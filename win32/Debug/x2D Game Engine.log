@@ -1,0 +1,21 @@
+﻿Build started 18.11.2014 02:49:14.
+     1>Project "C:\Users\Marcus\Documents\GitHub\OverworldCpp\win32\x2D Game Engine.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Isource\ /I"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\include" /I"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\vld\include" /I"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\openal\include" /I"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\glew\include" /ZI /nologo /W4 /WX- /Od /Oy- /D X2D_DEBUG /D X2D_IMPORT /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt source\gui\button.cpp source\scenes\mainmenu.cpp
+         button.cpp
+         Generating Code...
+         Skipping... (no relevant changes detected)
+         mainmenu.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"bin\OverworldCpp Debug.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\build\Win32\Debug" /LIBPATH:"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\vld\lib\Win32" /LIBPATH:"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\glew\lib" /LIBPATH:"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\openal\libs\Win32" x2dd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"bin\OverworldCpp Debug.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"bin\OverworldCpp Debug.lib" /MACHINE:X86 /SAFESEH:NO Debug\resources.res
+         Debug\main.obj
+         Debug\game.obj
+         Debug\button.obj
+         Debug\uiobject.obj
+         Debug\mainmenu.obj
+         x2D Game Engine.vcxproj -> C:\Users\Marcus\Documents\GitHub\OverworldCpp\win32\bin\OverworldCpp Debug.exe
+     1>Done Building Project "C:\Users\Marcus\Documents\GitHub\OverworldCpp\win32\x2D Game Engine.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.56
