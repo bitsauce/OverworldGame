@@ -1,52 +1,77 @@
 #include "button.h"
 #include "constants.h"
+#include "resources.h"
 
-Button::Button(string text, delegate<void()> *onClick, UiObject *parent) :
+Button::Button(string text, function<void()> onClick, UiObject *parent) :
 	UiObject(parent),
-	animTime(0.0f)
+	m_font("Arial Bold", 32),
+	m_animTime(0.0f),
+	m_userData(0)
 {
 	// Set callback
-	if(onClick) {
-		this->callback = *onClick;
-	}
+	m_callback = onClick;
 
 	// Set sprite
-	this->buttonSprite = new XSprite(XTextureRegion());
+	m_buttonSprite = new XSprite(XTextureRegion());
 		
 	// Set text
 	setText(text);
 }
 	
-/*Button(string text, ButtonCallbackThis @callbackThis, UiObject @parent)
+/*Button::Button(string text, function<void(Button*)> onClick, UiObject *parent) :
+	UiObject(parent),
+	m_font(ResourceManager::getFont("font_large")),
+	m_animTime(0.0f),
+	m_userData(0)
 {
-	// Call parent constructor
-	super(@parent);
-		
 	// Set callback
-	@this.callbackThis = @callbackThis;
+	m_callbackThis = onClick;
+
+	// Set sprite
+	m_buttonSprite = new XSprite(XTextureRegion());
 		
 	// Set text
 	setText(text);
 }*/
+
+Button::~Button()
+{
+	delete m_buttonSprite;
+}
 	
 void Button::setText(string text)
 {
 	// Set text
-	this->text = text;
+	m_text = text;
 		
 	// Store text render texture
-	textTexture = font::large->renderToTexture(text);
+	//m_textTexture = font::large->renderToTexture(text);
 }
-	
+
+string Button::getText() const
+{
+	return m_text;
+}
+
+void Button::setUserData(void *userData)
+{
+	m_userData = userData;
+}
+
+void *Button::getUserData() const
+{
+	return m_userData;
+}
+
 void Button::update()
 {
 	if(isHovered())
 	{
-		animTime = min(animTime + XGraphics::getTimeStep()*4.0f, 1.0f);
+		m_animTime = min(m_animTime + XGraphics::getTimeStep()*4.0f, 1.0f);
 	}
 	else
 	{
-		animTime = max(animTime - XGraphics::getTimeStep()*4.0f, 0.0f);
+		m_animTime = max(m_animTime - XGraphics::getTimeStep()*4.0f, 0.0f);
 	}
 	UiObject::update();
 }
@@ -58,35 +83,34 @@ void Button::draw(XBatch *batch)
 	Vector2 size = getSize();
 
 	// Draw button sprite
-	buttonSprite->setSize(size);
-	buttonSprite->setPosition(position);
+	m_buttonSprite->setSize(size);
+	m_buttonSprite->setPosition(position);
 
 	// Draw hovered sprite
-	if(animTime > 0.0f)
+	if(m_animTime > 0.0f)
 	{
-		buttonSprite->setColor(Vector4(1.0f, 1.0f, 1.0f, animTime));
-		buttonSprite->setRegion(XTextureRegion(texture::menuButton, 0.0f, 0.0f, 1.0f, 0.5f));
-		buttonSprite->draw(batch);
+		m_buttonSprite->setColor(Vector4(1.0f, 1.0f, 1.0f, m_animTime));
+		m_buttonSprite->setRegion(XTextureRegion(texture::menuButton, 0.0f, 0.0f, 1.0f, 0.5f));
+		m_buttonSprite->draw(batch);
 	}
 
 	// Draw default sprite
-	buttonSprite->setColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	buttonSprite->setRegion(XTextureRegion(texture::menuButton, 0.0f, 0.5f, 1.0f, 1.0f));
-	buttonSprite->draw(batch);
+	m_buttonSprite->setColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_buttonSprite->setRegion(XTextureRegion(texture::menuButton, 0.0f, 0.5f, 1.0f, 1.0f));
+	m_buttonSprite->draw(batch);
 		
 	// Draw text
-	font::large->setColor(Vector4(1.0f));
-	font::large->draw(batch, position - (Vector2(font::large->getStringWidth(text), font::large->getStringHeight(text))-size)*0.5f, text);
+	m_font.setColor(Vector4(1.0f));
+	m_font.draw(batch, position - (Vector2(font::large->getStringWidth(m_text), font::large->getStringHeight(m_text))-size)*0.5f, m_text);
 }
 	
 void Button::clickEvent()
 {
-	// Call click callbacks
-	if(callback != nullptr) {
-		callback();
+	if(m_callback) {
+		m_callback();
 	}
-		
-	/*if(callbackThis != null) {
-		callbackThis(@this);
-	}*/
+
+	if(m_callbackThis) {
+		m_callbackThis(this);
+	}
 }

@@ -1,7 +1,11 @@
 #include "game.h"
+#include "resources.h"
 #include "constants.h"
 
+
 #include "scenes/mainmenu.h"
+
+#include "gui/canvas.h"
 #include "gui/uiobject.h"
 
 UiObject *canvas = 0;
@@ -10,40 +14,10 @@ XFont *font::large = 0;
 MainMenu *scene::mainMenu = 0;
 XTexture *texture::menuButton = 0;
 
-class Canvas : public UiObject
-{
-public:
-	Canvas() :
-		UiObject(0)
-	{
-		m_anchor.set(0.5f, 0.5f);
-	}
-
-	void update()
-	{
-		if(XWindow::getSize().x > XWindow::getSize().y) {
-			// TODO: Fit height and use aspect ratio
-		}
-		else {
-			// TODO: Fit width and use inverse aspect ratio
-		}
-		m_rect.size = Vector2(min(CANVAS_WIDTH, XWindow::getSize().x), min(CANVAS_HEIGHT, XWindow::getSize().y))/Vector2(XWindow::getSize());
-		UiObject::update();
-	}
-
-	void draw(XBatch *batch)
-	{
-		Vector2 position = getPosition();
-		Vector2 size = getSize();
-
-		XShape shape(getRect());
-		shape.setFillColor(Vector4(0,0,1,1));
-		shape.draw(batch);
-	}
-};
-
 void gameMain()
 {
+	ResourceManager::load();
+
 	scene::mainMenu = new MainMenu;
 
 	texture::menuButton = new XTexture(":/sprites/gui/menu_button.png");
@@ -68,6 +42,7 @@ void gameMain()
 
 void gameEnd()
 {
+	ResourceManager::release();
 	delete canvas;
 	delete scene::mainMenu;
 	delete font::large;

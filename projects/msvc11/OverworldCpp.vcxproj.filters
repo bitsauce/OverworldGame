@@ -14,6 +14,12 @@
     <ClCompile Include="..\..\source\scenes\mainmenu.cpp">
       <Filter>source\scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\gui\canvas.cpp">
+      <Filter>source\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\resources.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -44,6 +50,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\scenes\mainmenu.h">
       <Filter>source\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\canvas.h">
+      <Filter>source\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\resources.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

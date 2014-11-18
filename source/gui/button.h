@@ -7,31 +7,42 @@
 class Button : public UiObject
 {
 public:
-	Button(string text, delegate<void()> *onClick, UiObject *parent = nullptr);
+	Button(string text, function<void()> onClick, UiObject *parent = nullptr);
+	//Button(string text, function<void(Button*)> onClick, UiObject *parent = nullptr);
+	~Button();
+
 	void setText(string text);
+	string getText() const;
+
+	void setUserData(void *userData);
+	void *getUserData() const;
+
 	void update();
 	void draw(XBatch *batch);
 	void clickEvent();
 
 private:
 	// Button text
-	string text;
+	string m_text;
+
+	// Button font
+	XFont m_font;
 		
 	// Button callback
-	delegate<void()> callback;
-	//delegate<void()> callbackThis;
-		
+	function<void()> m_callback;
+	function<void(Button*)> m_callbackThis;
+	
 	// User data
-	void *userData;
+	void *m_userData;
 	
 	// Text texture
-	XTexture *textTexture;
+	XTexture *m_textTexture;
 		
 	// Button sprite
-	XSprite *buttonSprite;
+	XSprite *m_buttonSprite;
 
 	// Animation time
-	float animTime;
+	float m_animTime;
 };
 
 #endif // BUTTON_H

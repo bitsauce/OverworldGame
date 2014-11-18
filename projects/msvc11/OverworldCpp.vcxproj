@@ -94,7 +94,9 @@
   <ItemGroup>
     <ClCompile Include="..\..\source\game.cpp" />
     <ClCompile Include="..\..\source\gui\button.cpp" />
+    <ClCompile Include="..\..\source\gui\canvas.cpp" />
     <ClCompile Include="..\..\source\gui\uiobject.cpp" />
+    <ClCompile Include="..\..\source\resources.cpp" />
     <ClCompile Include="..\..\source\scenes\mainmenu.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -102,7 +104,9 @@
     <ClInclude Include="..\..\source\constants.h" />
     <ClInclude Include="..\..\source\game.h" />
     <ClInclude Include="..\..\source\gui\button.h" />
+    <ClInclude Include="..\..\source\gui\canvas.h" />
     <ClInclude Include="..\..\source\gui\uiobject.h" />
+    <ClInclude Include="..\..\source\resources.h" />
     <ClInclude Include="..\..\source\scenes\mainmenu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

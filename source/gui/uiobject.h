@@ -9,6 +9,7 @@ class UiObject
 {
 public:
 	UiObject(UiObject *parent);
+	virtual ~UiObject() { }
 
 	// Mouse press event
 	virtual void pressEvent() { }

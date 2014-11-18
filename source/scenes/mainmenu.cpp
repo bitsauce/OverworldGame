@@ -14,8 +14,8 @@ void MainMenu::showEvent()
 {
 	LOG("Scene: Main menu");
 
-	Button *spBtn = new Button("Singleplayer", &delegate<void()>(bind(&MainMenu::showWorldSelect, this)), canvas);
-	//Button *mpBtn = new Button("Multiplayer", &delegate<void()>(bind(&MainMenu::showWorldSelect, this)));
+	Button *spBtn = new Button("Singleplayer", function<void()>(bind(&MainMenu::showWorldSelect, this)), canvas);
+	Button *mpBtn = new Button("Multiplayer", function<void()>(), canvas);
 	
 	spBtn->setPosition(Vector2(0.0f, -0.1f));
 	spBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
@@ -23,12 +23,17 @@ void MainMenu::showEvent()
 
 	
 	//spBtn->setPosition(Vector2(0.0f, 0.0f));
-
+	
 	uiObjects.push_back(spBtn);
+	uiObjects.push_back(mpBtn);
 }
 
 void MainMenu::hideEvent()
 {
+	for(int i = 0; i < uiObjects.size(); ++i)
+	{
+		delete uiObjects[i];
+	}
 }
 
 void MainMenu::drawEvent()
@@ -63,5 +68,5 @@ void MainMenu::updateEvent()
 
 void MainMenu::showWorldSelect()
 {
-	LOG("Show World Select");
+	XEngine::exit();
 }
