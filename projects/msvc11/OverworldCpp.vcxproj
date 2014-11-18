@@ -52,13 +52,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\vld\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\glew\include;..\..\..\x2D-Game-Engine\3rdparty\openal\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\vld\include;..\..\3rdparty\Box2D\Box2D\include;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\glew\include;..\..\..\x2D-Game-Engine\3rdparty\openal\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>X2D_DEBUG;X2D_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\..\3rdparty\vld\lib\Win32;..\..\..\x2D-Game-Engine\build\Win32\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>x2dd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\3rdparty\vld\lib\Win32;..\..\3rdparty\Box2D\Box2D\Lib;..\..\3rdparty\spine\lib;..\..\..\x2D-Game-Engine\build\Win32\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>x2dd.lib;spined.lib;box2dd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>

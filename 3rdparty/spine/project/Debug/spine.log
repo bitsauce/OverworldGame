@@ -1,7 +1,7 @@
-﻿Build started 11.09.2014 23:03:14.
-     1>Project "C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\project\spine.vcxproj" on node 2 (Rebuild target(s)).
+﻿Build started 18.11.2014 10:58:30.
+     1>Project "C:\Users\Marcus\Documents\GitHub\OverworldCpp\3rdparty\spine\project\spine.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\include" /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt ..\src\spine\Animation.c ..\src\spine\AnimationState.c ..\src\spine\AnimationStateData.c ..\src\spine\Atlas.c ..\src\spine\AtlasAttachmentLoader.c ..\src\spine\Attachment.c ..\src\spine\AttachmentLoader.c ..\src\spine\Bone.c ..\src\spine\BoneData.c ..\src\spine\BoundingBoxAttachment.c ..\src\spine\Event.c ..\src\spine\EventData.c ..\src\spine\extension.c ..\src\spine\Json.c ..\src\spine\MeshAttachment.c ..\src\spine\RegionAttachment.c ..\src\spine\Skeleton.c ..\src\spine\SkeletonBounds.c ..\src\spine\SkeletonData.c ..\src\spine\SkeletonJson.c ..\src\spine\Skin.c ..\src\spine\SkinnedMeshAttachment.c ..\src\spine\Slot.c ..\src\spine\SlotData.c
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\Users\Marcus\Documents\GitHub\OverworldCpp\3rdparty\spine\project\..\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D WIN32 /D _DEBUG /D _LIB /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt ..\src\spine\Animation.c ..\src\spine\AnimationState.c ..\src\spine\AnimationStateData.c ..\src\spine\Atlas.c ..\src\spine\AtlasAttachmentLoader.c ..\src\spine\Attachment.c ..\src\spine\AttachmentLoader.c ..\src\spine\Bone.c ..\src\spine\BoneData.c ..\src\spine\BoundingBoxAttachment.c ..\src\spine\Event.c ..\src\spine\EventData.c ..\src\spine\extension.c ..\src\spine\Json.c ..\src\spine\MeshAttachment.c ..\src\spine\RegionAttachment.c ..\src\spine\Skeleton.c ..\src\spine\SkeletonBounds.c ..\src\spine\SkeletonData.c ..\src\spine\SkeletonJson.c ..\src\spine\Skin.c ..\src\spine\SkinnedMeshAttachment.c ..\src\spine\Slot.c ..\src\spine\SlotData.c
          SlotData.c
          Slot.c
          SkinnedMeshAttachment.c
@@ -30,7 +30,7 @@
          Animation.c
          Generating Code...
        Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\Lib.exe /OUT:"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\lib\spined.lib" /NOLOGO Debug\Animation.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\Lib.exe /OUT:"C:\Users\Marcus\Documents\GitHub\OverworldCpp\3rdparty\spine\project\..\lib\spined.lib" /NOLOGO Debug\Animation.obj
          Debug\AnimationState.obj
          Debug\AnimationStateData.obj
          Debug\Atlas.obj
@@ -54,9 +54,9 @@
          Debug\SkinnedMeshAttachment.obj
          Debug\Slot.obj
          Debug\SlotData.obj
-         spine.vcxproj -> C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\lib\spined.lib
-     1>Done Building Project "C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\project\spine.vcxproj" (Rebuild target(s)).
+         spine.vcxproj -> C:\Users\Marcus\Documents\GitHub\OverworldCpp\3rdparty\spine\project\..\lib\spined.lib
+     1>Done Building Project "C:\Users\Marcus\Documents\GitHub\OverworldCpp\3rdparty\spine\project\spine.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.73
+Time Elapsed 00:00:01.55
