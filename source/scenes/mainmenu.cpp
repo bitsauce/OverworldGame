@@ -1,6 +1,7 @@
 #include "mainmenu.h"
 #include "gui/button.h"
 #include "game.h"
+#include "constants.h"
 
 int TITLE_TILES[4][37] = {
 	{ 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0 },
@@ -13,11 +14,15 @@ void MainMenu::showEvent()
 {
 	LOG("Scene: Main menu");
 
-	Button *spBtn = new Button("Singleplayer", &delegate<void()>(bind(&MainMenu::showWorldSelect, this)));
+	Button *spBtn = new Button("Singleplayer", &delegate<void()>(bind(&MainMenu::showWorldSelect, this)), canvas);
+	//Button *mpBtn = new Button("Multiplayer", &delegate<void()>(bind(&MainMenu::showWorldSelect, this)));
 	
 	spBtn->setPosition(Vector2(0.0f, -0.1f));
-	spBtn->setSize(Vector2(300.0f/XWindow::getSize().x, 70.0f/XWindow::getSize().y));
+	spBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 	spBtn->setAnchor(Vector2(0.5f, 0.5f));
+
+	
+	//spBtn->setPosition(Vector2(0.0f, 0.0f));
 
 	uiObjects.push_back(spBtn);
 }
@@ -29,6 +34,8 @@ void MainMenu::hideEvent()
 void MainMenu::drawEvent()
 {
 	XBatch batch;
+
+	canvas->draw(&batch);
 
 	// Draw all ui objects
 	for(uint i = 0; i < uiObjects.size(); ++i)
@@ -43,6 +50,8 @@ void MainMenu::drawEvent()
 
 void MainMenu::updateEvent()
 {
+	canvas->update();
+
 	// Update all ui objects
 	for(uint i = 0; i < uiObjects.size(); ++i)
 	{

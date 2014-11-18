@@ -5,8 +5,6 @@
 
 #pragma warning(disable : 4717)
 
-extern class UiObject *uiRoot;
-
 class UiObject
 {
 public:

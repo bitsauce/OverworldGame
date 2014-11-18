@@ -1,18 +1,13 @@
 #include "uiobject.h"
 
 UiObject::UiObject(UiObject *parent) :
+	m_parent(parent),
 	m_anchor(0.0f, 0.0f),
 	m_rect(),
 	m_hovered(false),
 	m_pressed(false),
 	m_active(false)
 {
-	if(parent == nullptr) {
-		m_parent = uiRoot;
-	}
-	else {
-		m_parent = parent;
-	}
 }
 	
 bool UiObject::isPressed() const
@@ -71,10 +66,8 @@ void UiObject::setPosition(const Vector2 &position)
 
 Vector2 UiObject::getPosition() const
 {
-	if(!m_parent) return Vector2(0.0f, 0.0f);
-
-	Vector2 parentPos = m_parent->getPosition();
-	Vector2 parentSize = m_parent->getSize();
+	Vector2 parentPos = m_parent ? m_parent->getPosition() : m_rect.position;
+	Vector2 parentSize = m_parent ? m_parent->getSize() : XWindow::getSize();
 	Vector2 pos = m_rect.position;
 	Vector2 size = m_rect.size;
 			
@@ -91,7 +84,7 @@ void UiObject::setSize(const Vector2 &size)
 
 Vector2 UiObject::getSize() const
 {
-	if(!m_parent) return XWindow::getSize();
+	if(!m_parent) return Vector2(XWindow::getSize()) * m_rect.size;
 	return m_parent->getSize() * m_rect.size;
 }
 	

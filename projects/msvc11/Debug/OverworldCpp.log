@@ -1,14 +1,10 @@
-﻿Build started 18.11.2014 11:00:33.
+﻿Build started 18.11.2014 11:47:59.
      1>Project "C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\OverworldCpp.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I..\..\source\ /I..\..\3rdparty\vld\include /I..\..\3rdparty\Box2D\Box2D\include /I..\..\3rdparty\spine\include /I"..\..\..\x2D-Game-Engine\include" /I"..\..\..\x2D-Game-Engine\3rdparty\glew\include" /I"..\..\..\x2D-Game-Engine\3rdparty\openal\include" /ZI /nologo /W4 /WX- /Od /Oy- /D X2D_DEBUG /D X2D_IMPORT /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\source\game.cpp ..\..\source\gui\button.cpp ..\..\source\gui\uiobject.cpp ..\..\source\scenes\mainmenu.cpp main.cpp
-         main.cpp
-         mainmenu.cpp
-     1>c:\users\marcus\documents\github\overworldcpp\source\scenes\mainmenu.cpp(16): warning C4238: nonstandard extension used : class rvalue used as lvalue
-         uiobject.cpp
-         button.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I..\..\source\ /I..\..\3rdparty\vld\include /I..\..\3rdparty\Box2D\Box2D\include /I..\..\3rdparty\spine\include /I"..\..\..\x2D-Game-Engine\include" /I"..\..\..\x2D-Game-Engine\3rdparty\glew\include" /I"..\..\..\x2D-Game-Engine\3rdparty\openal\include" /ZI /nologo /W4 /WX- /Od /Oy- /D X2D_DEBUG /D X2D_IMPORT /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\source\game.cpp
          game.cpp
-     1>c:\users\marcus\documents\github\overworldcpp\source\game.cpp(22): warning C4239: nonstandard extension used : 'argument' : conversion from 'std::basic_string<_Elem,_Traits,_Alloc>' to 'std::string &'
+     1>c:\users\marcus\documents\github\overworldcpp\source\game.cpp(30): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
+     1>c:\users\marcus\documents\github\overworldcpp\source\game.cpp(54): warning C4239: nonstandard extension used : 'argument' : conversion from 'std::basic_string<_Elem,_Traits,_Alloc>' to 'std::string &'
                  with
                  [
                      _Elem=char,
@@ -16,8 +12,7 @@
                      _Alloc=std::allocator<char>
                  ]
                  A non-const reference may only be bound to an lvalue
-     1>c:\users\marcus\documents\github\overworldcpp\source\game.cpp(24): warning C4238: nonstandard extension used : class rvalue used as lvalue
-         Generating Code...
+     1>c:\users\marcus\documents\github\overworldcpp\source\game.cpp(56): warning C4238: nonstandard extension used : class rvalue used as lvalue
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\..\..\exe\Win32\Debug\OverworldCpp Debug.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\..\3rdparty\vld\lib\Win32 /LIBPATH:..\..\3rdparty\Box2D\Box2D\Lib /LIBPATH:..\..\3rdparty\spine\lib /LIBPATH:"..\..\..\x2D-Game-Engine\build\Win32\Debug" x2dd.lib spined.lib box2dd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\..\..\exe\Win32\Debug\OverworldCpp Debug.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\..\..\exe\Win32\Debug\OverworldCpp Debug.lib" /MACHINE:X86 /SAFESEH:NO Debug\resources.res
          Debug\game.obj
@@ -38,4 +33,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:10.01
+Time Elapsed 00:00:02.94
