@@ -1,0 +1,58 @@
+﻿Build started 17.10.2014 17:11:09.
+     1>Project "C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\Box2D\Box2D\Build\vs2012\Box2D.vcxproj" on node 3 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I..\.. /ZI /nologo /W4 /WX /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"obj\x32\Debug\Box2D\\" /Fd"bin\Debug\Box2D.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\Box2D\Common\b2Settings.cpp
+         Skipping... (no relevant changes detected)
+         b2Settings.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\Lib.exe /OUT:"bin\Debug\Box2D.lib" /NOLOGO /MACHINE:X86 obj\x32\Debug\Box2D\b2BroadPhase.obj
+         obj\x32\Debug\Box2D\b2CollideCircle.obj
+         obj\x32\Debug\Box2D\b2CollideEdge.obj
+         obj\x32\Debug\Box2D\b2CollidePolygon.obj
+         obj\x32\Debug\Box2D\b2Collision.obj
+         obj\x32\Debug\Box2D\b2Distance.obj
+         obj\x32\Debug\Box2D\b2DynamicTree.obj
+         obj\x32\Debug\Box2D\b2TimeOfImpact.obj
+         obj\x32\Debug\Box2D\b2ChainShape.obj
+         obj\x32\Debug\Box2D\b2CircleShape.obj
+         obj\x32\Debug\Box2D\b2EdgeShape.obj
+         obj\x32\Debug\Box2D\b2PolygonShape.obj
+         obj\x32\Debug\Box2D\b2BlockAllocator.obj
+         obj\x32\Debug\Box2D\b2Draw.obj
+         obj\x32\Debug\Box2D\b2Math.obj
+         obj\x32\Debug\Box2D\b2Settings.obj
+         obj\x32\Debug\Box2D\b2StackAllocator.obj
+         obj\x32\Debug\Box2D\b2Timer.obj
+         obj\x32\Debug\Box2D\b2Body.obj
+         obj\x32\Debug\Box2D\b2ContactManager.obj
+         obj\x32\Debug\Box2D\b2Fixture.obj
+         obj\x32\Debug\Box2D\b2Island.obj
+         obj\x32\Debug\Box2D\b2World.obj
+         obj\x32\Debug\Box2D\b2WorldCallbacks.obj
+         obj\x32\Debug\Box2D\b2ChainAndCircleContact.obj
+         obj\x32\Debug\Box2D\b2ChainAndPolygonContact.obj
+         obj\x32\Debug\Box2D\b2CircleContact.obj
+         obj\x32\Debug\Box2D\b2Contact.obj
+         obj\x32\Debug\Box2D\b2ContactSolver.obj
+         obj\x32\Debug\Box2D\b2EdgeAndCircleContact.obj
+         obj\x32\Debug\Box2D\b2EdgeAndPolygonContact.obj
+         obj\x32\Debug\Box2D\b2PolygonAndCircleContact.obj
+         obj\x32\Debug\Box2D\b2PolygonContact.obj
+         obj\x32\Debug\Box2D\b2DistanceJoint.obj
+         obj\x32\Debug\Box2D\b2FrictionJoint.obj
+         obj\x32\Debug\Box2D\b2GearJoint.obj
+         obj\x32\Debug\Box2D\b2Joint.obj
+         obj\x32\Debug\Box2D\b2MotorJoint.obj
+         obj\x32\Debug\Box2D\b2MouseJoint.obj
+         obj\x32\Debug\Box2D\b2PrismaticJoint.obj
+         obj\x32\Debug\Box2D\b2PulleyJoint.obj
+         obj\x32\Debug\Box2D\b2RevoluteJoint.obj
+         obj\x32\Debug\Box2D\b2RopeJoint.obj
+         obj\x32\Debug\Box2D\b2WeldJoint.obj
+         obj\x32\Debug\Box2D\b2WheelJoint.obj
+         Box2D.vcxproj -> C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\Box2D\Box2D\Build\vs2012\bin\Debug\Box2D.lib
+     1>Done Building Project "C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\Box2D\Box2D\Build\vs2012\Box2D.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.34

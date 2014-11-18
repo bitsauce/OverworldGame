@@ -1,0 +1,33 @@
+﻿Build started 17.08.2014 12:53:18.
+     1>Project "C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\project\spine.vcxproj" on node 2 (Build target(s)).
+     1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\Lib.exe /OUT:"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\lib\spine.lib" /NOLOGO /LTCG Release\Animation.obj
+         Release\AnimationState.obj
+         Release\AnimationStateData.obj
+         Release\Atlas.obj
+         Release\AtlasAttachmentLoader.obj
+         Release\Attachment.obj
+         Release\AttachmentLoader.obj
+         Release\Bone.obj
+         Release\BoneData.obj
+         Release\BoundingBoxAttachment.obj
+         Release\Event.obj
+         Release\EventData.obj
+         Release\extension.obj
+         Release\Json.obj
+         Release\MeshAttachment.obj
+         Release\RegionAttachment.obj
+         Release\Skeleton.obj
+         Release\SkeletonBounds.obj
+         Release\SkeletonData.obj
+         Release\SkeletonJson.obj
+         Release\Skin.obj
+         Release\SkinnedMeshAttachment.obj
+         Release\Slot.obj
+         Release\SlotData.obj
+         spine.vcxproj -> C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\lib\spine.lib
+     1>Done Building Project "C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\project\spine.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.62

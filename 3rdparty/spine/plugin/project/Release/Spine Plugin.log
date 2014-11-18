@@ -1,0 +1,23 @@
+﻿Build started 11.09.2014 23:06:55.
+     1>Project "C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\plugin\project\Spine Plugin.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\include" /I"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\..\..\include" /I"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\..\angelscript\sdk\angelscript\include" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D X2D_IMPORT /D _WINDLL /D _WINDLL /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ..\src\event.cpp
+         event.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\plugin\lib\spine.dll" /NOLOGO /LIBPATH:"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\lib\\" /LIBPATH:"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\..\..\build\Win32\Release\\" /LIBPATH:"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\..\angelscript\sdk\angelscript\lib\\" spine.lib x2d.lib angelscript.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\plugin\lib\spine.pdb" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\plugin\lib\spine.lib" /MACHINE:X86 /SAFESEH /DLL Release\animation.obj
+         Release\event.obj
+         Release\plugin.obj
+         Release\skeleton.obj
+            Creating library C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\plugin\lib\spine.lib and object C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\plugin\lib\spine.exp
+         Generating code
+         Finished generating code
+         Spine Plugin.vcxproj -> C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\plugin\lib\spine.dll
+       PostBuildEvent:
+         copy "..\lib\spine.dll" "..\example\plugins\spine.dll"
+         :VCEnd
+                 1 file(s) copied.
+     1>Done Building Project "C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\spine\plugin\project\Spine Plugin.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:06.75

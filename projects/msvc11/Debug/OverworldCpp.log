@@ -1,0 +1,23 @@
+﻿Build started 18.11.2014 10:19:30.
+     1>Project "C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\OverworldCpp.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\..\..\exe\Win32\Debug\OverworldCpp Debug.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\..\3rdparty\vld\lib\Win32 /LIBPATH:"..\..\..\x2D-Game-Engine\build\Win32\Debug" x2dd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\..\..\exe\Win32\Debug\OverworldCpp Debug.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\..\..\exe\Win32\Debug\OverworldCpp Debug.lib" /MACHINE:X86 /SAFESEH:NO Debug\resources.res
+         Debug\game.obj
+         Debug\button.obj
+         Debug\uiobject.obj
+         Debug\mainmenu.obj
+         Debug\main.obj
+         OverworldCpp.vcxproj -> C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\..\..\exe\Win32\Debug\OverworldCpp Debug.exe
+       PostBuildEvent:
+         copy "C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\..\..\..\x2D-Game-Engine\build\Win32\Debug\*.dll" "C:\Users\Marcus\Documents\GitHub\OverworldCpp\exe\Win32\Debug\"
+         :VCEnd
+         C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\..\..\..\x2D-Game-Engine\build\Win32\Debug\FreeImaged.dll
+         C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\..\..\..\x2D-Game-Engine\build\Win32\Debug\freetyped.dll
+         C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\..\..\..\x2D-Game-Engine\build\Win32\Debug\glewd.dll
+         C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\..\..\..\x2D-Game-Engine\build\Win32\Debug\x2dd.dll
+                 4 file(s) copied.
+     1>Done Building Project "C:\Users\Marcus\Documents\GitHub\OverworldCpp\projects\msvc11\OverworldCpp.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.41

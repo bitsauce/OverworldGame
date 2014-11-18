@@ -1,0 +1,3 @@
+** x2D Game Engine **
+Initializing AngelScript (2.29.0)
+Compiling scripts...

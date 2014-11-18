@@ -1,0 +1,33 @@
+﻿Build started 17.10.2014 17:11:09.
+     1>Project "C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\Box2D\Box2D\Build\vs2012\FreeGLUT.vcxproj" on node 2 (Build target(s)).
+     1>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\Lib.exe /OUT:"bin\Debug\FreeGLUT.lib" /NOLOGO /MACHINE:X86 obj\x32\Debug\FreeGLUT\freeglut_callbacks.obj
+         obj\x32\Debug\FreeGLUT\freeglut_cursor.obj
+         obj\x32\Debug\FreeGLUT\freeglut_display.obj
+         obj\x32\Debug\FreeGLUT\freeglut_ext.obj
+         obj\x32\Debug\FreeGLUT\freeglut_font.obj
+         obj\x32\Debug\FreeGLUT\freeglut_font_data.obj
+         obj\x32\Debug\FreeGLUT\freeglut_gamemode.obj
+         obj\x32\Debug\FreeGLUT\freeglut_geometry.obj
+         obj\x32\Debug\FreeGLUT\freeglut_glutfont_definitions.obj
+         obj\x32\Debug\FreeGLUT\freeglut_init.obj
+         obj\x32\Debug\FreeGLUT\freeglut_input_devices.obj
+         obj\x32\Debug\FreeGLUT\freeglut_joystick.obj
+         obj\x32\Debug\FreeGLUT\freeglut_main.obj
+         obj\x32\Debug\FreeGLUT\freeglut_menu.obj
+         obj\x32\Debug\FreeGLUT\freeglut_misc.obj
+         obj\x32\Debug\FreeGLUT\freeglut_overlay.obj
+         obj\x32\Debug\FreeGLUT\freeglut_spaceball.obj
+         obj\x32\Debug\FreeGLUT\freeglut_state.obj
+         obj\x32\Debug\FreeGLUT\freeglut_stroke_mono_roman.obj
+         obj\x32\Debug\FreeGLUT\freeglut_stroke_roman.obj
+         obj\x32\Debug\FreeGLUT\freeglut_structure.obj
+         obj\x32\Debug\FreeGLUT\freeglut_teapot.obj
+         obj\x32\Debug\FreeGLUT\freeglut_videoresize.obj
+         obj\x32\Debug\FreeGLUT\freeglut_window.obj
+         FreeGLUT.vcxproj -> C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\Box2D\Box2D\Build\vs2012\bin\Debug\FreeGLUT.lib
+     1>Done Building Project "C:\Users\Marcus\Documents\GitHub\x2D-Game-Engine\3rdparty\Box2D\Box2D\Build\vs2012\FreeGLUT.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.87

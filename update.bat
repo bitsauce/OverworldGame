@@ -1,6 +1,0 @@
-copy "..\x2D-Game-Engine\build\Win32\Release\x2d.dll" "win32\release\x2d.dll"
-copy "..\x2D-Game-Engine\build\Win32\Debug\x2dd.dll" "win32\bin\x2dd.dll"
-copy "..\x2D-Game-Engine\3rdparty\Box2D\Box2D\plugin\lib\box2d.dll" "game\plugins\box2d.dll"
-copy "..\x2D-Game-Engine\3rdparty\Box2D\Box2D\plugin\lib\box2dd.dll" "game\plugins\box2d.dll.debug"
-copy "..\x2D-Game-Engine\3rdparty\spine\plugin\lib\spine.dll" "game\plugins\spine.dll"
-copy "..\x2D-Game-Engine\3rdparty\spine\plugin\lib\spined.dll" "game\plugins\spine.dll.debug"
