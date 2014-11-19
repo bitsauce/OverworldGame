@@ -4,7 +4,8 @@
 
 Button::Button(string text, function<void()> onClick, UiObject *parent) :
 	UiObject(parent),
-	m_font("Arial Bold", 32),
+	m_font(UI_MENU_BUTTON_FONT),
+	m_textTexture(0),
 	m_animTime(0.0f),
 	m_userData(0)
 {
@@ -45,7 +46,8 @@ void Button::setText(string text)
 	m_text = text;
 		
 	// Store text render texture
-	//m_textTexture = font::large->renderToTexture(text);
+	m_font->setColor(XColor(255, 255, 255, 255));
+	m_textTexture = m_font->renderToTexture(text, 128);
 }
 
 string Button::getText() const
@@ -90,18 +92,23 @@ void Button::draw(XBatch *batch)
 	if(m_animTime > 0.0f)
 	{
 		m_buttonSprite->setColor(Vector4(1.0f, 1.0f, 1.0f, m_animTime));
-		m_buttonSprite->setRegion(XTextureRegion(texture::menuButton, 0.0f, 0.0f, 1.0f, 0.5f));
+		m_buttonSprite->setRegion(XTextureRegion(UI_MENU_BUTTON_TEXTURE, 0.0f, 0.0f, 1.0f, 0.5f));
 		m_buttonSprite->draw(batch);
 	}
 
 	// Draw default sprite
 	m_buttonSprite->setColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_buttonSprite->setRegion(XTextureRegion(texture::menuButton, 0.0f, 0.5f, 1.0f, 1.0f));
+	m_buttonSprite->setRegion(XTextureRegion(UI_MENU_BUTTON_TEXTURE, 0.0f, 0.5f, 1.0f, 1.0f));
 	m_buttonSprite->draw(batch);
 		
 	// Draw text
-	m_font.setColor(Vector4(1.0f));
-	m_font.draw(batch, position - (Vector2(font::large->getStringWidth(m_text), font::large->getStringHeight(m_text))-size)*0.5f, m_text);
+	/*XShape shape(Rect(position, size));
+	shape.setFillTexture(m_textTexture);
+	shape.draw(batch);*/
+
+
+	m_font->setColor(XColor(255, 255, 255, 255));
+	m_font->draw(batch, position - (Vector2(m_font->getStringWidth(m_text), m_font->getStringHeight(m_text))-size)*0.5f, m_text);
 }
 	
 void Button::clickEvent()

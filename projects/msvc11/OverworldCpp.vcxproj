@@ -57,7 +57,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\..\3rdparty\vld\lib\Win32;..\..\3rdparty\Box2D\Box2D\Lib;..\..\3rdparty\spine\lib;..\..\..\x2D-Game-Engine\build\Win32\Debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\3rdparty\vld\lib;..\..\3rdparty\Box2D\Box2D\Lib;..\..\3rdparty\spine\lib;..\..\..\x2D-Game-Engine\build\Win32\Debug</AdditionalLibraryDirectories>
       <AdditionalDependencies>x2dd.lib;spined.lib;box2dd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>

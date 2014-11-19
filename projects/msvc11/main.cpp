@@ -11,7 +11,7 @@
 #include "game.h"
 
 #if defined(X2D_WINDOWS) && defined(X2D_DEBUG)
-#include <vld.h> // Visual Leak Detector
+//#include <vld.h> // Visual Leak Detector
 #endif
 
 // Win32 entry point

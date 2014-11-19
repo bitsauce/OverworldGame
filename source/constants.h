@@ -4,7 +4,15 @@
 #define CANVAS_WIDTH 800
 #define CANVAS_HEIGHT 600
 
+#define UI_MENU_BUTTON_FONT font::large
+#define UI_MENU_BUTTON_TEXTURE texture::menuButton
+
 extern class UiObject *canvas;
+class MainMenu;
+namespace scene
+{
+	extern MainMenu *mainMenu;
+}
 
 namespace font
 {
@@ -14,13 +22,6 @@ namespace font
 namespace texture
 {
 	extern XTexture *menuButton;
-}
-
-class MainMenu;
-
-namespace scene
-{
-	extern MainMenu *mainMenu;
 }
 
 #endif // CONSTANTS_H

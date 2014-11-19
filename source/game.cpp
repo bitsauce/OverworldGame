@@ -9,23 +9,20 @@
 #include "gui/uiobject.h"
 
 UiObject *canvas = 0;
-
 XFont *font::large = 0;
-MainMenu *scene::mainMenu = 0;
 XTexture *texture::menuButton = 0;
+MainMenu *scene::mainMenu = 0;
 
 void gameMain()
 {
-	ResourceManager::load();
-
 	scene::mainMenu = new MainMenu;
-
-	texture::menuButton = new XTexture(":/sprites/gui/menu_button.png");
 
 	canvas = new Canvas();
 	canvas->setSize(Vector2(1.0f, 1.0f));
+	
+	font::large = new XFont(string("Arial Bold"), 27);
 
-	font::large = new XFont(string("Arial Bold"), 24);
+	texture::menuButton = new XTexture(":/sprites/gui/menu_button.png");
 
 	XInput::bind(XD_KEY_ESCAPE, &delegate<void()>(XEngine::exit));
 	//XInput::bind(XD_KEY_I, &delegate<void()>(Camera::zoomIn));
@@ -42,11 +39,10 @@ void gameMain()
 
 void gameEnd()
 {
-	ResourceManager::release();
 	delete canvas;
 	delete scene::mainMenu;
-	delete font::large;
 	delete texture::menuButton;
+	delete font::large;
 }
 
 void gameDraw()
@@ -57,7 +53,7 @@ void gameDraw()
 	shape.setFillColor(Vector4(1,0,0,1));
 	shape.draw(&batch);
 
-	font::large->draw(&batch, Vector2(25.0f), string("FPS: ") + util::floatToStr(XGraphics::getFPS()));
+	//((XFont*)XAssetManager::getAsset("font_large"))->draw(&batch, Vector2(25.0f), string("FPS: ") + util::floatToStr(XGraphics::getFPS()));
 
 	XGraphics::renderBatch(batch);
 }

@@ -26,7 +26,7 @@ private:
 	string m_text;
 
 	// Button font
-	XFont m_font;
+	XFont *m_font;
 		
 	// Button callback
 	function<void()> m_callback;

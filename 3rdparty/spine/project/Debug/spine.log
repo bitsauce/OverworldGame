@@ -1,7 +1,8 @@
-﻿Build started 18.11.2014 10:58:30.
-     1>Project "C:\Users\Marcus\Documents\GitHub\OverworldCpp\3rdparty\spine\project\spine.vcxproj" on node 2 (Build target(s)).
+﻿Build started 19.11.2014 00:33:57.
+     1>Project "C:\Users\Marcus\Documents\GitHub\OverworldCpp\3rdparty\spine\project\spine.vcxproj" on node 4 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\Users\Marcus\Documents\GitHub\OverworldCpp\3rdparty\spine\project\..\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D WIN32 /D _DEBUG /D _LIB /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt ..\src\spine\Animation.c ..\src\spine\AnimationState.c ..\src\spine\AnimationStateData.c ..\src\spine\Atlas.c ..\src\spine\AtlasAttachmentLoader.c ..\src\spine\Attachment.c ..\src\spine\AttachmentLoader.c ..\src\spine\Bone.c ..\src\spine\BoneData.c ..\src\spine\BoundingBoxAttachment.c ..\src\spine\Event.c ..\src\spine\EventData.c ..\src\spine\extension.c ..\src\spine\Json.c ..\src\spine\MeshAttachment.c ..\src\spine\RegionAttachment.c ..\src\spine\Skeleton.c ..\src\spine\SkeletonBounds.c ..\src\spine\SkeletonData.c ..\src\spine\SkeletonJson.c ..\src\spine\Skin.c ..\src\spine\SkinnedMeshAttachment.c ..\src\spine\Slot.c ..\src\spine\SlotData.c
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\Users\Marcus\Documents\GitHub\OverworldCpp\3rdparty\spine\project\..\include /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D WIN32 /D _DEBUG /D _LIB /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt ..\src\spine\Animation.c ..\src\spine\AnimationState.c ..\src\spine\AnimationStateData.c ..\src\spine\Atlas.c ..\src\spine\AtlasAttachmentLoader.c ..\src\spine\Attachment.c ..\src\spine\AttachmentLoader.c ..\src\spine\Bone.c ..\src\spine\BoneData.c ..\src\spine\BoundingBoxAttachment.c ..\src\spine\Event.c ..\src\spine\EventData.c ..\src\spine\Json.c ..\src\spine\MeshAttachment.c ..\src\spine\RegionAttachment.c ..\src\spine\Skeleton.c ..\src\spine\SkeletonBounds.c ..\src\spine\SkeletonData.c ..\src\spine\SkeletonJson.c ..\src\spine\Skin.c ..\src\spine\SkinnedMeshAttachment.c ..\src\spine\Slot.c ..\src\spine\SlotData.c ..\src\spine\extension.c
+         extension.c
          SlotData.c
          Slot.c
          SkinnedMeshAttachment.c
@@ -13,7 +14,6 @@
          RegionAttachment.c
          MeshAttachment.c
          Json.c
-         extension.c
          EventData.c
          Event.c
          BoundingBoxAttachment.c
@@ -59,4 +59,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.55
+Time Elapsed 00:00:01.08
