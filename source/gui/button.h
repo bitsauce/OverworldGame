@@ -26,7 +26,10 @@ private:
 	string m_text;
 
 	// Button font
-	XFont *m_font;
+	xd::Resource<XFont> m_font;
+
+	// Button sprite texture
+	xd::Resource<XTexture> m_btnTexture;
 		
 	// Button callback
 	function<void()> m_callback;

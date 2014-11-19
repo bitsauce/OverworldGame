@@ -69,3 +69,10 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+
+# MSVC files
+*.pdb
+*.tlog
+*.log
+*.sdf
+*.idb

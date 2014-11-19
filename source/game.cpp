@@ -1,5 +1,4 @@
 #include "game.h"
-#include "resources.h"
 #include "constants.h"
 
 
@@ -9,8 +8,6 @@
 #include "gui/uiobject.h"
 
 UiObject *canvas = 0;
-XFont *font::large = 0;
-XTexture *texture::menuButton = 0;
 MainMenu *scene::mainMenu = 0;
 
 void gameMain()
@@ -19,10 +16,6 @@ void gameMain()
 
 	canvas = new Canvas();
 	canvas->setSize(Vector2(1.0f, 1.0f));
-	
-	font::large = new XFont(string("Arial Bold"), 27);
-
-	texture::menuButton = new XTexture(":/sprites/gui/menu_button.png");
 
 	XInput::bind(XD_KEY_ESCAPE, &delegate<void()>(XEngine::exit));
 	//XInput::bind(XD_KEY_I, &delegate<void()>(Camera::zoomIn));
@@ -41,8 +34,6 @@ void gameEnd()
 {
 	delete canvas;
 	delete scene::mainMenu;
-	delete texture::menuButton;
-	delete font::large;
 }
 
 void gameDraw()

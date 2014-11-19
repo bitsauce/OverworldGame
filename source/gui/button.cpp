@@ -1,10 +1,10 @@
 #include "button.h"
 #include "constants.h"
-#include "resources.h"
 
 Button::Button(string text, function<void()> onClick, UiObject *parent) :
 	UiObject(parent),
-	m_font(UI_MENU_BUTTON_FONT),
+	m_font(xd::ResourceManager::get<XFont>(UI_MENU_BUTTON_FONT)),
+	m_btnTexture(xd::ResourceManager::get<XTexture>(UI_MENU_BUTTON_TEXTURE)),
 	m_textTexture(0),
 	m_animTime(0.0f),
 	m_userData(0)
@@ -92,13 +92,13 @@ void Button::draw(XBatch *batch)
 	if(m_animTime > 0.0f)
 	{
 		m_buttonSprite->setColor(Vector4(1.0f, 1.0f, 1.0f, m_animTime));
-		m_buttonSprite->setRegion(XTextureRegion(UI_MENU_BUTTON_TEXTURE, 0.0f, 0.0f, 1.0f, 0.5f));
+		m_buttonSprite->setRegion(XTextureRegion(m_btnTexture, 0.0f, 0.0f, 1.0f, 0.5f));
 		m_buttonSprite->draw(batch);
 	}
 
 	// Draw default sprite
 	m_buttonSprite->setColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	m_buttonSprite->setRegion(XTextureRegion(UI_MENU_BUTTON_TEXTURE, 0.0f, 0.5f, 1.0f, 1.0f));
+	m_buttonSprite->setRegion(XTextureRegion(m_btnTexture, 0.0f, 0.5f, 1.0f, 1.0f));
 	m_buttonSprite->draw(batch);
 		
 	// Draw text
