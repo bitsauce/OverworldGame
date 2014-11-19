@@ -76,3 +76,6 @@ $RECYCLE.BIN/
 *.log
 *.sdf
 *.idb
+*.opensdf
+*.suo
+*.vcxproj.user
