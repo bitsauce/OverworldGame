@@ -1,11 +1,13 @@
-#ifndef UIOBJECT_H
-#define UIOBJECT_H
+#ifndef UI_OBJECT_H
+#define UI_OBJECT_H
 
 #include <x2d/x2d.h>
 
+#include "game/gameobject.h"
+
 #pragma warning(disable : 4717)
 
-class UiObject
+class UiObject : public GameObject
 {
 public:
 	UiObject(UiObject *parent);
@@ -63,4 +65,4 @@ protected:
 	bool m_active;
 };
 
-#endif // MAINMENU_H
+#endif // UI_OBJECT_H

@@ -8,10 +8,16 @@
 #define UI_MENU_BUTTON_TEXTURE ":/sprites/gui/menu_button.png"
 
 extern class UiObject *canvas;
-class MainMenu;
+class MainMenuScene;
+class WorldSelectScene;
+class WorldCreateScene;
+class GameScene;
 namespace scene
 {
-	extern MainMenu *mainMenu;
+	extern MainMenuScene *mainMenu;
+	extern WorldSelectScene *worldSelect;
+	extern WorldCreateScene *worldCreate;
+	extern GameScene *game;
 }
 
 #endif // CONSTANTS_H

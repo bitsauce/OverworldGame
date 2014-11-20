@@ -93,19 +93,29 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\game.cpp" />
+    <ClCompile Include="..\..\source\game\gameobject.cpp" />
     <ClCompile Include="..\..\source\gui\button.cpp" />
     <ClCompile Include="..\..\source\gui\canvas.cpp" />
+    <ClCompile Include="..\..\source\gui\lineedit.cpp" />
     <ClCompile Include="..\..\source\gui\uiobject.cpp" />
+    <ClCompile Include="..\..\source\scenes\gamescene.cpp" />
+    <ClCompile Include="..\..\source\scenes\worldcreate.cpp" />
     <ClCompile Include="..\..\source\scenes\mainmenu.cpp" />
+    <ClCompile Include="..\..\source\scenes\worldselect.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\constants.h" />
     <ClInclude Include="..\..\source\game.h" />
+    <ClInclude Include="..\..\source\game\gameobject.h" />
     <ClInclude Include="..\..\source\gui\button.h" />
     <ClInclude Include="..\..\source\gui\canvas.h" />
+    <ClInclude Include="..\..\source\gui\lineedit.h" />
     <ClInclude Include="..\..\source\gui\uiobject.h" />
+    <ClInclude Include="..\..\source\scenes\gamescene.h" />
+    <ClInclude Include="..\..\source\scenes\worldcreate.h" />
     <ClInclude Include="..\..\source\scenes\mainmenu.h" />
+    <ClInclude Include="..\..\source\scenes\worldselect.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,12 +1,12 @@
-#ifndef MAINMENU_H
-#define MAINMENU_H
+#ifndef WORLD_SELECT_H
+#define WORLD_SELECT_H
 
 #include <x2d/x2d.h>
 
 class UiObject;
 class Button;
 
-class MainMenuScene : public XScene
+class WorldSelectScene : public XScene
 {
 public:
 	void showEvent();
@@ -14,10 +14,11 @@ public:
 	void drawEvent();
 	void updateEvent();
 
-	void showSelectWorld();
+	void worldClicked();
+	void showCreateWorld();
 
 private:
 	vector<UiObject*> m_uiObjects;
 };
 
-#endif // MAINMENU_H
+#endif // WORLD_SELECT_H

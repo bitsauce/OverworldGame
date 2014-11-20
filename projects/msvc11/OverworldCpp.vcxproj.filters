@@ -17,6 +17,21 @@
     <ClCompile Include="..\..\source\gui\canvas.cpp">
       <Filter>source\gui</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\gui\lineedit.cpp">
+      <Filter>source\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenes\worldcreate.cpp">
+      <Filter>source\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenes\worldselect.cpp">
+      <Filter>source\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenes\gamescene.cpp">
+      <Filter>source\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\game\gameobject.cpp">
+      <Filter>source\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -30,6 +45,9 @@
     </Filter>
     <Filter Include="source\scenes">
       <UniqueIdentifier>{a771c727-de3c-48d8-93c5-0076f2474292}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\game">
+      <UniqueIdentifier>{18bc6b9a-571d-4fa2-8cc2-faf75c39f783}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -50,6 +68,21 @@
     </ClInclude>
     <ClInclude Include="..\..\source\gui\canvas.h">
       <Filter>source\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\lineedit.h">
+      <Filter>source\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scenes\worldcreate.h">
+      <Filter>source\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scenes\worldselect.h">
+      <Filter>source\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scenes\gamescene.h">
+      <Filter>source\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\gameobject.h">
+      <Filter>source\game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

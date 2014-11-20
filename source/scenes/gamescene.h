@@ -1,12 +1,11 @@
-#ifndef MAINMENU_H
-#define MAINMENU_H
+#ifndef GAME_SCENE_H
+#define GAME_SCENE_H
 
 #include <x2d/x2d.h>
 
 class UiObject;
-class Button;
 
-class MainMenuScene : public XScene
+class GameScene : public XScene
 {
 public:
 	void showEvent();
@@ -14,10 +13,8 @@ public:
 	void drawEvent();
 	void updateEvent();
 
-	void showSelectWorld();
-
-private:
+public:
 	vector<UiObject*> m_uiObjects;
 };
 
-#endif // MAINMENU_H
+#endif // GAME_SCENE_H
