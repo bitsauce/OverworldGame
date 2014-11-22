@@ -1,6 +1,7 @@
 #include "mainmenu.h"
 #include "worldselect.h"
 #include "gui/button.h"
+#include "gui/canvas.h"
 #include "game.h"
 #include "constants.h"
 
@@ -14,6 +15,10 @@ int TITLE_TILES[4][37] = {
 void MainMenuScene::showEvent()
 {
 	LOG("Scene: Main menu");
+	
+	// Setup canvas
+	canvas = new Canvas();
+	canvas->setSize(Vector2(1.0f, 1.0f));
 
 	Button *spBtn = new Button("Singleplayer", function<void()>(bind(&MainMenuScene::showSelectWorld, this)), canvas);
 	Button *mpBtn = new Button("Multiplayer", function<void()>(), canvas);
@@ -36,16 +41,17 @@ void MainMenuScene::hideEvent()
 	{
 		delete m_uiObjects[i];
 	}
+	m_uiObjects.clear();
 }
 
 void MainMenuScene::drawEvent()
 {
-	gameDraw();
+	Game::draw();
 }
 
 void MainMenuScene::updateEvent()
 {
-	gameUpdate();
+	Game::update();
 }
 
 void MainMenuScene::showSelectWorld()

@@ -22,14 +22,14 @@ void gameMain()
 	scene::worldCreate = new WorldCreateScene;
 	scene::game = new GameScene;
 
-	canvas = new Canvas();
-	canvas->setSize(Vector2(1.0f, 1.0f));
-
+	// Set some key bindings
 	XInput::bind(XD_KEY_ESCAPE, function<void()>(XEngine::exit));
 	//XInput::bind(XD_KEY_I, &delegate<void()>(Camera::zoomIn));
 	//XInput::bind(XD_KEY_O, &delegate<void()>(Camera::zoomOut));
 	//XInput::bind(XD_KEY_C, &delegate<void()>(Debug::debugFunc));
+	//XInput::bind(XD_BACKSPACE, &delegate<void()>());
 
+	// Set b2d world scale
 	//Box2D::setGravity(0, 40);
 	//Box2D::setWorldScale(TILE_PX);
 
@@ -44,6 +44,7 @@ void gameEnd()
 	delete scene::mainMenu;
 	delete scene::worldSelect;
 	delete scene::worldCreate;
+	delete scene::game;
 }
 
 void gameDraw()

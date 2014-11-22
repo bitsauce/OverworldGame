@@ -32,6 +32,24 @@
     <ClCompile Include="..\..\source\game\gameobject.cpp">
       <Filter>source\game</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\game\camera.cpp">
+      <Filter>source\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\game\debug.cpp">
+      <Filter>source\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\terrain\terrain.cpp">
+      <Filter>source\terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\terrain\terrainchunk.cpp">
+      <Filter>source\terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\game\world.cpp">
+      <Filter>source\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\terrain\terraingen.cpp">
+      <Filter>source\terrain</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -48,6 +66,18 @@
     </Filter>
     <Filter Include="source\game">
       <UniqueIdentifier>{18bc6b9a-571d-4fa2-8cc2-faf75c39f783}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\environment">
+      <UniqueIdentifier>{60063404-bf8e-4d1f-91c0-9ce7bdaa6c13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\entities">
+      <UniqueIdentifier>{dc2d914f-c636-4931-b0ee-b79e1c3b94ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\mobs">
+      <UniqueIdentifier>{e4431234-8aa8-4683-9b3c-7898bc8ecc33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\terrain">
+      <UniqueIdentifier>{acdbe615-25b7-49dc-9dd6-17c021361fc7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +112,24 @@
       <Filter>source\scenes</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\game\gameobject.h">
+      <Filter>source\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\camera.h">
+      <Filter>source\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\debug.h">
+      <Filter>source\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\terrain\terrain.h">
+      <Filter>source\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\terrain\terrainchunk.h">
+      <Filter>source\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\terrain\terraingen.h">
+      <Filter>source\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\world.h">
       <Filter>source\game</Filter>
     </ClInclude>
   </ItemGroup>
