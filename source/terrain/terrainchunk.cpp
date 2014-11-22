@@ -25,6 +25,9 @@ void TerrainChunk::init(int chunkX, int chunkY)
 	this->shadowPass1 = new XTexture(CHUNK_PX + shadowRadius*2, CHUNK_PX + shadowRadius*2);
 	this->shadowPass2 = new XTexture(CHUNK_PX + shadowRadius*2, CHUNK_PX + shadowRadius*2);
 	this->shadowPass2->setFiltering(XTexture::LINEAR);
+
+	// access: x + (width * (y + depth * z))
+	tiles = new TileID[CHUNK_BLOCKS*CHUNK_BLOCKS*TERRAIN_LAYER_COUNT];
 		
 	// Create body
 	/*b2BodyDef def;
@@ -54,6 +57,7 @@ void TerrainChunk::generate()
 			{
 				for(int i = TERRAIN_LAYER_COUNT-1; i >= 0; --i)
 				{
+					tiles[x + (CHUNK_BLOCKS * (y + TERRAIN_LAYER_COUNT * i))] = TerrainGen::getTileAt(chunkX * CHUNK_BLOCKS + x, chunkY * CHUNK_BLOCKS + y, (TerrainLayer)i);
 					//tiles[i][x, y] = Terrain.generator.getTileAt(chunkX * CHUNK_BLOCKS + x, chunkY * CHUNK_BLOCKS + y, TerrainLayer(i));
 				}
 			}
@@ -124,18 +128,18 @@ void TerrainChunk::generateVBO()
 	updateShadows();
 }
 	
-void TerrainChunk::serialize(stringstream &ss)
+void TerrainChunk::serialize(XFileWriter &ss)
 {
 	LOG("Saving chunk [%i, %i]...", chunkX, chunkY);
 		
 	// Write chunk pos
-	//ss.write(chunkX);
-	//ss.write(chunkY);
+	ss << chunkX << endl;
+	ss << chunkY << endl;
 		
 	// Write chunk tiles
-	for(int y = 0; y < CHUNK_BLOCKS; y++)
+	for(int y = 0; y < CHUNK_BLOCKS; ++y)
 	{
-		for(int x = 0; x < CHUNK_BLOCKS; x++)
+		for(int x = 0; x < CHUNK_BLOCKS; ++x)
 		{
 			for(int i = TERRAIN_LAYER_COUNT-1; i >= 0; --i)
 			{
@@ -151,8 +155,8 @@ void TerrainChunk::deserialize(stringstream &ss)
 {
 	// Initialize chunk
 	int chunkX, chunkY;
-	ss << chunkX << endl;
-	ss << chunkY << endl;
+	ss >> chunkX;
+	ss >> chunkY;
 		
 	LOG("Loading chunk [%i, %i]...", chunkX, chunkY);
 		

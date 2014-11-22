@@ -4,6 +4,8 @@
 #include "game/camera.h"
 #include "game/world.h"
 
+#define CHUNK_KEY(chunkX, chunkY) (chunkX & 0x0000FFFF) | ((chunkY << 16) & 0xFFFF0000)
+
 TerrainLayer getLayerByTile(TileID tile)
 {
 	if(tile < BACKGROUND_TILES) return TERRAIN_LAYER_BACKGROUND;
@@ -33,13 +35,22 @@ XVertexFormat TerrainManager::getVertexFormat() const
 void TerrainManager::saveChunks()
 {
 	LOG("Saving chunks...");
+
+	// Iterate loaded chunks
 	for(map<uint, TerrainChunk>::iterator itr = chunks.begin(); itr != chunks.end(); ++itr)
 	{
-		if(itr->second.modified)
+		// Skip unmodified chunks
+		if(!itr->second.modified) continue;
+
+		// Save chunk
+		string path = World::getWorldPath() + "/chunks/" + util::intToStr(CHUNK_KEY(itr->second.getX(), itr->second.getY())) + ".obj";
+		XFileWriter writer(path);
+		if(!writer)
 		{
-			//itr->second->serialize(ss);
-			//Scripts.serialize(cast<Serializable@>(chunks[key]), World.getWorldPath() + "/chunks/" + key + ".obj");
+			LOG("Error opening chunk file: '%s'", path);
+			continue;
 		}
+		itr->second.serialize(writer);
 	}
 }
 	
@@ -218,7 +229,7 @@ bool TerrainManager::removeTile(const int x, const int y, TerrainLayer layer = T
 // CHUNKS
 TerrainChunk &TerrainManager::getChunk(const int chunkX, const int chunkY, const bool generate)
 {
-	uint key = (chunkX & 0x0000FFFF) | ((chunkY << 16) & 0xFFFF0000);
+	uint key = CHUNK_KEY(chunkX, chunkY);
 	if(chunks.find(key) == chunks.end())
 	{
 		if(generate)

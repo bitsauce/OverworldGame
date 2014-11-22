@@ -31,7 +31,6 @@ class TerrainTile
 class TerrainChunk
 {
 	friend class TerrainManager;
-
 public:
 	TerrainChunk();
 	TerrainChunk(int chunkX, int chunkY);
@@ -40,7 +39,7 @@ public:
 	void init(int chunkX, int chunkY);
 	void generate();
 	void generateVBO();
-	void serialize(stringstream &ss);
+	void serialize(XFileWriter &ss);
 	void deserialize(stringstream &ss);
 	
 	int getX() const { return chunkX; }
@@ -70,6 +69,7 @@ private:
 	// CHUNK
 	int chunkX, chunkY;
 	//vector<vector<vector<TileID>>> tiles; TileID tiles[][][];
+	TileID *tiles;
 	
 	// PHYSICS
 	//b2Body *body;
