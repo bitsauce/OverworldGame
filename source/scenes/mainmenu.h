@@ -14,7 +14,7 @@ public:
 	void drawEvent();
 	void updateEvent();
 
-	void showSelectWorld();
+	void showWorldSelect();
 
 private:
 	vector<UiObject*> m_uiObjects;

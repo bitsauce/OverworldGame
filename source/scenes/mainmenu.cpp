@@ -20,7 +20,7 @@ void MainMenuScene::showEvent()
 	canvas = new Canvas();
 	canvas->setSize(Vector2(1.0f, 1.0f));
 
-	Button *spBtn = new Button("Singleplayer", function<void()>(bind(&MainMenuScene::showSelectWorld, this)), canvas);
+	Button *spBtn = new Button("Singleplayer", function<void()>(bind(&MainMenuScene::showWorldSelect, this)), canvas);
 	Button *mpBtn = new Button("Multiplayer", function<void()>(), canvas);
 	
 	spBtn->setPosition(Vector2(0.0f, -0.1f));
@@ -54,7 +54,7 @@ void MainMenuScene::updateEvent()
 	Game::update();
 }
 
-void MainMenuScene::showSelectWorld()
+void MainMenuScene::showWorldSelect()
 {
 	XEngine::pushScene(scene::worldSelect);
 }

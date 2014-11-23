@@ -5,11 +5,13 @@
 #include "terrainchunk.h"
 #include "terraingen.h"
 
+#include "game/gameobject.h"
+
 enum TerrainLayer;
 enum BlockID;
 extern TerrainLayer getLayerByTile(BlockID tile);
 
-class Terrain
+class Terrain : public GameObject
 {
 public:
 	Terrain();

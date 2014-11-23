@@ -14,7 +14,7 @@ void GameScene::showEvent()
 
 	// Setup canvas
 	canvas = new Canvas();
-	canvas->setSize(Vector2(1.0f, 1.0f));
+	canvas->update();
 }
 
 void GameScene::hideEvent()

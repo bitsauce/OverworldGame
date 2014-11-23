@@ -1,6 +1,8 @@
 #include "game.h"
 #include "constants.h"
 
+#include "game/world.h"
+
 #include "scenes/mainmenu.h"
 #include "scenes/worldselect.h"
 #include "scenes/worldcreate.h"
@@ -28,6 +30,8 @@ void gameMain()
 	//XInput::bind(XD_KEY_O, &delegate<void()>(Camera::zoomOut));
 	//XInput::bind(XD_KEY_C, &delegate<void()>(Debug::debugFunc));
 	//XInput::bind(XD_BACKSPACE, &delegate<void()>());
+
+	World::init();
 
 	// Set b2d world scale
 	//Box2D::setGravity(0, 40);

@@ -5,6 +5,7 @@
 #include "gui/canvas.h"
 
 #include "game/gameobject.h"
+#include "game/world.h"
 
 #include "game.h"
 #include "constants.h"
@@ -15,7 +16,7 @@ void WorldCreateScene::showEvent()
 	
 	// Setup canvas
 	canvas = new Canvas();
-	canvas->setSize(Vector2(1.0f, 1.0f));
+	canvas->update();
 		
 	m_worldNameEdit = new LineEdit(canvas);
 	m_worldNameEdit->setAnchor(Vector2(0.5f, 0.5f));
@@ -53,4 +54,10 @@ void WorldCreateScene::updateEvent()
 
 void WorldCreateScene::createWorld()
 {
+	// Get world name
+	string worldName = m_worldNameEdit->getText();
+	if(worldName.empty()) return;
+
+	// Create world
+	World::create(worldName);
 }
