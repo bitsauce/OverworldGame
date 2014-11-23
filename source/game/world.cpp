@@ -1,19 +1,25 @@
 #include "world.h"
 #include "constants.h"
 
+#include "environment/timeofday.h"
+#include "environment/background.h"
+
 #include "scenes/gamescene.h"
 
 #include "terrain/terrain.h"
 
 #include <Box2D/Box2D.h>
 
-Terrain *World::s_terrain = nullptr;
 b2World *World::s_b2World = nullptr;
+Terrain *World::s_terrain = nullptr;
+TimeOfDay *World::s_timeOfDay = nullptr;
 string World::s_worldPath;
 XIniFile *World::s_worldFile = nullptr;
 
 void World::init()
 {
+	s_timeOfDay = new TimeOfDay();
+	new Background(s_timeOfDay);
 	s_b2World = new b2World(b2Vec2(0.0f, 9.81f));
 	s_terrain = new Terrain;
 	s_worldFile = nullptr;

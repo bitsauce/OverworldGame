@@ -103,7 +103,7 @@
       <AdditionalIncludeDirectories>..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>bin\Debug\Box2D.lib;bin\Debug\FreeGLUT.lib;bin\Debug\GLUI.lib;glu32.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\Lib\Box2Dd.lib;bin\Debug\FreeGLUT.lib;bin\Debug\GLUI.lib;glu32.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)Testbed.exe</OutputFile>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
@@ -161,7 +161,7 @@
       <AdditionalIncludeDirectories>..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>bin\Release\Box2D.lib;bin\Release\FreeGLUT.lib;bin\Release\GLUI.lib;glu32.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\Lib\Box2D.lib;bin\Release\FreeGLUT.lib;bin\Release\GLUI.lib;glu32.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)Testbed.exe</OutputFile>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
@@ -230,6 +230,7 @@
     <ClInclude Include="..\..\Testbed\Tests\EdgeShapes.h" />
     <ClInclude Include="..\..\Testbed\Tests\EdgeTest.h" />
     <ClInclude Include="..\..\Testbed\Tests\Gears.h" />
+    <ClInclude Include="..\..\Testbed\Tests\HugeBodies.h" />
     <ClInclude Include="..\..\Testbed\Tests\Mobile.h" />
     <ClInclude Include="..\..\Testbed\Tests\MobileBalanced.h" />
     <ClInclude Include="..\..\Testbed\Tests\MotorJoint.h" />

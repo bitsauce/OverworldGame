@@ -26,7 +26,7 @@ private:
 	void keyPressEvent(const XVirtualKey key);
 	void keyReleaseEvent(const XVirtualKey key);
 
-	xd::Resource<XFont> m_font;
+	shared_ptr<XFont> m_font;
 	string m_text;
 	int m_cursorPos;
 	float m_cursorTime;

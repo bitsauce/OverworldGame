@@ -14,7 +14,7 @@ BlockID Tree::getTileAt(const int x, const int y, TerrainLayer layer)
 		{
 			if(x == 5 && y >= 5)
 			{
-				return WOOD_TILE;
+				return BLOCK_BACKGROUND_WOOD;
 			}
 		}
 			
@@ -22,14 +22,16 @@ BlockID Tree::getTileAt(const int x, const int y, TerrainLayer layer)
 		{
 			if(sqrt(pow(y-5, 2)+pow(x-5, 2)) < 5.0f)
 			{
-				return LEAF_TILE;
+				return BLOCK_FOREGROUND_LEAF;
 			}
 		}
 	}
-	return NULL_TILE;
+	return BLOCK_NULL;
 }
 
-BlockID TerrainGen::getTileAt(const int x, const int y, const TerrainLayer)
+BlockID TerrainGen::getTileAt(const int x, const int y, const TerrainLayer layer)
 {
-	return EMPTY_TILE;
+	if(layer == TERRAIN_LAYER_SCENE)
+		return sin(x*0.1f)*20.0f < y ? BLOCK_SCENE_GRASS : BLOCK_EMPTY;
+	return BLOCK_EMPTY;
 }

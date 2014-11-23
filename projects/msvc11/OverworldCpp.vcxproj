@@ -92,6 +92,8 @@
     <ResourceCompile Include="resources.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\environment\background.cpp" />
+    <ClCompile Include="..\..\source\environment\timeofday.cpp" />
     <ClCompile Include="..\..\source\game.cpp" />
     <ClCompile Include="..\..\source\game\camera.cpp" />
     <ClCompile Include="..\..\source\game\debug.cpp" />
@@ -113,6 +115,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\constants.h" />
+    <ClInclude Include="..\..\source\environment\background.h" />
+    <ClInclude Include="..\..\source\environment\timeofday.h" />
     <ClInclude Include="..\..\source\game.h" />
     <ClInclude Include="..\..\source\game\camera.h" />
     <ClInclude Include="..\..\source\game\debug.h" />

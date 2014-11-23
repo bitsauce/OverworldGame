@@ -28,7 +28,7 @@ public:
 	
 	BlockID getTileAt(const int x, const int y, TerrainLayer layer)
 	{
-		return EMPTY_TILE;
+		return BLOCK_EMPTY;
 	}
 };
 

@@ -1,7 +1,7 @@
 #include "camera.h"
 
 Vector2 Camera::s_position(0.0f, 0.0f);
-float Camera::s_zoom = 0.0f;
+float Camera::s_zoom = 1.0f;
 
 Vector2 Camera::getCenter()
 {

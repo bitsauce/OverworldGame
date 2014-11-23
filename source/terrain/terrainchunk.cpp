@@ -44,7 +44,7 @@ void TerrainChunk::init(int chunkX, int chunkY)
 		{
 			for(uint x = 0; x < CHUNK_BLOCKS; ++x)
 			{
-				m_blocks[BLOCK_INDEX(x, y, z)] = EMPTY_TILE;
+				m_blocks[BLOCK_INDEX(x, y, z)] = BLOCK_EMPTY;
 			}
 		}
 	}
@@ -118,7 +118,7 @@ void TerrainChunk::generateVBO()
 			for(int i = TERRAIN_LAYER_COUNT-1; i >= 0; --i)
 			{
 				BlockID tile = m_blocks[BLOCK_INDEX(x, y, i)];
-				if(tile > RESERVED_TILE) // no point in updating air/reserved tiles
+				if(tile > BLOCK_RESERVED) // no point in updating air/reserved tiles
 				{
 					uint state = World::getTerrain()->getTileState(m_x * CHUNK_BLOCKS + x, m_y * CHUNK_BLOCKS + y, TerrainLayer(i));
 						
@@ -129,7 +129,7 @@ void TerrainChunk::generateVBO()
 					t.y = y;
 					sortedTiles.push_back(t);
 						
-					updateFixture(x, y, state);
+					//updateFixture(x, y, state);
 					//if(tileIsOpaque)
 						break;
 				}
@@ -141,8 +141,8 @@ void TerrainChunk::generateVBO()
 	for(uint i = 0; i < sortedTiles.size(); ++i)
 	{
 		TerrainTile tile = sortedTiles[i];
-		vector<XVertex> vertices = TileData::get(tile.tile).getVertices(tile.x, tile.y, tile.state);
-		vector<uint> indices = TileData::get(tile.tile).getIndices();
+		vector<XVertex> vertices = BlockData::get(tile.tile).getVertices(tile.x, tile.y, tile.state);
+		vector<uint> indices = BlockData::get(tile.tile).getIndices();
 		m_vbo.addVertices(vertices.data(), vertices.size(), indices.data(), indices.size());
 	}
 	
@@ -168,7 +168,7 @@ void TerrainChunk::serialize(XFileWriter &ss)
 			for(int i = TERRAIN_LAYER_COUNT-1; i >= 0; --i)
 			{
 				BlockID block = m_blocks[BLOCK_INDEX(x, y, i)];
-				if(block <= RESERVED_TILE) block = EMPTY_TILE;
+				if(block <= BLOCK_RESERVED) block = BLOCK_EMPTY;
 				ss << block << endl;
 			}
 		}
@@ -211,17 +211,17 @@ ChunkState TerrainChunk::getState() const
 	
 BlockID TerrainChunk::getTileAt(const int x, const int y, TerrainLayer layer) const
 {
-	return m_state != CHUNK_DUMMY ? m_blocks[BLOCK_INDEX(x, y, layer)] : NULL_TILE;
+	return m_state != CHUNK_DUMMY ? m_blocks[BLOCK_INDEX(x, y, layer)] : BLOCK_NULL;
 }
 	
 bool TerrainChunk::isTileAt(const int x, const int y, TerrainLayer layer) const
 {
-	return m_state != CHUNK_DUMMY && m_blocks[BLOCK_INDEX(x, y, layer)] != EMPTY_TILE;
+	return m_state != CHUNK_DUMMY && m_blocks[BLOCK_INDEX(x, y, layer)] != BLOCK_EMPTY;
 }
 	
 bool TerrainChunk::isReservedTileAt(const int x, const int y, TerrainLayer layer) const
 {
-	return m_state != CHUNK_DUMMY && m_blocks[BLOCK_INDEX(x, y, layer)] > RESERVED_TILE;
+	return m_state != CHUNK_DUMMY && m_blocks[BLOCK_INDEX(x, y, layer)] > BLOCK_RESERVED;
 }
 	
 bool TerrainChunk::setTile(const int x, const int y, const BlockID tile, TerrainLayer layer)
@@ -350,7 +350,7 @@ void TerrainChunk::createFixture(const int x, const int y)
 	def.density = 0.0f;
 
 	b2Fixture *fixture = m_body->CreateFixture(&def);
-	TileData::get(getTileAt(x, y, TERRAIN_LAYER_SCENE)).setupFixture(fixture);
+	BlockData::get(getTileAt(x, y, TERRAIN_LAYER_SCENE)).setupFixture(fixture);
 	m_fixtures[FIXTURE_INDEX(x, y)] = fixture;
 }
 	
@@ -419,7 +419,7 @@ void TerrainChunk::updateShadows()
 }
 	
 // DRAWING
-void TerrainChunk::draw(const Matrix4 &projmat)
+void TerrainChunk::draw(XBatch *batch)
 {
 	if(m_state == CHUNK_INITIALIZED)
 	{
@@ -430,29 +430,24 @@ void TerrainChunk::draw(const Matrix4 &projmat)
 		}
 			
 		// Draw tiles
-		XBatch batch;
-		batch.setProjectionMatrix(projmat);
-		m_vbo.draw(&batch, 0/*@Tiles.getAtlas().getTexture()*/);
+		m_vbo.draw(batch, BlockData::get(BLOCK_EMPTY).getTexture()/*@Tiles.getAtlas().getTexture()*/);
 			
 		if(XInput::getKeyState(XD_KEY_Z))
 		{
-			XShape line1(Rect(0, 0, CHUNK_PX, 1));
+			XShape line1(Rect(m_x * CHUNK_PX, m_y * CHUNK_PX, CHUNK_PX, 1));
 			line1.setFillColor(XColor(0, 0, 0, 255));
-			line1.draw(&batch);
+			line1.draw(batch);
 				
-			XShape line2(Rect(0, 1, 1, CHUNK_PX));
+			XShape line2(Rect(m_x * CHUNK_PX, m_y * CHUNK_PX, 1, CHUNK_PX));
 			line2.setFillColor(XColor(0, 0, 0, 255));
-			line2.draw(&batch);
+			line2.draw(batch);
 		}
 			
-		XGraphics::renderBatch(batch);
-		batch.clear();
-			
 		// Draw shadows
-		float f = m_shadowRadius/(CHUNK_BLOCKSF + m_shadowRadius*2);
-		XSprite shadows(XTextureRegion(m_shadowPass2, f, f, 1.0-f, 1.0-f));
+		/*float f = m_shadowRadius/(CHUNK_BLOCKSF + m_shadowRadius*2);
+		XSprite shadows(XTextureRegion(shared_ptr<XTexture>(m_shadowPass2), f, f, 1.0-f, 1.0-f));
 		shadows.setPosition(CHUNK_PXF*m_x, CHUNK_PXF*m_y);
-		shadows.setSize(CHUNK_PXF, CHUNK_PXF);
+		shadows.setSize(CHUNK_PXF, CHUNK_PXF);*/
 		//shadows.draw(Shadows);
 	}
 }

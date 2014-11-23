@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Box2D", "Box2D.vcxproj", "{98400D17-43A5-1A40-95BE-C53AC78E7694}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FreeGLUT", "FreeGLUT.vcxproj", "{BCA4569B-A486-E443-9EE2-07D4CB3CFBA8}"
@@ -17,11 +17,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Testbed", "Testbed.vcxproj"
 		{6F01DB00-32F0-A842-9B60-3ABA75A2D458} = {6F01DB00-32F0-A842-9B60-3ABA75A2D458}
 		{98400D17-43A5-1A40-95BE-C53AC78E7694} = {98400D17-43A5-1A40-95BE-C53AC78E7694}
 		{BCA4569B-A486-E443-9EE2-07D4CB3CFBA8} = {BCA4569B-A486-E443-9EE2-07D4CB3CFBA8}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Box2D Plugin", "Box2D Plugin.vcxproj", "{BFE43637-34C5-4ED7-BF2F-9B5FF7A43309}"
-	ProjectSection(ProjectDependencies) = postProject
-		{98400D17-43A5-1A40-95BE-C53AC78E7694} = {98400D17-43A5-1A40-95BE-C53AC78E7694}
 	EndProjectSection
 EndProject
 Global
@@ -72,12 +67,6 @@ Global
 		{3FC8974C-9179-4D4E-A5E0-79E3C836548F}.Release|Win32.Build.0 = Release|Win32
 		{3FC8974C-9179-4D4E-A5E0-79E3C836548F}.Release|x64.ActiveCfg = Release|x64
 		{3FC8974C-9179-4D4E-A5E0-79E3C836548F}.Release|x64.Build.0 = Release|x64
-		{BFE43637-34C5-4ED7-BF2F-9B5FF7A43309}.Debug|Win32.ActiveCfg = Debug|Win32
-		{BFE43637-34C5-4ED7-BF2F-9B5FF7A43309}.Debug|Win32.Build.0 = Debug|Win32
-		{BFE43637-34C5-4ED7-BF2F-9B5FF7A43309}.Debug|x64.ActiveCfg = Debug|Win32
-		{BFE43637-34C5-4ED7-BF2F-9B5FF7A43309}.Release|Win32.ActiveCfg = Release|Win32
-		{BFE43637-34C5-4ED7-BF2F-9B5FF7A43309}.Release|Win32.Build.0 = Release|Win32
-		{BFE43637-34C5-4ED7-BF2F-9B5FF7A43309}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

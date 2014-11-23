@@ -1,6 +1,10 @@
 #include "gameobject.h"
+#include "camera.h"
+#include "debug.h"
 
-GameObject::GameObject()
+
+GameObject::GameObject(DrawOrder depth) :
+	m_depth(depth)
 {
 	Game::addGameObject(this);
 }
@@ -39,6 +43,11 @@ void Game::draw()
 	{
 		(*itr)->draw(&batch);
 	}
+	
+	Debug::setVariable("Camera", util::floatToStr(Camera::getPosition().x) + ", " + util::floatToStr(Camera::getPosition().y));
+	Debug::setVariable("FPS", util::intToStr(XGraphics::getFPS()));
+	Debug::draw(&batch);
+
 	XGraphics::renderBatch(batch);
 
 	/*
@@ -95,6 +104,14 @@ void Game::draw()
 
 void Game::addGameObject(GameObject *object)
 {
+	/*list<GameObject*>::iterator itr;
+	for(itr = s_gameObjects.begin(); itr != s_gameObjects.end(); ++itr)
+	{
+		if((*itr)->m_depth < object->m_depth)
+			continue;
+		break;
+	}
+	s_gameObjects.insert(itr, object);*/
 	s_gameObjects.push_back(object);
 }
 

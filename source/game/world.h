@@ -3,8 +3,9 @@
 
 #include <x2d/x2d.h>
 
-class Terrain;
 class b2World;
+class Terrain;
+class TimeOfDay;
 
 class World
 {
@@ -18,11 +19,13 @@ public:
 
 	static b2World *getb2World();
 	static Terrain *getTerrain();
+	static TimeOfDay *getTimeOfDay();
 
 private:
-
-	static Terrain *s_terrain;
+	
 	static b2World *s_b2World;
+	static Terrain *s_terrain;
+	static TimeOfDay *s_timeOfDay;
 	static string s_worldPath;
 	static XIniFile *s_worldFile;
 };

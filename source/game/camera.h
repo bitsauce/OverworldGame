@@ -3,7 +3,9 @@
 
 #include <x2d/x2d.h>
 
-class Camera
+#include "game/gameobject.h"
+
+class Camera : public GameObject
 {
 public:
 	static Vector2 getCenter();

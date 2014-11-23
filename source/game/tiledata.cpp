@@ -1,4 +1,21 @@
 #include "tiledata.h"
+#include "game/world.h"
+#include "terrain/terrain.h"
+
+vector<BlockData> BlockData::s_blockData;
+
+void BlockData::init()
+{
+	s_blockData.push_back(BlockData(BLOCK_SCENE_GRASS, xd::ResourceManager::get<XTexture>(":/sprites/tiles/grass_tile.png"), 0/*ITEM_GRASS_BLOCK*/, 1.0f));
+}
+
+BlockData::BlockData(BlockID id, const shared_ptr<XTexture> &texture, const /*ItemID*/ uint i, const float opacity) :
+	m_id(id),
+	m_texture(texture),
+	m_itemID(i),
+	m_opacity(opacity)
+{
+}
 
 /*array<uint> TILE_INDICES = {
 	0, 3, 2, 0, 2, 1,       // q1
@@ -12,7 +29,7 @@
 	32, 35, 34, 32, 34, 33  // q9
 };*/
 
-vector<XVertex> Tile::getVertices(const int x, const int y, const uint state)
+vector<XVertex> BlockData::getVertices(const int x, const int y, const uint state)
 {
 	/*array<Vertex> vertices = Terrain.getVertexFormat().createVertices(4*9);
 	TextureAtlas @atlas = @Tiles.getAtlas();
@@ -35,16 +52,32 @@ vector<XVertex> Tile::getVertices(const int x, const int y, const uint state)
 		vertices[i*4+3].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
 	}
 	return vertices;*/
-	return vector<XVertex>();
+	XVertex *vertices = World::getTerrain()->getVertexFormat().createVertices(4);
+
+	vertices[0].set4f(VERTEX_POSITION, x * BLOCK_PX, y * BLOCK_PX);
+	vertices[1].set4f(VERTEX_POSITION, (x+1) * BLOCK_PX, y * BLOCK_PX);
+	vertices[2].set4f(VERTEX_POSITION, (x+1) * BLOCK_PX, (y+1) * BLOCK_PX);
+	vertices[3].set4f(VERTEX_POSITION, x * BLOCK_PX, (y+1) * BLOCK_PX);
+	
+	vertices[0].set4f(VERTEX_TEX_COORD, 4.0f/24.0f, 4.0f/24.0f);
+	vertices[1].set4f(VERTEX_TEX_COORD, 1.0f - 4.0f/24.0f, 4.0f/24.0f);
+	vertices[2].set4f(VERTEX_TEX_COORD, 1.0f - 4.0f/24.0f, 1.0f - 4.0f/24.0f);
+	vertices[3].set4f(VERTEX_TEX_COORD, 4.0f/24.0f, 1.0f - 4.0f/24.0f);
+
+	vector<XVertex> v;
+	v.assign(vertices, vertices + 4);
+	return v;
 }
 
-vector<uint> Tile::getIndices()
+vector<uint> BlockData::getIndices()
 {
-	return vector<uint>();
+	vector<uint> v;
+	v.assign(QUAD_INDICES, QUAD_INDICES + 6);
+	return v;
 	//return TILE_INDICES;
 }
 
-Tile &TileData::get(const BlockID tile)
+BlockData &BlockData::get(const BlockID tile)
 {
-	return Tile();
+	return s_blockData[0];
 }

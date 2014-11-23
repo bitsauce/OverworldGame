@@ -2,6 +2,7 @@
 #include "constants.h"
 
 #include "game/world.h"
+#include "game/tiledata.h"
 
 #include "scenes/mainmenu.h"
 #include "scenes/worldselect.h"
@@ -10,6 +11,8 @@
 
 #include "gui/canvas.h"
 #include "gui/uiobject.h"
+
+#include "game/camera.h"
 
 UiObject *canvas = 0;
 MainMenuScene *scene::mainMenu = 0;
@@ -31,7 +34,10 @@ void gameMain()
 	//XInput::bind(XD_KEY_C, &delegate<void()>(Debug::debugFunc));
 	//XInput::bind(XD_BACKSPACE, &delegate<void()>());
 
+	BlockData::init();
 	World::init();
+
+	//Camera::lookAt(Vector2(0.0f, 0.0f));
 
 	// Set b2d world scale
 	//Box2D::setGravity(0, 40);

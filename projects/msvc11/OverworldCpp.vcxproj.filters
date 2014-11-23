@@ -53,6 +53,12 @@
     <ClCompile Include="..\..\source\game\tiledata.cpp">
       <Filter>source\game</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\environment\background.cpp">
+      <Filter>source\environment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\environment\timeofday.cpp">
+      <Filter>source\environment</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -137,6 +143,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\game\tiledata.h">
       <Filter>source\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\environment\background.h">
+      <Filter>source\environment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\environment\timeofday.h">
+      <Filter>source\environment</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

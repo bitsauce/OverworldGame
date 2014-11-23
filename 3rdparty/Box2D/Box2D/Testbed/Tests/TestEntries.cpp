@@ -74,6 +74,7 @@
 #include "VaryingRestitution.h"
 #include "VerticalStack.h"
 #include "Web.h"
+#include "HugeBodies.h"
 
 TestEntry g_testEntries[] =
 {
@@ -126,5 +127,6 @@ TestEntry g_testEntries[] =
 	{"Slider Crank", SliderCrank::Create},
 	{"Varying Friction", VaryingFriction::Create},
 	{"Add Pair Stress Test", AddPair::Create},
+	{"Huge Bodies", HugeBodies::Create},
 	{NULL, NULL}
 };

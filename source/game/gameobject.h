@@ -3,14 +3,20 @@
 
 #include <x2d/x2d.h>
 
+enum DrawOrder;
+
 class GameObject
 {
+	friend class Game;
 public:
-	GameObject();
+	GameObject(DrawOrder depth);
 	virtual ~GameObject();
 
 	virtual void update() { }
 	virtual void draw(XBatch*) { }
+
+private:
+	const DrawOrder m_depth;
 };
 
 class Game

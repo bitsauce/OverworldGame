@@ -40,13 +40,14 @@ public:
 	void update();
 	
 	// DRAWING
-	void draw(const TerrainLayer layer, XBatch *batch);
+	void draw(/*const TerrainLayer layer, */XBatch *batch);
 
 private:
 	// Terrain chunks
 	//vector<TerrainChunk*> loadedChunks;
+	TerrainChunk m_dummyChunk;
 	list<TerrainChunk*> chunkLoadQueue;
-	map<uint, TerrainChunk> chunks;
+	map<uint, TerrainChunk*> chunks;
 	XVertexFormat vertexFormat;
 	
 	// Terrain generator

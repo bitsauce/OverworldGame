@@ -60,9 +60,11 @@ public:
 	float getOpacity(const int x, const int y);
 	
 	// DRAWING
-	void draw(const Matrix4 &projmat);
+	void draw(XBatch *batch);
 
 private:
+	TerrainChunk(const TerrainChunk &) {}
+
 	// PHYSICS
 	void createFixture(const int x, const int y);
 	void removeFixture(const int x, const int y);

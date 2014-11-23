@@ -1,6 +1,9 @@
 #include "uiobject.h"
 
+#include "constants.h"
+
 UiObject::UiObject(UiObject *parent) :
+	GameObject(DRAW_ORDER_UI),
 	m_parent(parent),
 	m_anchor(0.0f, 0.0f),
 	m_rect(),
