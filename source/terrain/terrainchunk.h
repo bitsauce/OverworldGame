@@ -3,7 +3,7 @@
 
 #include <x2d/x2d.h>
 
-enum TileID;
+enum BlockID;
 enum TerrainLayer;
 
 enum ChunkState
@@ -13,24 +13,28 @@ enum ChunkState
 	CHUNK_INITIALIZED
 };
 
+class b2Body;
+class b2Fixture;
+
 //Shader @blurHShader = @Shader(":/shaders/blur_h.vert", ":/shaders/blur_h.frag");
 //Shader @blurVShader = @Shader(":/shaders/blur_v.vert", ":/shaders/blur_v.frag");
 
 class TerrainTile
 {
-	int opCmp(const TerrainTile &other)
+public:
+	bool operator<(const TerrainTile &other) const
 	{
-		return tile - other.tile;
+		return tile < other.tile;
 	}
 	
-	TileID tile;
+	BlockID tile;
 	uint state;
 	int x, y;
 };
 
 class TerrainChunk
 {
-	friend class TerrainManager;
+	friend class Terrain;
 public:
 	TerrainChunk();
 	TerrainChunk(int chunkX, int chunkY);
@@ -42,14 +46,14 @@ public:
 	void serialize(XFileWriter &ss);
 	void deserialize(stringstream &ss);
 	
-	int getX() const { return chunkX; }
-	int getY() const { return chunkY; }
+	int getX() const { return m_x; }
+	int getY() const { return m_y; }
 	
 	ChunkState getState() const;
-	TileID getTileAt(const int x, const int y, TerrainLayer layer) const;
+	BlockID getTileAt(const int x, const int y, TerrainLayer layer) const;
 	bool isTileAt(const int x, const int y, TerrainLayer layer) const;
 	bool isReservedTileAt(const int x, const int y, TerrainLayer layer) const;
-	bool setTile(const int x, const int y, const TileID tile, TerrainLayer layer);
+	bool setTile(const int x, const int y, const BlockID tile, TerrainLayer layer);
 	void updateTile(const int x, const int y, const uint tileState, const bool fixture = false);
 
 	// SHADOWS
@@ -67,26 +71,24 @@ private:
 	void updateShadows();
 
 	// CHUNK
-	int chunkX, chunkY;
-	//vector<vector<vector<TileID>>> tiles; TileID tiles[][][];
-	TileID *tiles;
+	int m_x, m_y;
+	BlockID *m_blocks;
 	
 	// PHYSICS
-	//b2Body *body;
-	//grid<b2Fixture@> fixtures; b2Fixture *fixtures[][];
+	b2Body *m_body;
+	b2Fixture **m_fixtures;
 	
 	// DRAWING
-	XVertexBuffer vbo;
-	XTexture *shadowMap;
-	XTexture *shadowPass1;
-	XTexture *shadowPass2;
-	int shadowRadius;
+	XVertexBuffer m_vbo;
+	XTexture *m_shadowMap;
+	XTexture *m_shadowPass1;
+	XTexture *m_shadowPass2;
+	int m_shadowRadius;
 	
 	// MISC
-	bool modified;
-	bool dirty;
-	ChunkState state;
-		
+	bool m_modified;
+	bool m_dirty;
+	ChunkState m_state;
 };
 
 #endif // TERRAIN_CHUNK_H

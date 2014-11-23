@@ -6,29 +6,28 @@
 #include "terraingen.h"
 
 enum TerrainLayer;
-enum TileID;
-extern TerrainLayer getLayerByTile(TileID tile);
+enum BlockID;
+extern TerrainLayer getLayerByTile(BlockID tile);
 
-class TerrainManager
+class Terrain
 {
 public:
-	TerrainManager();
+	Terrain();
 	
 	// VERTEX FORMAT
 	XVertexFormat getVertexFormat() const;
 	
 	// Move?
 	void saveChunks();
-	
 	void load(const XIniFile &file);
 	
 	// TILE HELPERS
-	TileID getTileAt(const int x, const int y, const TerrainLayer layer);
+	BlockID getTileAt(const int x, const int y, const TerrainLayer layer);
 	bool isTileAt(const int x, const int y, TerrainLayer layer);
 	uint getTileState(const int x, const int y, TerrainLayer layer) /*const*/;
 	
 	// TILE MODIFICATION
-	bool setTile(const int x, const int y, TileID tile, const TerrainLayer layer);
+	bool setTile(const int x, const int y, BlockID tile, const TerrainLayer layer);
 	bool removeTile(const int x, const int y, TerrainLayer layer);
 	
 	// CHUNKS

@@ -29,7 +29,8 @@
 #define SUPER_CHUNK_TILES SUPER_CHUNK_CHUNKS*CHUNK_BLOCKS
 #define SUPER_CHUNK_TILESF float(SUPER_CHUNK_TILES)
 #define SUPER_CHUNK_PX SUPER_CHUNK_SIZE*CHUNK_SIZE*TILE_PX
-#define SUPER_CHUNK_PXF float(SUPER_CHUNK_PX)
+#define SUPER_CHUNK_PXF float(SUPER_CHUNK_PX)
+
 // Tile texture coordinates
 /*const float TILE_U0 = 0.000f;
 const float TILE_V0 = 0.000f;
@@ -54,7 +55,7 @@ grid<float> TILE_TEXTURE_COORDS =
 	{ TILE_U1, TILE_V1, TILE_U3, TILE_V3 }  // 8
 };*/
 
-enum TileID
+enum BlockID
 {
 	NULL_TILE = 0,
 	EMPTY_TILE,

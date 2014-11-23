@@ -1,54 +1,77 @@
 #include "terrainchunk.h"
+#include "terrain.h"
+#include "terraingen.h"
 #include "constants.h"
+
+#include "game/world.h"
+#include "game/tiledata.h"
+
+#include <Box2D/Box2D.h>
 	
 TerrainChunk::TerrainChunk()
 {
 	// A dummy
-	state = CHUNK_DUMMY;
+	m_state = CHUNK_DUMMY;
 }
 	
 TerrainChunk::TerrainChunk(int chunkX, int chunkY)
 {
 	init(chunkX, chunkY);
 }
+
+#define BLOCK_INDEX(x, y, z) x + CHUNK_BLOCKS * (y + CHUNK_BLOCKS * z)
+#define FIXTURE_INDEX(x, y) x + CHUNK_BLOCKS * y
 	
 // SERIALIZATION
 void TerrainChunk::init(int chunkX, int chunkY)
 {
 	// Set chunk vars
-	this->state = CHUNK_GENERATING;
-	this->chunkX = chunkX;
-	this->chunkY = chunkY;
-	this->dirty = this->modified = false; // not modified
-	this->shadowRadius = 4;
-	this->shadowMap   = new XTexture(CHUNK_PX + shadowRadius*2, CHUNK_PX + shadowRadius*2);
-	this->shadowPass1 = new XTexture(CHUNK_PX + shadowRadius*2, CHUNK_PX + shadowRadius*2);
-	this->shadowPass2 = new XTexture(CHUNK_PX + shadowRadius*2, CHUNK_PX + shadowRadius*2);
-	this->shadowPass2->setFiltering(XTexture::LINEAR);
+	m_state = CHUNK_GENERATING;
+	m_x = chunkX;
+	m_y = chunkY;
+	m_dirty = m_modified = false; // not modified
+	m_shadowRadius = 4;
+	m_shadowMap   = new XTexture(CHUNK_PX + m_shadowRadius*2, CHUNK_PX + m_shadowRadius*2);
+	m_shadowPass1 = new XTexture(CHUNK_PX + m_shadowRadius*2, CHUNK_PX + m_shadowRadius*2);
+	m_shadowPass2 = new XTexture(CHUNK_PX + m_shadowRadius*2, CHUNK_PX + m_shadowRadius*2);
+	m_shadowPass2->setFiltering(XTexture::LINEAR);
 
-	// access: x + (width * (y + depth * z))
-	tiles = new TileID[CHUNK_BLOCKS*CHUNK_BLOCKS*TERRAIN_LAYER_COUNT];
-		
+	// Initialize tiles
+	m_blocks = new BlockID[CHUNK_BLOCKS*CHUNK_BLOCKS*TERRAIN_LAYER_COUNT];
+	for(uint z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+	{
+		for(uint y = 0; y < CHUNK_BLOCKS; ++y)
+		{
+			for(uint x = 0; x < CHUNK_BLOCKS; ++x)
+			{
+				m_blocks[BLOCK_INDEX(x, y, z)] = EMPTY_TILE;
+			}
+		}
+	}
+	
 	// Create body
-	/*b2BodyDef def;
+	b2BodyDef def;
 	def.type = b2_staticBody;
-	def.position.set(chunkX * CHUNK_SIZE * TILE_PX, chunkY * CHUNK_SIZE * TILE_PX);
+	def.position.Set(chunkX * CHUNK_PXF, chunkY * CHUNK_PXF);
 	def.allowSleep = true;
-	@body = @b2Body(def);
-	body.setObject(@Terrain);
+	
+	m_body = World::getb2World()->CreateBody(&def);
+	m_body->SetUserData(World::getTerrain());
 		
 	// Resize tile grid
-	fixtures = grid<b2Fixture@>(CHUNK_SIZE, CHUNK_SIZE, null);
-	tiles = array<grid<TileID>>(TERRAIN_LAYERS_MAX);
-	for(int i = 0; i < TERRAIN_LAYERS_MAX; ++i)
+	m_fixtures = new b2Fixture*[CHUNK_BLOCKS*CHUNK_BLOCKS];
+	for(uint y = 0; y < CHUNK_BLOCKS; ++y)
 	{
-		tiles[i] = grid<TileID>(CHUNK_SIZE, CHUNK_SIZE, EMPTY_TILE);
-	}*/
+		for(uint x = 0; x < CHUNK_BLOCKS; ++x)
+		{
+			m_fixtures[FIXTURE_INDEX(x, y)] = nullptr;
+		}
+	}
 }
 	
 void TerrainChunk::generate()
 {
-	if(state == CHUNK_GENERATING)
+	if(m_state == CHUNK_GENERATING)
 	{
 		// Set all tiles
 		for(uint y = 0; y < CHUNK_BLOCKS; ++y)
@@ -57,8 +80,7 @@ void TerrainChunk::generate()
 			{
 				for(int i = TERRAIN_LAYER_COUNT-1; i >= 0; --i)
 				{
-					tiles[x + (CHUNK_BLOCKS * (y + TERRAIN_LAYER_COUNT * i))] = TerrainGen::getTileAt(chunkX * CHUNK_BLOCKS + x, chunkY * CHUNK_BLOCKS + y, (TerrainLayer)i);
-					//tiles[i][x, y] = Terrain.generator.getTileAt(chunkX * CHUNK_BLOCKS + x, chunkY * CHUNK_BLOCKS + y, TerrainLayer(i));
+					m_blocks[BLOCK_INDEX(x, y, i)] = TerrainGen::getTileAt(m_x * CHUNK_BLOCKS + x, m_y * CHUNK_BLOCKS + y, (TerrainLayer)i);
 				}
 			}
 		}
@@ -77,15 +99,15 @@ void TerrainChunk::generate()
 		Terrain.getChunk(chunkX+1, chunkY-1).dirty = true;*/
 			
 		// Mark chunk as initialized
-		state = CHUNK_INITIALIZED;
-		LOG("Chunk [%i, %i] generated", chunkX, chunkY);
+		m_state = CHUNK_INITIALIZED;
+		LOG("Chunk [%i, %i] generated", m_x, m_y);
 	}
 }
 	
 void TerrainChunk::generateVBO()
 {
 	// Create new vbo
-	vbo = XVertexBuffer(/*Terrain.getVertexFormat()*/);
+	m_vbo = XVertexBuffer(World::getTerrain()->getVertexFormat());
 		
 	// Load all vertex data
 	vector<TerrainTile> sortedTiles;
@@ -95,10 +117,10 @@ void TerrainChunk::generateVBO()
 		{
 			for(int i = TERRAIN_LAYER_COUNT-1; i >= 0; --i)
 			{
-				/*TileID tile = tiles[i][x, y];
+				BlockID tile = m_blocks[BLOCK_INDEX(x, y, i)];
 				if(tile > RESERVED_TILE) // no point in updating air/reserved tiles
 				{
-					uint state = Terrain.getTileState(chunkX * CHUNK_BLOCKS + x, chunkY * CHUNK_BLOCKS + y, TerrainLayer(i));
+					uint state = World::getTerrain()->getTileState(m_x * CHUNK_BLOCKS + x, m_y * CHUNK_BLOCKS + y, TerrainLayer(i));
 						
 					TerrainTile t;
 					t.tile = tile;
@@ -110,31 +132,33 @@ void TerrainChunk::generateVBO()
 					updateFixture(x, y, state);
 					//if(tileIsOpaque)
 						break;
-				}*/
+				}
 			}
 		}
 	}
-	//sortedTiles.sortAsc();
+	sort(sortedTiles.begin(), sortedTiles.end());
 		
-	for(int i = 0; i < sortedTiles.size(); ++i)
+	for(uint i = 0; i < sortedTiles.size(); ++i)
 	{
 		TerrainTile tile = sortedTiles[i];
-		//vbo.addVertices(Tiles[tile.tile].getVertices(tile.x, tile.y, tile.state), Tiles[tile.tile].getIndices());
+		vector<XVertex> vertices = TileData::get(tile.tile).getVertices(tile.x, tile.y, tile.state);
+		vector<uint> indices = TileData::get(tile.tile).getIndices();
+		m_vbo.addVertices(vertices.data(), vertices.size(), indices.data(), indices.size());
 	}
-			
+	
 	// Make the chunk buffer static
-	vbo.setBufferType(XVertexBuffer::STATIC_BUFFER);
+	m_vbo.setBufferType(XVertexBuffer::STATIC_BUFFER);
 		
 	updateShadows();
 }
 	
 void TerrainChunk::serialize(XFileWriter &ss)
 {
-	LOG("Saving chunk [%i, %i]...", chunkX, chunkY);
+	LOG("Saving chunk [%i, %i]...", m_x, m_y);
 		
 	// Write chunk pos
-	ss << chunkX << endl;
-	ss << chunkY << endl;
+	ss << m_x << endl;
+	ss << m_y << endl;
 		
 	// Write chunk tiles
 	for(int y = 0; y < CHUNK_BLOCKS; ++y)
@@ -143,9 +167,9 @@ void TerrainChunk::serialize(XFileWriter &ss)
 		{
 			for(int i = TERRAIN_LAYER_COUNT-1; i >= 0; --i)
 			{
-				/*TileID tile = tiles[i][x, y];
-				if(tile <= RESERVED_TILE) tile = EMPTY_TILE;
-				ss.write(int(tile));*/
+				BlockID block = m_blocks[BLOCK_INDEX(x, y, i)];
+				if(block <= RESERVED_TILE) block = EMPTY_TILE;
+				ss << block << endl;
 			}
 		}
 	}
@@ -169,45 +193,45 @@ void TerrainChunk::deserialize(stringstream &ss)
 		{
 			for(int i = TERRAIN_LAYER_COUNT-1; i >= 0; --i)
 			{
-				/*int tile;
-				ss.read(tile);
-				tiles[i][x, y] = TileID(tile);*/
+				int tile;
+				ss >> tile;
+				m_blocks[BLOCK_INDEX(x, y, i)] = BlockID(tile);
 			}
 		}
 	}
 		
-	state = CHUNK_INITIALIZED;
+	m_state = CHUNK_INITIALIZED;
 	generateVBO();
 }
 	
 ChunkState TerrainChunk::getState() const
 {
-	return state;
+	return m_state;
 }
 	
-TileID TerrainChunk::getTileAt(const int x, const int y, TerrainLayer layer) const
+BlockID TerrainChunk::getTileAt(const int x, const int y, TerrainLayer layer) const
 {
-	return /*state != CHUNK_DUMMY ? tiles[layer][x, y] :*/ NULL_TILE;
+	return m_state != CHUNK_DUMMY ? m_blocks[BLOCK_INDEX(x, y, layer)] : NULL_TILE;
 }
 	
 bool TerrainChunk::isTileAt(const int x, const int y, TerrainLayer layer) const
 {
-	return /*state != CHUNK_DUMMY && tiles[layer][x, y] !=*/ EMPTY_TILE;
+	return m_state != CHUNK_DUMMY && m_blocks[BLOCK_INDEX(x, y, layer)] != EMPTY_TILE;
 }
 	
 bool TerrainChunk::isReservedTileAt(const int x, const int y, TerrainLayer layer) const
 {
-	return /*state != CHUNK_DUMMY && tiles[layer][x, y] >*/ RESERVED_TILE;
+	return m_state != CHUNK_DUMMY && m_blocks[BLOCK_INDEX(x, y, layer)] > RESERVED_TILE;
 }
 	
-bool TerrainChunk::setTile(const int x, const int y, const TileID tile, TerrainLayer layer)
+bool TerrainChunk::setTile(const int x, const int y, const BlockID tile, TerrainLayer layer)
 {
 	// Make sure we can add a tile here
-	if(state == CHUNK_INITIALIZED/* && tiles[layer][x, y] != tile*/)
+	if(m_state == CHUNK_INITIALIZED && m_blocks[BLOCK_INDEX(x, y, layer)] != tile)
 	{
 		// Set the tile value
-		//tiles[layer][x, y] = tile;
-		dirty = modified = true; // mark chunk as modified
+		m_blocks[BLOCK_INDEX(x, y, layer)] = tile;
+		m_dirty = m_modified = true; // mark chunk as modified
 		return true; // return true as something was changed
 	}
 	return false; // nothing changed
@@ -215,7 +239,7 @@ bool TerrainChunk::setTile(const int x, const int y, const TileID tile, TerrainL
 	
 void TerrainChunk::updateTile(const int x, const int y, const uint tileState, const bool fixture)
 {
-	if(state == CHUNK_INITIALIZED)
+	if(m_state == CHUNK_INITIALIZED)
 	{
 		// Update shadow map
 		/*float opacity = getOpacity(x, y);
@@ -223,7 +247,7 @@ void TerrainChunk::updateTile(const int x, const int y, const uint tileState, co
 		shadowMap.updateSection(x + shadowRadius, CHUNK_SIZE - y - 1 + shadowRadius, Pixmap(1, 1, pixel));*/
 			
 		// Get tile
-		/*TileID tile = tiles[x, y];
+		/*BlockID tile = tiles[x, y];
 		int i = (y * CHUNK_SIZE + x) * 16;
 		TextureRegion region;
 		if(tile > RESERVED_TILE)
@@ -306,14 +330,28 @@ float TerrainChunk::getOpacity(const int x, const int y)
 	}
 	return opacity;
 }
+
+b2Vec2 tob2Vec(const Vector2 &vec)
+{
+	return b2Vec2(vec.x, vec.y);
+}
 	
 // PHYSICS
 void TerrainChunk::createFixture(const int x, const int y)
 {
 	//b2Fixture @fixture = @body.createFixture(Rect(x * TILE_PX - TILE_PX * 0.5f, y * TILE_PX - TILE_PX * 0.5f, TILE_PX*2, TILE_PX*2), 0.0f);
-	/*b2Fixture @fixture = @body.createFixture(Rect(x * TILE_PX, y * TILE_PX - 3, TILE_PX, TILE_PX + 3), 0.0f);
-	Tiles[getTileAt(x, y, TERRAIN_LAYER_SCENE)].setupFixture(@fixture);
-	@fixtures[x, y] = @fixture;*/
+	Rect rect(x * BLOCK_PX, y * BLOCK_PX - 3, BLOCK_PX, BLOCK_PX + 3);
+
+	b2PolygonShape shape;
+	shape.SetAsBox(rect.getHeight()*0.5f, rect.getHeight()*0.5f, tob2Vec(rect.getCenter()), 0.0f);
+
+	b2FixtureDef def;
+	def.shape = &shape;
+	def.density = 0.0f;
+
+	b2Fixture *fixture = m_body->CreateFixture(&def);
+	TileData::get(getTileAt(x, y, TERRAIN_LAYER_SCENE)).setupFixture(fixture);
+	m_fixtures[FIXTURE_INDEX(x, y)] = fixture;
 }
 	
 void TerrainChunk::removeFixture(const int x, const int y)
@@ -345,11 +383,11 @@ void TerrainChunk::updateFixture(const int x, const int y, const uint state)
 	
 void TerrainChunk::updateShadows()
 {
-	for(int y = -shadowRadius; y <= CHUNK_BLOCKS + shadowRadius; ++y)
+	for(int y = -m_shadowRadius; y <= CHUNK_BLOCKS + m_shadowRadius; ++y)
 	{
-		for(int x = -shadowRadius; x <= CHUNK_BLOCKS + shadowRadius; ++x)
+		for(int x = -m_shadowRadius; x <= CHUNK_BLOCKS + m_shadowRadius; ++x)
 		{
-			int tileX = chunkX*CHUNK_BLOCKS + x, tileY = chunkY*CHUNK_BLOCKS + y;
+			int tileX = m_x*CHUNK_BLOCKS + x, tileY = m_y*CHUNK_BLOCKS + y;
 			/*float opacity = Terrain.getChunk(XMath::floor(tileX / CHUNK_BLOCKSF), XMath::floor(tileY / CHUNK_BLOCKSF)).getOpacity(XMath::mod(tileX, CHUNK_BLOCKS), XMath::mod(tileY, CHUNK_BLOCKS));
 			array<Vector4> pixel = { Vector4(0.0f, 0.0f, 0.0f, opacity) };
 			shadowMap.updateSection(x + shadowRadius, CHUNK_BLOCKS - y - 1 + shadowRadius, Pixmap(1, 1, pixel));*/
@@ -359,42 +397,42 @@ void TerrainChunk::updateShadows()
 	XBatch batch;
 		
 	// Blur horizontally
-	shadowPass1->clear();
+	m_shadowPass1->clear();
 	//blurHShader.setSampler2D("u_texture", @shadowMap);
 	//blurHShader.setUniform1i("u_width", CHUNK_BLOCKS + shadowRadius*2);
 	//blurHShader.setUniform1i("u_radius", shadowRadius-1);
 	//batch.setShader(@blurHShader);
-	XShape(Rect(0, 0, CHUNK_BLOCKS + shadowRadius*2, CHUNK_BLOCKS + shadowRadius*2)).draw(&batch);
-	batch.renderToTexture(shadowPass1);
+	XShape(Rect(0, 0, CHUNK_BLOCKS + m_shadowRadius*2, CHUNK_BLOCKS + m_shadowRadius*2)).draw(&batch);
+	batch.renderToTexture(m_shadowPass1);
 	batch.clear();
 		
 	// Blur vertically
-	shadowPass2->clear();
+	m_shadowPass2->clear();
 	//blurVShader.setSampler2D("u_texture", @shadowPass1);
 	//blurVShader.setSampler2D("u_filter", @shadowMap);
 	//blurVShader.setUniform1i("u_height", CHUNK_BLOCKS + shadowRadius*2);
 	//blurVShader.setUniform1i("u_radius", shadowRadius-1);
 	//batch.setShader(@blurVShader);
-	XShape(Rect(0, 0, CHUNK_BLOCKS + shadowRadius*2, CHUNK_BLOCKS + shadowRadius*2)).draw(&batch);
-	batch.renderToTexture(shadowPass2);
+	XShape(Rect(0, 0, CHUNK_BLOCKS + m_shadowRadius*2, CHUNK_BLOCKS + m_shadowRadius*2)).draw(&batch);
+	batch.renderToTexture(m_shadowPass2);
 	batch.clear();
 }
 	
 // DRAWING
 void TerrainChunk::draw(const Matrix4 &projmat)
 {
-	if(state == CHUNK_INITIALIZED)
+	if(m_state == CHUNK_INITIALIZED)
 	{
-		if(dirty)
+		if(m_dirty)
 		{
 			generateVBO();
-			dirty = false;
+			m_dirty = false;
 		}
 			
 		// Draw tiles
 		XBatch batch;
 		batch.setProjectionMatrix(projmat);
-		vbo.draw(&batch, 0/*@Tiles.getAtlas().getTexture()*/);
+		m_vbo.draw(&batch, 0/*@Tiles.getAtlas().getTexture()*/);
 			
 		if(XInput::getKeyState(XD_KEY_Z))
 		{
@@ -411,9 +449,9 @@ void TerrainChunk::draw(const Matrix4 &projmat)
 		batch.clear();
 			
 		// Draw shadows
-		float f = shadowRadius/(CHUNK_BLOCKSF + shadowRadius*2);
-		XSprite shadows(XTextureRegion(shadowPass2, f, f, 1.0-f, 1.0-f));
-		shadows.setPosition(CHUNK_PXF*chunkX, CHUNK_PXF*chunkY);
+		float f = m_shadowRadius/(CHUNK_BLOCKSF + m_shadowRadius*2);
+		XSprite shadows(XTextureRegion(m_shadowPass2, f, f, 1.0-f, 1.0-f));
+		shadows.setPosition(CHUNK_PXF*m_x, CHUNK_PXF*m_y);
 		shadows.setSize(CHUNK_PXF, CHUNK_PXF);
 		//shadows.draw(Shadows);
 	}

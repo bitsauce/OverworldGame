@@ -6,7 +6,7 @@
 
 class UiObject;
 
-class LineEdit : public UiObject//, public KeyboardListener
+class LineEdit : public UiObject, public xd::KeyboardListener
 {
 public:
 	LineEdit(UiObject *parent = nullptr);
@@ -22,9 +22,9 @@ public:
 private:
 	void insertAt(const uint at, const string &str);
 	void removeAt(const uint at);
-	void charEvent(uint code);
-	void keyPressed(XVirtualKey key);
-	void keyReleased(XVirtualKey key);
+	void charEvent(const wchar_t code);
+	void keyPressEvent(const XVirtualKey key);
+	void keyReleaseEvent(const XVirtualKey key);
 
 	xd::Resource<XFont> m_font;
 	string m_text;

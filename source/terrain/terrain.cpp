@@ -6,14 +6,14 @@
 
 #define CHUNK_KEY(chunkX, chunkY) (chunkX & 0x0000FFFF) | ((chunkY << 16) & 0xFFFF0000)
 
-TerrainLayer getLayerByTile(TileID tile)
+TerrainLayer getLayerByTile(BlockID tile)
 {
 	if(tile < BACKGROUND_TILES) return TERRAIN_LAYER_BACKGROUND;
 	if(tile < SCENE_TILES) return TERRAIN_LAYER_SCENE;
 	return TERRAIN_LAYER_FOREGROUND;
 }
 
-TerrainManager::TerrainManager()
+Terrain::Terrain()
 {
 	LOG("Initializing terrain");
 		
@@ -26,13 +26,13 @@ TerrainManager::TerrainManager()
 }
 
 // VERTEX FORMAT
-XVertexFormat TerrainManager::getVertexFormat() const
+XVertexFormat Terrain::getVertexFormat() const
 {
 	return vertexFormat;
 }
 	
 // Move?
-void TerrainManager::saveChunks()
+void Terrain::saveChunks()
 {
 	LOG("Saving chunks...");
 
@@ -40,7 +40,7 @@ void TerrainManager::saveChunks()
 	for(map<uint, TerrainChunk>::iterator itr = chunks.begin(); itr != chunks.end(); ++itr)
 	{
 		// Skip unmodified chunks
-		if(!itr->second.modified) continue;
+		if(!itr->second.m_modified) continue;
 
 		// Save chunk
 		string path = World::getWorldPath() + "/chunks/" + util::intToStr(CHUNK_KEY(itr->second.getX(), itr->second.getY())) + ".obj";
@@ -54,7 +54,7 @@ void TerrainManager::saveChunks()
 	}
 }
 	
-void TerrainManager::load(const XIniFile &file)
+void Terrain::load(const XIniFile &file)
 {
 	LOG("Loading terrain...");
 		
@@ -62,17 +62,17 @@ void TerrainManager::load(const XIniFile &file)
 }
 	
 // TILE HELPERS
-TileID TerrainManager::getTileAt(const int x, const int y, const TerrainLayer layer = TERRAIN_LAYER_SCENE)
+BlockID Terrain::getTileAt(const int x, const int y, const TerrainLayer layer = TERRAIN_LAYER_SCENE)
 {
 	return getChunk(XMath::floor(x / CHUNK_PXF), XMath::floor(y / CHUNK_PXF)).getTileAt(XMath::mod(x, CHUNK_PX), XMath::mod(y, CHUNK_PX), layer);
 }
 	
-bool TerrainManager::isTileAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_SCENE)
+bool Terrain::isTileAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_SCENE)
 {
 	return getTileAt(x, y, layer) > RESERVED_TILE;
 }
 	
-uint TerrainManager::getTileState(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_SCENE)
+uint Terrain::getTileState(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_SCENE)
 {
 	// Get state
 	uint state = 0;
@@ -80,7 +80,7 @@ uint TerrainManager::getTileState(const int x, const int y, TerrainLayer layer =
 	TerrainChunk &chunk = getChunk(chunkX, chunkY), chunkN, chunkS;
 	if(chunk.getState() == CHUNK_DUMMY) return 0;
 		
-	TileID tile = chunk.getTileAt(tileX, tileY, layer);
+	BlockID tile = chunk.getTileAt(tileX, tileY, layer);
 	if(tileY == 0)
 	{
 		chunkN = getChunk(chunkX, chunkY-1);
@@ -184,7 +184,7 @@ uint TerrainManager::getTileState(const int x, const int y, TerrainLayer layer =
 }
 	
 // TILE MODIFICATION
-bool TerrainManager::setTile(const int x, const int y, TileID tile, const TerrainLayer layer = TERRAIN_LAYER_SCENE)
+bool Terrain::setTile(const int x, const int y, BlockID tile, const TerrainLayer layer = TERRAIN_LAYER_SCENE)
 {
 	if(getChunk(XMath::floor(x / CHUNK_PXF), XMath::floor(y / CHUNK_PXF)).setTile(XMath::mod(x, CHUNK_PX), XMath::mod(y, CHUNK_PX), tile, layer))
 	{	
@@ -205,7 +205,7 @@ bool TerrainManager::setTile(const int x, const int y, TileID tile, const Terrai
 	return false;
 }
 	
-bool TerrainManager::removeTile(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_SCENE)
+bool Terrain::removeTile(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_SCENE)
 {
 	if(getChunk(XMath::floor(x / CHUNK_PXF), XMath::floor(y / CHUNK_PXF)).setTile(XMath::mod(x, CHUNK_PX), XMath::mod(y, CHUNK_PX), EMPTY_TILE, layer))
 	{
@@ -227,7 +227,7 @@ bool TerrainManager::removeTile(const int x, const int y, TerrainLayer layer = T
 }
 	
 // CHUNKS
-TerrainChunk &TerrainManager::getChunk(const int chunkX, const int chunkY, const bool generate)
+TerrainChunk &Terrain::getChunk(const int chunkX, const int chunkY, const bool generate)
 {
 	uint key = CHUNK_KEY(chunkX, chunkY);
 	if(chunks.find(key) == chunks.end())
@@ -257,7 +257,7 @@ TerrainChunk &TerrainManager::getChunk(const int chunkX, const int chunkY, const
 	return chunks[key];
 }
 	
-void TerrainManager::loadVisibleChunks()
+void Terrain::loadVisibleChunks()
 {
 	int x0 = XMath::floor(Camera::getPosition().x/CHUNK_PXF);
 	int y0 = XMath::floor(Camera::getPosition().y/CHUNK_PXF);
@@ -279,7 +279,7 @@ void TerrainManager::loadVisibleChunks()
 }
 	
 // UPDATING
-void TerrainManager::update()
+void Terrain::update()
 {
 	Debug::setVariable("Chunks", util::intToStr(chunks.size()));
 	
@@ -302,7 +302,7 @@ void TerrainManager::update()
 }
 	
 // DRAWING
-void TerrainManager::draw(const TerrainLayer layer, XBatch *batch)
+void Terrain::draw(const TerrainLayer layer, XBatch *batch)
 {
 	int x0 = XMath::floor(Camera::getPosition().x/CHUNK_PXF);
 	int y0 = XMath::floor(Camera::getPosition().y/CHUNK_PXF);

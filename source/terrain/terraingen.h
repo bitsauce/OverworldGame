@@ -4,7 +4,7 @@
 #include <x2d/x2d.h>
 #include "constants.h"
 
-enum TileID;
+enum BlockID;
 enum TerrainLayer;
 
 extern float step(float edge, float x);
@@ -26,7 +26,7 @@ public:
 	{
 	}
 	
-	TileID getTileAt(const int x, const int y, TerrainLayer layer)
+	BlockID getTileAt(const int x, const int y, TerrainLayer layer)
 	{
 		return EMPTY_TILE;
 	}
@@ -43,13 +43,15 @@ public:
 		originY = 15;
 	}
 	
-	TileID getTileAt(const int x, const int y, TerrainLayer layer);
+	BlockID getTileAt(const int x, const int y, TerrainLayer layer);
 };
 
 class TerrainGen
 {
 public:
 	uint seed;
+
+	static BlockID getTileAt(const int x, const int y, const TerrainLayer);
 };
 
 #endif // TERRAIN_GEN_H

@@ -52,7 +52,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\vld\include;..\..\3rdparty\Box2D\Box2D\include;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\glew\include;..\..\..\x2D-Game-Engine\3rdparty\openal\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\vld\include;..\..\3rdparty\Box2D\Box2D;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\glew\include;..\..\..\x2D-Game-Engine\3rdparty\openal\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>X2D_DEBUG;X2D_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -96,6 +96,7 @@
     <ClCompile Include="..\..\source\game\camera.cpp" />
     <ClCompile Include="..\..\source\game\debug.cpp" />
     <ClCompile Include="..\..\source\game\gameobject.cpp" />
+    <ClCompile Include="..\..\source\game\tiledata.cpp" />
     <ClCompile Include="..\..\source\game\world.cpp" />
     <ClCompile Include="..\..\source\gui\button.cpp" />
     <ClCompile Include="..\..\source\gui\canvas.cpp" />
@@ -116,6 +117,7 @@
     <ClInclude Include="..\..\source\game\camera.h" />
     <ClInclude Include="..\..\source\game\debug.h" />
     <ClInclude Include="..\..\source\game\gameobject.h" />
+    <ClInclude Include="..\..\source\game\tiledata.h" />
     <ClInclude Include="..\..\source\game\world.h" />
     <ClInclude Include="..\..\source\gui\button.h" />
     <ClInclude Include="..\..\source\gui\canvas.h" />

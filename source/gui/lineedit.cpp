@@ -7,8 +7,8 @@ LineEdit::LineEdit(UiObject *parent) :
 	m_cursorTime(0.0f),
 	m_font(xd::ResourceManager::get<XFont>(UI_MENU_BUTTON_FONT))
 {
+	XInput::addKeyboardListener(this);
 }
-
 
 void LineEdit::setText(const string &text)
 {
@@ -51,13 +51,13 @@ void LineEdit::draw(XBatch *batch)
 void LineEdit::insertAt(const uint at, const string &str)
 {
 	// Check valid index
-	if(at > str.size())
+	if(at > m_text.size())
 		return;
 		
 	// Insert string at index
-	string endStr = str.substr(at);
+	string endStr = m_text.substr(at);
 	m_text = m_text.substr(0, at);
-	m_text += m_text + endStr;
+	m_text += str + endStr;
 }
 
 void LineEdit::removeAt(const uint at)
@@ -72,13 +72,14 @@ void LineEdit::removeAt(const uint at)
 	m_text += endStr;
 }
 	
-void LineEdit::charEvent(uint code)
+void LineEdit::charEvent(const wchar_t c)
 {
 	// Only add text if active
 	//if(!isActive())
 	//	return;
+
 		
-	switch(code)
+	switch(c)
 	{
 	case XD_KEY_BACKSPACE:
 		// Remove char behind
@@ -97,13 +98,13 @@ void LineEdit::charEvent(uint code)
 			
 	default:
 		// Add text
-		insertAt(m_cursorPos, ""+(char)code);//formatUtf8(code));
+		insertAt(m_cursorPos, string("")+(char)c);//formatUtf8(code));
 		m_cursorPos++;
 		break;
 	}
 }
 	
-void LineEdit::keyPressed(XVirtualKey key)
+void LineEdit::keyPressEvent(const XVirtualKey key)
 {
 	switch(key)
 	{
@@ -138,6 +139,6 @@ void LineEdit::keyPressed(XVirtualKey key)
 	}
 }
 	
-void LineEdit::keyReleased(XVirtualKey key)
+void LineEdit::keyReleaseEvent(const XVirtualKey key)
 {
 }

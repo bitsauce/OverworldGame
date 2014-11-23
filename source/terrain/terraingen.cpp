@@ -6,7 +6,7 @@ float step(float edge, float x)
 	return x < edge ? 0.0f : 1.0f;
 }
 
-TileID Tree::getTileAt(const int x, const int y, TerrainLayer layer)
+BlockID Tree::getTileAt(const int x, const int y, TerrainLayer layer)
 {
 	switch(layer)
 	{
@@ -27,4 +27,9 @@ TileID Tree::getTileAt(const int x, const int y, TerrainLayer layer)
 		}
 	}
 	return NULL_TILE;
+}
+
+BlockID TerrainGen::getTileAt(const int x, const int y, const TerrainLayer)
+{
+	return EMPTY_TILE;
 }

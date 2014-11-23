@@ -50,6 +50,9 @@
     <ClCompile Include="..\..\source\terrain\terraingen.cpp">
       <Filter>source\terrain</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\game\tiledata.cpp">
+      <Filter>source\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -130,6 +133,9 @@
       <Filter>source\terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\game\world.h">
+      <Filter>source\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\tiledata.h">
       <Filter>source\game</Filter>
     </ClInclude>
   </ItemGroup>
