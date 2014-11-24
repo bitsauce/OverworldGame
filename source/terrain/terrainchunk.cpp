@@ -432,17 +432,6 @@ void TerrainChunk::draw(XBatch *batch)
 		// Draw tiles
 		m_vbo.draw(batch, BlockData::get(BLOCK_EMPTY).getTexture()/*@Tiles.getAtlas().getTexture()*/);
 			
-		if(XInput::getKeyState(XD_KEY_Z))
-		{
-			XShape line1(Rect(m_x * CHUNK_PX, m_y * CHUNK_PX, CHUNK_PX, 1));
-			line1.setFillColor(XColor(0, 0, 0, 255));
-			line1.draw(batch);
-				
-			XShape line2(Rect(m_x * CHUNK_PX, m_y * CHUNK_PX, 1, CHUNK_PX));
-			line2.setFillColor(XColor(0, 0, 0, 255));
-			line2.draw(batch);
-		}
-			
 		// Draw shadows
 		/*float f = m_shadowRadius/(CHUNK_BLOCKSF + m_shadowRadius*2);
 		XSprite shadows(XTextureRegion(shared_ptr<XTexture>(m_shadowPass2), f, f, 1.0-f, 1.0-f));

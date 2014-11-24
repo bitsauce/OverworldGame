@@ -40,13 +40,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 	config.update = &gameUpdate;
 	config.draw = &gameDraw;
 	config.end = &gameEnd;
-#ifdef X2D_DEBUG
 	config.workDir = "C:\\Users\\Marcus\\Documents\\GitHub\\Overworld\\";
-	//config.workDir = "C:\\Users\\Marcus\\Documents\\GitHub\\x2D-Game-Engine\\examples\\Debug\\";
-	//config.workDir = "C:\\Users\\Marcus\\Dropbox\\Game Development\\Projects\\BlockShadows\\";
-#else
-	config.workDir = workDir.empty() ? _getcwd(0, 0) : workDir.c_str(); // TODO: The engine should do this by itself
-#endif
+	//config.workDir = workDir.empty() ? _getcwd(0, 0) : workDir.c_str(); // TODO: The engine should do this by itself
 	config.flags = flags;
 
 	if(engine->init(config) != X2D_OK)

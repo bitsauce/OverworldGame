@@ -6,6 +6,7 @@
 class b2World;
 class Terrain;
 class TimeOfDay;
+class Camera;
 
 class World
 {
@@ -20,6 +21,7 @@ public:
 	static b2World *getb2World();
 	static Terrain *getTerrain();
 	static TimeOfDay *getTimeOfDay();
+	static Camera *getCamera();
 
 private:
 	
@@ -28,6 +30,7 @@ private:
 	static TimeOfDay *s_timeOfDay;
 	static string s_worldPath;
 	static XIniFile *s_worldFile;
+	static Camera *s_camera;
 };
 
 #endif // WORLD_H

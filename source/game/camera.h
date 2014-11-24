@@ -5,20 +5,33 @@
 
 #include "game/gameobject.h"
 
-class Camera : public GameObject
+class Camera : public GameObject, public xd::MouseListener
 {
 public:
-	static Vector2 getCenter();
-	static void lookAt(Vector2 point);
-	static Matrix4 getProjectionMatrix();
+	Camera();
+	
+	Matrix4 getProjectionMatrix();
+	Vector2 getCenter();
+	void lookAt(Vector2 point);
 
-	static Vector2 getPosition();
-	static float getX();
-	static float getY();
+	float getZoom() { return m_zoom; }
+
+	Vector2 getPosition();
+	float getX();
+	float getY();
+	
+	Vector2 getSize();
+	float getWidth();
+	float getHeight();
+
+	void update();
+	void draw(XBatch *batch);
+	void mouseWheelEvent(const int dt);
 
 private:
-	static Vector2 s_position;
-	static float s_zoom;
+	Vector2 m_position;
+	Vector2 m_size;
+	float m_zoom;
 };
 
 #endif // CAMERA_H

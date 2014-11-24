@@ -8,6 +8,8 @@
 
 #include "terrain/terrain.h"
 
+#include "game/camera.h"
+
 #include <Box2D/Box2D.h>
 
 b2World *World::s_b2World = nullptr;
@@ -15,11 +17,13 @@ Terrain *World::s_terrain = nullptr;
 TimeOfDay *World::s_timeOfDay = nullptr;
 string World::s_worldPath;
 XIniFile *World::s_worldFile = nullptr;
+Camera *World::s_camera = nullptr;
 
 void World::init()
 {
 	s_timeOfDay = new TimeOfDay();
 	new Background(s_timeOfDay);
+	s_camera = new Camera();
 	s_b2World = new b2World(b2Vec2(0.0f, 9.81f));
 	s_terrain = new Terrain;
 	s_worldFile = nullptr;
@@ -76,4 +80,9 @@ b2World *World::getb2World()
 Terrain *World::getTerrain()
 {
 	return s_terrain;
+}
+
+Camera *World::getCamera()
+{
+	return s_camera;
 }

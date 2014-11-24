@@ -40,7 +40,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\..\build\$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)..\..\exe\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)..\..\exe\$(Platform)\$(Configuration)\</OutDir>
@@ -73,7 +73,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>.\source;..\..\include;..\..\3rdparty\vld\include;..\..\3rdparty\openal\include;..\..\3rdparty\glew\include;..\..\3rdparty\angelscript\sdk\angelscript\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\vld\include;..\..\3rdparty\Box2D\Box2D;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\glew\include;..\..\..\x2D-Game-Engine\3rdparty\openal\include</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <PreprocessorDefinitions>X2D_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -81,8 +81,8 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>ws2_32.lib;iphlpapi.lib;x2d.lib;openal32.lib;opengl32.lib;glew.lib;glu32.lib;angelscript.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\build\$(Platform)\$(Configuration)\;..\..\3rdparty\vld\lib\Win32;..\..\3rdparty\glew\lib;..\..\3rdparty\openal\libs;..\..\3rdparty\openal\libs\Win32;..\..\3rdparty\angelscript\sdk\angelscript\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>x2d.lib;spine.lib;box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\3rdparty\vld\lib;..\..\3rdparty\Box2D\Box2D\Lib;..\..\3rdparty\spine\lib;..\..\..\x2D-Game-Engine\build\Win32\Release</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(OutDir)x2d$(TargetExt)"</Command>
