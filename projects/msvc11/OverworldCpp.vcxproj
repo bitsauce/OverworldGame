@@ -98,7 +98,7 @@
     <ClCompile Include="..\..\source\game\camera.cpp" />
     <ClCompile Include="..\..\source\game\debug.cpp" />
     <ClCompile Include="..\..\source\game\gameobject.cpp" />
-    <ClCompile Include="..\..\source\game\tiledata.cpp" />
+    <ClCompile Include="..\..\source\game\blockdata.cpp" />
     <ClCompile Include="..\..\source\game\world.cpp" />
     <ClCompile Include="..\..\source\gui\button.cpp" />
     <ClCompile Include="..\..\source\gui\canvas.cpp" />
@@ -121,7 +121,7 @@
     <ClInclude Include="..\..\source\game\camera.h" />
     <ClInclude Include="..\..\source\game\debug.h" />
     <ClInclude Include="..\..\source\game\gameobject.h" />
-    <ClInclude Include="..\..\source\game\tiledata.h" />
+    <ClInclude Include="..\..\source\game\blockdata.h" />
     <ClInclude Include="..\..\source\game\world.h" />
     <ClInclude Include="..\..\source\gui\button.h" />
     <ClInclude Include="..\..\source\gui\canvas.h" />

@@ -2,7 +2,7 @@
 #include "constants.h"
 
 #include "game/world.h"
-#include "game/tiledata.h"
+#include "game/blockdata.h"
 
 #include "scenes/mainmenu.h"
 #include "scenes/worldselect.h"

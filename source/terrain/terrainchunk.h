@@ -19,19 +19,6 @@ class b2Fixture;
 //Shader @blurHShader = @Shader(":/shaders/blur_h.vert", ":/shaders/blur_h.frag");
 //Shader @blurVShader = @Shader(":/shaders/blur_v.vert", ":/shaders/blur_v.frag");
 
-class TerrainTile
-{
-public:
-	bool operator<(const TerrainTile &other) const
-	{
-		return tile < other.tile;
-	}
-	
-	BlockID tile;
-	uint state;
-	int x, y;
-};
-
 class TerrainChunk
 {
 	friend class Terrain;
@@ -81,7 +68,7 @@ private:
 	b2Fixture **m_fixtures;
 	
 	// DRAWING
-	XVertexBuffer m_vbo;
+	shared_ptr<XVertexBuffer> m_vbo;
 	XTexture *m_shadowMap;
 	XTexture *m_shadowPass1;
 	XTexture *m_shadowPass2;

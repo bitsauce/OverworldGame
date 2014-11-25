@@ -247,10 +247,12 @@ TerrainChunk &Terrain::getChunk(const int chunkX, const int chunkY, const bool g
 			else
 			{
 				chunk = new TerrainChunk(chunkX, chunkY);
-				chunkLoadQueue.push_front(chunk); // Add to load queue
+				//chunkLoadQueue.push_front(chunk); // Add to load queue
 			}
 				
 			chunks[key] = chunk;
+			chunk->generate();
+			
 			return *chunk;
 		}
 		return m_dummyChunk; // Create dummy
@@ -288,7 +290,7 @@ void Terrain::update()
 	if((chunk = &getChunk(cx, cy, true))->getState() != CHUNK_INITIALIZED)
 	{
 		LOG("Insta-generate chunk [%i, %i]", cx, cy);
-		chunkLoadQueue.remove(chunk);
+		//chunkLoadQueue.remove(chunk);
 		chunk->generate();
 	}
 		

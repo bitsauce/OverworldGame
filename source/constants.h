@@ -16,8 +16,8 @@
 #define BORDER_PX 4
 #define BORDER_PXF float(BORDER_PX)
 
-#define FULL_TILE_PX (BLOCK_PX + BORDER_PX*2)
-#define FULL_TILE_PXF float(FULL_TILE_PX)
+#define FULL_BLOCK_PX (BLOCK_PX + BORDER_PX*2)
+#define FULL_BLOCK_PXF float(FULL_BLOCK_PX)
 
 #define CHUNK_BLOCKS 16
 #define CHUNK_BLOCKSF float(CHUNK_BLOCKS)
@@ -32,38 +32,26 @@
 #define SUPER_CHUNK_PXF float(SUPER_CHUNK_PX)
 
 // Tile texture coordinates
-/*const float TILE_U0 = 0.000f;
-const float TILE_V0 = 0.000f;
-const float TILE_U1 = BORDER_PXF/FULL_TILE_PXF;
-const float TILE_V1 = BORDER_PXF/FULL_TILE_PXF;
-const float TILE_U2 = 0.500f;
-const float TILE_V2 = 0.500f;
-const float TILE_U3 = (TILE_PXF + BORDER_PXF)/FULL_TILE_PXF;
-const float TILE_V3 = (TILE_PXF + BORDER_PXF)/FULL_TILE_PXF;
-const float TILE_U4 = 1.000f;
-const float TILE_V4 = 1.000f;
-grid<float> TILE_TEXTURE_COORDS =
-{
-	{ TILE_U0, TILE_V0, TILE_U1, TILE_V1 }, // 0
-	{ TILE_U1, TILE_V0, TILE_U3, TILE_V1 }, // 1
-	{ TILE_U3, TILE_V0, TILE_U4, TILE_V1 }, // 2
-	{ TILE_U3, TILE_V1, TILE_U4, TILE_V3 }, // 3
-	{ TILE_U3, TILE_V3, TILE_U4, TILE_V4 }, // 4
-	{ TILE_U1, TILE_V3, TILE_U3, TILE_V4 }, // 5
-	{ TILE_U0, TILE_V3, TILE_U1, TILE_V4 }, // 6
-	{ TILE_U0, TILE_V1, TILE_U1, TILE_V3 }, // 7
-	{ TILE_U1, TILE_V1, TILE_U3, TILE_V3 }  // 8
-};*/
+#define BLOCK_U0 0.000f
+#define BLOCK_V0 0.000f
+#define BLOCK_U1 BORDER_PXF/FULL_BLOCK_PXF
+#define BLOCK_V1 BORDER_PXF/FULL_BLOCK_PXF
+#define BLOCK_U2 0.500f
+#define BLOCK_V2 0.500f
+#define BLOCK_U3 (BLOCK_PXF + BORDER_PXF)/FULL_BLOCK_PXF
+#define BLOCK_V3 (BLOCK_PXF + BORDER_PXF)/FULL_BLOCK_PXF
+#define BLOCK_U4 1.000f
+#define BLOCK_V4 1.000f
 
 enum DrawOrder
 {
-		DRAW_ORDER_CAMERA,
-		DRAW_ORDER_BACKGROUND,
-		DRAW_ORDER_TIME_OF_DAY,
-	DRAW_ORDER_SCENE_START,
-		DRAW_ORDER_TERRAIN,
-	DRAW_ORDER_SCENE_END,
-		DRAW_ORDER_UI
+	DRAW_ORDER_CAMERA,
+	DRAW_ORDER_BACKGROUND,
+	DRAW_ORDER_TIME_OF_DAY,
+DRAW_ORDER_SCENE_START,
+	DRAW_ORDER_TERRAIN,
+DRAW_ORDER_SCENE_END,
+	DRAW_ORDER_UI
 };
 
 enum BlockID
@@ -92,7 +80,7 @@ enum BlockID
 	
 	FOREGROUND_BLOCKS,
 	
-	MAX_TILES
+	BLOCK_COUNT
 };
 
 // INVENTORY CONSTANTS
@@ -122,14 +110,14 @@ enum TerrainLayer
 // Tile directions
 enum Direction
 {
-	NORTH		= 1,
-	NORTH_EAST 	= 2,
-	EAST		= 4,
-	SOUTH_EAST 	= 8,
-	SOUTH		= 16,
-	SOUTH_WEST 	= 32,
-	WEST		= 64,
-	NORTH_WEST 	= 128,
+	NORTH		= 1 << 0,
+	NORTH_EAST 	= 1 << 1,
+	EAST		= 1 << 2,
+	SOUTH_EAST 	= 1 << 3,
+	SOUTH		= 1 << 4,
+	SOUTH_WEST 	= 1 << 5,
+	WEST		= 1 << 6,
+	NORTH_WEST 	= 1 << 7,
 	NESW = NORTH | EAST | SOUTH | WEST
 };
 

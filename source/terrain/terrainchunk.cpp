@@ -4,7 +4,7 @@
 #include "constants.h"
 
 #include "game/world.h"
-#include "game/tiledata.h"
+#include "game/blockdata.h"
 
 #include <Box2D/Box2D.h>
 	
@@ -107,47 +107,42 @@ void TerrainChunk::generate()
 void TerrainChunk::generateVBO()
 {
 	// Create new vbo
-	m_vbo = XVertexBuffer(World::getTerrain()->getVertexFormat());
+	m_vbo = shared_ptr<XVertexBuffer>(new XVertexBuffer(World::getTerrain()->getVertexFormat()));
 		
 	// Load all vertex data
-	vector<TerrainTile> sortedTiles;
 	for(uint y = 0; y < CHUNK_BLOCKS; ++y)
 	{
 		for(uint x = 0; x < CHUNK_BLOCKS; ++x)
 		{
 			for(int i = TERRAIN_LAYER_COUNT-1; i >= 0; --i)
 			{
-				BlockID tile = m_blocks[BLOCK_INDEX(x, y, i)];
-				if(tile > BLOCK_RESERVED) // no point in updating air/reserved tiles
+				BlockID block = m_blocks[BLOCK_INDEX(x, y, i)];
+				uint state = World::getTerrain()->getTileState(m_x * CHUNK_BLOCKS + x, m_y * CHUNK_BLOCKS + y, (TerrainLayer)i);
+				
+				if(block == BLOCK_EMPTY) continue;
+
+				XVertex *vertices; uint *indices;
+				uint vertexCount = 0, indexCount = 0;
+				BlockData::get(block).getVertices(x, y, state, &vertices, vertexCount, &indices, indexCount);
+
+				m_vbo->addVertices(vertices, vertexCount, indices, indexCount);
+
+				delete[] vertices;
+				delete[] indices;
+
+				if(block > BLOCK_RESERVED) // no point in updating air/reserved tiles
 				{
-					uint state = World::getTerrain()->getTileState(m_x * CHUNK_BLOCKS + x, m_y * CHUNK_BLOCKS + y, TerrainLayer(i));
-						
-					TerrainTile t;
-					t.tile = tile;
-					t.state = state;
-					t.x = x;
-					t.y = y;
-					sortedTiles.push_back(t);
+					
 						
 					//updateFixture(x, y, state);
-					//if(tileIsOpaque)
-						break;
 				}
+				//if(tileIsOpaque) break;
 			}
 		}
 	}
-	sort(sortedTiles.begin(), sortedTiles.end());
-		
-	for(uint i = 0; i < sortedTiles.size(); ++i)
-	{
-		TerrainTile tile = sortedTiles[i];
-		vector<XVertex> vertices = BlockData::get(tile.tile).getVertices(tile.x, tile.y, tile.state);
-		vector<uint> indices = BlockData::get(tile.tile).getIndices();
-		m_vbo.addVertices(vertices.data(), vertices.size(), indices.data(), indices.size());
-	}
 	
 	// Make the chunk buffer static
-	m_vbo.setBufferType(XVertexBuffer::STATIC_BUFFER);
+	m_vbo->setBufferType(XVertexBuffer::STATIC_BUFFER);
 		
 	updateShadows();
 }
@@ -428,10 +423,12 @@ void TerrainChunk::draw(XBatch *batch)
 			generateVBO();
 			m_dirty = false;
 		}
-			
-		// Draw tiles
-		m_vbo.draw(batch, BlockData::get(BLOCK_EMPTY).getTexture()/*@Tiles.getAtlas().getTexture()*/);
-			
+		
+		// Draw blocks
+		batch->setTexture(BlockData::get(BLOCK_EMPTY).getTexture()/*@Tiles.getAtlas().getTexture()*/);
+		batch->setPrimitive(XBatch::PRIMITIVE_TRIANGLES);
+		batch->addVertexBuffer(m_vbo);
+		
 		// Draw shadows
 		/*float f = m_shadowRadius/(CHUNK_BLOCKSF + m_shadowRadius*2);
 		XSprite shadows(XTextureRegion(shared_ptr<XTexture>(m_shadowPass2), f, f, 1.0-f, 1.0-f));
