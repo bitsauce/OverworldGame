@@ -45,7 +45,7 @@ void gameMain()
 
 	XWindow::setSize(Vector2i(1280, 720));
 
-	XEngine::pushScene(scene::mainMenu);
+	XEngine::pushScene(scene::game);
 }
 
 void gameEnd()

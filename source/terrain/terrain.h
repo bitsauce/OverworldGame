@@ -26,7 +26,7 @@ public:
 	// TILE HELPERS
 	BlockID getTileAt(const int x, const int y, const TerrainLayer layer);
 	bool isTileAt(const int x, const int y, TerrainLayer layer);
-	uint getTileState(const int x, const int y, TerrainLayer layer) /*const*/;
+	void getTileState(const int x, const int y, BlockID *blocks, TerrainLayer layer) /*const*/;
 	
 	// TILE MODIFICATION
 	bool setTile(const int x, const int y, BlockID tile, const TerrainLayer layer);

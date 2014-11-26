@@ -6,13 +6,6 @@
 
 #define CHUNK_KEY(chunkX, chunkY) (chunkX & 0x0000FFFF) | ((chunkY << 16) & 0xFFFF0000)
 
-TerrainLayer getLayerByTile(BlockID tile)
-{
-	if(tile < BACKGROUND_BLOCKS) return TERRAIN_LAYER_BACKGROUND;
-	if(tile < SCENE_BLOCKS) return TERRAIN_LAYER_SCENE;
-	return TERRAIN_LAYER_FOREGROUND;
-}
-
 Terrain::Terrain() :
 	GameObject(DRAW_ORDER_TERRAIN)
 {
@@ -73,16 +66,20 @@ bool Terrain::isTileAt(const int x, const int y, TerrainLayer layer = TERRAIN_LA
 	return getTileAt(x, y, layer) > BLOCK_RESERVED;
 }
 	
-uint Terrain::getTileState(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_SCENE)
+void Terrain::getTileState(const int x, const int y, BlockID *blocks, TerrainLayer layer = TERRAIN_LAYER_SCENE)
 {
 	// Get state
-	uint state = 0;
-	int chunkX = XMath::floor(x / CHUNK_BLOCKSF), chunkY = XMath::floor(y / CHUNK_BLOCKSF), tileX = XMath::mod(x, CHUNK_BLOCKS), tileY = XMath::mod(y, CHUNK_BLOCKS);
-	TerrainChunk *chunk = &getChunk(chunkX, chunkY), *chunkN, *chunkS;
-	if(chunk->getState() == CHUNK_DUMMY) return 0;
-		
-	BlockID tile = chunk->getTileAt(tileX, tileY, layer);
-	if(tileY == 0)
+	blocks[0] = getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x-1), CHUNK_BLOCKS), XMath::mod((y-1), CHUNK_BLOCKS), layer);
+	blocks[1] = getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod(x,     CHUNK_BLOCKS), XMath::mod((y-1), CHUNK_BLOCKS), layer);
+	blocks[2] = getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x+1), CHUNK_BLOCKS), XMath::mod((y-1), CHUNK_BLOCKS), layer);
+	blocks[3] = getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x-1), CHUNK_BLOCKS), XMath::mod(y,     CHUNK_BLOCKS), layer);
+	blocks[4] = getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x+1), CHUNK_BLOCKS), XMath::mod(y,     CHUNK_BLOCKS), layer);
+	blocks[5] = getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x-1), CHUNK_BLOCKS), XMath::mod((y+1), CHUNK_BLOCKS), layer);
+	blocks[6] = getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod(x,     CHUNK_BLOCKS), XMath::mod((y+1), CHUNK_BLOCKS), layer);
+	blocks[7] = getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x+1), CHUNK_BLOCKS), XMath::mod((y+1), CHUNK_BLOCKS), layer);
+	blocks[8] = getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).getTileAt(XMath::mod(x,     CHUNK_BLOCKS), XMath::mod(y,     CHUNK_BLOCKS), layer);
+
+	/*if(tileY == 0)
 	{
 		chunkN = &getChunk(chunkX, chunkY-1);
 		if(chunkN->getTileAt(tileX, CHUNK_BLOCKS-1, layer) == tile) state |= NORTH;
@@ -181,7 +178,7 @@ uint Terrain::getTileState(const int x, const int y, TerrainLayer layer = TERRAI
 		}
 	}
 		
-	return state;
+	return state;*/
 }
 	
 // TILE MODIFICATION
@@ -190,7 +187,7 @@ bool Terrain::setTile(const int x, const int y, BlockID tile, const TerrainLayer
 	if(getChunk(XMath::floor(x / CHUNK_BLOCKSF), XMath::floor(y / CHUNK_BLOCKSF)).setTile(XMath::mod(x, CHUNK_BLOCKS), XMath::mod(y, CHUNK_BLOCKS), tile, layer))
 	{	
 		// Update neighbouring tiles
-		getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).updateTile(XMath::mod(x,   CHUNK_BLOCKS), XMath::mod(y,   CHUNK_BLOCKS), getTileState(x,   y), true);
+		/*getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).updateTile(XMath::mod(x,   CHUNK_BLOCKS), XMath::mod(y,   CHUNK_BLOCKS), getTileState(x,   y), true);
 		getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).updateTile(XMath::mod(x+1, CHUNK_BLOCKS), XMath::mod(y,   CHUNK_BLOCKS), getTileState(x+1, y), true);
 		getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).updateTile(XMath::mod(x-1, CHUNK_BLOCKS), XMath::mod(y,   CHUNK_BLOCKS), getTileState(x-1, y), true);
 		getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).updateTile(XMath::mod(x,   CHUNK_BLOCKS), XMath::mod(y+1, CHUNK_BLOCKS), getTileState(x, y+1), true);
@@ -199,7 +196,7 @@ bool Terrain::setTile(const int x, const int y, BlockID tile, const TerrainLayer
 		getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).updateTile(XMath::mod(x+1, CHUNK_BLOCKS), XMath::mod(y+1, CHUNK_BLOCKS), getTileState(x+1, y+1));
 		getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).updateTile(XMath::mod(x-1, CHUNK_BLOCKS), XMath::mod(y+1, CHUNK_BLOCKS), getTileState(x-1, y+1));
 		getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).updateTile(XMath::mod(x-1, CHUNK_BLOCKS), XMath::mod(y-1, CHUNK_BLOCKS), getTileState(x-1, y-1));
-		getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).updateTile(XMath::mod(x+1, CHUNK_BLOCKS), XMath::mod(y-1, CHUNK_BLOCKS), getTileState(x+1, y-1));
+		getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).updateTile(XMath::mod(x+1, CHUNK_BLOCKS), XMath::mod(y-1, CHUNK_BLOCKS), getTileState(x+1, y-1));*/
 			
 		return true;
 	}
@@ -211,7 +208,7 @@ bool Terrain::removeTile(const int x, const int y, TerrainLayer layer = TERRAIN_
 	if(getChunk(XMath::floor(x / CHUNK_BLOCKSF), XMath::floor(y / CHUNK_BLOCKSF)).setTile(XMath::mod(x, CHUNK_BLOCKS), XMath::mod(y, CHUNK_BLOCKS), BLOCK_EMPTY, layer))
 	{
 		// Update neighbouring tiles
-		getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).updateTile(XMath::mod(x,   CHUNK_BLOCKS), XMath::mod(y,   CHUNK_BLOCKS), getTileState(x,   y), true);
+		/*getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).updateTile(XMath::mod(x,   CHUNK_BLOCKS), XMath::mod(y,   CHUNK_BLOCKS), getTileState(x,   y), true);
 		getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).updateTile(XMath::mod(x+1, CHUNK_BLOCKS), XMath::mod(y,   CHUNK_BLOCKS), getTileState(x+1, y), true);
 		getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).updateTile(XMath::mod(x-1, CHUNK_BLOCKS), XMath::mod(y,   CHUNK_BLOCKS), getTileState(x-1, y), true);
 		getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).updateTile(XMath::mod(x,   CHUNK_BLOCKS), XMath::mod(y+1, CHUNK_BLOCKS), getTileState(x, y+1), true);
@@ -220,7 +217,7 @@ bool Terrain::removeTile(const int x, const int y, TerrainLayer layer = TERRAIN_
 		getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).updateTile(XMath::mod(x+1, CHUNK_BLOCKS), XMath::mod(y+1, CHUNK_BLOCKS), getTileState(x+1, y+1));
 		getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).updateTile(XMath::mod(x-1, CHUNK_BLOCKS), XMath::mod(y+1, CHUNK_BLOCKS), getTileState(x-1, y+1));
 		getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).updateTile(XMath::mod(x-1, CHUNK_BLOCKS), XMath::mod(y-1, CHUNK_BLOCKS), getTileState(x-1, y-1));
-		getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).updateTile(XMath::mod(x+1, CHUNK_BLOCKS), XMath::mod(y-1, CHUNK_BLOCKS), getTileState(x+1, y-1));
+		getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).updateTile(XMath::mod(x+1, CHUNK_BLOCKS), XMath::mod(y-1, CHUNK_BLOCKS), getTileState(x+1, y-1));*/
 			
 		return true;
 	}
@@ -316,7 +313,11 @@ void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 	{
 		for(int x = x0; x <= x1; ++x)
 		{
-			batch->pushMatrix(Matrix4().translate(x * CHUNK_PXF, y * CHUNK_PXF, 0.0f));
+			Matrix4 mat;
+			mat.scale(BLOCK_PXF, BLOCK_PXF, 1.0f);
+			mat.translate(x * CHUNK_PXF, y * CHUNK_PXF, 0.0f);
+
+			batch->pushMatrix(mat);
 			getChunk(x, y, true).draw(batch);
 			batch->popMatrix();
 		}
@@ -336,6 +337,28 @@ void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 			XShape line(Rect(x * CHUNK_PX, y0 * CHUNK_PX, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * CHUNK_PX));
 			line.setFillColor(XColor(0, 0, 0, 255));
 			line.draw(batch);
+		}
+
+		if(XInput::getKeyState(XD_KEY_B))
+		{
+			int x0 = XMath::floor(World::getCamera()->getX()/BLOCK_PXF);
+			int y0 = XMath::floor(World::getCamera()->getY()/BLOCK_PXF);
+			int x1 = XMath::floor((World::getCamera()->getX() + World::getCamera()->getWidth())/BLOCK_PXF);
+			int y1 = XMath::floor((World::getCamera()->getY() + World::getCamera()->getHeight())/BLOCK_PXF);
+
+			for(int y = y0; y <= y1; ++y)
+			{
+				XShape line(Rect(x0 * BLOCK_PXF, y * BLOCK_PXF, (x1 - x0 + 1) * BLOCK_PXF, 1.0f / World::getCamera()->getZoom()));
+				line.setFillColor(XColor(0, 0, 0, 255));
+				line.draw(batch);
+			}
+
+			for(int x = x0; x <= x1; ++x)
+			{
+				XShape line(Rect(x * BLOCK_PXF, y0 * BLOCK_PXF, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * BLOCK_PXF));
+				line.setFillColor(XColor(0, 0, 0, 255));
+				line.draw(batch);
+			} 
 		}
 	}
 }

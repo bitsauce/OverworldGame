@@ -116,21 +116,10 @@ void TerrainChunk::generateVBO()
 		{
 			for(int i = TERRAIN_LAYER_COUNT-1; i >= 0; --i)
 			{
-				BlockID block = m_blocks[BLOCK_INDEX(x, y, i)];
-				uint state = World::getTerrain()->getTileState(m_x * CHUNK_BLOCKS + x, m_y * CHUNK_BLOCKS + y, (TerrainLayer)i);
-				
-				if(block == BLOCK_EMPTY) continue;
-
-				XVertex *vertices; uint *indices;
-				uint vertexCount = 0, indexCount = 0;
-				BlockData::get(block).getVertices(x, y, state, &vertices, vertexCount, &indices, indexCount);
-
-				m_vbo->addVertices(vertices, vertexCount, indices, indexCount);
-
-				delete[] vertices;
-				delete[] indices;
-
-				if(block > BLOCK_RESERVED) // no point in updating air/reserved tiles
+				BlockID blocks[9];
+				World::getTerrain()->getTileState(m_x * CHUNK_BLOCKS + x, m_y * CHUNK_BLOCKS + y, blocks, (TerrainLayer)i);
+				BlockData::get(blocks[8]).getVertices(x, y, blocks, m_vbo);
+				//if(block > BLOCK_RESERVED) // no point in updating air/reserved tiles
 				{
 					
 						
@@ -425,7 +414,7 @@ void TerrainChunk::draw(XBatch *batch)
 		}
 		
 		// Draw blocks
-		batch->setTexture(BlockData::get(BLOCK_EMPTY).getTexture()/*@Tiles.getAtlas().getTexture()*/);
+		batch->setTexture(BlockData::s_blockAtlas->getTexture());
 		batch->setPrimitive(XBatch::PRIMITIVE_TRIANGLES);
 		batch->addVertexBuffer(m_vbo);
 		

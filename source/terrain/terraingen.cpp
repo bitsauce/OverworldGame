@@ -32,6 +32,6 @@ BlockID Tree::getTileAt(const int x, const int y, TerrainLayer layer)
 BlockID TerrainGen::getTileAt(const int x, const int y, const TerrainLayer layer)
 {
 	if(layer == TERRAIN_LAYER_SCENE)
-		return sin(x*0.1f)*20.0f < y ? BLOCK_SCENE_GRASS : BLOCK_EMPTY;
+		return sin(x*0.1f)*10.0f < y ? BLOCK_SCENE_GRASS : BLOCK_EMPTY;
 	return BLOCK_EMPTY;
 }
