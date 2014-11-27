@@ -62,16 +62,16 @@ float Camera::getHeight()
 void Camera::update()
 {
 	if(XInput::getKeyState(XD_KEY_LEFT)) {
-		m_position.x -= 16.0f;
+		m_position.x -= 16.0f/m_zoom;
 	}
 	if(XInput::getKeyState(XD_KEY_RIGHT)) {
-		m_position.x += 16.0f;
+		m_position.x += 16.0f/m_zoom;
 	}
 	if(XInput::getKeyState(XD_KEY_UP)) {
-		m_position.y -= 16.0f;
+		m_position.y -= 16.0f/m_zoom;
 	}
 	if(XInput::getKeyState(XD_KEY_DOWN)) {
-		m_position.y += 16.0f;
+		m_position.y += 16.0f/m_zoom;
 	}
 }
 

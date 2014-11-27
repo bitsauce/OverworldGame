@@ -118,7 +118,7 @@ void TerrainChunk::generateVBO()
 			{
 				BlockID blocks[9];
 				World::getTerrain()->getTileState(m_x * CHUNK_BLOCKS + x, m_y * CHUNK_BLOCKS + y, blocks, (TerrainLayer)i);
-				BlockData::get(blocks[8]).getVertices(x, y, blocks, m_vbo);
+				BlockData::get(blocks[0]).getVertices(x, y, blocks, m_vbo);
 				//if(block > BLOCK_RESERVED) // no point in updating air/reserved tiles
 				{
 					

@@ -69,15 +69,15 @@ bool Terrain::isTileAt(const int x, const int y, TerrainLayer layer = TERRAIN_LA
 void Terrain::getTileState(const int x, const int y, BlockID *blocks, TerrainLayer layer = TERRAIN_LAYER_SCENE)
 {
 	// Get state
-	blocks[0] = getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x-1), CHUNK_BLOCKS), XMath::mod((y-1), CHUNK_BLOCKS), layer);
-	blocks[1] = getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod(x,     CHUNK_BLOCKS), XMath::mod((y-1), CHUNK_BLOCKS), layer);
-	blocks[2] = getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x+1), CHUNK_BLOCKS), XMath::mod((y-1), CHUNK_BLOCKS), layer);
-	blocks[3] = getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x-1), CHUNK_BLOCKS), XMath::mod(y,     CHUNK_BLOCKS), layer);
+	blocks[0] = getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).getTileAt(XMath::mod(x,     CHUNK_BLOCKS), XMath::mod(y,     CHUNK_BLOCKS), layer);
+	blocks[1] = getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x-1), CHUNK_BLOCKS), XMath::mod((y-1), CHUNK_BLOCKS), layer);
+	blocks[2] = getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod(x,     CHUNK_BLOCKS), XMath::mod((y-1), CHUNK_BLOCKS), layer);
+	blocks[3] = getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x+1), CHUNK_BLOCKS), XMath::mod((y-1), CHUNK_BLOCKS), layer);
 	blocks[4] = getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x+1), CHUNK_BLOCKS), XMath::mod(y,     CHUNK_BLOCKS), layer);
-	blocks[5] = getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x-1), CHUNK_BLOCKS), XMath::mod((y+1), CHUNK_BLOCKS), layer);
+	blocks[5] = getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x+1), CHUNK_BLOCKS), XMath::mod((y+1), CHUNK_BLOCKS), layer);
 	blocks[6] = getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod(x,     CHUNK_BLOCKS), XMath::mod((y+1), CHUNK_BLOCKS), layer);
-	blocks[7] = getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x+1), CHUNK_BLOCKS), XMath::mod((y+1), CHUNK_BLOCKS), layer);
-	blocks[8] = getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).getTileAt(XMath::mod(x,     CHUNK_BLOCKS), XMath::mod(y,     CHUNK_BLOCKS), layer);
+	blocks[7] = getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x-1), CHUNK_BLOCKS), XMath::mod((y+1), CHUNK_BLOCKS), layer);
+	blocks[8] = getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x-1), CHUNK_BLOCKS), XMath::mod(y,     CHUNK_BLOCKS), layer);
 
 	/*if(tileY == 0)
 	{

@@ -49,137 +49,163 @@ uint BLOCK_INDICES[54] = {
 };
 
 // Block texture coordinates
-#define BLOCK_X0 0.0f
-#define BLOCK_Y0 0.0f
-#define BLOCK_X1 BORDER_PXF/FULL_BLOCK_PXF
-#define BLOCK_Y1 BORDER_PXF/FULL_BLOCK_PXF
-#define BLOCK_X2 (FULL_BLOCK_PXF-BORDER_PXF)/FULL_BLOCK_PXF
-#define BLOCK_Y2 (FULL_BLOCK_PXF-BORDER_PXF)/FULL_BLOCK_PXF
-#define BLOCK_X3 1.0f
-#define BLOCK_Y3 1.0f
+#define BLOCK_X0 0.00f
+#define BLOCK_Y0 0.00f
+#define BLOCK_X1 0.25f
+#define BLOCK_Y1 0.25f
+#define BLOCK_X2 0.50f
+#define BLOCK_Y2 0.50f
+#define BLOCK_X3 0.75f
+#define BLOCK_Y3 0.75f
+#define BLOCK_X4 1.00f
+#define BLOCK_Y4 1.00f
 
 float BLOCK_VERTICES[9][4] =
 {
 	{ BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y1 },
-	{ BLOCK_X1, BLOCK_Y0, BLOCK_X2, BLOCK_Y1 },
+	{ BLOCK_X0, BLOCK_Y0, BLOCK_X3, BLOCK_Y1 },
 	{ BLOCK_X2, BLOCK_Y0, BLOCK_X3, BLOCK_Y1 },
-	{ BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y2 },
-	{ BLOCK_X2, BLOCK_Y1, BLOCK_X3, BLOCK_Y2 },
+	{ BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y3 },
+	{ BLOCK_X2, BLOCK_Y0, BLOCK_X3, BLOCK_Y3 },
 	{ BLOCK_X0, BLOCK_Y2, BLOCK_X1, BLOCK_Y3 },
-	{ BLOCK_X1, BLOCK_Y2, BLOCK_X2, BLOCK_Y3 },
+	{ BLOCK_X0, BLOCK_Y2, BLOCK_X3, BLOCK_Y3 },
 	{ BLOCK_X2, BLOCK_Y2, BLOCK_X3, BLOCK_Y3 },
 	{ BLOCK_X0, BLOCK_Y0, BLOCK_X3, BLOCK_Y3 }
 };
 
-#define BLOCK_U0 0.0f
-#define BLOCK_V0 0.0f
-#define BLOCK_U1 BORDER_PXF/FULL_BLOCK_PXF
-#define BLOCK_V1 BORDER_PXF/FULL_BLOCK_PXF
-#define BLOCK_U2 (FULL_BLOCK_PXF-BORDER_PXF)/FULL_BLOCK_PXF
-#define BLOCK_V2 (FULL_BLOCK_PXF-BORDER_PXF)/FULL_BLOCK_PXF
-#define BLOCK_U3 1.0f
-#define BLOCK_V3 1.0f
-
-float BLOCK_TEXTURE_COORDS[9][4] =
-{
-	{ BLOCK_U2, BLOCK_V0, BLOCK_U3, BLOCK_V1 }, // 0
-	{ BLOCK_U1, BLOCK_V0, BLOCK_U2, BLOCK_V1 }, // 1
-	{ BLOCK_U0, BLOCK_V0, BLOCK_U1, BLOCK_V1 }, // 2
-	{ BLOCK_U2, BLOCK_V1, BLOCK_U3, BLOCK_V2 }, // 3
-	{ BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V2 }, // 4
-	{ BLOCK_U2, BLOCK_V2, BLOCK_U3, BLOCK_V3 }, // 5
-	{ BLOCK_U1, BLOCK_V2, BLOCK_U2, BLOCK_V3 }, // 6
-	{ BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V3 }, // 7
-	{ BLOCK_U1, BLOCK_V1, BLOCK_U2, BLOCK_V2 }  // 8
-};
+#define BLOCK_UV0 (0.0f / 6.0f)
+#define BLOCK_UV1 (1.0f / 6.0f)
+#define BLOCK_UV2 (2.0f / 6.0f)
+#define BLOCK_UV3 (3.0f / 6.0f)
+#define BLOCK_UV4 (4.0f / 6.0f)
+#define BLOCK_UV5 (5.0f / 6.0f)
+#define BLOCK_UV6 (6.0f / 6.0f)
 
 uint BLOCK_DIR[8] =
 {
-	NORTH_WEST,
-	NORTH,
-	NORTH_EAST,
-	WEST,
-	EAST,
-	SOUTH_WEST,
-	SOUTH,
-	SOUTH_EAST
+	NORTH_WEST, // 0
+	NORTH,      // 1
+	NORTH_EAST, // 2
+	WEST,       // 3
+	EAST,       // 4
+	SOUTH_WEST, // 5
+	SOUTH,      // 6
+	SOUTH_EAST  // 7
+};
+
+struct BlockQuad
+{
+	BlockQuad(BlockID block, const float x0, const float y0, const float x1, const float y1, const float u0, const float v0, const float u1, const float v1) :
+		block(block),
+		x0(x0),
+		y0(y0),
+		x1(x1),
+		y1(y1),
+		u0(u0),
+		v0(v0),
+		u1(u1),
+		v1(v1)
+	{
+	}
+	
+	BlockID block;
+	float x0, y0, x1, y1, u0, v0, u1, v1;
 };
 
 void BlockData::getVertices(const int x, const int y, const BlockID *blocks, shared_ptr<XVertexBuffer> buffer) const
 {
-	/*array<Vertex> vertices = Terrain.getVertexFormat().createVertices(4*9);
-	TextureAtlas @atlas = @Tiles.getAtlas();
-	for(int i = 0; i < 9; ++i)
-	{
-		if(i >= 0 && i <= 2 && state & NORTH != 0) continue;
-		else if(i >= 2 && i <= 4 && state & EAST != 0) continue;
-		else if(i >= 4 && i <= 6 && state & SOUTH != 0) continue;
-		else if((i >= 6 && i <= 7 || i == 0) && state & WEST != 0) continue;
-			
-		vertices[i*4+0].set4f(VERTEX_POSITION, x * TILE_PX + (TILE_TEXTURE_COORDS[0, i] * FULL_TILE_PXF - BORDER_PXF), y * TILE_PX + (TILE_TEXTURE_COORDS[1, i] * FULL_TILE_PXF - BORDER_PXF));
-		vertices[i*4+1].set4f(VERTEX_POSITION, x * TILE_PX + (TILE_TEXTURE_COORDS[2, i] * FULL_TILE_PXF - BORDER_PXF), y * TILE_PX + (TILE_TEXTURE_COORDS[1, i] * FULL_TILE_PXF - BORDER_PXF));
-		vertices[i*4+2].set4f(VERTEX_POSITION, x * TILE_PX + (TILE_TEXTURE_COORDS[2, i] * FULL_TILE_PXF - BORDER_PXF), y * TILE_PX + (TILE_TEXTURE_COORDS[3, i] * FULL_TILE_PXF - BORDER_PXF));
-		vertices[i*4+3].set4f(VERTEX_POSITION, x * TILE_PX + (TILE_TEXTURE_COORDS[0, i] * FULL_TILE_PXF - BORDER_PXF), y * TILE_PX + (TILE_TEXTURE_COORDS[3, i] * FULL_TILE_PXF - BORDER_PXF));
-			
-		TextureRegion region = atlas.get(id, TILE_TEXTURE_COORDS[0, i], 1-TILE_TEXTURE_COORDS[3, i], TILE_TEXTURE_COORDS[2, i], 1-TILE_TEXTURE_COORDS[1, i]);
-		vertices[i*4+0].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
-		vertices[i*4+1].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv1.y);
-		vertices[i*4+2].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
-		vertices[i*4+3].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
-	}
-	return vertices;*/
-
 	XVertexFormat &format = World::getTerrain()->getVertexFormat();
 
+	vector<BlockQuad> quads;
 	if(m_id != BLOCK_EMPTY)
 	{
-		XVertex *vertices = format.createVertices(4);
-		uint *indices = new uint[6];
+		quads.push_back(BlockQuad(m_id, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_UV1, BLOCK_UV1, BLOCK_UV5, BLOCK_UV5));
+	}
 
-		vertices[0].set4f(VERTEX_POSITION, x + BLOCK_VERTICES[8][0], y + BLOCK_VERTICES[8][1]);
-		vertices[1].set4f(VERTEX_POSITION, x + BLOCK_VERTICES[8][2], y + BLOCK_VERTICES[8][1]);
-		vertices[2].set4f(VERTEX_POSITION, x + BLOCK_VERTICES[8][2], y + BLOCK_VERTICES[8][3]);
-		vertices[3].set4f(VERTEX_POSITION, x + BLOCK_VERTICES[8][0], y + BLOCK_VERTICES[8][3]);
+	// Draw left edge
+	if(blocks[4] != blocks[0])
+	{
+		if(blocks[4] == blocks[2])
+			if(blocks[4] == blocks[6])
+				quads.push_back(BlockQuad(blocks[4], BLOCK_X3, BLOCK_Y1, BLOCK_X4, BLOCK_Y3, BLOCK_UV0, BLOCK_UV2, BLOCK_UV1, BLOCK_UV4));
+			else
+				quads.push_back(BlockQuad(blocks[4], BLOCK_X3, BLOCK_Y1, BLOCK_X4, BLOCK_Y4, BLOCK_UV0, BLOCK_UV2, BLOCK_UV1, BLOCK_UV5));
+		else if(blocks[4] == blocks[6])
+			quads.push_back(BlockQuad(blocks[4], BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y3, BLOCK_UV0, BLOCK_UV2, BLOCK_UV1, BLOCK_UV5));
+		else
+			quads.push_back(BlockQuad(blocks[4], BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_UV0, BLOCK_UV1, BLOCK_UV1, BLOCK_UV5));
+	}
+
+	// Top-left outer-corner
+	if(blocks[5] != m_id && blocks[5] != blocks[4] && blocks[5] != blocks[6])
+	{
+		quads.push_back(BlockQuad(blocks[5], BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_UV0, BLOCK_UV5, BLOCK_UV1, BLOCK_UV6));
+	}
+
+	// Draw top edge
+	if(blocks[6] != blocks[0])
+	{
+		if(blocks[6] == blocks[4])
+			if(blocks[6] == blocks[8])
+				quads.push_back(BlockQuad(blocks[6], BLOCK_X1, BLOCK_Y3, BLOCK_X3, BLOCK_Y4, BLOCK_UV2, BLOCK_UV5, BLOCK_UV4, BLOCK_UV6));
+			else
+				quads.push_back(BlockQuad(blocks[6], BLOCK_X0, BLOCK_Y3, BLOCK_X3, BLOCK_Y4, BLOCK_UV1, BLOCK_UV5, BLOCK_UV4, BLOCK_UV6));
+		else if(blocks[6] == blocks[8])
+			quads.push_back(BlockQuad(blocks[6], BLOCK_X1, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_UV2, BLOCK_UV5, BLOCK_UV5, BLOCK_UV6));
+		else
+			quads.push_back(BlockQuad(blocks[6], BLOCK_X0, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_UV1, BLOCK_UV5, BLOCK_UV5, BLOCK_UV6));
+	}
 	
-		XTextureRegion region = s_blockAtlas->get(m_id, BLOCK_TEXTURE_COORDS[8][0], BLOCK_TEXTURE_COORDS[8][1], BLOCK_TEXTURE_COORDS[8][2], BLOCK_TEXTURE_COORDS[8][3]);
-		vertices[0].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
-		vertices[1].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv1.y);
-		vertices[2].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
-		vertices[3].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
-		
-		memcpy(indices, QUAD_INDICES, 6*sizeof(uint));
+	// Top-right outer-corner
+	if(blocks[7] != m_id && blocks[7] != blocks[8] && blocks[7] != blocks[6])
+	{
+		quads.push_back(BlockQuad(blocks[7], BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_UV5, BLOCK_UV5, BLOCK_UV6, BLOCK_UV6));
+	}
 
-		buffer->addVertices(vertices, 4, indices, 6);
+	// Draw right edge
+	if(blocks[8] != blocks[0])
+	{
+		if(blocks[8] == blocks[2])
+			if(blocks[8] == blocks[6])
+				quads.push_back(BlockQuad(blocks[8], BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y3, BLOCK_UV5, BLOCK_UV2, BLOCK_UV6, BLOCK_UV4));
+			else
+				quads.push_back(BlockQuad(blocks[8], BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y4, BLOCK_UV5, BLOCK_UV2, BLOCK_UV6, BLOCK_UV5));
+		else if(blocks[8] == blocks[6])
+			quads.push_back(BlockQuad(blocks[8], BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y3, BLOCK_UV5, BLOCK_UV2, BLOCK_UV6, BLOCK_UV5));
+		else
+			quads.push_back(BlockQuad(blocks[8], BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y4, BLOCK_UV5, BLOCK_UV1, BLOCK_UV6, BLOCK_UV5));
+	}
+
+	if(quads.size() > 0)
+	{
+		XVertex *vertices = format.createVertices(4*quads.size());
+		uint *indices = new uint[6*quads.size()];
+		for(uint i = 0; i < quads.size(); ++i)
+		{
+			BlockQuad &quad = quads[i];
+
+			vertices[0 + i*4].set4f(VERTEX_POSITION, x + quad.x0, y + quad.y0);
+			vertices[1 + i*4].set4f(VERTEX_POSITION, x + quad.x1, y + quad.y0);
+			vertices[2 + i*4].set4f(VERTEX_POSITION, x + quad.x1, y + quad.y1);
+			vertices[3 + i*4].set4f(VERTEX_POSITION, x + quad.x0, y + quad.y1);
+	
+			XTextureRegion region = s_blockAtlas->get(quad.block, quad.u0, quad.v0, quad.u1, quad.v1);
+			vertices[0 + i*4].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
+			vertices[1 + i*4].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv1.y);
+			vertices[2 + i*4].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
+			vertices[3 + i*4].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
+		
+			indices[0 + i*6] = QUAD_INDICES[0] + i*4;
+			indices[1 + i*6] = QUAD_INDICES[1] + i*4;
+			indices[2 + i*6] = QUAD_INDICES[2] + i*4;
+			indices[3 + i*6] = QUAD_INDICES[3] + i*4;
+			indices[4 + i*6] = QUAD_INDICES[4] + i*4;
+			indices[5 + i*6] = QUAD_INDICES[5] + i*4;
+		}
+		buffer->addVertices(vertices, 4*quads.size(), indices, 6*quads.size());
 
 		delete[] vertices;
 		delete[] indices;
-	}
-
-	for(uint i = 0; i < 8; ++i)
-	{
-		if(blocks[i] != BLOCK_EMPTY && blocks[i] != m_id)
-		{
-			XVertex *vertices = format.createVertices(4);
-			uint *indices = new uint[6];
-
-			vertices[0].set4f(VERTEX_POSITION, x + BLOCK_VERTICES[i][0], y + BLOCK_VERTICES[i][1]);
-			vertices[1].set4f(VERTEX_POSITION, x + BLOCK_VERTICES[i][2], y + BLOCK_VERTICES[i][1]);
-			vertices[2].set4f(VERTEX_POSITION, x + BLOCK_VERTICES[i][2], y + BLOCK_VERTICES[i][3]);
-			vertices[3].set4f(VERTEX_POSITION, x + BLOCK_VERTICES[i][0], y + BLOCK_VERTICES[i][3]);
-	
-			XTextureRegion region = s_blockAtlas->get(blocks[i], BLOCK_TEXTURE_COORDS[i][0], BLOCK_TEXTURE_COORDS[i][1], BLOCK_TEXTURE_COORDS[i][2], BLOCK_TEXTURE_COORDS[i][3]);
-			vertices[0].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
-			vertices[1].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv1.y);
-			vertices[2].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
-			vertices[3].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
-		
-			memcpy(indices, QUAD_INDICES, 6*sizeof(uint));
-
-			buffer->addVertices(vertices, 4, indices, 6);
-
-			delete[] vertices;
-			delete[] indices;
-		}
 	}
 }
 
