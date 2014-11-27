@@ -9,7 +9,7 @@ void BlockData::init()
 {
 	shared_ptr<XTexture> temp = xd::ResourceManager::get<XTexture>(":/sprites/tiles/tile_template.png");
 	s_blockData[BLOCK_EMPTY] = BlockData(BLOCK_EMPTY, xd::ResourceManager::get<XTexture>(":/sprites/tiles/empty_tile.png"), 0/*ITEM_GRASS_BLOCK*/, 1.0f);
-	s_blockData[BLOCK_SCENE_GRASS] = BlockData(BLOCK_SCENE_GRASS, xd::ResourceManager::get<XTexture>(":/sprites/tiles/tile_template.png"), 0/*ITEM_GRASS_BLOCK*/, 1.0f);
+	s_blockData[BLOCK_SCENE_GRASS] = BlockData(BLOCK_SCENE_GRASS, xd::ResourceManager::get<XTexture>(":/sprites/tiles/grass_tile.png"), 0/*ITEM_GRASS_BLOCK*/, 1.0f);
 
 	vector<shared_ptr<XTexture>> textures;
 	for(uint i = 0; i < BLOCK_COUNT; ++i)
@@ -73,13 +73,22 @@ float BLOCK_VERTICES[9][4] =
 	{ BLOCK_X0, BLOCK_Y0, BLOCK_X3, BLOCK_Y3 }
 };
 
-#define BLOCK_UV0 (0.0f / 6.0f)
-#define BLOCK_UV1 (1.0f / 6.0f)
-#define BLOCK_UV2 (2.0f / 6.0f)
-#define BLOCK_UV3 (3.0f / 6.0f)
-#define BLOCK_UV4 (4.0f / 6.0f)
-#define BLOCK_UV5 (5.0f / 6.0f)
-#define BLOCK_UV6 (6.0f / 6.0f)
+#define BLOCK_U0 (0.0f / 6.0f)
+#define BLOCK_V0 (0.0f / 8.0f)
+#define BLOCK_U1 (1.0f / 6.0f)
+#define BLOCK_V1 (1.0f / 8.0f)
+#define BLOCK_U2 (2.0f / 6.0f)
+#define BLOCK_V2 (2.0f / 8.0f)
+#define BLOCK_U3 (3.0f / 6.0f)
+#define BLOCK_V3 (3.0f / 8.0f)
+#define BLOCK_U4 (4.0f / 6.0f)
+#define BLOCK_V4 (4.0f / 8.0f)
+#define BLOCK_U5 (5.0f / 6.0f)
+#define BLOCK_V5 (5.0f / 8.0f)
+#define BLOCK_U6 (6.0f / 6.0f)
+#define BLOCK_V6 (6.0f / 8.0f)
+#define BLOCK_V7 (7.0f / 8.0f)
+#define BLOCK_V8 (8.0f / 8.0f)
 
 uint BLOCK_DIR[8] =
 {
@@ -119,7 +128,7 @@ void BlockData::getVertices(const int x, const int y, const BlockID *blocks, sha
 	vector<BlockQuad> quads;
 	if(m_id != BLOCK_EMPTY)
 	{
-		quads.push_back(BlockQuad(m_id, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_UV1, BLOCK_UV1, BLOCK_UV5, BLOCK_UV5));
+		quads.push_back(BlockQuad(m_id, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V1, BLOCK_U5, BLOCK_V5));
 	}
 
 	// Draw left edge
@@ -127,19 +136,27 @@ void BlockData::getVertices(const int x, const int y, const BlockID *blocks, sha
 	{
 		if(blocks[4] == blocks[2])
 			if(blocks[4] == blocks[6])
-				quads.push_back(BlockQuad(blocks[4], BLOCK_X3, BLOCK_Y1, BLOCK_X4, BLOCK_Y3, BLOCK_UV0, BLOCK_UV2, BLOCK_UV1, BLOCK_UV4));
+			{
+				quads.push_back(BlockQuad(blocks[4], BLOCK_X3, BLOCK_Y1, BLOCK_X4, BLOCK_Y3, BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V4));
+			}
 			else
-				quads.push_back(BlockQuad(blocks[4], BLOCK_X3, BLOCK_Y1, BLOCK_X4, BLOCK_Y4, BLOCK_UV0, BLOCK_UV2, BLOCK_UV1, BLOCK_UV5));
+			{
+				quads.push_back(BlockQuad(blocks[4], BLOCK_X3, BLOCK_Y1, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V5));
+				quads.push_back(BlockQuad(blocks[4], BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U1, BLOCK_V7, BLOCK_U2, BLOCK_V8));
+			}
 		else if(blocks[4] == blocks[6])
-			quads.push_back(BlockQuad(blocks[4], BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y3, BLOCK_UV0, BLOCK_UV2, BLOCK_UV1, BLOCK_UV5));
+		{
+			quads.push_back(BlockQuad(blocks[4], BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y3, BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V5));
+			quads.push_back(BlockQuad(blocks[4], BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V6, BLOCK_U2, BLOCK_V7));
+		}
 		else
-			quads.push_back(BlockQuad(blocks[4], BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_UV0, BLOCK_UV1, BLOCK_UV1, BLOCK_UV5));
+			quads.push_back(BlockQuad(blocks[4], BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V5));
 	}
 
 	// Top-left outer-corner
 	if(blocks[5] != m_id && blocks[5] != blocks[4] && blocks[5] != blocks[6])
 	{
-		quads.push_back(BlockQuad(blocks[5], BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_UV0, BLOCK_UV5, BLOCK_UV1, BLOCK_UV6));
+		quads.push_back(BlockQuad(blocks[5], BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V5, BLOCK_U1, BLOCK_V6));
 	}
 
 	// Draw top edge
@@ -147,19 +164,19 @@ void BlockData::getVertices(const int x, const int y, const BlockID *blocks, sha
 	{
 		if(blocks[6] == blocks[4])
 			if(blocks[6] == blocks[8])
-				quads.push_back(BlockQuad(blocks[6], BLOCK_X1, BLOCK_Y3, BLOCK_X3, BLOCK_Y4, BLOCK_UV2, BLOCK_UV5, BLOCK_UV4, BLOCK_UV6));
+				quads.push_back(BlockQuad(blocks[6], BLOCK_X1, BLOCK_Y3, BLOCK_X3, BLOCK_Y4, BLOCK_U2, BLOCK_V5, BLOCK_U4, BLOCK_V6));
 			else
-				quads.push_back(BlockQuad(blocks[6], BLOCK_X0, BLOCK_Y3, BLOCK_X3, BLOCK_Y4, BLOCK_UV1, BLOCK_UV5, BLOCK_UV4, BLOCK_UV6));
+				quads.push_back(BlockQuad(blocks[6], BLOCK_X0, BLOCK_Y3, BLOCK_X3, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U4, BLOCK_V6));
 		else if(blocks[6] == blocks[8])
-			quads.push_back(BlockQuad(blocks[6], BLOCK_X1, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_UV2, BLOCK_UV5, BLOCK_UV5, BLOCK_UV6));
+			quads.push_back(BlockQuad(blocks[6], BLOCK_X1, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V5, BLOCK_U5, BLOCK_V6));
 		else
-			quads.push_back(BlockQuad(blocks[6], BLOCK_X0, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_UV1, BLOCK_UV5, BLOCK_UV5, BLOCK_UV6));
+			quads.push_back(BlockQuad(blocks[6], BLOCK_X0, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U5, BLOCK_V6));
 	}
 	
 	// Top-right outer-corner
 	if(blocks[7] != m_id && blocks[7] != blocks[8] && blocks[7] != blocks[6])
 	{
-		quads.push_back(BlockQuad(blocks[7], BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_UV5, BLOCK_UV5, BLOCK_UV6, BLOCK_UV6));
+		quads.push_back(BlockQuad(blocks[7], BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V5, BLOCK_U6, BLOCK_V6));
 	}
 
 	// Draw right edge
@@ -167,13 +184,16 @@ void BlockData::getVertices(const int x, const int y, const BlockID *blocks, sha
 	{
 		if(blocks[8] == blocks[2])
 			if(blocks[8] == blocks[6])
-				quads.push_back(BlockQuad(blocks[8], BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y3, BLOCK_UV5, BLOCK_UV2, BLOCK_UV6, BLOCK_UV4));
+				quads.push_back(BlockQuad(blocks[8], BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y3, BLOCK_U5, BLOCK_V2, BLOCK_U6, BLOCK_V4));
 			else
-				quads.push_back(BlockQuad(blocks[8], BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y4, BLOCK_UV5, BLOCK_UV2, BLOCK_UV6, BLOCK_UV5));
+				quads.push_back(BlockQuad(blocks[8], BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V2, BLOCK_U6, BLOCK_V5));
 		else if(blocks[8] == blocks[6])
-			quads.push_back(BlockQuad(blocks[8], BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y3, BLOCK_UV5, BLOCK_UV2, BLOCK_UV6, BLOCK_UV5));
+		{
+			quads.push_back(BlockQuad(blocks[8], BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y3, BLOCK_U5, BLOCK_V2, BLOCK_U6, BLOCK_V5));
+			quads.push_back(BlockQuad(blocks[8], BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U1, BLOCK_V7));
+		}
 		else
-			quads.push_back(BlockQuad(blocks[8], BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y4, BLOCK_UV5, BLOCK_UV1, BLOCK_UV6, BLOCK_UV5));
+			quads.push_back(BlockQuad(blocks[8], BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V1, BLOCK_U6, BLOCK_V5));
 	}
 
 	if(quads.size() > 0)

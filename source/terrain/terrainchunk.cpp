@@ -195,7 +195,7 @@ ChunkState TerrainChunk::getState() const
 	
 BlockID TerrainChunk::getTileAt(const int x, const int y, TerrainLayer layer) const
 {
-	return m_state != CHUNK_DUMMY ? m_blocks[BLOCK_INDEX(x, y, layer)] : BLOCK_NULL;
+	return m_state != CHUNK_DUMMY ? m_blocks[BLOCK_INDEX(x, y, layer)] : BLOCK_EMPTY;
 }
 	
 bool TerrainChunk::isTileAt(const int x, const int y, TerrainLayer layer) const
