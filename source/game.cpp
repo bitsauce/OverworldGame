@@ -41,7 +41,7 @@ void gameMain()
 
 	// Set b2d world scale
 	//Box2D::setGravity(0, 40);
-	//Box2D::setWorldScale(TILE_PX);
+	//Box2D::setWorldScale(BLOCK_PX);
 
 	XWindow::setSize(Vector2i(1280, 720));
 

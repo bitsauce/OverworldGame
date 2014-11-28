@@ -26,7 +26,7 @@ public:
 	{
 	}
 	
-	BlockID getTileAt(const int x, const int y, TerrainLayer layer)
+	BlockID getBlockAt(const int x, const int y, TerrainLayer layer)
 	{
 		return BLOCK_EMPTY;
 	}
@@ -43,7 +43,7 @@ public:
 		originY = 15;
 	}
 	
-	BlockID getTileAt(const int x, const int y, TerrainLayer layer);
+	BlockID getBlockAt(const int x, const int y, TerrainLayer layer);
 };
 
 class TerrainGen
@@ -51,7 +51,7 @@ class TerrainGen
 public:
 	uint seed;
 
-	static BlockID getTileAt(const int x, const int y, const TerrainLayer);
+	static BlockID getBlockAt(const int x, const int y, const TerrainLayer);
 };
 
 #endif // TERRAIN_GEN_H

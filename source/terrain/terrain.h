@@ -9,7 +9,6 @@
 
 enum TerrainLayer;
 enum BlockID;
-extern TerrainLayer getLayerByTile(BlockID tile);
 
 class Terrain : public GameObject
 {
@@ -27,9 +26,9 @@ public:
 	BlockID getBlockAt(const int x, const int y, const TerrainLayer layer);
 	bool isBlockAt(const int x, const int y, TerrainLayer layer);
 	
-	// TILE MODIFICATION
-	bool setTile(const int x, const int y, BlockID tile, const TerrainLayer layer);
-	bool removeTile(const int x, const int y, TerrainLayer layer);
+	// BLOCK MODIFICATION
+	bool setBlockAt(const int x, const int y, BlockID block, const TerrainLayer layer);
+	bool removeBlockAt(const int x, const int y, TerrainLayer layer);
 	
 	// CHUNKS
 	TerrainChunk &getChunk(const int chunkX, const int chunkY, const bool generate = false);

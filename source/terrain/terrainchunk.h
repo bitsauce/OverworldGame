@@ -37,11 +37,10 @@ public:
 	int getY() const { return m_y; }
 	
 	ChunkState getState() const;
-	BlockID getTileAt(const int x, const int y, TerrainLayer layer) const;
-	bool isTileAt(const int x, const int y, TerrainLayer layer) const;
+	BlockID getBlockAt(const int x, const int y, TerrainLayer layer) const;
+	bool isBlockAt(const int x, const int y, TerrainLayer layer) const;
 	bool isBlockOccupied(const int x, const int y, TerrainLayer layer) const;
-	bool setTile(const int x, const int y, const BlockID tile, TerrainLayer layer);
-	void updateTile(const int x, const int y, const uint tileState, const bool fixture = false);
+	bool setBlockAt(const int x, const int y, const BlockID block, TerrainLayer layer);
 
 	// SHADOWS
 	float getOpacity(const int x, const int y);

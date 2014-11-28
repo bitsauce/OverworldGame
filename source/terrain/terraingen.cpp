@@ -6,7 +6,7 @@ float step(float edge, float x)
 	return x < edge ? 0.0f : 1.0f;
 }
 
-BlockID Tree::getTileAt(const int x, const int y, TerrainLayer layer)
+BlockID Tree::getBlockAt(const int x, const int y, TerrainLayer layer)
 {
 	switch(layer)
 	{
@@ -29,7 +29,7 @@ BlockID Tree::getTileAt(const int x, const int y, TerrainLayer layer)
 	return BlockID(-1);
 }
 
-BlockID TerrainGen::getTileAt(const int x, const int y, const TerrainLayer layer)
+BlockID TerrainGen::getBlockAt(const int x, const int y, const TerrainLayer layer)
 {
 	if(layer == TERRAIN_LAYER_SCENE)
 		return sin(x*0.1f)*10.0f < y ? BLOCK_SCENE_GRASS : BLOCK_EMPTY;

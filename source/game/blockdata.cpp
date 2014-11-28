@@ -37,7 +37,7 @@ BlockData::BlockData(BlockID id, const shared_ptr<XTexture> &texture, const /*It
 {
 }
 
-BlockData &BlockData::get(const BlockID tile)
+BlockData &BlockData::get(const BlockID block)
 {
-	return s_blockData[tile];
+	return s_blockData[block];
 }

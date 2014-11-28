@@ -45,7 +45,7 @@ void World::create(const string &name)
 		
 	// Create player
 	/*Player player();
-	player.body.setPosition(Vector2(0, Terrain.generator.getGroundHeight(0)*TILE_PX));
+	player.body.setPosition(Vector2(0, Terrain.generator.getGroundHeight(0)*BLOCK_PX));
 		
 	// Give default loadout
 	player.inventory.addItem(@Items[ITEM_PICKAXE_IRON]);
