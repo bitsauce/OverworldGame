@@ -62,6 +62,7 @@ private:
 	// CHUNK
 	int m_x, m_y;
 	BlockID *m_blocks;
+	TerrainChunk *m_nextChunk[8];
 	
 	// PHYSICS
 	b2Body *m_body;

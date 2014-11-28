@@ -4,7 +4,7 @@
 #include "game/camera.h"
 #include "game/world.h"
 
-#define CHUNK_KEY(chunkX, chunkY) (chunkX & 0x0000FFFF) | ((chunkY << 16) & 0xFFFF0000)
+#define CHUNK_KEY(X, Y) ((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000)
 
 Terrain::Terrain() :
 	GameObject(DRAW_ORDER_TERRAIN)
@@ -31,7 +31,7 @@ void Terrain::saveChunks()
 	LOG("Saving chunks...");
 
 	// Iterate loaded chunks
-	for(map<uint, TerrainChunk*>::iterator itr = chunks.begin(); itr != chunks.end(); ++itr)
+	for(unordered_map<uint, TerrainChunk*>::iterator itr = chunks.begin(); itr != chunks.end(); ++itr)
 	{
 		// Skip unmodified chunks
 		if(!itr->second->m_modified) continue;
@@ -223,7 +223,7 @@ bool Terrain::removeTile(const int x, const int y, TerrainLayer layer = TERRAIN_
 	}
 	return false;
 }
-	
+
 // CHUNKS
 TerrainChunk &Terrain::getChunk(const int chunkX, const int chunkY, const bool generate)
 {
@@ -244,6 +244,16 @@ TerrainChunk &Terrain::getChunk(const int chunkX, const int chunkY, const bool g
 			else
 			{
 				chunk = new TerrainChunk(chunkX, chunkY);
+
+				// Inform all neightbour chunks about the new guy
+				if(isChunk(chunkX,   chunkY+1)) { chunks[CHUNK_KEY(chunkX,   chunkY+1)]->m_nextChunk[0] = chunk; chunk->m_nextChunk[4] = chunks[CHUNK_KEY(chunkX,   chunkY+1)]; }
+				if(isChunk(chunkX-1, chunkY+1)) { chunks[CHUNK_KEY(chunkX-1, chunkY+1)]->m_nextChunk[1] = chunk; chunk->m_nextChunk[5] = chunks[CHUNK_KEY(chunkX-1, chunkY+1)]; }
+				if(isChunk(chunkX-1, chunkY  )) { chunks[CHUNK_KEY(chunkX-1, chunkY  )]->m_nextChunk[2] = chunk; chunk->m_nextChunk[6] = chunks[CHUNK_KEY(chunkX-1, chunkY  )]; }
+				if(isChunk(chunkX-1, chunkY-1)) { chunks[CHUNK_KEY(chunkX-1, chunkY-1)]->m_nextChunk[3] = chunk; chunk->m_nextChunk[7] = chunks[CHUNK_KEY(chunkX-1, chunkY-1)]; }
+				if(isChunk(chunkX,   chunkY-1)) { chunks[CHUNK_KEY(chunkX,   chunkY-1)]->m_nextChunk[4] = chunk; chunk->m_nextChunk[0] = chunks[CHUNK_KEY(chunkX,   chunkY-1)]; }
+				if(isChunk(chunkX+1, chunkY-1)) { chunks[CHUNK_KEY(chunkX+1, chunkY-1)]->m_nextChunk[5] = chunk; chunk->m_nextChunk[1] = chunks[CHUNK_KEY(chunkX+1, chunkY-1)]; }
+				if(isChunk(chunkX+1, chunkY  )) { chunks[CHUNK_KEY(chunkX+1, chunkY  )]->m_nextChunk[6] = chunk; chunk->m_nextChunk[2] = chunks[CHUNK_KEY(chunkX+1, chunkY  )]; }
+				if(isChunk(chunkX+1, chunkY+1)) { chunks[CHUNK_KEY(chunkX+1, chunkY+1)]->m_nextChunk[7] = chunk; chunk->m_nextChunk[3] = chunks[CHUNK_KEY(chunkX+1, chunkY+1)]; }
 				//chunkLoadQueue.push_front(chunk); // Add to load queue
 			}
 				
@@ -255,6 +265,11 @@ TerrainChunk &Terrain::getChunk(const int chunkX, const int chunkY, const bool g
 		return m_dummyChunk; // Create dummy
 	}
 	return *chunks[key];
+}
+
+bool Terrain::isChunk(const int chunkX, const int chunkY) const
+{
+	return chunks.find(CHUNK_KEY(chunkX, chunkY)) != chunks.end();
 }
 	
 void Terrain::loadVisibleChunks()
@@ -281,6 +296,15 @@ void Terrain::loadVisibleChunks()
 // UPDATING
 void Terrain::update()
 {
+	if(XInput::getKeyState(XD_LMB))
+	{
+		setTile(XMath::floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), XMath::floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_SCENE_GRASS);
+	}
+	else if(XInput::getKeyState(XD_RMB))
+	{
+		setTile(XMath::floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), XMath::floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_EMPTY);
+	}
+
 	int cx = XMath::floor(World::getCamera()->getX()/CHUNK_PXF);
 	int cy = XMath::floor(World::getCamera()->getY()/CHUNK_PXF);
 	TerrainChunk *chunk = 0;

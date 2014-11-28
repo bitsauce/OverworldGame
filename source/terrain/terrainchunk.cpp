@@ -12,6 +12,12 @@ TerrainChunk::TerrainChunk()
 {
 	// A dummy
 	m_state = CHUNK_DUMMY;
+
+	// Init neightbour chunks
+	for(uint i = 0; i < 8; ++i)
+	{
+		m_nextChunk[i] = nullptr;
+	}
 }
 	
 TerrainChunk::TerrainChunk(int chunkX, int chunkY)
@@ -48,7 +54,13 @@ void TerrainChunk::init(int chunkX, int chunkY)
 			}
 		}
 	}
-	
+
+	// Init neightbour chunks
+	for(uint i = 0; i < 8; ++i)
+	{
+		m_nextChunk[i] = nullptr;
+	}
+
 	// Create body
 	b2BodyDef def;
 	def.type = b2_staticBody;
@@ -74,13 +86,13 @@ void TerrainChunk::generate()
 	if(m_state == CHUNK_GENERATING)
 	{
 		// Set all tiles
-		for(uint y = 0; y < CHUNK_BLOCKS; ++y)
+		for(uint z = 0; z < TERRAIN_LAYER_COUNT; ++z)
 		{
-			for(uint x = 0; x < CHUNK_BLOCKS; ++x)
+			for(uint y = 0; y < CHUNK_BLOCKS; ++y)
 			{
-				for(int i = TERRAIN_LAYER_COUNT-1; i >= 0; --i)
+				for(uint x = 0; x < CHUNK_BLOCKS; ++x)
 				{
-					m_blocks[BLOCK_INDEX(x, y, i)] = TerrainGen::getTileAt(m_x * CHUNK_BLOCKS + x, m_y * CHUNK_BLOCKS + y, (TerrainLayer)i);
+					m_blocks[BLOCK_INDEX(x, y, z)] = TerrainGen::getTileAt(m_x * CHUNK_BLOCKS + x, m_y * CHUNK_BLOCKS + y, (TerrainLayer)z);
 				}
 			}
 		}
@@ -89,14 +101,14 @@ void TerrainChunk::generate()
 		generateVBO();
 			
 		// Re-generate neightbouring chunks
-		/*Terrain.getChunk(chunkX+1, chunkY).dirty = true;
-		Terrain.getChunk(chunkX+1, chunkY+1).dirty = true;
-		Terrain.getChunk(chunkX,   chunkY+1).dirty = true;
-		Terrain.getChunk(chunkX-1, chunkY+1).dirty = true;
-		Terrain.getChunk(chunkX-1, chunkY).dirty = true;
-		Terrain.getChunk(chunkX-1, chunkY-1).dirty = true;
-		Terrain.getChunk(chunkX,   chunkY-1).dirty = true;
-		Terrain.getChunk(chunkX+1, chunkY-1).dirty = true;*/
+		if(m_nextChunk[0]) m_nextChunk[0]->m_dirty = true;
+		if(m_nextChunk[1]) m_nextChunk[1]->m_dirty = true;
+		if(m_nextChunk[2]) m_nextChunk[2]->m_dirty = true;
+		if(m_nextChunk[3]) m_nextChunk[3]->m_dirty = true;
+		if(m_nextChunk[4]) m_nextChunk[4]->m_dirty = true;
+		if(m_nextChunk[5]) m_nextChunk[5]->m_dirty = true;
+		if(m_nextChunk[6]) m_nextChunk[6]->m_dirty = true;
+		if(m_nextChunk[7]) m_nextChunk[7]->m_dirty = true;
 			
 		// Mark chunk as initialized
 		m_state = CHUNK_INITIALIZED;
@@ -119,10 +131,9 @@ void TerrainChunk::generateVBO()
 				BlockID blocks[9];
 				World::getTerrain()->getTileState(m_x * CHUNK_BLOCKS + x, m_y * CHUNK_BLOCKS + y, blocks, (TerrainLayer)i);
 				BlockData::get(blocks[0]).getVertices(x, y, blocks, m_vbo);
+
 				//if(block > BLOCK_RESERVED) // no point in updating air/reserved tiles
 				{
-					
-						
 					//updateFixture(x, y, state);
 				}
 				//if(tileIsOpaque) break;
@@ -216,6 +227,14 @@ bool TerrainChunk::setTile(const int x, const int y, const BlockID tile, Terrain
 		// Set the tile value
 		m_blocks[BLOCK_INDEX(x, y, layer)] = tile;
 		m_dirty = m_modified = true; // mark chunk as modified
+		if(m_nextChunk[0] && y == 0)										m_nextChunk[0]->m_dirty = true;
+		if(m_nextChunk[1] && x == CHUNK_BLOCKS-1 && y == 0)					m_nextChunk[1]->m_dirty = true;
+		if(m_nextChunk[2] && x == CHUNK_BLOCKS-1)							m_nextChunk[2]->m_dirty = true;
+		if(m_nextChunk[3] && x == CHUNK_BLOCKS-1 && y == CHUNK_BLOCKS-1)	m_nextChunk[3]->m_dirty = true;
+		if(m_nextChunk[4] && y == CHUNK_BLOCKS-1)							m_nextChunk[4]->m_dirty = true;
+		if(m_nextChunk[5] && x == 0 && y == CHUNK_BLOCKS-1)					m_nextChunk[5]->m_dirty = true;
+		if(m_nextChunk[6] && x == 0)										m_nextChunk[6]->m_dirty = true;
+		if(m_nextChunk[7] && x == 0 && y == 0)								m_nextChunk[7]->m_dirty = true;
 		return true; // return true as something was changed
 	}
 	return false; // nothing changed
@@ -225,76 +244,6 @@ void TerrainChunk::updateTile(const int x, const int y, const uint tileState, co
 {
 	if(m_state == CHUNK_INITIALIZED)
 	{
-		// Update shadow map
-		/*float opacity = getOpacity(x, y);
-		array<Vector4> pixel = { Vector4(0.0f, 0.0f, 0.0f, opacity) };
-		shadowMap.updateSection(x + shadowRadius, CHUNK_SIZE - y - 1 + shadowRadius, Pixmap(1, 1, pixel));*/
-			
-		// Get tile
-		/*BlockID tile = tiles[x, y];
-		int i = (y * CHUNK_SIZE + x) * 16;
-		TextureRegion region;
-		if(tile > RESERVED_TILE)
-		{
-			uint8 q1 = ((tileState >> 0) & 0x7) + 0x0;
-			uint8 q2 = ((tileState >> 2) & 0x7) + 0x8;
-			uint8 q3 = ((tileState >> 4) & 0x7) + 0x10;
-			uint8 q4 = (((tileState >> 6) & 0x7) | ((tileState << 2) & 0x7)) + 0x18;
-				
-			array<Vertex> vertices = vbo.getVertices(i, 16);
-				
-			region = tileAtlas.get(tile, q1/32.0f, 0.0f, (q1+1)/32.0f, 1.0f);
-			vertices[0].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
-			vertices[1].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv1.y);
-			vertices[2].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
-			vertices[3].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
-				
-			region = tileAtlas.get(tile, q2/32.0f, 0.0f, (q2+1)/32.0f, 1.0f);
-			vertices[4].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
-			vertices[5].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv1.y);
-			vertices[6].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
-			vertices[7].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
-				
-			region = tileAtlas.get(tile, q3/32.0f, 0.0f, (q3+1)/32.0f, 1.0f);
-			vertices[8].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
-			vertices[9].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv1.y);
-			vertices[10].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
-			vertices[11].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
-				
-			region = tileAtlas.get(tile, q4/32.0f, 0.0f, (q4+1)/32.0f, 1.0f);
-			vertices[12].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
-			vertices[13].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv1.y);
-			vertices[14].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
-			vertices[15].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
-				
-			vbo.modifyVertices(i, vertices);
-		}
-		else
-		{
-			array<Vertex> vertices = vbo.getVertices(i, 16);
-				
-			vertices[0].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-			vertices[1].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-			vertices[2].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-			vertices[3].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-				
-			vertices[4].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-			vertices[5].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-			vertices[6].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-			vertices[7].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-				
-			vertices[8].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-			vertices[9].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-			vertices[10].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-			vertices[11].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-				
-			vertices[12].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-			vertices[13].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-			vertices[14].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-			vertices[15].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-				
-			vbo.modifyVertices(i, vertices);
-		}*/
 			
 		// Update fixtures
 		if(fixture)

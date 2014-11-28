@@ -34,6 +34,7 @@ public:
 	
 	// CHUNKS
 	TerrainChunk &getChunk(const int chunkX, const int chunkY, const bool generate = false);
+	bool isChunk(const int chunkX, const int chunkY) const;
 	void loadVisibleChunks();
 	
 	// UPDATING
@@ -47,7 +48,7 @@ private:
 	//vector<TerrainChunk*> loadedChunks;
 	TerrainChunk m_dummyChunk;
 	list<TerrainChunk*> chunkLoadQueue;
-	map<uint, TerrainChunk*> chunks;
+	unordered_map<uint, TerrainChunk*> chunks;
 	XVertexFormat vertexFormat;
 	
 	// Terrain generator
