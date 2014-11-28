@@ -14,7 +14,6 @@ public:
 	BlockData(BlockID id, const shared_ptr<XTexture> &texture, const /*ItemID*/ uint i, const float opacity);
 	
 	void setupFixture(b2Fixture *fixture) {}
-	void getVertices(const int x, const int y, const BlockID* blocks, shared_ptr<XVertexBuffer> buffer) const;
 
 	shared_ptr<XTexture> getTexture() const { return m_texture; }
 

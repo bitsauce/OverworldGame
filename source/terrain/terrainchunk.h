@@ -66,11 +66,22 @@ private:
 		BlockID id;
 		Block *next[8];
 	};
+	
+	struct BlockQuad
+	{
+		BlockQuad();
+		BlockQuad(BlockID block, const float x0, const float y0, const float x1, const float y1, const float u0, const float v0, const float u1, const float v1);
+		bool operator<(const BlockQuad &other) const { return block < other.block; };
+		BlockID block;
+		float x0, y0, x1, y1, u0, v0, u1, v1;
+	};
 
 	// CHUNK
 	int m_x, m_y;
 	Block **m_blocks;
 	TerrainChunk *m_nextChunk[8];
+	
+	vector<BlockQuad> m_tmpQuads;
 	static Block s_tempBlock;
 	
 	// PHYSICS
@@ -87,6 +98,7 @@ private:
 	// MISC
 	bool m_modified;
 	bool m_dirty;
+	bool m_nextChunksGenerated;
 	ChunkState m_state;
 };
 

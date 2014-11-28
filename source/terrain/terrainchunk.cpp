@@ -27,6 +27,23 @@ TerrainChunk::Block::Block(BlockID id) :
 		next[i] = &s_tempBlock;
 	}
 }
+TerrainChunk::BlockQuad::BlockQuad() :
+	block(BLOCK_EMPTY)
+{
+}
+
+TerrainChunk::BlockQuad::BlockQuad(BlockID block, const float x0, const float y0, const float x1, const float y1, const float u0, const float v0, const float u1, const float v1) :
+	block(block),
+	x0(x0),
+	y0(y0),
+	x1(x1),
+	y1(y1),
+	u0(u0),
+	v0(v0),
+	u1(u1),
+	v1(v1)
+{
+}
 	
 TerrainChunk::TerrainChunk()
 {
@@ -49,12 +66,16 @@ void TerrainChunk::init(int chunkX, int chunkY)
 	m_state = CHUNK_GENERATING;
 	m_x = chunkX;
 	m_y = chunkY;
-	m_dirty = m_modified = false; // not modified
+	m_nextChunksGenerated = m_dirty = m_modified = false; // not modified
 	m_shadowRadius = 4;
-	m_shadowMap   = new XTexture(CHUNK_PX + m_shadowRadius*2, CHUNK_PX + m_shadowRadius*2); // NOTE TO SELF: Apparently these XTexture calls are performance hogs.
-	m_shadowPass1 = new XTexture(CHUNK_PX + m_shadowRadius*2, CHUNK_PX + m_shadowRadius*2); // Concider having a static empty buffer that I can just feed, instead
-	m_shadowPass2 = new XTexture(CHUNK_PX + m_shadowRadius*2, CHUNK_PX + m_shadowRadius*2); // of creating a XPixmap each time.
+	XPixmap pixmap(CHUNK_PX + m_shadowRadius*2, CHUNK_PX + m_shadowRadius*2); // NOTE TO SELF: Concider creating this at start up and each time the chunk size change (for example in an options menu)
+	                                                                          // and reusing that object instead of creating a new XPixmap for every chunk.
+	m_shadowMap   = new XTexture(pixmap);
+	m_shadowPass1 = new XTexture(pixmap);
+	m_shadowPass2 = new XTexture(pixmap);
 	m_shadowPass2->setFiltering(XTexture::LINEAR);
+	
+	m_tmpQuads.resize(9);
 
 	// Initialize tiles
 	m_blocks = new Block*[(CHUNK_BLOCKS+2)*(CHUNK_BLOCKS+2)*TERRAIN_LAYER_COUNT];
@@ -183,8 +204,8 @@ void TerrainChunk::generate()
 			}
 		}
 		
-		// Create vertex buffer
-		generateVBO();
+		// Mark as dirty
+		m_dirty = true;
 			
 		// Re-generate neightbouring chunks
 		if(m_nextChunk[0]) m_nextChunk[0]->m_dirty = true;
@@ -231,25 +252,6 @@ void TerrainChunk::generate()
 #define BLOCK_V7 (7.0f / 8.0f)
 #define BLOCK_V8 (8.0f / 8.0f)
 
-struct BlockQuad
-{
-	BlockQuad(BlockID block, const float x0, const float y0, const float x1, const float y1, const float u0, const float v0, const float u1, const float v1) :
-		block(block),
-		x0(x0),
-		y0(y0),
-		x1(x1),
-		y1(y1),
-		u0(u0),
-		v0(v0),
-		u1(u1),
-		v1(v1)
-	{
-	}
-	
-	BlockID block;
-	float x0, y0, x1, y1, u0, v0, u1, v1;
-};
-
 void TerrainChunk::generateVBO()
 {
 	// Create new vbo
@@ -266,149 +268,173 @@ void TerrainChunk::generateVBO()
 
 				XVertexFormat &format = World::getTerrain()->getVertexFormat();
 
-				vector<BlockQuad> quads; // TODO: Consider using a static array
+				uint offset = 0;
 				if(block->id != BLOCK_EMPTY)
 				{
-					quads.push_back(BlockQuad(block->id, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V1, BLOCK_U5, BLOCK_V5));
+					m_tmpQuads[offset++] = BlockQuad(block->id, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V1, BLOCK_U5, BLOCK_V5);
 				}
 	
 				// Bottom-right outer-corner
-				if(block->next[0]->id != block->id && block->next[0]->id != block->next[1]->id && block->next[0]->id != block->next[7]->id)
+				if(block->next[0]->id != BLOCK_EMPTY)
 				{
-					quads.push_back(BlockQuad(block->next[0]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y1, BLOCK_U5, BLOCK_V0, BLOCK_U6, BLOCK_V1));
+					if(block->next[0]->id != block->id && block->next[0]->id != block->next[1]->id && block->next[0]->id != block->next[7]->id)
+					{
+						m_tmpQuads[offset++] = BlockQuad(block->next[0]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y1, BLOCK_U5, BLOCK_V0, BLOCK_U6, BLOCK_V1);
+					}
 				}
 
 				// Draw bottom edge
-				if(block->next[1]->id != block->id)
+				if(block->next[1]->id != BLOCK_EMPTY)
 				{
-					if(block->next[1]->id == block->next[3]->id)
+					if(block->next[1]->id != block->id)
 					{
-						if(block->next[1]->id == block->next[7]->id)
+						if(block->next[1]->id == block->next[3]->id)
 						{
-							quads.push_back(BlockQuad(block->next[1]->id, BLOCK_X1, BLOCK_Y0, BLOCK_X3, BLOCK_Y1, BLOCK_U2, BLOCK_V0, BLOCK_U4, BLOCK_V1));
-							quads.push_back(BlockQuad(block->next[1]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U1, BLOCK_V7, BLOCK_U2, BLOCK_V8));
-							quads.push_back(BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y1, BLOCK_U0, BLOCK_V7, BLOCK_U1, BLOCK_V8));
+							if(block->next[1]->id == block->next[7]->id)
+							{
+								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X1, BLOCK_Y0, BLOCK_X3, BLOCK_Y1, BLOCK_U2, BLOCK_V0, BLOCK_U4, BLOCK_V1);
+								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U1, BLOCK_V7, BLOCK_U2, BLOCK_V8);
+								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y1, BLOCK_U0, BLOCK_V7, BLOCK_U1, BLOCK_V8);
+							}
+							else
+							{
+								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X3, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U4, BLOCK_V1);
+								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U1, BLOCK_V7, BLOCK_U2, BLOCK_V8);
+							}
+						}
+						else if(block->next[1]->id == block->next[7]->id)
+						{
+							m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X1, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U2, BLOCK_V0, BLOCK_U5, BLOCK_V1);
+							m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y1, BLOCK_U0, BLOCK_V7, BLOCK_U1, BLOCK_V8);
 						}
 						else
 						{
-							quads.push_back(BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X3, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U4, BLOCK_V1));
-							quads.push_back(BlockQuad(block->next[1]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U1, BLOCK_V7, BLOCK_U2, BLOCK_V8));
+							m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U5, BLOCK_V1);
 						}
-					}
-					else if(block->next[1]->id == block->next[7]->id)
-					{
-						quads.push_back(BlockQuad(block->next[1]->id, BLOCK_X1, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U2, BLOCK_V0, BLOCK_U5, BLOCK_V1));
-						quads.push_back(BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y1, BLOCK_U0, BLOCK_V7, BLOCK_U1, BLOCK_V8));
-					}
-					else
-					{
-						quads.push_back(BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U5, BLOCK_V1));
 					}
 				}
 
 				// Bottom-left outer-corner
-				if(block->next[2]->id != block->id && block->next[2]->id != block->next[1]->id && block->next[2]->id != block->next[3]->id)
+				if(block->next[2]->id != BLOCK_EMPTY)
 				{
-					quads.push_back(BlockQuad(block->next[2]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U0, BLOCK_V0, BLOCK_U1, BLOCK_V1));
+					if(block->next[2]->id != block->id && block->next[2]->id != block->next[1]->id && block->next[2]->id != block->next[3]->id)
+					{
+						m_tmpQuads[offset++] = BlockQuad(block->next[2]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U0, BLOCK_V0, BLOCK_U1, BLOCK_V1);
+					}
 				}
 
 				// Draw left edge
-				if(block->next[3]->id != block->id)
+				if(block->next[3]->id != BLOCK_EMPTY)
 				{
-					if(block->next[3]->id == block->next[1]->id)
+					if(block->next[3]->id != block->id)
 					{
-						if(block->next[3]->id == block->next[5]->id)
+						if(block->next[3]->id == block->next[1]->id)
 						{
-							quads.push_back(BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y1, BLOCK_X4, BLOCK_Y3, BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V4));
+							if(block->next[3]->id == block->next[5]->id)
+							{
+								m_tmpQuads[offset++] = BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y1, BLOCK_X4, BLOCK_Y3, BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V4);
+							}
+							else
+							{
+								m_tmpQuads[offset++] = BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y1, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V5);
+							}
+						}
+						else if(block->next[3]->id == block->next[5]->id)
+						{
+							m_tmpQuads[offset++] = BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y3, BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V5);
 						}
 						else
 						{
-							quads.push_back(BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y1, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V5));
+							m_tmpQuads[offset++] = BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V5);
 						}
-					}
-					else if(block->next[3]->id == block->next[5]->id)
-					{
-						quads.push_back(BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y3, BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V5));
-					}
-					else
-					{
-						quads.push_back(BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V5));
 					}
 				}
 
 				// Top-left outer-corner
-				if(block->next[4]->id != block->id && block->next[4]->id != block->next[3]->id && block->next[4]->id != block->next[5]->id)
+				if(block->next[4]->id != BLOCK_EMPTY)
 				{
-					quads.push_back(BlockQuad(block->next[4]->id, BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V5, BLOCK_U1, BLOCK_V6));
+					if(block->next[4]->id != block->id && block->next[4]->id != block->next[3]->id && block->next[4]->id != block->next[5]->id)
+					{
+						m_tmpQuads[offset++] = BlockQuad(block->next[4]->id, BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V5, BLOCK_U1, BLOCK_V6);
+					}
 				}
 
 				// Draw top edge
-				if(block->next[5]->id != block->id)
+				if(block->next[5]->id != BLOCK_EMPTY)
 				{
-					if(block->next[5]->id == block->next[3]->id)
+					if(block->next[5]->id != block->id)
 					{
-						if(block->next[5]->id == block->next[7]->id)
+						if(block->next[5]->id == block->next[3]->id)
 						{
-							quads.push_back(BlockQuad(block->next[5]->id, BLOCK_X1, BLOCK_Y3, BLOCK_X3, BLOCK_Y4, BLOCK_U2, BLOCK_V5, BLOCK_U4, BLOCK_V6));
-							quads.push_back(BlockQuad(block->next[5]->id, BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V6, BLOCK_U2, BLOCK_V7));
-							quads.push_back(BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U1, BLOCK_V7));
+							if(block->next[5]->id == block->next[7]->id)
+							{
+								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X1, BLOCK_Y3, BLOCK_X3, BLOCK_Y4, BLOCK_U2, BLOCK_V5, BLOCK_U4, BLOCK_V6);
+								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V6, BLOCK_U2, BLOCK_V7);
+								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U1, BLOCK_V7);
+							}
+							else
+							{
+								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X3, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U4, BLOCK_V6);
+								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V6, BLOCK_U2, BLOCK_V7);
+							}
+						}
+						else if(block->next[5]->id == block->next[7]->id)
+						{
+							m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X1, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V5, BLOCK_U5, BLOCK_V6);
+							m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U1, BLOCK_V7);
 						}
 						else
 						{
-							quads.push_back(BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X3, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U4, BLOCK_V6));
-							quads.push_back(BlockQuad(block->next[5]->id, BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V6, BLOCK_U2, BLOCK_V7));
+							m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U5, BLOCK_V6);
 						}
-					}
-					else if(block->next[5]->id == block->next[7]->id)
-					{
-						quads.push_back(BlockQuad(block->next[5]->id, BLOCK_X1, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V5, BLOCK_U5, BLOCK_V6));
-						quads.push_back(BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U1, BLOCK_V7));
-					}
-					else
-					{
-						quads.push_back(BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U5, BLOCK_V6));
 					}
 				}
 	
 				// Top-right outer-corner
-				if(block->next[6]->id != block->id && block->next[6]->id != block->next[7]->id && block->next[6]->id != block->next[5]->id)
+				if(block->next[6]->id != BLOCK_EMPTY)
 				{
-					quads.push_back(BlockQuad(block->next[6]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V5, BLOCK_U6, BLOCK_V6));
+					if(block->next[6]->id != block->id && block->next[6]->id != block->next[7]->id && block->next[6]->id != block->next[5]->id)
+					{
+						m_tmpQuads[offset++] = BlockQuad(block->next[6]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V5, BLOCK_U6, BLOCK_V6);
+					}
 				}
 
 				// Draw right edge
-				if(block->next[7]->id != block->id)
+				if(block->next[7]->id != BLOCK_EMPTY)
 				{
-					if(block->next[7]->id == block->next[1]->id)
+					if(block->next[7]->id != block->id)
 					{
-						if(block->next[7]->id == block->next[5]->id)
+						if(block->next[7]->id == block->next[1]->id)
 						{
-							quads.push_back(BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y3, BLOCK_U5, BLOCK_V2, BLOCK_U6, BLOCK_V4));
+							if(block->next[7]->id == block->next[5]->id)
+							{
+								m_tmpQuads[offset++] = BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y3, BLOCK_U5, BLOCK_V2, BLOCK_U6, BLOCK_V4);
+							}
+							else
+							{
+								m_tmpQuads[offset++] = BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V2, BLOCK_U6, BLOCK_V5);
+							}
+						}
+						else if(block->next[7]->id == block->next[5]->id)
+						{
+							m_tmpQuads[offset++] = BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y3, BLOCK_U5, BLOCK_V2, BLOCK_U6, BLOCK_V5);
 						}
 						else
 						{
-							quads.push_back(BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V2, BLOCK_U6, BLOCK_V5));
+							m_tmpQuads[offset++] = BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V1, BLOCK_U6, BLOCK_V5);
 						}
-					}
-					else if(block->next[7]->id == block->next[5]->id)
-					{
-						quads.push_back(BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y3, BLOCK_U5, BLOCK_V2, BLOCK_U6, BLOCK_V5));
-					}
-					else
-					{
-						quads.push_back(BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V1, BLOCK_U6, BLOCK_V5));
 					}
 				}
 
-				if(quads.size() > 0)
+				if(offset > 0)
 				{
-					//if(needsSorting) sort(quads.begin(), quads.end());
+					/*if(needsSorting)*/ sort(m_tmpQuads.begin(), m_tmpQuads.begin() + offset);
 
-					XVertex *vertices = format.createVertices(4*quads.size()); // TODO: Hmm... I don't like that this is so performance demanding as it is. I should concider a different way to represent vertices an vertex formats
-					uint *indices = new uint[6*quads.size()];
-					for(uint i = 0; i < quads.size(); ++i)
+					XVertex *vertices = format.createVertices(4*offset); // TODO: Hmm... I don't like that this is so performance demanding as it is. I should concider a different way to represent vertices an vertex formats
+					uint *indices = new uint[6*m_tmpQuads.size()];
+					for(uint i = 0; i < offset; ++i)
 					{
-						BlockQuad &quad = quads[i];
+						BlockQuad &quad = m_tmpQuads[i];
 
 						vertices[0 + i*4].set4f(VERTEX_POSITION, x + quad.x0, y + quad.y0);
 						vertices[1 + i*4].set4f(VERTEX_POSITION, x + quad.x1, y + quad.y0);
@@ -428,7 +454,7 @@ void TerrainChunk::generateVBO()
 						indices[4 + i*6] = QUAD_INDICES[4] + i*4;
 						indices[5 + i*6] = QUAD_INDICES[5] + i*4;
 					}
-					m_vbo->addVertices(vertices, 4*quads.size(), indices, 6*quads.size());
+					m_vbo->addVertices(vertices, 4*offset, indices, 6*offset);
 
 					delete[] vertices;
 					delete[] indices;
@@ -447,7 +473,7 @@ void TerrainChunk::generateVBO()
 	// Make the chunk buffer static
 	m_vbo->setBufferType(XVertexBuffer::STATIC_BUFFER);
 		
-	updateShadows();
+	//updateShadows();
 }
 	
 void TerrainChunk::serialize(XFileWriter &ss)
@@ -661,8 +687,28 @@ void TerrainChunk::draw(XBatch *batch)
 	{
 		if(m_dirty)
 		{
-			generateVBO();
-			m_dirty = false;
+			if(!m_nextChunksGenerated)
+			{
+				m_nextChunksGenerated = true;
+				for(uint i = 0; i < 8; ++i)
+				{
+					if(m_nextChunk[i] == nullptr)
+					{
+						m_nextChunksGenerated = false;
+						break;
+					}
+				}
+			}
+			
+			if(m_nextChunksGenerated)
+			{
+				generateVBO();
+				m_dirty = false;
+			}
+			else
+			{
+				return;
+			}
 		}
 		
 		// Draw blocks

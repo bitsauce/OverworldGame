@@ -65,22 +65,19 @@ void Game::draw()
 	Debug::setVariable("FPS", util::intToStr(XGraphics::getFPS()));
 	Debug::draw(&batch);
 
-	//XSprite(BlockData::s_blockAtlas->get(BLOCK_SCENE_GRASS)).draw(&batch);
-
 	XGraphics::renderBatch(batch);
 }
 
 void Game::addGameObject(GameObject *object)
 {
-	/*list<GameObject*>::iterator itr;
+	list<GameObject*>::iterator itr;
 	for(itr = s_gameObjects.begin(); itr != s_gameObjects.end(); ++itr)
 	{
 		if((*itr)->m_depth < object->m_depth)
 			continue;
 		break;
 	}
-	s_gameObjects.insert(itr, object);*/
-	s_gameObjects.push_back(object);
+	s_gameObjects.insert(itr, object);
 }
 
 void Game::removeGameObject(GameObject *object)
