@@ -56,131 +56,16 @@ void Terrain::load(const XIniFile &file)
 }
 	
 // TILE HELPERS
-BlockID Terrain::getTileAt(const int x, const int y, const TerrainLayer layer = TERRAIN_LAYER_SCENE)
+BlockID Terrain::getBlockAt(const int x, const int y, const TerrainLayer layer = TERRAIN_LAYER_SCENE)
 {
 	return getChunk(XMath::floor(x / CHUNK_BLOCKSF), XMath::floor(y / CHUNK_BLOCKSF)).getTileAt(XMath::mod(x, CHUNK_BLOCKS), XMath::mod(y, CHUNK_BLOCKS), layer);
 }
 	
-bool Terrain::isTileAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_SCENE)
+bool Terrain::isBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_SCENE)
 {
-	return getTileAt(x, y, layer) > BLOCK_RESERVED;
+	return getBlockAt(x, y, layer) != BLOCK_EMPTY;
 }
-	
-void Terrain::getTileState(const int x, const int y, BlockID *blocks, TerrainLayer layer = TERRAIN_LAYER_SCENE)
-{
-	// Get state
-	blocks[0] = getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).getTileAt(XMath::mod(x,     CHUNK_BLOCKS), XMath::mod(y,     CHUNK_BLOCKS), layer);
-	blocks[1] = getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x-1), CHUNK_BLOCKS), XMath::mod((y-1), CHUNK_BLOCKS), layer);
-	blocks[2] = getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod(x,     CHUNK_BLOCKS), XMath::mod((y-1), CHUNK_BLOCKS), layer);
-	blocks[3] = getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor((y-1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x+1), CHUNK_BLOCKS), XMath::mod((y-1), CHUNK_BLOCKS), layer);
-	blocks[4] = getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x+1), CHUNK_BLOCKS), XMath::mod(y,     CHUNK_BLOCKS), layer);
-	blocks[5] = getChunk(XMath::floor((x+1) / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x+1), CHUNK_BLOCKS), XMath::mod((y+1), CHUNK_BLOCKS), layer);
-	blocks[6] = getChunk(XMath::floor(x     / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod(x,     CHUNK_BLOCKS), XMath::mod((y+1), CHUNK_BLOCKS), layer);
-	blocks[7] = getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor((y+1) / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x-1), CHUNK_BLOCKS), XMath::mod((y+1), CHUNK_BLOCKS), layer);
-	blocks[8] = getChunk(XMath::floor((x-1) / CHUNK_BLOCKSF), XMath::floor(y     / CHUNK_BLOCKSF)).getTileAt(XMath::mod((x-1), CHUNK_BLOCKS), XMath::mod(y,     CHUNK_BLOCKS), layer);
 
-	/*if(tileY == 0)
-	{
-		chunkN = &getChunk(chunkX, chunkY-1);
-		if(chunkN->getTileAt(tileX, CHUNK_BLOCKS-1, layer) == tile) state |= NORTH;
-		if(chunk->getTileAt(tileX, tileY+1, layer) == tile) state |= SOUTH;
-	}
-	else if(tileY == CHUNK_BLOCKS-1)
-	{
-		chunkS = &getChunk(chunkX, chunkY+1);
-		if(chunkS->getTileAt(tileX, 0, layer) == tile) state |= SOUTH;
-		if(chunk->getTileAt(tileX, tileY-1, layer) == tile) state |= NORTH;
-	}
-	else
-	{
-		if(chunk->getTileAt(tileX, tileY-1, layer) == tile) state |= NORTH;
-		if(chunk->getTileAt(tileX, tileY+1, layer) == tile) state |= SOUTH;
-	}
-		
-	if(tileX == 0)
-	{
-		TerrainChunk *chunkW = &getChunk(chunkX-1, chunkY);
-		if(chunkW->getTileAt(CHUNK_BLOCKS-1, tileY, layer) == tile) state |= WEST;
-		if(tileY == 0)
-		{
-			if(getChunk(chunkX-1, chunkY-1).getTileAt(CHUNK_BLOCKS-1, CHUNK_BLOCKS-1, layer) == tile) state |= NORTH_WEST;
-			if(chunkW->getTileAt(CHUNK_BLOCKS-1, tileY+1, layer) == tile) state |= SOUTH_WEST;
-			if(chunkN->getTileAt(tileX+1, CHUNK_BLOCKS-1, layer) == tile) state |= NORTH_EAST;
-			if(chunk->getTileAt(tileX+1, tileY+1, layer) == tile) state |= SOUTH_EAST;
-		}
-		else if(tileY == CHUNK_BLOCKS-1)
-		{
-			if(getChunk(chunkX-1, chunkY+1).getTileAt(CHUNK_BLOCKS-1, 0, layer) == tile) state |= SOUTH_WEST;
-			if(chunkW->getTileAt(CHUNK_BLOCKS-1, tileY-1, layer) == tile) state |= NORTH_WEST;
-			if(chunk->getTileAt(tileX+1, tileY-1, layer) == tile) state |= NORTH_EAST;
-			if(chunkS->getTileAt(tileX+1, 0, layer) == tile) state |= SOUTH_EAST;
-		}
-		else
-		{
-			if(chunkW->getTileAt(CHUNK_BLOCKS-1, tileY-1, layer) == tile) state |= NORTH_WEST;
-			if(chunkW->getTileAt(CHUNK_BLOCKS-1, tileY+1, layer) == tile) state |= SOUTH_WEST;
-			if(chunk->getTileAt(tileX+1, tileY-1, layer) == tile) state |= NORTH_EAST;
-			if(chunk->getTileAt(tileX+1, tileY+1, layer) == tile) state |= SOUTH_EAST;
-		}
-		if(chunk->getTileAt(tileX+1, tileY, layer) == tile) state |= EAST;
-	}
-	else if(tileX == CHUNK_BLOCKS-1)
-	{
-		TerrainChunk *chunkE = &getChunk(chunkX+1, chunkY);
-		if(chunkE->getTileAt(0, tileY, layer) == tile) state |= EAST;
-		if(tileY == 0)
-		{
-			if(getChunk(chunkX+1, chunkY-1).getTileAt(0, CHUNK_BLOCKS-1, layer) == tile) state |= NORTH_EAST;
-			if(chunkE->getTileAt(0, tileY+1, layer) == tile) state |= SOUTH_EAST;
-			if(chunkN->getTileAt(tileX-1, CHUNK_BLOCKS-1, layer) == tile) state |= NORTH_WEST;
-			if(chunk->getTileAt(tileX-1, tileY+1, layer) == tile) state |= SOUTH_WEST;
-		}
-		else if(tileY == CHUNK_BLOCKS-1)
-		{
-			if(getChunk(chunkX+1, chunkY+1).getTileAt(0, 0, layer) == tile) state |= SOUTH_EAST;
-			if(chunkE->getTileAt(0, tileY-1, layer) == tile) state |= NORTH_EAST;
-			if(chunk->getTileAt(tileX-1, tileY-1, layer) == tile) state |= NORTH_WEST;
-			if(chunkS->getTileAt(tileX-1, 0, layer) == tile) state |= SOUTH_WEST;
-		}
-		else
-		{
-			if(chunkE->getTileAt(0, tileY-1, layer) == tile) state |= NORTH_EAST;
-			if(chunkE->getTileAt(0, tileY+1, layer) == tile) state |= SOUTH_EAST;
-			if(chunk->getTileAt(tileX-1, tileY-1, layer) == tile) state |= NORTH_WEST;
-			if(chunk->getTileAt(tileX-1, tileY+1, layer) == tile) state |= SOUTH_WEST;
-		}
-		if(chunk->getTileAt(tileX-1, tileY, layer) == tile) state |= WEST;
-	}
-	else
-	{
-		if(chunk->getTileAt(tileX-1, tileY, layer) == tile) state |= WEST;
-		if(chunk->getTileAt(tileX+1, tileY, layer) == tile) state |= EAST;
-		if(tileY == 0)
-		{
-			if(chunkN->getTileAt(tileX+1, CHUNK_BLOCKS-1, layer) == tile) state |= NORTH_EAST;
-			if(chunkN->getTileAt(tileX-1, CHUNK_BLOCKS-1, layer) == tile) state |= NORTH_WEST;
-			if(chunk->getTileAt(tileX+1, tileY+1, layer) == tile) state |= SOUTH_EAST;
-			if(chunk->getTileAt(tileX-1, tileY+1, layer) == tile) state |= SOUTH_WEST;
-		}
-		else if(tileY == CHUNK_BLOCKS-1)
-		{
-			if(chunkS->getTileAt(tileX+1, 0, layer) == tile) state |= SOUTH_EAST;
-			if(chunkS->getTileAt(tileX-1, 0, layer) == tile) state |= SOUTH_WEST;
-			if(chunk->getTileAt(tileX+1, tileY-1, layer) == tile) state |= NORTH_EAST;
-			if(chunk->getTileAt(tileX-1, tileY-1, layer) == tile) state |= NORTH_WEST;
-		}
-		else
-		{
-			if(chunk->getTileAt(tileX+1, tileY-1, layer) == tile) state |= NORTH_EAST;
-			if(chunk->getTileAt(tileX-1, tileY-1, layer) == tile) state |= NORTH_WEST;
-			if(chunk->getTileAt(tileX+1, tileY+1, layer) == tile) state |= SOUTH_EAST;
-			if(chunk->getTileAt(tileX-1, tileY+1, layer) == tile) state |= SOUTH_WEST;
-		}
-	}
-		
-	return state;*/
-}
-	
 // TILE MODIFICATION
 bool Terrain::setTile(const int x, const int y, BlockID tile, const TerrainLayer layer = TERRAIN_LAYER_SCENE)
 {

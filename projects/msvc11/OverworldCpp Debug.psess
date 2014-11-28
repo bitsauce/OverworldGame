@@ -36,7 +36,7 @@
   </PostinstrumentEvent>
   <Binaries>
     <ProjBinary>
-      <Path>..\..\exe\Win32\Release\OverworldCpp.exe</Path>
+      <Path>..\..\exe\Win32\Debug\OverworldCpp Debug.exe</Path>
       <ArgumentTimestamp>01/01/0001 00:00:00</ArgumentTimestamp>
       <Instrument>true</Instrument>
       <Sample>true</Sample>
@@ -48,7 +48,7 @@
       <LaunchProject>true</LaunchProject>
       <OverrideProjectSettings>false</OverrideProjectSettings>
       <LaunchMethod>Executable</LaunchMethod>
-      <ExecutablePath>..\..\exe\Win32\Release\OverworldCpp.exe</ExecutablePath>
+      <ExecutablePath>..\..\exe\Win32\Debug\OverworldCpp Debug.exe</ExecutablePath>
       <StartupDirectory>.\</StartupDirectory>
       <Arguments>
       </Arguments>
@@ -67,6 +67,11 @@
       <ProjName>OverworldCpp</ProjName>
     </ProjBinary>
   </Binaries>
+  <Reports>
+    <Report>
+      <Path>OverworldCpp Debug141128.vsp</Path>
+    </Report>
+  </Reports>
   <Launches>
     <ProjBinary>
       <Path>:PB:{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}|OverworldCpp.vcxproj</Path>

@@ -39,7 +39,7 @@ public:
 	ChunkState getState() const;
 	BlockID getTileAt(const int x, const int y, TerrainLayer layer) const;
 	bool isTileAt(const int x, const int y, TerrainLayer layer) const;
-	bool isReservedTileAt(const int x, const int y, TerrainLayer layer) const;
+	bool isBlockOccupied(const int x, const int y, TerrainLayer layer) const;
 	bool setTile(const int x, const int y, const BlockID tile, TerrainLayer layer);
 	void updateTile(const int x, const int y, const uint tileState, const bool fixture = false);
 
@@ -59,10 +59,19 @@ private:
 	void updateFixture(const int x, const int y, const uint state);
 	void updateShadows();
 
+	struct Block
+	{
+		Block();
+		Block(BlockID id);
+		BlockID id;
+		Block *next[8];
+	};
+
 	// CHUNK
 	int m_x, m_y;
-	BlockID *m_blocks;
+	Block **m_blocks;
 	TerrainChunk *m_nextChunk[8];
+	static Block s_tempBlock;
 	
 	// PHYSICS
 	b2Body *m_body;

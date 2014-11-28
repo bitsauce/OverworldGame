@@ -26,7 +26,7 @@ BlockID Tree::getTileAt(const int x, const int y, TerrainLayer layer)
 			}
 		}
 	}
-	return BLOCK_NULL;
+	return BlockID(-1);
 }
 
 BlockID TerrainGen::getTileAt(const int x, const int y, const TerrainLayer layer)

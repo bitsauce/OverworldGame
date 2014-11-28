@@ -23,10 +23,9 @@ public:
 	void saveChunks();
 	void load(const XIniFile &file);
 	
-	// TILE HELPERS
-	BlockID getTileAt(const int x, const int y, const TerrainLayer layer);
-	bool isTileAt(const int x, const int y, TerrainLayer layer);
-	void getTileState(const int x, const int y, BlockID *blocks, TerrainLayer layer) /*const*/;
+	// BLOCK HELPERS
+	BlockID getBlockAt(const int x, const int y, const TerrainLayer layer);
+	bool isBlockAt(const int x, const int y, TerrainLayer layer);
 	
 	// TILE MODIFICATION
 	bool setTile(const int x, const int y, BlockID tile, const TerrainLayer layer);

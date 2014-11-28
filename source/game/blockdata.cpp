@@ -21,7 +21,7 @@ void BlockData::init()
 }
 
 BlockData::BlockData() :
-	m_id(BLOCK_NULL),
+	m_id(BLOCK_EMPTY),
 	m_texture(0),
 	m_itemID(0),
 	m_opacity(0.0f)
