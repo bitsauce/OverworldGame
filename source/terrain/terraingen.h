@@ -46,12 +46,18 @@ public:
 	BlockID getBlockAt(const int x, const int y, TerrainLayer layer);
 };
 
+#include "simplex.h"
+
 class TerrainGen
 {
 public:
+
 	uint seed;
 
 	static BlockID getBlockAt(const int x, const int y, const TerrainLayer);
+
+private:
+	static Simplex2D s_noise;
 };
 
 #endif // TERRAIN_GEN_H

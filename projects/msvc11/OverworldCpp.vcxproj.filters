@@ -59,6 +59,9 @@
     <ClCompile Include="..\..\source\game\blockdata.cpp">
       <Filter>source\game</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\terrain\simplex.cpp">
+      <Filter>source\terrain</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -149,6 +152,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\game\blockdata.h">
       <Filter>source\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\terrain\simplex.h">
+      <Filter>source\terrain</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

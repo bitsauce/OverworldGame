@@ -85,7 +85,7 @@
       <AdditionalLibraryDirectories>..\..\3rdparty\vld\lib;..\..\3rdparty\Box2D\Box2D\Lib;..\..\3rdparty\spine\lib;..\..\..\x2D-Game-Engine\build\Win32\Release</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(OutDir)x2d$(TargetExt)"</Command>
+      <Command>copy "$(SolutionDir)..\..\..\x2D-Game-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -108,6 +108,7 @@
     <ClCompile Include="..\..\source\scenes\worldcreate.cpp" />
     <ClCompile Include="..\..\source\scenes\mainmenu.cpp" />
     <ClCompile Include="..\..\source\scenes\worldselect.cpp" />
+    <ClCompile Include="..\..\source\terrain\simplex.cpp" />
     <ClCompile Include="..\..\source\terrain\terrain.cpp" />
     <ClCompile Include="..\..\source\terrain\terrainchunk.cpp" />
     <ClCompile Include="..\..\source\terrain\terraingen.cpp" />
@@ -131,6 +132,7 @@
     <ClInclude Include="..\..\source\scenes\worldcreate.h" />
     <ClInclude Include="..\..\source\scenes\mainmenu.h" />
     <ClInclude Include="..\..\source\scenes\worldselect.h" />
+    <ClInclude Include="..\..\source\terrain\simplex.h" />
     <ClInclude Include="..\..\source\terrain\terrain.h" />
     <ClInclude Include="..\..\source\terrain\terrainchunk.h" />
     <ClInclude Include="..\..\source\terrain\terraingen.h" />
