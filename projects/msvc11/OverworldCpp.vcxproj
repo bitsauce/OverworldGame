@@ -92,6 +92,8 @@
     <ResourceCompile Include="resources.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\blockentities\blockentity.cpp" />
+    <ClCompile Include="..\..\source\blockentities\redcurrantbush.cpp" />
     <ClCompile Include="..\..\source\environment\background.cpp" />
     <ClCompile Include="..\..\source\environment\timeofday.cpp" />
     <ClCompile Include="..\..\source\game.cpp" />
@@ -115,6 +117,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\source\blockentities\blockentity.h" />
+    <ClInclude Include="..\..\source\blockentities\redcurrantbush.h" />
     <ClInclude Include="..\..\source\constants.h" />
     <ClInclude Include="..\..\source\environment\background.h" />
     <ClInclude Include="..\..\source\environment\timeofday.h" />

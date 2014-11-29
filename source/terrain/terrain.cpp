@@ -200,8 +200,30 @@ void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 		}
 	}
 	
-	//if(XInput::getKeyState(XD_KEY_Z))
+	if(XInput::getKeyState(XD_KEY_Z))
 	{
+		if(XInput::getKeyState(XD_KEY_B))
+		{
+			int x0 = XMath::floor(World::getCamera()->getX()/BLOCK_PXF);
+			int y0 = XMath::floor(World::getCamera()->getY()/BLOCK_PXF);
+			int x1 = XMath::floor((World::getCamera()->getX() + World::getCamera()->getWidth())/BLOCK_PXF);
+			int y1 = XMath::floor((World::getCamera()->getY() + World::getCamera()->getHeight())/BLOCK_PXF);
+
+			for(int y = y0; y <= y1; ++y)
+			{
+				XShape line(Rect(x0 * BLOCK_PXF, y * BLOCK_PXF, (x1 - x0 + 1) * BLOCK_PXF, 1.0f / World::getCamera()->getZoom()));
+				line.setFillColor(XColor(127, 127, 127, 255));
+				line.draw(batch);
+			}
+
+			for(int x = x0; x <= x1; ++x)
+			{
+				XShape line(Rect(x * BLOCK_PXF, y0 * BLOCK_PXF, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * BLOCK_PXF));
+				line.setFillColor(XColor(127, 127, 127, 255));
+				line.draw(batch);
+			} 
+		}
+
 		for(int y = y0; y <= y1; ++y)
 		{
 			XShape line(Rect(x0 * CHUNK_PX, y * CHUNK_PX, (x1 - x0 + 1) * CHUNK_PX, 1.0f / World::getCamera()->getZoom()));
@@ -214,28 +236,6 @@ void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 			XShape line(Rect(x * CHUNK_PX, y0 * CHUNK_PX, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * CHUNK_PX));
 			line.setFillColor(XColor(0, 0, 0, 255));
 			line.draw(batch);
-		}
-
-		if(XInput::getKeyState(XD_KEY_B))
-		{
-			int x0 = XMath::floor(World::getCamera()->getX()/BLOCK_PXF);
-			int y0 = XMath::floor(World::getCamera()->getY()/BLOCK_PXF);
-			int x1 = XMath::floor((World::getCamera()->getX() + World::getCamera()->getWidth())/BLOCK_PXF);
-			int y1 = XMath::floor((World::getCamera()->getY() + World::getCamera()->getHeight())/BLOCK_PXF);
-
-			for(int y = y0; y <= y1; ++y)
-			{
-				XShape line(Rect(x0 * BLOCK_PXF, y * BLOCK_PXF, (x1 - x0 + 1) * BLOCK_PXF, 1.0f / World::getCamera()->getZoom()));
-				line.setFillColor(XColor(0, 0, 0, 255));
-				line.draw(batch);
-			}
-
-			for(int x = x0; x <= x1; ++x)
-			{
-				XShape line(Rect(x * BLOCK_PXF, y0 * BLOCK_PXF, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * BLOCK_PXF));
-				line.setFillColor(XColor(0, 0, 0, 255));
-				line.draw(batch);
-			} 
 		}
 	}
 }

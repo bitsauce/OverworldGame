@@ -269,13 +269,13 @@ void TerrainChunk::generateVBO()
 				XVertexFormat &format = World::getTerrain()->getVertexFormat();
 
 				uint offset = 0;
-				if(block->id != BLOCK_EMPTY)
+				if(block->id > BLOCK_OCCUPIED)
 				{
 					m_tmpQuads[offset++] = BlockQuad(block->id, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V1, BLOCK_U5, BLOCK_V5);
 				}
 	
 				// Bottom-right outer-corner
-				if(block->next[0]->id != BLOCK_EMPTY)
+				if(block->next[0]->id > BLOCK_OCCUPIED)
 				{
 					if(block->next[0]->id != block->id && block->next[0]->id != block->next[1]->id && block->next[0]->id != block->next[7]->id)
 					{
@@ -284,7 +284,7 @@ void TerrainChunk::generateVBO()
 				}
 
 				// Draw bottom edge
-				if(block->next[1]->id != BLOCK_EMPTY)
+				if(block->next[1]->id > BLOCK_OCCUPIED)
 				{
 					if(block->next[1]->id != block->id)
 					{
@@ -315,7 +315,7 @@ void TerrainChunk::generateVBO()
 				}
 
 				// Bottom-left outer-corner
-				if(block->next[2]->id != BLOCK_EMPTY)
+				if(block->next[2]->id > BLOCK_OCCUPIED)
 				{
 					if(block->next[2]->id != block->id && block->next[2]->id != block->next[1]->id && block->next[2]->id != block->next[3]->id)
 					{
@@ -324,7 +324,7 @@ void TerrainChunk::generateVBO()
 				}
 
 				// Draw left edge
-				if(block->next[3]->id != BLOCK_EMPTY)
+				if(block->next[3]->id > BLOCK_OCCUPIED)
 				{
 					if(block->next[3]->id != block->id)
 					{
@@ -351,7 +351,7 @@ void TerrainChunk::generateVBO()
 				}
 
 				// Top-left outer-corner
-				if(block->next[4]->id != BLOCK_EMPTY)
+				if(block->next[4]->id > BLOCK_OCCUPIED)
 				{
 					if(block->next[4]->id != block->id && block->next[4]->id != block->next[3]->id && block->next[4]->id != block->next[5]->id)
 					{
@@ -360,7 +360,7 @@ void TerrainChunk::generateVBO()
 				}
 
 				// Draw top edge
-				if(block->next[5]->id != BLOCK_EMPTY)
+				if(block->next[5]->id > BLOCK_OCCUPIED)
 				{
 					if(block->next[5]->id != block->id)
 					{
@@ -391,7 +391,7 @@ void TerrainChunk::generateVBO()
 				}
 	
 				// Top-right outer-corner
-				if(block->next[6]->id != BLOCK_EMPTY)
+				if(block->next[6]->id > BLOCK_OCCUPIED)
 				{
 					if(block->next[6]->id != block->id && block->next[6]->id != block->next[7]->id && block->next[6]->id != block->next[5]->id)
 					{
@@ -400,7 +400,7 @@ void TerrainChunk::generateVBO()
 				}
 
 				// Draw right edge
-				if(block->next[7]->id != BLOCK_EMPTY)
+				if(block->next[7]->id > BLOCK_OCCUPIED)
 				{
 					if(block->next[7]->id != block->id)
 					{

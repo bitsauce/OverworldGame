@@ -17,8 +17,27 @@ GameObject::~GameObject()
 
 list<GameObject*> Game::s_gameObjects;
 
+#include "blockentities/redcurrantbush.h"
+
+BlockEntity *entity = 0;
+
 void Game::update()
 {
+	if(!entity && XInput::getKeyState(XD_KEY_O))
+	{
+		entity = new RedcurrantBush();
+	}
+
+	if(entity)
+	{
+		entity->move(XMath::floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), XMath::floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF));
+		if(XInput::getKeyState(XD_KEY_P))
+		{
+			if(entity->place())
+				entity = 0;
+		}
+	}
+
 	for(list<GameObject*>::iterator itr = s_gameObjects.begin(); itr != s_gameObjects.end(); ++itr)
 	{
 		(*itr)->update();
@@ -36,7 +55,7 @@ void Game::update()
 	//Water.update();
 	World.update();*/
 }
-#include "blockdata.h"
+
 void Game::draw()
 {
 	XBatch batch;
@@ -63,7 +82,10 @@ void Game::draw()
 	}
 	
 	Debug::setVariable("FPS", util::intToStr(XGraphics::getFPS()));
-	Debug::draw(&batch);
+	if(XInput::getKeyState(XD_KEY_Z))
+	{
+		Debug::draw(&batch);
+	}
 
 	XGraphics::renderBatch(batch);
 }

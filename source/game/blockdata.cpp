@@ -9,6 +9,7 @@ void BlockData::init()
 {
 	shared_ptr<XTexture> temp = xd::ResourceManager::get<XTexture>(":/sprites/tiles/tile_template.png");
 	s_blockData[BLOCK_EMPTY] = BlockData(BLOCK_EMPTY, xd::ResourceManager::get<XTexture>(":/sprites/tiles/empty_tile.png"), 0/*ITEM_GRASS_BLOCK*/, 1.0f);
+	s_blockData[BLOCK_OCCUPIED] = BlockData(BLOCK_OCCUPIED, xd::ResourceManager::get<XTexture>(":/sprites/tiles/tile_template.png"), 0/*ITEM_GRASS_BLOCK*/, 1.0f);
 	s_blockData[BLOCK_SCENE_GRASS] = BlockData(BLOCK_SCENE_GRASS, xd::ResourceManager::get<XTexture>(":/sprites/tiles/grass_tile.png"), 0/*ITEM_GRASS_BLOCK*/, 1.0f);
 	s_blockData[BLOCK_SCENE_STONE] = BlockData(BLOCK_SCENE_STONE, xd::ResourceManager::get<XTexture>(":/sprites/tiles/tile_template.png"), 0/*ITEM_GRASS_BLOCK*/, 1.0f);
 

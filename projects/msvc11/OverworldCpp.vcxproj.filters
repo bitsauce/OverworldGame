@@ -62,6 +62,12 @@
     <ClCompile Include="..\..\source\terrain\simplex.cpp">
       <Filter>source\terrain</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\blockentities\redcurrantbush.cpp">
+      <Filter>source\blockentities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\blockentities\blockentity.cpp">
+      <Filter>source\blockentities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -82,14 +88,14 @@
     <Filter Include="source\environment">
       <UniqueIdentifier>{60063404-bf8e-4d1f-91c0-9ce7bdaa6c13}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\entities">
-      <UniqueIdentifier>{dc2d914f-c636-4931-b0ee-b79e1c3b94ee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\mobs">
       <UniqueIdentifier>{e4431234-8aa8-4683-9b3c-7898bc8ecc33}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\terrain">
       <UniqueIdentifier>{acdbe615-25b7-49dc-9dd6-17c021361fc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\blockentities">
+      <UniqueIdentifier>{dc2d914f-c636-4931-b0ee-b79e1c3b94ee}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +161,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\terrain\simplex.h">
       <Filter>source\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\blockentities\redcurrantbush.h">
+      <Filter>source\blockentities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\blockentities\blockentity.h">
+      <Filter>source\blockentities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
