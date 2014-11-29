@@ -17,25 +17,15 @@ GameObject::~GameObject()
 
 list<GameObject*> Game::s_gameObjects;
 
-#include "blockentities/redcurrantbush.h"
-
-BlockEntity *entity = 0;
+#include "physics/physicsbody.h"
 
 void Game::update()
 {
-	if(!entity && XInput::getKeyState(XD_KEY_O))
+	if(XInput::getKeyState(XD_KEY_O))
 	{
-		entity = new RedcurrantBush();
-	}
-
-	if(entity)
-	{
-		entity->move(XMath::floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), XMath::floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF));
-		if(XInput::getKeyState(XD_KEY_P))
-		{
-			if(entity->place())
-				entity = 0;
-		}
+		PhysicsBody *body = new PhysicsBody();
+		body->setSize(BLOCK_PXF, BLOCK_PXF);
+		body->setPosition(World::getCamera()->getPosition().x + XInput::getPosition().x, World::getCamera()->getPosition().y + XInput::getPosition().y);
 	}
 
 	for(list<GameObject*>::iterator itr = s_gameObjects.begin(); itr != s_gameObjects.end(); ++itr)

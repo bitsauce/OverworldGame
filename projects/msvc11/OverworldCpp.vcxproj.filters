@@ -68,6 +68,9 @@
     <ClCompile Include="..\..\source\blockentities\blockentity.cpp">
       <Filter>source\blockentities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\physics\physicsbody.cpp">
+      <Filter>source\physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -96,6 +99,9 @@
     </Filter>
     <Filter Include="source\blockentities">
       <UniqueIdentifier>{dc2d914f-c636-4931-b0ee-b79e1c3b94ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\physics">
+      <UniqueIdentifier>{e03c2679-3c51-49ab-a1d8-899ba002d17a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +173,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\blockentities\blockentity.h">
       <Filter>source\blockentities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\physics\physicsbody.h">
+      <Filter>source\physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
