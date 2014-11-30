@@ -1,6 +1,7 @@
 #include "player.h"
 #include "game/world.h"
 #include "game/camera.h"
+#include "terrain/terrain.h"
 #include "constants.h"
 #include "physics/physicsbody.h"
 
@@ -15,12 +16,22 @@ Player::Player() :
 
 void Player::update()
 {
-	if(XInput::getKeyState(XD_KEY_SPACE)) m_body->setVelocityY(-10.0f);
+	// Jumping
+	if(m_body->isContact(SOUTH) && XInput::getKeyState(XD_KEY_SPACE))
+	{
+		m_body->setVelocityY(-10.0f);
+	}
+
+	// Walking
 	m_body->setVelocityX((XInput::getKeyState(XD_KEY_D) - XInput::getKeyState(XD_KEY_A)) * 10.0f);
 
+	// Update physics
 	m_body->update();
+
+	// Update sprite
 	m_sprite->setPosition(m_body->getPosition());
 
+	// Move camera
 	World::getCamera()->lookAt(m_body->getPosition());
 }
 

@@ -15,19 +15,38 @@ GameObject::~GameObject()
 	Game::removeGameObject(this);
 }
 
-list<GameObject*> Game::s_gameObjects;
+#include "scenes/mainmenu.h"
+#include "scenes/worldselect.h"
+#include "scenes/worldcreate.h"
+#include "scenes/gamescene.h"
 
-#include "physics/physicsbody.h"
+list<GameObject*> Game::s_gameObjects;
+Scene* Game::s_scenes[SCENE_COUNT];
+Scene* Game::s_currentScene = nullptr;
+
+void Game::init()
+{
+	s_scenes[SCENE_MAIN_MENU] = new MainMenuScene;
+	s_scenes[SCENE_WORLD_SELECT] = new WorldSelectScene;
+	s_scenes[SCENE_WORLD_CREATE] = new WorldCreateScene;
+	s_scenes[SCENE_GAME] = new GameScene;
+}
+
+void Game::destroy()
+{
+	for(uint i = 0; i < SCENE_COUNT; ++i)
+	{
+		delete s_scenes[i];
+	}
+}
+
+void Game::gotoScene(const SceneID scene)
+{
+	s_currentScene = s_scenes[scene];
+}
 
 void Game::update()
 {
-	if(XInput::getKeyState(XD_KEY_O))
-	{
-		PhysicsBody *body = new PhysicsBody();
-		body->setSize(BLOCK_PXF, BLOCK_PXF);
-		body->setPosition(World::getCamera()->getPosition().x + XInput::getPosition().x, World::getCamera()->getPosition().y + XInput::getPosition().y);
-	}
-
 	for(list<GameObject*>::iterator itr = s_gameObjects.begin(); itr != s_gameObjects.end(); ++itr)
 	{
 		(*itr)->update();
@@ -71,7 +90,7 @@ void Game::draw()
 		(*itr)->draw(&batch);
 	}
 	
-	Debug::setVariable("FPS", util::intToStr(XGraphics::getFPS()));
+	Debug::setVariable("FPS", util::intToStr((int)XGraphics::getFPS()));
 	if(XInput::getKeyState(XD_KEY_Z))
 	{
 		Debug::draw(&batch);

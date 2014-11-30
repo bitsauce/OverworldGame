@@ -32,6 +32,7 @@ void World::init()
 	s_worldFile = nullptr;
 	Player *p = new Player();
 	p->m_body->setPosition(0, 0);
+	s_camera->lookAt(Vector2(0.0f, 0.0f));
 }
 
 void World::create(const string &name)
@@ -57,7 +58,7 @@ void World::create(const string &name)
 	player.inventory.addItem(@Items[ITEM_AXE_IRON]);*/
 		
 	// Show game
-	XEngine::pushScene(scene::game);
+	Game::gotoScene(SCENE_GAME);
 }
 
 void World::save()

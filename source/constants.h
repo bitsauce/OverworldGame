@@ -48,6 +48,7 @@ enum BlockID
 {
 	BLOCK_EMPTY,
 	BLOCK_OCCUPIED,
+	//BLOCK_BLOCKER, // TODO: Gonna need this some time for doors
 	
 	BLOCK_BACKGROUND_WOOD,
 	BLOCK_BACKGROUND_STONE,
@@ -58,21 +59,6 @@ enum BlockID
 	BLOCK_FOREGROUND_LEAF,
 	
 	BLOCK_COUNT
-};
-
-// INVENTORY CONSTANTS
-const int INV_WIDTH = 9;
-const int INV_HEIGHT = 3;
-
-// Drawing layers
-enum Layer
-{
-	LAYER_BACKGROUND,
-	LAYER_SCENE,
-	LAYER_FOREGROUND,
-	LAYER_GUI,
-	LAYER_UITEXT,
-	LAYER_COUNT
 };
 
 // Terrain layers
@@ -98,17 +84,16 @@ enum Direction
 	NESW = NORTH | EAST | SOUTH | WEST
 };
 
-extern class UiObject *canvas;
-class MainMenuScene;
-class WorldSelectScene;
-class WorldCreateScene;
-class GameScene;
-namespace scene
+// SCENES
+enum SceneID
 {
-	extern MainMenuScene *mainMenu;
-	extern WorldSelectScene *worldSelect;
-	extern WorldCreateScene *worldCreate;
-	extern GameScene *game;
-}
+	SCENE_MAIN_MENU,
+	SCENE_GAME,
+	SCENE_WORLD_SELECT,
+	SCENE_WORLD_CREATE,
+	SCENE_COUNT
+};
+
+extern class UiObject *canvas;
 
 #endif // CONSTANTS_H

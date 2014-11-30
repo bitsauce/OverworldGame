@@ -56,5 +56,5 @@ void MainMenuScene::updateEvent()
 
 void MainMenuScene::showWorldSelect()
 {
-	XEngine::pushScene(scene::worldSelect);
+	Game::gotoScene(SCENE_WORLD_SELECT);
 }

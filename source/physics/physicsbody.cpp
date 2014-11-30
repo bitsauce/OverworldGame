@@ -12,12 +12,14 @@ PhysicsBody::PhysicsBody() :
 	m_rotation(45.0f),
 	m_gravityScale(1.0f),
 	m_allowRotation(false),
+	m_contact(0),
 	m_terrain(World::getTerrain())
 {
 }
 
 void PhysicsBody::update()
 {
+	m_contact = 0; 
 	m_velocity.y += PHYSICS_GRAVITY * m_gravityScale;
 
 	if(m_allowRotation)
@@ -63,6 +65,7 @@ void PhysicsBody::update()
 					{
 						m_position.y = y * BLOCK_PXF - m_size.y;
 						m_velocity.y = 0.0f;
+						m_contact |= SOUTH;
 					}
 				}
 			}
@@ -79,6 +82,7 @@ void PhysicsBody::update()
 					{
 						m_position.y = y * BLOCK_PXF + BLOCK_PXF;
 						m_velocity.y = 0.0f;
+						m_contact |= NORTH;
 					}
 				}
 			}
@@ -100,6 +104,7 @@ void PhysicsBody::update()
 					{
 						m_position.x = x * BLOCK_PXF - m_size.x;
 						m_velocity.x = 0.0f;
+						m_contact |= EAST;
 					}
 				}
 			}
@@ -116,6 +121,7 @@ void PhysicsBody::update()
 					{
 						m_position.x = x * BLOCK_PXF + BLOCK_PXF;
 						m_velocity.x = 0.0f;
+						m_contact |= WEST;
 					}
 				}
 			}

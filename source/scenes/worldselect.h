@@ -2,11 +2,12 @@
 #define WORLD_SELECT_H
 
 #include <x2d/x2d.h>
+#include "scene.h"
 
 class UiObject;
 class Button;
 
-class WorldSelectScene : public XScene
+class WorldSelectScene : public Scene
 {
 public:
 	void showEvent();

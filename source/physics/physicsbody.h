@@ -19,6 +19,7 @@ public:
 	void setVelocity(const Vector2 &velocity) { m_velocity = velocity; }
 	void setVelocityX(const float x) { m_velocity.x = x; }
 	void setVelocityY(const float y) { m_velocity.y = y; }
+	bool isContact(const uint dir) { return (m_contact & dir) != 0; }
 
 private:
 	Vector2 m_velocity;
@@ -27,6 +28,7 @@ private:
 	float m_rotation;
 	float m_gravityScale;
 	bool m_allowRotation;
+	uint m_contact;
 
 	class Terrain *m_terrain;
 };

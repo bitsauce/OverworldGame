@@ -2,11 +2,12 @@
 #define MAINMENU_H
 
 #include <x2d/x2d.h>
+#include "scene.h"
 
 class UiObject;
 class Button;
 
-class MainMenuScene : public XScene
+class MainMenuScene : public Scene
 {
 public:
 	void showEvent();

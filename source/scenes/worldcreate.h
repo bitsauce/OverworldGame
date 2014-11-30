@@ -1,13 +1,14 @@
 #ifndef WORLD_CREATE_H
 #define WORLD_CREATE_H
 
-#include "game.h"
+#include <x2d/x2d.h>
+#include "scene.h"
 
 class UiObject;
 class LineEdit;
 class Button;
 
-class WorldCreateScene : public XScene
+class WorldCreateScene : public Scene
 {
 public:
 	void showEvent();

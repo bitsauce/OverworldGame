@@ -2,10 +2,11 @@
 #define GAME_SCENE_H
 
 #include <x2d/x2d.h>
+#include "scene.h"
 
 class UiObject;
 
-class GameScene : public XScene
+class GameScene : public Scene
 {
 public:
 	void showEvent();

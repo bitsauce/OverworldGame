@@ -71,8 +71,11 @@
     <ClCompile Include="..\..\source\physics\physicsbody.cpp">
       <Filter>source\physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\player.cpp">
-      <Filter>source</Filter>
+    <ClCompile Include="..\..\source\game\player.cpp">
+      <Filter>source\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenes\scene.cpp">
+      <Filter>source\scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,8 +183,11 @@
     <ClInclude Include="..\..\source\physics\physicsbody.h">
       <Filter>source\physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\player.h">
-      <Filter>source</Filter>
+    <ClInclude Include="..\..\source\game\player.h">
+      <Filter>source\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scenes\scene.h">
+      <Filter>source\scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

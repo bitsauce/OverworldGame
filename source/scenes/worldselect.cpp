@@ -60,5 +60,5 @@ void WorldSelectScene::worldClicked()
 
 void WorldSelectScene::showCreateWorld()
 {
-	XEngine::pushScene(scene::worldCreate);
+	Game::gotoScene(SCENE_WORLD_CREATE);
 }
