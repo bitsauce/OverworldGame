@@ -10,6 +10,9 @@
 
 #include "game/camera.h"
 
+#include "player.h"
+#include "physics/physicsbody.h"
+
 #include <Box2D/Box2D.h>
 
 b2World *World::s_b2World = nullptr;
@@ -27,6 +30,8 @@ void World::init()
 	s_b2World = new b2World(b2Vec2(0.0f, 9.81f));
 	s_terrain = new Terrain;
 	s_worldFile = nullptr;
+	Player *p = new Player();
+	p->m_body->setPosition(0, 0);
 }
 
 void World::create(const string &name)

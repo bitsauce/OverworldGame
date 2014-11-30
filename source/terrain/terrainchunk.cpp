@@ -430,7 +430,7 @@ void TerrainChunk::generateVBO()
 				{
 					/*if(needsSorting)*/ sort(m_tmpQuads.begin(), m_tmpQuads.begin() + offset);
 
-					XVertex *vertices = format.createVertices(4*offset); // TODO: Hmm... I don't like that this is so performance demanding as it is. I should concider a different way to represent vertices an vertex formats
+					XVertex *vertices = format.createVertices(4*offset); // TODO: Hmm... I don't like that this is so performance demanding as it is. I should concider a different way to represent vertices and vertex formats
 					uint *indices = new uint[6*m_tmpQuads.size()];
 					for(uint i = 0; i < offset; ++i)
 					{
@@ -459,13 +459,6 @@ void TerrainChunk::generateVBO()
 					delete[] vertices;
 					delete[] indices;
 				}
-
-
-				//if(block > BLOCK_RESERVED) // no point in updating air/reserved blocks
-				{
-					//updateFixture(x, y, state);
-				}
-				//if(blockIsOpaque) break;
 			}
 		}
 	}
@@ -492,7 +485,6 @@ void TerrainChunk::serialize(XFileWriter &ss)
 			for(int x = 0; x < CHUNK_BLOCKS; ++x)
 			{
 				Block *block = m_blocks[BLOCK_INDEX(x, y, i)];
-				if(block->id <= BLOCK_OCCUPIED) block->id = BLOCK_EMPTY;
 				ss << block->id << endl;
 			}
 		}
@@ -637,7 +629,7 @@ void TerrainChunk::updateShadows()
 		for(int x = -m_shadowRadius; x <= CHUNK_BLOCKS + m_shadowRadius; ++x)
 		{
 			int blockX = m_x*CHUNK_BLOCKS + x, blockY = m_y*CHUNK_BLOCKS + y;
-			/*float opacity = Terrain.getChunk(XMath::floor(blockX / CHUNK_BLOCKSF), XMath::floor(blockY / CHUNK_BLOCKSF)).getOpacity(XMath::mod(blockX, CHUNK_BLOCKS), XMath::mod(blockY, CHUNK_BLOCKS));
+			/*float opacity = Terrain.getChunk(floor(blockX / CHUNK_BLOCKSF), floor(blockY / CHUNK_BLOCKSF)).getOpacity(XMath::mod(blockX, CHUNK_BLOCKS), XMath::mod(blockY, CHUNK_BLOCKS));
 			array<Vector4> pixel = { Vector4(0.0f, 0.0f, 0.0f, opacity) };
 			shadowMap.updateSection(x + shadowRadius, CHUNK_BLOCKS - y - 1 + shadowRadius, Pixmap(1, 1, pixel));*/
 		}

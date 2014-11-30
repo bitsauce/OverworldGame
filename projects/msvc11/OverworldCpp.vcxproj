@@ -107,6 +107,7 @@
     <ClCompile Include="..\..\source\gui\lineedit.cpp" />
     <ClCompile Include="..\..\source\gui\uiobject.cpp" />
     <ClCompile Include="..\..\source\physics\physicsbody.cpp" />
+    <ClCompile Include="..\..\source\player.cpp" />
     <ClCompile Include="..\..\source\scenes\gamescene.cpp" />
     <ClCompile Include="..\..\source\scenes\worldcreate.cpp" />
     <ClCompile Include="..\..\source\scenes\mainmenu.cpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="..\..\source\gui\lineedit.h" />
     <ClInclude Include="..\..\source\gui\uiobject.h" />
     <ClInclude Include="..\..\source\physics\physicsbody.h" />
+    <ClInclude Include="..\..\source\player.h" />
     <ClInclude Include="..\..\source\scenes\gamescene.h" />
     <ClInclude Include="..\..\source\scenes\worldcreate.h" />
     <ClInclude Include="..\..\source\scenes\mainmenu.h" />

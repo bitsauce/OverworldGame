@@ -58,7 +58,7 @@ void Terrain::load(const XIniFile &file)
 // BLOCK HELPERS
 BlockID Terrain::getBlockAt(const int x, const int y, const TerrainLayer layer = TERRAIN_LAYER_SCENE)
 {
-	return getChunk(XMath::floor(x / CHUNK_BLOCKSF), XMath::floor(y / CHUNK_BLOCKSF)).getBlockAt(XMath::mod(x, CHUNK_BLOCKS), XMath::mod(y, CHUNK_BLOCKS), layer);
+	return getChunk(floor(x / CHUNK_BLOCKSF), floor(y / CHUNK_BLOCKSF)).getBlockAt(XMath::mod(x, CHUNK_BLOCKS), XMath::mod(y, CHUNK_BLOCKS), layer);
 }
 	
 bool Terrain::isBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_SCENE)
@@ -69,12 +69,12 @@ bool Terrain::isBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_L
 // BLOCK MODIFICATION
 bool Terrain::setBlockAt(const int x, const int y, BlockID block, const TerrainLayer layer = TERRAIN_LAYER_SCENE)
 {
-	return getChunk(XMath::floor(x / CHUNK_BLOCKSF), XMath::floor(y / CHUNK_BLOCKSF)).setBlockAt(XMath::mod(x, CHUNK_BLOCKS), XMath::mod(y, CHUNK_BLOCKS), block, layer);
+	return getChunk(floor(x / CHUNK_BLOCKSF), floor(y / CHUNK_BLOCKSF)).setBlockAt(XMath::mod(x, CHUNK_BLOCKS), XMath::mod(y, CHUNK_BLOCKS), block, layer);
 }
 	
 bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_SCENE)
 {
-	return getChunk(XMath::floor(x / CHUNK_BLOCKSF), XMath::floor(y / CHUNK_BLOCKSF)).setBlockAt(XMath::mod(x, CHUNK_BLOCKS), XMath::mod(y, CHUNK_BLOCKS), BLOCK_EMPTY, layer);
+	return getChunk(floor(x / CHUNK_BLOCKSF), floor(y / CHUNK_BLOCKSF)).setBlockAt(XMath::mod(x, CHUNK_BLOCKS), XMath::mod(y, CHUNK_BLOCKS), BLOCK_EMPTY, layer);
 }
 
 // CHUNKS
@@ -127,10 +127,10 @@ bool Terrain::isChunk(const int chunkX, const int chunkY) const
 	
 void Terrain::loadVisibleChunks()
 {
-	int x0 = XMath::floor(World::getCamera()->getX()/CHUNK_PXF);
-	int y0 = XMath::floor(World::getCamera()->getY()/CHUNK_PXF);
-	int x1 = XMath::floor((World::getCamera()->getX() + World::getCamera()->getWidth())/CHUNK_PXF);
-	int y1 = XMath::floor((World::getCamera()->getY() + World::getCamera()->getHeight())/CHUNK_PXF);
+	int x0 = floor(World::getCamera()->getX()/CHUNK_PXF);
+	int y0 = floor(World::getCamera()->getY()/CHUNK_PXF);
+	int x1 = floor((World::getCamera()->getX() + World::getCamera()->getWidth())/CHUNK_PXF);
+	int y1 = floor((World::getCamera()->getY() + World::getCamera()->getHeight())/CHUNK_PXF);
 		
 	TerrainChunk *chunk;
 	for(int y = y0-1; y <= y1+1; y++)
@@ -151,15 +151,15 @@ void Terrain::update()
 {
 	if(XInput::getKeyState(XD_LMB))
 	{
-		setBlockAt(XMath::floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), XMath::floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_SCENE_GRASS);
+		setBlockAt(floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_SCENE_GRASS);
 	}
 	else if(XInput::getKeyState(XD_RMB))
 	{
-		setBlockAt(XMath::floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), XMath::floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_EMPTY);
+		setBlockAt(floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_EMPTY);
 	}
 
-	int cx = XMath::floor(World::getCamera()->getX()/CHUNK_PXF);
-	int cy = XMath::floor(World::getCamera()->getY()/CHUNK_PXF);
+	int cx = floor(World::getCamera()->getX()/CHUNK_PXF);
+	int cy = floor(World::getCamera()->getY()/CHUNK_PXF);
 	TerrainChunk *chunk = 0;
 	if((chunk = &getChunk(cx, cy, true))->getState() != CHUNK_INITIALIZED)
 	{
@@ -181,10 +181,10 @@ void Terrain::update()
 // DRAWING
 void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 {
-	int x0 = XMath::floor(World::getCamera()->getX()/CHUNK_PXF);
-	int y0 = XMath::floor(World::getCamera()->getY()/CHUNK_PXF);
-	int x1 = XMath::floor((World::getCamera()->getX() + World::getCamera()->getWidth())/CHUNK_PXF);
-	int y1 = XMath::floor((World::getCamera()->getY() + World::getCamera()->getHeight())/CHUNK_PXF);
+	int x0 = floor(World::getCamera()->getX()/CHUNK_PXF);
+	int y0 = floor(World::getCamera()->getY()/CHUNK_PXF);
+	int x1 = floor((World::getCamera()->getX() + World::getCamera()->getWidth())/CHUNK_PXF);
+	int y1 = floor((World::getCamera()->getY() + World::getCamera()->getHeight())/CHUNK_PXF);
 		
 	for(int y = y0-1; y <= y1+1; ++y)
 	{
@@ -204,10 +204,10 @@ void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 	{
 		if(XInput::getKeyState(XD_KEY_B))
 		{
-			int x0 = XMath::floor(World::getCamera()->getX()/BLOCK_PXF);
-			int y0 = XMath::floor(World::getCamera()->getY()/BLOCK_PXF);
-			int x1 = XMath::floor((World::getCamera()->getX() + World::getCamera()->getWidth())/BLOCK_PXF);
-			int y1 = XMath::floor((World::getCamera()->getY() + World::getCamera()->getHeight())/BLOCK_PXF);
+			int x0 = floor(World::getCamera()->getX()/BLOCK_PXF);
+			int y0 = floor(World::getCamera()->getY()/BLOCK_PXF);
+			int x1 = floor((World::getCamera()->getX() + World::getCamera()->getWidth())/BLOCK_PXF);
+			int y1 = floor((World::getCamera()->getY() + World::getCamera()->getHeight())/BLOCK_PXF);
 
 			for(int y = y0; y <= y1; ++y)
 			{

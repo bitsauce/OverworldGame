@@ -71,6 +71,9 @@
     <ClCompile Include="..\..\source\physics\physicsbody.cpp">
       <Filter>source\physics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\player.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -176,6 +179,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\physics\physicsbody.h">
       <Filter>source\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\player.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
