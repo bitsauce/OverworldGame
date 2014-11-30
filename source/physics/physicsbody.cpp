@@ -47,19 +47,15 @@ void PhysicsBody::update()
 	}
 	else
 	{
+		// Apply vertical velocity
 		m_position.y += m_velocity.y;
 
-		int x0 = floor(m_position.x/BLOCK_PXF);
-		int y0 = floor(m_position.y/BLOCK_PXF);
-		int x1 = floor((m_position.x+m_size.x-1)/BLOCK_PXF);
-		int y1 = floor((m_position.y+m_size.y-1)/BLOCK_PXF);
-		int vx = floor((m_position.x+m_size.x-1+m_velocity.x)/BLOCK_PXF);
-		int vy = floor((m_position.y+m_size.y-1+m_velocity.y)/BLOCK_PXF);
-	
-		// Check down
+		// Check collision vertically
 		if(m_velocity.y > 0.0f)
 		{
-			for(int y = y1; y <= vy && m_velocity.y > 0.0f; ++y)
+			int x0 = (int)floor(m_position.x/BLOCK_PXF), x1 = (int)floor((m_position.x+m_size.x-1)/BLOCK_PXF);
+			int y0 = (int)floor((m_position.y+m_size.y-1)/BLOCK_PXF), y1 = (int)floor((m_position.y+m_size.y-1+m_velocity.y)/BLOCK_PXF);
+			for(int y = y0; y <= y1 && m_velocity.y > 0.0f; ++y)
 			{
 				for(int x = x0; x <= x1 && m_velocity.y > 0.0f; ++x)
 				{
@@ -67,28 +63,36 @@ void PhysicsBody::update()
 					{
 						m_position.y = y * BLOCK_PXF - m_size.y;
 						m_velocity.y = 0.0f;
-
-						y0 = floor(m_position.y/BLOCK_PXF);
-						y1 = floor((m_position.y+m_size.y-1)/BLOCK_PXF);
-						vy = 0;
 					}
 				}
 			}
 		}
 		else if(m_velocity.y < 0.0f)
 		{
-
+			int x0 = (int)floor(m_position.x/BLOCK_PXF), x1 = (int)floor((m_position.x+m_size.x-1)/BLOCK_PXF);
+			int y0 = (int)floor(m_position.y/BLOCK_PXF), y1 = (int)floor((m_position.y+m_velocity.y)/BLOCK_PXF);
+			for(int y = y0; y >= y1 && m_velocity.y < 0.0f; --y)
+			{
+				for(int x = x0; x <= x1 && m_velocity.y < 0.0f; ++x)
+				{
+					if(m_terrain->getBlockAt(x, y, TERRAIN_LAYER_SCENE) > BLOCK_OCCUPIED)
+					{
+						m_position.y = y * BLOCK_PXF + BLOCK_PXF;
+						m_velocity.y = 0.0f;
+					}
+				}
+			}
 		}
 
+		// Apply horizontal velocity
 		m_position.x += m_velocity.x;
-		x0 = floor(m_position.x/BLOCK_PXF);
-		x1 = floor((m_position.x+m_size.x-1)/BLOCK_PXF);
-		vx = floor((m_position.x+m_size.x-1+m_velocity.x)/BLOCK_PXF);
 		
-		// Check right
+		// Check collision horizontally
 		if(m_velocity.x > 0.0f)
 		{
-			for(int x = x1; x <= vx && m_velocity.x > 0.0f; ++x)
+			int y0 = (int)floor(m_position.y/BLOCK_PXF), y1 = (int)floor((m_position.y+m_size.y-1)/BLOCK_PXF);
+			int x0 = (int)floor((m_position.x+m_size.x-1)/BLOCK_PXF), x1 = (int)floor((m_position.x+m_size.x-1+m_velocity.x)/BLOCK_PXF);
+			for(int x = x0; x <= x1 && m_velocity.x > 0.0f; ++x)
 			{
 				for(int y = y0; y <= y1 && m_velocity.x > 0.0f; ++y)
 				{
@@ -102,6 +106,19 @@ void PhysicsBody::update()
 		}
 		else if(m_velocity.x < 0.0f)
 		{
+			int y0 = (int)floor(m_position.y/BLOCK_PXF), y1 = (int)floor((m_position.y+m_size.y-1)/BLOCK_PXF);
+			int x0 = (int)floor(m_position.x/BLOCK_PXF), x1 = (int)floor((m_position.x+m_velocity.x)/BLOCK_PXF);
+			for(int x = x0; x >= x1 && m_velocity.x < 0.0f; --x)
+			{
+				for(int y = y0; y <= y1 && m_velocity.x < 0.0f; ++y)
+				{
+					if(m_terrain->getBlockAt(x, y, TERRAIN_LAYER_SCENE) > BLOCK_OCCUPIED)
+					{
+						m_position.x = x * BLOCK_PXF + BLOCK_PXF;
+						m_velocity.x = 0.0f;
+					}
+				}
+			}
 		}
 	}
 }
