@@ -93,6 +93,12 @@ void Game::draw()
 	Debug::setVariable("FPS", util::intToStr((int)XGraphics::getFPS()));
 	if(XInput::getKeyState(XD_KEY_Z))
 	{
+		if(usingSceneMat)
+		{
+			batch.setProjectionMatrix(Matrix4());
+			usingSceneMat = false;
+		}
+
 		Debug::draw(&batch);
 	}
 

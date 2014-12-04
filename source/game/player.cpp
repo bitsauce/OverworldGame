@@ -5,6 +5,8 @@
 #include "constants.h"
 #include "physics/physicsbody.h"
 
+#include <stdlib.h>
+
 Player::Player() :
 	GameObject(DRAW_ORDER_PLAYER)
 {
@@ -17,13 +19,20 @@ Player::Player() :
 void Player::update()
 {
 	// Jumping
+	m_body->setAccelerationX(0.0f);
+	m_body->setAccelerationY(0.5f);
 	if(m_body->isContact(SOUTH) && XInput::getKeyState(XD_KEY_SPACE))
 	{
-		m_body->setVelocityY(-10.0f);
+		m_body->applyImpulse(Vector2(0.0f, -10.0f));
+		//m_body->setVelocityY(-10.0f);
 	}
 
 	// Walking
-	m_body->setVelocityX((XInput::getKeyState(XD_KEY_D) - XInput::getKeyState(XD_KEY_A)) * 10.0f);
+	if(abs(m_body->getVelocity().x) < 10.0f)
+	/*m_body->setVelocityX*/m_body->applyImpulse(Vector2((XInput::getKeyState(XD_KEY_D) - XInput::getKeyState(XD_KEY_A)) * 0.5f, 0.0f));
+
+	// Apply friction
+	m_body->setVelocityX(m_body->getVelocity().x * 0.85f);
 
 	// Update physics
 	m_body->update();

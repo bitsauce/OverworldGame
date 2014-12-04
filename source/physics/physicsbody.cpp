@@ -20,7 +20,7 @@ PhysicsBody::PhysicsBody() :
 void PhysicsBody::update()
 {
 	m_contact = 0; 
-	m_velocity.y += PHYSICS_GRAVITY * m_gravityScale;
+	m_velocity += m_acceleration;
 
 	if(m_allowRotation)
 	{
