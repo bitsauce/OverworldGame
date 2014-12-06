@@ -5,6 +5,9 @@
 #include "constants.h"
 #include "physics/physicsbody.h"
 
+#include "animation/animation.h"
+#include "animation/skeleton.h"
+
 #include <stdlib.h>
 
 Player::Player() :
@@ -12,10 +15,32 @@ Player::Player() :
 	m_camera(World::getCamera()),
 	m_jumpTimer(1.0f)
 {
+	// Load physics
 	m_body = new PhysicsBody();
+	m_body->setSize(32, 48);
+
+	// Load skeleton data
+	m_skeleton = new Skeleton(":/sprites/characters/anim/skeleton.json", ":/sprites/characters/anim/skeleton.atlas", 1.0f);
+	m_skeleton->getTexture()->setFiltering(XTexture::LINEAR);
+	
+	// Setup spine animations // TODO: Move to global scope (as only one copy of this is strictly neseccary)
+	AnimationStateData *data = new AnimationStateData(m_skeleton);
+	data.setMix("idle", "walk", 0.2f);
+	data.setMix("walk", "idle", 0.5f);
+	data.setMix("jump", "idle", 0.1f);
+	data.setMix("walk", "jump", 0.1f);
+	data.setMix("jump", "idle", 0.1f);
+	data.setMix("idle", "jump", 0.2f);
+	
+	// Create spine animation
+	m_animation = AnimationState(data);
+	//m_animation.setEventCallback(animationEvent);
+	m_animation->setLooping(true);
+	//changeAnimation("idle");
+	
+	// TODO: Remove
 	m_sprite = new XSprite(XTextureRegion(xd::ResourceManager::get<XTexture>(":/sprites/items/box.png")));
 	m_sprite->setSize(32, 48);
-	m_body->setSize(32, 48);
 }
 
 void Player::update()

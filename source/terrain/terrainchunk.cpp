@@ -273,7 +273,7 @@ void TerrainChunk::generateVBO()
 	{
 		for(int x = 0; x < CHUNK_BLOCKS; ++x)
 		{
-			for(int i = TERRAIN_LAYER_COUNT-1; i >= 0; --i)
+			for(int i = 0; i < TERRAIN_LAYER_COUNT; ++i)
 			{
 				Block *block = m_blocks[BLOCK_INDEX(x, y, i)];
 

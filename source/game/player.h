@@ -5,6 +5,11 @@
 
 #include "game/gameobject.h"
 
+class Skeleton;
+class AnimationState;
+class Animation;
+class Camera;
+
 class Player : public GameObject
 {
 public:
@@ -18,8 +23,13 @@ public:
 private:
 
 	XSprite *m_sprite;
-	class Camera *m_camera;
+	Camera *m_camera;
 	float m_jumpTimer;
+	
+	// Skeletal animations
+	Skeleton *m_skeleton;
+	AnimationState *m_animation;
+	Animation *m_currentAnim;
 };
 
 #endif // PLAYER_H

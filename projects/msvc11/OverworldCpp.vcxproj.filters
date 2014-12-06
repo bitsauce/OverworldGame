@@ -77,6 +77,9 @@
     <ClCompile Include="..\..\source\scenes\scene.cpp">
       <Filter>source\scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\animation\skeleton.cpp">
+      <Filter>source\animations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -108,6 +111,9 @@
     </Filter>
     <Filter Include="source\physics">
       <UniqueIdentifier>{e03c2679-3c51-49ab-a1d8-899ba002d17a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\animations">
+      <UniqueIdentifier>{30ad5ef0-d9bb-4e01-b029-5debc3059e46}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +194,18 @@
     </ClInclude>
     <ClInclude Include="..\..\source\scenes\scene.h">
       <Filter>source\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\animation\skeleton.h">
+      <Filter>source\animations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\animation\animation.h">
+      <Filter>source\animations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\animation\slot.h">
+      <Filter>source\animations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\animation\bone.h">
+      <Filter>source\animations</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

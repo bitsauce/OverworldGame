@@ -14,7 +14,7 @@ BlockID Tree::getBlockAt(const int x, const int y, TerrainLayer layer)
 		{
 			if(x == 5 && y >= 5)
 			{
-				return BLOCK_BACKGROUND_WOOD;
+				return BLOCK_WOOD;
 			}
 		}
 			
@@ -42,14 +42,14 @@ BlockID TerrainGen::getBlockAt(const int x, const int y, const TerrainLayer laye
 			// Ground
 			if((XMath::clamp((100 - y)/100.0f, 0.0f, 1.0f) + (s_noise.valueAt(x, y) * 0.5f + 0.5f)) * step(0, y + h) > 0.5f)
 			{
-				return BLOCK_SCENE_GRASS;
+				return BLOCK_GRASS;
 			}*/
 
 			if(sin(x*0.05f)*10 + 30 < y)
 			{
 				if(sin(x*0.05f)*10 + 40 < y && s_noise.valueAt(x, y) > 0.0f)
-					return BLOCK_SCENE_STONE;
-				return BLOCK_SCENE_GRASS;
+					return BLOCK_STONE;
+				return BLOCK_GRASS;
 			}
 			return BLOCK_EMPTY;
 		}

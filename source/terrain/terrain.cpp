@@ -170,7 +170,7 @@ void Terrain::update()
 {
 	if(XInput::getKeyState(XD_LMB))
 	{
-		setBlockAt(floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_SCENE_STONE);
+		setBlockAt(floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_WOOD, TERRAIN_LAYER_BACKGROUND);
 	}
 	else if(XInput::getKeyState(XD_RMB))
 	{
@@ -205,7 +205,7 @@ void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 	int x1 = floor((World::getCamera()->getX() + World::getCamera()->getWidth())/CHUNK_PXF);
 	int y1 = floor((World::getCamera()->getY() + World::getCamera()->getHeight())/CHUNK_PXF);
 	
-	if(m_prevX0 != x0 || m_prevY0 != y0)
+	//if(m_prevX0 != x0 || m_prevY0 != y0)
 	{
 		for(int y = y0-2; y <= y1+2; ++y)
 		{
@@ -261,7 +261,7 @@ void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 			batch->popMatrix();
 		}
 	}
-	m_prevX0 = x0; m_prevY0 = y0;
+	//m_prevX0 = x0; m_prevY0 = y0;
 
 	XShape s(Rect((x0-1)*CHUNK_PXF, (y0-1)*CHUNK_PXF, m_shadowPass2->getWidth()*BLOCK_PXF, m_shadowPass2->getHeight()*BLOCK_PXF));
 	s.setFillTexture(m_shadowPass2);

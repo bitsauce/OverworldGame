@@ -10,8 +10,9 @@ void BlockData::init()
 	shared_ptr<XTexture> temp = xd::ResourceManager::get<XTexture>(":/sprites/tiles/tile_template.png");
 	s_blockData[BLOCK_EMPTY] = BlockData(BLOCK_EMPTY, xd::ResourceManager::get<XTexture>(":/sprites/tiles/empty_tile.png"), 0/*ITEM_GRASS_BLOCK*/, 0.0f);
 	s_blockData[BLOCK_OCCUPIED] = BlockData(BLOCK_OCCUPIED, xd::ResourceManager::get<XTexture>(":/sprites/tiles/tile_template.png"), 0/*ITEM_GRASS_BLOCK*/, 0.0f);
-	s_blockData[BLOCK_SCENE_GRASS] = BlockData(BLOCK_SCENE_GRASS, xd::ResourceManager::get<XTexture>(":/sprites/tiles/grass_tile.png"), 0/*ITEM_GRASS_BLOCK*/, 1.0f);
-	s_blockData[BLOCK_SCENE_STONE] = BlockData(BLOCK_SCENE_STONE, xd::ResourceManager::get<XTexture>(":/sprites/tiles/stone_block.png"), 0/*ITEM_GRASS_BLOCK*/, 1.0f);
+	s_blockData[BLOCK_WOOD] = BlockData(BLOCK_WOOD, xd::ResourceManager::get<XTexture>(":/sprites/tiles/wood_block.png"), 0/*ITEM_GRASS_BLOCK*/, 0.75f);
+	s_blockData[BLOCK_GRASS] = BlockData(BLOCK_GRASS, xd::ResourceManager::get<XTexture>(":/sprites/tiles/grass_tile.png"), 0/*ITEM_GRASS_BLOCK*/, 1.0f);
+	s_blockData[BLOCK_STONE] = BlockData(BLOCK_STONE, xd::ResourceManager::get<XTexture>(":/sprites/tiles/stone_block.png"), 0/*ITEM_GRASS_BLOCK*/, 1.0f);
 
 	vector<shared_ptr<XTexture>> textures;
 	for(uint i = 0; i < BLOCK_COUNT; ++i)
