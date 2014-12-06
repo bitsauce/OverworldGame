@@ -45,7 +45,13 @@ BlockID TerrainGen::getBlockAt(const int x, const int y, const TerrainLayer laye
 				return BLOCK_SCENE_GRASS;
 			}*/
 
-			return (sin(x*0.05f)*10 + 40 < y) ? BLOCK_SCENE_GRASS : BLOCK_EMPTY;
+			if(sin(x*0.05f)*10 + 30 < y)
+			{
+				if(sin(x*0.05f)*10 + 40 < y && s_noise.valueAt(x, y) > 0.0f)
+					return BLOCK_SCENE_STONE;
+				return BLOCK_SCENE_GRASS;
+			}
+			return BLOCK_EMPTY;
 		}
 		break;
 			

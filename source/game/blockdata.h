@@ -8,7 +8,6 @@ class b2Fixture;
 
 class BlockData
 {
-	friend class TerrainChunk;
 public:
 	BlockData();
 	BlockData(BlockID id, const shared_ptr<XTexture> &texture, const /*ItemID*/ uint i, const float opacity);
@@ -16,9 +15,11 @@ public:
 	void setupFixture(b2Fixture *fixture) {}
 
 	shared_ptr<XTexture> getTexture() const { return m_texture; }
+	float getOpacity() const { return m_opacity; }
 
 	static void init();
 	static BlockData &get(const BlockID id);
+	static XTextureAtlas *getBlockAtlas() { return s_blockAtlas; }
 	
 private:
 	BlockID m_id;

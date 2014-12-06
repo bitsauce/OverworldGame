@@ -39,7 +39,7 @@ private:
 	void *m_userData;
 	
 	// Text texture
-	XTexture *m_textTexture;
+	shared_ptr<XTexture> m_textTexture;
 		
 	// Button sprite
 	XSprite *m_buttonSprite;

@@ -10,10 +10,11 @@
 enum TerrainLayer;
 enum BlockID;
 
-class Terrain : public GameObject
+class Terrain : public GameObject, public xd::WindowListener
 {
 public:
 	Terrain();
+	~Terrain();
 	
 	// VERTEX FORMAT
 	XVertexFormat getVertexFormat() const;
@@ -41,6 +42,9 @@ public:
 	// DRAWING
 	void draw(/*const TerrainLayer layer, */XBatch *batch);
 
+	// WINDOW
+	void resizeEvent(uint width, uint height);
+
 private:
 	// Terrain chunks
 	//vector<TerrainChunk*> loadedChunks;
@@ -48,6 +52,16 @@ private:
 	list<TerrainChunk*> chunkLoadQueue;
 	unordered_map<uint, TerrainChunk*> chunks;
 	XVertexFormat vertexFormat;
+
+	// SHADOWS
+	XBatch m_shadowBatch;
+	shared_ptr<XTexture> m_shadowPass0;
+	shared_ptr<XTexture> m_shadowPass1;
+	shared_ptr<XTexture> m_shadowPass2;
+	shared_ptr<XShader> m_blurHShader;
+	shared_ptr<XShader> m_blurVShader;
+	int m_shadowRadius;
+	int m_prevX0, m_prevY0;
 	
 	// Terrain generator
 	TerrainGen generator;

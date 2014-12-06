@@ -18,6 +18,8 @@ public:
 private:
 
 	XSprite *m_sprite;
+	class Camera *m_camera;
+	float m_jumpTimer;
 };
 
 #endif // PLAYER_H

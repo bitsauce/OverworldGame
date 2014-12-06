@@ -16,9 +16,6 @@ enum ChunkState
 class b2Body;
 class b2Fixture;
 
-//Shader @blurHShader = @Shader(":/shaders/blur_h.vert", ":/shaders/blur_h.frag");
-//Shader @blurVShader = @Shader(":/shaders/blur_v.vert", ":/shaders/blur_v.frag");
-
 class TerrainChunk
 {
 	friend class Terrain;
@@ -52,10 +49,6 @@ private:
 	TerrainChunk(const TerrainChunk &) {}
 
 	// PHYSICS
-	void createFixture(const int x, const int y);
-	void removeFixture(const int x, const int y);
-	bool isFixtureAt(const int x, const int y);
-	void updateFixture(const int x, const int y, const uint state);
 	void updateShadows();
 
 	struct Block
@@ -89,10 +82,7 @@ private:
 	
 	// DRAWING
 	shared_ptr<XVertexBuffer> m_vbo;
-	XTexture *m_shadowMap;
-	XTexture *m_shadowPass1;
-	XTexture *m_shadowPass2;
-	int m_shadowRadius;
+	shared_ptr<XTexture> m_shadowMap;
 	
 	// MISC
 	bool m_modified;

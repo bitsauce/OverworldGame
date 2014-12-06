@@ -4,8 +4,6 @@
 #include "game/world.h"
 #include "terrain/terrain.h"
 
-#define PHYSICS_GRAVITY 0.5f
-
 PhysicsBody::PhysicsBody() :
 	m_velocity(0.0f, 0.0f),
 	m_position(0.0f, 0.0f),
@@ -20,7 +18,9 @@ PhysicsBody::PhysicsBody() :
 void PhysicsBody::update()
 {
 	m_contact = 0; 
+	m_acceleration.y += 0.5f;
 	m_velocity += m_acceleration;
+	m_acceleration.set(0.0f, 0.0f);
 
 	if(m_allowRotation)
 	{
