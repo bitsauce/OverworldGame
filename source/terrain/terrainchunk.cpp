@@ -56,7 +56,6 @@ TerrainChunk::TerrainChunk(int chunkX, int chunkY)
 }
 
 #define BLOCK_INDEX(x, y, z) (x+1) + (CHUNK_BLOCKS+2) * ((y+1) + (CHUNK_BLOCKS+2) * (z))
-#define FIXTURE_INDEX(x, y) (x) + CHUNK_BLOCKS * (y)
 	
 // SERIALIZATION
 void TerrainChunk::init(int chunkX, int chunkY)

@@ -14,6 +14,7 @@ Player::Player() :
 	GameObject(DRAW_ORDER_PLAYER),
 	m_camera(World::getCamera()),
 	m_jumpTimer(1.0f),
+	m_canJump(false),
 	m_currentAnim(nullptr)
 {
 	// Load physics
@@ -68,8 +69,16 @@ void Player::update()
 	{
 		if(XInput::getKeyState(XD_KEY_SPACE))
 		{
-			m_body->applyImpulse(Vector2(0.0f, -4.5f));
-			m_jumpTimer = 0.0f;
+			if(m_canJump)
+			{
+				m_body->applyImpulse(Vector2(0.0f, -4.5f));
+				m_jumpTimer = 0.0f;
+				m_canJump = false;
+			}
+		}
+		else
+		{
+			m_canJump = true;
 		}
 	}
 	else
@@ -84,15 +93,20 @@ void Player::update()
 		}
 		else if(m_body->isContact(WEST) || m_body->isContact(EAST)) // Wall jumping
 		{
+			m_body->setVelocityY(m_body->getVelocity().y*0.5f);
 			if(XInput::getKeyState(XD_KEY_SPACE))
 			{
-				m_body->setVelocityX((m_body->isContact(WEST) - m_body->isContact(EAST)) * 14.0f);
-				m_body->setVelocityY(-4.5f);
-				m_jumpTimer = 0.0f;
+				if(m_canJump)
+				{
+					m_body->setVelocityX((m_body->isContact(WEST) - m_body->isContact(EAST)) * 14.0f);
+					m_body->setVelocityY(-4.5f);
+					m_jumpTimer = 0.0f;
+					m_canJump = false;
+				}
 			}
 			else
 			{
-				m_body->setVelocityY(m_body->getVelocity().y*0.5f);
+				m_canJump = true;
 			}
 		}
 	}
@@ -130,18 +144,18 @@ void Player::update()
 	}
 	else
 	{
-		if(m_body->isContact(WEST))
+		if(m_body->isContact(WEST)/* >= 3*/) // TODO: I should check for a column of 3 rows of blocks instead of simlply one
 		{
 			m_skeleton->setFlipX(false);
 			m_animation->setLooping(false);
-			m_animation->setTimeScale(1.0f);
+			m_animation->setTimeScale(5.0f);
 			changeAnimation("wall-slide");
 		}
 		else if(m_body->isContact(EAST))
 		{
 			m_skeleton->setFlipX(true);
 			m_animation->setLooping(false);
-			m_animation->setTimeScale(1.0f);
+			m_animation->setTimeScale(5.0f);
 			changeAnimation("wall-slide");
 		}
 		else

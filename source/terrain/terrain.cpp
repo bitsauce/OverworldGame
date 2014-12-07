@@ -31,7 +31,7 @@ Terrain::Terrain() :
 	vertexFormat.set(VERTEX_TEX_COORD, 2);
 		
 	// Get terrain seed
-	generator.seed = XRandom().nextInt();
+	TerrainGen::s_seed = XRandom().nextInt();
 }
 
 Terrain::~Terrain()
@@ -72,7 +72,7 @@ void Terrain::load(const XIniFile &file)
 {
 	LOG("Loading terrain...");
 		
-	generator.seed = 0;// parseInt(file.getValue("terrain", "seed"));
+	TerrainGen::s_seed = 0;// parseInt(file.getValue("terrain", "seed"));
 }
 	
 // BLOCK HELPERS

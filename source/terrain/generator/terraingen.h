@@ -14,14 +14,19 @@ extern float step(float edge, float x);
 
 class TerrainGen
 {
+	friend class Terrain;
 public:
 
-	uint seed;
-
-	static BlockID getBlockAt(const int x, const int y, const TerrainLayer);
+	static BlockID getBlockAt(const int x, const int y, const TerrainLayer layer);
+	static BlockID getGroundAt(const int x, const int y, const TerrainLayer layer);
+	static int getGroundHeight(const int x);
+	static void loadStructures(const int x, const int y);
 
 private:
+	static uint s_seed;
 	static Simplex2D s_noise;
+	static XRandom s_random;
+	static map<uint, map<uint, BlockID*>> s_structureTiles;
 };
 
 #endif // TERRAIN_GEN_H

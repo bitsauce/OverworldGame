@@ -25,6 +25,7 @@ private:
 
 	Camera *m_camera;
 	float m_jumpTimer;
+	bool m_canJump;
 	
 	// Skeletal animations
 	Skeleton *m_skeleton;
