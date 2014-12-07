@@ -13,9 +13,6 @@
 #include "player.h"
 #include "physics/physicsbody.h"
 
-#include <Box2D/Box2D.h>
-
-b2World *World::s_b2World = nullptr;
 Terrain *World::s_terrain = nullptr;
 TimeOfDay *World::s_timeOfDay = nullptr;
 string World::s_worldPath;
@@ -27,7 +24,6 @@ void World::init()
 	s_timeOfDay = new TimeOfDay();
 	new Background(s_timeOfDay);
 	s_camera = new Camera();
-	s_b2World = new b2World(b2Vec2(0.0f, 9.81f));
 	s_terrain = new Terrain;
 	s_worldFile = nullptr;
 	Player *p = new Player();
@@ -76,11 +72,6 @@ void World::clear()
 string World::getWorldPath()
 {
 	return s_worldPath;
-}
-
-b2World *World::getb2World()
-{
-	return s_b2World;
 }
 
 Terrain *World::getTerrain()

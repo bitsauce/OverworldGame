@@ -3,7 +3,7 @@
 
 #include <x2d/x2d.h>
 #include "terrainchunk.h"
-#include "terraingen.h"
+#include "generator/terraingen.h"
 
 #include "game/gameobject.h"
 

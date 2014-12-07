@@ -170,7 +170,7 @@ void Terrain::update()
 {
 	if(XInput::getKeyState(XD_LMB))
 	{
-		setBlockAt(floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_WOOD, TERRAIN_LAYER_BACKGROUND);
+		setBlockAt(floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_GRASS);
 	}
 	else if(XInput::getKeyState(XD_RMB))
 	{
@@ -227,8 +227,8 @@ void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 		m_shadowPass1->clear();
 		m_blurHShader->setSampler2D("u_texture", m_shadowPass0);
 		m_blurHShader->setUniform1i("u_width", m_shadowPass0->getWidth());
-		m_blurHShader->setUniform1i("u_radius", m_shadowRadius);
-		m_blurHShader->setUniform1f("u_exponent", 2.0);
+		//m_blurHShader->setUniform1i("u_radius", m_shadowRadius);
+		//m_blurHShader->setUniform1f("u_exponent", 2.0);
 		m_shadowBatch.setShader(m_blurHShader);
 		XShape(Rect(0, 0, m_shadowPass1->getWidth(), m_shadowPass1->getHeight())).draw(&m_shadowBatch);
 		m_shadowBatch.renderToTexture(m_shadowPass1);
@@ -238,7 +238,7 @@ void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 		m_shadowPass2->clear();
 		m_blurVShader->setSampler2D("u_texture", m_shadowPass1);
 		m_blurVShader->setUniform1i("u_height", m_shadowPass0->getHeight());
-		m_blurVShader->setUniform1i("u_radius", m_shadowRadius);
+		//m_blurVShader->setUniform1i("u_radius", m_shadowRadius);
 		m_blurVShader->setUniform1f("u_exponent", 2.0);
 		m_shadowBatch.setShader(m_blurVShader);
 		XShape(Rect(0, 0, m_shadowPass2->getWidth(), m_shadowPass2->getHeight())).draw(&m_shadowBatch);
@@ -263,9 +263,13 @@ void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 	}
 	//m_prevX0 = x0; m_prevY0 = y0;
 
+	//batch->setBlendFunc(XBatch::BLEND_ZERO, XBatch::BLEND_SRC_COLOR);
+
 	XShape s(Rect((x0-1)*CHUNK_PXF, (y0-1)*CHUNK_PXF, m_shadowPass2->getWidth()*BLOCK_PXF, m_shadowPass2->getHeight()*BLOCK_PXF));
 	s.setFillTexture(m_shadowPass2);
 	s.draw(batch);
+	
+	//batch->setBlendFunc(XBatch::BLEND_SRC_ALPHA, XBatch::BLEND_ONE_MINUS_SRC_ALPHA);
 	
 	if(XInput::getKeyState(XD_KEY_Z))
 	{

@@ -18,14 +18,12 @@ public:
 
 	static string getWorldPath();
 
-	static b2World *getb2World();
 	static Terrain *getTerrain();
 	static TimeOfDay *getTimeOfDay();
 	static Camera *getCamera();
 
 private:
 	
-	static b2World *s_b2World;
 	static Terrain *s_terrain;
 	static TimeOfDay *s_timeOfDay;
 	static string s_worldPath;

@@ -47,9 +47,6 @@
     <ClCompile Include="..\..\source\game\world.cpp">
       <Filter>source\game</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\terrain\terraingen.cpp">
-      <Filter>source\terrain</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\environment\background.cpp">
       <Filter>source\environment</Filter>
     </ClCompile>
@@ -79,6 +76,24 @@
     </ClCompile>
     <ClCompile Include="..\..\source\animation\skeleton.cpp">
       <Filter>source\animations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\animation\animation.cpp">
+      <Filter>source\animations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\animation\bone.cpp">
+      <Filter>source\animations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\animation\slot.cpp">
+      <Filter>source\animations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\terrain\generator\terraingen.cpp">
+      <Filter>source\terrain\generator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\terrain\generator\structure.cpp">
+      <Filter>source\terrain\generator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\terrain\generator\grassland.cpp">
+      <Filter>source\terrain\generator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +129,9 @@
     </Filter>
     <Filter Include="source\animations">
       <UniqueIdentifier>{30ad5ef0-d9bb-4e01-b029-5debc3059e46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\terrain\generator">
+      <UniqueIdentifier>{f67dfadc-f3b6-4079-aa67-7fc81aa5053b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -162,9 +180,6 @@
     <ClInclude Include="..\..\source\terrain\terrainchunk.h">
       <Filter>source\terrain</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\terrain\terraingen.h">
-      <Filter>source\terrain</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\game\world.h">
       <Filter>source\game</Filter>
     </ClInclude>
@@ -206,6 +221,15 @@
     </ClInclude>
     <ClInclude Include="..\..\source\animation\bone.h">
       <Filter>source\animations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\terrain\generator\terraingen.h">
+      <Filter>source\terrain\generator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\terrain\generator\structure.h">
+      <Filter>source\terrain\generator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\terrain\generator\grassland.h">
+      <Filter>source\terrain\generator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

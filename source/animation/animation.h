@@ -9,6 +9,8 @@ class Event;
 
 class Animation
 {
+	friend class AnimationState;
+	friend class AnimationStateData;
 public:
 	Animation(spSkeleton *skeleton, spAnimation *anim);
 	void setTime(const float time);
@@ -24,25 +26,27 @@ private:
 	float m_lastTime;
 	bool m_looping;
 };
+
 class AnimationStateData
 {
+	friend class AnimationState;
 public:
-	AnimationStateData(Skeleton *data);
+	AnimationStateData(Skeleton *skeleton);
 	~AnimationStateData();
 	void setMix(const string &fromName, const string &toName, const float duration);
 	void setMix(Animation *from, Animation *to, const float duration);
 	float getMix(Animation *from, Animation *to) const;
-	spSkeletonWrapper *getSkeleton() const;
 
 private:
 	spAnimationStateData *m_self;
-	spSkeletonWrapper *m_skeleton;
+	Skeleton *m_skeleton;
 };
+
 class AnimationState
 {
-friend class spEventWrapper;
+	friend class spEventWrapper;
 public:
-	AnimationState(const AnimationStateData &data);
+	AnimationState(AnimationStateData *data);
 	~AnimationState();
 
 	void setLooping(const bool looping);

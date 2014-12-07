@@ -10,6 +10,8 @@ class Bone;
 
 class Skeleton
 {
+	friend class AnimationStateData;
+	friend class AnimationState;
 public:
 	Skeleton(const string &jsonFile, const string &atlasFile, const float scale);
 	~Skeleton();

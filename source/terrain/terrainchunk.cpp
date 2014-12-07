@@ -1,12 +1,11 @@
 #include "terrainchunk.h"
 #include "terrain.h"
-#include "terraingen.h"
 #include "constants.h"
 
 #include "game/world.h"
 #include "game/blockdata.h"
 
-#include <Box2D/Box2D.h>
+#include "generator/terraingen.h"
 
 TerrainChunk::Block TerrainChunk::s_tempBlock;
 
@@ -90,25 +89,6 @@ void TerrainChunk::init(int chunkX, int chunkY)
 	for(uint i = 0; i < 8; ++i)
 	{
 		m_nextChunk[i] = nullptr;
-	}
-
-	// Create body
-	b2BodyDef def;
-	def.type = b2_staticBody;
-	def.position.Set(chunkX * CHUNK_PXF, chunkY * CHUNK_PXF);
-	def.allowSleep = true;
-	
-	m_body = World::getb2World()->CreateBody(&def);
-	m_body->SetUserData(World::getTerrain());
-		
-	// Resize fixture grid
-	m_fixtures = new b2Fixture*[CHUNK_BLOCKS*CHUNK_BLOCKS];
-	for(uint y = 0; y < CHUNK_BLOCKS; ++y)
-	{
-		for(uint x = 0; x < CHUNK_BLOCKS; ++x)
-		{
-			m_fixtures[FIXTURE_INDEX(x, y)] = nullptr;
-		}
 	}
 }
 	
@@ -567,33 +547,17 @@ bool TerrainChunk::setBlockAt(const int x, const int y, const BlockID block, Ter
 		if(m_nextChunk[7] && x == 0 && y == 0)								m_nextChunk[7]->m_dirty = true;
 		
 		// Update shadow map
-		float opacity = 0.0f;
+		int r = 0, g = 0, b = 0, a = 0;
 		for(uint i = 0; i < TERRAIN_LAYER_COUNT; ++i)
 		{
-			opacity += BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]->id).getOpacity();
+			a += BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]->id).getOpacity()*255;
 		}
-		const uchar pixel[4] = { 0, 0, 0, 255 * min(opacity, 1.0f) };
+		const uchar pixel[4] = { min(r, 255), min(g, 255), min(b, 255), min(a, 255) };
 		m_shadowMap->updatePixmap(x, CHUNK_BLOCKS - y - 1, XPixmap(1, 1, pixel));
 
 		return true; // return true as something was changed
 	}
 	return false; // nothing changed
-}
-
-// SHADOWS
-float TerrainChunk::getOpacity(const int x, const int y)
-{
-	float opacity = 0.0f;
-	for(int i = TERRAIN_LAYER_COUNT-1; i >= 0; --i)
-	{
-		opacity += 0.0f;//BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]).getOpacity();
-	}
-	return opacity;
-}
-
-b2Vec2 tob2Vec(const Vector2 &vec)
-{
-	return b2Vec2(vec.x, vec.y);
 }
 
 // DRAWING

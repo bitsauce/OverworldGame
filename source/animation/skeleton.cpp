@@ -8,12 +8,43 @@
 #define SPINE_MESH_VERTEX_COUNT_MAX 1000
 #endif
 
+void _spAtlasPage_createTexture(spAtlasPage* self, const char* path)
+{
+	shared_ptr<XTexture> *texture = new shared_ptr<XTexture>(xd::ResourceManager::get<XTexture>(path));
+	if(texture)
+	{
+		self->rendererObject = texture;
+		self->width = (*texture)->getWidth();
+		self->height = (*texture)->getHeight();
+	}
+}
+
+void _spAtlasPage_disposeTexture(spAtlasPage* self)
+{
+	if(self->rendererObject) {
+		delete ((shared_ptr<XTexture>*)self->rendererObject);
+	}
+}
+
+char* _spUtil_readFile(const char* path, int* length)
+{
+	string content;
+	char *data = 0;
+	if(XFileSystem::ReadFile(path, content))
+	{
+		*length = content.size();
+		data = MALLOC(char, *length);
+		memcpy(data, content.c_str(), *length);
+	}
+	return data;
+}
+
 Skeleton::Skeleton(const string &jsonFile, const string &atlasFile, const float scale) :
 	m_data(nullptr),
 	m_atlas(nullptr)
 {
-	spAtlas *atlas = spAtlas_createFromFile(atlasFile.c_str(), 0);
-	spSkeletonJson* json = spSkeletonJson_create(atlas);
+	m_atlas = spAtlas_createFromFile(atlasFile.c_str(), 0);
+	spSkeletonJson* json = spSkeletonJson_create(m_atlas);
 	json->scale = scale;
 
 	m_data = spSkeletonJson_readSkeletonDataFile(json, jsonFile.c_str());

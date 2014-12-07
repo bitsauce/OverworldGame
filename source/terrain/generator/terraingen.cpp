@@ -1,32 +1,10 @@
 #include "terraingen.h"
 #include "constants.h"
+#include "grassland.h"
 
 float step(float edge, float x)
 {
 	return x < edge ? 0.0f : 1.0f;
-}
-
-BlockID Tree::getBlockAt(const int x, const int y, TerrainLayer layer)
-{
-	switch(layer)
-	{
-		case TERRAIN_LAYER_BACKGROUND:
-		{
-			if(x == 5 && y >= 5)
-			{
-				return BLOCK_WOOD;
-			}
-		}
-			
-		case TERRAIN_LAYER_FOREGROUND:
-		{
-			if(sqrt(pow(y-5, 2)+pow(x-5, 2)) < 5.0f)
-			{
-				return BLOCK_FOREGROUND_LEAF;
-			}
-		}
-	}
-	return BlockID(-1);
 }
 
 Simplex2D TerrainGen::s_noise;

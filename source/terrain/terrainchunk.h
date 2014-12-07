@@ -13,9 +13,6 @@ enum ChunkState
 	CHUNK_INITIALIZED
 };
 
-class b2Body;
-class b2Fixture;
-
 class TerrainChunk
 {
 	friend class Terrain;
@@ -38,9 +35,6 @@ public:
 	bool isBlockAt(const int x, const int y, TerrainLayer layer) const;
 	bool isBlockOccupied(const int x, const int y, TerrainLayer layer) const;
 	bool setBlockAt(const int x, const int y, const BlockID block, TerrainLayer layer);
-
-	// SHADOWS
-	float getOpacity(const int x, const int y);
 	
 	// DRAWING
 	void draw(XBatch *batch);
@@ -75,10 +69,6 @@ private:
 	
 	vector<BlockQuad> m_tmpQuads;
 	static Block s_tempBlock;
-	
-	// PHYSICS
-	b2Body *m_body;
-	b2Fixture **m_fixtures;
 	
 	// DRAWING
 	shared_ptr<XVertexBuffer> m_vbo;

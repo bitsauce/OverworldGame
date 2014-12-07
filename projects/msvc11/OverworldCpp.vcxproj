@@ -92,7 +92,10 @@
     <ResourceCompile Include="resources.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\animation\animation.cpp" />
+    <ClCompile Include="..\..\source\animation\bone.cpp" />
     <ClCompile Include="..\..\source\animation\skeleton.cpp" />
+    <ClCompile Include="..\..\source\animation\slot.cpp" />
     <ClCompile Include="..\..\source\blockentities\blockentity.cpp" />
     <ClCompile Include="..\..\source\blockentities\redcurrantbush.cpp" />
     <ClCompile Include="..\..\source\environment\background.cpp" />
@@ -114,10 +117,12 @@
     <ClCompile Include="..\..\source\scenes\worldcreate.cpp" />
     <ClCompile Include="..\..\source\scenes\mainmenu.cpp" />
     <ClCompile Include="..\..\source\scenes\worldselect.cpp" />
+    <ClCompile Include="..\..\source\terrain\generator\grassland.cpp" />
+    <ClCompile Include="..\..\source\terrain\generator\structure.cpp" />
+    <ClCompile Include="..\..\source\terrain\generator\terraingen.cpp" />
     <ClCompile Include="..\..\source\terrain\simplex.cpp" />
     <ClCompile Include="..\..\source\terrain\terrain.cpp" />
     <ClCompile Include="..\..\source\terrain\terrainchunk.cpp" />
-    <ClCompile Include="..\..\source\terrain\terraingen.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,10 +152,12 @@
     <ClInclude Include="..\..\source\scenes\worldcreate.h" />
     <ClInclude Include="..\..\source\scenes\mainmenu.h" />
     <ClInclude Include="..\..\source\scenes\worldselect.h" />
+    <ClInclude Include="..\..\source\terrain\generator\grassland.h" />
+    <ClInclude Include="..\..\source\terrain\generator\structure.h" />
+    <ClInclude Include="..\..\source\terrain\generator\terraingen.h" />
     <ClInclude Include="..\..\source\terrain\simplex.h" />
     <ClInclude Include="..\..\source\terrain\terrain.h" />
     <ClInclude Include="..\..\source\terrain\terrainchunk.h" />
-    <ClInclude Include="..\..\source\terrain\terraingen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

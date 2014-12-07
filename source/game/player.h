@@ -17,12 +17,12 @@ public:
 
 	void update();
 	void draw(XBatch *batch);
+	void changeAnimation(const string &name);
 
 	class PhysicsBody *m_body;
 
 private:
 
-	XSprite *m_sprite;
 	Camera *m_camera;
 	float m_jumpTimer;
 	
