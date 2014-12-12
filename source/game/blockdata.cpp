@@ -7,12 +7,13 @@ XTextureAtlas *BlockData::s_blockAtlas = nullptr;
 
 void BlockData::init()
 {
-	shared_ptr<XTexture> temp = xd::ResourceManager::get<XTexture>(":/sprites/tiles/tile_template.png");
-	s_blockData[BLOCK_EMPTY] = BlockData(BLOCK_EMPTY, xd::ResourceManager::get<XTexture>(":/sprites/tiles/empty_tile.png"), 0/*ITEM_GRASS_BLOCK*/, 0.0f);
-	s_blockData[BLOCK_OCCUPIED] = BlockData(BLOCK_OCCUPIED, xd::ResourceManager::get<XTexture>(":/sprites/tiles/tile_template.png"), 0/*ITEM_GRASS_BLOCK*/, 0.0f);
-	s_blockData[BLOCK_WOOD] = BlockData(BLOCK_WOOD, xd::ResourceManager::get<XTexture>(":/sprites/tiles/wood_block.png"), 0/*ITEM_GRASS_BLOCK*/, 0.75f);
-	s_blockData[BLOCK_GRASS] = BlockData(BLOCK_GRASS, xd::ResourceManager::get<XTexture>(":/sprites/tiles/grass_tile.png"), 0/*ITEM_GRASS_BLOCK*/, 1.0f);
-	s_blockData[BLOCK_STONE] = BlockData(BLOCK_STONE, xd::ResourceManager::get<XTexture>(":/sprites/tiles/stone_block.png"), 0/*ITEM_GRASS_BLOCK*/, 1.0f);
+	shared_ptr<XTexture> temp = xd::ResourceManager::get<XTexture>(":/sprites/blocks/template.png");
+	s_blockData[BLOCK_EMPTY] = BlockData(BLOCK_EMPTY, xd::ResourceManager::get<XTexture>(":/sprites/blocks/empty.png"), ITEM_NONE, 0.0f);
+	s_blockData[BLOCK_OCCUPIED] = BlockData(BLOCK_OCCUPIED, xd::ResourceManager::get<XTexture>(":/sprites/blocks/empty.png"), ITEM_NONE, 0.0f);
+	s_blockData[BLOCK_WOOD] = BlockData(BLOCK_WOOD, xd::ResourceManager::get<XTexture>(":/sprites/blocks/wood.png"), ITEM_WOOD_BLOCK, 0.75f);
+	s_blockData[BLOCK_LEAF] = BlockData(BLOCK_LEAF, xd::ResourceManager::get<XTexture>(":/sprites/blocks/leaf.png"), ITEM_LEAF_BLOCK, 0.0f);
+	s_blockData[BLOCK_GRASS] = BlockData(BLOCK_GRASS, xd::ResourceManager::get<XTexture>(":/sprites/blocks/grass.png"), ITEM_GRASS_BLOCK, 1.0f);
+	s_blockData[BLOCK_STONE] = BlockData(BLOCK_STONE, xd::ResourceManager::get<XTexture>(":/sprites/blocks/stone.png"), ITEM_STONE_BLOCK, 1.0f);
 
 	vector<shared_ptr<XTexture>> textures;
 	for(uint i = 0; i < BLOCK_COUNT; ++i)
@@ -26,15 +27,15 @@ void BlockData::init()
 BlockData::BlockData() :
 	m_id(BLOCK_EMPTY),
 	m_texture(0),
-	m_itemID(0),
+	m_item(ITEM_NONE),
 	m_opacity(0.0f)
 {
 }
 
-BlockData::BlockData(BlockID id, const shared_ptr<XTexture> &texture, const /*ItemID*/ uint i, const float opacity) :
+BlockData::BlockData(BlockID id, const shared_ptr<XTexture> &texture, const ItemID item, const float opacity) :
 	m_id(id),
 	m_texture(texture),
-	m_itemID(i),
+	m_item(item),
 	m_opacity(opacity)
 {
 }

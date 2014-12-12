@@ -40,8 +40,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 	config.update = &gameUpdate;
 	config.draw = &gameDraw;
 	config.end = &gameEnd;
-	config.workDir = "C:\\Users\\Marcus\\Documents\\GitHub\\Overworld\\";
-	//config.workDir = workDir.empty() ? _getcwd(0, 0) : workDir.c_str(); // TODO: The engine should do this by itself
+#ifdef X2D_DEBUG
+	config.workDir = "..\\..\\game\\";
+#endif
 	config.flags = flags;
 
 	if(engine->init(config) != X2D_OK)

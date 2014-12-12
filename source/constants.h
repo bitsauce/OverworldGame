@@ -45,6 +45,7 @@ DRAW_ORDER_SCENE_END,
 	DRAW_ORDER_UI
 };
 
+// BLOCK IDS
 enum BlockID
 {
 	BLOCK_EMPTY,
@@ -57,12 +58,24 @@ enum BlockID
 	BLOCK_GRASS,
 	BLOCK_STONE,
 	
-	BLOCK_FOREGROUND_LEAF,
+	BLOCK_LEAF,
 	
 	BLOCK_COUNT
 };
 
-// Terrain layers
+// ITEM IDS
+enum ItemID
+{
+	ITEM_NONE,
+
+	ITEM_WOOD_BLOCK,
+	ITEM_,
+	ITEM_GRASS_BLOCK,
+	ITEM_STONE_BLOCK,
+	ITEM_LEAF_BLOCK
+};
+
+// TERRAIN LAYER
 enum TerrainLayer
 {
 	TERRAIN_LAYER_BACKGROUND,
@@ -71,7 +84,7 @@ enum TerrainLayer
 	TERRAIN_LAYER_COUNT
 };
 
-// Directions
+// DIRECTION
 enum Direction
 {
 	NORTH		= 1 << 0,
@@ -82,7 +95,7 @@ enum Direction
 	SOUTH_WEST 	= 1 << 5,
 	WEST		= 1 << 6,
 	NORTH_WEST 	= 1 << 7,
-	NESW = NORTH | EAST | SOUTH | WEST
+	NESW		= NORTH | EAST | SOUTH | WEST
 };
 
 // SCENES

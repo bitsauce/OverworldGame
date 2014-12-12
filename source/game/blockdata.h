@@ -4,13 +4,14 @@
 #include <x2d/x2d.h>
 
 enum BlockID;
+enum ItemID;
 class b2Fixture;
 
 class BlockData
 {
 public:
 	BlockData();
-	BlockData(BlockID id, const shared_ptr<XTexture> &texture, const /*ItemID*/ uint i, const float opacity);
+	BlockData(BlockID id, const shared_ptr<XTexture> &texture, const ItemID item, const float opacity);
 	
 	void setupFixture(b2Fixture *fixture) {}
 
@@ -24,7 +25,7 @@ public:
 private:
 	BlockID m_id;
 	shared_ptr<XTexture> m_texture;
-	uint m_itemID;
+	ItemID m_item;
 	float m_opacity;
 
 	static vector<BlockData> s_blockData;

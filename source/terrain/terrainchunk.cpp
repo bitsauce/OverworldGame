@@ -226,21 +226,21 @@ void TerrainChunk::generate()
 #define BLOCK_Y4 1.00f
 
 #define BLOCK_U0 (0.0f / 6.0f)
-#define BLOCK_V0 (0.0f / 8.0f)
+#define BLOCK_V0 (0.0f / 10.0f)
 #define BLOCK_U1 (1.0f / 6.0f)
-#define BLOCK_V1 (1.0f / 8.0f)
+#define BLOCK_V1 (1.0f / 10.0f)
 #define BLOCK_U2 (2.0f / 6.0f)
-#define BLOCK_V2 (2.0f / 8.0f)
+#define BLOCK_V2 (2.0f / 10.0f)
 #define BLOCK_U3 (3.0f / 6.0f)
-#define BLOCK_V3 (3.0f / 8.0f)
+#define BLOCK_V3 (3.0f / 10.0f)
 #define BLOCK_U4 (4.0f / 6.0f)
-#define BLOCK_V4 (4.0f / 8.0f)
+#define BLOCK_V4 (4.0f / 10.0f)
 #define BLOCK_U5 (5.0f / 6.0f)
-#define BLOCK_V5 (5.0f / 8.0f)
+#define BLOCK_V5 (5.0f / 10.0f)
 #define BLOCK_U6 (6.0f / 6.0f)
-#define BLOCK_V6 (6.0f / 8.0f)
-#define BLOCK_V7 (7.0f / 8.0f)
-#define BLOCK_V8 (8.0f / 8.0f)
+#define BLOCK_V6 (6.0f / 10.0f)
+#define BLOCK_V7 (8.0f / 10.0f)
+#define BLOCK_V8 (10.0f / 10.0f)
 
 void TerrainChunk::generateVBO()
 {
@@ -282,20 +282,20 @@ void TerrainChunk::generateVBO()
 						{
 							if(block->next[1]->id == block->next[7]->id)
 							{
-								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X1, BLOCK_Y0, BLOCK_X3, BLOCK_Y1, BLOCK_U2, BLOCK_V0, BLOCK_U4, BLOCK_V1);
-								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U1, BLOCK_V7, BLOCK_U2, BLOCK_V8);
-								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y1, BLOCK_U0, BLOCK_V7, BLOCK_U1, BLOCK_V8);
+								//m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X1, BLOCK_Y0, BLOCK_X3, BLOCK_Y1, BLOCK_U2, BLOCK_V0, BLOCK_U4, BLOCK_V1);
+								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U2, BLOCK_V7, BLOCK_U4, BLOCK_V8);
+								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y2, BLOCK_U0, BLOCK_V7, BLOCK_U2, BLOCK_V8);
 							}
 							else
 							{
-								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X3, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U4, BLOCK_V1);
-								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U1, BLOCK_V7, BLOCK_U2, BLOCK_V8);
+								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U3, BLOCK_V1); // m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X3, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U4, BLOCK_V1);
+								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U2, BLOCK_V7, BLOCK_U4, BLOCK_V8);
 							}
 						}
 						else if(block->next[1]->id == block->next[7]->id)
 						{
-							m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X1, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U2, BLOCK_V0, BLOCK_U5, BLOCK_V1);
-							m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y1, BLOCK_U0, BLOCK_V7, BLOCK_U1, BLOCK_V8);
+							m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U3, BLOCK_V0, BLOCK_U5, BLOCK_V1); // m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X1, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U2, BLOCK_V0, BLOCK_U5, BLOCK_V1);
+							m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y2, BLOCK_U0, BLOCK_V7, BLOCK_U2, BLOCK_V8);
 						}
 						else
 						{
@@ -322,16 +322,16 @@ void TerrainChunk::generateVBO()
 						{
 							if(block->next[3]->id == block->next[5]->id)
 							{
-								m_tmpQuads[offset++] = BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y1, BLOCK_X4, BLOCK_Y3, BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V4);
+								//m_tmpQuads[offset++] = BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y1, BLOCK_X4, BLOCK_Y3, BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V4);
 							}
 							else
 							{
-								m_tmpQuads[offset++] = BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y1, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V5);
+								m_tmpQuads[offset++] = BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V3);
 							}
 						}
 						else if(block->next[3]->id == block->next[5]->id)
 						{
-							m_tmpQuads[offset++] = BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y3, BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V5);
+							m_tmpQuads[offset++] = BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U0, BLOCK_V3, BLOCK_U1, BLOCK_V5);
 						}
 						else
 						{
@@ -358,20 +358,20 @@ void TerrainChunk::generateVBO()
 						{
 							if(block->next[5]->id == block->next[7]->id)
 							{
-								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X1, BLOCK_Y3, BLOCK_X3, BLOCK_Y4, BLOCK_U2, BLOCK_V5, BLOCK_U4, BLOCK_V6);
-								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V6, BLOCK_U2, BLOCK_V7);
-								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U1, BLOCK_V7);
+								//m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X1, BLOCK_Y3, BLOCK_X3, BLOCK_Y4, BLOCK_U2, BLOCK_V5, BLOCK_U4, BLOCK_V6);
+								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X2, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V6, BLOCK_U4, BLOCK_V7);
+								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y2, BLOCK_X2, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U2, BLOCK_V7);
 							}
 							else
 							{
-								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X3, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U4, BLOCK_V6);
-								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V6, BLOCK_U2, BLOCK_V7);
+								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X2, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U3, BLOCK_V6);
+								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X2, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V6, BLOCK_U4, BLOCK_V7);
 							}
 						}
 						else if(block->next[5]->id == block->next[7]->id)
 						{
-							m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X1, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V5, BLOCK_U5, BLOCK_V6);
-							m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U1, BLOCK_V7);
+							m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X2, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U3, BLOCK_V5, BLOCK_U5, BLOCK_V6);
+							m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y2, BLOCK_X2, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U2, BLOCK_V7);
 						}
 						else
 						{
@@ -398,16 +398,16 @@ void TerrainChunk::generateVBO()
 						{
 							if(block->next[7]->id == block->next[5]->id)
 							{
-								m_tmpQuads[offset++] = BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y3, BLOCK_U5, BLOCK_V2, BLOCK_U6, BLOCK_V4);
+								//m_tmpQuads[offset++] = BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y3, BLOCK_U5, BLOCK_V2, BLOCK_U6, BLOCK_V4);
 							}
 							else
 							{
-								m_tmpQuads[offset++] = BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V2, BLOCK_U6, BLOCK_V5);
+								m_tmpQuads[offset++] = BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y2, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V1, BLOCK_U6, BLOCK_V3);
 							}
 						}
 						else if(block->next[7]->id == block->next[5]->id)
 						{
-							m_tmpQuads[offset++] = BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y3, BLOCK_U5, BLOCK_V2, BLOCK_U6, BLOCK_V5);
+							m_tmpQuads[offset++] = BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y2, BLOCK_U5, BLOCK_V3, BLOCK_U6, BLOCK_V5);
 						}
 						else
 						{

@@ -95,6 +95,9 @@
     <ClCompile Include="..\..\source\terrain\generator\grassland.cpp">
       <Filter>source\terrain\generator</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\items\item.cpp">
+      <Filter>source\items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -132,6 +135,9 @@
     </Filter>
     <Filter Include="source\terrain\generator">
       <UniqueIdentifier>{f67dfadc-f3b6-4079-aa67-7fc81aa5053b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\items">
+      <UniqueIdentifier>{1f91a026-3a45-40fe-ac3f-6910a38f5067}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -230,6 +236,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\terrain\generator\grassland.h">
       <Filter>source\terrain\generator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\items\item.h">
+      <Filter>source\items</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

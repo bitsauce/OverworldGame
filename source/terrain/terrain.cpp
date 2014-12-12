@@ -170,7 +170,7 @@ void Terrain::update()
 {
 	if(XInput::getKeyState(XD_LMB))
 	{
-		setBlockAt(floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_GRASS);
+		setBlockAt(floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_LEAF);
 	}
 	else if(XInput::getKeyState(XD_RMB))
 	{
