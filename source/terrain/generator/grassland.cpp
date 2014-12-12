@@ -23,7 +23,7 @@ BlockID Tree::getBlockAt(const int x, const int y, TerrainLayer layer)
 			
 		case TERRAIN_LAYER_FOREGROUND:
 		{
-			if(sqrt(pow(y-5, 2)+pow(x-5, 2)) < 5.0f)
+			if(sqrt(pow(y-5, 2)+pow(x-5, 2)) < 5.0f || sqrt(pow(y-10, 2)+pow(x-5, 2)) < 15.0f)
 			{
 				return BLOCK_LEAF;
 			}

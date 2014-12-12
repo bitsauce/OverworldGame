@@ -11,6 +11,7 @@ enum TerrainLayer;
 extern float step(float edge, float x);
 
 #include "terrain/simplex.h"
+#include <unordered_set>
 
 class TerrainGen
 {
@@ -26,7 +27,17 @@ private:
 	static uint s_seed;
 	static Simplex2D s_noise;
 	static XRandom s_random;
-	static map<uint, map<uint, BlockID*>> s_structureTiles;
+
+	struct BlockUnion
+	{
+		BlockUnion() : back(BLOCK_EMPTY), middle(BLOCK_EMPTY), front(BLOCK_EMPTY) {}
+		BlockID back;
+		BlockID middle;
+		BlockID front;
+	};
+
+	static map<int64_t, BlockUnion> s_structureMap;
+	static unordered_set<uint> s_loadedSuperChunks;
 };
 
 #endif // TERRAIN_GEN_H
