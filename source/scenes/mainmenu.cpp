@@ -1,7 +1,10 @@
 #include "mainmenu.h"
 #include "worldselect.h"
+#include "scenemanager.h"
+
 #include "gui/button.h"
 #include "gui/canvas.h"
+
 #include "game.h"
 #include "constants.h"
 
@@ -20,6 +23,7 @@ void MainMenuScene::showEvent()
 	canvas = new Canvas();
 	canvas->setSize(Vector2(1.0f, 1.0f));
 
+	// Create and setup menu buttons
 	Button *spBtn = new Button("Singleplayer", function<void()>(bind(&MainMenuScene::showWorldSelect, this)), canvas);
 	Button *mpBtn = new Button("Multiplayer", function<void()>(), canvas);
 	
@@ -31,30 +35,18 @@ void MainMenuScene::showEvent()
 	mpBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 	mpBtn->setAnchor(Vector2(0.5f, 0.5f));
 
-	m_uiObjects.push_back(spBtn);
-	m_uiObjects.push_back(mpBtn);
+	m_sceneObjects.push_back(spBtn);
+	m_sceneObjects.push_back(mpBtn);
 }
 
 void MainMenuScene::hideEvent()
 {
-	for(uint i = 0; i < m_uiObjects.size(); ++i)
-	{
-		delete m_uiObjects[i];
-	}
-	m_uiObjects.clear();
-}
-
-void MainMenuScene::drawEvent()
-{
-	Game::draw();
-}
-
-void MainMenuScene::updateEvent()
-{
-	Game::update();
+	for(uint i = 0; i < m_sceneObjects.size(); ++i)
+		delete m_sceneObjects[i];
+	m_sceneObjects.clear();
 }
 
 void MainMenuScene::showWorldSelect()
 {
-	Game::gotoScene(SCENE_WORLD_SELECT);
+	SceneManager::gotoScene(SCENE_WORLD_SELECT);
 }

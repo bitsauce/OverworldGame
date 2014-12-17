@@ -4,7 +4,7 @@
 #include "environment/timeofday.h"
 #include "environment/background.h"
 
-#include "scenes/gamescene.h"
+#include "scenes.h"
 
 #include "terrain/terrain.h"
 
@@ -26,8 +26,8 @@ void World::init()
 	s_camera = new Camera();
 	s_terrain = new Terrain;
 	s_worldFile = nullptr;
-	Player *p = new Player();
-	p->m_body->setPosition(0, 0);
+	/*Player *p = new Player();
+	p->m_body->setPosition(0, 0);*/
 	s_camera->lookAt(Vector2(0.0f, 0.0f));
 }
 
@@ -54,7 +54,7 @@ void World::create(const string &name)
 	player.inventory.addItem(@Items[ITEM_AXE_IRON]);*/
 		
 	// Show game
-	Game::gotoScene(SCENE_GAME);
+	SceneManager::gotoScene(SCENE_GAME);
 }
 
 void World::save()

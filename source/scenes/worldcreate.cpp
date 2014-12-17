@@ -23,33 +23,20 @@ void WorldCreateScene::showEvent()
 	m_worldNameEdit->setPosition(Vector2(0.0f, 0.0f));
 	m_worldNameEdit->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 	m_worldNameEdit->setAcceptFunc(function<void()>(bind(&WorldCreateScene::createWorld, this))); // TODO: Accept func should probably be connected to the canvas instead
+	m_sceneObjects.push_back(m_worldNameEdit);
 	
 	Button *createWorldButton = new Button("Create!", function<void()>(bind(&WorldCreateScene::createWorld, this)), canvas);
 	createWorldButton->setAnchor(Vector2(0.5f, 1.0f));
 	createWorldButton->setPosition(Vector2(0.0f, -0.1f));
 	createWorldButton->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
-
-	m_uiObjects.push_back(m_worldNameEdit);
-	m_uiObjects.push_back(createWorldButton);
+	m_sceneObjects.push_back(createWorldButton);
 }
 
 void WorldCreateScene::hideEvent()
 {
-	for(uint i = 0; i < m_uiObjects.size(); ++i)
-	{
-		delete m_uiObjects[i];
-	}
-	m_uiObjects.clear();
-}
-
-void WorldCreateScene::drawEvent()
-{
-	Game::draw();
-}
-
-void WorldCreateScene::updateEvent()
-{
-	Game::update();
+	for(uint i = 0; i < m_sceneObjects.size(); ++i)
+		delete m_sceneObjects[i];
+	m_sceneObjects.clear();
 }
 
 void WorldCreateScene::createWorld()

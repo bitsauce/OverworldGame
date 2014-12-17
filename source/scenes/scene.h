@@ -1,8 +1,14 @@
-#ifndef SCENES_H
-#define SCENES_H
+#ifndef SCENE_H
+#define SCENE_H
 
 class Scene
 {
+	friend class SceneManager;
+protected:
+	virtual void showEvent() { }
+	virtual void hideEvent() { }
+	//virtual void drawEvent() { }
+	//virtual void updateEvent() { }
 };
 
-#endif // SCENES_H
+#endif // SCENE_H

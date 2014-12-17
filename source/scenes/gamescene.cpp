@@ -22,20 +22,4 @@ void GameScene::hideEvent()
 	// Save and clear
 	World::save();
 	World::clear();
-	
-	for(uint i = 0; i < m_uiObjects.size(); ++i)
-	{
-		delete m_uiObjects[i];
-	}
-	m_uiObjects.clear();
-}
-
-void GameScene::drawEvent()
-{
-	Game::draw();
-}
-
-void GameScene::updateEvent()
-{
-	Game::update();
 }

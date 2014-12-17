@@ -100,9 +100,9 @@
     <ClCompile Include="..\..\source\blockentities\redcurrantbush.cpp" />
     <ClCompile Include="..\..\source\environment\background.cpp" />
     <ClCompile Include="..\..\source\environment\timeofday.cpp" />
-    <ClCompile Include="..\..\source\game.cpp" />
     <ClCompile Include="..\..\source\game\camera.cpp" />
     <ClCompile Include="..\..\source\game\debug.cpp" />
+    <ClCompile Include="..\..\source\game\gamemanager.cpp" />
     <ClCompile Include="..\..\source\game\gameobject.cpp" />
     <ClCompile Include="..\..\source\game\blockdata.cpp" />
     <ClCompile Include="..\..\source\game\player.cpp" />
@@ -115,6 +115,7 @@
     <ClCompile Include="..\..\source\physics\physicsbody.cpp" />
     <ClCompile Include="..\..\source\scenes\gamescene.cpp" />
     <ClCompile Include="..\..\source\scenes\scene.cpp" />
+    <ClCompile Include="..\..\source\scenes\scenemanager.cpp" />
     <ClCompile Include="..\..\source\scenes\worldcreate.cpp" />
     <ClCompile Include="..\..\source\scenes\mainmenu.cpp" />
     <ClCompile Include="..\..\source\scenes\worldselect.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="..\..\source\game.h" />
     <ClInclude Include="..\..\source\game\camera.h" />
     <ClInclude Include="..\..\source\game\debug.h" />
+    <ClInclude Include="..\..\source\game\gamemanager.h" />
     <ClInclude Include="..\..\source\game\gameobject.h" />
     <ClInclude Include="..\..\source\game\blockdata.h" />
     <ClInclude Include="..\..\source\game\player.h" />
@@ -149,8 +151,10 @@
     <ClInclude Include="..\..\source\gui\uiobject.h" />
     <ClInclude Include="..\..\source\items\item.h" />
     <ClInclude Include="..\..\source\physics\physicsbody.h" />
+    <ClInclude Include="..\..\source\scenes.h" />
     <ClInclude Include="..\..\source\scenes\gamescene.h" />
     <ClInclude Include="..\..\source\scenes\scene.h" />
+    <ClInclude Include="..\..\source\scenes\scenemanager.h" />
     <ClInclude Include="..\..\source\scenes\worldcreate.h" />
     <ClInclude Include="..\..\source\scenes\mainmenu.h" />
     <ClInclude Include="..\..\source\scenes\worldselect.h" />

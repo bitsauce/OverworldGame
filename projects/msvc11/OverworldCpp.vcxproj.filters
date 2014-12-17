@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="..\..\source\game.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\gui\button.cpp">
       <Filter>source\gui</Filter>
     </ClCompile>
@@ -97,6 +94,12 @@
     </ClCompile>
     <ClCompile Include="..\..\source\items\item.cpp">
       <Filter>source\items</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenes\scenemanager.cpp">
+      <Filter>source\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\game\gamemanager.cpp">
+      <Filter>source\game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -239,6 +242,15 @@
     </ClInclude>
     <ClInclude Include="..\..\source\items\item.h">
       <Filter>source\items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scenes\scenemanager.h">
+      <Filter>source\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scenes.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\gamemanager.h">
+      <Filter>source\game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

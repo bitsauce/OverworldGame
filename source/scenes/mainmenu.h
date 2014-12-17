@@ -4,8 +4,7 @@
 #include <x2d/x2d.h>
 #include "scene.h"
 
-class UiObject;
-class Button;
+class GameObject;
 
 class MainMenuScene : public Scene
 {
@@ -15,10 +14,10 @@ public:
 	void drawEvent();
 	void updateEvent();
 
+private:
 	void showWorldSelect();
 
-private:
-	vector<UiObject*> m_uiObjects;
+	vector<GameObject*> m_sceneObjects;
 };
 
 #endif // MAINMENU_H

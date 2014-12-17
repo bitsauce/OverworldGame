@@ -4,8 +4,7 @@
 #include <x2d/x2d.h>
 #include "scene.h"
 
-class UiObject;
-class Button;
+class GameObject;
 
 class WorldSelectScene : public Scene
 {
@@ -19,7 +18,7 @@ public:
 	void showCreateWorld();
 
 private:
-	vector<UiObject*> m_uiObjects;
+	vector<GameObject*> m_sceneObjects;
 };
 
 #endif // WORLD_SELECT_H

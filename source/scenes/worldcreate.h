@@ -22,7 +22,8 @@ public:
 
 private:
 	LineEdit *m_worldNameEdit;
-	vector<UiObject*> m_uiObjects;
+
+	vector<GameObject*> m_sceneObjects;
 };
 
 #endif // WORLD_CREATE_H

@@ -4,8 +4,6 @@
 #include <x2d/x2d.h>
 #include "scene.h"
 
-class UiObject;
-
 class GameScene : public Scene
 {
 public:
@@ -15,7 +13,6 @@ public:
 	void updateEvent();
 
 public:
-	vector<UiObject*> m_uiObjects;
 };
 
 #endif // GAME_SCENE_H
