@@ -37,7 +37,7 @@ public:
 	bool setBlockAt(const int x, const int y, const BlockID block, TerrainLayer layer);
 	
 	// DRAWING
-	void draw(XBatch *batch);
+	void draw(xd::GraphicsContext &gfxContext);
 
 private:
 	TerrainChunk(const TerrainChunk &) {}
@@ -68,11 +68,14 @@ private:
 	TerrainChunk *m_nextChunk[8];
 	
 	vector<BlockQuad> m_tmpQuads;
+	static xd::Vertex *s_vertices;
+	static uint *s_indices;
 	static Block s_tempBlock;
 	
 	// DRAWING
-	shared_ptr<XVertexBuffer> m_vbo;
-	shared_ptr<XTexture> m_shadowMap;
+	xd::StaticVertexBuffer m_vbo;
+	xd::StaticIndexBuffer m_ibo;
+	xd::Texture2DPtr m_shadowMap;
 	
 	// MISC
 	bool m_modified;

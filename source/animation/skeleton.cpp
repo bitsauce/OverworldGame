@@ -10,7 +10,7 @@
 
 void _spAtlasPage_createTexture(spAtlasPage* self, const char* path)
 {
-	shared_ptr<XTexture> *texture = new shared_ptr<XTexture>(xd::ResourceManager::get<XTexture>(path));
+	xd::Texture2DPtr *texture = new xd::Texture2DPtr(xd::ResourceManager::get<xd::Texture2D>(path));
 	if(texture)
 	{
 		self->rendererObject = texture;
@@ -22,7 +22,7 @@ void _spAtlasPage_createTexture(spAtlasPage* self, const char* path)
 void _spAtlasPage_disposeTexture(spAtlasPage* self)
 {
 	if(self->rendererObject) {
-		delete ((shared_ptr<XTexture>*)self->rendererObject);
+		delete ((xd::Texture2DPtr*)self->rendererObject);
 	}
 }
 
@@ -142,28 +142,30 @@ bool Skeleton::getFlipY() const
 	return m_self->flipY != 0;
 }
 
-shared_ptr<XTexture> Skeleton::getTexture() const
+xd::Texture2DPtr Skeleton::getTexture() const
 {
-	return *(shared_ptr<XTexture>*)m_atlas->pages->rendererObject;
+	return *(xd::Texture2DPtr*)m_atlas->pages->rendererObject;
 }
 
-void Skeleton::draw(XBatch *batch)
+void Skeleton::draw(xd::SpriteBatch *spriteBatch)
 {
-	if(!batch) return;
+	if(!spriteBatch) return;
 
 	spSkeleton_updateWorldTransform(m_self);
 
-	XVertex vertices[4];
+	xd::GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
+
+	xd::Vertex vertices[4];
 	for(int i = 0; i < m_self->slotCount; i++)
 	{
 		spSlot *slot = m_self->drawOrder[i];
 		spAttachment *attachment = slot->attachment;
 		if(!attachment) continue;
-		shared_ptr<XTexture> texture;
+		xd::Texture2DPtr texture;
 		if(attachment->type == SP_ATTACHMENT_REGION)
 		{
 			spRegionAttachment* regionAttachment = SUB_CAST(spRegionAttachment, attachment);
-			texture = *(shared_ptr<XTexture>*)((spAtlasRegion*)regionAttachment->rendererObject)->page->rendererObject;
+			texture = *(xd::Texture2DPtr*)((spAtlasRegion*)regionAttachment->rendererObject)->page->rendererObject;
 			spRegionAttachment_computeWorldVertices(regionAttachment, slot->skeleton->x, slot->skeleton->y, slot->bone, m_worldVertices);
 
 			uchar r = uchar(m_self->r * slot->r * 255);
@@ -171,25 +173,24 @@ void Skeleton::draw(XBatch *batch)
 			uchar b = uchar(m_self->b * slot->b * 255);
 			uchar a = uchar(m_self->a * slot->a * 255);
 
-			vertices[0].set4ub(VERTEX_COLOR, r, g, b, a);
-			vertices[0].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X1], m_worldVertices[SP_VERTEX_Y1]);
-			vertices[0].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X1], 1.0f - regionAttachment->uvs[SP_VERTEX_Y1]);
+			vertices[0].set4ub(xd::VERTEX_COLOR, r, g, b, a);
+			vertices[0].set4f(xd::VERTEX_POSITION, m_worldVertices[SP_VERTEX_X1], m_worldVertices[SP_VERTEX_Y1]);
+			vertices[0].set4f(xd::VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X1], 1.0f - regionAttachment->uvs[SP_VERTEX_Y1]);
 
-			vertices[1].set4ub(VERTEX_COLOR, r, g, b, a);
-			vertices[1].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X2], m_worldVertices[SP_VERTEX_Y2]);
-			vertices[1].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X2], 1.0f - regionAttachment->uvs[SP_VERTEX_Y2]);
+			vertices[1].set4ub(xd::VERTEX_COLOR, r, g, b, a);
+			vertices[1].set4f(xd::VERTEX_POSITION, m_worldVertices[SP_VERTEX_X2], m_worldVertices[SP_VERTEX_Y2]);
+			vertices[1].set4f(xd::VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X2], 1.0f - regionAttachment->uvs[SP_VERTEX_Y2]);
+
+			vertices[2].set4ub(xd::VERTEX_COLOR, r, g, b, a);
+			vertices[2].set4f(xd::VERTEX_POSITION, m_worldVertices[SP_VERTEX_X4], m_worldVertices[SP_VERTEX_Y4]);
+			vertices[2].set4f(xd::VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X4], 1.0f - regionAttachment->uvs[SP_VERTEX_Y4]);
 			
-			vertices[2].set4ub(VERTEX_COLOR, r, g, b, a);
-			vertices[2].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X3], m_worldVertices[SP_VERTEX_Y3]);
-			vertices[2].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X3], 1.0f - regionAttachment->uvs[SP_VERTEX_Y3]);
+			vertices[3].set4ub(xd::VERTEX_COLOR, r, g, b, a);
+			vertices[3].set4f(xd::VERTEX_POSITION, m_worldVertices[SP_VERTEX_X3], m_worldVertices[SP_VERTEX_Y3]);
+			vertices[3].set4f(xd::VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X3], 1.0f - regionAttachment->uvs[SP_VERTEX_Y3]);
 
-			vertices[3].set4ub(VERTEX_COLOR, r, g, b, a);
-			vertices[3].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X4], m_worldVertices[SP_VERTEX_Y4]);
-			vertices[3].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X4], 1.0f - regionAttachment->uvs[SP_VERTEX_Y4]);
-
-			batch->setTexture(texture);
-			batch->setPrimitive(XBatch::PRIMITIVE_TRIANGLES);
-			batch->addVertices(vertices, 4, QUAD_INDICES, 6);
+			gfxContext.setTexture(texture);
+			gfxContext.drawPrimitives(xd::GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
 		} /*else if (attachment->type == ATTACHMENT_MESH) {
 			MeshAttachment* mesh = (MeshAttachment*)attachment;
 			if (mesh->verticesCount > SPINE_MESH_VERTEX_COUNT_MAX) continue;

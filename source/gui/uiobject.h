@@ -47,7 +47,7 @@ public:
 	
 	// Update & draw
 	virtual void update();
-	virtual void draw(XBatch *batch) { }
+	virtual void draw(xd::SpriteBatch *SpriteBatch) { }
 
 protected:
 	// Parent object

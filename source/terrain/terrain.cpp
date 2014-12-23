@@ -8,7 +8,10 @@
 #define CHUNK_KEY(X, Y) ((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000)
 
 Terrain::Terrain() :
-	GameObject(DRAW_ORDER_TERRAIN)
+	GameObject(DRAW_ORDER_TERRAIN),
+	m_shadowPass0(nullptr),
+	m_shadowPass1(nullptr),
+	m_shadowPass2(nullptr)
 {
 	LOG("Initializing terrain");
 
@@ -23,12 +26,13 @@ Terrain::Terrain() :
 	m_shadowRadius = 6;
 	
 	// Load blur shaders
-	m_blurHShader = xd::ResourceManager::get<XShader>(":/shaders/blur_h");
-	m_blurVShader = xd::ResourceManager::get<XShader>(":/shaders/blur_v");
+	m_blurHShader = xd::ResourceManager::get<xd::Shader>(":/shaders/blur_h");
+	m_blurVShader = xd::ResourceManager::get<xd::Shader>(":/shaders/blur_v");
 
 	// Setup vertex format
-	vertexFormat.set(VERTEX_POSITION, 2);
-	vertexFormat.set(VERTEX_TEX_COORD, 2);
+	vertexFormat.set(xd::VERTEX_POSITION, 2);
+	vertexFormat.set(xd::VERTEX_TEX_COORD, 2);
+	TerrainChunk::s_vertices = vertexFormat.createVertices(4*12*16*16*3);
 		
 	// Get terrain seed
 	TerrainGen::s_seed = XRandom().nextInt();
@@ -40,7 +44,7 @@ Terrain::~Terrain()
 }
 
 // VERTEX FORMAT
-XVertexFormat Terrain::getVertexFormat() const
+xd::VertexFormat Terrain::getVertexFormat() const
 {
 	return vertexFormat;
 }
@@ -198,8 +202,10 @@ void Terrain::update()
 }
 	
 // DRAWING
-void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
+void Terrain::draw(xd::SpriteBatch *spriteBatch)
 {
+	xd::GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
+
 	int x0 = floor(World::getCamera()->getX()/CHUNK_PXF);
 	int y0 = floor(World::getCamera()->getY()/CHUNK_PXF);
 	int x1 = floor((World::getCamera()->getX() + World::getCamera()->getWidth())/CHUNK_PXF);
@@ -207,47 +213,47 @@ void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 	
 	//if(m_prevX0 != x0 || m_prevY0 != y0)
 	{
+		// Disable alpha blend when drawing to render targets
+		gfxContext.disable(xd::GraphicsContext::BLEND);
+
+		// Render shadows to texture (pass 0)
+		gfxContext.setRenderTarget(m_shadowPass0);
+		gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
+		xd::Vertex vertices[4];
 		for(int y = y0-2; y <= y1+2; ++y)
 		{
 			for(int x = x0-2; x <= x1+2; ++x)
 			{
-				XShape shadow(Rect((x-x0+1)*CHUNK_BLOCKS, (y-y0+1)*CHUNK_BLOCKS, CHUNK_BLOCKS, CHUNK_BLOCKS));
-				shadow.setFillTexture(getChunk(x, y, true).m_shadowMap);
-				shadow.draw(&m_shadowBatch);
+				gfxContext.setTexture(getChunk(x, y, true).m_shadowMap);
+				gfxContext.drawRectangle((x - x0 + 1) * CHUNK_BLOCKS, (y - y0 + 1) * CHUNK_BLOCKS, CHUNK_BLOCKS, CHUNK_BLOCKS);
 			}
 		}
 
-		XGraphics::disableAlphaBlending();
-
-		m_shadowPass0->clear();
-		m_shadowBatch.renderToTexture(m_shadowPass0);
-		m_shadowBatch.clear();
-
-		// Blur horizontally
-		m_shadowPass1->clear();
-		m_blurHShader->setSampler2D("u_texture", m_shadowPass0);
+		// Blur horizontally (pass 1)
+		gfxContext.setRenderTarget(m_shadowPass1);
+		gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
+		m_blurHShader->setSampler2D("u_texture", m_shadowPass0->getTexture());
 		m_blurHShader->setUniform1i("u_width", m_shadowPass0->getWidth());
-		//m_blurHShader->setUniform1i("u_radius", m_shadowRadius);
-		//m_blurHShader->setUniform1f("u_exponent", 2.0);
-		m_shadowBatch.setShader(m_blurHShader);
-		XShape(Rect(0, 0, m_shadowPass1->getWidth(), m_shadowPass1->getHeight())).draw(&m_shadowBatch);
-		m_shadowBatch.renderToTexture(m_shadowPass1);
-		m_shadowBatch.clear();
-		
-		// Blur vertically
-		m_shadowPass2->clear();
-		m_blurVShader->setSampler2D("u_texture", m_shadowPass1);
-		m_blurVShader->setUniform1i("u_height", m_shadowPass0->getHeight());
-		//m_blurVShader->setUniform1i("u_radius", m_shadowRadius);
-		m_blurVShader->setUniform1f("u_exponent", 2.0);
-		m_shadowBatch.setShader(m_blurVShader);
-		XShape(Rect(0, 0, m_shadowPass2->getWidth(), m_shadowPass2->getHeight())).draw(&m_shadowBatch);
-		m_shadowBatch.renderToTexture(m_shadowPass2);
-		m_shadowBatch.clear();
+		gfxContext.setShader(m_blurHShader);
+		gfxContext.drawRectangle(0, 0, m_shadowPass1->getWidth(), m_shadowPass1->getHeight());
 
-		XGraphics::enableAlphaBlending();
+		// Blur vertically (pass 2)
+		gfxContext.setRenderTarget(m_shadowPass2);
+		gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
+		m_blurVShader->setSampler2D("u_texture", m_shadowPass1->getTexture());
+		m_blurVShader->setUniform1i("u_height", m_shadowPass0->getHeight());
+		m_blurVShader->setUniform1f("u_exponent", 2.0);
+		gfxContext.setShader(m_blurVShader);
+		gfxContext.drawRectangle(0, 0, m_shadowPass2->getWidth(), m_shadowPass2->getHeight());
+		
+		// Re-enable alpha blending
+		gfxContext.setRenderTarget(nullptr);
+		gfxContext.setShader(nullptr);
+		gfxContext.enable(xd::GraphicsContext::BLEND);
 	}
 	
+	gfxContext.setTexture(BlockData::getBlockAtlas()->getTexture());
+	gfxContext.setProjectionMatrix(spriteBatch->getState().projectionMatix);
 	for(int y = y0-1; y <= y1+1; ++y)
 	{
 		for(int x = x0-1; x <= x1+1; ++x)
@@ -256,20 +262,20 @@ void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 			mat.scale(BLOCK_PXF, BLOCK_PXF, 1.0f);
 			mat.translate(x * CHUNK_PXF, y * CHUNK_PXF, 0.0f);
 
-			batch->pushMatrix(mat);
-			getChunk(x, y, true).draw(batch);
-			batch->popMatrix();
+			gfxContext.pushMatrix(mat);
+			getChunk(x, y, true).draw(gfxContext);
+			gfxContext.popMatrix();
 		}
 	}
+
 	//m_prevX0 = x0; m_prevY0 = y0;
 
-	//batch->setBlendFunc(XBatch::BLEND_ZERO, XBatch::BLEND_SRC_COLOR);
+	//gfxContext.setBlendFunc(xd::SpriteBatch::BLEND_ZERO, xd::SpriteBatch::BLEND_SRC_COLOR);
 
-	XShape s(Rect((x0-1)*CHUNK_PXF, (y0-1)*CHUNK_PXF, m_shadowPass2->getWidth()*BLOCK_PXF, m_shadowPass2->getHeight()*BLOCK_PXF));
-	s.setFillTexture(m_shadowPass2);
-	s.draw(batch);
+	gfxContext.setTexture(m_shadowPass2->getTexture());
+	gfxContext.drawRectangle((x0-1)*CHUNK_PXF, (y0-1)*CHUNK_PXF, m_shadowPass2->getWidth()*BLOCK_PXF, m_shadowPass2->getHeight()*BLOCK_PXF);
 	
-	//batch->setBlendFunc(XBatch::BLEND_SRC_ALPHA, XBatch::BLEND_ONE_MINUS_SRC_ALPHA);
+	//gfxContext.setBlendFunc(xd::SpriteBatch::BLEND_SRC_ALPHA, xd::SpriteBatch::BLEND_ONE_MINUS_SRC_ALPHA);
 	
 	if(XInput::getKeyState(XD_KEY_Z))
 	{
@@ -282,31 +288,23 @@ void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 
 			for(int y = y0; y <= y1; ++y)
 			{
-				XShape line(Rect(x0 * BLOCK_PXF, y * BLOCK_PXF, (x1 - x0 + 1) * BLOCK_PXF, 1.0f / World::getCamera()->getZoom()));
-				line.setFillColor(XColor(127, 127, 127, 255));
-				line.draw(batch);
+				gfxContext.drawRectangle(x0 * BLOCK_PXF, y * BLOCK_PXF, (x1 - x0 + 1) * BLOCK_PXF, 1.0f / World::getCamera()->getZoom(), xd::Color(127, 127, 127, 255));
 			}
 
 			for(int x = x0; x <= x1; ++x)
 			{
-				XShape line(Rect(x * BLOCK_PXF, y0 * BLOCK_PXF, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * BLOCK_PXF));
-				line.setFillColor(XColor(127, 127, 127, 255));
-				line.draw(batch);
+				gfxContext.drawRectangle(x * BLOCK_PXF, y0 * BLOCK_PXF, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * BLOCK_PXF, xd::Color(127, 127, 127, 255));
 			} 
 		}
 
 		for(int y = y0; y <= y1; ++y)
 		{
-			XShape line(Rect(x0 * CHUNK_PX, y * CHUNK_PX, (x1 - x0 + 1) * CHUNK_PX, 1.0f / World::getCamera()->getZoom()));
-			line.setFillColor(XColor(0, 0, 0, 255));
-			line.draw(batch);
+			gfxContext.drawRectangle(x0 * CHUNK_PX, y * CHUNK_PX, (x1 - x0 + 1) * CHUNK_PX, 1.0f / World::getCamera()->getZoom(), xd::Color(0, 0, 0, 255));
 		}
 
 		for(int x = x0; x <= x1; ++x)
 		{
-			XShape line(Rect(x * CHUNK_PX, y0 * CHUNK_PX, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * CHUNK_PX));
-			line.setFillColor(XColor(0, 0, 0, 255));
-			line.draw(batch);
+			gfxContext.drawRectangle(x * CHUNK_PX, y0 * CHUNK_PX, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * CHUNK_PX, xd::Color(0, 0, 0, 255));
 		}
 	}
 }
@@ -314,11 +312,19 @@ void Terrain::draw(/*const TerrainLayer layer, */XBatch *batch)
 
 void Terrain::resizeEvent(uint width, uint height)
 {
+	// Clear old render targets
+	delete m_shadowPass0;
+	delete m_shadowPass1;
+	delete m_shadowPass2;
+
 	// Create shadow textures
-	XPixmap pixmap((floor(width/CHUNK_PXF) + 4)*CHUNK_BLOCKS, (floor(height/CHUNK_PXF) + 4)*CHUNK_BLOCKS);
-	m_shadowPass0 = shared_ptr<XTexture>(new XTexture(pixmap));
-	m_shadowPass1 = shared_ptr<XTexture>(new XTexture(pixmap));
-	m_shadowPass2 = shared_ptr<XTexture>(new XTexture(pixmap));
-	m_shadowPass2->setFiltering(XTexture::LINEAR);
+	uint targetWidth = (floor(width/CHUNK_PXF) + 4) * CHUNK_BLOCKS;
+	uint targetHeight = (floor(height/CHUNK_PXF) + 4) * CHUNK_BLOCKS;
+	m_shadowPass0 = new xd::RenderTarget2D(targetWidth, targetHeight, 1);
+	m_shadowPass1 = new xd::RenderTarget2D(targetWidth, targetHeight, 1);
+	m_shadowPass2 = new xd::RenderTarget2D(targetWidth, targetHeight, 1);
+	m_shadowPass2->getTexture()->setFiltering(xd::Texture2D::LINEAR);
+
+	// Make sure the shadows will update
 	m_prevX0 = m_prevY0 = 0xFFFFFFFF;
 }

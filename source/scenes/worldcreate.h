@@ -4,9 +4,8 @@
 #include <x2d/x2d.h>
 #include "scene.h"
 
-class UiObject;
+class GameObject;
 class LineEdit;
-class Button;
 
 class WorldCreateScene : public Scene
 {

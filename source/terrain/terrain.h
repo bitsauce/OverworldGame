@@ -17,7 +17,7 @@ public:
 	~Terrain();
 	
 	// VERTEX FORMAT
-	XVertexFormat getVertexFormat() const;
+	xd::VertexFormat getVertexFormat() const;
 	
 	// Move?
 	void saveChunks();
@@ -40,7 +40,7 @@ public:
 	void update();
 	
 	// DRAWING
-	void draw(/*const TerrainLayer layer, */XBatch *batch);
+	void draw(xd::SpriteBatch *spriteBatch);
 
 	// WINDOW
 	void resizeEvent(uint width, uint height);
@@ -51,15 +51,14 @@ private:
 	TerrainChunk m_dummyChunk;
 	list<TerrainChunk*> chunkLoadQueue;
 	unordered_map<uint, TerrainChunk*> chunks;
-	XVertexFormat vertexFormat;
+	xd::VertexFormat vertexFormat;
 
 	// SHADOWS
-	XBatch m_shadowBatch;
-	shared_ptr<XTexture> m_shadowPass0;
-	shared_ptr<XTexture> m_shadowPass1;
-	shared_ptr<XTexture> m_shadowPass2;
-	shared_ptr<XShader> m_blurHShader;
-	shared_ptr<XShader> m_blurVShader;
+	xd::RenderTarget2D *m_shadowPass0;
+	xd::RenderTarget2D *m_shadowPass1;
+	xd::RenderTarget2D *m_shadowPass2;
+	shared_ptr<xd::Shader> m_blurHShader;
+	shared_ptr<xd::Shader> m_blurVShader;
 	int m_shadowRadius;
 	int m_prevX0, m_prevY0;
 	

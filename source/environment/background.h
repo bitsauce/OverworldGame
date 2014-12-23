@@ -13,24 +13,27 @@ public:
 	Background(TimeOfDay *timeOfDay);
 
 	void update();
-	void draw(XBatch *batch);
+	void draw(xd::SpriteBatch *SpriteBatch);
 
 private:
 	
 	TimeOfDay *m_timeOfDay;
 
-	XColor m_topColor;
-	XColor m_bottomColor;
-	XSprite *m_sun;
-	XSprite *m_moon;
+	xd::Color m_topColor;
+	xd::Color m_bottomColor;
+	xd::Sprite m_sun;
+	xd::Sprite m_moon;
 	
-	XSprite *m_hill1;
-	XSprite *m_hill2;
+	xd::Sprite m_hill1;
+	xd::Sprite m_hill2;
+
 	float m_wind;
 	float m_cloudTime;
-	XShader *m_simplexNoise;
-	XTexture *m_cloudGradient;
-	XSprite *m_cloudSprite;
+	xd::Shader *m_simplexNoise;
+	xd::Texture2D *m_cloudGradient;
+	xd::Sprite m_cloudSprite;
+
+	xd::Vertex m_vertices[4];
 };
 
 #endif // BACKGROUND_H

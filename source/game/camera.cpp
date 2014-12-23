@@ -75,7 +75,7 @@ void Camera::update()
 	}
 }
 
-void Camera::draw(XBatch *batch)
+void Camera::draw(xd::SpriteBatch *SpriteBatch)
 {
 	Vector2 center = getCenter();
 	Debug::setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));

@@ -18,7 +18,7 @@ public:
 	void *getUserData() const;
 
 	void update();
-	void draw(XBatch *batch);
+	void draw(xd::SpriteBatch *SpriteBatch);
 	void clickEvent();
 
 private:
@@ -26,10 +26,10 @@ private:
 	string m_text;
 
 	// Button font
-	shared_ptr<XFont> m_font;
+	xd::FontPtr m_font;
 
 	// Button sprite texture
-	shared_ptr<XTexture> m_btnTexture;
+	xd::Texture2DPtr m_btnTexture;
 		
 	// Button callback
 	function<void()> m_callback;
@@ -39,10 +39,10 @@ private:
 	void *m_userData;
 	
 	// Text texture
-	shared_ptr<XTexture> m_textTexture;
+	xd::Texture2DPtr m_textTexture;
 		
 	// Button sprite
-	XSprite *m_buttonSprite;
+	xd::Sprite *m_buttonSprite;
 
 	// Animation time
 	float m_animTime;

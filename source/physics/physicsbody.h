@@ -10,7 +10,7 @@ public:
 
 	void update();
 
-	void draw(XBatch *);
+	void draw(xd::SpriteBatch *);
 
 	void setPosition(const float x, const float y) { m_position.set(x, y); }
 	Vector2 getPosition() const { return m_position; }

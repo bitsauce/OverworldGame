@@ -37,7 +37,7 @@ public:
 	void update()
 	{
 		// Apply time
-		time += XGraphics::getTimeStep();
+		time += xd::Graphics::getTimeStep();
 		
 		// Debug: Time speedup (0 forwards, 9 backwards)
 		if(XInput::getKeyState(XD_KEY_0))
@@ -47,11 +47,13 @@ public:
 		else if(XInput::getKeyState(XD_KEY_9))
 		{
 			time -= 10.0f;
-		}
+		}
+
 		// Make sure time loops around to 00:00
 		if(time >= 1440.0f) {
 			time = 0.0f;
-		}
+		}
+
 		// Make sure time loops back to 24:59
 		if(time < 0.0f) {
 			time = 1440.0f;

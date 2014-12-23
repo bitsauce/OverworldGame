@@ -16,7 +16,7 @@ public:
 	Player();
 
 	void update();
-	void draw(XBatch *batch);
+	void draw(xd::SpriteBatch *SpriteBatch);
 	void changeAnimation(const string &name);
 
 	class PhysicsBody *m_body;

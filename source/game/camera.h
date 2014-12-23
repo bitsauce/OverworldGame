@@ -25,7 +25,7 @@ public:
 	float getHeight();
 
 	void update();
-	void draw(XBatch *batch);
+	void draw(xd::SpriteBatch *SpriteBatch);
 	void mouseWheelEvent(const int dt);
 
 private:

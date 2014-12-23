@@ -13,11 +13,11 @@ public:
 	void moveEvent();
 	void placeEvent();
 
-	void draw(XBatch *batch);
+	void draw(xd::SpriteBatch *SpriteBatch);
 
 private:
 	float m_growTimer;
-	XSprite *m_sprite;
+	xd::Sprite *m_sprite;
 };
 
 #endif // RED_CURRANT_BUSH_H

@@ -33,7 +33,7 @@ void GameManager::main()
 
 	XWindow::setSize(Vector2i(1280, 720));
 
-	SceneManager::gotoScene(SCENE_MAIN_MENU);//SCENE_GAME);
+	SceneManager::gotoScene(SCENE_GAME);
 }
 
 void GameManager::exit()
@@ -49,9 +49,13 @@ void GameManager::update()
 	}
 }
 
-void GameManager::draw()
+xd::SpriteBatch *GameManager::s_spriteBatch = nullptr;
+
+void GameManager::draw(xd::GraphicsContext &context)
 {
-	XBatch batch;
+	if(!s_spriteBatch) s_spriteBatch = new xd::SpriteBatch(context);
+
+	s_spriteBatch->begin();
 	bool usingSceneMat = false;
 	for(list<GameObject*>::iterator itr = s_gameObjects.begin(); itr != s_gameObjects.end(); ++itr)
 	{
@@ -59,7 +63,8 @@ void GameManager::draw()
 		{
 			if(!usingSceneMat)
 			{
-				batch.setProjectionMatrix(World::getCamera()->getProjectionMatrix());
+				s_spriteBatch->end();
+				s_spriteBatch->begin(xd::SpriteBatch::State(xd::SpriteBatch::DEFERRED, xd::BlendState::PRESET_ALPHA_BLEND, World::getCamera()->getProjectionMatrix()));
 				usingSceneMat = true;
 			}
 		}
@@ -67,26 +72,27 @@ void GameManager::draw()
 		{
 			if(usingSceneMat)
 			{
-				batch.setProjectionMatrix(Matrix4());
+				s_spriteBatch->end();
+				s_spriteBatch->begin();
 				usingSceneMat = false;
 			}
 		}
-		(*itr)->draw(&batch);
+		(*itr)->draw(s_spriteBatch);
 	}
 	
-	Debug::setVariable("FPS", util::intToStr((int)XGraphics::getFPS()));
+	Debug::setVariable("FPS", util::intToStr((int)xd::Graphics::getFPS()));
 	if(XInput::getKeyState(XD_KEY_Z))
 	{
 		if(usingSceneMat)
 		{
-			batch.setProjectionMatrix(Matrix4());
+			s_spriteBatch->end();
+			s_spriteBatch->begin();
 			usingSceneMat = false;
 		}
 
-		Debug::draw(&batch);
+		Debug::draw(s_spriteBatch);
 	}
-
-	XGraphics::renderBatch(batch);
+	s_spriteBatch->end();
 
 	SceneManager::update();
 }

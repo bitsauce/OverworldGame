@@ -65,9 +65,9 @@ void TerrainChunk::init(int chunkX, int chunkY)
 	m_x = chunkX;
 	m_y = chunkY;
 	m_nextChunksGenerated = m_dirty = m_modified = false; // not modified
-	XPixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS); // NOTE TO SELF: Concider creating this at start up and each time the chunk size change (for example in an options menu)
-	                                             // and reusing that object instead of creating a new XPixmap for every chunk.
-	m_shadowMap   = shared_ptr<XTexture>(new XTexture(pixmap));
+	xd::Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS); // NOTE TO SELF: Concider creating this at start up and each time the chunk size change (for example in an options menu)
+	                                               // and reusing that object instead of creating a new xd::Pixmap for every chunk.
+	m_shadowMap = xd::Texture2DPtr(new xd::Texture2D(pixmap));
 	
 	m_tmpQuads.resize(12);
 
@@ -193,9 +193,9 @@ void TerrainChunk::generate()
 		if(m_nextChunk[7]) m_nextChunk[7]->m_dirty = true;*/
 
 		// Load shadow map // TODO: Optimize by not calling updatePixmap 16*16*3 times
-		for(int y = 0; y <= CHUNK_BLOCKS; ++y)
+		for(int y = 0; y < CHUNK_BLOCKS; ++y)
 		{
-			for(int x = 0; x <= CHUNK_BLOCKS; ++x)
+			for(int x = 0; x < CHUNK_BLOCKS; ++x)
 			{
 				float opacity = 0.0f;
 				for(uint i = 0; i < TERRAIN_LAYER_COUNT; ++i)
@@ -203,7 +203,7 @@ void TerrainChunk::generate()
 					opacity += BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]->id).getOpacity();
 				}
 				const uchar pixel[4] = { 0, 0, 0, 255 * min(opacity, 1.0f) };
-				m_shadowMap->updatePixmap(x, CHUNK_BLOCKS - y - 1, XPixmap(1, 1, pixel));
+				m_shadowMap->updatePixmap(x, CHUNK_BLOCKS - y - 1, xd::Pixmap(1, 1, pixel));
 			}
 		}
 			
@@ -242,11 +242,14 @@ void TerrainChunk::generate()
 #define BLOCK_V7 (8.0f / 10.0f)
 #define BLOCK_V8 (10.0f / 10.0f)
 
+xd::Vertex *TerrainChunk::s_vertices = nullptr;
+uint *TerrainChunk::s_indices = new uint[6*12*16*16*3];
+
 void TerrainChunk::generateVBO()
 {
-	// Create new vbo
-	m_vbo = shared_ptr<XVertexBuffer>(new XVertexBuffer(World::getTerrain()->getVertexFormat()));
-		
+	// Allocate vertices
+	uint vertexCount = 0, indexCount = 0;
+
 	// Load all vertex data
 	for(int y = 0; y < CHUNK_BLOCKS; ++y)
 	{
@@ -255,8 +258,6 @@ void TerrainChunk::generateVBO()
 			for(int i = 0; i < TERRAIN_LAYER_COUNT; ++i)
 			{
 				Block *block = m_blocks[BLOCK_INDEX(x, y, i)];
-
-				XVertexFormat &format = World::getTerrain()->getVertexFormat();
 
 				uint offset = 0;
 				if(block->id > BLOCK_OCCUPIED)
@@ -416,45 +417,42 @@ void TerrainChunk::generateVBO()
 					}
 				}
 
-				if(offset > 0)
+				if(offset > 1)
 				{
-					/*if(needsSorting)*/ sort(m_tmpQuads.begin(), m_tmpQuads.begin() + offset);
+					sort(m_tmpQuads.begin(), m_tmpQuads.begin() + offset);
+				}
 
-					XVertex *vertices = format.createVertices(4*offset); // TODO: Hmm... I don't like that this is so performance demanding as it is. I should concider a different way to represent vertices and vertex formats
-					uint *indices = new uint[6*m_tmpQuads.size()];
-					for(uint i = 0; i < offset; ++i)
-					{
-						BlockQuad &quad = m_tmpQuads[i];
+				for(uint i = 0; i < offset; ++i)
+				{
+					BlockQuad &quad = m_tmpQuads[i];
 
-						vertices[0 + i*4].set4f(VERTEX_POSITION, x + quad.x0, y + quad.y0);
-						vertices[1 + i*4].set4f(VERTEX_POSITION, x + quad.x1, y + quad.y0);
-						vertices[2 + i*4].set4f(VERTEX_POSITION, x + quad.x1, y + quad.y1);
-						vertices[3 + i*4].set4f(VERTEX_POSITION, x + quad.x0, y + quad.y1);
-	
-						XTextureRegion region = BlockData::getBlockAtlas()->get(quad.block, quad.u0, quad.v0, quad.u1, quad.v1);
-						vertices[0 + i*4].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
-						vertices[1 + i*4].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv1.y);
-						vertices[2 + i*4].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
-						vertices[3 + i*4].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
+					s_vertices[0 + vertexCount].set4f(xd::VERTEX_POSITION, x + quad.x0, y + quad.y0);
+					s_vertices[1 + vertexCount].set4f(xd::VERTEX_POSITION, x + quad.x1, y + quad.y0);
+					s_vertices[2 + vertexCount].set4f(xd::VERTEX_POSITION, x + quad.x1, y + quad.y1);
+					s_vertices[3 + vertexCount].set4f(xd::VERTEX_POSITION, x + quad.x0, y + quad.y1);
+					xd::TextureRegion region = BlockData::getBlockAtlas()->get(quad.block, quad.u0, quad.v0, quad.u1, quad.v1);
+					s_vertices[0 + vertexCount].set4f(xd::VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
+					s_vertices[1 + vertexCount].set4f(xd::VERTEX_TEX_COORD, region.uv1.x, region.uv1.y);
+					s_vertices[2 + vertexCount].set4f(xd::VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
+					s_vertices[3 + vertexCount].set4f(xd::VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
 		
-						indices[0 + i*6] = QUAD_INDICES[0] + i*4;
-						indices[1 + i*6] = QUAD_INDICES[1] + i*4;
-						indices[2 + i*6] = QUAD_INDICES[2] + i*4;
-						indices[3 + i*6] = QUAD_INDICES[3] + i*4;
-						indices[4 + i*6] = QUAD_INDICES[4] + i*4;
-						indices[5 + i*6] = QUAD_INDICES[5] + i*4;
-					}
-					m_vbo->addVertices(vertices, 4*offset, indices, 6*offset);
+					s_indices[0 + indexCount] = xd::QUAD_INDICES[0] + vertexCount;
+					s_indices[1 + indexCount] = xd::QUAD_INDICES[1] + vertexCount;
+					s_indices[2 + indexCount] = xd::QUAD_INDICES[2] + vertexCount;
+					s_indices[3 + indexCount] = xd::QUAD_INDICES[3] + vertexCount;
+					s_indices[4 + indexCount] = xd::QUAD_INDICES[4] + vertexCount;
+					s_indices[5 + indexCount] = xd::QUAD_INDICES[5] + vertexCount;
 
-					delete[] vertices;
-					delete[] indices;
+					vertexCount += 4;
+					indexCount += 6;
 				}
 			}
 		}
 	}
 	
-	// Make the chunk buffer static
-	m_vbo->setBufferType(XVertexBuffer::STATIC_BUFFER);
+	// Create static vbo
+	m_vbo.setData(s_vertices, vertexCount);
+	m_ibo.setData(s_indices, indexCount);
 }
 	
 void TerrainChunk::serialize(XFileWriter &ss)
@@ -552,7 +550,7 @@ bool TerrainChunk::setBlockAt(const int x, const int y, const BlockID block, Ter
 			a += BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]->id).getOpacity()*255;
 		}
 		const uchar pixel[4] = { min(r, 255), min(g, 255), min(b, 255), min(a, 255) };
-		m_shadowMap->updatePixmap(x, CHUNK_BLOCKS - y - 1, XPixmap(1, 1, pixel));
+		m_shadowMap->updatePixmap(x, CHUNK_BLOCKS - y - 1, xd::Pixmap(1, 1, pixel));
 
 		return true; // return true as something was changed
 	}
@@ -560,7 +558,7 @@ bool TerrainChunk::setBlockAt(const int x, const int y, const BlockID block, Ter
 }
 
 // DRAWING
-void TerrainChunk::draw(XBatch *batch)
+void TerrainChunk::draw(xd::GraphicsContext &gfxContext)
 {
 	if(m_state == CHUNK_INITIALIZED)
 	{
@@ -591,8 +589,6 @@ void TerrainChunk::draw(XBatch *batch)
 		}
 		
 		// Draw blocks
-		batch->setTexture(BlockData::getBlockAtlas()->getTexture());
-		batch->setPrimitive(XBatch::PRIMITIVE_TRIANGLES);
-		batch->addVertexBuffer(m_vbo);
+		gfxContext.drawIndexedPrimitives(xd::GraphicsContext::PRIMITIVE_TRIANGLES, &m_vbo, &m_ibo);
 	}
 }

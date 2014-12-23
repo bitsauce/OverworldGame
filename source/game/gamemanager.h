@@ -10,11 +10,13 @@ public:
 	static void main();
 	static void exit();
 	static void update();
-	static void draw();
+	static void draw(xd::GraphicsContext &context);
 
 private:
 	static void addGameObject(GameObject *object);
 	static void removeGameObject(GameObject *object);
+
+	static xd::SpriteBatch *s_spriteBatch;
 
 	static list<GameObject*> s_gameObjects;
 };

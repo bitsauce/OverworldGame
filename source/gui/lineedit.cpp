@@ -5,7 +5,7 @@ LineEdit::LineEdit(UiObject *parent) :
 	UiObject(parent),
 	m_cursorPos(0),
 	m_cursorTime(0.0f),
-	m_font(xd::ResourceManager::get<XFont>(UI_MENU_BUTTON_FONT))
+	m_font(xd::ResourceManager::get<xd::Font>(UI_MENU_BUTTON_FONT))
 {
 	XInput::addKeyboardListener(this);
 }
@@ -22,14 +22,14 @@ string LineEdit::getText() const
 
 void LineEdit::update()
 {
-	m_cursorTime -= XGraphics::getTimeStep();
+	m_cursorTime -= xd::Graphics::getTimeStep();
 	if(m_cursorTime <= 0.0f)
 	{
 		m_cursorTime = 1.0f;
 	}
 }
 
-void LineEdit::draw(XBatch *batch)
+void LineEdit::draw(xd::SpriteBatch *spriteBatch)
 {
 	Vector2 position = getPosition();
 	Vector2 size = getSize();
@@ -37,14 +37,13 @@ void LineEdit::draw(XBatch *batch)
 	// Apply center alignment
 	position.x += (size.x - m_font->getStringWidth(m_text))*0.5f;
 		
-	m_font->setColor(XColor(255, 255, 255, 255));
-	m_font->draw(batch, position, m_text);
+	m_font->setColor(xd::Color(255, 255, 255, 255));
+	m_font->draw(spriteBatch, position, m_text);
 	
+	xd::GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 	if(m_cursorTime >= 0.5f)
 	{
-		XShape shape(Rect(position.x + m_font->getStringWidth(m_text.substr(0, m_cursorPos)), position.y, 2, m_font->getStringHeight("")));
-		shape.setFillColor(XColor(0, 0, 0, 255));
-		shape.draw(batch);
+		gfxContext.drawRectangle(position.x + m_font->getStringWidth(m_text.substr(0, m_cursorPos)), position.y, 2, m_font->getStringHeight(""), xd::Color(0, 0, 0, 255));
 	}
 }
 

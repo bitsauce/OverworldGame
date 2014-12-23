@@ -129,6 +129,6 @@ void PhysicsBody::update()
 	}
 }
 
-void PhysicsBody::draw(XBatch *batch)
+void PhysicsBody::draw(xd::SpriteBatch *SpriteBatch)
 {
 }

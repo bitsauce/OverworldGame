@@ -17,7 +17,7 @@ public:
 	string getText() const;
 
 	void update();
-	void draw(XBatch *batch);
+	void draw(xd::SpriteBatch *SpriteBatch);
 
 private:
 	void insertAt(const uint at, const string &str);
@@ -26,7 +26,7 @@ private:
 	void keyPressEvent(const XVirtualKey key);
 	void keyReleaseEvent(const XVirtualKey key);
 
-	shared_ptr<XFont> m_font;
+	xd::FontPtr m_font;
 	string m_text;
 	int m_cursorPos;
 	float m_cursorTime;

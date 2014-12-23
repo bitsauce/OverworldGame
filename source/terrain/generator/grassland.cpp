@@ -9,7 +9,7 @@ Tree::Tree()
 	originY = 15;
 }
 
-BlockID Tree::getBlockAt(const int x, const int y, TerrainLayer layer)
+BlockID Tree::getBlockAt(const int x, const int y, const TerrainLayer layer)
 {
 	switch(layer)
 	{

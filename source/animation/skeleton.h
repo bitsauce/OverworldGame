@@ -25,9 +25,9 @@ public:
 	bool getFlipX() const;
 	void setFlipY(const bool flip);
 	bool getFlipY() const;
-	shared_ptr<XTexture> getTexture() const;
+	xd::Texture2DPtr getTexture() const;
 
-	void draw(XBatch *batch);
+	void draw(xd::SpriteBatch *spriteBatch);
 
 private:
 	spSkeleton *m_self;

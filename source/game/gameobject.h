@@ -13,7 +13,7 @@ public:
 	virtual ~GameObject();
 
 	virtual void update() { }
-	virtual void draw(XBatch*) { }
+	virtual void draw(xd::SpriteBatch*) { }
 
 private:
 	const DrawOrder m_depth;

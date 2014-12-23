@@ -7,7 +7,7 @@ class Debug
 {
 public:
 	static void setVariable(const string &name, const string &value);
-	static void draw(XBatch *batch);
+	static void draw(xd::SpriteBatch *SpriteBatch);
 
 private:
 	static map<string, string> s_variables;

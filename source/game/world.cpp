@@ -24,7 +24,7 @@ void World::init()
 	s_timeOfDay = new TimeOfDay();
 	new Background(s_timeOfDay);
 	s_camera = new Camera();
-	s_terrain = new Terrain;
+	s_terrain = new Terrain();
 	s_worldFile = nullptr;
 	/*Player *p = new Player();
 	p->m_body->setPosition(0, 0);*/

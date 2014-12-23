@@ -1,8 +1,6 @@
 varying vec2 v_texCoord;
 
 uniform sampler2D u_texture;
-//uniform float u_exponent;
-uniform int u_radius;
 uniform int u_width;
 
 void main()

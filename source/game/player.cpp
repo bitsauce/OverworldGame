@@ -23,7 +23,7 @@ Player::Player() :
 
 	// Load skeleton data
 	m_skeleton = new Skeleton(":/sprites/characters/anim/skeleton.json", ":/sprites/characters/anim/skeleton.atlas", 1.0f);
-	m_skeleton->getTexture()->setFiltering(XTexture::LINEAR);
+	m_skeleton->getTexture()->setFiltering(xd::Texture2D::LINEAR);
 	
 	// Setup spine animations // TODO: Move to global scope (as only one copy of this is strictly neseccary)
 	AnimationStateData *data = new AnimationStateData(m_skeleton);
@@ -89,7 +89,7 @@ void Player::update()
 			{
 				m_body->applyImpulse(Vector2(0.0f, -0.75f));
 			}
-			m_jumpTimer += XGraphics::getTimeStep();
+			m_jumpTimer += xd::Graphics::getTimeStep();
 		}
 		else if(m_body->isContact(WEST) || m_body->isContact(EAST)) // Wall jumping
 		{
@@ -173,10 +173,10 @@ void Player::update()
 	m_camera->lookAt(m_body->getPosition());
 
 	m_skeleton->setPosition(m_body->getPosition() + Vector2(m_body->getSize().x*0.5f, 48.0f));
-	m_animation->update(XGraphics::getTimeStep());
+	m_animation->update(xd::Graphics::getTimeStep());
 }
 
-void Player::draw(XBatch *batch)
+void Player::draw(xd::SpriteBatch *SpriteBatch)
 {
-	m_skeleton->draw(batch);
+	m_skeleton->draw(SpriteBatch);
 }
