@@ -112,6 +112,7 @@
     <ClCompile Include="..\..\source\gui\lineedit.cpp" />
     <ClCompile Include="..\..\source\gui\uiobject.cpp" />
     <ClCompile Include="..\..\source\items\item.cpp" />
+    <ClCompile Include="..\..\source\mobs\zombie.cpp" />
     <ClCompile Include="..\..\source\physics\physicsbody.cpp" />
     <ClCompile Include="..\..\source\scenes\gamescene.cpp" />
     <ClCompile Include="..\..\source\scenes\scene.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="..\..\source\gui\lineedit.h" />
     <ClInclude Include="..\..\source\gui\uiobject.h" />
     <ClInclude Include="..\..\source\items\item.h" />
+    <ClInclude Include="..\..\source\mobs\zombie.h" />
     <ClInclude Include="..\..\source\physics\physicsbody.h" />
     <ClInclude Include="..\..\source\scenes.h" />
     <ClInclude Include="..\..\source\scenes\gamescene.h" />

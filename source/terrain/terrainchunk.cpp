@@ -68,8 +68,6 @@ void TerrainChunk::init(int chunkX, int chunkY)
 	xd::Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS); // NOTE TO SELF: Concider creating this at start up and each time the chunk size change (for example in an options menu)
 	                                               // and reusing that object instead of creating a new xd::Pixmap for every chunk.
 	m_shadowMap = xd::Texture2DPtr(new xd::Texture2D(pixmap));
-	
-	m_tmpQuads.resize(12);
 
 	// Initialize blocks
 	m_blocks = new Block*[(CHUNK_BLOCKS+2)*(CHUNK_BLOCKS+2)*TERRAIN_LAYER_COUNT];
@@ -259,172 +257,269 @@ void TerrainChunk::generateVBO()
 			{
 				Block *block = m_blocks[BLOCK_INDEX(x, y, i)];
 
-				uint offset = 0;
+				// block->next:
+				// 0 | 1 | 2
+				// 7 |   | 3
+				// 6 | 5 | 4
+
 				if(block->id > BLOCK_OCCUPIED)
 				{
-					m_tmpQuads[offset++] = BlockQuad(block->id, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V1, BLOCK_U5, BLOCK_V5);
+					m_tmpQuads.push_back(BlockQuad(block->id, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V1, BLOCK_U5, BLOCK_V5));
 				}
 	
 				// Bottom-right outer-corner
-				if(block->next[0]->id > BLOCK_OCCUPIED)
+				if(block->next[0]->id > BLOCK_OCCUPIED && block->next[0]->id != block->next[1]->id && block->next[0]->id != block->next[7]->id)
 				{
-					if(block->next[0]->id != block->id && block->next[0]->id != block->next[1]->id && block->next[0]->id != block->next[7]->id)
+					if(block->next[0]->id > block->id)
 					{
-						m_tmpQuads[offset++] = BlockQuad(block->next[0]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y1, BLOCK_U5, BLOCK_V0, BLOCK_U6, BLOCK_V1);
+						m_tmpQuads.push_back(BlockQuad(block->next[0]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y1, BLOCK_U5, BLOCK_V0, BLOCK_U6, BLOCK_V1));
+					}
+					else if(block->next[0]->id < block->id)
+					{
+						m_tmpQuads.push_front(BlockQuad(block->next[0]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y1, BLOCK_U5, BLOCK_V0, BLOCK_U6, BLOCK_V1));
 					}
 				}
 
 				// Draw bottom edge
 				if(block->next[1]->id > BLOCK_OCCUPIED)
 				{
-					if(block->next[1]->id != block->id)
+					if(block->next[1]->id > block->id)
 					{
 						if(block->next[1]->id == block->next[3]->id)
 						{
 							if(block->next[1]->id == block->next[7]->id)
 							{
-								//m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X1, BLOCK_Y0, BLOCK_X3, BLOCK_Y1, BLOCK_U2, BLOCK_V0, BLOCK_U4, BLOCK_V1);
-								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U2, BLOCK_V7, BLOCK_U4, BLOCK_V8);
-								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y2, BLOCK_U0, BLOCK_V7, BLOCK_U2, BLOCK_V8);
+								if(block->next[1]->id > block->id)
+								{
+									m_tmpQuads.push_back(BlockQuad(block->next[1]->id, BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U2, BLOCK_V7, BLOCK_U4, BLOCK_V8));
+									m_tmpQuads.push_back(BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y2, BLOCK_U0, BLOCK_V7, BLOCK_U2, BLOCK_V8));
+								}
 							}
 							else
 							{
-								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U3, BLOCK_V1); // m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X3, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U4, BLOCK_V1);
-								m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U2, BLOCK_V7, BLOCK_U4, BLOCK_V8);
+								m_tmpQuads.push_back(BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U3, BLOCK_V1));
+								m_tmpQuads.push_back(BlockQuad(block->next[1]->id, BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U2, BLOCK_V7, BLOCK_U4, BLOCK_V8));
 							}
 						}
 						else if(block->next[1]->id == block->next[7]->id)
 						{
-							m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U3, BLOCK_V0, BLOCK_U5, BLOCK_V1); // m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X1, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U2, BLOCK_V0, BLOCK_U5, BLOCK_V1);
-							m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y2, BLOCK_U0, BLOCK_V7, BLOCK_U2, BLOCK_V8);
+							m_tmpQuads.push_back(BlockQuad(block->next[1]->id, BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U3, BLOCK_V0, BLOCK_U5, BLOCK_V1));
+							m_tmpQuads.push_back(BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y2, BLOCK_U0, BLOCK_V7, BLOCK_U2, BLOCK_V8));
 						}
 						else
 						{
-							m_tmpQuads[offset++] = BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U5, BLOCK_V1);
+							m_tmpQuads.push_back(BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U5, BLOCK_V1));
+						}
+					}
+					else if(block->next[1]->id < block->id)
+					{
+						if(block->next[1]->id == block->next[3]->id)
+						{
+							if(block->next[1]->id == block->next[7]->id)
+							{
+								if(block->next[1]->id > block->id)
+								{
+									m_tmpQuads.push_front(BlockQuad(block->next[1]->id, BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U2, BLOCK_V7, BLOCK_U4, BLOCK_V8));
+									m_tmpQuads.push_front(BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y2, BLOCK_U0, BLOCK_V7, BLOCK_U2, BLOCK_V8));
+								}
+							}
+							else
+							{
+								m_tmpQuads.push_front(BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U3, BLOCK_V1));
+								m_tmpQuads.push_front(BlockQuad(block->next[1]->id, BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U2, BLOCK_V7, BLOCK_U4, BLOCK_V8));
+							}
+						}
+						else if(block->next[1]->id == block->next[7]->id)
+						{
+							m_tmpQuads.push_front(BlockQuad(block->next[1]->id, BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U3, BLOCK_V0, BLOCK_U5, BLOCK_V1));
+							m_tmpQuads.push_front(BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y2, BLOCK_U0, BLOCK_V7, BLOCK_U2, BLOCK_V8));
+						}
+						else
+						{
+							m_tmpQuads.push_front(BlockQuad(block->next[1]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U5, BLOCK_V1));
 						}
 					}
 				}
 
 				// Bottom-left outer-corner
-				if(block->next[2]->id > BLOCK_OCCUPIED)
+				if(block->next[2]->id > BLOCK_OCCUPIED && block->next[2]->id != block->next[1]->id && block->next[2]->id != block->next[3]->id)
 				{
-					if(block->next[2]->id != block->id && block->next[2]->id != block->next[1]->id && block->next[2]->id != block->next[3]->id)
+					if(block->next[2]->id > block->id)
 					{
-						m_tmpQuads[offset++] = BlockQuad(block->next[2]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U0, BLOCK_V0, BLOCK_U1, BLOCK_V1);
+						m_tmpQuads.push_back(BlockQuad(block->next[2]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U0, BLOCK_V0, BLOCK_U1, BLOCK_V1));
+					}
+					else if(block->next[2]->id < block->id)
+					{
+						m_tmpQuads.push_front(BlockQuad(block->next[2]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U0, BLOCK_V0, BLOCK_U1, BLOCK_V1));
 					}
 				}
 
 				// Draw left edge
 				if(block->next[3]->id > BLOCK_OCCUPIED)
 				{
-					if(block->next[3]->id != block->id)
+					if(block->next[3]->id > block->id)
 					{
 						if(block->next[3]->id == block->next[1]->id)
 						{
-							if(block->next[3]->id == block->next[5]->id)
+							if(block->next[3]->id != block->next[5]->id)
 							{
-								//m_tmpQuads[offset++] = BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y1, BLOCK_X4, BLOCK_Y3, BLOCK_U0, BLOCK_V2, BLOCK_U1, BLOCK_V4);
-							}
-							else
-							{
-								m_tmpQuads[offset++] = BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V3);
+								m_tmpQuads.push_back(BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V3));
 							}
 						}
 						else if(block->next[3]->id == block->next[5]->id)
 						{
-							m_tmpQuads[offset++] = BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U0, BLOCK_V3, BLOCK_U1, BLOCK_V5);
+							m_tmpQuads.push_back(BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U0, BLOCK_V3, BLOCK_U1, BLOCK_V5));
 						}
 						else
 						{
-							m_tmpQuads[offset++] = BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V5);
+							m_tmpQuads.push_back(BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V5));
+						}
+					}
+					else if(block->next[3]->id < block->id)
+					{
+						if(block->next[3]->id == block->next[1]->id)
+						{
+							if(block->next[3]->id != block->next[5]->id)
+							{
+								m_tmpQuads.push_front(BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V3));
+							}
+						}
+						else if(block->next[3]->id == block->next[5]->id)
+						{
+							m_tmpQuads.push_front(BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U0, BLOCK_V3, BLOCK_U1, BLOCK_V5));
+						}
+						else
+						{
+							m_tmpQuads.push_front(BlockQuad(block->next[3]->id, BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V5));
 						}
 					}
 				}
 
 				// Top-left outer-corner
-				if(block->next[4]->id > BLOCK_OCCUPIED)
+				if(block->next[4]->id > BLOCK_OCCUPIED && block->next[4]->id != block->next[3]->id && block->next[4]->id != block->next[5]->id)
 				{
-					if(block->next[4]->id != block->id && block->next[4]->id != block->next[3]->id && block->next[4]->id != block->next[5]->id)
+					if(block->next[4]->id > block->id)
 					{
-						m_tmpQuads[offset++] = BlockQuad(block->next[4]->id, BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V5, BLOCK_U1, BLOCK_V6);
+						m_tmpQuads.push_back(BlockQuad(block->next[4]->id, BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V5, BLOCK_U1, BLOCK_V6));
+					}
+					else if(block->next[4]->id < block->id)
+					{
+						m_tmpQuads.push_front(BlockQuad(block->next[4]->id, BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V5, BLOCK_U1, BLOCK_V6));
 					}
 				}
 
 				// Draw top edge
 				if(block->next[5]->id > BLOCK_OCCUPIED)
 				{
-					if(block->next[5]->id != block->id)
+					if(block->next[5]->id > block->id)
 					{
 						if(block->next[5]->id == block->next[3]->id)
 						{
 							if(block->next[5]->id == block->next[7]->id)
 							{
-								//m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X1, BLOCK_Y3, BLOCK_X3, BLOCK_Y4, BLOCK_U2, BLOCK_V5, BLOCK_U4, BLOCK_V6);
-								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X2, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V6, BLOCK_U4, BLOCK_V7);
-								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y2, BLOCK_X2, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U2, BLOCK_V7);
+								m_tmpQuads.push_back(BlockQuad(block->next[5]->id, BLOCK_X2, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V6, BLOCK_U4, BLOCK_V7));
+								m_tmpQuads.push_back(BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y2, BLOCK_X2, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U2, BLOCK_V7));
 							}
 							else
 							{
-								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X2, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U3, BLOCK_V6);
-								m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X2, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V6, BLOCK_U4, BLOCK_V7);
+								m_tmpQuads.push_back(BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X2, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U3, BLOCK_V6));
+								m_tmpQuads.push_back(BlockQuad(block->next[5]->id, BLOCK_X2, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V6, BLOCK_U4, BLOCK_V7));
 							}
 						}
 						else if(block->next[5]->id == block->next[7]->id)
 						{
-							m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X2, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U3, BLOCK_V5, BLOCK_U5, BLOCK_V6);
-							m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y2, BLOCK_X2, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U2, BLOCK_V7);
+							m_tmpQuads.push_back(BlockQuad(block->next[5]->id, BLOCK_X2, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U3, BLOCK_V5, BLOCK_U5, BLOCK_V6));
+							m_tmpQuads.push_back(BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y2, BLOCK_X2, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U2, BLOCK_V7));
 						}
 						else
 						{
-							m_tmpQuads[offset++] = BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U5, BLOCK_V6);
+							m_tmpQuads.push_back(BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U5, BLOCK_V6));
+						}
+					}
+					else if(block->next[5]->id < block->id)
+					{
+						if(block->next[5]->id == block->next[3]->id)
+						{
+							if(block->next[5]->id == block->next[7]->id)
+							{
+								m_tmpQuads.push_front(BlockQuad(block->next[5]->id, BLOCK_X2, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V6, BLOCK_U4, BLOCK_V7));
+								m_tmpQuads.push_front(BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y2, BLOCK_X2, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U2, BLOCK_V7));
+							}
+							else
+							{
+								m_tmpQuads.push_front(BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X2, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U3, BLOCK_V6));
+								m_tmpQuads.push_front(BlockQuad(block->next[5]->id, BLOCK_X2, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V6, BLOCK_U4, BLOCK_V7));
+							}
+						}
+						else if(block->next[5]->id == block->next[7]->id)
+						{
+							m_tmpQuads.push_front(BlockQuad(block->next[5]->id, BLOCK_X2, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U3, BLOCK_V5, BLOCK_U5, BLOCK_V6));
+							m_tmpQuads.push_front(BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y2, BLOCK_X2, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U2, BLOCK_V7));
+						}
+						else
+						{
+							m_tmpQuads.push_front(BlockQuad(block->next[5]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U5, BLOCK_V6));
 						}
 					}
 				}
 	
 				// Top-right outer-corner
-				if(block->next[6]->id > BLOCK_OCCUPIED)
+				if(block->next[6]->id > BLOCK_OCCUPIED && block->next[6]->id != block->next[7]->id && block->next[6]->id != block->next[5]->id)
 				{
-					if(block->next[6]->id != block->id && block->next[6]->id != block->next[7]->id && block->next[6]->id != block->next[5]->id)
+					if(block->next[6]->id > block->id)
 					{
-						m_tmpQuads[offset++] = BlockQuad(block->next[6]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V5, BLOCK_U6, BLOCK_V6);
+						m_tmpQuads.push_back(BlockQuad(block->next[6]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V5, BLOCK_U6, BLOCK_V6));
+					}
+					else if(block->next[6]->id < block->id)
+					{
+						m_tmpQuads.push_front(BlockQuad(block->next[6]->id, BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V5, BLOCK_U6, BLOCK_V6));
 					}
 				}
 
 				// Draw right edge
 				if(block->next[7]->id > BLOCK_OCCUPIED)
 				{
-					if(block->next[7]->id != block->id)
+					if(block->next[7]->id > block->id)
 					{
 						if(block->next[7]->id == block->next[1]->id)
 						{
-							if(block->next[7]->id == block->next[5]->id)
+							if(block->next[7]->id != block->next[5]->id)
 							{
-								//m_tmpQuads[offset++] = BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y1, BLOCK_X1, BLOCK_Y3, BLOCK_U5, BLOCK_V2, BLOCK_U6, BLOCK_V4);
-							}
-							else
-							{
-								m_tmpQuads[offset++] = BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y2, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V1, BLOCK_U6, BLOCK_V3);
+								m_tmpQuads.push_back(BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y2, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V1, BLOCK_U6, BLOCK_V3));
 							}
 						}
 						else if(block->next[7]->id == block->next[5]->id)
 						{
-							m_tmpQuads[offset++] = BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y2, BLOCK_U5, BLOCK_V3, BLOCK_U6, BLOCK_V5);
+							m_tmpQuads.push_back(BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y2, BLOCK_U5, BLOCK_V3, BLOCK_U6, BLOCK_V5));
 						}
 						else
 						{
-							m_tmpQuads[offset++] = BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V1, BLOCK_U6, BLOCK_V5);
+							m_tmpQuads.push_back(BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V1, BLOCK_U6, BLOCK_V5));
+						}
+					}
+					else if(block->next[7]->id < block->id)
+					{
+						if(block->next[7]->id == block->next[1]->id)
+						{
+							if(block->next[7]->id != block->next[5]->id)
+							{
+								m_tmpQuads.push_front(BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y2, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V1, BLOCK_U6, BLOCK_V3));
+							}
+						}
+						else if(block->next[7]->id == block->next[5]->id)
+						{
+							m_tmpQuads.push_front(BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y2, BLOCK_U5, BLOCK_V3, BLOCK_U6, BLOCK_V5));
+						}
+						else
+						{
+							m_tmpQuads.push_front(BlockQuad(block->next[7]->id, BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V1, BLOCK_U6, BLOCK_V5));
 						}
 					}
 				}
 
-				if(offset > 1)
+				for(list<BlockQuad>::iterator itr = m_tmpQuads.begin(); itr != m_tmpQuads.end(); ++itr)
 				{
-					sort(m_tmpQuads.begin(), m_tmpQuads.begin() + offset);
-				}
-
-				for(uint i = 0; i < offset; ++i)
-				{
-					BlockQuad &quad = m_tmpQuads[i];
+					BlockQuad &quad = *itr;
 
 					s_vertices[0 + vertexCount].set4f(xd::VERTEX_POSITION, x + quad.x0, y + quad.y0);
 					s_vertices[1 + vertexCount].set4f(xd::VERTEX_POSITION, x + quad.x1, y + quad.y0);
@@ -446,6 +541,8 @@ void TerrainChunk::generateVBO()
 					vertexCount += 4;
 					indexCount += 6;
 				}
+
+				m_tmpQuads.clear();
 			}
 		}
 	}

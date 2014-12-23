@@ -73,6 +73,16 @@ void Camera::update()
 	if(XInput::getKeyState(XD_KEY_DOWN)) {
 		m_position.y += 16.0f/m_zoom;
 	}
+	if(XInput::getKeyState(XD_KEY_Plus)) {
+		Vector2 center = getCenter();
+		m_zoom *= 2.0f;
+		lookAt(center);
+	}
+	if(XInput::getKeyState(XD_KEY_Hyphen)) {
+		Vector2 center = getCenter();
+		m_zoom *= 0.5f;
+		lookAt(center);
+	}
 }
 
 void Camera::draw(xd::SpriteBatch *SpriteBatch)

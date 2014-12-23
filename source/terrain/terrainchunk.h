@@ -67,7 +67,7 @@ private:
 	Block **m_blocks;
 	TerrainChunk *m_nextChunk[8];
 	
-	vector<BlockQuad> m_tmpQuads;
+	list<BlockQuad> m_tmpQuads;
 	static xd::Vertex *s_vertices;
 	static uint *s_indices;
 	static Block s_tempBlock;

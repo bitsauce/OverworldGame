@@ -101,6 +101,9 @@
     <ClCompile Include="..\..\source\game\gamemanager.cpp">
       <Filter>source\game</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\mobs\zombie.cpp">
+      <Filter>source\mobs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -251,6 +254,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\game\gamemanager.h">
       <Filter>source\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\mobs\zombie.h">
+      <Filter>source\mobs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

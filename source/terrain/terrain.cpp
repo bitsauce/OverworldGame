@@ -274,7 +274,8 @@ void Terrain::draw(xd::SpriteBatch *spriteBatch)
 
 	gfxContext.setTexture(m_shadowPass2->getTexture());
 	gfxContext.drawRectangle((x0-1)*CHUNK_PXF, (y0-1)*CHUNK_PXF, m_shadowPass2->getWidth()*BLOCK_PXF, m_shadowPass2->getHeight()*BLOCK_PXF);
-	
+	gfxContext.setTexture(nullptr);
+
 	//gfxContext.setBlendFunc(xd::SpriteBatch::BLEND_SRC_ALPHA, xd::SpriteBatch::BLEND_ONE_MINUS_SRC_ALPHA);
 	
 	if(XInput::getKeyState(XD_KEY_Z))
