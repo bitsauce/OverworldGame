@@ -57,6 +57,7 @@ private:
 	xd::RenderTarget2D *m_shadowPass0;
 	xd::RenderTarget2D *m_shadowPass1;
 	xd::RenderTarget2D *m_shadowPass2;
+	xd::RenderTarget2D *m_shadowRenderTarget;
 	shared_ptr<xd::Shader> m_blurHShader;
 	shared_ptr<xd::Shader> m_blurVShader;
 	int m_shadowRadius;

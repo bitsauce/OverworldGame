@@ -13,9 +13,12 @@
 #include "scenes.h"
 #include "game/gamemanager.h"
 
+#include "lighting/spotlight.h"
+
 UiObject *canvas = nullptr;
 
 list<GameObject*> GameManager::s_gameObjects;
+Spotlight *GameManager::s_spotlight = nullptr;
 
 void GameManager::main()
 {
@@ -41,8 +44,13 @@ void GameManager::exit()
 	delete canvas;
 }
 
+XRandom random;
 void GameManager::update()
 {
+	if(XInput::getKeyState(XD_KEY_L)) {
+		s_spotlight = new Spotlight(Vector2(0.0f, 0.0f), 64, xd::Color(random.nextInt(255), random.nextInt(255), random.nextInt(255), 255));
+	}
+	if(s_spotlight) s_spotlight->m_position.set(XInput::getPosition().x, XInput::getPosition().y);
 	for(list<GameObject*>::iterator itr = s_gameObjects.begin(); itr != s_gameObjects.end(); ++itr)
 	{
 		(*itr)->update();

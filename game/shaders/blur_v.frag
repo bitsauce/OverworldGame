@@ -17,4 +17,5 @@ void main()
 	gl_FragColor += texture2D(u_texture, vec2(v_texCoord.x, v_texCoord.y + 3.0*(1.0/u_height))) * 0.0540540541;
 	gl_FragColor += texture2D(u_texture, vec2(v_texCoord.x, v_texCoord.y + 4.0*(1.0/u_height))) * 0.0162162162;
 	gl_FragColor.a = pow(gl_FragColor.a, u_exponent);
+	gl_FragColor = mix(vec4(1.0), vec4(0.0), gl_FragColor.a);
 }

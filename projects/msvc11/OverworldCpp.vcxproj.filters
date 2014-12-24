@@ -104,6 +104,12 @@
     <ClCompile Include="..\..\source\mobs\zombie.cpp">
       <Filter>source\mobs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\lighting\spotlight.cpp">
+      <Filter>source\lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\blockentities\torch.cpp">
+      <Filter>source\blockentities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -144,6 +150,9 @@
     </Filter>
     <Filter Include="source\items">
       <UniqueIdentifier>{1f91a026-3a45-40fe-ac3f-6910a38f5067}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\lighting">
+      <UniqueIdentifier>{533c6540-500f-49f1-8b01-a8401b317f0f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -257,6 +266,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\mobs\zombie.h">
       <Filter>source\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\lighting\spotlight.h">
+      <Filter>source\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\blockentities\torch.h">
+      <Filter>source\blockentities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

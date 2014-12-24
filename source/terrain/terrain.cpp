@@ -4,6 +4,7 @@
 #include "game/camera.h"
 #include "game/world.h"
 #include "game/blockdata.h"
+#include "lighting/spotlight.h"
 
 #define CHUNK_KEY(X, Y) ((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000)
 
@@ -11,7 +12,8 @@ Terrain::Terrain() :
 	GameObject(DRAW_ORDER_TERRAIN),
 	m_shadowPass0(nullptr),
 	m_shadowPass1(nullptr),
-	m_shadowPass2(nullptr)
+	m_shadowPass2(nullptr),
+	m_shadowRenderTarget(nullptr)
 {
 	LOG("Initializing terrain");
 
@@ -33,7 +35,8 @@ Terrain::Terrain() :
 	vertexFormat.set(xd::VERTEX_POSITION, 2);
 	vertexFormat.set(xd::VERTEX_TEX_COORD, 2);
 	TerrainChunk::s_vertices = vertexFormat.createVertices(4*12*16*16*3);
-		
+	Spotlight::s_vertices = new xd::Vertex[SPOTLIGHT_SEGMENTS+2];
+	
 	// Get terrain seed
 	TerrainGen::s_seed = XRandom().nextInt();
 }
@@ -270,16 +273,32 @@ void Terrain::draw(xd::SpriteBatch *spriteBatch)
 
 	//m_prevX0 = x0; m_prevY0 = y0;
 
-	//gfxContext.setBlendFunc(xd::SpriteBatch::BLEND_ZERO, xd::SpriteBatch::BLEND_SRC_COLOR);
+	gfxContext.setRenderTarget(m_shadowRenderTarget);
+	gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
+	gfxContext.disable(xd::GraphicsContext::BLEND);
 
 	gfxContext.setTexture(m_shadowPass2->getTexture());
 	gfxContext.drawRectangle((x0-1)*CHUNK_PXF, (y0-1)*CHUNK_PXF, m_shadowPass2->getWidth()*BLOCK_PXF, m_shadowPass2->getHeight()*BLOCK_PXF);
-	gfxContext.setTexture(nullptr);
+	
+	gfxContext.enable(xd::GraphicsContext::BLEND);
 
-	//gfxContext.setBlendFunc(xd::SpriteBatch::BLEND_SRC_ALPHA, xd::SpriteBatch::BLEND_ONE_MINUS_SRC_ALPHA);
+
+	gfxContext.setTexture(nullptr);
+	gfxContext.setBlendState(xd::BlendState::PRESET_ADDITIVE);
+
+	Spotlight::drawAll(gfxContext);
+
+	gfxContext.setRenderTarget(nullptr);
+	
+	gfxContext.setProjectionMatrix(Matrix4());
+	gfxContext.setBlendState(xd::BlendState::PRESET_MULTIPLY);
+	gfxContext.setTexture(m_shadowRenderTarget->getTexture());
+	gfxContext.drawRectangle(0, 0, m_shadowRenderTarget->getWidth(), m_shadowRenderTarget->getHeight());
+	gfxContext.setBlendState(xd::BlendState::PRESET_ALPHA_BLEND);
 	
 	if(XInput::getKeyState(XD_KEY_Z))
 	{
+		gfxContext.setTexture(nullptr);
 		if(XInput::getKeyState(XD_KEY_B))
 		{
 			int x0 = floor(World::getCamera()->getX()/BLOCK_PXF);
@@ -317,6 +336,7 @@ void Terrain::resizeEvent(uint width, uint height)
 	delete m_shadowPass0;
 	delete m_shadowPass1;
 	delete m_shadowPass2;
+	delete m_shadowRenderTarget;
 
 	// Create shadow textures
 	uint targetWidth = (floor(width/CHUNK_PXF) + 4) * CHUNK_BLOCKS;
@@ -325,6 +345,7 @@ void Terrain::resizeEvent(uint width, uint height)
 	m_shadowPass1 = new xd::RenderTarget2D(targetWidth, targetHeight, 1);
 	m_shadowPass2 = new xd::RenderTarget2D(targetWidth, targetHeight, 1);
 	m_shadowPass2->getTexture()->setFiltering(xd::Texture2D::LINEAR);
+	m_shadowRenderTarget = new xd::RenderTarget2D(width, height);
 
 	// Make sure the shadows will update
 	m_prevX0 = m_prevY0 = 0xFFFFFFFF;

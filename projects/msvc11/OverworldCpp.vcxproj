@@ -98,6 +98,7 @@
     <ClCompile Include="..\..\source\animation\slot.cpp" />
     <ClCompile Include="..\..\source\blockentities\blockentity.cpp" />
     <ClCompile Include="..\..\source\blockentities\redcurrantbush.cpp" />
+    <ClCompile Include="..\..\source\blockentities\torch.cpp" />
     <ClCompile Include="..\..\source\environment\background.cpp" />
     <ClCompile Include="..\..\source\environment\timeofday.cpp" />
     <ClCompile Include="..\..\source\game\camera.cpp" />
@@ -112,6 +113,7 @@
     <ClCompile Include="..\..\source\gui\lineedit.cpp" />
     <ClCompile Include="..\..\source\gui\uiobject.cpp" />
     <ClCompile Include="..\..\source\items\item.cpp" />
+    <ClCompile Include="..\..\source\lighting\spotlight.cpp" />
     <ClCompile Include="..\..\source\mobs\zombie.cpp" />
     <ClCompile Include="..\..\source\physics\physicsbody.cpp" />
     <ClCompile Include="..\..\source\scenes\gamescene.cpp" />
@@ -135,6 +137,7 @@
     <ClInclude Include="..\..\source\animation\slot.h" />
     <ClInclude Include="..\..\source\blockentities\blockentity.h" />
     <ClInclude Include="..\..\source\blockentities\redcurrantbush.h" />
+    <ClInclude Include="..\..\source\blockentities\torch.h" />
     <ClInclude Include="..\..\source\constants.h" />
     <ClInclude Include="..\..\source\environment\background.h" />
     <ClInclude Include="..\..\source\environment\timeofday.h" />
@@ -151,6 +154,7 @@
     <ClInclude Include="..\..\source\gui\lineedit.h" />
     <ClInclude Include="..\..\source\gui\uiobject.h" />
     <ClInclude Include="..\..\source\items\item.h" />
+    <ClInclude Include="..\..\source\lighting\spotlight.h" />
     <ClInclude Include="..\..\source\mobs\zombie.h" />
     <ClInclude Include="..\..\source\physics\physicsbody.h" />
     <ClInclude Include="..\..\source\scenes.h" />
