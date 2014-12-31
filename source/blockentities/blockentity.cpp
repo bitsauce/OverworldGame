@@ -26,7 +26,7 @@ void BlockEntity::move(const int x, const int y)
 	{
 		for(int x = 0; x < m_width && m_placeable; ++x)
 		{
-			BlockID id = World::getTerrain()->getBlockAt(m_x + x, m_y + y, TERRAIN_LAYER_SCENE);
+			BlockID id = World::getTerrain()->getBlockAt(m_x + x, m_y + y, TERRAIN_LAYER_MIDDLE);
 			if(id >= BLOCK_OCCUPIED)
 			{
 				m_placeable = false;
@@ -45,7 +45,7 @@ bool BlockEntity::place()
 		{
 			for(int x = 0; x < m_width && m_placeable; ++x)
 			{
-				World::getTerrain()->setBlockAt(m_x + x, m_y + y, BLOCK_OCCUPIED, TERRAIN_LAYER_SCENE);
+				World::getTerrain()->setBlockAt(m_x + x, m_y + y, BLOCK_OCCUPIED, TERRAIN_LAYER_MIDDLE);
 			}
 		}
 

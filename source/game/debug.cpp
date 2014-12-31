@@ -23,9 +23,9 @@ void Debug::update()
 	if(!m_enabled) return;
 
 	// Block painting
-	TerrainLayer layer = TERRAIN_LAYER_SCENE;
-	if(XInput::getKeyState(XD_KEY_LSHIFT)) layer = TERRAIN_LAYER_FOREGROUND;
-	if(XInput::getKeyState(XD_KEY_LCONTROL)) layer = TERRAIN_LAYER_BACKGROUND;
+	TerrainLayer layer = TERRAIN_LAYER_MIDDLE;
+	if(XInput::getKeyState(XD_KEY_LSHIFT)) layer = TERRAIN_LAYER_FRONT;
+	if(XInput::getKeyState(XD_KEY_LCONTROL)) layer = TERRAIN_LAYER_BACK;
 	if(XInput::getKeyState(XD_LMB))
 	{
 		m_terrain->setBlockAt(floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), m_block, layer);

@@ -36,9 +36,9 @@ BlockID TerrainGen::getBlockAt(const int x, const int y, const TerrainLayer laye
 		BlockUnion &blocks = s_structureMap[blockKey];
 		switch(layer)
 		{
-		case TERRAIN_LAYER_BACKGROUND: if(blocks.back > 0) block = blocks.back; break;
-		case TERRAIN_LAYER_SCENE: if(blocks.middle > 0) block = blocks.middle; break;
-		case TERRAIN_LAYER_FOREGROUND: if(blocks.front > 0) block = blocks.front; break;
+		case TERRAIN_LAYER_BACK: if(blocks.back > 0) block = blocks.back; break;
+		case TERRAIN_LAYER_MIDDLE: if(blocks.middle > 0) block = blocks.middle; break;
+		case TERRAIN_LAYER_FRONT: if(blocks.front > 0) block = blocks.front; break;
 		}
 	}
 	return block;
@@ -48,7 +48,7 @@ BlockID TerrainGen::getGroundAt(const int x, const int y, const TerrainLayer lay
 {
 	switch(layer)
 	{
-		case TERRAIN_LAYER_SCENE:
+		case TERRAIN_LAYER_MIDDLE:
 		{
 			float h = s_noise.valueAt(x*0.1f, y + 710239) * 7;
 
@@ -60,7 +60,7 @@ BlockID TerrainGen::getGroundAt(const int x, const int y, const TerrainLayer lay
 		}
 		break;
 			
-		case TERRAIN_LAYER_BACKGROUND:
+		case TERRAIN_LAYER_BACK:
 		{
 			if(y > 20)
 			{
@@ -141,9 +141,9 @@ void TerrainGen::loadStructures(const int superChunkX, const int superChunkY)
 					{
 						switch(i)
 						{
-						case TERRAIN_LAYER_BACKGROUND: blocks.back = structTile; break;
-						case TERRAIN_LAYER_SCENE: blocks.middle = structTile; break;
-						case TERRAIN_LAYER_FOREGROUND: blocks.front = structTile; break;
+						case TERRAIN_LAYER_BACK: blocks.back = structTile; break;
+						case TERRAIN_LAYER_MIDDLE: blocks.middle = structTile; break;
+						case TERRAIN_LAYER_FRONT: blocks.front = structTile; break;
 						}
 					}
 				}
@@ -160,7 +160,7 @@ void TerrainGen::loadStructures(const int superChunkX, const int superChunkY)
 int TerrainGen::getGroundHeight(const int x)
 {
 	int y = 0;
-	while(getGroundAt(x, y++, TERRAIN_LAYER_SCENE) == BLOCK_EMPTY);
+	while(getGroundAt(x, y++, TERRAIN_LAYER_MIDDLE) == BLOCK_EMPTY);
 	return y-1;
 }
 	
