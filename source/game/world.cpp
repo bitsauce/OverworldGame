@@ -4,8 +4,6 @@
 #include "environment/timeofday.h"
 #include "environment/background.h"
 
-#include "scenes.h"
-
 #include "terrain/terrain.h"
 
 #include "game.h"

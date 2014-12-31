@@ -8,8 +8,6 @@
 #define UI_MENU_BUTTON_FONT "Arial Bold 27"
 #define UI_MENU_BUTTON_TEXTURE ":/sprites/gui/menu_button.png"
 
-#define MAX_LOADED_CHUNKS 128
-
 // TERRAIN CONSTANTS
 #define BLOCK_PX 16
 #define BLOCK_PXF float(BLOCK_PX)

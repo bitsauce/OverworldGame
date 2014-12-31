@@ -1,17 +1,8 @@
 #include "gamemanager.h"
-#include "debug.h"
-#include "world.h"
-#include "camera.h"
-#include "constants.h"
-#include "blockdata.h"
+#include "game.h"
 
 #include "gui/canvas.h"
 #include "gui/uiobject.h"
-
-#include "game/camera.h"
-
-#include "scenes.h"
-#include "game/gamemanager.h"
 
 #include "lighting/spotlight.h"
 

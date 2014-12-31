@@ -17,8 +17,8 @@ Terrain::Terrain() :
 {
 	LOG("Initializing terrain");
 
-	//setDrawPass(DRAW_ORDER_TERRAIN, true);
-	//setDrawPass(DRAW_ORDER_TERRAIN_SHADOWS, true);
+	// Set max chunks to some value
+	setMaxChunks(512);
 	
 	// Resize textures
 	XWindow::addWindowListener(this);
@@ -58,7 +58,7 @@ void Terrain::saveChunks()
 	LOG("Saving chunks...");
 
 	// Iterate loaded chunks
-	for(unordered_map<uint, TerrainChunk*>::iterator itr = chunks.begin(); itr != chunks.end(); ++itr)
+	for(unordered_map<uint, TerrainChunk*>::iterator itr = m_chunks.begin(); itr != m_chunks.end(); ++itr)
 	{
 		// Skip unmodified chunks
 		if(!itr->second->m_modified) continue;
@@ -108,14 +108,14 @@ bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRA
 TerrainChunk &Terrain::getChunk(const int chunkX, const int chunkY, const bool generate)
 {
 	uint key = CHUNK_KEY(chunkX, chunkY);
-	if(chunks.find(key) == chunks.end())
+	if(m_chunks.find(key) == m_chunks.end())
 	{
 		if(generate)
 		{
 			LOG("Chunk [%i, %i] added to queue", chunkX, chunkY);
 			
 			// Create new chunk
-			TerrainChunk *chunk = 0;
+			TerrainChunk *chunk = nullptr;
 			string chunkFile = World::getWorldPath() + "/chunks/" + util::intToStr(key) + ".obj";
 			if(util::fileExists(chunkFile))
 			{
@@ -123,32 +123,56 @@ TerrainChunk &Terrain::getChunk(const int chunkX, const int chunkY, const bool g
 			}
 			else
 			{
-				chunk = new TerrainChunk(chunkX, chunkY);
+				if(m_chunkPool.empty())
+				{
+					// Grab a chunk offscreen
+					int x0 = floor(World::getCamera()->getX()/CHUNK_PXF);
+					int y0 = floor(World::getCamera()->getY()/CHUNK_PXF);
+					int x1 = floor((World::getCamera()->getX() + World::getCamera()->getWidth())/CHUNK_PXF);
+					int y1 = floor((World::getCamera()->getY() + World::getCamera()->getHeight())/CHUNK_PXF);
+					for(unordered_map<uint, TerrainChunk*>::iterator itr = m_chunks.begin(); itr != m_chunks.end(); ++itr)
+					{
+						int x = itr->second->getX(), y = itr->second->getY();
+						if(x < x0 || x > x1 || y < y0 || y > y1)
+						{
+							chunk = itr->second;
+							break;
+						}
+					}
+				}
+				else
+				{
+					// Grab a chunk from the pool
+					chunk = m_chunkPool.back();
+					m_chunkPool.pop_back();
+				}
+
+				chunk->load(chunkX, chunkY);
 
 				// Inform all neightbour chunks about the new guy
-				if(isChunk(chunkX,   chunkY+1)) { chunks[CHUNK_KEY(chunkX,   chunkY+1)]->m_nextChunk[0] = chunk; chunk->m_nextChunk[4] = chunks[CHUNK_KEY(chunkX,   chunkY+1)]; }
-				if(isChunk(chunkX-1, chunkY+1)) { chunks[CHUNK_KEY(chunkX-1, chunkY+1)]->m_nextChunk[1] = chunk; chunk->m_nextChunk[5] = chunks[CHUNK_KEY(chunkX-1, chunkY+1)]; }
-				if(isChunk(chunkX-1, chunkY  )) { chunks[CHUNK_KEY(chunkX-1, chunkY  )]->m_nextChunk[2] = chunk; chunk->m_nextChunk[6] = chunks[CHUNK_KEY(chunkX-1, chunkY  )]; }
-				if(isChunk(chunkX-1, chunkY-1)) { chunks[CHUNK_KEY(chunkX-1, chunkY-1)]->m_nextChunk[3] = chunk; chunk->m_nextChunk[7] = chunks[CHUNK_KEY(chunkX-1, chunkY-1)]; }
-				if(isChunk(chunkX,   chunkY-1)) { chunks[CHUNK_KEY(chunkX,   chunkY-1)]->m_nextChunk[4] = chunk; chunk->m_nextChunk[0] = chunks[CHUNK_KEY(chunkX,   chunkY-1)]; }
-				if(isChunk(chunkX+1, chunkY-1)) { chunks[CHUNK_KEY(chunkX+1, chunkY-1)]->m_nextChunk[5] = chunk; chunk->m_nextChunk[1] = chunks[CHUNK_KEY(chunkX+1, chunkY-1)]; }
-				if(isChunk(chunkX+1, chunkY  )) { chunks[CHUNK_KEY(chunkX+1, chunkY  )]->m_nextChunk[6] = chunk; chunk->m_nextChunk[2] = chunks[CHUNK_KEY(chunkX+1, chunkY  )]; }
-				if(isChunk(chunkX+1, chunkY+1)) { chunks[CHUNK_KEY(chunkX+1, chunkY+1)]->m_nextChunk[7] = chunk; chunk->m_nextChunk[3] = chunks[CHUNK_KEY(chunkX+1, chunkY+1)]; }
+				if(isChunk(chunkX,   chunkY+1)) { m_chunks[CHUNK_KEY(chunkX,   chunkY+1)]->m_nextChunk[0] = chunk; chunk->m_nextChunk[4] = m_chunks[CHUNK_KEY(chunkX,   chunkY+1)]; }
+				if(isChunk(chunkX-1, chunkY+1)) { m_chunks[CHUNK_KEY(chunkX-1, chunkY+1)]->m_nextChunk[1] = chunk; chunk->m_nextChunk[5] = m_chunks[CHUNK_KEY(chunkX-1, chunkY+1)]; }
+				if(isChunk(chunkX-1, chunkY  )) { m_chunks[CHUNK_KEY(chunkX-1, chunkY  )]->m_nextChunk[2] = chunk; chunk->m_nextChunk[6] = m_chunks[CHUNK_KEY(chunkX-1, chunkY  )]; }
+				if(isChunk(chunkX-1, chunkY-1)) { m_chunks[CHUNK_KEY(chunkX-1, chunkY-1)]->m_nextChunk[3] = chunk; chunk->m_nextChunk[7] = m_chunks[CHUNK_KEY(chunkX-1, chunkY-1)]; }
+				if(isChunk(chunkX,   chunkY-1)) { m_chunks[CHUNK_KEY(chunkX,   chunkY-1)]->m_nextChunk[4] = chunk; chunk->m_nextChunk[0] = m_chunks[CHUNK_KEY(chunkX,   chunkY-1)]; }
+				if(isChunk(chunkX+1, chunkY-1)) { m_chunks[CHUNK_KEY(chunkX+1, chunkY-1)]->m_nextChunk[5] = chunk; chunk->m_nextChunk[1] = m_chunks[CHUNK_KEY(chunkX+1, chunkY-1)]; }
+				if(isChunk(chunkX+1, chunkY  )) { m_chunks[CHUNK_KEY(chunkX+1, chunkY  )]->m_nextChunk[6] = chunk; chunk->m_nextChunk[2] = m_chunks[CHUNK_KEY(chunkX+1, chunkY  )]; }
+				if(isChunk(chunkX+1, chunkY+1)) { m_chunks[CHUNK_KEY(chunkX+1, chunkY+1)]->m_nextChunk[7] = chunk; chunk->m_nextChunk[3] = m_chunks[CHUNK_KEY(chunkX+1, chunkY+1)]; }
 			}
 				
-			chunks[key] = chunk;
+			m_chunks[key] = chunk;
 			chunk->generate();
 			
 			return *chunk;
 		}
 		return m_dummyChunk; // Create dummy
 	}
-	return *chunks[key];
+	return *m_chunks[key];
 }
 
 bool Terrain::isChunk(const int chunkX, const int chunkY) const
 {
-	return chunks.find(CHUNK_KEY(chunkX, chunkY)) != chunks.end();
+	return m_chunks.find(CHUNK_KEY(chunkX, chunkY)) != m_chunks.end();
 }
 	
 void Terrain::loadVisibleChunks()
@@ -171,7 +195,16 @@ void Terrain::loadVisibleChunks()
 	}
 	chunkLoadQueue.clear();
 }
-	
+
+void Terrain::setMaxChunks(const uint maxChunkCount)
+{
+	m_chunkPool.resize(maxChunkCount);
+	for(uint i = 0; i < maxChunkCount; ++i)
+	{
+		m_chunkPool[i] = new TerrainChunk();
+	}
+}
+
 // UPDATING
 void Terrain::update()
 {
@@ -192,7 +225,7 @@ void Terrain::update()
 		chunkLoadQueue.pop_back();
 	}
 
-	World::getDebug()->setVariable("Chunks", util::intToStr(chunks.size()));
+	World::getDebug()->setVariable("Chunks", util::intToStr(m_chunks.size()));
 }
 	
 // DRAWING

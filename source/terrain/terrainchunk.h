@@ -21,7 +21,7 @@ public:
 	TerrainChunk(int chunkX, int chunkY);
 	
 	// SERIALIZATION
-	void init(int chunkX, int chunkY);
+	void load(int chunkX, int chunkY);
 	void generate();
 	void generateVBO();
 	void serialize(XFileWriter &ss);

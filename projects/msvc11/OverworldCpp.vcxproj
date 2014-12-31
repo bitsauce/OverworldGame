@@ -157,7 +157,6 @@
     <ClInclude Include="..\..\source\lighting\spotlight.h" />
     <ClInclude Include="..\..\source\mobs\zombie.h" />
     <ClInclude Include="..\..\source\physics\physicsbody.h" />
-    <ClInclude Include="..\..\source\scenes.h" />
     <ClInclude Include="..\..\source\scenes\gamescene.h" />
     <ClInclude Include="..\..\source\scenes\scene.h" />
     <ClInclude Include="..\..\source\scenes\scenemanager.h" />

@@ -35,6 +35,7 @@ public:
 	TerrainChunk &getChunk(const int chunkX, const int chunkY, const bool generate = false);
 	bool isChunk(const int chunkX, const int chunkY) const;
 	void loadVisibleChunks();
+	void setMaxChunks(const uint maxChunkCount);
 	
 	// UPDATING
 	void update();
@@ -48,9 +49,11 @@ public:
 private:
 	// Terrain chunks
 	//vector<TerrainChunk*> loadedChunks;
+	vector<TerrainChunk*> m_chunkPool;
+	uint m_chunkCount;
 	TerrainChunk m_dummyChunk;
 	list<TerrainChunk*> chunkLoadQueue;
-	unordered_map<uint, TerrainChunk*> chunks;
+	unordered_map<uint, TerrainChunk*> m_chunks;
 	xd::VertexFormat vertexFormat;
 
 	// SHADOWS

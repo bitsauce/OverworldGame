@@ -252,14 +252,8 @@
     <ClInclude Include="..\..\source\terrain\generator\grassland.h">
       <Filter>source\terrain\generator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\items\item.h">
-      <Filter>source\items</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\scenes\scenemanager.h">
       <Filter>source\scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\scenes.h">
-      <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\game\gamemanager.h">
       <Filter>source\game</Filter>
@@ -272,6 +266,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\blockentities\torch.h">
       <Filter>source\blockentities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\items\item.h">
+      <Filter>source\lighting</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

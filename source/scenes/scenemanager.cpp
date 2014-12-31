@@ -1,6 +1,5 @@
 #include "scenemanager.h"
-#include "constants.h"
-#include "scenes.h"
+#include "game.h"
 
 // Init static members
 Scene *SceneManager::s_scenes[SCENE_COUNT];

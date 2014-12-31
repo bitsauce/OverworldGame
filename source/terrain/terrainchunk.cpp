@@ -7,6 +7,8 @@
 
 #include "generator/terraingen.h"
 
+#define BLOCK_INDEX(x, y, z) (x+1) + (CHUNK_BLOCKS+2) * ((y+1) + (CHUNK_BLOCKS+2) * (z))
+
 TerrainChunk::Block TerrainChunk::s_tempBlock;
 
 TerrainChunk::Block::Block() :
@@ -26,6 +28,7 @@ TerrainChunk::Block::Block(BlockID id) :
 		next[i] = &s_tempBlock;
 	}
 }
+
 TerrainChunk::BlockQuad::BlockQuad() :
 	block(BLOCK_EMPTY)
 {
@@ -48,22 +51,6 @@ TerrainChunk::TerrainChunk()
 {
 	// A dummy
 	m_state = CHUNK_DUMMY;
-}
-	
-TerrainChunk::TerrainChunk(int chunkX, int chunkY)
-{
-	init(chunkX, chunkY);
-}
-
-#define BLOCK_INDEX(x, y, z) (x+1) + (CHUNK_BLOCKS+2) * ((y+1) + (CHUNK_BLOCKS+2) * (z))
-	
-// SERIALIZATION
-void TerrainChunk::init(int chunkX, int chunkY)
-{
-	// Set chunk vars
-	m_state = CHUNK_GENERATING;
-	m_x = chunkX;
-	m_y = chunkY;
 	m_nextChunksGenerated = m_dirty = m_modified = false; // not modified
 	xd::Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS); // NOTE TO SELF: Concider creating this at start up and each time the chunk size change (for example in an options menu)
 	                                               // and reusing that object instead of creating a new xd::Pixmap for every chunk.
@@ -89,6 +76,15 @@ void TerrainChunk::init(int chunkX, int chunkY)
 	}
 }
 	
+// SERIALIZATION
+void TerrainChunk::load(int chunkX, int chunkY)
+{
+	// Set chunk vars
+	m_state = CHUNK_GENERATING;
+	m_x = chunkX;
+	m_y = chunkY;
+}
+	
 void TerrainChunk::generate()
 {
 	if(m_state == CHUNK_GENERATING)
@@ -102,8 +98,8 @@ void TerrainChunk::generate()
 				{
 					if(m_nextChunk[0])
 					{
-						if(y == -1)														m_blocks[BLOCK_INDEX(x, -1, z)]								= m_nextChunk[0]->m_blocks[BLOCK_INDEX(x, CHUNK_BLOCKS-1, z)];
-						else if(y == 0)													m_blocks[BLOCK_INDEX(x, 0, z)]								= m_nextChunk[0]->m_blocks[BLOCK_INDEX(x, CHUNK_BLOCKS, z)];
+						if(y == -1)		m_blocks[BLOCK_INDEX(x, -1, z)] = m_nextChunk[0]->m_blocks[BLOCK_INDEX(x, CHUNK_BLOCKS-1, z)];
+						else if(y == 0)	m_blocks[BLOCK_INDEX(x,  0, z)] = m_nextChunk[0]->m_blocks[BLOCK_INDEX(x, CHUNK_BLOCKS, z)];
 					}
 
 					if(m_nextChunk[1])
@@ -179,18 +175,9 @@ void TerrainChunk::generate()
 		
 		// Mark as dirty
 		m_dirty = true;
-			
-		// Re-generate neightbouring chunks
-		/*if(m_nextChunk[0]) m_nextChunk[0]->m_dirty = true;
-		if(m_nextChunk[1]) m_nextChunk[1]->m_dirty = true;
-		if(m_nextChunk[2]) m_nextChunk[2]->m_dirty = true;
-		if(m_nextChunk[3]) m_nextChunk[3]->m_dirty = true;
-		if(m_nextChunk[4]) m_nextChunk[4]->m_dirty = true;
-		if(m_nextChunk[5]) m_nextChunk[5]->m_dirty = true;
-		if(m_nextChunk[6]) m_nextChunk[6]->m_dirty = true;
-		if(m_nextChunk[7]) m_nextChunk[7]->m_dirty = true;*/
 
 		// Load shadow map // TODO: Optimize by not calling updatePixmap 16*16*3 times
+		xd::Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS);
 		for(int y = 0; y < CHUNK_BLOCKS; ++y)
 		{
 			for(int x = 0; x < CHUNK_BLOCKS; ++x)
@@ -200,11 +187,12 @@ void TerrainChunk::generate()
 				{
 					opacity += BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]->id).getOpacity();
 				}
-				const uchar pixel[4] = { 0, 0, 0, 255 * min(opacity, 1.0f) };
-				m_shadowMap->updatePixmap(x, CHUNK_BLOCKS - y - 1, xd::Pixmap(1, 1, pixel));
+				pixmap.setColor(x, y, xd::Color(0, 0, 0, 255 * min(opacity, 1.0f)));
+				//m_shadowMap->updatePixmap(x, CHUNK_BLOCKS - y - 1, xd::Pixmap(1, 1, pixel));
 			}
 		}
-			
+		m_shadowMap->updatePixmap(pixmap);
+
 		// Mark chunk as initialized
 		m_state = CHUNK_INITIALIZED;
 		LOG("Chunk [%i, %i] generated", m_x, m_y);
@@ -498,7 +486,7 @@ void TerrainChunk::deserialize(stringstream &ss)
 		
 	LOG("Loading chunk [%i, %i]...", chunkX, chunkY);
 		
-	init(chunkX, chunkY);
+	load(chunkX, chunkY);
 		
 	// Load blocks from stream
 	for(int i = 0; i < TERRAIN_LAYER_COUNT; ++i)
