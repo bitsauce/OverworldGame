@@ -17,8 +17,6 @@ private:
 	static void removeGameObject(GameObject *object);
 
 	static xd::SpriteBatch *s_spriteBatch;
-	static class Spotlight *s_spotlight;
-
 	static list<GameObject*> s_gameObjects;
 };
 

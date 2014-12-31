@@ -8,16 +8,17 @@
 
 #include "terrain/terrain.h"
 
-#include "game/camera.h"
+#include "game.h"
 
 #include "player.h"
 #include "physics/physicsbody.h"
 
+string World::s_worldPath = "";
 Terrain *World::s_terrain = nullptr;
 TimeOfDay *World::s_timeOfDay = nullptr;
-string World::s_worldPath;
 XIniFile *World::s_worldFile = nullptr;
 Camera *World::s_camera = nullptr;
+Debug *World::s_debug = nullptr;
 
 void World::init()
 {
@@ -25,6 +26,7 @@ void World::init()
 	new Background(s_timeOfDay);
 	s_camera = new Camera();
 	s_terrain = new Terrain();
+	s_debug = new Debug(s_terrain);
 	s_worldFile = nullptr;
 	//Player *p = new Player(); p->m_body->setPosition(0, 0);
 	s_camera->lookAt(Vector2(0.0f, 0.0f));
@@ -81,4 +83,9 @@ Terrain *World::getTerrain()
 Camera *World::getCamera()
 {
 	return s_camera;
+}
+
+Debug *World::getDebug()
+{
+	return s_debug;
 }

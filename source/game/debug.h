@@ -2,15 +2,40 @@
 #define DEBUG_H
 
 #include <x2d/x2d.h>
+#include "game/gameObject.h"
 
-class Debug
+class Terrain;
+enum BlockID;
+
+class Debug : public GameObject
 {
 public:
-	static void setVariable(const string &name, const string &value);
-	static void draw(xd::SpriteBatch *SpriteBatch);
+	Debug(Terrain *terrain);
+
+	void update();
+	void draw(xd::SpriteBatch *spriteBatch);
+	void toggle();
+
+	void nextBlock();
+	void prevBlock();
+
+	void setVariable(const string &name, const string &value);
 
 private:
-	static map<string, string> s_variables;
+	// Enabled flag
+	bool m_enabled;
+
+	// Debug variables
+	map<string, string> m_variables;
+
+	// Terrain pointer
+	Terrain *m_terrain;
+
+	// Debug font
+	xd::FontPtr m_font;
+
+	// Paint block
+	BlockID m_block;
 };
 
 #endif // DEBUG_H

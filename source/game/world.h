@@ -3,10 +3,10 @@
 
 #include <x2d/x2d.h>
 
-class b2World;
 class Terrain;
 class TimeOfDay;
 class Camera;
+class Debug;
 
 class World
 {
@@ -21,6 +21,7 @@ public:
 	static Terrain *getTerrain();
 	static TimeOfDay *getTimeOfDay();
 	static Camera *getCamera();
+	static Debug *getDebug();
 
 private:
 	
@@ -29,6 +30,7 @@ private:
 	static string s_worldPath;
 	static XIniFile *s_worldFile;
 	static Camera *s_camera;
+	static Debug *s_debug;
 };
 
 #endif // WORLD_H

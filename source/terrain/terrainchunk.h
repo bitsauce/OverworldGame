@@ -58,6 +58,7 @@ private:
 		BlockQuad();
 		BlockQuad(BlockID block, const float x0, const float y0, const float x1, const float y1, const float u0, const float v0, const float u1, const float v1);
 		bool operator<(const BlockQuad &other) const { return block < other.block; };
+		bool operator>(const BlockQuad &other) const { return block > other.block; };
 		BlockID block;
 		float x0, y0, x1, y1, u0, v0, u1, v1;
 	};
@@ -67,7 +68,7 @@ private:
 	Block **m_blocks;
 	TerrainChunk *m_nextChunk[8];
 	
-	list<BlockQuad> m_tmpQuads;
+	vector<BlockQuad> m_tmpQuads;
 	static xd::Vertex *s_vertices;
 	static uint *s_indices;
 	static Block s_tempBlock;

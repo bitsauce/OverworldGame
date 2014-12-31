@@ -1,6 +1,5 @@
 #include "camera.h"
-#include "debug.h"
-#include "constants.h"
+#include "game.h"
 
 Camera::Camera() :
 	GameObject(DRAW_ORDER_CAMERA),
@@ -73,12 +72,12 @@ void Camera::update()
 	if(XInput::getKeyState(XD_KEY_DOWN)) {
 		m_position.y += 16.0f/m_zoom;
 	}
-	if(XInput::getKeyState(XD_KEY_Plus)) {
+	if(XInput::getKeyState(XD_KEY_PLUS)) {
 		Vector2 center = getCenter();
 		m_zoom *= 2.0f;
 		lookAt(center);
 	}
-	if(XInput::getKeyState(XD_KEY_Hyphen)) {
+	if(XInput::getKeyState(XD_KEY_MINUS)) {
 		Vector2 center = getCenter();
 		m_zoom *= 0.5f;
 		lookAt(center);
@@ -88,8 +87,8 @@ void Camera::update()
 void Camera::draw(xd::SpriteBatch *SpriteBatch)
 {
 	Vector2 center = getCenter();
-	Debug::setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
-	Debug::setVariable("Zoom", util::floatToStr(m_zoom));
+	World::getDebug()->setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
+	World::getDebug()->setVariable("Zoom", util::floatToStr(m_zoom));
 }
 
 void Camera::mouseWheelEvent(const int dt)

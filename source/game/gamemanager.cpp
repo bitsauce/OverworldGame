@@ -18,7 +18,7 @@
 UiObject *canvas = nullptr;
 
 list<GameObject*> GameManager::s_gameObjects;
-Spotlight *GameManager::s_spotlight = nullptr;
+xd::SpriteBatch *GameManager::s_spriteBatch = nullptr;
 
 void GameManager::main()
 {
@@ -26,13 +26,10 @@ void GameManager::main()
 
 	// Set some key bindings
 	XInput::bind(XD_KEY_ESCAPE, function<void()>(XEngine::exit));
-	//XInput::bind(XD_KEY_I, &delegate<void()>(Camera::zoomIn));
-	//XInput::bind(XD_KEY_O, &delegate<void()>(Camera::zoomOut));
-	//XInput::bind(XD_KEY_C, &delegate<void()>(Debug::debugFunc));
-	//XInput::bind(XD_BACKSPACE, &delegate<void()>());
 
 	BlockData::init();
 	World::init();
+	World::getDebug()->toggle();
 
 	XWindow::setSize(Vector2i(1280, 720));
 
@@ -44,24 +41,19 @@ void GameManager::exit()
 	delete canvas;
 }
 
-XRandom random;
 void GameManager::update()
 {
-	if(XInput::getKeyState(XD_KEY_L)) {
-		s_spotlight = new Spotlight(Vector2(0.0f, 0.0f), 64, xd::Color(random.nextInt(255), random.nextInt(255), random.nextInt(255), 255));
-	}
-	if(s_spotlight) s_spotlight->m_position.set(XInput::getPosition().x, XInput::getPosition().y);
 	for(list<GameObject*>::iterator itr = s_gameObjects.begin(); itr != s_gameObjects.end(); ++itr)
 	{
 		(*itr)->update();
 	}
 }
 
-xd::SpriteBatch *GameManager::s_spriteBatch = nullptr;
-
 void GameManager::draw(xd::GraphicsContext &context)
 {
 	if(!s_spriteBatch) s_spriteBatch = new xd::SpriteBatch(context);
+	
+	World::getDebug()->setVariable("FPS", util::intToStr((int)xd::Graphics::getFPS()));
 
 	s_spriteBatch->begin();
 	bool usingSceneMat = false;
@@ -86,19 +78,6 @@ void GameManager::draw(xd::GraphicsContext &context)
 			}
 		}
 		(*itr)->draw(s_spriteBatch);
-	}
-	
-	Debug::setVariable("FPS", util::intToStr((int)xd::Graphics::getFPS()));
-	if(XInput::getKeyState(XD_KEY_Z))
-	{
-		if(usingSceneMat)
-		{
-			s_spriteBatch->end();
-			s_spriteBatch->begin();
-			usingSceneMat = false;
-		}
-
-		Debug::draw(s_spriteBatch);
 	}
 	s_spriteBatch->end();
 

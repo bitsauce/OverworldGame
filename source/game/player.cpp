@@ -114,7 +114,7 @@ void Player::update()
 	// Walking
 	if(abs(m_body->getVelocity().x) < 10.0f)
 	{
-		m_body->applyImpulse(Vector2((XInput::getKeyState(XD_KEY_D) - XInput::getKeyState(XD_KEY_A)) * (XInput::getKeyState(XD_KEY_Shift) ? 1.0f : 0.5f), 0.0f));
+		m_body->applyImpulse(Vector2((XInput::getKeyState(XD_KEY_D) - XInput::getKeyState(XD_KEY_A)) * (XInput::getKeyState(XD_KEY_SHIFT) ? 1.0f : 0.5f), 0.0f));
 	}
 
 	// Apply friction

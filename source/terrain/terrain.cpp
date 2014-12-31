@@ -175,15 +175,6 @@ void Terrain::loadVisibleChunks()
 // UPDATING
 void Terrain::update()
 {
-	if(XInput::getKeyState(XD_LMB))
-	{
-		setBlockAt(floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_LEAF);
-	}
-	else if(XInput::getKeyState(XD_RMB))
-	{
-		setBlockAt(floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_EMPTY);
-	}
-
 	int cx = floor(World::getCamera()->getX()/CHUNK_PXF);
 	int cy = floor(World::getCamera()->getY()/CHUNK_PXF);
 	TerrainChunk *chunk = 0;
@@ -201,7 +192,7 @@ void Terrain::update()
 		chunkLoadQueue.pop_back();
 	}
 
-	Debug::setVariable("Chunks", util::intToStr(chunks.size()));
+	World::getDebug()->setVariable("Chunks", util::intToStr(chunks.size()));
 }
 	
 // DRAWING
@@ -215,7 +206,7 @@ void Terrain::draw(xd::SpriteBatch *spriteBatch)
 	int y1 = floor((World::getCamera()->getY() + World::getCamera()->getHeight())/CHUNK_PXF);
 	
 	//if(m_prevX0 != x0 || m_prevY0 != y0)
-	{
+	/*{
 		// Disable alpha blend when drawing to render targets
 		gfxContext.disable(xd::GraphicsContext::BLEND);
 
@@ -253,7 +244,7 @@ void Terrain::draw(xd::SpriteBatch *spriteBatch)
 		gfxContext.setRenderTarget(nullptr);
 		gfxContext.setShader(nullptr);
 		gfxContext.enable(xd::GraphicsContext::BLEND);
-	}
+	}*/
 	
 	gfxContext.setTexture(BlockData::getBlockAtlas()->getTexture());
 	gfxContext.setProjectionMatrix(spriteBatch->getState().projectionMatix);
@@ -273,7 +264,7 @@ void Terrain::draw(xd::SpriteBatch *spriteBatch)
 
 	//m_prevX0 = x0; m_prevY0 = y0;
 
-	gfxContext.setRenderTarget(m_shadowRenderTarget);
+	/*gfxContext.setRenderTarget(m_shadowRenderTarget);
 	gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
 	gfxContext.disable(xd::GraphicsContext::BLEND);
 
@@ -294,39 +285,7 @@ void Terrain::draw(xd::SpriteBatch *spriteBatch)
 	gfxContext.setBlendState(xd::BlendState::PRESET_MULTIPLY);
 	gfxContext.setTexture(m_shadowRenderTarget->getTexture());
 	gfxContext.drawRectangle(0, 0, m_shadowRenderTarget->getWidth(), m_shadowRenderTarget->getHeight());
-	gfxContext.setBlendState(xd::BlendState::PRESET_ALPHA_BLEND);
-	
-	if(XInput::getKeyState(XD_KEY_Z))
-	{
-		gfxContext.setTexture(nullptr);
-		if(XInput::getKeyState(XD_KEY_B))
-		{
-			int x0 = floor(World::getCamera()->getX()/BLOCK_PXF);
-			int y0 = floor(World::getCamera()->getY()/BLOCK_PXF);
-			int x1 = floor((World::getCamera()->getX() + World::getCamera()->getWidth())/BLOCK_PXF);
-			int y1 = floor((World::getCamera()->getY() + World::getCamera()->getHeight())/BLOCK_PXF);
-
-			for(int y = y0; y <= y1; ++y)
-			{
-				gfxContext.drawRectangle(x0 * BLOCK_PXF, y * BLOCK_PXF, (x1 - x0 + 1) * BLOCK_PXF, 1.0f / World::getCamera()->getZoom(), xd::Color(127, 127, 127, 255));
-			}
-
-			for(int x = x0; x <= x1; ++x)
-			{
-				gfxContext.drawRectangle(x * BLOCK_PXF, y0 * BLOCK_PXF, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * BLOCK_PXF, xd::Color(127, 127, 127, 255));
-			} 
-		}
-
-		for(int y = y0; y <= y1; ++y)
-		{
-			gfxContext.drawRectangle(x0 * CHUNK_PX, y * CHUNK_PX, (x1 - x0 + 1) * CHUNK_PX, 1.0f / World::getCamera()->getZoom(), xd::Color(0, 0, 0, 255));
-		}
-
-		for(int x = x0; x <= x1; ++x)
-		{
-			gfxContext.drawRectangle(x * CHUNK_PX, y0 * CHUNK_PX, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * CHUNK_PX, xd::Color(0, 0, 0, 255));
-		}
-	}
+	gfxContext.setBlendState(xd::BlendState::PRESET_ALPHA_BLEND);*/
 }
 
 
