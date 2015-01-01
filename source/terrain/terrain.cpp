@@ -233,13 +233,35 @@ void Terrain::draw(xd::SpriteBatch *spriteBatch)
 {
 	xd::GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 
+	// Get chunk coordinates
 	int x0 = floor(World::getCamera()->getX()/CHUNK_PXF);
 	int y0 = floor(World::getCamera()->getY()/CHUNK_PXF);
 	int x1 = floor((World::getCamera()->getX() + World::getCamera()->getWidth())/CHUNK_PXF);
 	int y1 = floor((World::getCamera()->getY() + World::getCamera()->getHeight())/CHUNK_PXF);
 	
+	// Draw tiles
+	gfxContext.setTexture(BlockData::getBlockAtlas()->getTexture());
+	gfxContext.setProjectionMatrix(spriteBatch->getState().projectionMatix);
+	for(int y = y0-1; y <= y1+1; ++y)
+	{
+		for(int x = x0-1; x <= x1+1; ++x)
+		{
+			Matrix4 mat;
+			mat.scale(BLOCK_PXF, BLOCK_PXF, 1.0f);
+			mat.translate(x * CHUNK_PXF, y * CHUNK_PXF, 0.0f);
+
+			gfxContext.pushMatrix(mat);
+			getChunk(x, y, true).draw(gfxContext);
+			gfxContext.popMatrix();
+		}
+	}
+	
+	
+	// Draw shadows
 	//if(m_prevX0 != x0 || m_prevY0 != y0)
-	/*{
+	{
+		gfxContext.setProjectionMatrix(Matrix4());
+
 		// Disable alpha blend when drawing to render targets
 		gfxContext.disable(xd::GraphicsContext::BLEND);
 
@@ -276,49 +298,16 @@ void Terrain::draw(xd::SpriteBatch *spriteBatch)
 		// Re-enable alpha blending
 		gfxContext.setRenderTarget(nullptr);
 		gfxContext.setShader(nullptr);
+		
 		gfxContext.enable(xd::GraphicsContext::BLEND);
-	}*/
-	
-	gfxContext.setTexture(BlockData::getBlockAtlas()->getTexture());
-	gfxContext.setProjectionMatrix(spriteBatch->getState().projectionMatix);
-	for(int y = y0-1; y <= y1+1; ++y)
-	{
-		for(int x = x0-1; x <= x1+1; ++x)
-		{
-			Matrix4 mat;
-			mat.scale(BLOCK_PXF, BLOCK_PXF, 1.0f);
-			mat.translate(x * CHUNK_PXF, y * CHUNK_PXF, 0.0f);
+		gfxContext.setBlendState(xd::BlendState::PRESET_MULTIPLY);
 
-			gfxContext.pushMatrix(mat);
-			getChunk(x, y, true).draw(gfxContext);
-			gfxContext.popMatrix();
-		}
+		gfxContext.setProjectionMatrix(spriteBatch->getState().projectionMatix);
+		gfxContext.setTexture(m_shadowPass2->getTexture());
+		gfxContext.drawRectangle((x0-1)*CHUNK_PXF, (y0-1)*CHUNK_PXF, m_shadowPass2->getWidth()*BLOCK_PXF, m_shadowPass2->getHeight()*BLOCK_PXF);
+		
+		gfxContext.setBlendState(xd::BlendState::PRESET_ALPHA_BLEND);
 	}
-
-	//m_prevX0 = x0; m_prevY0 = y0;
-
-	/*gfxContext.setRenderTarget(m_shadowRenderTarget);
-	gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
-	gfxContext.disable(xd::GraphicsContext::BLEND);
-
-	gfxContext.setTexture(m_shadowPass2->getTexture());
-	gfxContext.drawRectangle((x0-1)*CHUNK_PXF, (y0-1)*CHUNK_PXF, m_shadowPass2->getWidth()*BLOCK_PXF, m_shadowPass2->getHeight()*BLOCK_PXF);
-	
-	gfxContext.enable(xd::GraphicsContext::BLEND);
-
-
-	gfxContext.setTexture(nullptr);
-	gfxContext.setBlendState(xd::BlendState::PRESET_ADDITIVE);
-
-	Spotlight::drawAll(gfxContext);
-
-	gfxContext.setRenderTarget(nullptr);
-	
-	gfxContext.setProjectionMatrix(Matrix4());
-	gfxContext.setBlendState(xd::BlendState::PRESET_MULTIPLY);
-	gfxContext.setTexture(m_shadowRenderTarget->getTexture());
-	gfxContext.drawRectangle(0, 0, m_shadowRenderTarget->getWidth(), m_shadowRenderTarget->getHeight());
-	gfxContext.setBlendState(xd::BlendState::PRESET_ALPHA_BLEND);*/
 }
 
 

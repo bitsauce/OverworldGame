@@ -185,10 +185,9 @@ void TerrainChunk::generate()
 				float opacity = 0.0f;
 				for(uint i = 0; i < TERRAIN_LAYER_COUNT; ++i)
 				{
-					opacity += BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]->id).getOpacity();
+					opacity += BlockData::get(m_blocks[BLOCK_INDEX(x, CHUNK_BLOCKS - y - 1, i)]->id).getOpacity();
 				}
 				pixmap.setColor(x, y, xd::Color(0, 0, 0, 255 * min(opacity, 1.0f)));
-				//m_shadowMap->updatePixmap(x, CHUNK_BLOCKS - y - 1, xd::Pixmap(1, 1, pixel));
 			}
 		}
 		m_shadowMap->updatePixmap(pixmap);
