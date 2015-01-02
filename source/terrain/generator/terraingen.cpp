@@ -87,41 +87,97 @@ void TerrainGen::loadStructures(const int superChunkX, const int superChunkY)
 			//structures.push_back(tree);
 
 			int tileY = getGroundHeight(tileX);
-			int height = 8 + s_random.getDouble(tileX + s_seed + 8572) * 8;
-			for(int h = height; h >= 0; --h)
+			int length = 8 + s_random.getDouble(tileX + s_seed + 8572) * 32;
+
+			// Stem and lower branches
+			for(int h = length * 0.5f; h >= 0; --h)
 			{
-				/*if(h > height * 0.25 && s_random.getDouble(tileY - h + s_seed) < 0.2*(height-h)/float(height))
+				if(h > length * 0.2f && s_random.getDouble(tileX + s_seed + h) < 0.1)
 				{
-					for(int w = -10; w < 10; w++)
-						s_structureMap[BLOCK_KEY(tileX + w, tileY - h)].back = BLOCK_WOOD;
-				}*/
+					// Create lower branches
+					int w = s_random.getDouble(tileX + s_seed + h + 1392) * h; // Branch length
+					bool dir = s_random.getDouble(tileX + s_seed + h + 844135) < 0.5; // Left or right?
+					int x1 = 1, y1 = h; // Branch offsets
+					int w1 = w*0.5f; // Half length
+					while(true)
+					{
+						// Set branch block
+						s_structureMap[BLOCK_KEY(tileX + (dir ? x1 : -x1), tileY - y1)].back = BLOCK_WOOD;
+						
+						// Have we reached the half of the remainding branch?
+						if(w1-- <= 0)
+						{
+							// Increase branch height
+							y1++;
+
+							// Calculate half of remaining branch
+							w1 = (w-x1)*0.5f;
+							if(w1 < 1) break; // It'll look prettier this way
+
+							// Set the block here 
+							s_structureMap[BLOCK_KEY(tileX + (dir ? x1 : -x1), tileY - y1)].back = BLOCK_WOOD;
+						}
+
+						x1++;
+					}
+				}
 
 				s_structureMap[BLOCK_KEY(tileX, tileY - h)].back = BLOCK_WOOD;
 			}
 
-			int r = 8 * height/16.0f;
+			// HOW IT (SHOULD) WORK(S):
+			// 1) From the end of the branch, choose a random number of branches to create.
+			// 2) For each branch, pick a random angle between [45, 135] (relative to the angle of the branch)
+			//    and a random branch length.
+			// 3) Use line rasterization to create the branch segment.
+			// 4) Repeat until a branch with a total length of length/2 is created.
+
+			// Upper brances
+			/*int branchCount = 1 + (s_random.getInt(tileX + s_seed + 88372) % 3);
+			for(uint i = 0; i < branchCount; ++i)
+			{
+				int branchLength = length * 0.5f;
+				int branchX = 0, branchY = length * 0.5f;
+				while(branchLength > 0)
+				{
+					float angle = PI * 0.25 + (s_random.getDouble(tileX + s_seed + i * 3628) * PI * 0.5); // From [45, 135]
+					int segmentLength = s_random.getDouble(tileX + s_seed + i * 3628 + 87991) * branchLength;
+					for(int x1 = 0; x1 < segmentLength; ++x1)
+					{
+						branchX += cos(angle);
+
+						// Set the block here 
+						s_structureMap[BLOCK_KEY(tileX + branchX, tileY - branchY)].back = BLOCK_WOOD;
+					}
+
+					branchLength -= segmentLength;
+				}
+			}*/
+
+
+			/*int r = 8 * length/16.0f;
 			for(int j = -r; j < r; ++j)
 			{
 				for(int i = -r; i < r; ++i)
 				{
 					if(sqrt(j*j+i*i) <= r * 0.5f)
 					{
-						s_structureMap[BLOCK_KEY(tileX + i, tileY + j - height)].front = BLOCK_LEAF;
+						s_structureMap[BLOCK_KEY(tileX + i, tileY + j - length)].front = BLOCK_LEAF;
 					}
 				}
 			}
 
-			r = 12 * height/16.0f;
+			r = 12 * length/16.0f;
 			for(int j = -r; j < r; ++j)
 			{
 				for(int i = -r; i < r; ++i)
 				{
 					if(sqrt(j*j+i*i) <= r * 0.5f)
 					{
-						s_structureMap[BLOCK_KEY(tileX + i, tileY + j - height + int(6.0f*height/20.0f))].front = BLOCK_LEAF;
+						s_structureMap[BLOCK_KEY(tileX + i, tileY + j - length + int(6.0f*length/20.0f))].front = BLOCK_LEAF;
 					}
 				}
-			}
+			}*/
 		}
 	}
 		

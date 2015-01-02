@@ -176,7 +176,7 @@ void TerrainChunk::generate()
 		// Mark as dirty
 		m_dirty = true;
 
-		// Load shadow map // TODO: Optimize by not calling updatePixmap 16*16*3 times
+		// Load shadow map
 		xd::Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS);
 		for(int y = 0; y < CHUNK_BLOCKS; ++y)
 		{
