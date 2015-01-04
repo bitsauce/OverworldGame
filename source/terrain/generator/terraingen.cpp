@@ -1,5 +1,5 @@
 #include "terraingen.h"
-#include "constants.h"
+#include "game.h"
 #include "grassland.h"
 
 float step(float edge, float x)
@@ -71,7 +71,7 @@ BlockID TerrainGen::getGroundAt(const int x, const int y, const TerrainLayer lay
 	}
 	return BLOCK_EMPTY;
 }
-	
+
 void TerrainGen::loadStructures(const int superChunkX, const int superChunkY)
 {
 	LOG("Placing structures in super chunk [%i, %i]", superChunkX, superChunkY);
@@ -79,7 +79,7 @@ void TerrainGen::loadStructures(const int superChunkX, const int superChunkY)
 	for(int x = 0; x < SUPER_CHUNK_BLOCKS; ++x)
 	{
 		int tileX = SUPER_CHUNK_BLOCKS * superChunkX + x;
-		if(s_random.getDouble(tileX + s_seed) < 0.05/*TREE_CHANCE*/)
+		if(s_random.getDouble(tileX + s_seed) < 0.005/*TREE_CHANCE*/)
 		{
 			//Tree *tree = new Tree;
 			//tree->x = tileX;
@@ -92,7 +92,7 @@ void TerrainGen::loadStructures(const int superChunkX, const int superChunkY)
 			// Stem and lower branches
 			for(int h = length * 0.5f; h >= 0; --h)
 			{
-				if(h > length * 0.2f && s_random.getDouble(tileX + s_seed + h) < 0.1)
+				/*if(h > length * 0.2f && s_random.getDouble(tileX + s_seed + h) < 0.1)
 				{
 					// Create lower branches
 					int w = s_random.getDouble(tileX + s_seed + h + 1392) * h; // Branch length
@@ -120,7 +120,7 @@ void TerrainGen::loadStructures(const int superChunkX, const int superChunkY)
 
 						x1++;
 					}
-				}
+				}*/
 
 				s_structureMap[BLOCK_KEY(tileX, tileY - h)].back = BLOCK_WOOD;
 			}
@@ -133,51 +133,46 @@ void TerrainGen::loadStructures(const int superChunkX, const int superChunkY)
 			// 4) Repeat until a branch with a total length of length/2 is created.
 
 			// Upper brances
-			/*int branchCount = 1 + (s_random.getInt(tileX + s_seed + 88372) % 3);
-			for(uint i = 0; i < branchCount; ++i)
+			vector<Vector4> branchPoints;
+			branchPoints.push_back(Vector4(0.0f, length * 0.5f, PI * 0.5f, length));
+			while(!branchPoints.empty())
 			{
-				int branchLength = length * 0.5f;
-				int branchX = 0, branchY = length * 0.5f;
-				while(branchLength > 0)
-				{
-					float angle = PI * 0.25 + (s_random.getDouble(tileX + s_seed + i * 3628) * PI * 0.5); // From [45, 135]
-					int segmentLength = s_random.getDouble(tileX + s_seed + i * 3628 + 87991) * branchLength;
-					for(int x1 = 0; x1 < segmentLength; ++x1)
-					{
-						branchX += cos(angle);
+				Vector4 branch = branchPoints.back();
+				branchPoints.pop_back();
 
-						// Set the block here 
-						s_structureMap[BLOCK_KEY(tileX + branchX, tileY - branchY)].back = BLOCK_WOOD;
+				int r = 5;
+				for(int j = -r; j < r; ++j)
+				{
+					for(int i = -r; i < r; ++i)
+					{
+						if(sqrt(j*j+i*i) < r)
+						{
+							s_structureMap[BLOCK_KEY(tileX + branch.x + i, tileY - branch.y + j)].front = BLOCK_LEAF;
+						}
 					}
-
-					branchLength -= segmentLength;
 				}
-			}*/
 
-
-			/*int r = 8 * length/16.0f;
-			for(int j = -r; j < r; ++j)
-			{
-				for(int i = -r; i < r; ++i)
+				int branchCount = 2;// + (s_random.getInt(tileX + s_seed + 88372) % 3);
+				for(uint i = 0; i < branchCount; ++i)
 				{
-					if(sqrt(j*j+i*i) <= r * 0.5f)
+					//float segmentAngle = branch.z - (s_random.getDouble(tileX + s_seed + (branch.x + branch.y + branch.w) * 3628 + i * 8731) * PI * 0.5f) - PI * 0.25f; // From [45, 135]
+					float segmentAngle = branch.z + PI * 0.25f * (i == 0 ? 1 : -1); // From [45, 135]
+					float segmentLength = branch.w * 0.15f;
+					if(segmentLength > 3.0f)
 					{
-						s_structureMap[BLOCK_KEY(tileX + i, tileY + j - length)].front = BLOCK_LEAF;
+						RayCast ray;
+						ray.test(Vector2(branch.x, branch.y), Vector2(branch.x, branch.y) + Vector2(cos(segmentAngle), sin(segmentAngle)) * segmentLength);
+					
+						vector<Vector2i> points = ray.getPoints();
+						for(int j = 0; j < points.size(); ++j)
+						{
+							s_structureMap[BLOCK_KEY(tileX + points[j].x, tileY - points[j].y)].back = BLOCK_WOOD;
+						}
+
+						branchPoints.push_back(Vector4(points.back().x, points.back().y, segmentAngle, branch.w - segmentLength));
 					}
 				}
 			}
-
-			r = 12 * length/16.0f;
-			for(int j = -r; j < r; ++j)
-			{
-				for(int i = -r; i < r; ++i)
-				{
-					if(sqrt(j*j+i*i) <= r * 0.5f)
-					{
-						s_structureMap[BLOCK_KEY(tileX + i, tileY + j - length + int(6.0f*length/20.0f))].front = BLOCK_LEAF;
-					}
-				}
-			}*/
 		}
 	}
 		

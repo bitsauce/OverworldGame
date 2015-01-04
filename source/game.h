@@ -10,6 +10,7 @@
 #include "game/gameobject.h"
 #include "game/player.h"
 #include "game/world.h"
+#include "game/rayCast.h"
 
 #include "scenes/scene.h"
 #include "scenes/scenemanager.h"

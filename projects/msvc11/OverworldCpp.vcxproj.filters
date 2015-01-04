@@ -110,6 +110,9 @@
     <ClCompile Include="..\..\source\blockentities\torch.cpp">
       <Filter>source\blockentities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\game\rayCast.cpp">
+      <Filter>source\game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -269,6 +272,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\items\item.h">
       <Filter>source\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\rayCast.h">
+      <Filter>source\game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
