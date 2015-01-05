@@ -78,6 +78,11 @@ Terrain *World::getTerrain()
 	return s_terrain;
 }
 
+TimeOfDay *World::getTimeOfDay()
+{
+	return s_timeOfDay;
+}
+
 Camera *World::getCamera()
 {
 	return s_camera;

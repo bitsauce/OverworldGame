@@ -10,7 +10,7 @@ enum TerrainLayer;
 
 extern float step(float edge, float x);
 
-#include "terrain/simplex.h"
+#include "Noise/Simplex.h"
 #include <unordered_set>
 
 class TerrainGen

@@ -32,6 +32,7 @@ public:
 	
 	ChunkState getState() const;
 	BlockID getBlockAt(const int x, const int y, TerrainLayer layer) const;
+	xd::Texture2DPtr getLightMap() const { return m_shadowMap; }
 	bool isBlockAt(const int x, const int y, TerrainLayer layer) const;
 	bool isBlockOccupied(const int x, const int y, TerrainLayer layer) const;
 	bool setBlockAt(const int x, const int y, const BlockID block, TerrainLayer layer);

@@ -12,12 +12,15 @@ public:
 	static void update();
 	static void draw(xd::GraphicsContext &context);
 
+	static void takeScreenshot() { s_takeScreenshot = true; }
+
 private:
 	static void addGameObject(GameObject *object);
 	static void removeGameObject(GameObject *object);
 
 	static xd::SpriteBatch *s_spriteBatch;
 	static list<GameObject*> s_gameObjects;
+	static bool s_takeScreenshot;
 };
 
 #endif // GAME_MANAGER_H

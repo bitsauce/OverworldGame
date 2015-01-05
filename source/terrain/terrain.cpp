@@ -10,28 +10,21 @@
 
 Terrain::Terrain() :
 	GameObject(DRAW_ORDER_TERRAIN),
-	m_shadowPass0(nullptr),
-	m_shadowPass1(nullptr),
-	m_shadowPass2(nullptr),
-	m_shadowRenderTarget(nullptr)
+	m_directionalLightingShader(xd::ResourceManager::get<xd::Shader>(":/shaders/directional_lighting")),
+	m_renderTarget(nullptr),
+	m_lighting(this)
 {
 	LOG("Initializing terrain");
 
 	// Set max chunks to some value
 	setMaxChunks(512);
-	
-	// Resize textures
+
+	// Window
 	XWindow::addWindowListener(this);
 	resizeEvent(XWindow::getSize().x, XWindow::getSize().y);
 
-	// Shadow radius
-	m_shadowRadius = 6;
-	
-	// Load blur shaders
-	m_blurHShader = xd::ResourceManager::get<xd::Shader>(":/shaders/blur_h");
-	m_blurVShader = xd::ResourceManager::get<xd::Shader>(":/shaders/blur_v");
-
 	// Setup vertex format
+	xd::VertexFormat vertexFormat;
 	vertexFormat.set(xd::VERTEX_POSITION, 2);
 	vertexFormat.set(xd::VERTEX_TEX_COORD, 2);
 	TerrainChunk::s_vertices = vertexFormat.createVertices(4*12*16*16*3);
@@ -44,12 +37,6 @@ Terrain::Terrain() :
 Terrain::~Terrain()
 {
 	XWindow::removeWindowListener(this);
-}
-
-// VERTEX FORMAT
-xd::VertexFormat Terrain::getVertexFormat() const
-{
-	return vertexFormat;
 }
 	
 // Move?
@@ -193,7 +180,6 @@ void Terrain::loadVisibleChunks()
 			}
 		}
 	}
-	chunkLoadQueue.clear();
 }
 
 void Terrain::setMaxChunks(const uint maxChunkCount)
@@ -214,15 +200,7 @@ void Terrain::update()
 	if((chunk = &getChunk(cx, cy, true))->getState() != CHUNK_INITIALIZED)
 	{
 		LOG("Insta-generate chunk [%i, %i]", cx, cy);
-		//chunkLoadQueue.remove(chunk);
 		chunk->generate();
-	}
-		
-	if(!chunkLoadQueue.empty())
-	{
-		// Load queued chunk
-		chunkLoadQueue.back()->generate();
-		chunkLoadQueue.pop_back();
 	}
 
 	World::getDebug()->setVariable("Chunks", util::intToStr(m_chunks.size()));
@@ -240,8 +218,11 @@ void Terrain::draw(xd::SpriteBatch *spriteBatch)
 	int y1 = floor((World::getCamera()->getY() + World::getCamera()->getHeight())/CHUNK_PXF);
 	
 	// Draw tiles
+	//gfxContext.setRenderTarget(m_renderTarget);
+	//gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
+
 	gfxContext.setTexture(BlockData::getBlockAtlas()->getTexture());
-	gfxContext.setProjectionMatrix(spriteBatch->getState().projectionMatix);
+	gfxContext.setProjectionMatrix(World::getCamera()->getProjectionMatrix());
 	for(int y = y0-1; y <= y1+1; ++y)
 	{
 		for(int x = x0-1; x <= x1+1; ++x)
@@ -255,79 +236,26 @@ void Terrain::draw(xd::SpriteBatch *spriteBatch)
 			gfxContext.popMatrix();
 		}
 	}
-	
-	
-	// Draw shadows
-	//if(m_prevX0 != x0 || m_prevY0 != y0)
-	{
-		gfxContext.setProjectionMatrix(Matrix4());
+	//gfxContext.setRenderTarget(nullptr);
 
-		// Disable alpha blend when drawing to render targets
-		gfxContext.disable(xd::GraphicsContext::BLEND);
+	/*gfxContext.setProjectionMatrix(Matrix4());
+	gfxContext.setTexture(m_renderTarget->getTexture());
+	gfxContext.drawRectangle(0.0f, 0.0f, m_renderTarget->getWidth(), m_renderTarget->getHeight());
+	gfxContext.setTexture(nullptr);
+	gfxContext.setProjectionMatrix(World::getCamera()->getProjectionMatrix());
 
-		// Render shadows to texture (pass 0)
-		gfxContext.setRenderTarget(m_shadowPass0);
-		gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
-		xd::Vertex vertices[4];
-		for(int y = y0-2; y <= y1+2; ++y)
-		{
-			for(int x = x0-2; x <= x1+2; ++x)
-			{
-				gfxContext.setTexture(getChunk(x, y, true).m_shadowMap);
-				gfxContext.drawRectangle((x - x0 + 1) * CHUNK_BLOCKS, (y - y0 + 1) * CHUNK_BLOCKS, CHUNK_BLOCKS, CHUNK_BLOCKS);
-			}
-		}
-
-		// Blur horizontally (pass 1)
-		gfxContext.setRenderTarget(m_shadowPass1);
-		gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
-		m_blurHShader->setSampler2D("u_texture", m_shadowPass0->getTexture());
-		m_blurHShader->setUniform1i("u_width", m_shadowPass0->getWidth());
-		gfxContext.setShader(m_blurHShader);
-		gfxContext.drawRectangle(0, 0, m_shadowPass1->getWidth(), m_shadowPass1->getHeight());
-
-		// Blur vertically (pass 2)
-		gfxContext.setRenderTarget(m_shadowPass2);
-		gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
-		m_blurVShader->setSampler2D("u_texture", m_shadowPass1->getTexture());
-		m_blurVShader->setUniform1i("u_height", m_shadowPass0->getHeight());
-		m_blurVShader->setUniform1f("u_exponent", 2.0);
-		gfxContext.setShader(m_blurVShader);
-		gfxContext.drawRectangle(0, 0, m_shadowPass2->getWidth(), m_shadowPass2->getHeight());
-		
-		// Re-enable alpha blending
-		gfxContext.setRenderTarget(nullptr);
-		gfxContext.setShader(nullptr);
-		
-		gfxContext.enable(xd::GraphicsContext::BLEND);
-		gfxContext.setBlendState(xd::BlendState::PRESET_MULTIPLY);
-
-		gfxContext.setProjectionMatrix(spriteBatch->getState().projectionMatix);
-		gfxContext.setTexture(m_shadowPass2->getTexture());
-		gfxContext.drawRectangle((x0-1)*CHUNK_PXF, (y0-1)*CHUNK_PXF, m_shadowPass2->getWidth()*BLOCK_PXF, m_shadowPass2->getHeight()*BLOCK_PXF);
-		
-		gfxContext.setBlendState(xd::BlendState::PRESET_ALPHA_BLEND);
-	}
+	gfxContext.setProjectionMatrix(Matrix4());
+	gfxContext.setShader(m_directionalLightingShader);
+	m_directionalLightingShader->setSampler2D("u_texture", m_renderTarget->getTexture());
+	m_directionalLightingShader->setUniform1f("u_height", m_renderTarget->getHeight());
+	gfxContext.drawRectangle(0.0f, 0.0f, m_renderTarget->getWidth(), m_renderTarget->getHeight());
+	gfxContext.setShader(nullptr);
+	gfxContext.setProjectionMatrix(World::getCamera()->getProjectionMatrix());*/
 }
 
-
+// WINDOW
 void Terrain::resizeEvent(uint width, uint height)
 {
-	// Clear old render targets
-	delete m_shadowPass0;
-	delete m_shadowPass1;
-	delete m_shadowPass2;
-	delete m_shadowRenderTarget;
-
-	// Create shadow textures
-	uint targetWidth = (floor(width/CHUNK_PXF) + 4) * CHUNK_BLOCKS;
-	uint targetHeight = (floor(height/CHUNK_PXF) + 4) * CHUNK_BLOCKS;
-	m_shadowPass0 = new xd::RenderTarget2D(targetWidth, targetHeight, 1);
-	m_shadowPass1 = new xd::RenderTarget2D(targetWidth, targetHeight, 1);
-	m_shadowPass2 = new xd::RenderTarget2D(targetWidth, targetHeight, 1);
-	m_shadowPass2->getTexture()->setFiltering(xd::Texture2D::LINEAR);
-	m_shadowRenderTarget = new xd::RenderTarget2D(width, height);
-
-	// Make sure the shadows will update
-	m_prevX0 = m_prevY0 = 0xFFFFFFFF;
+	delete m_renderTarget;
+	m_renderTarget = new xd::RenderTarget2D(width, height);
 }

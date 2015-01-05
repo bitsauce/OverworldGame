@@ -3,6 +3,9 @@
 
 #include "constants.h"
 
+#include "Environment/Background.h"
+#include "Environment/TimeOfDay.h"
+
 #include "game/blockdata.h"
 #include "game/camera.h"
 #include "game/debug.h"
@@ -12,6 +15,9 @@
 #include "game/world.h"
 #include "game/rayCast.h"
 
+#include "lighting/TerrainLighting.h"
+#include "lighting/Spotlight.h"
+
 #include "scenes/scene.h"
 #include "scenes/scenemanager.h"
 #include "scenes/gamescene.h"
@@ -20,6 +26,6 @@
 #include "scenes/worldselect.h"
 //#include "charactercreate.h"
 
-#include "terrain/terrain.h"
+#include "terrain/Terrain.h"
 
 #endif // GAME_H

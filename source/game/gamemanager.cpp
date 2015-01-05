@@ -10,6 +10,7 @@ UiObject *canvas = nullptr;
 
 list<GameObject*> GameManager::s_gameObjects;
 xd::SpriteBatch *GameManager::s_spriteBatch = nullptr;
+bool GameManager::s_takeScreenshot = false;
 
 void GameManager::main()
 {
@@ -17,6 +18,7 @@ void GameManager::main()
 
 	// Set some key bindings
 	XInput::bind(XD_KEY_ESCAPE, function<void()>(XEngine::exit));
+	XInput::bind(XD_KEY_SNAPSHOT, function<void()>(GameManager::takeScreenshot));
 
 	BlockData::init();
 	World::init();
@@ -43,6 +45,14 @@ void GameManager::update()
 void GameManager::draw(xd::GraphicsContext &context)
 {
 	if(!s_spriteBatch) s_spriteBatch = new xd::SpriteBatch(context);
+
+	if(s_takeScreenshot)
+	{
+		int i = 0;
+		while(util::fileExists("C:\\Users\\Marcus\\Desktop\\screenshot_" + util::intToStr(i) + ".png")) i++;
+		context.saveScreenshot("C:\\Users\\Marcus\\Desktop\\screenshot_" + util::intToStr(i) + ".png");
+		s_takeScreenshot = false;
+	}
 	
 	World::getDebug()->setVariable("FPS", util::intToStr((int)xd::Graphics::getFPS()));
 

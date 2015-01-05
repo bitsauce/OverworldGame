@@ -99,11 +99,11 @@
     <ClCompile Include="..\..\source\blockentities\blockentity.cpp" />
     <ClCompile Include="..\..\source\blockentities\redcurrantbush.cpp" />
     <ClCompile Include="..\..\source\blockentities\torch.cpp" />
-    <ClCompile Include="..\..\source\environment\background.cpp" />
-    <ClCompile Include="..\..\source\environment\timeofday.cpp" />
+    <ClCompile Include="..\..\source\environment\Background.cpp" />
+    <ClCompile Include="..\..\source\environment\TimeOfDay.cpp" />
     <ClCompile Include="..\..\source\game\camera.cpp" />
     <ClCompile Include="..\..\source\game\debug.cpp" />
-    <ClCompile Include="..\..\source\game\gamemanager.cpp" />
+    <ClCompile Include="..\..\source\game\GameManager.cpp" />
     <ClCompile Include="..\..\source\game\gameobject.cpp" />
     <ClCompile Include="..\..\source\game\blockdata.cpp" />
     <ClCompile Include="..\..\source\game\player.cpp" />
@@ -114,8 +114,10 @@
     <ClCompile Include="..\..\source\gui\lineedit.cpp" />
     <ClCompile Include="..\..\source\gui\uiobject.cpp" />
     <ClCompile Include="..\..\source\items\item.cpp" />
-    <ClCompile Include="..\..\source\lighting\spotlight.cpp" />
+    <ClCompile Include="..\..\source\lighting\TerrainLighting.cpp" />
+    <ClCompile Include="..\..\source\lighting\Spotlight.cpp" />
     <ClCompile Include="..\..\source\mobs\zombie.cpp" />
+    <ClCompile Include="..\..\source\Noise\Simplex.cpp" />
     <ClCompile Include="..\..\source\physics\physicsbody.cpp" />
     <ClCompile Include="..\..\source\scenes\gamescene.cpp" />
     <ClCompile Include="..\..\source\scenes\scene.cpp" />
@@ -123,12 +125,11 @@
     <ClCompile Include="..\..\source\scenes\worldcreate.cpp" />
     <ClCompile Include="..\..\source\scenes\mainmenu.cpp" />
     <ClCompile Include="..\..\source\scenes\worldselect.cpp" />
-    <ClCompile Include="..\..\source\terrain\generator\grassland.cpp" />
-    <ClCompile Include="..\..\source\terrain\generator\structure.cpp" />
-    <ClCompile Include="..\..\source\terrain\generator\terraingen.cpp" />
-    <ClCompile Include="..\..\source\terrain\simplex.cpp" />
-    <ClCompile Include="..\..\source\terrain\terrain.cpp" />
-    <ClCompile Include="..\..\source\terrain\terrainchunk.cpp" />
+    <ClCompile Include="..\..\source\terrain\generator\Grassland.cpp" />
+    <ClCompile Include="..\..\source\terrain\generator\Structure.cpp" />
+    <ClCompile Include="..\..\source\terrain\generator\TerrainGen.cpp" />
+    <ClCompile Include="..\..\source\terrain\Terrain.cpp" />
+    <ClCompile Include="..\..\source\terrain\TerrainChunk.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -139,13 +140,13 @@
     <ClInclude Include="..\..\source\blockentities\blockentity.h" />
     <ClInclude Include="..\..\source\blockentities\redcurrantbush.h" />
     <ClInclude Include="..\..\source\blockentities\torch.h" />
-    <ClInclude Include="..\..\source\constants.h" />
-    <ClInclude Include="..\..\source\environment\background.h" />
-    <ClInclude Include="..\..\source\environment\timeofday.h" />
-    <ClInclude Include="..\..\source\game.h" />
+    <ClInclude Include="..\..\source\Constants.h" />
+    <ClInclude Include="..\..\source\environment\Background.h" />
+    <ClInclude Include="..\..\source\environment\TimeOfDay.h" />
+    <ClInclude Include="..\..\source\Game.h" />
     <ClInclude Include="..\..\source\game\camera.h" />
     <ClInclude Include="..\..\source\game\debug.h" />
-    <ClInclude Include="..\..\source\game\gamemanager.h" />
+    <ClInclude Include="..\..\source\game\GameManager.h" />
     <ClInclude Include="..\..\source\game\gameobject.h" />
     <ClInclude Include="..\..\source\game\blockdata.h" />
     <ClInclude Include="..\..\source\game\player.h" />
@@ -156,8 +157,10 @@
     <ClInclude Include="..\..\source\gui\lineedit.h" />
     <ClInclude Include="..\..\source\gui\uiobject.h" />
     <ClInclude Include="..\..\source\items\item.h" />
-    <ClInclude Include="..\..\source\lighting\spotlight.h" />
+    <ClInclude Include="..\..\source\lighting\TerrainLighting.h" />
+    <ClInclude Include="..\..\source\lighting\Spotlight.h" />
     <ClInclude Include="..\..\source\mobs\zombie.h" />
+    <ClInclude Include="..\..\source\Noise\Simplex.h" />
     <ClInclude Include="..\..\source\physics\physicsbody.h" />
     <ClInclude Include="..\..\source\scenes\gamescene.h" />
     <ClInclude Include="..\..\source\scenes\scene.h" />
@@ -165,12 +168,11 @@
     <ClInclude Include="..\..\source\scenes\worldcreate.h" />
     <ClInclude Include="..\..\source\scenes\mainmenu.h" />
     <ClInclude Include="..\..\source\scenes\worldselect.h" />
-    <ClInclude Include="..\..\source\terrain\generator\grassland.h" />
-    <ClInclude Include="..\..\source\terrain\generator\structure.h" />
-    <ClInclude Include="..\..\source\terrain\generator\terraingen.h" />
-    <ClInclude Include="..\..\source\terrain\simplex.h" />
-    <ClInclude Include="..\..\source\terrain\terrain.h" />
-    <ClInclude Include="..\..\source\terrain\terrainchunk.h" />
+    <ClInclude Include="..\..\source\terrain\generator\Grassland.h" />
+    <ClInclude Include="..\..\source\terrain\generator\Structure.h" />
+    <ClInclude Include="..\..\source\terrain\generator\TerrainGen.h" />
+    <ClInclude Include="..\..\source\terrain\Terrain.h" />
+    <ClInclude Include="..\..\source\terrain\TerrainChunk.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

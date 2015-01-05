@@ -2,10 +2,11 @@
 #define TERRAIN_H
 
 #include <x2d/x2d.h>
-#include "terrainchunk.h"
-#include "generator/terraingen.h"
 
-#include "game/gameobject.h"
+#include "Game/GameObject.h"
+#include "Lighting/TerrainLighting.h"
+#include "Terrain/TerrainChunk.h"
+#include "Terrain/Generator/TerrainGen.h"
 
 enum TerrainLayer;
 enum BlockID;
@@ -47,28 +48,24 @@ public:
 	void resizeEvent(uint width, uint height);
 
 private:
-	// Terrain chunks
-	//vector<TerrainChunk*> loadedChunks;
+	// CHUNKS
 	vector<TerrainChunk*> m_chunkPool;
-	uint m_chunkCount;
-	TerrainChunk m_dummyChunk;
-	list<TerrainChunk*> chunkLoadQueue;
 	unordered_map<uint, TerrainChunk*> m_chunks;
-	xd::VertexFormat vertexFormat;
+	TerrainChunk m_dummyChunk;
+
+	// RENDER TARGET
+	xd::ShaderPtr m_directionalLightingShader;
+	xd::RenderTarget2D *m_renderTarget;
 
 	// SHADOWS
-	xd::RenderTarget2D *m_shadowPass0;
-	xd::RenderTarget2D *m_shadowPass1;
-	xd::RenderTarget2D *m_shadowPass2;
-	xd::RenderTarget2D *m_shadowRenderTarget;
-	shared_ptr<xd::Shader> m_blurHShader;
-	shared_ptr<xd::Shader> m_blurVShader;
-	int m_shadowRadius;
 	int m_prevX0, m_prevY0;
 	
-	// Terrain generator
+	// GENERATOR
 	TerrainGen generator;
 	
+	// BLOCK LIGHTING
+	TerrainLighting m_lighting;
+
 	// For selecting a direction to generate in
 	Vector2 prevCameraPos;
 };
