@@ -104,14 +104,17 @@
     <ClCompile Include="..\..\source\mobs\zombie.cpp">
       <Filter>source\mobs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\lighting\spotlight.cpp">
-      <Filter>source\lighting</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\blockentities\torch.cpp">
       <Filter>source\blockentities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\game\rayCast.cpp">
       <Filter>source\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\lighting\Spotlight.cpp">
+      <Filter>source\lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\lighting\LightSource.cpp">
+      <Filter>source\lighting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -264,17 +267,20 @@
     <ClInclude Include="..\..\source\mobs\zombie.h">
       <Filter>source\mobs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\lighting\spotlight.h">
-      <Filter>source\lighting</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\blockentities\torch.h">
       <Filter>source\blockentities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\items\item.h">
-      <Filter>source\lighting</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\game\rayCast.h">
       <Filter>source\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\lighting\LightSource.h">
+      <Filter>source\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\lighting\Spotlight.h">
+      <Filter>source\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\items\item.h">
+      <Filter>source\items</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
