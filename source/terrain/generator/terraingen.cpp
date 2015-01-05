@@ -64,7 +64,7 @@ BlockID TerrainGen::getGroundAt(const int x, const int y, const TerrainLayer lay
 		{
 			if(y > 20)
 			{
-				return BLOCK_STONE;
+				//return BLOCK_STONE;
 			}
 		}
 		break;

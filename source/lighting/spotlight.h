@@ -8,6 +8,7 @@
 
 class Spotlight : public LightSource
 {
+	friend class Terrain;
 public:
 	Spotlight(const Vector2 &position, const float radius, const xd::Color &color);
 

@@ -78,6 +78,8 @@ private:
 	xd::StaticVertexBuffer m_vbo;
 	xd::StaticIndexBuffer m_ibo;
 	xd::Texture2DPtr m_shadowMap;
+
+	//list<LightSource> m_lightSources;
 	
 	// MISC
 	bool m_modified;

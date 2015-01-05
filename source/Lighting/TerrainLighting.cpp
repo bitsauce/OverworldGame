@@ -58,6 +58,7 @@ void TerrainLighting::draw(xd::SpriteBatch *spriteBatch)
 		gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
 		m_directionalLightingShader->setSampler2D("u_texture", m_lightingRenderTarget->getTexture());
 		m_directionalLightingShader->setUniform1f("u_direction", 0.0174532925f * 180.0f * (World::getTimeOfDay()->isDay() ? (1140.0f - World::getTimeOfDay()->getTime()) : (1860.0f - (World::getTimeOfDay()->getTime() >= 1140.0f ? World::getTimeOfDay()->getTime() : World::getTimeOfDay()->getTime() + 1440.0f)))/720.0f);
+		m_directionalLightingShader->setUniform1f("u_offsetY", floor(World::getCamera()->getY()/CHUNK_BLOCKSF)/m_height + (y0*CHUNK_BLOCKSF - floor(World::getCamera()->getY()/CHUNK_BLOCKSF))/m_height - 32.0f/m_height);
 		m_directionalLightingShader->setUniform1f("u_width", m_width);
 		m_directionalLightingShader->setUniform1f("u_height", m_height);
 		gfxContext.setShader(m_directionalLightingShader);
@@ -89,7 +90,6 @@ void TerrainLighting::draw(xd::SpriteBatch *spriteBatch)
 
 		gfxContext.setProjectionMatrix(World::getCamera()->getProjectionMatrix());
 		gfxContext.setTexture(m_lightingPass2->getTexture());
-		//gfxContext.setTexture(m_lightingPass1->getTexture());
 		gfxContext.drawRectangle((x0 - 1) * CHUNK_PXF, (y0 - 1) * CHUNK_PXF, m_width * BLOCK_PXF, m_height * BLOCK_PXF);
 		
 		gfxContext.setBlendState(xd::BlendState::PRESET_ALPHA_BLEND);

@@ -2,87 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="..\..\source\gui\button.cpp">
-      <Filter>source\gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\gui\uiobject.cpp">
-      <Filter>source\gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\scenes\mainmenu.cpp">
-      <Filter>source\scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\gui\canvas.cpp">
-      <Filter>source\gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\gui\lineedit.cpp">
-      <Filter>source\gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\scenes\worldcreate.cpp">
-      <Filter>source\scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\scenes\worldselect.cpp">
-      <Filter>source\scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\scenes\gamescene.cpp">
-      <Filter>source\scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\game\gameobject.cpp">
-      <Filter>source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\game\camera.cpp">
-      <Filter>source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\game\debug.cpp">
-      <Filter>source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\game\world.cpp">
-      <Filter>source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\game\blockdata.cpp">
-      <Filter>source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\blockentities\redcurrantbush.cpp">
-      <Filter>source\blockentities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\blockentities\blockentity.cpp">
-      <Filter>source\blockentities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\physics\physicsbody.cpp">
-      <Filter>source\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\game\player.cpp">
-      <Filter>source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\scenes\scene.cpp">
-      <Filter>source\scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\animation\skeleton.cpp">
-      <Filter>source\animations</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\animation\animation.cpp">
-      <Filter>source\animations</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\animation\bone.cpp">
-      <Filter>source\animations</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\animation\slot.cpp">
-      <Filter>source\animations</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\items\item.cpp">
-      <Filter>source\items</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\scenes\scenemanager.cpp">
-      <Filter>source\scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\mobs\zombie.cpp">
-      <Filter>source\mobs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\blockentities\torch.cpp">
-      <Filter>source\blockentities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\game\rayCast.cpp">
-      <Filter>source\Game</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\terrain\TerrainChunk.cpp">
       <Filter>source\Terrain</Filter>
     </ClCompile>
@@ -116,6 +35,93 @@
     <ClCompile Include="..\..\source\game\GameManager.cpp">
       <Filter>source\Game</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\Lighting\LightSource.cpp">
+      <Filter>source\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Lighting\LightingManager.cpp">
+      <Filter>source\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\physics\PhysicsBody.cpp">
+      <Filter>source\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\mobs\Zombie.cpp">
+      <Filter>source\Mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\items\Item.cpp">
+      <Filter>source\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\gui\Button.cpp">
+      <Filter>source\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\gui\Canvas.cpp">
+      <Filter>source\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\gui\LineEdit.cpp">
+      <Filter>source\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\gui\UiObject.cpp">
+      <Filter>source\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\animation\Animation.cpp">
+      <Filter>source\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\animation\Bone.cpp">
+      <Filter>source\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\animation\Skeleton.cpp">
+      <Filter>source\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\animation\Slot.cpp">
+      <Filter>source\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\blockentities\BlockEntity.cpp">
+      <Filter>source\BlockEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\blockentities\RedCurrantBush.cpp">
+      <Filter>source\BlockEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\blockentities\Torch.cpp">
+      <Filter>source\BlockEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\game\BlockData.cpp">
+      <Filter>source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\game\Camera.cpp">
+      <Filter>source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\game\Debug.cpp">
+      <Filter>source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\game\GameObject.cpp">
+      <Filter>source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\game\Player.cpp">
+      <Filter>source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\game\RayCast.cpp">
+      <Filter>source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\game\World.cpp">
+      <Filter>source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenes\GameScene.cpp">
+      <Filter>source\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenes\MainMenu.cpp">
+      <Filter>source\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenes\Scene.cpp">
+      <Filter>source\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenes\SceneManager.cpp">
+      <Filter>source\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenes\WorldCreate.cpp">
+      <Filter>source\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\scenes\WorldSelect.cpp">
+      <Filter>source\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -123,27 +129,6 @@
   <ItemGroup>
     <Filter Include="source">
       <UniqueIdentifier>{aa76d9fe-881d-4fc6-84f8-886f580bdf6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\gui">
-      <UniqueIdentifier>{e5cde9b0-bca1-414a-9213-0a7b3c1c350d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\scenes">
-      <UniqueIdentifier>{a771c727-de3c-48d8-93c5-0076f2474292}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\mobs">
-      <UniqueIdentifier>{e4431234-8aa8-4683-9b3c-7898bc8ecc33}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\blockentities">
-      <UniqueIdentifier>{dc2d914f-c636-4931-b0ee-b79e1c3b94ee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\physics">
-      <UniqueIdentifier>{e03c2679-3c51-49ab-a1d8-899ba002d17a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\animations">
-      <UniqueIdentifier>{30ad5ef0-d9bb-4e01-b029-5debc3059e46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\items">
-      <UniqueIdentifier>{1f91a026-3a45-40fe-ac3f-6910a38f5067}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\Noise">
       <UniqueIdentifier>{dc4c3fe4-09e5-417a-a2dd-12ea31f47404}</UniqueIdentifier>
@@ -163,89 +148,29 @@
     <Filter Include="source\Environment">
       <UniqueIdentifier>{60063404-bf8e-4d1f-91c0-9ce7bdaa6c13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\Scenes">
+      <UniqueIdentifier>{a771c727-de3c-48d8-93c5-0076f2474292}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Physics">
+      <UniqueIdentifier>{e03c2679-3c51-49ab-a1d8-899ba002d17a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Mobs">
+      <UniqueIdentifier>{e4431234-8aa8-4683-9b3c-7898bc8ecc33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Items">
+      <UniqueIdentifier>{1f91a026-3a45-40fe-ac3f-6910a38f5067}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Gui">
+      <UniqueIdentifier>{e5cde9b0-bca1-414a-9213-0a7b3c1c350d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Animations">
+      <UniqueIdentifier>{30ad5ef0-d9bb-4e01-b029-5debc3059e46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\BlockEntities">
+      <UniqueIdentifier>{dc2d914f-c636-4931-b0ee-b79e1c3b94ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\source\gui\button.h">
-      <Filter>source\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\gui\uiobject.h">
-      <Filter>source\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\scenes\mainmenu.h">
-      <Filter>source\scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\gui\canvas.h">
-      <Filter>source\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\gui\lineedit.h">
-      <Filter>source\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\scenes\worldcreate.h">
-      <Filter>source\scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\scenes\worldselect.h">
-      <Filter>source\scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\scenes\gamescene.h">
-      <Filter>source\scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\game\gameobject.h">
-      <Filter>source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\game\camera.h">
-      <Filter>source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\game\debug.h">
-      <Filter>source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\game\world.h">
-      <Filter>source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\game\blockdata.h">
-      <Filter>source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\blockentities\redcurrantbush.h">
-      <Filter>source\blockentities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\blockentities\blockentity.h">
-      <Filter>source\blockentities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\physics\physicsbody.h">
-      <Filter>source\physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\game\player.h">
-      <Filter>source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\scenes\scene.h">
-      <Filter>source\scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\animation\skeleton.h">
-      <Filter>source\animations</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\animation\animation.h">
-      <Filter>source\animations</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\animation\slot.h">
-      <Filter>source\animations</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\animation\bone.h">
-      <Filter>source\animations</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\scenes\scenemanager.h">
-      <Filter>source\scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\mobs\zombie.h">
-      <Filter>source\mobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\blockentities\torch.h">
-      <Filter>source\blockentities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\game\rayCast.h">
-      <Filter>source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\items\item.h">
-      <Filter>source\items</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\terrain\TerrainChunk.h">
       <Filter>source\Terrain</Filter>
     </ClInclude>
@@ -284,6 +209,93 @@
     </ClInclude>
     <ClInclude Include="..\..\source\game\GameManager.h">
       <Filter>source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lighting\LightSource.h">
+      <Filter>source\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lighting\LightingManager.h">
+      <Filter>source\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\physics\PhysicsBody.h">
+      <Filter>source\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\mobs\Zombie.h">
+      <Filter>source\Mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\items\Item.h">
+      <Filter>source\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\Button.h">
+      <Filter>source\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\Canvas.h">
+      <Filter>source\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\LineEdit.h">
+      <Filter>source\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\UiObject.h">
+      <Filter>source\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\animation\Animation.h">
+      <Filter>source\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\animation\Bone.h">
+      <Filter>source\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\animation\Skeleton.h">
+      <Filter>source\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\animation\Slot.h">
+      <Filter>source\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\blockentities\BlockEntity.h">
+      <Filter>source\BlockEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\blockentities\RedCurrantBush.h">
+      <Filter>source\BlockEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\blockentities\Torch.h">
+      <Filter>source\BlockEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\BlockData.h">
+      <Filter>source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\Camera.h">
+      <Filter>source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\Debug.h">
+      <Filter>source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\GameObject.h">
+      <Filter>source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\Player.h">
+      <Filter>source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\RayCast.h">
+      <Filter>source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\game\World.h">
+      <Filter>source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scenes\GameScene.h">
+      <Filter>source\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scenes\MainMenu.h">
+      <Filter>source\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scenes\Scene.h">
+      <Filter>source\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scenes\SceneManager.h">
+      <Filter>source\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scenes\WorldCreate.h">
+      <Filter>source\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scenes\WorldSelect.h">
+      <Filter>source\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
