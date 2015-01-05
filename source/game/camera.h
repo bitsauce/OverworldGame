@@ -8,30 +8,53 @@
 class Camera : public GameObject, public xd::MouseListener
 {
 public:
+	// Constructor
 	Camera();
-	
-	Matrix4 getProjectionMatrix();
-	Vector2 getCenter();
+
+	// Look at point
 	void lookAt(Vector2 point);
+	
+	// Get current projection matrix
+	Matrix4 getProjectionMatrix() const;
 
-	float getZoom() { return m_zoom; }
+	// Get camera center
+	Vector2 getCenter() const;
 
+	// Get active chunk area
+	Recti getActiveChunkArea() const;
+
+	// Get zoom level
+	float getZoom() const;
+
+	// Camera position
 	Vector2 getPosition();
 	float getX();
 	float getY();
-	
+
+	// Camera size
 	Vector2 getSize();
 	float getWidth();
 	float getHeight();
 
+	// Update & draw
 	void update();
 	void draw(xd::SpriteBatch *SpriteBatch);
+
+	// MouseListener event
 	void mouseWheelEvent(const int dt);
 
 private:
+	// Camera position
 	Vector2 m_position;
+
+	// Camera size (viewport size)
 	Vector2 m_size;
+
+	// Zoom level
 	float m_zoom;
+
+	// Active chunk area (chunks within viewspace)
+	Recti m_activeChunkArea;
 };
 
 #endif // CAMERA_H

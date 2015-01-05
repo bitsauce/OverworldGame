@@ -1,22 +1,22 @@
 #include "spotlight.h"
 
 xd::Vertex *Spotlight::s_vertices;
-list<Spotlight*> Spotlight::s_spotLights;
 
 Spotlight::Spotlight(const Vector2 &position, const float radius, const xd::Color &color) :
-	m_position(position),
-	m_radius(radius),
-	m_color(color)
+	LightSource(position, color),
+	m_radius(radius)
 {
-	s_spotLights.push_back(this);
+	//Lighting::addSpotlight(this);
 }
 
-void Spotlight::drawAll(xd::GraphicsContext &gfxContext)
+void Spotlight::setRadius(const float radius)
 {
-	for(list<Spotlight*>::iterator itr = s_spotLights.begin(); itr != s_spotLights.end(); ++itr)
-	{
-		(*itr)->draw(gfxContext);
-	}
+	m_radius = radius;
+}
+
+float Spotlight::getRadius() const
+{
+	return m_radius;
 }
 
 void Spotlight::draw(xd::GraphicsContext &gfxContext)
