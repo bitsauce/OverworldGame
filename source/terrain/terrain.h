@@ -4,7 +4,6 @@
 #include <x2d/x2d.h>
 
 #include "Game/GameObject.h"
-#include "Lighting/TerrainLighting.h"
 #include "Terrain/TerrainChunk.h"
 #include "Terrain/Generator/TerrainGen.h"
 
@@ -16,9 +15,6 @@ class Terrain : public GameObject, public xd::WindowListener
 public:
 	Terrain();
 	~Terrain();
-	
-	// VERTEX FORMAT
-	xd::VertexFormat getVertexFormat() const;
 	
 	// Move?
 	void saveChunks();
@@ -53,18 +49,11 @@ private:
 	unordered_map<uint, TerrainChunk*> m_chunks;
 	TerrainChunk m_dummyChunk;
 
-	// RENDER TARGET
-	xd::ShaderPtr m_directionalLightingShader;
-	xd::RenderTarget2D *m_renderTarget;
-
 	// SHADOWS
 	int m_prevX0, m_prevY0;
 	
 	// GENERATOR
 	TerrainGen generator;
-	
-	// BLOCK LIGHTING
-	TerrainLighting m_lighting;
 
 	// For selecting a direction to generate in
 	Vector2 prevCameraPos;

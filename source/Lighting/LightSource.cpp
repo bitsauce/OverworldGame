@@ -19,3 +19,13 @@ xd::Color LightSource::getColor() const
 {
 	return m_color;
 }
+
+void LightSource::setRadius(const float radius)
+{
+	m_radius = radius;
+}
+
+float LightSource::getRadius() const
+{
+	return m_radius;
+}

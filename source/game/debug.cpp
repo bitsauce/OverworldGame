@@ -1,21 +1,38 @@
 #include "debug.h"
 #include "game.h"
 
-Debug::Debug(Terrain *terrain) :
+Debug::Debug(Terrain *terrain, LightingManager *lighting) :
 	GameObject(DRAW_ORDER_DEBUG),
 	m_terrain(terrain),
+	m_lighting(lighting),
 	m_block(BLOCK_GRASS),
 	m_enabled(false),
 	m_font(xd::ResourceManager::get<xd::Font>(UI_DEBUG_FONT)),
-	m_variables()
+	m_variables(),
+	m_bulbSprite(xd::ResourceManager::get<xd::Texture2D>(":/sprites/debug/icon_bulb.png"))
 {
 	// Set font color
 	m_font->setColor(xd::Color(0, 0, 0, 255));
+
+	m_bulbSprite.setRegion(xd::TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 
 	// Debug binds
 	XInput::bind(XD_KEY_F2, function<void()>(bind(&Debug::toggle, this)));
 	XInput::bind(XD_KEY_PERIOD, function<void()>(bind(&Debug::nextBlock, this)));
 	XInput::bind(XD_KEY_COMMA, function<void()>(bind(&Debug::prevBlock, this)));
+	
+	XInput::bind(XD_KEY_F3, function<void()>(bind(&Debug::debugF3, this)));
+	XInput::bind(XD_KEY_F4, function<void()>(bind(&Debug::debugF4, this)));
+}
+
+void Debug::debugF3()
+{
+	new Spotlight((World::getCamera()->getPosition() + XInput::getPosition())/BLOCK_PXF, 20, xd::Color(255));
+}
+
+void Debug::debugF4()
+{
+
 }
 
 void Debug::update()
@@ -47,10 +64,21 @@ void Debug::draw(xd::SpriteBatch *spriteBatch)
 	}
 
 	m_font->draw(spriteBatch, Vector2(5.0f, 48.0f), drawString);
+	
+	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingRenderTarget->getTexture(), Rect(0.0f, 128.0f, 256.0f, 128.0f)));
+	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass0->getTexture(), Rect(0.0f, 128.0f*2, 256.0f, 128.0f)));
+	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass1->getTexture(), Rect(0.0f, 128.0f*3, 256.0f, 128.0f)));
+	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass2->getTexture(), Rect(0.0f, 128.0f*4, 256.0f, 128.0f)));
 
 	spriteBatch->drawText(Vector2(5.0f, XWindow::getSize().y - 48.0f), "Current block:    (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (XInput::getKeyState(XD_KEY_LCONTROL) ? "BACK" : (XInput::getKeyState(XD_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font);
 	xd::Sprite blockSprite(BlockData::get(m_block).getTexture(), Rect(150.0f, XWindow::getSize().y - 58.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, xd::TextureRegion(0.0f, 0.0f, 1.0f, 0.6f));
 	spriteBatch->drawSprite(blockSprite);
+
+	for(list<LightSource*>::iterator itr = m_lighting->m_lightSources.begin(); itr != m_lighting->m_lightSources.end(); ++itr)
+	{
+		m_bulbSprite.setPosition((*itr)->getPosition()*BLOCK_PXF - m_bulbSprite.getSize() * 0.5f);
+		spriteBatch->drawSprite(m_bulbSprite);
+	}
 	
 	int x0 = floor(World::getCamera()->getX()/CHUNK_PXF);
 	int y0 = floor(World::getCamera()->getY()/CHUNK_PXF);

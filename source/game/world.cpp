@@ -17,6 +17,7 @@ TimeOfDay *World::s_timeOfDay = nullptr;
 XIniFile *World::s_worldFile = nullptr;
 Camera *World::s_camera = nullptr;
 Debug *World::s_debug = nullptr;
+LightingManager *World::s_lighting = nullptr;
 
 void World::init()
 {
@@ -24,10 +25,11 @@ void World::init()
 	new Background(s_timeOfDay);
 	s_camera = new Camera();
 	s_terrain = new Terrain();
-	s_debug = new Debug(s_terrain);
 	s_worldFile = nullptr;
 	//Player *p = new Player(); p->m_body->setPosition(0, 0);
 	s_camera->lookAt(Vector2(0.0f, 0.0f));
+	s_lighting = new LightingManager(s_terrain);
+	s_debug = new Debug(s_terrain, s_lighting);
 }
 
 void World::create(const string &name)
@@ -91,4 +93,9 @@ Camera *World::getCamera()
 Debug *World::getDebug()
 {
 	return s_debug;
+}
+
+LightingManager *World::getLighting()
+{
+	return s_lighting;
 }

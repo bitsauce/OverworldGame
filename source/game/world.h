@@ -7,6 +7,7 @@ class Terrain;
 class TimeOfDay;
 class Camera;
 class Debug;
+class LightingManager;
 
 class World
 {
@@ -22,6 +23,7 @@ public:
 	static TimeOfDay *getTimeOfDay();
 	static Camera *getCamera();
 	static Debug *getDebug();
+	static LightingManager *getLighting();
 
 private:
 	
@@ -31,6 +33,7 @@ private:
 	static XIniFile *s_worldFile;
 	static Camera *s_camera;
 	static Debug *s_debug;
+	static LightingManager *s_lighting;
 };
 
 #endif // WORLD_H

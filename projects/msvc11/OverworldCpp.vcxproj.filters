@@ -23,9 +23,6 @@
     <ClCompile Include="..\..\source\lighting\Spotlight.cpp">
       <Filter>source\Lighting</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\lighting\TerrainLighting.cpp">
-      <Filter>source\Lighting</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\environment\Background.cpp">
       <Filter>source\Environment</Filter>
     </ClCompile>
@@ -36,9 +33,6 @@
       <Filter>source\Game</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\Lighting\LightSource.cpp">
-      <Filter>source\Lighting</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\Lighting\LightingManager.cpp">
       <Filter>source\Lighting</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\physics\PhysicsBody.cpp">
@@ -122,6 +116,9 @@
     <ClCompile Include="..\..\source\scenes\WorldSelect.cpp">
       <Filter>source\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\Lighting\LightingManager.cpp">
+      <Filter>source\Lighting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -198,9 +195,6 @@
     <ClInclude Include="..\..\source\lighting\Spotlight.h">
       <Filter>source\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\lighting\TerrainLighting.h">
-      <Filter>source\Lighting</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\environment\Background.h">
       <Filter>source\Environment</Filter>
     </ClInclude>
@@ -211,9 +205,6 @@
       <Filter>source\Game</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\Lighting\LightSource.h">
-      <Filter>source\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\Lighting\LightingManager.h">
       <Filter>source\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\physics\PhysicsBody.h">
@@ -296,6 +287,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\scenes\WorldSelect.h">
       <Filter>source\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Lighting\LightingManager.h">
+      <Filter>source\Lighting</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

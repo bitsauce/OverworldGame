@@ -13,15 +13,9 @@ public:
 	Spotlight(const Vector2 &position, const float radius, const xd::Color &color);
 
 	// Draw spotlight
-	void draw(xd::GraphicsContext &gfxContext);
-
-	// Spotlight radius
-	void setRadius(const float radius);
-	float getRadius() const;
+	void draw(xd::SpriteBatch *spriteBatch);
 
 private:
-	float m_radius;
-
 	// TODO: Maybe I should just have a global array of vct vertices that can be reused whenever
 	static xd::Vertex *s_vertices;
 };

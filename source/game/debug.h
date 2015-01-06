@@ -5,12 +5,13 @@
 #include "game/gameObject.h"
 
 class Terrain;
+class LightingManager;
 enum BlockID;
 
 class Debug : public GameObject
 {
 public:
-	Debug(Terrain *terrain);
+	Debug(Terrain *terrain, LightingManager *lighting);
 
 	void update();
 	void draw(xd::SpriteBatch *spriteBatch);
@@ -21,6 +22,11 @@ public:
 
 	void setVariable(const string &name, const string &value);
 
+	void debugF3();
+	void debugF4();
+
+	bool isEnabled() { return m_enabled; }
+
 private:
 	// Enabled flag
 	bool m_enabled;
@@ -30,6 +36,12 @@ private:
 
 	// Terrain pointer
 	Terrain *m_terrain;
+
+	// Lighting potiner
+	LightingManager *m_lighting;
+
+	// Debug sprites
+	xd::Sprite m_bulbSprite;
 
 	// Debug font
 	xd::FontPtr m_font;

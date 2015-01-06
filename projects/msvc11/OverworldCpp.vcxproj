@@ -114,9 +114,8 @@
     <ClCompile Include="..\..\source\gui\LineEdit.cpp" />
     <ClCompile Include="..\..\source\gui\UiObject.cpp" />
     <ClCompile Include="..\..\source\items\Item.cpp" />
-    <ClCompile Include="..\..\source\Lighting\LightingManager.cpp" />
     <ClCompile Include="..\..\source\Lighting\LightSource.cpp" />
-    <ClCompile Include="..\..\source\lighting\TerrainLighting.cpp" />
+    <ClCompile Include="..\..\source\Lighting\LightingManager.cpp" />
     <ClCompile Include="..\..\source\lighting\Spotlight.cpp" />
     <ClCompile Include="..\..\source\mobs\Zombie.cpp" />
     <ClCompile Include="..\..\source\Noise\Simplex.cpp" />
@@ -159,9 +158,8 @@
     <ClInclude Include="..\..\source\gui\LineEdit.h" />
     <ClInclude Include="..\..\source\gui\UiObject.h" />
     <ClInclude Include="..\..\source\items\Item.h" />
-    <ClInclude Include="..\..\source\Lighting\LightingManager.h" />
     <ClInclude Include="..\..\source\Lighting\LightSource.h" />
-    <ClInclude Include="..\..\source\lighting\TerrainLighting.h" />
+    <ClInclude Include="..\..\source\Lighting\LightingManager.h" />
     <ClInclude Include="..\..\source\lighting\Spotlight.h" />
     <ClInclude Include="..\..\source\mobs\Zombie.h" />
     <ClInclude Include="..\..\source\Noise\Simplex.h" />

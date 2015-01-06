@@ -1,26 +1,17 @@
 #include "spotlight.h"
+#include "game.h"
 
 xd::Vertex *Spotlight::s_vertices;
 
 Spotlight::Spotlight(const Vector2 &position, const float radius, const xd::Color &color) :
-	LightSource(position, color),
-	m_radius(radius)
+	LightSource(position, radius, color)
 {
-	//Lighting::addSpotlight(this);
+	World::getLighting()->addLightSource(this);
 }
 
-void Spotlight::setRadius(const float radius)
+void Spotlight::draw(xd::SpriteBatch *spriteBatch)
 {
-	m_radius = radius;
-}
-
-float Spotlight::getRadius() const
-{
-	return m_radius;
-}
-
-void Spotlight::draw(xd::GraphicsContext &gfxContext)
-{
+	xd::GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 	s_vertices[0].set4f(xd::VERTEX_POSITION, m_position.x, m_position.y);
 	s_vertices[0].set4ub(xd::VERTEX_COLOR, m_color.r, m_color.g, m_color.b, m_color.a);
 	s_vertices[0].set4f(xd::VERTEX_TEX_COORD, 0.0f, 1.0f);

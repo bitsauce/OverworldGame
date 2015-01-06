@@ -9,10 +9,7 @@
 #define CHUNK_KEY(X, Y) ((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000)
 
 Terrain::Terrain() :
-	GameObject(DRAW_ORDER_TERRAIN),
-	m_directionalLightingShader(xd::ResourceManager::get<xd::Shader>(":/shaders/directional_lighting")),
-	m_renderTarget(nullptr),
-	m_lighting(this)
+	GameObject(DRAW_ORDER_TERRAIN)
 {
 	LOG("Initializing terrain");
 
@@ -256,6 +253,6 @@ void Terrain::draw(xd::SpriteBatch *spriteBatch)
 // WINDOW
 void Terrain::resizeEvent(uint width, uint height)
 {
-	delete m_renderTarget;
-	m_renderTarget = new xd::RenderTarget2D(width, height);
+	//delete m_renderTarget;
+	//m_renderTarget = new xd::RenderTarget2D(width, height);
 }
