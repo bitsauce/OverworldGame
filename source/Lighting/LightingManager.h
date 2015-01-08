@@ -6,14 +6,14 @@
 class Terrain;
 class LightSource;
 
-class LightingManager : public GameObject, public xd::WindowListener
+class Lighting : public GameObject, public xd::WindowListener
 {
-	friend class LightingManager;
+	friend class Lighting;
 	friend class Debug;
 public:
 	// CONSTRUCTOR
-	LightingManager(Terrain *terrain);
-	~LightingManager();
+	Lighting(Terrain *terrain);
+	~Lighting();
 
 	// DRAWING
 	//xd::RenderTarget2D *drawLightMaps();

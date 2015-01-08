@@ -5,13 +5,13 @@
 #include "game/gameObject.h"
 
 class Terrain;
-class LightingManager;
+class Lighting;
 enum BlockID;
 
 class Debug : public GameObject
 {
 public:
-	Debug(Terrain *terrain, LightingManager *lighting);
+	Debug(Terrain *terrain, Lighting *lighting);
 
 	void update();
 	void draw(xd::SpriteBatch *spriteBatch);
@@ -38,7 +38,7 @@ private:
 	Terrain *m_terrain;
 
 	// Lighting potiner
-	LightingManager *m_lighting;
+	Lighting *m_lighting;
 
 	// Debug sprites
 	xd::Sprite m_bulbSprite;

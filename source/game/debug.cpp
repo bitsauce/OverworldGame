@@ -1,7 +1,7 @@
 #include "debug.h"
 #include "game.h"
 
-Debug::Debug(Terrain *terrain, LightingManager *lighting) :
+Debug::Debug(Terrain *terrain, Lighting *lighting) :
 	GameObject(DRAW_ORDER_DEBUG),
 	m_terrain(terrain),
 	m_lighting(lighting),

@@ -1,6 +1,6 @@
 #include "Game.h"
 
-LightingManager::LightingManager(Terrain *terrain) :
+Lighting::Lighting(Terrain *terrain) :
 	GameObject(DRAW_ORDER_LIGHTING),
 	m_terrain(terrain),
 	m_lightingPass0(nullptr),
@@ -17,17 +17,17 @@ LightingManager::LightingManager(Terrain *terrain) :
 	resizeEvent(XWindow::getSize().x, XWindow::getSize().y);
 }
 
-LightingManager::~LightingManager()
+Lighting::~Lighting()
 {
 	XWindow::removeWindowListener(this);
 }
 
-void LightingManager::addLightSource(LightSource *source)
+void Lighting::addLightSource(LightSource *source)
 {
 	m_lightSources.push_back(source);
 }
 
-void LightingManager::draw(xd::SpriteBatch *spriteBatch)
+void Lighting::draw(xd::SpriteBatch *spriteBatch)
 {
 	xd::GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 
@@ -108,7 +108,7 @@ void LightingManager::draw(xd::SpriteBatch *spriteBatch)
 	}
 }
 
-void LightingManager::resizeEvent(uint width, uint height)
+void Lighting::resizeEvent(uint width, uint height)
 {
 	// Clear old render targets
 	delete m_lightingPass0;
