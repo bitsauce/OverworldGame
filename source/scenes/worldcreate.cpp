@@ -12,7 +12,7 @@
 
 void WorldCreateScene::showEvent()
 {
-	LOG("Scene: World Create");
+	xd::LOG("Scene: World Create");
 	
 	// Setup canvas
 	canvas = new Canvas();

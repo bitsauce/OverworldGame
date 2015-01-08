@@ -1,5 +1,5 @@
-#ifndef LIGHTING_MANAGER_H
-#define LIGHTING_MANAGER_H
+#ifndef LIGHTING_H
+#define LIGHTING_H
 
 #include <x2d/x2d.h>
 
@@ -34,14 +34,12 @@ private:
 	xd::RenderTarget2D *m_lightingPass1;
 	xd::RenderTarget2D *m_lightingPass2;
 	xd::ShaderPtr m_directionalLightingShader;
+	xd::ShaderPtr m_radialLightingShader;
 	xd::ShaderPtr m_blurHShader;
 	xd::ShaderPtr m_blurVShader;
 	int m_lightRadius;
 
-	// RADIAL SHADER
-	xd::ShaderPtr m_radialLightingShader;
-
 	list<LightSource*> m_lightSources;
 };
 
-#endif // LIGHTING_MANAGER_H
+#endif // LIGHTING_H

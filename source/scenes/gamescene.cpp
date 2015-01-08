@@ -10,7 +10,7 @@
 
 void GameScene::showEvent()
 {
-	LOG("Scene: Game Scene");
+	xd::LOG("Scene: Game Scene");
 
 	// Setup canvas
 	canvas = new Canvas();

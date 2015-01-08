@@ -49,7 +49,7 @@ void Player::changeAnimation(const string &name)
 	Animation *anim = m_skeleton->findAnimation(name);
 	if(anim == nullptr)
 	{
-		LOG("Humanoid::changeAnimation() - Animation '%s' does not exists.", name);
+		xd::LOG("Humanoid::changeAnimation() - Animation '%s' does not exists.", name);
 		return;
 	}
 		
@@ -67,7 +67,7 @@ void Player::update()
 	// Jumping
 	if(m_body->isContact(SOUTH))
 	{
-		if(XInput::getKeyState(XD_KEY_SPACE))
+		if(xd::Input::getKeyState(xd::XD_KEY_SPACE))
 		{
 			if(m_canJump)
 			{
@@ -85,7 +85,7 @@ void Player::update()
 	{
 		if(m_jumpTimer < 0.1f)
 		{
-			if(XInput::getKeyState(XD_KEY_SPACE)) // High/low jumping
+			if(xd::Input::getKeyState(xd::XD_KEY_SPACE)) // High/low jumping
 			{
 				m_body->applyImpulse(Vector2(0.0f, -0.75f));
 			}
@@ -94,7 +94,7 @@ void Player::update()
 		else if(m_body->isContact(WEST) || m_body->isContact(EAST)) // Wall jumping
 		{
 			m_body->setVelocityY(m_body->getVelocity().y*0.5f);
-			if(XInput::getKeyState(XD_KEY_SPACE))
+			if(xd::Input::getKeyState(xd::XD_KEY_SPACE))
 			{
 				if(m_canJump)
 				{
@@ -114,14 +114,14 @@ void Player::update()
 	// Walking
 	if(abs(m_body->getVelocity().x) < 10.0f)
 	{
-		m_body->applyImpulse(Vector2((XInput::getKeyState(XD_KEY_D) - XInput::getKeyState(XD_KEY_A)) * (XInput::getKeyState(XD_KEY_SHIFT) ? 1.0f : 0.5f), 0.0f));
+		m_body->applyImpulse(Vector2((xd::Input::getKeyState(xd::XD_KEY_D) - xd::Input::getKeyState(xd::XD_KEY_A)) * (xd::Input::getKeyState(xd::XD_KEY_SHIFT) ? 1.0f : 0.5f), 0.0f));
 	}
 
 	// Apply friction
 	m_body->setVelocityX(m_body->getVelocity().x * 0.85f);
 	
 	// Set animations
-	m_animation->setTimeScale(XMath::abs(m_body->getVelocity().x) * 0.5f);
+	m_animation->setTimeScale(xd::math::abs(m_body->getVelocity().x) * 0.5f);
 	if(m_body->isContact(SOUTH))
 	{
 		m_animation->setLooping(true);

@@ -7,7 +7,7 @@ LineEdit::LineEdit(UiObject *parent) :
 	m_cursorTime(0.0f),
 	m_font(xd::ResourceManager::get<xd::Font>(UI_MENU_BUTTON_FONT))
 {
-	XInput::addKeyboardListener(this);
+	xd::Input::addKeyboardListener(this);
 }
 
 void LineEdit::setText(const string &text)
@@ -80,7 +80,7 @@ void LineEdit::charEvent(const wchar_t c)
 		
 	switch(c)
 	{
-	case XD_KEY_BACKSPACE:
+	case xd::XD_KEY_BACKSPACE:
 		// Remove char behind
 		if(m_cursorPos != 0) {
 			removeAt(m_cursorPos);
@@ -88,7 +88,7 @@ void LineEdit::charEvent(const wchar_t c)
 		}
 		break;
 			
-	case XD_KEY_ENTER:
+	case xd::XD_KEY_ENTER:
 		// Call accept function
 		if(m_acceptFunc) {
 			m_acceptFunc();
@@ -103,12 +103,12 @@ void LineEdit::charEvent(const wchar_t c)
 	}
 }
 	
-void LineEdit::keyPressEvent(const XVirtualKey key)
+void LineEdit::keyPressEvent(const xd::VirtualKey key)
 {
 	switch(key)
 	{
 		// Delete
-		case XD_KEY_DELETE:
+		case xd::XD_KEY_DELETE:
 		{
 			// Remove char in front
 			if(m_cursorPos + 1 <= (int)m_text.size()) {
@@ -118,7 +118,7 @@ void LineEdit::keyPressEvent(const XVirtualKey key)
 		break;
 			
 		// Left cursor key
-		case XD_KEY_LEFT:
+		case xd::XD_KEY_LEFT:
 		{
 			// Decrease cursor position
 			if(--m_cursorPos < 0) {
@@ -128,7 +128,7 @@ void LineEdit::keyPressEvent(const XVirtualKey key)
 		break;
 			
 		// Right cursor key
-		case XD_KEY_RIGHT:
+		case xd::XD_KEY_RIGHT:
 		{
 			if(++m_cursorPos >= (int)m_text.size()) {
 				m_cursorPos = m_text.size();
@@ -138,6 +138,6 @@ void LineEdit::keyPressEvent(const XVirtualKey key)
 	}
 }
 	
-void LineEdit::keyReleaseEvent(const XVirtualKey key)
+void LineEdit::keyReleaseEvent(const xd::VirtualKey key)
 {
 }

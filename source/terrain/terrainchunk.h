@@ -24,7 +24,7 @@ public:
 	void load(int chunkX, int chunkY);
 	void generate();
 	void generateVBO();
-	void serialize(XFileWriter &ss);
+	void serialize(xd::FileWriter &ss);
 	void deserialize(stringstream &ss);
 	
 	int getX() const { return m_x; }

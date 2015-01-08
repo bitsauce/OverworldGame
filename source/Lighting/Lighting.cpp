@@ -8,18 +8,19 @@ Lighting::Lighting(Terrain *terrain) :
 	m_lightingPass2(nullptr),
 	m_lightingRenderTarget(nullptr),
 	m_directionalLightingShader(xd::ResourceManager::get<xd::Shader>(":/shaders/directional_lighting")),
+	m_radialLightingShader(xd::ResourceManager::get<xd::Shader>(":/shaders/radial_lighting")),
 	m_blurHShader(xd::ResourceManager::get<xd::Shader>(":/shaders/blur_h")),
 	m_blurVShader(xd::ResourceManager::get<xd::Shader>(":/shaders/blur_v")),
 	m_lightRadius(6)
 {
 	// Resize render targets
-	XWindow::addWindowListener(this);
-	resizeEvent(XWindow::getSize().x, XWindow::getSize().y);
+	xd::Window::addWindowListener(this);
+	resizeEvent(xd::Window::getSize().x, xd::Window::getSize().y);
 }
 
 Lighting::~Lighting()
 {
-	XWindow::removeWindowListener(this);
+	xd::Window::removeWindowListener(this);
 }
 
 void Lighting::addLightSource(LightSource *source)
@@ -58,19 +59,26 @@ void Lighting::draw(xd::SpriteBatch *spriteBatch)
 			}
 		}
 		
-		for(list<LightSource*>::iterator itr = m_lightSources.begin(); itr != m_lightSources.end(); ++itr)
+		/*for(list<LightSource*>::iterator itr = m_lightSources.begin(); itr != m_lightSources.end(); ++itr)
 		{
 			gfxContext.drawCircle((*itr)->getPosition().x, (*itr)->getPosition().y, (*itr)->getRadius(), 32, xd::Color(0));
-		}
-
-		gfxContext.drawCircle(CHUNK_BLOCKS*2 + XInput::getPosition().x/BLOCK_PXF, CHUNK_BLOCKS*2 + XInput::getPosition().y/BLOCK_PXF, 2, 32, xd::Color(0));
-
+		}*/
+		
+		Vector2 pos = (xd::Input::getPosition() + World::getCamera()->getPosition())/BLOCK_PXF - Vector2(x0 - 1, y0 - 1)*CHUNK_BLOCKSF;
+		m_radialLightingShader->setSampler2D("u_lightMap", m_lightingRenderTarget->getTexture());
+		m_radialLightingShader->setUniform2f("u_lightTexCoord", pos.x/m_width, 1.0f - (pos.y/m_height));
+		m_radialLightingShader->setUniform2f("u_radius", 20.0f/m_width, 20.0f/m_height);
+		m_radialLightingShader->setUniform1i("u_iterations", 100);
+		gfxContext.setShader(m_radialLightingShader);
+		//gfxContext.drawRectangle((xd::Input::getPosition() + World::getCamera()->getPosition())/BLOCK_PXF - Vector2(x0 - 1, y0 - 1)*CHUNK_BLOCKSF - Vector2(8.0), Vector2(16.0f));
+		gfxContext.drawCircle((xd::Input::getPosition() + World::getCamera()->getPosition())/BLOCK_PXF - Vector2(x0 - 1, y0 - 1)*CHUNK_BLOCKSF, 20, 32);
+		
 		// Directional light
 		gfxContext.setRenderTarget(m_lightingPass0);
 		gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
 		m_directionalLightingShader->setSampler2D("u_texture", m_lightingRenderTarget->getTexture());
 		m_directionalLightingShader->setUniform1f("u_direction", 0.0174532925f * 180.0f * (World::getTimeOfDay()->isDay() ? (1140.0f - World::getTimeOfDay()->getTime()) : (1860.0f - (World::getTimeOfDay()->getTime() >= 1140.0f ? World::getTimeOfDay()->getTime() : World::getTimeOfDay()->getTime() + 1440.0f)))/720.0f);
-		m_directionalLightingShader->setUniform1f("u_offsetY", floor(World::getCamera()->getY()/CHUNK_BLOCKSF)/m_height + (y0*CHUNK_BLOCKSF - floor(World::getCamera()->getY()/CHUNK_BLOCKSF))/m_height - 32.0f/m_height);
+		m_directionalLightingShader->setUniform1f("u_offsetY", (y0*CHUNK_BLOCKSF - 32.0f)/m_height);
 		m_directionalLightingShader->setUniform1f("u_width", m_width);
 		m_directionalLightingShader->setUniform1f("u_height", m_height);
 		gfxContext.setShader(m_directionalLightingShader);

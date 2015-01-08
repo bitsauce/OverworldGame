@@ -182,19 +182,20 @@ void TerrainChunk::generate()
 		{
 			for(int x = 0; x < CHUNK_BLOCKS; ++x)
 			{
-				float opacity = 0.0f;
+				float shadow = 1.0f;
 				for(uint i = 0; i < TERRAIN_LAYER_COUNT; ++i)
 				{
-					opacity += BlockData::get(m_blocks[BLOCK_INDEX(x, CHUNK_BLOCKS - y - 1, i)]->id).getOpacity();
+					shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, CHUNK_BLOCKS - y - 1, i)]->id).getOpacity();
 				}
-				pixmap.setColor(x, y, xd::Color(0, 0, 0, 255 * min(opacity, 1.0f)));
+				int rgb = 255 * max(shadow, 0.0f);
+				pixmap.setColor(x, y, xd::Color(rgb, rgb, rgb, 255));
 			}
 		}
 		m_shadowMap->updatePixmap(pixmap);
 
 		// Mark chunk as initialized
 		m_state = CHUNK_INITIALIZED;
-		LOG("Chunk [%i, %i] generated", m_x, m_y);
+		xd::LOG("Chunk [%i, %i] generated", m_x, m_y);
 	}
 }
 
@@ -454,9 +455,9 @@ void TerrainChunk::generateVBO()
 	m_ibo.setData(s_indices, indexCount);
 }
 
-void TerrainChunk::serialize(XFileWriter &ss)
+void TerrainChunk::serialize(xd::FileWriter &ss)
 {
-	LOG("Saving chunk [%i, %i]...", m_x, m_y);
+	xd::LOG("Saving chunk [%i, %i]...", m_x, m_y);
 		
 	// Write chunk pos
 	ss << m_x << endl;
@@ -483,7 +484,7 @@ void TerrainChunk::deserialize(stringstream &ss)
 	ss >> chunkX;
 	ss >> chunkY;
 		
-	LOG("Loading chunk [%i, %i]...", chunkX, chunkY);
+	xd::LOG("Loading chunk [%i, %i]...", chunkX, chunkY);
 		
 	load(chunkX, chunkY);
 		
@@ -543,12 +544,13 @@ bool TerrainChunk::setBlockAt(const int x, const int y, const BlockID block, Ter
 		if(m_nextChunk[7] && x == 0 && y == 0)								m_nextChunk[7]->m_dirty = true;
 		
 		// Update shadow map
-		int r = 0, g = 0, b = 0, a = 0;
+		float shadow = 1.0f;
 		for(uint i = 0; i < TERRAIN_LAYER_COUNT; ++i)
 		{
-			a += BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]->id).getOpacity()*255;
+			shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]->id).getOpacity();
 		}
-		const uchar pixel[4] = { min(r, 255), min(g, 255), min(b, 255), min(a, 255) };
+		int rgb = 255 * max(shadow, 0.0f);
+		const uchar pixel[4] = { rgb, rgb, rgb, 255 };
 		m_shadowMap->updatePixmap(x, CHUNK_BLOCKS - y - 1, xd::Pixmap(1, 1, pixel));
 
 		return true; // return true as something was changed

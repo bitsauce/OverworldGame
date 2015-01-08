@@ -12,7 +12,7 @@
 
 void WorldSelectScene::showEvent()
 {
-	LOG("Scene: Select World");
+	xd::LOG("Scene: Select World");
 	
 	// Setup canvas
 	canvas = new Canvas();
@@ -23,7 +23,7 @@ void WorldSelectScene::showEvent()
 	while(itr)
 	{
 		string worldDir = itr.next();
-		Button *button = new Button(XIniFile(worldDir + "/world.ini").getValue("world", "name"), function<void()>(bind(&WorldSelectScene::worldClicked, this)), canvas);
+		Button *button = new Button(xd::IniFile(worldDir + "/world.ini").getValue("world", "name"), function<void()>(bind(&WorldSelectScene::worldClicked, this)), canvas);
 		button->setAnchor(Vector2(0.5f, 0.5f));
 		button->setPosition(Vector2(0.0f, -0.3f + i++*0.1f));
 		button->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));

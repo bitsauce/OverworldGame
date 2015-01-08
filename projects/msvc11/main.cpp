@@ -27,16 +27,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 		{
 			switch(__argv[i][1])
 			{
-			case 'v': flags |= XD_EXPORT_LOG; break;
+			case 'v': flags |= xd::XD_EXPORT_LOG; break;
 			case 'w': workDir = string(__argv[i]+3); break;
 			}
 		}
 	}
-	flags |= XD_EXPORT_LOG; // For now we force this flag
+	flags |= xd::XD_EXPORT_LOG; // For now we force this flag
 
-	XEngine *engine = CreateEngine();
+	xd::Engine *engine = xd::CreateEngine();
 
-	XConfig config;
+	xd::Config config;
 	config.main = &GameManager::main;
 	config.update = &GameManager::update;//gameUpdate;
 	config.draw = &GameManager::draw;
@@ -46,7 +46,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 #endif
 	config.flags = flags;
 
-	if(engine->init(config) != X2D_OK)
+	if(engine->init(config) != xd::X2D_OK)
 	{
 		delete engine;
 		return -1;

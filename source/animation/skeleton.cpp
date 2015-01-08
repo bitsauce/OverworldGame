@@ -30,7 +30,7 @@ char* _spUtil_readFile(const char* path, int* length)
 {
 	string content;
 	char *data = 0;
-	if(XFileSystem::ReadFile(path, content))
+	if(xd::FileSystem::ReadFile(path, content))
 	{
 		*length = content.size();
 		data = MALLOC(char, *length);
@@ -50,11 +50,11 @@ Skeleton::Skeleton(const string &jsonFile, const string &atlasFile, const float 
 	m_data = spSkeletonJson_readSkeletonDataFile(json, jsonFile.c_str());
 	if(!m_data)
 	{
-		LOG("Skeleton::Skeleton(): %s", json->error);
+		xd::LOG("Skeleton::Skeleton(): %s", json->error);
 		return;
 	}
 
-	LOG("Skeleton::Skeleton: Default skin name '%s'", m_data->defaultSkin->name);
+	xd::LOG("Skeleton::Skeleton: Default skin name '%s'", m_data->defaultSkin->name);
 	spSkeletonJson_dispose(json);
 
 	m_worldVertices = MALLOC(float, SPINE_MESH_VERTEX_COUNT_MAX);

@@ -9,7 +9,7 @@ float step(float edge, float x)
 
 uint TerrainGen::s_seed;
 Simplex2D TerrainGen::s_noise;
-XRandom TerrainGen::s_random;
+xd::Random TerrainGen::s_random;
 map<int64_t, TerrainGen::BlockUnion> TerrainGen::s_structureMap;
 unordered_set<uint> TerrainGen::s_loadedSuperChunks;
 
@@ -21,7 +21,7 @@ BlockID TerrainGen::getBlockAt(const int x, const int y, const TerrainLayer laye
 	BlockID block = getGroundAt(x, y, layer);
 		
 	// TODO: Move this check somewhere else
-	int superChunkX = XMath::floor(x/SUPER_CHUNK_BLOCKSF), superChunkY = XMath::floor(y/SUPER_CHUNK_BLOCKSF);
+	int superChunkX = xd::math::floor(x/SUPER_CHUNK_BLOCKSF), superChunkY = xd::math::floor(y/SUPER_CHUNK_BLOCKSF);
 	uint key = CHUNK_KEY(superChunkX, superChunkY);
 	if(s_loadedSuperChunks.find(key) == s_loadedSuperChunks.end())
 	{
@@ -53,7 +53,7 @@ BlockID TerrainGen::getGroundAt(const int x, const int y, const TerrainLayer lay
 			float h = s_noise.valueAt(x*0.1f, y + 710239) * 7;
 
 			// Ground
-			if((XMath::clamp((100 - y)/100.0f, 0.0f, 1.0f) + (s_noise.valueAt(x, y) * 0.5f + 0.5f)) * step(0, y + h) > 0.5f)
+			if((xd::math::clamp((100 - y)/100.0f, 0.0f, 1.0f) + (s_noise.valueAt(x, y) * 0.5f + 0.5f)) * step(0, y + h) > 0.5f)
 			{
 				return BLOCK_GRASS;
 			}
@@ -64,7 +64,7 @@ BlockID TerrainGen::getGroundAt(const int x, const int y, const TerrainLayer lay
 		{
 			if(y > 20)
 			{
-				//return BLOCK_STONE;
+				return BLOCK_STONE;
 			}
 		}
 		break;
@@ -74,7 +74,7 @@ BlockID TerrainGen::getGroundAt(const int x, const int y, const TerrainLayer lay
 
 void TerrainGen::loadStructures(const int superChunkX, const int superChunkY)
 {
-	LOG("Placing structures in super chunk [%i, %i]", superChunkX, superChunkY);
+	xd::LOG("Placing structures in super chunk [%i, %i]", superChunkX, superChunkY);
 	//vector<Structure*> structures;
 	for(int x = 0; x < SUPER_CHUNK_BLOCKS; ++x)
 	{

@@ -14,7 +14,7 @@
 string World::s_worldPath = "";
 Terrain *World::s_terrain = nullptr;
 TimeOfDay *World::s_timeOfDay = nullptr;
-XIniFile *World::s_worldFile = nullptr;
+xd::IniFile *World::s_worldFile = nullptr;
 Camera *World::s_camera = nullptr;
 Debug *World::s_debug = nullptr;
 Lighting *World::s_lighting = nullptr;
@@ -34,17 +34,17 @@ void World::init()
 
 void World::create(const string &name)
 {
-	LOG("Creating world '%s'...", name.c_str());
+	xd::LOG("Creating world '%s'...", name.c_str());
 	
 	// Set the world path
 	s_worldPath = "saves:/Overworld/" + name;
-	s_worldFile = new XIniFile(s_worldPath + "/world.ini");
+	s_worldFile = new xd::IniFile(s_worldPath + "/world.ini");
 		
 	// Create world file
 	s_worldFile->setValue("world", "name", name);
 	s_worldFile->save();
 		
-	LOG("Creating player...");
+	xd::LOG("Creating player...");
 		
 	// Create player
 	/*Player player();
@@ -60,12 +60,12 @@ void World::create(const string &name)
 
 void World::save()
 {
-	LOG("Saving world...");
+	xd::LOG("Saving world...");
 }
 
 void World::clear()
 {
-	LOG("Reseting world...");
+	xd::LOG("Reseting world...");
 
 	s_worldPath.clear();
 }

@@ -116,7 +116,7 @@
     <ClCompile Include="..\..\source\scenes\WorldSelect.cpp">
       <Filter>source\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\Lighting\LightingManager.cpp">
+    <ClCompile Include="..\..\source\Lighting\Lighting.cpp">
       <Filter>source\Lighting</Filter>
     </ClCompile>
   </ItemGroup>
@@ -288,7 +288,7 @@
     <ClInclude Include="..\..\source\scenes\WorldSelect.h">
       <Filter>source\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\Lighting\LightingManager.h">
+    <ClInclude Include="..\..\source\Lighting\Lighting.h">
       <Filter>source\Lighting</Filter>
     </ClInclude>
   </ItemGroup>

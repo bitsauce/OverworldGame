@@ -23,8 +23,8 @@ private:
 	void insertAt(const uint at, const string &str);
 	void removeAt(const uint at);
 	void charEvent(const wchar_t code);
-	void keyPressEvent(const XVirtualKey key);
-	void keyReleaseEvent(const XVirtualKey key);
+	void keyPressEvent(const xd::VirtualKey key);
+	void keyReleaseEvent(const xd::VirtualKey key);
 
 	xd::FontPtr m_font;
 	string m_text;

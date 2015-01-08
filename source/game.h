@@ -15,8 +15,8 @@
 #include "game/world.h"
 #include "game/rayCast.h"
 
-#include "lighting/Lighting.h"
-#include "lighting/Spotlight.h"
+#include "Lighting/Lighting.h"
+#include "Lighting/Spotlight.h"
 
 #include "scenes/scene.h"
 #include "scenes/scenemanager.h"

@@ -17,17 +17,17 @@ Debug::Debug(Terrain *terrain, Lighting *lighting) :
 	m_bulbSprite.setRegion(xd::TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 
 	// Debug binds
-	XInput::bind(XD_KEY_F2, function<void()>(bind(&Debug::toggle, this)));
-	XInput::bind(XD_KEY_PERIOD, function<void()>(bind(&Debug::nextBlock, this)));
-	XInput::bind(XD_KEY_COMMA, function<void()>(bind(&Debug::prevBlock, this)));
+	xd::Input::bind(xd::XD_KEY_F2, function<void()>(bind(&Debug::toggle, this)));
+	xd::Input::bind(xd::XD_KEY_PERIOD, function<void()>(bind(&Debug::nextBlock, this)));
+	xd::Input::bind(xd::XD_KEY_COMMA, function<void()>(bind(&Debug::prevBlock, this)));
 	
-	XInput::bind(XD_KEY_F3, function<void()>(bind(&Debug::debugF3, this)));
-	XInput::bind(XD_KEY_F4, function<void()>(bind(&Debug::debugF4, this)));
+	xd::Input::bind(xd::XD_KEY_F3, function<void()>(bind(&Debug::debugF3, this)));
+	xd::Input::bind(xd::XD_KEY_F4, function<void()>(bind(&Debug::debugF4, this)));
 }
 
 void Debug::debugF3()
 {
-	new Spotlight((World::getCamera()->getPosition() + XInput::getPosition())/BLOCK_PXF, 20, xd::Color(255));
+	new Spotlight((World::getCamera()->getPosition() + xd::Input::getPosition())/BLOCK_PXF, 20, xd::Color(255));
 }
 
 void Debug::debugF4()
@@ -41,15 +41,15 @@ void Debug::update()
 
 	// Block painting
 	TerrainLayer layer = TERRAIN_LAYER_MIDDLE;
-	if(XInput::getKeyState(XD_KEY_LSHIFT)) layer = TERRAIN_LAYER_FRONT;
-	if(XInput::getKeyState(XD_KEY_LCONTROL)) layer = TERRAIN_LAYER_BACK;
-	if(XInput::getKeyState(XD_LMB))
+	if(xd::Input::getKeyState(xd::XD_KEY_LSHIFT)) layer = TERRAIN_LAYER_FRONT;
+	if(xd::Input::getKeyState(xd::XD_KEY_LCONTROL)) layer = TERRAIN_LAYER_BACK;
+	if(xd::Input::getKeyState(xd::XD_LMB))
 	{
-		m_terrain->setBlockAt(floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), m_block, layer);
+		m_terrain->setBlockAt(floor((World::getCamera()->getPosition().x + xd::Input::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + xd::Input::getPosition().y)/BLOCK_PXF), m_block, layer);
 	}
-	else if(XInput::getKeyState(XD_RMB))
+	else if(xd::Input::getKeyState(xd::XD_RMB))
 	{
-		m_terrain->setBlockAt(floor((World::getCamera()->getPosition().x + XInput::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + XInput::getPosition().y)/BLOCK_PXF), BLOCK_EMPTY, layer);
+		m_terrain->setBlockAt(floor((World::getCamera()->getPosition().x + xd::Input::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + xd::Input::getPosition().y)/BLOCK_PXF), BLOCK_EMPTY, layer);
 	}
 }
 
@@ -70,8 +70,8 @@ void Debug::draw(xd::SpriteBatch *spriteBatch)
 	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass1->getTexture(), Rect(0.0f, 128.0f*3, 256.0f, 128.0f)));
 	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass2->getTexture(), Rect(0.0f, 128.0f*4, 256.0f, 128.0f)));
 
-	spriteBatch->drawText(Vector2(5.0f, XWindow::getSize().y - 48.0f), "Current block:    (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (XInput::getKeyState(XD_KEY_LCONTROL) ? "BACK" : (XInput::getKeyState(XD_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font);
-	xd::Sprite blockSprite(BlockData::get(m_block).getTexture(), Rect(150.0f, XWindow::getSize().y - 58.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, xd::TextureRegion(0.0f, 0.0f, 1.0f, 0.6f));
+	spriteBatch->drawText(Vector2(5.0f, xd::Window::getSize().y - 48.0f), "Current block:    (" + xd::util::intToStr(m_block) + ")\n" + "Current layer: " + (xd::Input::getKeyState(xd::XD_KEY_LCONTROL) ? "BACK" : (xd::Input::getKeyState(xd::XD_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font);
+	xd::Sprite blockSprite(BlockData::get(m_block).getTexture(), Rect(150.0f, xd::Window::getSize().y - 58.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, xd::TextureRegion(0.0f, 0.0f, 1.0f, 0.6f));
 	spriteBatch->drawSprite(blockSprite);
 
 	for(list<LightSource*>::iterator itr = m_lighting->m_lightSources.begin(); itr != m_lighting->m_lightSources.end(); ++itr)
@@ -88,7 +88,7 @@ void Debug::draw(xd::SpriteBatch *spriteBatch)
 	xd::GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 	gfxContext.setProjectionMatrix(World::getCamera()->getProjectionMatrix());
 	gfxContext.setTexture(nullptr);
-	if(XInput::getKeyState(XD_KEY_B))
+	if(xd::Input::getKeyState(xd::XD_KEY_B))
 	{
 		int x0 = floor(World::getCamera()->getX()/BLOCK_PXF);
 		int y0 = floor(World::getCamera()->getY()/BLOCK_PXF);

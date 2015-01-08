@@ -6,12 +6,12 @@ Camera::Camera() :
 	m_position(0.0f, 0.0f),
 	m_zoom(1.0f)
 {
-	XInput::addMouseListener(this);
+	xd::Input::addMouseListener(this);
 }
 
 Vector2 Camera::getCenter() const
 {
-	return m_position + XWindow::getSize() * 0.5f / m_zoom;
+	return m_position + xd::Window::getSize() * 0.5f / m_zoom;
 }
 
 Matrix4 Camera::getProjectionMatrix() const
@@ -24,7 +24,7 @@ Matrix4 Camera::getProjectionMatrix() const
 
 void Camera::lookAt(Vector2 point)
 {
-	point -= XWindow::getSize() * 0.5f / m_zoom;
+	point -= xd::Window::getSize() * 0.5f / m_zoom;
 	m_position = point;
 }
 
@@ -50,7 +50,7 @@ float Camera::getY()
 
 Vector2 Camera::getSize()
 {
-	return XWindow::getSize() / m_zoom;
+	return xd::Window::getSize() / m_zoom;
 }
 
 float Camera::getWidth()
@@ -70,29 +70,29 @@ float Camera::getZoom() const
 
 void Camera::update()
 {
-	if(XInput::getKeyState(XD_KEY_LEFT)) {
+	if(xd::Input::getKeyState(xd::XD_KEY_LEFT)) {
 		m_position.x -= 16.0f/m_zoom;
 	}
 	
-	if(XInput::getKeyState(XD_KEY_RIGHT)) {
+	if(xd::Input::getKeyState(xd::XD_KEY_RIGHT)) {
 		m_position.x += 16.0f/m_zoom;
 	}
 	
-	if(XInput::getKeyState(XD_KEY_UP)) {
+	if(xd::Input::getKeyState(xd::XD_KEY_UP)) {
 		m_position.y -= 16.0f/m_zoom;
 	}
 	
-	if(XInput::getKeyState(XD_KEY_DOWN)) {
+	if(xd::Input::getKeyState(xd::XD_KEY_DOWN)) {
 		m_position.y += 16.0f/m_zoom;
 	}
 	
-	if(XInput::getKeyState(XD_KEY_PLUS)) {
+	if(xd::Input::getKeyState(xd::XD_KEY_PLUS)) {
 		Vector2 center = getCenter();
 		m_zoom *= 2.0f;
 		lookAt(center);
 	}
 
-	if(XInput::getKeyState(XD_KEY_MINUS)) {
+	if(xd::Input::getKeyState(xd::XD_KEY_MINUS)) {
 		Vector2 center = getCenter();
 		m_zoom *= 0.5f;
 		lookAt(center);
@@ -110,8 +110,8 @@ void Camera::update()
 void Camera::draw(xd::SpriteBatch*)
 {
 	Vector2 center = getCenter();
-	World::getDebug()->setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
-	World::getDebug()->setVariable("Zoom", util::floatToStr(m_zoom));
+	World::getDebug()->setVariable("Camera", xd::util::floatToStr(center.x) + ", " + xd::util::floatToStr(center.y));
+	World::getDebug()->setVariable("Zoom", xd::util::floatToStr(m_zoom));
 }
 
 void Camera::mouseWheelEvent(const int dt)

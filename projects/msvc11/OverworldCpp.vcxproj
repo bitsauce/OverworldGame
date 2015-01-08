@@ -115,7 +115,7 @@
     <ClCompile Include="..\..\source\gui\UiObject.cpp" />
     <ClCompile Include="..\..\source\items\Item.cpp" />
     <ClCompile Include="..\..\source\Lighting\LightSource.cpp" />
-    <ClCompile Include="..\..\source\Lighting\LightingManager.cpp" />
+    <ClCompile Include="..\..\source\Lighting\Lighting.cpp" />
     <ClCompile Include="..\..\source\lighting\Spotlight.cpp" />
     <ClCompile Include="..\..\source\mobs\Zombie.cpp" />
     <ClCompile Include="..\..\source\Noise\Simplex.cpp" />
@@ -159,7 +159,7 @@
     <ClInclude Include="..\..\source\gui\UiObject.h" />
     <ClInclude Include="..\..\source\items\Item.h" />
     <ClInclude Include="..\..\source\Lighting\LightSource.h" />
-    <ClInclude Include="..\..\source\Lighting\LightingManager.h" />
+    <ClInclude Include="..\..\source\Lighting\Lighting.h" />
     <ClInclude Include="..\..\source\lighting\Spotlight.h" />
     <ClInclude Include="..\..\source\mobs\Zombie.h" />
     <ClInclude Include="..\..\source\Noise\Simplex.h" />

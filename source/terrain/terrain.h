@@ -18,7 +18,7 @@ public:
 	
 	// Move?
 	void saveChunks();
-	void load(const XIniFile &file);
+	void load(const xd::IniFile &file);
 	
 	// BLOCK HELPERS
 	BlockID getBlockAt(const int x, const int y, const TerrainLayer layer);

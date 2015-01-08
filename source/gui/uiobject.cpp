@@ -30,7 +30,7 @@ bool UiObject::isActive() const
 	
 void UiObject::update()
 {
-	if(getRect().contains(XInput::getPosition())) {
+	if(getRect().contains(xd::Input::getPosition())) {
 		m_hovered = true;
 		hover();
 	}
@@ -40,7 +40,7 @@ void UiObject::update()
 	}
 	
 	if(m_pressed) {
-		if(!XInput::getKeyState(XD_LMB)) {
+		if(!xd::Input::getKeyState(xd::XD_LMB)) {
 			if(isHovered()) {
 				m_active = true;
 				clickEvent();
@@ -55,7 +55,7 @@ void UiObject::update()
 		}
 	}
 	else {
-		if(m_hovered && XInput::getKeyState(XD_LMB)) {
+		if(m_hovered && xd::Input::getKeyState(xd::XD_LMB)) {
 			m_pressed = true;
 			pressEvent();
 		}
@@ -70,7 +70,7 @@ void UiObject::setPosition(const Vector2 &position)
 Vector2 UiObject::getPosition() const
 {
 	Vector2 parentPos = m_parent ? m_parent->getPosition() : m_rect.position;
-	Vector2 parentSize = m_parent ? m_parent->getSize() : XWindow::getSize();
+	Vector2 parentSize = m_parent ? m_parent->getSize() : xd::Window::getSize();
 	Vector2 pos = m_rect.position;
 	Vector2 size = m_rect.size;
 			
@@ -87,7 +87,7 @@ void UiObject::setSize(const Vector2 &size)
 
 Vector2 UiObject::getSize() const
 {
-	if(!m_parent) return Vector2(XWindow::getSize()) * m_rect.size;
+	if(!m_parent) return Vector2(xd::Window::getSize()) * m_rect.size;
 	return m_parent->getSize() * m_rect.size;
 }
 	

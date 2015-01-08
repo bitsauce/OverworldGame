@@ -14,11 +14,11 @@ void main()
 	float sum = 0.0;
 	for(int i = -5; i <= 5; i++)
 	{
-		sum += texture2D(u_texture, v_texCoord + vec2(float(i) / u_width, float(i) / u_height) * vec2(cos(u_direction), sin(u_direction)) * factor).a;
+		sum += texture2D(u_texture, v_texCoord + vec2(float(i) / u_width, float(i) / u_height) * vec2(cos(u_direction), sin(u_direction)) * factor).r;
 	}
 	sum /= 10.0;
 	
-	gl_FragColor = vec4(vec3(0.0), sum);
+	gl_FragColor = vec4(vec3(sum), 1.0);
 	
 	//gl_FragColor = vec4(vec3(0.0), min(texture2D(u_texture, v_texCoord).a, min(texture2D(u_texture, v_texCoord + vec2(1.0/u_width, 0.0)).a, min(texture2D(u_texture, v_texCoord - vec2(1.0/u_width, 0.0)).a, min(texture2D(u_texture, v_texCoord + vec2(0.0, 1.0/u_height)).a, texture2D(u_texture, v_texCoord - vec2(0.0, 1.0/u_height)).a)))));
 }

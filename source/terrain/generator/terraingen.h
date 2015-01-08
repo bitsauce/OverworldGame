@@ -26,7 +26,7 @@ public:
 private:
 	static uint s_seed;
 	static Simplex2D s_noise;
-	static XRandom s_random;
+	static xd::Random s_random;
 
 	struct BlockUnion
 	{

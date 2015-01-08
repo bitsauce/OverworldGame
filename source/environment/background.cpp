@@ -54,7 +54,7 @@ void Background::update()
 			
 		// Place sun
 		float ang = (1140-time)/720.0f;
-		Vector2 windowSize = XWindow::getSize();
+		Vector2 windowSize = xd::Window::getSize();
 		Vector2 sunSize = m_sun.getSize();
 		m_sun.setPosition(windowSize.x/2.0f - sunSize.x/2.0f + cos(PI*ang) * (windowSize.x/2.0f + sunSize.x/4.0f), windowSize.y/2.0f - sin(PI*ang) * (windowSize.y/2.0f + 64));
 		m_sun.setRotation(180*(1.0f-ang));
@@ -77,7 +77,7 @@ void Background::update()
 				
 		// Place moon
 		float ang = (1860 - (time >= 1140 ? time : time + 1440))/720.0f;
-		Vector2 windowSize = XWindow::getSize();
+		Vector2 windowSize = xd::Window::getSize();
 		Vector2 moonSize = m_moon.getSize();
 		m_moon.setPosition(windowSize.x/2.0f - moonSize.x/2.0f + cos(PI*ang) * (windowSize.x/2.0f + moonSize.x/2.0f), windowSize.y/2.0f - sin(PI*ang) * windowSize.y/2.0f);
 		m_moon.setRotation(180*(1.0f-ang));
@@ -93,10 +93,10 @@ void Background::draw(xd::SpriteBatch *spriteBatch)
 
 	// Draw sky gradient
 	//gfxContext.setRenderTarget(m_renderTarget);
-	m_vertices[0].set4f(xd::VERTEX_POSITION, 0.0f,							0.0f);
-	m_vertices[1].set4f(xd::VERTEX_POSITION, (float)XWindow::getSize().x,	0.0f);
-	m_vertices[2].set4f(xd::VERTEX_POSITION, 0.0f,							(float)XWindow::getSize().y);
-	m_vertices[3].set4f(xd::VERTEX_POSITION, (float)XWindow::getSize().x,	(float)XWindow::getSize().y);
+	m_vertices[0].set4f(xd::VERTEX_POSITION, 0.0f,								0.0f);
+	m_vertices[1].set4f(xd::VERTEX_POSITION, (float)xd::Window::getSize().x,	0.0f);
+	m_vertices[2].set4f(xd::VERTEX_POSITION, 0.0f,								(float)xd::Window::getSize().y);
+	m_vertices[3].set4f(xd::VERTEX_POSITION, (float)xd::Window::getSize().x,	(float)xd::Window::getSize().y);
 	m_vertices[0].set4ub(xd::VERTEX_COLOR, m_topColor.r, m_topColor.g, m_topColor.b, m_topColor.a);
 	m_vertices[1].set4ub(xd::VERTEX_COLOR, m_topColor.r, m_topColor.g, m_topColor.b, m_topColor.a);
 	m_vertices[2].set4ub(xd::VERTEX_COLOR, m_bottomColor.r, m_bottomColor.g, m_bottomColor.b, m_bottomColor.a);

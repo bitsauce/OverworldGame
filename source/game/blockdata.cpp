@@ -13,7 +13,7 @@ void BlockData::init()
 	s_blockData[BLOCK_WOOD] = BlockData(BLOCK_WOOD, xd::ResourceManager::get<xd::Texture2D>(":/sprites/blocks/oak_bark.png"), ITEM_WOOD_BLOCK, 0.75f);
 	s_blockData[BLOCK_LEAF] = BlockData(BLOCK_LEAF, xd::ResourceManager::get<xd::Texture2D>(":/sprites/blocks/oak_leaf.png"), ITEM_LEAF_BLOCK, 0.0f);
 	s_blockData[BLOCK_GRASS] = BlockData(BLOCK_GRASS, xd::ResourceManager::get<xd::Texture2D>(":/sprites/blocks/grass.png"), ITEM_GRASS_BLOCK, 1.0f);
-	s_blockData[BLOCK_STONE] = BlockData(BLOCK_STONE, xd::ResourceManager::get<xd::Texture2D>(":/sprites/blocks/stone.png"), ITEM_STONE_BLOCK, 1.0f);
+	s_blockData[BLOCK_STONE] = BlockData(BLOCK_STONE, xd::ResourceManager::get<xd::Texture2D>(":/sprites/blocks/stone.png"), ITEM_STONE_BLOCK, 0.9f);
 
 	vector<xd::Texture2DPtr> textures;
 	for(uint i = 0; i < BLOCK_COUNT; ++i)

@@ -30,7 +30,7 @@ private:
 	static Terrain *s_terrain;
 	static TimeOfDay *s_timeOfDay;
 	static string s_worldPath;
-	static XIniFile *s_worldFile;
+	static xd::IniFile *s_worldFile;
 	static Camera *s_camera;
 	static Debug *s_debug;
 	static Lighting *s_lighting;

@@ -11,14 +11,14 @@
 Terrain::Terrain() :
 	GameObject(DRAW_ORDER_TERRAIN)
 {
-	LOG("Initializing terrain");
+	xd::LOG("Initializing terrain");
 
 	// Set max chunks to some value
 	setMaxChunks(512);
 
 	// Window
-	XWindow::addWindowListener(this);
-	resizeEvent(XWindow::getSize().x, XWindow::getSize().y);
+	xd::Window::addWindowListener(this);
+	resizeEvent(xd::Window::getSize().x, xd::Window::getSize().y);
 
 	// Setup vertex format
 	xd::VertexFormat vertexFormat;
@@ -28,18 +28,18 @@ Terrain::Terrain() :
 	Spotlight::s_vertices = new xd::Vertex[SPOTLIGHT_SEGMENTS+2];
 	
 	// Get terrain seed
-	TerrainGen::s_seed = XRandom().nextInt();
+	TerrainGen::s_seed = xd::Random().nextInt();
 }
 
 Terrain::~Terrain()
 {
-	XWindow::removeWindowListener(this);
+	xd::Window::removeWindowListener(this);
 }
 	
 // Move?
 void Terrain::saveChunks()
 {
-	LOG("Saving chunks...");
+	xd::LOG("Saving chunks...");
 
 	// Iterate loaded chunks
 	for(unordered_map<uint, TerrainChunk*>::iterator itr = m_chunks.begin(); itr != m_chunks.end(); ++itr)
@@ -48,20 +48,20 @@ void Terrain::saveChunks()
 		if(!itr->second->m_modified) continue;
 
 		// Save chunk
-		string path = World::getWorldPath() + "/chunks/" + util::intToStr(CHUNK_KEY(itr->second->getX(), itr->second->getY())) + ".obj";
-		XFileWriter writer(path);
+		string path = World::getWorldPath() + "/chunks/" + xd::util::intToStr(CHUNK_KEY(itr->second->getX(), itr->second->getY())) + ".obj";
+		xd::FileWriter writer(path);
 		if(!writer)
 		{
-			LOG("Error opening chunk file: '%s'", path);
+			xd::LOG("Error opening chunk file: '%s'", path);
 			continue;
 		}
 		itr->second->serialize(writer);
 	}
 }
 	
-void Terrain::load(const XIniFile &file)
+void Terrain::load(const xd::IniFile &file)
 {
-	LOG("Loading terrain...");
+	xd::LOG("Loading terrain...");
 		
 	TerrainGen::s_seed = 0;// parseInt(file.getValue("terrain", "seed"));
 }
@@ -69,7 +69,7 @@ void Terrain::load(const XIniFile &file)
 // BLOCK HELPERS
 BlockID Terrain::getBlockAt(const int x, const int y, const TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
 {
-	return getChunk(floor(x / CHUNK_BLOCKSF), floor(y / CHUNK_BLOCKSF)).getBlockAt(XMath::mod(x, CHUNK_BLOCKS), XMath::mod(y, CHUNK_BLOCKS), layer);
+	return getChunk(floor(x / CHUNK_BLOCKSF), floor(y / CHUNK_BLOCKSF)).getBlockAt(xd::math::mod(x, CHUNK_BLOCKS), xd::math::mod(y, CHUNK_BLOCKS), layer);
 }
 	
 bool Terrain::isBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
@@ -80,12 +80,12 @@ bool Terrain::isBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_L
 // BLOCK MODIFICATION
 bool Terrain::setBlockAt(const int x, const int y, BlockID block, const TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
 {
-	return getChunk(floor(x / CHUNK_BLOCKSF), floor(y / CHUNK_BLOCKSF)).setBlockAt(XMath::mod(x, CHUNK_BLOCKS), XMath::mod(y, CHUNK_BLOCKS), block, layer);
+	return getChunk(floor(x / CHUNK_BLOCKSF), floor(y / CHUNK_BLOCKSF)).setBlockAt(xd::math::mod(x, CHUNK_BLOCKS), xd::math::mod(y, CHUNK_BLOCKS), block, layer);
 }
 	
 bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
 {
-	return getChunk(floor(x / CHUNK_BLOCKSF), floor(y / CHUNK_BLOCKSF)).setBlockAt(XMath::mod(x, CHUNK_BLOCKS), XMath::mod(y, CHUNK_BLOCKS), BLOCK_EMPTY, layer);
+	return getChunk(floor(x / CHUNK_BLOCKSF), floor(y / CHUNK_BLOCKSF)).setBlockAt(xd::math::mod(x, CHUNK_BLOCKS), xd::math::mod(y, CHUNK_BLOCKS), BLOCK_EMPTY, layer);
 }
 
 // CHUNKS
@@ -96,12 +96,12 @@ TerrainChunk &Terrain::getChunk(const int chunkX, const int chunkY, const bool g
 	{
 		if(generate)
 		{
-			LOG("Chunk [%i, %i] added to queue", chunkX, chunkY);
+			xd::LOG("Chunk [%i, %i] added to queue", chunkX, chunkY);
 			
 			// Create new chunk
 			TerrainChunk *chunk = nullptr;
-			string chunkFile = World::getWorldPath() + "/chunks/" + util::intToStr(key) + ".obj";
-			if(util::fileExists(chunkFile))
+			string chunkFile = World::getWorldPath() + "/chunks/" + xd::util::intToStr(key) + ".obj";
+			if(xd::util::fileExists(chunkFile))
 			{
 				//@chunk = cast<TerrainChunk>(@Scripts.deserialize(chunkFile));
 			}
@@ -196,11 +196,11 @@ void Terrain::update()
 	TerrainChunk *chunk = 0;
 	if((chunk = &getChunk(cx, cy, true))->getState() != CHUNK_INITIALIZED)
 	{
-		LOG("Insta-generate chunk [%i, %i]", cx, cy);
+		xd::LOG("Insta-generate chunk [%i, %i]", cx, cy);
 		chunk->generate();
 	}
 
-	World::getDebug()->setVariable("Chunks", util::intToStr(m_chunks.size()));
+	World::getDebug()->setVariable("Chunks", xd::util::intToStr(m_chunks.size()));
 }
 	
 // DRAWING

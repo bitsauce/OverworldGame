@@ -10,17 +10,19 @@ Canvas::Canvas() :
 void Canvas::update()
 {
 	Vector2 size;
-	if(XWindow::getSize().x < XWindow::getSize().y) {
+	if(xd::Window::getSize().x < xd::Window::getSize().y)
+	{
 		// Fit width and use inverse aspect ratio
-		size.x = (float)min(CANVAS_WIDTH, XWindow::getSize().x);
+		size.x = (float)min(CANVAS_WIDTH, xd::Window::getSize().x);
 		size.y = size.x*CANVAS_HEIGHT/CANVAS_WIDTH; 
 	}
-	else {
+	else
+	{
 		// Fit height and use aspect ratio
-		size.y = (float)min(CANVAS_HEIGHT, XWindow::getSize().y);
+		size.y = (float)min(CANVAS_HEIGHT, xd::Window::getSize().y);
 		size.x = size.y*CANVAS_WIDTH/CANVAS_HEIGHT; 
 	}
-	m_rect.size = size/Vector2(XWindow::getSize());
+	m_rect.size = size/Vector2(xd::Window::getSize());
 	//Debug::setVaraible("Canvas", "("+util::floatToStr(size.x)+", "+util::floatToStr(size.y)+")");
 	UiObject::update();
 }

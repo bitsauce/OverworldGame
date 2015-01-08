@@ -40,11 +40,11 @@ public:
 		time += xd::Graphics::getTimeStep();
 		
 		// Debug: Time speedup (0 forwards, 9 backwards)
-		if(XInput::getKeyState(XD_KEY_0))
+		if(xd::Input::getKeyState(xd::XD_KEY_0))
 		{
 			time += 10.0f;
 		}
-		else if(XInput::getKeyState(XD_KEY_9))
+		else if(xd::Input::getKeyState(xd::XD_KEY_9))
 		{
 			time -= 10.0f;
 		}

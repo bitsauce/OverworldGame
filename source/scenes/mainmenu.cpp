@@ -17,7 +17,7 @@ int TITLE_BLOCKS[4][37] = {
 
 void MainMenuScene::showEvent()
 {
-	LOG("Scene: Main menu");
+	xd::LOG("Scene: Main menu");
 	
 	// Setup canvas
 	canvas = new Canvas();
