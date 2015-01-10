@@ -59,20 +59,6 @@ void Lighting::draw(xd::SpriteBatch *spriteBatch)
 			}
 		}
 		
-		/*for(list<LightSource*>::iterator itr = m_lightSources.begin(); itr != m_lightSources.end(); ++itr)
-		{
-			gfxContext.drawCircle((*itr)->getPosition().x, (*itr)->getPosition().y, (*itr)->getRadius(), 32, xd::Color(0));
-		}*/
-		
-		Vector2 pos = (xd::Input::getPosition() + World::getCamera()->getPosition())/BLOCK_PXF - Vector2(x0 - 1, y0 - 1)*CHUNK_BLOCKSF;
-		m_radialLightingShader->setSampler2D("u_lightMap", m_lightingRenderTarget->getTexture());
-		m_radialLightingShader->setUniform2f("u_lightTexCoord", pos.x/m_width, 1.0f - (pos.y/m_height));
-		m_radialLightingShader->setUniform2f("u_radius", 20.0f/m_width, 20.0f/m_height);
-		m_radialLightingShader->setUniform1i("u_iterations", 100);
-		gfxContext.setShader(m_radialLightingShader);
-		//gfxContext.drawRectangle((xd::Input::getPosition() + World::getCamera()->getPosition())/BLOCK_PXF - Vector2(x0 - 1, y0 - 1)*CHUNK_BLOCKSF - Vector2(8.0), Vector2(16.0f));
-		gfxContext.drawCircle((xd::Input::getPosition() + World::getCamera()->getPosition())/BLOCK_PXF - Vector2(x0 - 1, y0 - 1)*CHUNK_BLOCKSF, 20, 32);
-		
 		// Directional light
 		gfxContext.setRenderTarget(m_lightingPass0);
 		gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
@@ -83,6 +69,21 @@ void Lighting::draw(xd::SpriteBatch *spriteBatch)
 		m_directionalLightingShader->setUniform1f("u_height", m_height);
 		gfxContext.setShader(m_directionalLightingShader);
 		gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
+		
+		// Draw light sources
+		gfxContext.setShader(m_radialLightingShader);
+		for(list<LightSource*>::iterator itr = m_lightSources.begin(); itr != m_lightSources.end(); ++itr)
+		{
+			LightSource *light = *itr;
+
+			Vector2 pos = light->getPosition() - Vector2(x0 - 1, y0 - 1)*CHUNK_BLOCKSF;
+			m_radialLightingShader->setSampler2D("u_lightMap", m_lightingRenderTarget->getTexture());
+			m_radialLightingShader->setUniform2f("u_lightTexCoord", pos.x/m_width, 1.0f - (pos.y/m_height));
+			m_radialLightingShader->setUniform2f("u_radius", light->getRadius()/m_width, light->getRadius()/m_height);
+			m_radialLightingShader->setUniform1i("u_iterations", 100);
+			m_radialLightingShader->setUniform3f("u_color", light->getColor().r/255.0f, light->getColor().g/255.0f, light->getColor().b/255.0f);
+			gfxContext.drawCircle(pos, light->getRadius(), light->getRadius()*1.5f);
+		}
 
 		// Blur horizontally (pass 1)
 		gfxContext.setRenderTarget(m_lightingPass1);

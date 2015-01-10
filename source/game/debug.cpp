@@ -25,9 +25,10 @@ Debug::Debug(Terrain *terrain, Lighting *lighting) :
 	xd::Input::bind(xd::XD_KEY_F4, function<void()>(bind(&Debug::debugF4, this)));
 }
 
+xd::Random random;
 void Debug::debugF3()
 {
-	new Spotlight((World::getCamera()->getPosition() + xd::Input::getPosition())/BLOCK_PXF, 20, xd::Color(255));
+	new Spotlight((World::getCamera()->getPosition() + xd::Input::getPosition())/BLOCK_PXF, 20, xd::Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
 }
 
 void Debug::debugF4()
@@ -73,12 +74,6 @@ void Debug::draw(xd::SpriteBatch *spriteBatch)
 	spriteBatch->drawText(Vector2(5.0f, xd::Window::getSize().y - 48.0f), "Current block:    (" + xd::util::intToStr(m_block) + ")\n" + "Current layer: " + (xd::Input::getKeyState(xd::XD_KEY_LCONTROL) ? "BACK" : (xd::Input::getKeyState(xd::XD_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font);
 	xd::Sprite blockSprite(BlockData::get(m_block).getTexture(), Rect(150.0f, xd::Window::getSize().y - 58.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, xd::TextureRegion(0.0f, 0.0f, 1.0f, 0.6f));
 	spriteBatch->drawSprite(blockSprite);
-
-	for(list<LightSource*>::iterator itr = m_lighting->m_lightSources.begin(); itr != m_lighting->m_lightSources.end(); ++itr)
-	{
-		m_bulbSprite.setPosition((*itr)->getPosition()*BLOCK_PXF - m_bulbSprite.getSize() * 0.5f);
-		spriteBatch->drawSprite(m_bulbSprite);
-	}
 	
 	int x0 = floor(World::getCamera()->getX()/CHUNK_PXF);
 	int y0 = floor(World::getCamera()->getY()/CHUNK_PXF);
@@ -114,6 +109,14 @@ void Debug::draw(xd::SpriteBatch *spriteBatch)
 	for(int x = x0; x <= x1; ++x)
 	{
 		gfxContext.drawRectangle(x * CHUNK_PX, y0 * CHUNK_PX, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * CHUNK_PX, xd::Color(0, 0, 0, 255));
+	}
+	
+	spriteBatch->end();
+	spriteBatch->begin(xd::SpriteBatch::State(xd::SpriteBatch::DEFERRED, xd::BlendState::PRESET_ALPHA_BLEND, World::getCamera()->getProjectionMatrix()));
+	for(list<LightSource*>::iterator itr = m_lighting->m_lightSources.begin(); itr != m_lighting->m_lightSources.end(); ++itr)
+	{
+		m_bulbSprite.setPosition((*itr)->getPosition()*BLOCK_PXF - m_bulbSprite.getSize() * 0.5f);
+		spriteBatch->drawSprite(m_bulbSprite);
 	}
 }
 
