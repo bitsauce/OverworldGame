@@ -6,6 +6,10 @@
 #include "Environment/Background.h"
 #include "Environment/TimeOfDay.h"
 
+#include "Items/Inventory.h"
+#include "Items/Item.h"
+#include "Items/ItemContainer.h"
+
 #include "game/blockdata.h"
 #include "game/camera.h"
 #include "game/debug.h"

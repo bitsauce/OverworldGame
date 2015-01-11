@@ -78,6 +78,7 @@ void TerrainGen::loadStructures(const int superChunkX, const int superChunkY)
 	//vector<Structure*> structures;
 	for(int x = 0; x < SUPER_CHUNK_BLOCKS; ++x)
 	{
+		break;
 		int tileX = SUPER_CHUNK_BLOCKS * superChunkX + x;
 		if(s_random.getDouble(tileX + s_seed) < 0.005/*TREE_CHANCE*/)
 		{

@@ -21,6 +21,7 @@ void GameManager::main()
 	xd::Input::bind(xd::XD_KEY_SNAPSHOT, function<void()>(GameManager::takeScreenshot));
 
 	BlockData::init();
+	ItemData::init();
 	World::init();
 	World::getDebug()->toggle();
 

@@ -107,14 +107,17 @@ void Debug::draw(xd::SpriteBatch *spriteBatch)
 	}
 	spriteBatch->end();
 	
-	gfxContext.disable(xd::GraphicsContext::BLEND);
-	spriteBatch->begin();
-	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingRenderTarget->getTexture(), Rect(0.0f, 128.0f, 256.0f, 128.0f)));
-	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass0->getTexture(), Rect(0.0f, 128.0f*2, 256.0f, 128.0f)));
-	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass1->getTexture(), Rect(0.0f, 128.0f*3, 256.0f, 128.0f)));
-	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass2->getTexture(), Rect(0.0f, 128.0f*4, 256.0f, 128.0f)));
-	spriteBatch->end();
-	gfxContext.enable(xd::GraphicsContext::BLEND);
+	if(xd::Input::getKeyState(xd::XD_KEY_L))
+	{
+		gfxContext.disable(xd::GraphicsContext::BLEND);
+		spriteBatch->begin();
+		spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingRenderTarget->getTexture(), Rect(0.0f, 128.0f, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass0->getTexture(), Rect(0.0f, 128.0f*2, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass1->getTexture(), Rect(0.0f, 128.0f*3, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass2->getTexture(), Rect(0.0f, 128.0f*4, 256.0f, 128.0f)));
+		spriteBatch->end();
+		gfxContext.enable(xd::GraphicsContext::BLEND);
+	}
 
 	spriteBatch->begin(xd::SpriteBatch::State(xd::SpriteBatch::DEFERRED, xd::BlendState::PRESET_ALPHA_BLEND, World::getCamera()->getProjectionMatrix()));
 	for(list<LightSource*>::iterator itr = m_lighting->m_lightSources.begin(); itr != m_lighting->m_lightSources.end(); ++itr)

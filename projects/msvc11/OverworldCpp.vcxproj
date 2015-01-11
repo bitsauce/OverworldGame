@@ -113,7 +113,9 @@
     <ClCompile Include="..\..\source\gui\Canvas.cpp" />
     <ClCompile Include="..\..\source\gui\LineEdit.cpp" />
     <ClCompile Include="..\..\source\gui\UiObject.cpp" />
+    <ClCompile Include="..\..\source\items\Inventory.cpp" />
     <ClCompile Include="..\..\source\items\Item.cpp" />
+    <ClCompile Include="..\..\source\items\ItemContainer.cpp" />
     <ClCompile Include="..\..\source\Lighting\LightSource.cpp" />
     <ClCompile Include="..\..\source\Lighting\Lighting.cpp" />
     <ClCompile Include="..\..\source\lighting\Spotlight.cpp" />
@@ -157,7 +159,9 @@
     <ClInclude Include="..\..\source\gui\Canvas.h" />
     <ClInclude Include="..\..\source\gui\LineEdit.h" />
     <ClInclude Include="..\..\source\gui\UiObject.h" />
+    <ClInclude Include="..\..\source\items\Inventory.h" />
     <ClInclude Include="..\..\source\items\Item.h" />
+    <ClInclude Include="..\..\source\items\ItemContainer.h" />
     <ClInclude Include="..\..\source\Lighting\LightSource.h" />
     <ClInclude Include="..\..\source\Lighting\Lighting.h" />
     <ClInclude Include="..\..\source\lighting\Spotlight.h" />
