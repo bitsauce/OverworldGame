@@ -3,6 +3,7 @@
 
 xd::Vertex *Spotlight::s_vertices;
 
+// TODO: This is NOT a spotlight. This is a pointlight.
 Spotlight::Spotlight(const Vector2 &position, const float radius, const xd::Color &color) :
 	LightSource(position, radius, color)
 {

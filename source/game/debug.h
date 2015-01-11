@@ -46,6 +46,8 @@ private:
 	// Debug font
 	xd::FontPtr m_font;
 
+	//xd::Texture2DPtr m_loadedChunks;
+
 	// Paint block
 	BlockID m_block;
 };

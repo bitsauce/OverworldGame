@@ -55,7 +55,7 @@ enum BlockID
 	//BLOCK_BLOCKER, // TODO: Gonna need this some time for doors
 	
 	BLOCK_WOOD,
-	//BLOCK_BACKGROUND_STONE,
+	//BLOCK_STONE,
 	
 	BLOCK_GRASS,
 	BLOCK_STONE,
