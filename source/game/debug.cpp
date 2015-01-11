@@ -28,7 +28,7 @@ Debug::Debug(Terrain *terrain, Lighting *lighting) :
 xd::Random random;
 void Debug::debugF3()
 {
-	new Spotlight((World::getCamera()->getPosition() + xd::Input::getPosition())/BLOCK_PXF, 20, xd::Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
+	new Spotlight((World::getCamera()->getPosition() + xd::Input::getPosition())/BLOCK_PXF, 20, xd::Color(255));//xd::Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
 }
 
 void Debug::debugF4()
@@ -65,11 +65,6 @@ void Debug::draw(xd::SpriteBatch *spriteBatch)
 	}
 
 	m_font->draw(spriteBatch, Vector2(5.0f, 48.0f), drawString);
-	
-	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingRenderTarget->getTexture(), Rect(0.0f, 128.0f, 256.0f, 128.0f)));
-	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass0->getTexture(), Rect(0.0f, 128.0f*2, 256.0f, 128.0f)));
-	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass1->getTexture(), Rect(0.0f, 128.0f*3, 256.0f, 128.0f)));
-	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass2->getTexture(), Rect(0.0f, 128.0f*4, 256.0f, 128.0f)));
 
 	spriteBatch->drawText(Vector2(5.0f, xd::Window::getSize().y - 48.0f), "Current block:    (" + xd::util::intToStr(m_block) + ")\n" + "Current layer: " + (xd::Input::getKeyState(xd::XD_KEY_LCONTROL) ? "BACK" : (xd::Input::getKeyState(xd::XD_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font);
 	xd::Sprite blockSprite(BlockData::get(m_block).getTexture(), Rect(150.0f, xd::Window::getSize().y - 58.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, xd::TextureRegion(0.0f, 0.0f, 1.0f, 0.6f));
@@ -98,7 +93,7 @@ void Debug::draw(xd::SpriteBatch *spriteBatch)
 		for(int x = x0; x <= x1; ++x)
 		{
 			gfxContext.drawRectangle(x * BLOCK_PXF, y0 * BLOCK_PXF, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * BLOCK_PXF, xd::Color(127, 127, 127, 255));
-		} 
+		}
 	}
 
 	for(int y = y0; y <= y1; ++y)
@@ -110,12 +105,21 @@ void Debug::draw(xd::SpriteBatch *spriteBatch)
 	{
 		gfxContext.drawRectangle(x * CHUNK_PX, y0 * CHUNK_PX, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * CHUNK_PX, xd::Color(0, 0, 0, 255));
 	}
-	
 	spriteBatch->end();
+	
+	gfxContext.disable(xd::GraphicsContext::BLEND);
+	spriteBatch->begin();
+	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingRenderTarget->getTexture(), Rect(0.0f, 128.0f, 256.0f, 128.0f)));
+	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass0->getTexture(), Rect(0.0f, 128.0f*2, 256.0f, 128.0f)));
+	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass1->getTexture(), Rect(0.0f, 128.0f*3, 256.0f, 128.0f)));
+	spriteBatch->drawSprite(xd::Sprite(m_lighting->m_lightingPass2->getTexture(), Rect(0.0f, 128.0f*4, 256.0f, 128.0f)));
+	spriteBatch->end();
+	gfxContext.enable(xd::GraphicsContext::BLEND);
+
 	spriteBatch->begin(xd::SpriteBatch::State(xd::SpriteBatch::DEFERRED, xd::BlendState::PRESET_ALPHA_BLEND, World::getCamera()->getProjectionMatrix()));
 	for(list<LightSource*>::iterator itr = m_lighting->m_lightSources.begin(); itr != m_lighting->m_lightSources.end(); ++itr)
 	{
-		m_bulbSprite.setPosition((*itr)->getPosition()*BLOCK_PXF - m_bulbSprite.getSize() * 0.5f);
+		m_bulbSprite.setPosition((*itr)->getPosition()*BLOCK_PXF + Vector2(0.5f, 0.5f));
 		spriteBatch->drawSprite(m_bulbSprite);
 	}
 }

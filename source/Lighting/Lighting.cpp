@@ -71,12 +71,14 @@ void Lighting::draw(xd::SpriteBatch *spriteBatch)
 		gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
 		
 		// Draw light sources
+		gfxContext.enable(xd::GraphicsContext::BLEND);
 		gfxContext.setShader(m_radialLightingShader);
+		gfxContext.setBlendState(xd::BlendState::PRESET_ADDITIVE);
 		for(list<LightSource*>::iterator itr = m_lightSources.begin(); itr != m_lightSources.end(); ++itr)
 		{
 			LightSource *light = *itr;
 
-			Vector2 pos = light->getPosition() - Vector2(x0 - 1, y0 - 1)*CHUNK_BLOCKSF;
+			Vector2 pos = light->getPosition() - Vector2(x0 - 1, y0 - 1)*CHUNK_BLOCKSF + Vector2(0.5f, 0.5f);
 			m_radialLightingShader->setSampler2D("u_lightMap", m_lightingRenderTarget->getTexture());
 			m_radialLightingShader->setUniform2f("u_lightTexCoord", pos.x/m_width, 1.0f - (pos.y/m_height));
 			m_radialLightingShader->setUniform2f("u_radius", light->getRadius()/m_width, light->getRadius()/m_height);
@@ -84,6 +86,7 @@ void Lighting::draw(xd::SpriteBatch *spriteBatch)
 			m_radialLightingShader->setUniform3f("u_color", light->getColor().r/255.0f, light->getColor().g/255.0f, light->getColor().b/255.0f);
 			gfxContext.drawCircle(pos, light->getRadius(), light->getRadius()*1.5f);
 		}
+		gfxContext.disable(xd::GraphicsContext::BLEND);
 
 		// Blur horizontally (pass 1)
 		gfxContext.setRenderTarget(m_lightingPass1);
@@ -129,8 +132,11 @@ void Lighting::resizeEvent(uint width, uint height)
 	uint targetWidth = (uint)(floor(width/CHUNK_PXF) + 4) * CHUNK_BLOCKS;
 	uint targetHeight = (uint)(floor(height/CHUNK_PXF) + 4) * CHUNK_BLOCKS;
 	m_lightingRenderTarget = new xd::RenderTarget2D(targetWidth, targetHeight);
+	m_lightingRenderTarget->getTexture()->setFiltering(xd::Texture2D::LINEAR);
 	m_lightingPass0 = new xd::RenderTarget2D(targetWidth, targetHeight);
+	m_lightingPass0->getTexture()->setFiltering(xd::Texture2D::LINEAR);
 	m_lightingPass1 = new xd::RenderTarget2D(targetWidth, targetHeight);
+	m_lightingPass1->getTexture()->setFiltering(xd::Texture2D::LINEAR);
 	m_lightingPass2 = new xd::RenderTarget2D(targetWidth, targetHeight);
 	m_lightingPass2->getTexture()->setFiltering(xd::Texture2D::LINEAR);
 

@@ -104,8 +104,8 @@ void TerrainChunk::generate()
 
 					if(m_nextChunk[1])
 					{
-						if(x == CHUNK_BLOCKS && y == -1)								m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, 0, z)]					= m_nextChunk[1]->m_blocks[BLOCK_INDEX(0, CHUNK_BLOCKS-1, z)];
-						else if(x == CHUNK_BLOCKS-1 && y == 0)							m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, 0, z)]					= m_nextChunk[1]->m_blocks[BLOCK_INDEX(-1, CHUNK_BLOCKS, z)];
+						if(x == CHUNK_BLOCKS && y == -1)       m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, 0, z)] = m_nextChunk[1]->m_blocks[BLOCK_INDEX(0, CHUNK_BLOCKS-1, z)];
+						else if(x == CHUNK_BLOCKS-1 && y == 0) m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, 0, z)] = m_nextChunk[1]->m_blocks[BLOCK_INDEX(-1, CHUNK_BLOCKS, z)];
 					}
 
 					if(m_nextChunk[2])
@@ -183,12 +183,12 @@ void TerrainChunk::generate()
 			for(int x = 0; x < CHUNK_BLOCKS; ++x)
 			{
 				float shadow = 1.0f;
-				bool shadowCaster = m_blocks[BLOCK_INDEX(x, y, TERRAIN_LAYER_MIDDLE)]->id > BLOCK_OCCUPIED;
+				bool shadowCaster = m_blocks[BLOCK_INDEX(x, y, TERRAIN_LAYER_MIDDLE)]->id <= BLOCK_OCCUPIED;
 				for(uint i = 0; i < TERRAIN_LAYER_COUNT; ++i)
 				{
 					shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]->id).getOpacity();
 				}
-				pixmap.setColor(x, CHUNK_BLOCKS - y - 1, xd::Color(255 * max(shadow, 0.0f), 255 * shadowCaster, 255, 255)); // r = light value, g = is shadow caster?, b, a = nothing
+				pixmap.setColor(x, CHUNK_BLOCKS - y - 1, xd::Color(255 * max(shadow, 0.0f), 255, 255, 255 * shadowCaster)); // rgb = light value, a = shadow casting value
 			}
 		}
 		m_shadowMap->updatePixmap(pixmap);
@@ -545,12 +545,12 @@ bool TerrainChunk::setBlockAt(const int x, const int y, const BlockID block, Ter
 		
 		// Update shadow map
 		float shadow = 1.0f;
-		bool shadowCaster = m_blocks[BLOCK_INDEX(x, y, TERRAIN_LAYER_MIDDLE)]->id > BLOCK_OCCUPIED;
+		bool shadowCaster = m_blocks[BLOCK_INDEX(x, y, TERRAIN_LAYER_MIDDLE)]->id <= BLOCK_OCCUPIED;
 		for(uint i = 0; i < TERRAIN_LAYER_COUNT; ++i)
 		{
 			shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]->id).getOpacity();
 		}
-		const uchar pixel[4] = { 255 * max(shadow, 0.0f), 255 * shadowCaster, 255, 255 };
+		const uchar pixel[4] = { 255 * max(shadow, 0.0f), 255, 255, 255 * shadowCaster };
 		m_shadowMap->updatePixmap(x, CHUNK_BLOCKS - y - 1, xd::Pixmap(1, 1, pixel));
 
 		return true; // return true as something was changed
