@@ -125,6 +125,9 @@
     <ClCompile Include="..\..\source\items\ItemContainer.cpp">
       <Filter>source\Items</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\Terrain\ChunkLoader.cpp">
+      <Filter>source\Terrain</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -305,6 +308,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\items\ItemContainer.h">
       <Filter>source\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Terrain\ChunkLoader.h">
+      <Filter>source\Terrain</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

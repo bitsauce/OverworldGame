@@ -52,9 +52,6 @@ private:
 
 	// Zoom level
 	float m_zoom;
-
-	// Active chunk area (chunks within viewspace)
-	Recti m_activeChunkArea;
 };
 
 #endif // CAMERA_H

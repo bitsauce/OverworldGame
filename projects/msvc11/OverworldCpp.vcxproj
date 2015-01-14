@@ -128,6 +128,7 @@
     <ClCompile Include="..\..\source\scenes\WorldCreate.cpp" />
     <ClCompile Include="..\..\source\scenes\MainMenu.cpp" />
     <ClCompile Include="..\..\source\scenes\WorldSelect.cpp" />
+    <ClCompile Include="..\..\source\Terrain\ChunkLoader.cpp" />
     <ClCompile Include="..\..\source\terrain\generator\Grassland.cpp" />
     <ClCompile Include="..\..\source\terrain\generator\Structure.cpp" />
     <ClCompile Include="..\..\source\terrain\generator\TerrainGen.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="..\..\source\scenes\WorldCreate.h" />
     <ClInclude Include="..\..\source\scenes\MainMenu.h" />
     <ClInclude Include="..\..\source\scenes\WorldSelect.h" />
+    <ClInclude Include="..\..\source\Terrain\ChunkLoader.h" />
     <ClInclude Include="..\..\source\terrain\generator\Grassland.h" />
     <ClInclude Include="..\..\source\terrain\generator\Structure.h" />
     <ClInclude Include="..\..\source\terrain\generator\TerrainGen.h" />

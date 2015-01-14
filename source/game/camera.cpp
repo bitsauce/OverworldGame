@@ -28,11 +28,6 @@ void Camera::lookAt(Vector2 point)
 	m_position = point;
 }
 
-Recti Camera::getActiveChunkArea() const
-{
-	return m_activeChunkArea;
-}
-
 Vector2 Camera::getPosition()
 {
 	return m_position;
@@ -97,14 +92,6 @@ void Camera::update()
 		m_zoom *= 0.5f;
 		lookAt(center);
 	}
-	
-	// Update active chunk area
-	m_activeChunkArea.set(
-		(int)floor(m_position.x/CHUNK_PXF), // x
-		(int)floor(m_position.y/CHUNK_PXF), // y
-		(int)floor(m_size.x/CHUNK_PXF),     // width
-		(int)floor(m_size.y/CHUNK_PXF)      // height
-		);
 }
 
 void Camera::draw(xd::SpriteBatch*)

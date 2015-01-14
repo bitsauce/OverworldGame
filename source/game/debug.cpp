@@ -137,7 +137,7 @@ void Debug::draw(xd::SpriteBatch *spriteBatch)
 				{
 					color = xd::Color(0, 0, 255);
 				}
-				else if(m_terrain->isChunk(x0 + x, y0 + y))
+				else if(m_terrain->getChunkLoader()->isChunkLoadedAt(x0 + x, y0 + y))
 				{
 					color = xd::Color(0, 255, 0);
 				}

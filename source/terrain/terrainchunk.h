@@ -15,7 +15,7 @@ enum ChunkState
 
 class TerrainChunk
 {
-	friend class Terrain;
+	friend class ChunkLoader;
 public:
 	TerrainChunk();
 	TerrainChunk(int chunkX, int chunkY);

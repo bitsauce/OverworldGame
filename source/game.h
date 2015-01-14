@@ -30,6 +30,6 @@
 #include "scenes/worldselect.h"
 //#include "charactercreate.h"
 
-#include "terrain/Terrain.h"
+#include "Terrain/Terrain.h"
 
 #endif // GAME_H
