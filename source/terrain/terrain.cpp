@@ -88,22 +88,17 @@ void Terrain::update()
 void Terrain::draw(xd::SpriteBatch *spriteBatch)
 {
 	xd::GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
-
-	// Get chunk coordinates
-	int x0 = floor(World::getCamera()->getX()/CHUNK_PXF);
-	int y0 = floor(World::getCamera()->getY()/CHUNK_PXF);
-	int x1 = floor((World::getCamera()->getX() + World::getCamera()->getWidth())/CHUNK_PXF);
-	int y1 = floor((World::getCamera()->getY() + World::getCamera()->getHeight())/CHUNK_PXF);
 	
 	// Draw tiles
 	//gfxContext.setRenderTarget(m_renderTarget);
 	//gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
 
+	ChunkLoader::ChunkArea area = m_chunkLoader.getActiveArea();
 	gfxContext.setTexture(BlockData::getBlockAtlas()->getTexture());
 	gfxContext.setProjectionMatrix(World::getCamera()->getProjectionMatrix());
-	for(int y = y0-1; y <= y1+1; ++y)
+	for(int y = area.y0 - 1; y <= area.y1 + 1; ++y)
 	{
-		for(int x = x0-1; x <= x1+1; ++x)
+		for(int x = area.x0 - 1; x <= area.x1 + 1; ++x)
 		{
 			Matrix4 mat;
 			mat.scale(BLOCK_PXF, BLOCK_PXF, 1.0f);

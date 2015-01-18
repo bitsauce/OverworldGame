@@ -26,15 +26,23 @@ public:
 	// Get zoom level
 	float getZoom() const;
 
-	// Camera position
+	// Position
 	Vector2 getPosition();
-	float getX();
-	float getY();
+	uint getX();
+	uint getY();
 
-	// Camera size
-	Vector2 getSize();
-	float getWidth();
-	float getHeight();
+	// Size
+	Vector2i getSize();
+	uint getWidth();
+	uint getHeight();
+
+	// Zoomed size
+	Vector2i getSizeZoomed();
+	uint getWidthZoomed();
+	uint getHeightZoomed();
+
+	// Get input position
+	Vector2 getInputPosition() const;
 
 	// Update & draw
 	void update();
@@ -44,13 +52,13 @@ public:
 	void mouseWheelEvent(const int dt);
 
 private:
-	// Camera position
-	Vector2 m_position;
+	// Position
+	Vector2i m_position;
 
-	// Camera size (viewport size)
-	Vector2 m_size;
+	// Size
+	Vector2i m_size;
 
-	// Zoom level
+	// Zoom
 	float m_zoom;
 };
 

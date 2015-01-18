@@ -8,6 +8,7 @@ class Camera;
 
 class ChunkLoader : public GameObject
 {
+	friend class Debug;
 public:
 	ChunkLoader(Camera *camera);
 
@@ -25,13 +26,14 @@ public:
 		int x1, y1;
 	};
 
-	ChunkArea getActiveArea();
-	ChunkArea getLoadArea(const uint areaIndex);
+	ChunkArea getActiveArea() const;
+	ChunkArea getLoadArea(/*const uint areaIndex*/) const;
 
 	void update();
 
 private:
 
+	bool m_applyZoom;
 	Camera *m_camera;
 
 	unordered_map<uint, TerrainChunk*> m_chunks;

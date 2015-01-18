@@ -6,6 +6,7 @@
 
 class Terrain;
 class Lighting;
+class ChunkLoader;
 enum BlockID;
 
 class Debug : public GameObject
@@ -22,6 +23,7 @@ public:
 
 	void setVariable(const string &name, const string &value);
 
+	void debugF2();
 	void debugF3();
 	void debugF4();
 
@@ -30,6 +32,7 @@ public:
 private:
 	// Enabled flag
 	bool m_enabled;
+	bool m_debugChunkLoader;
 
 	// Debug variables
 	map<string, string> m_variables;

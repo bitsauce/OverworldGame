@@ -33,29 +33,44 @@ Vector2 Camera::getPosition()
 	return m_position;
 }
 
-float Camera::getX()
+uint Camera::getX()
 {
 	return m_position.x;
 }
 
-float Camera::getY()
+uint Camera::getY()
 {
 	return m_position.y;
 }
 
-Vector2 Camera::getSize()
+Vector2i Camera::getSize()
 {
-	return xd::Window::getSize() / m_zoom;
+	return xd::Window::getSize();
 }
 
-float Camera::getWidth()
+uint Camera::getWidth()
 {
 	return getSize().x;
 }
 
-float Camera::getHeight()
+uint Camera::getHeight()
 {
 	return getSize().y;
+}
+
+Vector2i Camera::getSizeZoomed()
+{
+	return xd::Window::getSize() / m_zoom;
+}
+
+uint Camera::getWidthZoomed()
+{
+	return getSizeZoomed().x;
+}
+
+uint Camera::getHeightZoomed()
+{
+	return getSizeZoomed().y;
 }
 
 float Camera::getZoom() const

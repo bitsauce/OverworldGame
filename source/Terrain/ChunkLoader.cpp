@@ -5,6 +5,7 @@
 
 ChunkLoader::ChunkLoader(Camera *camera) :
 	GameObject(DRAW_ORDER_CHUNK_LOADER),
+	m_applyZoom(true),
 	m_camera(camera)
 {
 	// Setup vertex format
@@ -15,6 +16,8 @@ ChunkLoader::ChunkLoader(Camera *camera) :
 
 	// Set max chunks to some value
 	setMaxChunkCount(512);
+
+	update();
 }
 
 void ChunkLoader::setMaxChunkCount(const uint maxChunkCount)
@@ -109,18 +112,26 @@ bool ChunkLoader::isChunkLoadedAt(const int chunkX, const int chunkY) const
 	return m_chunks.find(CHUNK_KEY(chunkX, chunkY)) != m_chunks.end();
 }
 
+ChunkLoader::ChunkArea ChunkLoader::getActiveArea() const
+{
+	return m_activeArea;
+}
+
+ChunkLoader::ChunkArea ChunkLoader::getLoadArea() const
+{
+	return m_loadArea;
+}
+
 void ChunkLoader::update()
 {
-	int cx = floor(World::getCamera()->getX()/CHUNK_PXF);
-	int cy = floor(World::getCamera()->getY()/CHUNK_PXF);
-	TerrainChunk *chunk = 0;
-	if((chunk = &getChunkAt(cx, cy, true))->getState() != CHUNK_INITIALIZED)
-	{
-		xd::LOG("Insta-generate chunk [%i, %i]", cx, cy);
-		chunk->generate();
-	}
+	// Update active chunk area
+	Vector2 position = m_camera->getPosition();
+	Vector2 size = m_applyZoom ? m_camera->getSizeZoomed() : m_camera->getSize();
 
-	World::getDebug()->setVariable("Chunks", xd::util::intToStr(m_chunks.size()));
+	m_activeArea.x0 = (int)floor(position.x/CHUNK_PXF);
+	m_activeArea.y0 = (int)floor(position.y/CHUNK_PXF);
+	m_activeArea.x1 = (int)floor((position.x+size.x)/CHUNK_PXF);
+	m_activeArea.y1 = (int)floor((position.x+size.y)/CHUNK_PXF);
 
 	if(m_chunks.size() >= m_optimalChunkCount)
 	{
@@ -136,13 +147,4 @@ void ChunkLoader::update()
 			}
 		}
 	}
-	
-	// Update active chunk area
-	Vector2 position = m_camera->getPosition();
-	Vector2 size = m_camera->getSize();
-
-	m_activeArea.x0 = (int)floor(position.x/CHUNK_PXF);
-	m_activeArea.y0 = (int)floor(position.y/CHUNK_PXF);
-	m_activeArea.x1 = (int)floor((position.x+size.x)/CHUNK_PXF);
-	m_activeArea.y1 = (int)floor((position.x+size.y)/CHUNK_PXF);
 }
