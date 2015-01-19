@@ -96,9 +96,9 @@ void Terrain::draw(xd::SpriteBatch *spriteBatch)
 	ChunkLoader::ChunkArea area = m_chunkLoader.getActiveArea();
 	gfxContext.setTexture(BlockData::getBlockAtlas()->getTexture());
 	gfxContext.setProjectionMatrix(World::getCamera()->getProjectionMatrix());
-	for(int y = area.y0 - 1; y <= area.y1 + 1; ++y)
+	for(int y = area.y0; y <= area.y1; ++y)
 	{
-		for(int x = area.x0 - 1; x <= area.x1 + 1; ++x)
+		for(int x = area.x0; x <= area.x1; ++x)
 		{
 			Matrix4 mat;
 			mat.scale(BLOCK_PXF, BLOCK_PXF, 1.0f);

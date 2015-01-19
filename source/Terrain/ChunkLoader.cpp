@@ -122,16 +122,30 @@ ChunkLoader::ChunkArea ChunkLoader::getLoadArea() const
 	return m_loadArea;
 }
 
+float round(float d)
+{
+	return floor(d + 0.5);
+}
+
 void ChunkLoader::update()
 {
 	// Update active chunk area
-	Vector2 position = m_camera->getPosition();
-	Vector2 size = m_applyZoom ? m_camera->getSizeZoomed() : m_camera->getSize();
+	Vector2 center = m_camera->getCenter();
+	Vector2 size = m_applyZoom ? m_camera->getSize() : xd::Window::getSize();
 
-	m_activeArea.x0 = (int)floor(position.x/CHUNK_PXF);
-	m_activeArea.y0 = (int)floor(position.y/CHUNK_PXF);
-	m_activeArea.x1 = (int)floor((position.x+size.x)/CHUNK_PXF);
-	m_activeArea.y1 = (int)floor((position.x+size.y)/CHUNK_PXF);
+	m_activeAreaSize = size/CHUNK_PXF;
+
+	// Active area should have the same center as the view
+	m_activeArea.x0 = (int)floor(center.x/CHUNK_PXF) - floor(size.x*0.5f/CHUNK_PXF) - 1;
+	m_activeArea.y0 = (int)floor(center.y/CHUNK_PXF) - floor(size.y*0.5f/CHUNK_PXF) - 1;
+	m_activeArea.x1 = (int)floor(center.x/CHUNK_PXF) + floor(size.x*0.5f/CHUNK_PXF) + 1;
+	m_activeArea.y1 = (int)floor(center.y/CHUNK_PXF) + floor(size.y*0.5f/CHUNK_PXF) + 1;
+
+	// Update load area
+	m_loadArea.x0 = m_activeArea.x0 - 5;
+	m_loadArea.y0 = m_activeArea.y0 - 5;
+	m_loadArea.x1 = m_activeArea.x1 + 5;
+	m_loadArea.y1 = m_activeArea.y1 + 5;
 
 	if(m_chunks.size() >= m_optimalChunkCount)
 	{

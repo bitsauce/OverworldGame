@@ -3,109 +3,76 @@
 
 Camera::Camera() :
 	GameObject(DRAW_ORDER_CAMERA),
-	m_position(0.0f, 0.0f),
-	m_zoom(1.0f)
+	m_position(0.0f, 0.0f)
 {
 	xd::Input::addMouseListener(this);
+	xd::Window::addWindowListener(this);
+	
+	xd::Input::bind(xd::XD_KEY_PLUS, function<void()>(bind(&Camera::zoomIn, this)));
+	xd::Input::bind(xd::XD_KEY_MINUS, function<void()>(bind(&Camera::zoomOut, this)));
+
+	setZoomLevel(1.0f);
 }
 
 Vector2 Camera::getCenter() const
 {
-	return m_position + xd::Window::getSize() * 0.5f / m_zoom;
+	return m_position + m_size * 0.5f;
 }
 
 Matrix4 Camera::getProjectionMatrix() const
 {
 	Matrix4 mat;
 	mat.translate(-m_position.x, -m_position.y, 0.0f);
-	mat.scale(m_zoom);
+	mat.scale(m_zoomLevel);
 	return mat;
 }
 
-void Camera::lookAt(Vector2 point)
+void Camera::lookAt(Vector2i worldPoint)
 {
-	point -= xd::Window::getSize() * 0.5f / m_zoom;
-	m_position = point;
+	worldPoint -= m_size * 0.5f;
+	m_position = worldPoint;
 }
 
-Vector2 Camera::getPosition()
+Vector2i Camera::getPosition()
 {
 	return m_position;
 }
 
-uint Camera::getX()
+Vector2i Camera::getSize() const
 {
-	return m_position.x;
+	return m_size;
 }
 
-uint Camera::getY()
+void Camera::setZoomLevel(const float zoomLevel)
 {
-	return m_position.y;
+	Vector2 center = getCenter();
+	m_zoomLevel = zoomLevel;
+	m_size = xd::Window::getSize() / m_zoomLevel;
+	lookAt(center);
 }
 
-Vector2i Camera::getSize()
+float Camera::getZoomLevel() const
 {
-	return xd::Window::getSize();
-}
-
-uint Camera::getWidth()
-{
-	return getSize().x;
-}
-
-uint Camera::getHeight()
-{
-	return getSize().y;
-}
-
-Vector2i Camera::getSizeZoomed()
-{
-	return xd::Window::getSize() / m_zoom;
-}
-
-uint Camera::getWidthZoomed()
-{
-	return getSizeZoomed().x;
-}
-
-uint Camera::getHeightZoomed()
-{
-	return getSizeZoomed().y;
-}
-
-float Camera::getZoom() const
-{
-	return m_zoom;
+	return m_zoomLevel;
 }
 
 void Camera::update()
 {
+	float speed = xd::Input::getKeyState(xd::XD_KEY_LCONTROL) ? 1.0f : 16.0f;
 	if(xd::Input::getKeyState(xd::XD_KEY_LEFT)) {
-		m_position.x -= 16.0f/m_zoom;
+		m_position.x -= speed/m_zoomLevel;
 	}
 	
 	if(xd::Input::getKeyState(xd::XD_KEY_RIGHT)) {
-		m_position.x += 16.0f/m_zoom;
+		m_position.x += speed/m_zoomLevel;
 	}
 	
 	if(xd::Input::getKeyState(xd::XD_KEY_UP)) {
-		m_position.y -= 16.0f/m_zoom;
+		m_position.y -= speed/m_zoomLevel;
 	}
 	
 	if(xd::Input::getKeyState(xd::XD_KEY_DOWN)) {
-		m_position.y += 16.0f/m_zoom;
-	}
-	
-	if(xd::Input::getKeyState(xd::XD_KEY_PLUS)) {
-		Vector2 center = getCenter();
-		m_zoom *= 2.0f;
-		lookAt(center);
-	}
-
-	if(xd::Input::getKeyState(xd::XD_KEY_MINUS)) {
-		Vector2 center = getCenter();
-		m_zoom *= 0.5f;
-		lookAt(center);
+		m_position.y += speed/m_zoomLevel;
 	}
 }
 
@@ -113,13 +80,18 @@ void Camera::draw(xd::SpriteBatch*)
 {
 	Vector2 center = getCenter();
 	World::getDebug()->setVariable("Camera", xd::util::floatToStr(center.x) + ", " + xd::util::floatToStr(center.y));
-	World::getDebug()->setVariable("Zoom", xd::util::floatToStr(m_zoom));
+	World::getDebug()->setVariable("Zoom", xd::util::intToStr(m_zoomLevel*100) + "%");
 }
 
 void Camera::mouseWheelEvent(const int dt)
 {
 	Vector2 center = getCenter();
-	if(dt < 0) m_zoom *= 0.5f;
-	if(dt > 0) m_zoom *= 2.0f;
+	if(dt > 0) zoomIn();
+	if(dt < 0) zoomOut();
 	lookAt(center);
+}
+
+void Camera::resizeEvent(uint width, uint height)
+{
+	setZoomLevel(m_zoomLevel);
 }

@@ -565,7 +565,7 @@ void TerrainChunk::draw(xd::GraphicsContext &gfxContext)
 	{
 		if(m_dirty)
 		{
-			if(!m_nextChunksGenerated)
+			/*if(!m_nextChunksGenerated)
 			{
 				m_nextChunksGenerated = true;
 				for(uint i = 0; i < 8; ++i)
@@ -578,15 +578,15 @@ void TerrainChunk::draw(xd::GraphicsContext &gfxContext)
 				}
 			}
 			
-			if(m_nextChunksGenerated)
+			if(m_nextChunksGenerated)*/
 			{
 				generateVBO();
 				m_dirty = false;
 			}
-			else
+			/*else
 			{
 				return;
-			}
+			}*/
 		}
 		
 		// Draw blocks

@@ -3,16 +3,16 @@
 
 #include <x2d/x2d.h>
 
-#include "game/gameobject.h"
+#include "Game/GameObject.h"
 
-class Camera : public GameObject, public xd::MouseListener
+class Camera : public GameObject, public xd::MouseListener, public xd::WindowListener
 {
 public:
 	// Constructor
 	Camera();
 
 	// Look at point
-	void lookAt(Vector2 point);
+	void lookAt(Vector2i worldPoint);
 	
 	// Get current projection matrix
 	Matrix4 getProjectionMatrix() const;
@@ -20,26 +20,24 @@ public:
 	// Get camera center
 	Vector2 getCenter() const;
 
-	// Get active chunk area
-	Recti getActiveChunkArea() const;
-
 	// Get zoom level
-	float getZoom() const;
+	void setZoomLevel(const float zoomLevel);
+	float getZoomLevel() const;
+
+	void zoomIn() { setZoomLevel(m_zoomLevel*2.0f); }
+	void zoomOut() { setZoomLevel(m_zoomLevel*0.5f); }
 
 	// Position
-	Vector2 getPosition();
-	uint getX();
-	uint getY();
+	Vector2i getPosition();
+	uint getX() { return getPosition().x; }
+	uint getY() { return getPosition().y; }
 
 	// Size
-	Vector2i getSize();
-	uint getWidth();
-	uint getHeight();
-
-	// Zoomed size
-	Vector2i getSizeZoomed();
-	uint getWidthZoomed();
-	uint getHeightZoomed();
+	void setSize(Vector2i size);
+	void setSize(const uint width, const uint height) { setSize(Vector2i(width, height)); }
+	Vector2i getSize() const;
+	uint getWidth() const { return getSize().x; }
+	uint getHeight() const { return getSize().y; }
 
 	// Get input position
 	Vector2 getInputPosition() const;
@@ -51,6 +49,9 @@ public:
 	// MouseListener event
 	void mouseWheelEvent(const int dt);
 
+	// WindowListener event
+	void resizeEvent(uint width, uint height);
+
 private:
 	// Position
 	Vector2i m_position;
@@ -59,7 +60,7 @@ private:
 	Vector2i m_size;
 
 	// Zoom
-	float m_zoom;
+	float m_zoomLevel;
 };
 
 #endif // CAMERA_H

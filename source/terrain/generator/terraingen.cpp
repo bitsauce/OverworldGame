@@ -154,7 +154,7 @@ void TerrainGen::loadStructures(const int superChunkX, const int superChunkY)
 				}
 
 				int branchCount = 2;// + (s_random.getInt(tileX + s_seed + 88372) % 3);
-				for(uint i = 0; i < branchCount; ++i)
+				for(int i = 0; i < branchCount; ++i)
 				{
 					//float segmentAngle = branch.z - (s_random.getDouble(tileX + s_seed + (branch.x + branch.y + branch.w) * 3628 + i * 8731) * PI * 0.5f) - PI * 0.25f; // From [45, 135]
 					float segmentAngle = branch.z + PI * 0.25f * (i == 0 ? 1 : -1); // From [45, 135]
@@ -165,7 +165,7 @@ void TerrainGen::loadStructures(const int superChunkX, const int superChunkY)
 						ray.test(Vector2(branch.x, branch.y), Vector2(branch.x, branch.y) + Vector2(cos(segmentAngle), sin(segmentAngle)) * segmentLength);
 					
 						vector<Vector2i> points = ray.getPoints();
-						for(int j = 0; j < points.size(); ++j)
+						for(uint j = 0; j < points.size(); ++j)
 						{
 							s_structureMap[BLOCK_KEY(tileX + points[j].x, tileY - points[j].y)].back = BLOCK_WOOD;
 						}

@@ -93,60 +93,67 @@ void Debug::draw(xd::SpriteBatch *spriteBatch)
 
 		for(int y = y0; y <= y1; ++y)
 		{
-			gfxContext.drawRectangle(x0 * BLOCK_PXF, y * BLOCK_PXF, (x1 - x0 + 1) * BLOCK_PXF, 1.0f / World::getCamera()->getZoom(), xd::Color(127, 127, 127, 255));
+			gfxContext.drawRectangle(x0 * BLOCK_PXF, y * BLOCK_PXF, (x1 - x0 + 1) * BLOCK_PXF, 1.0f / World::getCamera()->getZoomLevel(), xd::Color(127, 127, 127, 255));
 		}
 
 		for(int x = x0; x <= x1; ++x)
 		{
-			gfxContext.drawRectangle(x * BLOCK_PXF, y0 * BLOCK_PXF, 1.0f / World::getCamera()->getZoom(), (y1 - y0 + 1) * BLOCK_PXF, xd::Color(127, 127, 127, 255));
+			gfxContext.drawRectangle(x * BLOCK_PXF, y0 * BLOCK_PXF, 1.0f / World::getCamera()->getZoomLevel(), (y1 - y0 + 1) * BLOCK_PXF, xd::Color(127, 127, 127, 255));
 		}
 	}
 
 	// Draw chunk grid
-	ChunkLoader::ChunkArea area = m_terrain->getChunkLoader()->getActiveArea();
-	for(int y = area.y0; y <= area.y1; ++y)
+	Vector2 position = World::getCamera()->getPosition();
+	Vector2 size = World::getCamera()->getSize();
+	int x0 = (int)floor(position.x/CHUNK_PXF);
+	int y0 = (int)floor(position.y/CHUNK_PXF);
+	int x1 = (int)floor((position.x+size.x)/CHUNK_PXF);
+	int y1 = (int)floor((position.y+size.y)/CHUNK_PXF);
+
+	for(int y = y0; y <= y1; ++y)
 	{
-		gfxContext.drawRectangle(area.x0 * CHUNK_PX, y * CHUNK_PX, (area.x1 - area.x0 + 1) * CHUNK_PX, 1.0f / World::getCamera()->getZoom(), xd::Color(0, 0, 0, 255));
+		gfxContext.drawRectangle(x0 * CHUNK_PX, y * CHUNK_PX, (x1 - x0 + 1) * CHUNK_PX, 1.0f / World::getCamera()->getZoomLevel(), xd::Color(0, 0, 0, 255));
 	}
 
-	for(int x = area.x0; x <= area.x1; ++x)
+	for(int x = x0; x <= x1; ++x)
 	{
-		gfxContext.drawRectangle(x * CHUNK_PX, area.y0 * CHUNK_PX, 1.0f / World::getCamera()->getZoom(), (area.y1 - area.y0 + 1) * CHUNK_PX, xd::Color(0, 0, 0, 255));
+		gfxContext.drawRectangle(x * CHUNK_PX, y0 * CHUNK_PX, 1.0f / World::getCamera()->getZoomLevel(), (y1 - y0 + 1) * CHUNK_PX, xd::Color(0, 0, 0, 255));
 	}
 
 	if(m_debugChunkLoader)
 	{
-		for(int y = area.y0; y <= area.y1; ++y)
+		// Draw current view
+		Vector2 position = World::getCamera()->getCenter() - xd::Window::getSize()*0.5f;
+		Vector2 size = xd::Window::getSize();
+		gfxContext.drawRectangle(position.x, position.y, 1.0f / World::getCamera()->getZoomLevel(), size.y, xd::Color(127, 127, 255, 255));
+		gfxContext.drawRectangle((position.x+size.x), position.y, 1.0f / World::getCamera()->getZoomLevel(), size.y, xd::Color(127, 127, 255, 255));
+		gfxContext.drawRectangle(position.x, position.y, size.x, 1.0f / World::getCamera()->getZoomLevel(), xd::Color(127, 127, 255, 255));
+		gfxContext.drawRectangle(position.x, (position.y+size.y), size.x, 1.0f / World::getCamera()->getZoomLevel(), xd::Color(127, 127, 255, 255));
+
+		// Draw active area
+		ChunkLoader::ChunkArea activeArea = m_terrain->getChunkLoader()->getActiveArea();
+		gfxContext.drawRectangle(activeArea.x0 * CHUNK_PX, activeArea.y0 * CHUNK_PX, 1.0f / World::getCamera()->getZoomLevel(), (activeArea.y1 - activeArea.y0 + 1) * CHUNK_PX, xd::Color(255, 255, 255, 255));
+		gfxContext.drawRectangle((activeArea.x1+1) * CHUNK_PX, activeArea.y0 * CHUNK_PX, 1.0f / World::getCamera()->getZoomLevel(), (activeArea.y1 - activeArea.y0 + 1) * CHUNK_PX, xd::Color(255, 255, 255, 255));
+		gfxContext.drawRectangle(activeArea.x0 * CHUNK_PX, activeArea.y0 * CHUNK_PX, (activeArea.x1 - activeArea.x0 + 1) * CHUNK_PX, 1.0f / World::getCamera()->getZoomLevel(), xd::Color(255, 255, 255, 255));
+		gfxContext.drawRectangle(activeArea.x0 * CHUNK_PX, (activeArea.y1+1) * CHUNK_PX, (activeArea.x1 - activeArea.x0 + 1) * CHUNK_PX, 1.0f / World::getCamera()->getZoomLevel(), xd::Color(255, 255, 255, 255));
+
+		// Draw load area
+		ChunkLoader::ChunkArea loadArea = m_terrain->getChunkLoader()->getLoadArea();
+		gfxContext.drawRectangle(loadArea.x0 * CHUNK_PX, loadArea.y0 * CHUNK_PX, 1.0f / World::getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PX, xd::Color(255, 255, 255, 255));
+		gfxContext.drawRectangle((loadArea.x1+1) * CHUNK_PX, loadArea.y0 * CHUNK_PX, 1.0f / World::getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PX, xd::Color(255, 255, 255, 255));
+		gfxContext.drawRectangle(loadArea.x0 * CHUNK_PX, loadArea.y0 * CHUNK_PX, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PX, 1.0f / World::getCamera()->getZoomLevel(), xd::Color(255, 255, 255, 255));
+		gfxContext.drawRectangle(loadArea.x0 * CHUNK_PX, (loadArea.y1+1) * CHUNK_PX, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PX, 1.0f / World::getCamera()->getZoomLevel(), xd::Color(255, 255, 255, 255));
+
+		for(int y = y0; y <= y1; ++y)
 		{
-			for(int x = area.x0; x <= area.x1; ++x)
+			for(int x = x0; x <= x1; ++x)
 			{
-				if(m_terrain->getChunkLoader()->isChunkLoadedAt(x, y))
+				if(!m_terrain->getChunkLoader()->isChunkLoadedAt(x, y))
 				{
-					gfxContext.drawRectangle(x * CHUNK_PX, y * CHUNK_PX, CHUNK_PX * World::getCamera()->getZoom(), CHUNK_PX * World::getCamera()->getZoom(), xd::Color(255, 0, 0, 127));
+					gfxContext.drawRectangle(x * CHUNK_PX, y * CHUNK_PX, CHUNK_PX, CHUNK_PX, xd::Color(255, 0, 0, 127));
 				}
 			}
 		}
-
-		// Show loaded chunks (red: unloaded, green: loaded, blue: loaded and current)
-		/*int w = floor(xd::Window::getSize().x/10.0f) * 0.5f;
-		int h = floor(xd::Window::getSize().y/10.0f) * 0.5f;
-		for(int y = -h; y <= h; ++y)
-		{
-			for(int x = -w; x <= w; ++x)
-			{
-				xd::Color color(255, 0, 0);
-				if(x == 0 && y == 0)
-				{
-					color = xd::Color(0, 0, 255);
-				}
-				else if(m_terrain->getChunkLoader()->isChunkLoadedAt(x0 + x, y0 + y))
-				{
-					color = xd::Color(0, 255, 0);
-				}
-				color.a = 127;
-				gfxContext.drawRectangle((x+w)*10, (y+h)*10, 10, 10, color);
-			}
-		}*/
 	}
 
 	spriteBatch->end();

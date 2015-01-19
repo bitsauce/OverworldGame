@@ -39,7 +39,11 @@ private:
 	unordered_map<uint, TerrainChunk*> m_chunks;
 	TerrainChunk m_dummyChunk;
 
+	// Active area
 	ChunkArea m_activeArea;
+	Vector2i m_activeAreaSize;
+
+	// Load area
 	ChunkArea m_loadArea;
 
 	uint m_maxChunkCount;
