@@ -32,6 +32,7 @@ public:
 	void update();
 
 private:
+	TerrainChunk *loadChunkAt(const int chunkX, const int chunkY);
 
 	bool m_applyZoom;
 	Camera *m_camera;

@@ -9,7 +9,7 @@ enum TerrainLayer;
 enum ChunkState
 {
 	CHUNK_DUMMY,
-	CHUNK_GENERATING,
+	CHUNK_LOADED,
 	CHUNK_INITIALIZED
 };
 
@@ -18,12 +18,11 @@ class TerrainChunk
 	friend class ChunkLoader;
 public:
 	TerrainChunk();
-	TerrainChunk(int chunkX, int chunkY);
+
+	// LOADING / GENERATION
+	void load(int chunkX, int chunkY);
 	
 	// SERIALIZATION
-	void load(int chunkX, int chunkY);
-	void generate();
-	void generateVBO();
 	void serialize(xd::FileWriter &ss);
 	void deserialize(stringstream &ss);
 	
@@ -46,6 +45,9 @@ private:
 	// PHYSICS
 	void updateShadows();
 
+	// GENERATION
+	void generateVBO();
+
 	struct Block
 	{
 		Block();
@@ -66,7 +68,7 @@ private:
 
 	// CHUNK
 	int m_x, m_y;
-	Block **m_blocks;
+	Block *m_blocks;
 	TerrainChunk *m_nextChunk[8];
 	
 	vector<BlockQuad> m_tmpQuads;
@@ -84,8 +86,7 @@ private:
 	// MISC
 	bool m_modified;
 	bool m_dirty;
-	bool m_nextChunksGenerated;
-	ChunkState m_state;
+	bool m_loaded;
 };
 
 #endif // TERRAIN_CHUNK_H

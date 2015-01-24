@@ -39,7 +39,7 @@ void ChunkLoader::loadActiveArea()
 		{
 			if((chunk = &getChunkAt(x, y, true))->getState() != CHUNK_INITIALIZED)
 			{
-				chunk->generate();
+				chunk->generateVBO();
 			}
 		}
 	}
@@ -54,57 +54,63 @@ TerrainChunk &ChunkLoader::getChunkAt(const int chunkX, const int chunkY, const 
 		{
 			xd::LOG("Chunk [%i, %i] added to queue", chunkX, chunkY);
 			
-			// Create new chunk
-			TerrainChunk *chunk = nullptr;
-			string chunkFile = World::getWorldPath() + "/chunks/" + xd::util::intToStr(key) + ".obj";
-			if(xd::util::fileExists(chunkFile))
-			{
-				//@chunk = cast<TerrainChunk>(@Scripts.deserialize(chunkFile));
-			}
-			else
-			{
-				if(m_chunks.size() >= m_maxChunkCount)
-				{
-					// Grab a chunk offscreen
-					for(unordered_map<uint, TerrainChunk*>::iterator itr = m_chunks.begin(); itr != m_chunks.end(); ++itr)
-					{
-						int x = itr->second->getX(), y = itr->second->getY();
-						if(x < m_activeArea.x0 || x > m_activeArea.x1 || y < m_activeArea.y0 || y > m_activeArea.y1)
-						{
-							chunk = itr->second;
-							m_chunks.erase(itr->first);
-							break;
-						}
-					}
-				}
-				else
-				{
-					// Grab a chunk from the pool
-					chunk = m_chunkPool.back();
-					m_chunkPool.pop_back();
-				}
+			// Load this chunk
+			TerrainChunk *chunk = loadChunkAt(chunkX, chunkY);
 
-				chunk->load(chunkX, chunkY);
+			// Load neighbour chunks
+			if(!isChunkLoadedAt(chunkX,   chunkY+1)) { TerrainChunk *nextChunk = loadChunkAt(chunkX,   chunkY+1); nextChunk->m_nextChunk[0] = chunk; chunk->m_nextChunk[4] = nextChunk; }
+			if(!isChunkLoadedAt(chunkX-1, chunkY+1)) { TerrainChunk *nextChunk = loadChunkAt(chunkX-1, chunkY+1); nextChunk->m_nextChunk[1] = chunk; chunk->m_nextChunk[5] = nextChunk; }
+			if(!isChunkLoadedAt(chunkX-1, chunkY  )) { TerrainChunk *nextChunk = loadChunkAt(chunkX-1, chunkY  ); nextChunk->m_nextChunk[2] = chunk; chunk->m_nextChunk[6] = nextChunk; }
+			if(!isChunkLoadedAt(chunkX-1, chunkY-1)) { TerrainChunk *nextChunk = loadChunkAt(chunkX-1, chunkY-1); nextChunk->m_nextChunk[3] = chunk; chunk->m_nextChunk[7] = nextChunk; }
+			if(!isChunkLoadedAt(chunkX,   chunkY-1)) { TerrainChunk *nextChunk = loadChunkAt(chunkX,   chunkY-1); nextChunk->m_nextChunk[4] = chunk; chunk->m_nextChunk[0] = nextChunk; }
+			if(!isChunkLoadedAt(chunkX+1, chunkY-1)) { TerrainChunk *nextChunk = loadChunkAt(chunkX+1, chunkY-1); nextChunk->m_nextChunk[5] = chunk; chunk->m_nextChunk[1] = nextChunk; }
+			if(!isChunkLoadedAt(chunkX+1, chunkY  )) { TerrainChunk *nextChunk = loadChunkAt(chunkX+1, chunkY  ); nextChunk->m_nextChunk[6] = chunk; chunk->m_nextChunk[2] = nextChunk; }
+			if(!isChunkLoadedAt(chunkX+1, chunkY+1)) { TerrainChunk *nextChunk = loadChunkAt(chunkX+1, chunkY+1); nextChunk->m_nextChunk[7] = chunk; chunk->m_nextChunk[3] = nextChunk; }
 
-				// Inform all neightbour chunks about the new guy
-				if(isChunkLoadedAt(chunkX,   chunkY+1)) { m_chunks[CHUNK_KEY(chunkX,   chunkY+1)]->m_nextChunk[0] = chunk; chunk->m_nextChunk[4] = m_chunks[CHUNK_KEY(chunkX,   chunkY+1)]; }
-				if(isChunkLoadedAt(chunkX-1, chunkY+1)) { m_chunks[CHUNK_KEY(chunkX-1, chunkY+1)]->m_nextChunk[1] = chunk; chunk->m_nextChunk[5] = m_chunks[CHUNK_KEY(chunkX-1, chunkY+1)]; }
-				if(isChunkLoadedAt(chunkX-1, chunkY  )) { m_chunks[CHUNK_KEY(chunkX-1, chunkY  )]->m_nextChunk[2] = chunk; chunk->m_nextChunk[6] = m_chunks[CHUNK_KEY(chunkX-1, chunkY  )]; }
-				if(isChunkLoadedAt(chunkX-1, chunkY-1)) { m_chunks[CHUNK_KEY(chunkX-1, chunkY-1)]->m_nextChunk[3] = chunk; chunk->m_nextChunk[7] = m_chunks[CHUNK_KEY(chunkX-1, chunkY-1)]; }
-				if(isChunkLoadedAt(chunkX,   chunkY-1)) { m_chunks[CHUNK_KEY(chunkX,   chunkY-1)]->m_nextChunk[4] = chunk; chunk->m_nextChunk[0] = m_chunks[CHUNK_KEY(chunkX,   chunkY-1)]; }
-				if(isChunkLoadedAt(chunkX+1, chunkY-1)) { m_chunks[CHUNK_KEY(chunkX+1, chunkY-1)]->m_nextChunk[5] = chunk; chunk->m_nextChunk[1] = m_chunks[CHUNK_KEY(chunkX+1, chunkY-1)]; }
-				if(isChunkLoadedAt(chunkX+1, chunkY  )) { m_chunks[CHUNK_KEY(chunkX+1, chunkY  )]->m_nextChunk[6] = chunk; chunk->m_nextChunk[2] = m_chunks[CHUNK_KEY(chunkX+1, chunkY  )]; }
-				if(isChunkLoadedAt(chunkX+1, chunkY+1)) { m_chunks[CHUNK_KEY(chunkX+1, chunkY+1)]->m_nextChunk[7] = chunk; chunk->m_nextChunk[3] = m_chunks[CHUNK_KEY(chunkX+1, chunkY+1)]; }
-			}
-				
-			m_chunks[key] = chunk;
-			chunk->generate();
-			
 			return *chunk;
 		}
 		return m_dummyChunk; // Return dummy
 	}
 	return *m_chunks[key];
+}
+
+TerrainChunk *ChunkLoader::loadChunkAt(const int chunkX, const int chunkY)
+{
+	uint key = CHUNK_KEY(chunkX, chunkY);
+	string chunkFile = World::getWorldPath() + "/chunks/" + xd::util::intToStr(key) + ".obj";
+	TerrainChunk *chunk = nullptr;
+
+	if(xd::util::fileExists(chunkFile))
+	{
+		// TODO: Load chunk from file
+	}
+	else
+	{
+		if(m_chunks.size() >= m_maxChunkCount)
+		{
+			// Grab a chunk offscreen
+			for(unordered_map<uint, TerrainChunk*>::iterator itr = m_chunks.begin(); itr != m_chunks.end(); ++itr)
+			{
+				int x = itr->second->getX(), y = itr->second->getY();
+				if(x < m_activeArea.x0 || x > m_activeArea.x1 || y < m_activeArea.y0 || y > m_activeArea.y1)
+				{
+					chunk = itr->second;
+					m_chunks.erase(itr->first);
+					break;
+				}
+			}
+		}
+		else
+		{
+			// Grab a chunk from the pool
+			chunk = m_chunkPool.back();
+			m_chunkPool.pop_back();
+		}
+	}
+
+	assert(chunk);
+	(m_chunks[key] = chunk)->load(chunkX, chunkY);
+	return chunk;
 }
 
 bool ChunkLoader::isChunkLoadedAt(const int chunkX, const int chunkY) const
