@@ -6,7 +6,9 @@
 ChunkLoader::ChunkLoader(Camera *camera) :
 	GameObject(DRAW_ORDER_CHUNK_LOADER),
 	m_applyZoom(true),
-	m_camera(camera)
+	m_camera(camera),
+	m_chunkPositionIndex(0),
+	m_loadAreaRadius(5)
 {
 	// Setup vertex format
 	xd::VertexFormat vertexFormat;
@@ -15,19 +17,29 @@ ChunkLoader::ChunkLoader(Camera *camera) :
 	TerrainChunk::s_vertices = vertexFormat.createVertices(4*12*16*16*3);
 
 	// Set max chunks to some value
-	setMaxChunkCount(512);
+	setOptimalChunkCount(512);
 
-	update();
+	// Add window listener
+	xd::Window::addWindowListener(this);
 }
 
-void ChunkLoader::setMaxChunkCount(const uint maxChunkCount)
+void ChunkLoader::setOptimalChunkCount(const uint optimalChunkCount)
 {
-	m_chunkPool.resize(maxChunkCount);
-	for(uint i = 0; i < maxChunkCount; ++i)
+	// Clear old chunks
+	for(uint i = 0; i < m_chunkPool.size(); ++i)
+	{
+		delete m_chunkPool[i];
+	}
+
+	// Create new chunks
+	m_chunkPool.resize(optimalChunkCount * 1.1f);
+	for(uint i = 0; i < m_chunkPool.size(); ++i)
 	{
 		m_chunkPool[i] = new TerrainChunk();
 	}
-	m_maxChunkCount = maxChunkCount;
+
+	// Set optimal chunk count
+	m_optimalChunkCount = optimalChunkCount;
 }
 
 void ChunkLoader::loadActiveArea()
@@ -68,7 +80,7 @@ TerrainChunk *ChunkLoader::loadChunkAt(const int chunkX, const int chunkY)
 	}
 	else
 	{
-		if(m_chunks.size() >= m_maxChunkCount)
+		if(m_chunkPool.empty())
 		{
 			// Grab a chunk offscreen
 			for(unordered_map<uint, TerrainChunk*>::iterator itr = m_chunks.begin(); itr != m_chunks.end(); ++itr)
@@ -90,7 +102,7 @@ TerrainChunk *ChunkLoader::loadChunkAt(const int chunkX, const int chunkY)
 		}
 	}
 
-	assert(chunk); // If we got here we probably ran out of chunks from the pool
+	assert(chunk); // If we got here we probably ran out of chunks
 
 	(m_chunks[key] = chunk)->load(chunkX, chunkY);
 	return chunk;
@@ -122,8 +134,6 @@ void ChunkLoader::update()
 	Vector2 center = m_camera->getCenter();
 	Vector2 size = m_applyZoom ? m_camera->getSize() : xd::Window::getSize();
 
-	m_activeAreaSize = size/CHUNK_PXF;
-
 	// Active area should have the same center as the view
 	m_activeArea.x0 = (int)floor(center.x/CHUNK_PXF) - floor(size.x*0.5f/CHUNK_PXF) - 1;
 	m_activeArea.y0 = (int)floor(center.y/CHUNK_PXF) - floor(size.y*0.5f/CHUNK_PXF) - 1;
@@ -131,23 +141,88 @@ void ChunkLoader::update()
 	m_activeArea.y1 = (int)floor(center.y/CHUNK_PXF) + floor(size.y*0.5f/CHUNK_PXF) + 1;
 
 	// Update load area
-	m_loadArea.x0 = m_activeArea.x0 - 5;
-	m_loadArea.y0 = m_activeArea.y0 - 5;
-	m_loadArea.x1 = m_activeArea.x1 + 5;
-	m_loadArea.y1 = m_activeArea.y1 + 5;
-
-	if(m_chunks.size() >= m_optimalChunkCount)
+	m_loadArea.x0 = m_activeArea.x0 - m_loadAreaRadius;
+	m_loadArea.y0 = m_activeArea.y0 - m_loadAreaRadius;
+	m_loadArea.x1 = m_activeArea.x1 + m_loadAreaRadius;
+	m_loadArea.y1 = m_activeArea.y1 + m_loadAreaRadius;
+	
+	// Calculate where the view is heading
+	Vector2i chunkPosition(m_activeArea.x0, m_activeArea.y0);
+	if(!(chunkPosition == m_prevChunkPosition))
 	{
-		// Find a chunk offscreen and add it to the pool
-		for(unordered_map<uint, TerrainChunk*>::iterator itr = m_chunks.begin(); itr != m_chunks.end(); ++itr)
+		// Calculate averate position
+		m_averagePosition.set(0.0f, 0.0f);
+		for(int i = 0; i < 4; ++i)
 		{
-			int x = itr->second->getX(), y = itr->second->getY();
-			if(x < m_activeArea.x0 || x > m_activeArea.x1 || y < m_activeArea.y0 || y > m_activeArea.y1)
+			m_averagePosition += m_chunkPositions[i];
+		}
+		m_averagePosition /= 4.0f;
+
+		// Store previous position
+		m_prevChunkPosition = m_chunkPositions[m_chunkPositionIndex++ % 4] = chunkPosition;
+		//m_circleIterator = m_circleLoadPattern.begin(); // Reset iterator
+	}
+
+	Vector2 dir = Vector2(chunkPosition) - m_averagePosition;
+	World::getDebug()->setVariable("Chunk load direction", "[" + xd::util::floatToStr(dir.x) + ", " + xd::util::floatToStr(dir.y) + "]");
+
+	// Find a chunk offscreen and add it to the pool
+	for(unordered_map<uint, TerrainChunk*>::iterator itr = m_chunks.begin(); itr != m_chunks.end(); ++itr)
+	{
+		int x = itr->second->getX(), y = itr->second->getY();
+		if(x < m_loadArea.x0-1 || x > m_loadArea.x1+1 || y < m_loadArea.y0-1 || y > m_loadArea.y1+1)
+		{
+			m_chunkPool.push_back(itr->second);
+			m_chunks.erase(itr->first);
+			break;
+		}
+	}
+	
+	if(m_chunks.size() < m_optimalChunkCount)
+	{
+		// Load offscren chunks
+		/*Vector2i centerChunkPosition = center/CHUNK_PXF;
+		TerrainChunk &chunk = getChunkAt(centerChunkPosition.x + (*m_circleIterator).x, centerChunkPosition.y + (*m_circleIterator).y);
+		if(chunk.isDirty()) chunk.generateVertexBuffers(this);
+		m_circleIterator++;*/
+
+		bool generated = false;
+		for(int y = m_loadArea.y0; y <= m_loadArea.y1 && !generated; ++y)
+		{
+			for(int x = m_loadArea.x0; x <= m_loadArea.x1 && !generated; ++x)
 			{
-				m_chunkPool.push_back(itr->second);
-				m_chunks.erase(itr->first);
-				break;
+				TerrainChunk &chunk = getChunkAt(x, y);
+				if(chunk.isDirty())
+				{
+					chunk.generateVertexBuffers(this);
+					generated = true;
+				}
 			}
 		}
 	}
+}
+
+void ChunkLoader::resizeEvent(uint width, uint height)
+{
+	int loadAreaWidth  = (int)(floor(width *0.5f/CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2 + 2;
+	int loadAreaHeight = (int)(floor(height*0.5f/CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2 + 2;
+
+	setOptimalChunkCount(loadAreaWidth * loadAreaHeight);
+	
+	/*int diagonalHalfLength = sqrt(loadAreaWidth*loadAreaWidth + loadAreaHeight*loadAreaHeight) * 0.5f;
+	for(int r = 1; r < diagonalHalfLength; ++r)
+	{
+		for(int y = -r; y <= r; ++y)
+		{
+			for(int x = -r; x <= r; ++x)
+			{
+				if(abs(x) > loadAreaWidth*0.5f || abs(y) > loadAreaHeight*0.5f) continue;
+				if((int)sqrt(x*x+y*y) == r)
+				{
+					m_circleLoadPattern.insert(Vector2i(x, y));
+				}
+			}
+		}
+	}
+	m_circleIterator = m_circleLoadPattern.begin();*/
 }

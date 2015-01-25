@@ -65,7 +65,7 @@ void Debug::draw(xd::SpriteBatch *spriteBatch)
 {
 	if(!m_enabled) return;
 	
-	setVariable("Chunks", xd::util::intToStr(m_terrain->getChunkLoader()->m_chunks.size()));
+	setVariable("Chunks", xd::util::intToStr(m_terrain->getChunkLoader()->m_chunks.size()) + " / " + xd::util::intToStr(m_terrain->getChunkLoader()->m_optimalChunkCount));
 
 	// Draw debug info
 	string drawString;
@@ -151,6 +151,10 @@ void Debug::draw(xd::SpriteBatch *spriteBatch)
 				if(!m_terrain->getChunkLoader()->isChunkLoadedAt(x, y))
 				{
 					gfxContext.drawRectangle(x * CHUNK_PX, y * CHUNK_PX, CHUNK_PX, CHUNK_PX, xd::Color(255, 0, 0, 127));
+				}
+				else if(m_terrain->getChunkLoader()->getChunkAt(x, y).isDirty())
+				{
+					gfxContext.drawRectangle(x * CHUNK_PX, y * CHUNK_PX, CHUNK_PX, CHUNK_PX, xd::Color(0, 0, 255, 127));
 				}
 			}
 		}

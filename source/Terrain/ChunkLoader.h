@@ -6,7 +6,7 @@
 
 class Camera;
 
-class ChunkLoader : public GameObject
+class ChunkLoader : public GameObject, public xd::WindowListener
 {
 	friend class Debug;
 public:
@@ -15,13 +15,13 @@ public:
 	TerrainChunk &getChunkAt(const int chunkX, const int chunkY);
 	bool isChunkLoadedAt(const int chunkX, const int chunkY) const;
 
-	void setMaxChunkCount(const uint maxChunkCount);
-	void setOptimalChunkCount(const uint optimalChunkCount) { m_optimalChunkCount = optimalChunkCount; }
+	void setOptimalChunkCount(const uint maxChunkCount);
 
 	void loadActiveArea();
 	
 	struct ChunkArea
 	{
+		ChunkArea() : x0(0), y0(0), x1(0), y1(0) {}
 		int x0, y0;
 		int x1, y1;
 	};
@@ -33,6 +33,8 @@ public:
 
 private:
 	TerrainChunk *loadChunkAt(const int chunkX, const int chunkY);
+	
+	void resizeEvent(uint width, uint height);
 
 	bool m_applyZoom;
 	Camera *m_camera;
@@ -42,17 +44,24 @@ private:
 
 	// Active area
 	ChunkArea m_activeArea;
-	Vector2i m_activeAreaSize;
 
 	// Load area
 	ChunkArea m_loadArea;
+	uint m_loadAreaRadius;
 
-	uint m_maxChunkCount;
-	uint m_optimalChunkCount;
-	
+	// Chunk pool
 	vector<TerrainChunk*> m_chunkPool;
+	uint m_optimalChunkCount;
 
-	Vector2 m_prevCameraPos;
+	// Prev chunk pos
+	Vector2i m_chunkPositions[4];
+	Vector2  m_averagePosition;
+	Vector2i m_prevChunkPosition;
+	uint m_chunkPositionIndex;
+
+	// Load patterns
+	set<Vector2i> m_circleLoadPattern;
+	set<Vector2i>::iterator m_circleIterator;
 };
 
 #endif // CHUNK_LOADER_H
