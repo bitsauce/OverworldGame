@@ -12,7 +12,7 @@ class ChunkLoader : public GameObject
 public:
 	ChunkLoader(Camera *camera);
 
-	TerrainChunk &getChunkAt(const int chunkX, const int chunkY, const bool generate = false);
+	TerrainChunk &getChunkAt(const int chunkX, const int chunkY);
 	bool isChunkLoadedAt(const int chunkX, const int chunkY) const;
 
 	void setMaxChunkCount(const uint maxChunkCount);

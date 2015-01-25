@@ -50,7 +50,7 @@ void Lighting::draw(xd::SpriteBatch *spriteBatch)
 		{
 			for(int x = area.x0; x <= area.x1; ++x)
 			{
-				gfxContext.setTexture(m_terrain->getChunkLoader()->getChunkAt(x, y, true).getLightMap());
+				gfxContext.setTexture(m_terrain->getChunkLoader()->getChunkAt(x, y).getLightMap());
 				gfxContext.drawRectangle((x - area.x0) * CHUNK_BLOCKSF, (y - area.y0) * CHUNK_BLOCKSF, CHUNK_BLOCKSF, CHUNK_BLOCKSF);
 			}
 		}

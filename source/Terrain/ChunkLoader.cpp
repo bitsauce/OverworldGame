@@ -37,39 +37,21 @@ void ChunkLoader::loadActiveArea()
 	{
 		for(int x = m_activeArea.x0-1; x <= m_activeArea.x1+1; x++)
 		{
-			if((chunk = &getChunkAt(x, y, true))->getState() != CHUNK_INITIALIZED)
+			if(chunk = &getChunkAt(x, y))
 			{
-				chunk->generateVBO();
+				chunk->generateVertexBuffers(this);
 			}
 		}
 	}
 }
 
-TerrainChunk &ChunkLoader::getChunkAt(const int chunkX, const int chunkY, const bool generate)
+TerrainChunk &ChunkLoader::getChunkAt(const int chunkX, const int chunkY)
 {
 	uint key = CHUNK_KEY(chunkX, chunkY);
 	if(m_chunks.find(key) == m_chunks.end())
 	{
-		if(generate)
-		{
-			xd::LOG("Chunk [%i, %i] added to queue", chunkX, chunkY);
-			
-			// Load this chunk
-			TerrainChunk *chunk = loadChunkAt(chunkX, chunkY);
-
-			// Load neighbour chunks
-			if(!isChunkLoadedAt(chunkX,   chunkY+1)) { TerrainChunk *nextChunk = loadChunkAt(chunkX,   chunkY+1); nextChunk->m_nextChunk[0] = chunk; chunk->m_nextChunk[4] = nextChunk; }
-			if(!isChunkLoadedAt(chunkX-1, chunkY+1)) { TerrainChunk *nextChunk = loadChunkAt(chunkX-1, chunkY+1); nextChunk->m_nextChunk[1] = chunk; chunk->m_nextChunk[5] = nextChunk; }
-			if(!isChunkLoadedAt(chunkX-1, chunkY  )) { TerrainChunk *nextChunk = loadChunkAt(chunkX-1, chunkY  ); nextChunk->m_nextChunk[2] = chunk; chunk->m_nextChunk[6] = nextChunk; }
-			if(!isChunkLoadedAt(chunkX-1, chunkY-1)) { TerrainChunk *nextChunk = loadChunkAt(chunkX-1, chunkY-1); nextChunk->m_nextChunk[3] = chunk; chunk->m_nextChunk[7] = nextChunk; }
-			if(!isChunkLoadedAt(chunkX,   chunkY-1)) { TerrainChunk *nextChunk = loadChunkAt(chunkX,   chunkY-1); nextChunk->m_nextChunk[4] = chunk; chunk->m_nextChunk[0] = nextChunk; }
-			if(!isChunkLoadedAt(chunkX+1, chunkY-1)) { TerrainChunk *nextChunk = loadChunkAt(chunkX+1, chunkY-1); nextChunk->m_nextChunk[5] = chunk; chunk->m_nextChunk[1] = nextChunk; }
-			if(!isChunkLoadedAt(chunkX+1, chunkY  )) { TerrainChunk *nextChunk = loadChunkAt(chunkX+1, chunkY  ); nextChunk->m_nextChunk[6] = chunk; chunk->m_nextChunk[2] = nextChunk; }
-			if(!isChunkLoadedAt(chunkX+1, chunkY+1)) { TerrainChunk *nextChunk = loadChunkAt(chunkX+1, chunkY+1); nextChunk->m_nextChunk[7] = chunk; chunk->m_nextChunk[3] = nextChunk; }
-
-			return *chunk;
-		}
-		return m_dummyChunk; // Return dummy
+		// Load block data for this chunk
+		return *loadChunkAt(chunkX, chunkY);
 	}
 	return *m_chunks[key];
 }
@@ -108,7 +90,8 @@ TerrainChunk *ChunkLoader::loadChunkAt(const int chunkX, const int chunkY)
 		}
 	}
 
-	assert(chunk);
+	assert(chunk); // If we got here we probably ran out of chunks from the pool
+
 	(m_chunks[key] = chunk)->load(chunkX, chunkY);
 	return chunk;
 }

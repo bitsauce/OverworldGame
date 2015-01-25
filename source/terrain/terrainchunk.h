@@ -6,22 +6,19 @@
 enum BlockID;
 enum TerrainLayer;
 
-enum ChunkState
-{
-	CHUNK_DUMMY,
-	CHUNK_LOADED,
-	CHUNK_INITIALIZED
-};
-
 class TerrainChunk
 {
 	friend class ChunkLoader;
 public:
 	TerrainChunk();
 
-	// LOADING / GENERATION
+	// BLOCK LOADING
 	void load(int chunkX, int chunkY);
 	
+	// VBO LOADING
+	void generateVertexBuffers(ChunkLoader *chunkLoader);
+	bool isDirty() const { return m_dirty; }
+
 	// SERIALIZATION
 	void serialize(xd::FileWriter &ss);
 	void deserialize(stringstream &ss);
@@ -29,7 +26,6 @@ public:
 	int getX() const { return m_x; }
 	int getY() const { return m_y; }
 	
-	ChunkState getState() const;
 	BlockID getBlockAt(const int x, const int y, TerrainLayer layer) const;
 	xd::Texture2DPtr getLightMap() const { return m_shadowMap; }
 	bool isBlockAt(const int x, const int y, TerrainLayer layer) const;
@@ -41,20 +37,6 @@ public:
 
 private:
 	TerrainChunk(const TerrainChunk &) {}
-
-	// PHYSICS
-	void updateShadows();
-
-	// GENERATION
-	void generateVBO();
-
-	struct Block
-	{
-		Block();
-		Block(BlockID id);
-		BlockID id;
-		Block *next[8];
-	};
 	
 	struct BlockQuad
 	{
@@ -68,13 +50,14 @@ private:
 
 	// CHUNK
 	int m_x, m_y;
-	Block *m_blocks;
-	TerrainChunk *m_nextChunk[8];
+	BlockID *m_blocks;
+
+	// Adjacency list
+	TerrainChunk *m_adjacentChunks[8];
 	
 	vector<BlockQuad> m_tmpQuads;
 	static xd::Vertex *s_vertices;
 	static uint *s_indices;
-	static Block s_tempBlock;
 	
 	// DRAWING
 	xd::StaticVertexBuffer m_vbo;
@@ -86,7 +69,6 @@ private:
 	// MISC
 	bool m_modified;
 	bool m_dirty;
-	bool m_loaded;
 };
 
 #endif // TERRAIN_CHUNK_H

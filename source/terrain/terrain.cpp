@@ -100,12 +100,20 @@ void Terrain::draw(xd::SpriteBatch *spriteBatch)
 	{
 		for(int x = area.x0; x <= area.x1; ++x)
 		{
+			TerrainChunk &chunk = m_chunkLoader.getChunkAt(x, y);
+
+			// Should we generate new vertex buffers
+			if(chunk.isDirty())
+			{
+				chunk.generateVertexBuffers(&m_chunkLoader);
+			}
+
 			Matrix4 mat;
 			mat.scale(BLOCK_PXF, BLOCK_PXF, 1.0f);
 			mat.translate(x * CHUNK_PXF, y * CHUNK_PXF, 0.0f);
 
 			gfxContext.pushMatrix(mat);
-			m_chunkLoader.getChunkAt(x, y, true).draw(gfxContext);
+			chunk.draw(gfxContext);
 			gfxContext.popMatrix();
 		}
 	}
