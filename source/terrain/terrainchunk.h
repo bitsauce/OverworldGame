@@ -1,7 +1,7 @@
 #ifndef TERRAIN_CHUNK_H
 #define TERRAIN_CHUNK_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
 
 enum BlockID;
 enum TerrainLayer;
@@ -20,20 +20,20 @@ public:
 	bool isDirty() const { return m_dirty; }
 
 	// SERIALIZATION
-	void serialize(xd::FileWriter &ss);
+	void serialize(FileWriter &ss);
 	void deserialize(stringstream &ss);
 	
 	int getX() const { return m_x; }
 	int getY() const { return m_y; }
 	
 	BlockID getBlockAt(const int x, const int y, TerrainLayer layer) const;
-	xd::Texture2DPtr getLightMap() const { return m_shadowMap; }
+	Texture2DPtr getLightMap() const { return m_shadowMap; }
 	bool isBlockAt(const int x, const int y, TerrainLayer layer) const;
 	bool isBlockOccupied(const int x, const int y, TerrainLayer layer) const;
 	bool setBlockAt(const int x, const int y, const BlockID block, TerrainLayer layer);
 	
 	// DRAWING
-	void draw(xd::GraphicsContext &gfxContext);
+	void draw(GraphicsContext &gfxContext);
 
 private:
 	TerrainChunk(const TerrainChunk &) {}
@@ -52,19 +52,18 @@ private:
 	int m_x, m_y;
 	BlockID *m_blocks;
 
-	// Adjacency list
+	// ADJACENCY LIST
 	TerrainChunk *m_adjacentChunks[8];
 	
+	// VBO VARIABLES
 	vector<BlockQuad> m_tmpQuads;
-	static xd::Vertex *s_vertices;
+	static Vertex *s_vertices;
 	static uint *s_indices;
 	
 	// DRAWING
-	xd::StaticVertexBuffer m_vbo;
-	xd::StaticIndexBuffer m_ibo;
-	xd::Texture2DPtr m_shadowMap;
-
-	//list<LightSource> m_lightSources;
+	StaticVertexBuffer m_vbo;
+	StaticIndexBuffer m_ibo;
+	Texture2DPtr m_shadowMap;
 	
 	// MISC
 	bool m_modified;

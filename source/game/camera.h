@@ -28,9 +28,9 @@ public:
 	void zoomOut() { setZoomLevel(m_zoomLevel*0.5f); }
 
 	// Position
-	Vector2i getPosition();
-	uint getX() { return getPosition().x; }
-	uint getY() { return getPosition().y; }
+	Vector2i getPosition() const;
+	uint getX() const { return getPosition().x; }
+	uint getY() const { return getPosition().y; }
 
 	// Size
 	void setSize(Vector2i size);

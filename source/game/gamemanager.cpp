@@ -14,19 +14,24 @@ bool GameManager::s_takeScreenshot = false;
 
 void GameManager::main()
 {
-	SceneManager::init();
-
 	// Set some key bindings
 	xd::Input::bind(xd::XD_KEY_ESCAPE, function<void()>(xd::Engine::exit));
 	xd::Input::bind(xd::XD_KEY_SNAPSHOT, function<void()>(GameManager::takeScreenshot));
-
+	
+	// Initialize game managers
+	SceneManager::init();
 	BlockData::init();
 	ItemData::init();
 	World::init();
+	BlockEntityData::init(World::getTerrain());
+
+	// Enable debugger
 	World::getDebug()->toggle();
 
+	// Resize the window
 	xd::Window::setSize(Vector2i(1280, 720));
 
+	// Show main menu
 	SceneManager::gotoScene(SCENE_GAME);
 }
 

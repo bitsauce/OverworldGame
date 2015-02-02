@@ -24,6 +24,7 @@ Debug::Debug(Terrain *terrain, Lighting *lighting) :
 	xd::Input::bind(xd::XD_KEY_F2, function<void()>(bind(&Debug::debugF2, this)));
 	xd::Input::bind(xd::XD_KEY_F3, function<void()>(bind(&Debug::debugF3, this)));
 	xd::Input::bind(xd::XD_KEY_F4, function<void()>(bind(&Debug::debugF4, this)));
+	xd::Input::bind(xd::XD_KEY_F5, function<void()>(bind(&Debug::debugF5, this)));
 }
 
 void Debug::debugF2()
@@ -34,13 +35,18 @@ void Debug::debugF2()
 xd::Random random;
 void Debug::debugF3()
 {
-	new Spotlight((World::getCamera()->getPosition() + xd::Input::getPosition())/BLOCK_PXF, 20, xd::Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
+	new Spotlight(World::getCamera()->getInputPosition()/BLOCK_PXF, 20, xd::Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
 }
 
 void Debug::debugF4()
 {
 	m_debugChunkLoader = !m_debugChunkLoader;
 	m_terrain->getChunkLoader()->m_applyZoom = !m_terrain->getChunkLoader()->m_applyZoom;
+}
+
+void Debug::debugF5()
+{
+	m_terrain->setBlockEntityAt(World::getCamera()->getInputPosition().x/BLOCK_PXF, World::getCamera()->getInputPosition().y/BLOCK_PXF, BLOCK_ENTITY_RED_CURRANT_BUSH);
 }
 
 void Debug::update()
@@ -194,14 +200,14 @@ void Debug::nextBlock()
 	if(!m_enabled) return;
 	if((m_block = BlockID(m_block + 1)) >= BLOCK_COUNT)
 	{
-		m_block = BlockID(BLOCK_OCCUPIED + 1);
+		m_block = BlockID(BLOCK_ENTITY + 1);
 	}
 }
 
 void Debug::prevBlock()
 {
 	if(!m_enabled) return;
-	if((m_block = BlockID(m_block - 1)) <= BLOCK_OCCUPIED)
+	if((m_block = BlockID(m_block - 1)) <= BLOCK_ENTITY)
 	{
 		m_block = BlockID(BLOCK_COUNT - 1);
 	}

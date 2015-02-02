@@ -26,6 +26,7 @@ public:
 	void debugF2();
 	void debugF3();
 	void debugF4();
+	void debugF5();
 
 	bool isEnabled() { return m_enabled; }
 

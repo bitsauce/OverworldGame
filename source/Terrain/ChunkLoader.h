@@ -60,8 +60,8 @@ private:
 	uint m_chunkPositionIndex;
 
 	// Load patterns
-	set<Vector2i> m_circleLoadPattern;
-	set<Vector2i>::iterator m_circleIterator;
+	vector<Vector2i> m_circleLoadPattern;
+	uint m_circleLoadIndex;
 };
 
 #endif // CHUNK_LOADER_H

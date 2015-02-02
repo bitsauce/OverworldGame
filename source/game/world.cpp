@@ -26,8 +26,8 @@ void World::init()
 	s_camera = new Camera();
 	s_terrain = new Terrain();
 	s_worldFile = nullptr;
-	//Player *p = new Player(); p->m_body->setPosition(0, 0);
-	s_camera->lookAt(Vector2(0.0f, 0.0f));
+	Player *p = new Player(); p->getBody()->setPosition(0, 0);
+	//s_camera->lookAt(Vector2(0.0f, 0.0f));
 	s_lighting = new Lighting(s_terrain);
 	s_debug = new Debug(s_terrain, s_lighting);
 }

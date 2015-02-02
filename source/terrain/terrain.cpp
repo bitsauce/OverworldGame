@@ -3,7 +3,8 @@
 #include "game/debug.h"
 #include "game/camera.h"
 #include "game/world.h"
-#include "game/blockdata.h"
+#include "Blocks/BlockData.h"
+#include "BlockEntities/BlockEntityData.h"
 #include "lighting/spotlight.h"
 
 Terrain::Terrain() :
@@ -57,7 +58,12 @@ void Terrain::load(const xd::IniFile &file)
 	TerrainGen::s_seed = 0;// parseInt(file.getValue("terrain", "seed"));
 }
 	
-// BLOCK HELPERS
+// BLOCKS
+bool Terrain::setBlockAt(const int x, const int y, BlockID block, const TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
+{
+	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).setBlockAt(xd::math::mod(x, CHUNK_BLOCKS), xd::math::mod(y, CHUNK_BLOCKS), block, layer);
+}
+
 BlockID Terrain::getBlockAt(const int x, const int y, const TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
 {
 	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).getBlockAt(xd::math::mod(x, CHUNK_BLOCKS), xd::math::mod(y, CHUNK_BLOCKS), layer);
@@ -68,15 +74,15 @@ bool Terrain::isBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_L
 	return getBlockAt(x, y, layer) != BLOCK_EMPTY;
 }
 
-// BLOCK MODIFICATION
-bool Terrain::setBlockAt(const int x, const int y, BlockID block, const TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
-{
-	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).setBlockAt(xd::math::mod(x, CHUNK_BLOCKS), xd::math::mod(y, CHUNK_BLOCKS), block, layer);
-}
-	
 bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
 {
 	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).setBlockAt(xd::math::mod(x, CHUNK_BLOCKS), xd::math::mod(y, CHUNK_BLOCKS), BLOCK_EMPTY, layer);
+}
+
+// BLOCK ENTITIES
+bool Terrain::setBlockEntityAt(const int x, const int y, BlockEntityID blockEntity)
+{
+	return BlockEntityData::get(blockEntity).tryPlace(x, y);
 }
 
 // UPDATING
@@ -87,6 +93,9 @@ void Terrain::update()
 // DRAWING
 void Terrain::draw(xd::SpriteBatch *spriteBatch)
 {
+	spriteBatch->end();
+	spriteBatch->begin(xd::SpriteBatch::State(xd::SpriteBatch::DEFERRED, xd::BlendState::PRESET_ALPHA_BLEND, World::getCamera()->getProjectionMatrix()));
+
 	xd::GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 
 	ChunkLoader::ChunkArea area = m_chunkLoader.getActiveArea();
@@ -113,26 +122,9 @@ void Terrain::draw(xd::SpriteBatch *spriteBatch)
 			gfxContext.popMatrix();
 		}
 	}
-	//gfxContext.setRenderTarget(nullptr);
-
-	/*gfxContext.setProjectionMatrix(Matrix4());
-	gfxContext.setTexture(m_renderTarget->getTexture());
-	gfxContext.drawRectangle(0.0f, 0.0f, m_renderTarget->getWidth(), m_renderTarget->getHeight());
-	gfxContext.setTexture(nullptr);
-	gfxContext.setProjectionMatrix(World::getCamera()->getProjectionMatrix());
-
-	gfxContext.setProjectionMatrix(Matrix4());
-	gfxContext.setShader(m_directionalLightingShader);
-	m_directionalLightingShader->setSampler2D("u_texture", m_renderTarget->getTexture());
-	m_directionalLightingShader->setUniform1f("u_height", m_renderTarget->getHeight());
-	gfxContext.drawRectangle(0.0f, 0.0f, m_renderTarget->getWidth(), m_renderTarget->getHeight());
-	gfxContext.setShader(nullptr);
-	gfxContext.setProjectionMatrix(World::getCamera()->getProjectionMatrix());*/
 }
 
 // WINDOW
 void Terrain::resizeEvent(uint width, uint height)
 {
-	//delete m_renderTarget;
-	//m_renderTarget = new xd::RenderTarget2D(width, height);
 }

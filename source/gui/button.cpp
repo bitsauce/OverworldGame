@@ -104,7 +104,7 @@ void Button::draw(xd::SpriteBatch *spriteBatch)
 	spriteBatch->drawSprite(*m_buttonSprite);
 		
 	// Draw text
-	m_font->setColor(xd::Color(255, 255, 255, 255));
+	m_font->setColor(xd::Color(0, 0, 0, 255));
 	spriteBatch->drawText(position - (Vector2(m_font->getStringWidth(m_text), m_font->getStringHeight(m_text))-size)*0.5f, m_text, m_font);
 }
 	

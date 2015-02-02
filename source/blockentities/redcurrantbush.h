@@ -1,23 +1,23 @@
 #ifndef RED_CURRANT_BUSH_H
 #define RED_CURRANT_BUSH_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
+#include "BlockEntity.h"
+#include "BlockEntityData.h"
 
-#include "blockentity.h"
-
-class RedcurrantBush : public BlockEntity
+class RedCurrantBush : public BlockEntity
 {
+	friend class BlockEntityData;
 public:
-	RedcurrantBush();
+	RedCurrantBush(const int x, const int y);
 
-	void moveEvent();
-	void placeEvent();
-
-	void draw(xd::SpriteBatch *SpriteBatch);
+	void draw(SpriteBatch *spriteBatch);
 
 private:
+	Sprite *m_sprite;
 	float m_growTimer;
-	xd::Sprite *m_sprite;
+
+	static void Factory(const int x, const int y) { new RedCurrantBush(x, y); }
 };
 
 #endif // RED_CURRANT_BUSH_H

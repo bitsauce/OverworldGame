@@ -8,7 +8,8 @@ ChunkLoader::ChunkLoader(Camera *camera) :
 	m_applyZoom(true),
 	m_camera(camera),
 	m_chunkPositionIndex(0),
-	m_loadAreaRadius(5)
+	m_loadAreaRadius(5),
+	m_circleLoadIndex(0)
 {
 	// Setup vertex format
 	xd::VertexFormat vertexFormat;
@@ -160,7 +161,7 @@ void ChunkLoader::update()
 
 		// Store previous position
 		m_prevChunkPosition = m_chunkPositions[m_chunkPositionIndex++ % 4] = chunkPosition;
-		//m_circleIterator = m_circleLoadPattern.begin(); // Reset iterator
+		m_circleLoadIndex = 0; // Reset iterator
 	}
 
 	Vector2 dir = Vector2(chunkPosition) - m_averagePosition;
@@ -181,26 +182,20 @@ void ChunkLoader::update()
 	if(m_chunks.size() < m_optimalChunkCount)
 	{
 		// Load offscren chunks
-		/*Vector2i centerChunkPosition = center/CHUNK_PXF;
-		TerrainChunk &chunk = getChunkAt(centerChunkPosition.x + (*m_circleIterator).x, centerChunkPosition.y + (*m_circleIterator).y);
+		Vector2i centerChunkPosition = center/CHUNK_PXF;
+		TerrainChunk &chunk = getChunkAt(centerChunkPosition.x + m_circleLoadPattern[m_circleLoadIndex].x, centerChunkPosition.y + m_circleLoadPattern[m_circleLoadIndex].y);
 		if(chunk.isDirty()) chunk.generateVertexBuffers(this);
-		m_circleIterator++;*/
-
-		bool generated = false;
-		for(int y = m_loadArea.y0; y <= m_loadArea.y1 && !generated; ++y)
-		{
-			for(int x = m_loadArea.x0; x <= m_loadArea.x1 && !generated; ++x)
-			{
-				TerrainChunk &chunk = getChunkAt(x, y);
-				if(chunk.isDirty())
-				{
-					chunk.generateVertexBuffers(this);
-					generated = true;
-				}
-			}
-		}
+		m_circleLoadIndex++;
 	}
 }
+
+struct VectorComparator
+{
+	bool operator() (const Vector2i &v0, const Vector2i &v1)
+	{
+		return v0.magnitude() > v1.magnitude();
+	}
+};
 
 void ChunkLoader::resizeEvent(uint width, uint height)
 {
@@ -209,20 +204,21 @@ void ChunkLoader::resizeEvent(uint width, uint height)
 
 	setOptimalChunkCount(loadAreaWidth * loadAreaHeight);
 	
-	/*int diagonalHalfLength = sqrt(loadAreaWidth*loadAreaWidth + loadAreaHeight*loadAreaHeight) * 0.5f;
-	for(int r = 1; r < diagonalHalfLength; ++r)
+	int r = sqrt(loadAreaWidth*loadAreaWidth + loadAreaHeight*loadAreaHeight) * 0.5f;
+	priority_queue<Vector2i, vector<Vector2i>, VectorComparator> minHeap;
+	for(int y = -r; y <= r; ++y)
 	{
-		for(int y = -r; y <= r; ++y)
+		if(abs(y) > loadAreaHeight*0.5f) continue;
+		for(int x = -r; x <= r; ++x)
 		{
-			for(int x = -r; x <= r; ++x)
-			{
-				if(abs(x) > loadAreaWidth*0.5f || abs(y) > loadAreaHeight*0.5f) continue;
-				if((int)sqrt(x*x+y*y) == r)
-				{
-					m_circleLoadPattern.insert(Vector2i(x, y));
-				}
-			}
+			if(abs(x) > loadAreaWidth*0.5f) continue;
+			minHeap.push(Vector2i(x, y));
 		}
 	}
-	m_circleIterator = m_circleLoadPattern.begin();*/
+
+	while(!minHeap.empty())
+	{
+		m_circleLoadPattern.push_back(minHeap.top());
+		minHeap.pop();
+	}
 }

@@ -49,7 +49,7 @@ void WorldSelectScene::worldClicked()
 {
 	// Create a player
 	Player *p = new Player();
-	p->m_body->setPosition(0, 0);
+	p->getBody()->setPosition(0, 0);
 
 	// Go to game
 	SceneManager::gotoScene(SCENE_GAME);

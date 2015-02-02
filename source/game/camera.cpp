@@ -33,9 +33,14 @@ void Camera::lookAt(Vector2i worldPoint)
 	m_position = worldPoint;
 }
 
-Vector2i Camera::getPosition()
+Vector2i Camera::getPosition() const
 {
 	return m_position;
+}
+
+Vector2 Camera::getInputPosition() const
+{
+	return m_position + xd::Input::getPosition();
 }
 
 Vector2i Camera::getSize() const

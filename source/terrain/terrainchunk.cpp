@@ -3,7 +3,7 @@
 #include "constants.h"
 
 #include "game/world.h"
-#include "game/blockdata.h"
+#include "blocks/blockdata.h"
 
 #include "generator/terraingen.h"
 
@@ -31,7 +31,7 @@ TerrainChunk::TerrainChunk()
 {
 	// A dummy
 	m_dirty = m_modified = false; // not modified
-	m_shadowMap = xd::Texture2DPtr(new xd::Texture2D(xd::Pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS)));
+	m_shadowMap = Texture2DPtr(new Texture2D(Pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS)));
 
 	// Initialize blocks
 	m_blocks = new BlockID[CHUNK_BLOCKS*CHUNK_BLOCKS*TERRAIN_LAYER_COUNT];
@@ -73,18 +73,18 @@ void TerrainChunk::load(int chunkX, int chunkY)
 	}
 
 	// Load shadow map
-	xd::Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS);
+	Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS);
 	for(int y = 0; y < CHUNK_BLOCKS; ++y)
 	{
 		for(int x = 0; x < CHUNK_BLOCKS; ++x)
 		{
 			float shadow = 1.0f;
-			bool shadowCaster = m_blocks[BLOCK_INDEX(x, y, TERRAIN_LAYER_MIDDLE)] <= BLOCK_OCCUPIED;
+			bool shadowCaster = m_blocks[BLOCK_INDEX(x, y, TERRAIN_LAYER_MIDDLE)] <= BLOCK_ENTITY;
 			for(uint i = 0; i < TERRAIN_LAYER_COUNT; ++i)
 			{
 				shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]).getOpacity();
 			}
-			pixmap.setColor(x, CHUNK_BLOCKS - y - 1, xd::Color(255 * max(shadow, 0.0f), 255, 255, 255 * shadowCaster)); // rgb = light value, a = shadow casting value
+			pixmap.setColor(x, CHUNK_BLOCKS - y - 1, Color(255 * max(shadow, 0.0f), 255, 255, 255 * shadowCaster)); // rgb = light value, a = shadow casting value
 		}
 	}
 	m_shadowMap->updatePixmap(pixmap);
@@ -93,7 +93,7 @@ void TerrainChunk::load(int chunkX, int chunkY)
 	m_dirty = true;
 
 	// Mark chunk as initialized
-	xd::LOG("Chunk [%i, %i] generated", m_x, m_y);
+	LOG("Chunk [%i, %i] generated", m_x, m_y);
 }
 
 // Block texture coordinates
@@ -125,7 +125,7 @@ void TerrainChunk::load(int chunkX, int chunkY)
 #define BLOCK_V7 (8.0f / 10.0f)
 #define BLOCK_V8 (10.0f / 10.0f)
 
-xd::Vertex *TerrainChunk::s_vertices = nullptr;
+Vertex *TerrainChunk::s_vertices = nullptr;
 uint *TerrainChunk::s_indices = new uint[6*12*16*16*3];
 void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
 {
@@ -217,14 +217,14 @@ void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
 
 				adjacentBlocks[7] = (x != 0) ? m_blocks[BLOCK_INDEX(x-1, y, z)] : m_adjacentChunks[7]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, y, z)];
 
-				if(block > BLOCK_OCCUPIED)
+				if(block > BLOCK_ENTITY)
 				{
 					m_tmpQuads.push_back(BlockQuad(block, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V1, BLOCK_U5, BLOCK_V5));
 					push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
 				}
 	
 				// Bottom-right outer-corner
-				if(adjacentBlocks[0] > BLOCK_OCCUPIED)
+				if(adjacentBlocks[0] > BLOCK_ENTITY)
 				{
 					if(adjacentBlocks[0] != block && adjacentBlocks[0] != adjacentBlocks[1] && adjacentBlocks[0] != adjacentBlocks[7])
 					{
@@ -234,7 +234,7 @@ void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
 				}
 
 				// Draw bottom edge
-				if(adjacentBlocks[1] > BLOCK_OCCUPIED)
+				if(adjacentBlocks[1] > BLOCK_ENTITY)
 				{
 					if(adjacentBlocks[1] != block)
 					{
@@ -271,7 +271,7 @@ void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
 				}
 
 				// Bottom-left outer-corner
-				if(adjacentBlocks[2] > BLOCK_OCCUPIED)
+				if(adjacentBlocks[2] > BLOCK_ENTITY)
 				{
 					if(adjacentBlocks[2] != block && adjacentBlocks[2] != adjacentBlocks[1] && adjacentBlocks[2] != adjacentBlocks[3])
 					{
@@ -281,7 +281,7 @@ void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
 				}
 
 				// Draw left edge
-				if(adjacentBlocks[3] > BLOCK_OCCUPIED)
+				if(adjacentBlocks[3] > BLOCK_ENTITY)
 				{
 					if(adjacentBlocks[3] != block)
 					{
@@ -307,7 +307,7 @@ void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
 				}
 
 				// Top-left outer-corner
-				if(adjacentBlocks[4] > BLOCK_OCCUPIED)
+				if(adjacentBlocks[4] > BLOCK_ENTITY)
 				{
 					if(adjacentBlocks[4] != block && adjacentBlocks[4] != adjacentBlocks[3] && adjacentBlocks[4] != adjacentBlocks[5])
 					{
@@ -317,7 +317,7 @@ void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
 				}
 
 				// Draw top edge
-				if(adjacentBlocks[5] > BLOCK_OCCUPIED)
+				if(adjacentBlocks[5] > BLOCK_ENTITY)
 				{
 					if(adjacentBlocks[5] != block)
 					{
@@ -354,7 +354,7 @@ void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
 				}
 	
 				// Top-right outer-corner
-				if(adjacentBlocks[6] > BLOCK_OCCUPIED)
+				if(adjacentBlocks[6] > BLOCK_ENTITY)
 				{
 					if(adjacentBlocks[6] != block && adjacentBlocks[6] != adjacentBlocks[7] && adjacentBlocks[6] != adjacentBlocks[5])
 					{
@@ -364,7 +364,7 @@ void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
 				}
 
 				// Draw right edge
-				if(adjacentBlocks[7] > BLOCK_OCCUPIED)
+				if(adjacentBlocks[7] > BLOCK_ENTITY)
 				{
 					if(adjacentBlocks[7] != block)
 					{
@@ -393,22 +393,22 @@ void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
 				{
 					BlockQuad &quad = m_tmpQuads[0];
 
-					s_vertices[0 + vertexCount].set4f(xd::VERTEX_POSITION, x + quad.x0, y + quad.y0);
-					s_vertices[1 + vertexCount].set4f(xd::VERTEX_POSITION, x + quad.x1, y + quad.y0);
-					s_vertices[2 + vertexCount].set4f(xd::VERTEX_POSITION, x + quad.x1, y + quad.y1);
-					s_vertices[3 + vertexCount].set4f(xd::VERTEX_POSITION, x + quad.x0, y + quad.y1);
-					xd::TextureRegion region = BlockData::getBlockAtlas()->get(quad.block, quad.u0, quad.v0, quad.u1, quad.v1);
-					s_vertices[0 + vertexCount].set4f(xd::VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
-					s_vertices[1 + vertexCount].set4f(xd::VERTEX_TEX_COORD, region.uv1.x, region.uv1.y);
-					s_vertices[2 + vertexCount].set4f(xd::VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
-					s_vertices[3 + vertexCount].set4f(xd::VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
+					s_vertices[0 + vertexCount].set4f(VERTEX_POSITION, x + quad.x0, y + quad.y0);
+					s_vertices[1 + vertexCount].set4f(VERTEX_POSITION, x + quad.x1, y + quad.y0);
+					s_vertices[2 + vertexCount].set4f(VERTEX_POSITION, x + quad.x1, y + quad.y1);
+					s_vertices[3 + vertexCount].set4f(VERTEX_POSITION, x + quad.x0, y + quad.y1);
+					TextureRegion region = BlockData::getBlockAtlas()->get(quad.block, quad.u0, quad.v0, quad.u1, quad.v1);
+					s_vertices[0 + vertexCount].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
+					s_vertices[1 + vertexCount].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv1.y);
+					s_vertices[2 + vertexCount].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
+					s_vertices[3 + vertexCount].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
 		
-					s_indices[0 + indexCount] = xd::QUAD_INDICES[0] + vertexCount;
-					s_indices[1 + indexCount] = xd::QUAD_INDICES[1] + vertexCount;
-					s_indices[2 + indexCount] = xd::QUAD_INDICES[2] + vertexCount;
-					s_indices[3 + indexCount] = xd::QUAD_INDICES[3] + vertexCount;
-					s_indices[4 + indexCount] = xd::QUAD_INDICES[4] + vertexCount;
-					s_indices[5 + indexCount] = xd::QUAD_INDICES[5] + vertexCount;
+					s_indices[0 + indexCount] = QUAD_INDICES[0] + vertexCount;
+					s_indices[1 + indexCount] = QUAD_INDICES[1] + vertexCount;
+					s_indices[2 + indexCount] = QUAD_INDICES[2] + vertexCount;
+					s_indices[3 + indexCount] = QUAD_INDICES[3] + vertexCount;
+					s_indices[4 + indexCount] = QUAD_INDICES[4] + vertexCount;
+					s_indices[5 + indexCount] = QUAD_INDICES[5] + vertexCount;
 
 					vertexCount += 4;
 					indexCount += 6;
@@ -430,9 +430,9 @@ void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
 	m_dirty = false;
 }
 
-void TerrainChunk::serialize(xd::FileWriter &ss)
+void TerrainChunk::serialize(FileWriter &ss)
 {
-	/*xd::LOG("Saving chunk [%i, %i]...", m_x, m_y);
+	/*LOG("Saving chunk [%i, %i]...", m_x, m_y);
 		
 	// Write chunk pos
 	ss << m_x << endl;
@@ -459,7 +459,7 @@ void TerrainChunk::deserialize(stringstream &ss)
 	ss >> chunkX;
 	ss >> chunkY;
 		
-	xd::LOG("Loading chunk [%i, %i]...", chunkX, chunkY);
+	LOG("Loading chunk [%i, %i]...", chunkX, chunkY);
 		
 	load(chunkX, chunkY);
 		
@@ -493,7 +493,7 @@ bool TerrainChunk::isBlockAt(const int x, const int y, TerrainLayer layer) const
 	
 bool TerrainChunk::isBlockOccupied(const int x, const int y, TerrainLayer layer) const
 {
-	return m_blocks[BLOCK_INDEX(x, y, layer)] >= BLOCK_OCCUPIED;
+	return m_blocks[BLOCK_INDEX(x, y, layer)] >= BLOCK_ENTITY;
 }
 	
 bool TerrainChunk::setBlockAt(const int x, const int y, const BlockID block, TerrainLayer layer)
@@ -515,13 +515,13 @@ bool TerrainChunk::setBlockAt(const int x, const int y, const BlockID block, Ter
 		
 		// Update shadow map
 		float shadow = 1.0f;
-		bool shadowCaster = m_blocks[BLOCK_INDEX(x, y, TERRAIN_LAYER_MIDDLE)] <= BLOCK_OCCUPIED;
+		bool shadowCaster = m_blocks[BLOCK_INDEX(x, y, TERRAIN_LAYER_MIDDLE)] <= BLOCK_ENTITY;
 		for(uint i = 0; i < TERRAIN_LAYER_COUNT; ++i)
 		{
 			shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]).getOpacity();
 		}
 		const uchar pixel[4] = { 255 * max(shadow, 0.0f), 255, 255, 255 * shadowCaster };
-		m_shadowMap->updatePixmap(x, CHUNK_BLOCKS - y - 1, xd::Pixmap(1, 1, pixel));
+		m_shadowMap->updatePixmap(x, CHUNK_BLOCKS - y - 1, Pixmap(1, 1, pixel));
 
 		return true; // return true as something was changed
 	}
@@ -529,8 +529,8 @@ bool TerrainChunk::setBlockAt(const int x, const int y, const BlockID block, Ter
 }
 
 // DRAWING
-void TerrainChunk::draw(xd::GraphicsContext &gfxContext)
+void TerrainChunk::draw(GraphicsContext &gfxContext)
 {
 	// Draw vertex buffers
-	gfxContext.drawIndexedPrimitives(xd::GraphicsContext::PRIMITIVE_TRIANGLES, &m_vbo, &m_ibo);
+	gfxContext.drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, &m_vbo, &m_ibo);
 }

@@ -51,9 +51,9 @@ DRAW_ORDER_SCENE_END,
 // BLOCK IDS
 enum BlockID
 {
+	// Invisible blocks
 	BLOCK_EMPTY,
-	BLOCK_OCCUPIED,
-	//BLOCK_BLOCKER, // TODO: Gonna need this some time for doors
+	BLOCK_ENTITY,
 	
 	BLOCK_WOOD,
 	//BLOCK_STONE,
@@ -64,6 +64,16 @@ enum BlockID
 	BLOCK_LEAF,
 	
 	BLOCK_COUNT
+};
+
+// BLOCK ENTITY IDS
+enum BlockEntityID
+{
+	BLOCK_ENTITY_NONE,
+
+	BLOCK_ENTITY_RED_CURRANT_BUSH,
+
+	BLOCK_ENTITY_COUNT
 };
 
 // ITEM IDS

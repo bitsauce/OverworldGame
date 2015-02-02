@@ -10,7 +10,11 @@
 #include "Items/Item.h"
 #include "Items/ItemContainer.h"
 
-#include "game/blockdata.h"
+#include "Blocks/BlockData.h"
+
+#include "BlockEntities/BlockEntityData.h"
+#include "BlockEntities/BlockEntity.h"
+
 #include "game/camera.h"
 #include "game/debug.h"
 #include "game/gamemanager.h"

@@ -44,7 +44,7 @@ private:
 	// Button sprite
 	xd::Sprite *m_buttonSprite;
 
-	// Animation time
+	// SkeletalAnimation time
 	float m_animTime;
 };
 

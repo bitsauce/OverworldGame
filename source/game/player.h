@@ -9,6 +9,7 @@ class Skeleton;
 class AnimationState;
 class Animation;
 class Camera;
+class PhysicsBody;
 
 class Player : public GameObject
 {
@@ -19,13 +20,15 @@ public:
 	void draw(xd::SpriteBatch *SpriteBatch);
 	void changeAnimation(const string &name);
 
-	class PhysicsBody *m_body;
+	PhysicsBody *getBody() const { return m_body; }
 
 private:
 
 	Camera *m_camera;
 	float m_jumpTimer;
 	bool m_canJump;
+
+	PhysicsBody *m_body;
 	
 	// Skeletal animations
 	Skeleton *m_skeleton;
