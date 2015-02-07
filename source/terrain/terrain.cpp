@@ -11,27 +11,27 @@ Terrain::Terrain() :
 	GameObject(DRAW_ORDER_TERRAIN),
 	m_chunkLoader(World::getCamera())
 {
-	xd::LOG("Initializing terrain");
+	LOG("Initializing terrain");
 
 	// Window
-	xd::Window::addWindowListener(this);
-	resizeEvent(xd::Window::getSize().x, xd::Window::getSize().y);
+	Window::addWindowListener(this);
+	resizeEvent(Window::getSize().x, Window::getSize().y);
 
-	Spotlight::s_vertices = new xd::Vertex[SPOTLIGHT_SEGMENTS+2];
+	Spotlight::s_vertices = new Vertex[SPOTLIGHT_SEGMENTS+2];
 	
 	// Get terrain seed
-	TerrainGen::s_seed = xd::Random().nextInt();
+	TerrainGen::s_seed = Random().nextInt();
 }
 
 Terrain::~Terrain()
 {
-	xd::Window::removeWindowListener(this);
+	Window::removeWindowListener(this);
 }
 	
 // Move?
 void Terrain::saveChunks()
 {
-	xd::LOG("Saving chunks...");
+	LOG("Saving chunks...");
 
 	// Iterate loaded chunks
 	/*for(unordered_map<uint, TerrainChunk*>::iterator itr = m_chunks.begin(); itr != m_chunks.end(); ++itr)
@@ -40,20 +40,20 @@ void Terrain::saveChunks()
 		if(!itr->second->m_modified) continue;
 
 		// Save chunk
-		string path = World::getWorldPath() + "/chunks/" + xd::util::intToStr(CHUNK_KEY(itr->second->getX(), itr->second->getY())) + ".obj";
-		xd::FileWriter writer(path);
+		string path = World::getWorldPath() + "/chunks/" + util::intToStr(CHUNK_KEY(itr->second->getX(), itr->second->getY())) + ".obj";
+		FileWriter writer(path);
 		if(!writer)
 		{
-			xd::LOG("Error opening chunk file: '%s'", path);
+			LOG("Error opening chunk file: '%s'", path);
 			continue;
 		}
 		itr->second->serialize(writer);
 	}*/
 }
 	
-void Terrain::load(const xd::IniFile &file)
+void Terrain::load(const IniFile &file)
 {
-	xd::LOG("Loading terrain...");
+	LOG("Loading terrain...");
 		
 	TerrainGen::s_seed = 0;// parseInt(file.getValue("terrain", "seed"));
 }
@@ -61,12 +61,12 @@ void Terrain::load(const xd::IniFile &file)
 // BLOCKS
 bool Terrain::setBlockAt(const int x, const int y, BlockID block, const TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
 {
-	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).setBlockAt(xd::math::mod(x, CHUNK_BLOCKS), xd::math::mod(y, CHUNK_BLOCKS), block, layer);
+	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), block, layer);
 }
 
 BlockID Terrain::getBlockAt(const int x, const int y, const TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
 {
-	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).getBlockAt(xd::math::mod(x, CHUNK_BLOCKS), xd::math::mod(y, CHUNK_BLOCKS), layer);
+	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
 }
 	
 bool Terrain::isBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
@@ -76,7 +76,7 @@ bool Terrain::isBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_L
 
 bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
 {
-	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).setBlockAt(xd::math::mod(x, CHUNK_BLOCKS), xd::math::mod(y, CHUNK_BLOCKS), BLOCK_EMPTY, layer);
+	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), BLOCK_EMPTY, layer);
 }
 
 // BLOCK ENTITIES
@@ -91,12 +91,12 @@ void Terrain::update()
 }
 	
 // DRAWING
-void Terrain::draw(xd::SpriteBatch *spriteBatch)
+void Terrain::draw(SpriteBatch *spriteBatch)
 {
 	spriteBatch->end();
-	spriteBatch->begin(xd::SpriteBatch::State(xd::SpriteBatch::DEFERRED, xd::BlendState::PRESET_ALPHA_BLEND, World::getCamera()->getProjectionMatrix()));
+	spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, World::getCamera()->getProjectionMatrix()));
 
-	xd::GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
+	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 
 	ChunkLoader::ChunkArea area = m_chunkLoader.getActiveArea();
 	gfxContext.setTexture(BlockData::getBlockAtlas()->getTexture());

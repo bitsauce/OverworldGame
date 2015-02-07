@@ -112,9 +112,9 @@
     <ClCompile Include="..\..\source\game\World.cpp" />
     <ClCompile Include="..\..\source\gui\Button.cpp" />
     <ClCompile Include="..\..\source\gui\Canvas.cpp" />
+    <ClCompile Include="..\..\source\gui\Inventory.cpp" />
     <ClCompile Include="..\..\source\gui\LineEdit.cpp" />
     <ClCompile Include="..\..\source\gui\UiObject.cpp" />
-    <ClCompile Include="..\..\source\items\Inventory.cpp" />
     <ClCompile Include="..\..\source\items\Item.cpp" />
     <ClCompile Include="..\..\source\items\ItemContainer.cpp" />
     <ClCompile Include="..\..\source\Lighting\LightSource.cpp" />
@@ -161,9 +161,9 @@
     <ClInclude Include="..\..\source\game\World.h" />
     <ClInclude Include="..\..\source\gui\Button.h" />
     <ClInclude Include="..\..\source\gui\Canvas.h" />
+    <ClInclude Include="..\..\source\gui\Inventory.h" />
     <ClInclude Include="..\..\source\gui\LineEdit.h" />
     <ClInclude Include="..\..\source\gui\UiObject.h" />
-    <ClInclude Include="..\..\source\items\Inventory.h" />
     <ClInclude Include="..\..\source\items\Item.h" />
     <ClInclude Include="..\..\source\items\ItemContainer.h" />
     <ClInclude Include="..\..\source\Lighting\LightSource.h" />

@@ -185,7 +185,7 @@ void ChunkLoader::update()
 		Vector2i centerChunkPosition = center/CHUNK_PXF;
 		TerrainChunk &chunk = getChunkAt(centerChunkPosition.x + m_circleLoadPattern[m_circleLoadIndex].x, centerChunkPosition.y + m_circleLoadPattern[m_circleLoadIndex].y);
 		if(chunk.isDirty()) chunk.generateVertexBuffers(this);
-		m_circleLoadIndex++;
+		m_circleLoadIndex = (m_circleLoadIndex + 1) % m_optimalChunkCount;
 	}
 }
 

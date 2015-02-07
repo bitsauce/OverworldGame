@@ -1,7 +1,7 @@
 #include "ItemContainer.h"
 #include "Game.h"
 
-ItemContainer::ItemContainer(const uint size) :
+ItemContainer::ItemContainer(const int size) :
 	m_size(size)
 {
 	m_items = new ItemSlot[size];

@@ -107,9 +107,6 @@
     <ClCompile Include="..\..\source\Lighting\Lighting.cpp">
       <Filter>source\Lighting</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\items\Inventory.cpp">
-      <Filter>source\Items</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\items\ItemContainer.cpp">
       <Filter>source\Items</Filter>
     </ClCompile>
@@ -130,6 +127,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\BlockEntities\BlockEntity.cpp">
       <Filter>source\BlockEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\gui\Inventory.cpp">
+      <Filter>source\Gui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -297,9 +297,6 @@
     <ClInclude Include="..\..\source\Lighting\Lighting.h">
       <Filter>source\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\items\Inventory.h">
-      <Filter>source\Items</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\items\ItemContainer.h">
       <Filter>source\Items</Filter>
     </ClInclude>
@@ -323,6 +320,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\BlockEntities\BlockEntity.h">
       <Filter>source\BlockEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\Inventory.h">
+      <Filter>source\Gui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

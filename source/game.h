@@ -3,10 +3,11 @@
 
 #include "constants.h"
 
+#include "Gui/Inventory.h"
+
 #include "Environment/Background.h"
 #include "Environment/TimeOfDay.h"
 
-#include "Items/Inventory.h"
 #include "Items/Item.h"
 #include "Items/ItemContainer.h"
 

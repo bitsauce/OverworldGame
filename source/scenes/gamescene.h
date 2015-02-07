@@ -4,6 +4,8 @@
 #include <x2d/x2d.h>
 #include "scene.h"
 
+class Inventory;
+
 class GameScene : public Scene
 {
 public:
@@ -13,6 +15,8 @@ public:
 	void updateEvent();
 
 public:
+
+	Inventory *m_inventory;
 };
 
 #endif // GAME_SCENE_H

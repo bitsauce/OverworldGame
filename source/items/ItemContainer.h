@@ -8,9 +8,10 @@ class ItemData;
 class ItemContainer
 {
 public:
-	ItemContainer(const uint size);
+	ItemContainer(const int size);
 
 	bool addItem(ItemData *item, const uint amount = 1);
+	int getSize() const { return m_size; }
 
 private:
 	int findEmptySlot() const;
@@ -31,7 +32,7 @@ private:
 	};
 
 	ItemSlot *m_items;
-	const uint m_size;
+	const int m_size;
 };
 
 #endif // ITEM_CONTAINER_H
