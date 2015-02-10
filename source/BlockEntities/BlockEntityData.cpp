@@ -10,45 +10,56 @@ void BlockEntityData::init(Terrain *terrain)
 {
 	s_terrain = terrain;
 
-	s_blockEntityData[BLOCK_ENTITY_RED_CURRANT_BUSH] = new BlockEntityData(4, 2, function<void(int, int)>(RedCurrantBush::Factory));
+	s_blockEntityData[BLOCK_ENTITY_RED_CURRANT_BUSH] = new BlockEntityData(4, 2, NEED_FLOOR, function<void(int, int)>(RedCurrantBush::Factory));
 }
 
-BlockEntityData::BlockEntityData(const int width, const int height, function<void(int, int)> factory) :
+BlockEntityData::BlockEntityData(const int width, const int height, const PlacementRule rule, function<void(int, int)> factory) :
 	m_width(width),
 	m_height(height),
+	m_placementRule(rule),
 	m_factory(factory)
 {
 }
 
 bool BlockEntityData::tryPlace(const int x, const int y)
 {
-	bool placeable = true;
-	for(int i = 0; i < m_height && placeable; ++i)
+	for(int i = 0; i < m_height; ++i)
 	{
-		for(int j = 0; j < m_width && placeable; ++j)
+		for(int j = 0; j < m_width; ++j)
 		{
 			if(s_terrain->getBlockAt(x + j, y + i, TERRAIN_LAYER_MIDDLE) != BLOCK_EMPTY)
 			{
-				placeable = false;
+				return false;
 			}
 		}
 	}
 
-	if(placeable)
+	if(m_placementRule & NEED_FLOOR != 0)
 	{
-		for(int i = 0; i < m_height; ++i)
+		for(int i = 0; i < m_width; ++i)
 		{
-			for(int j = 0; j < m_width; ++j)
+			if(s_terrain->getBlockAt(x + i, y + m_height, TERRAIN_LAYER_MIDDLE) == BLOCK_EMPTY)
 			{
-				s_terrain->setBlockAt(x + j, y + i, BLOCK_ENTITY, TERRAIN_LAYER_MIDDLE);
+				return false;
 			}
 		}
-		m_factory(x, y);
 	}
-	else
+
+	//switch(m_placementRule) {
+	// case NEED_FLOOR:
+	// case NEED_WALL:
+	// case NEED_ROOF:
+	// case NEED_BACKGROUND:
+	// }
+
+	for(int i = 0; i < m_height; ++i)
 	{
-		return false;
+		for(int j = 0; j < m_width; ++j)
+		{
+			s_terrain->setBlockAt(x + j, y + i, BLOCK_ENTITY, TERRAIN_LAYER_MIDDLE);
+		}
 	}
+	m_factory(x, y);
 	return true;
 }
 

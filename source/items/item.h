@@ -1,7 +1,7 @@
 #ifndef ITEM_DATA_H
 #define ITEM_DATA_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
 
 class Player;
 enum ItemID;
@@ -10,7 +10,7 @@ class ItemData
 {
 	friend class GameManager;
 public:
-	ItemData(const ItemID id, const string &name, const string &desc, const xd::Sprite *icon, const uint maxStack, const bool singleShot = false) :
+	ItemData(const ItemID id, const string &name, const string &desc, const Sprite *icon, const uint maxStack, const bool singleShot = false) :
 		m_id(id),
 		m_name(name),
 		m_desc(desc),
@@ -30,7 +30,7 @@ private:
 	const string m_name;
 	const string m_desc;
 	const uint m_maxStack;
-	const xd::Sprite *m_icon;
+	const Sprite *m_icon;
 	const bool m_singleShot;
 
 	static vector<ItemData*> s_itemData;

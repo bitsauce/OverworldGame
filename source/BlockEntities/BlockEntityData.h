@@ -9,8 +9,13 @@ class BlockEntity;
 
 class BlockEntityData
 {
+	enum PlacementRule
+	{
+		NEED_FLOOR = 1 << 0
+	};
+
 public:
-	BlockEntityData(const int width, const int height, function<void(int, int)> factory);
+	BlockEntityData(const int width, const int height, const PlacementRule rule, function<void(int, int)> factory);
 
 	bool tryPlace(const int x, const int y);
 
@@ -19,6 +24,7 @@ public:
 
 private:
 	const int m_width, m_height;
+	const int m_placementRule;
 	const function<void(int, int)> m_factory;
 
 	static Terrain *s_terrain;

@@ -7,9 +7,8 @@
 //				Originally written by Marcus Loo Vergara (aka. Bitsauce)
 //									2011-2014 (C)
 
-#include <x2d/x2d.h>
-#include "game.h"
-#include "game/gamemanager.h"
+#include "Config.h"
+#include "Game.h"
 
 #if defined(X2D_WINDOWS) && defined(X2D_DEBUG)
 //#include <vld.h> // Visual Leak Detector
@@ -32,13 +31,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 			}
 		}
 	}
-	flags |= xd::XD_EXPORT_LOG; // For now we force this flag
+	flags |= XD_EXPORT_LOG; // For now we force this flag
 
-	xd::Engine *engine = xd::CreateEngine();
+	Engine *engine = CreateEngine();
 
-	xd::Config config;
+	Config config;
 	config.main = &GameManager::main;
-	config.update = &GameManager::update;//gameUpdate;
+	config.update = &GameManager::update;
 	config.draw = &GameManager::draw;
 	config.end = &GameManager::exit;
 #ifdef X2D_DEBUG
@@ -46,7 +45,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 #endif
 	config.flags = flags;
 
-	if(engine->init(config) != xd::X2D_OK)
+	if(engine->init(config) != X2D_OK)
 	{
 		delete engine;
 		return -1;
