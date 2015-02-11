@@ -25,20 +25,24 @@ Player::Player() :
 	// Load skeleton data
 	m_skeleton = new Skeleton(":/sprites/characters/anim/skeleton.json", ":/sprites/characters/anim/skeleton.atlas", 1.0f);
 	m_skeleton->getTexture()->setFiltering(Texture2D::LINEAR);
+
+	// Setup spine animations
+	m_animationStateData = new AnimationStateData(m_skeleton);
+	m_animationStateData->setMix("idle", "walk", 0.2f);
+	m_animationStateData->setMix("walk", "idle", 0.5f);
+	m_animationStateData->setMix("jump", "idle", 0.1f);
+	m_animationStateData->setMix("walk", "jump", 0.1f);
+	m_animationStateData->setMix("jump", "idle", 0.1f);
+	m_animationStateData->setMix("idle", "jump", 0.2f);
 	
-	// Setup spine animations // TODO: Move to global scope (as only one copy of this is strictly neseccary)
-	AnimationStateData *data = new AnimationStateData(m_skeleton);
-	data->setMix("idle", "walk", 0.2f);
-	data->setMix("walk", "idle", 0.5f);
-	data->setMix("jump", "idle", 0.1f);
-	data->setMix("walk", "jump", 0.1f);
-	data->setMix("jump", "idle", 0.1f);
-	data->setMix("idle", "jump", 0.2f);
-	
-	// Create spine animation
-	m_animation = new AnimationState(data);
+	// Create spine animation states
+	m_walkAnimationState = new AnimationState(m_animationStateData);
 	//m_animation.setEventCallback(animationEvent);
-	m_animation->setLooping(true);
+	m_walkAnimationState->setLooping(true);
+	
+	m_itemAnimationState = new AnimationState(m_animationStateData);
+	m_itemAnimationState->setLooping(true);
+
 	m_skeleton->setFlipY(true); // TODO: Investigate why this is needed
 	changeAnimation("idle");
 
@@ -59,7 +63,7 @@ void Player::changeAnimation(const string &name)
 	// Make sure this animation isn't current
 	if(m_currentAnim != anim)
 	{
-		m_animation->setAnimation(anim);
+		m_walkAnimationState->setAnimation(anim);
 		m_currentAnim = anim;
 	}
 }
@@ -123,10 +127,10 @@ void Player::update()
 	m_body->setVelocityX(m_body->getVelocity().x * 0.85f);
 	
 	// Set animations
-	m_animation->setTimeScale(math::abs(m_body->getVelocity().x) * 0.5f);
+	m_walkAnimationState->setTimeScale(math::abs(m_body->getVelocity().x) * 0.5f);
 	if(m_body->isContact(SOUTH))
 	{
-		m_animation->setLooping(true);
+		m_walkAnimationState->setLooping(true);
 		if(m_body->getVelocity().x >= 0.01f)
 		{
 			changeAnimation("walk");
@@ -141,7 +145,7 @@ void Player::update()
 		{
 			changeAnimation("idle");
 			m_body->setVelocityX(0.0f);
-			m_animation->setTimeScale(1.0f);
+			m_walkAnimationState->setTimeScale(1.0f);
 		}
 	}
 	else
@@ -149,21 +153,21 @@ void Player::update()
 		if(m_body->isContact(WEST)/* >= 3*/) // TODO: I should check for a column of 3 rows of blocks instead of simlply one
 		{
 			m_skeleton->setFlipX(false);
-			m_animation->setLooping(false);
-			m_animation->setTimeScale(5.0f);
+			m_walkAnimationState->setLooping(false);
+			m_walkAnimationState->setTimeScale(5.0f);
 			changeAnimation("wall-slide");
 		}
 		else if(m_body->isContact(EAST))
 		{
 			m_skeleton->setFlipX(true);
-			m_animation->setLooping(false);
-			m_animation->setTimeScale(5.0f);
+			m_walkAnimationState->setLooping(false);
+			m_walkAnimationState->setTimeScale(5.0f);
 			changeAnimation("wall-slide");
 		}
 		else
 		{
-			m_animation->setLooping(false);
-			m_animation->setTimeScale(1.0f);
+			m_walkAnimationState->setLooping(false);
+			m_walkAnimationState->setTimeScale(1.0f);
 			changeAnimation("jump");
 		}
 	}
@@ -171,17 +175,29 @@ void Player::update()
 	// Update physics
 	m_body->update();
 
-	// Move camera
-	m_camera->lookAt(m_body->getPosition());
-
-	m_skeleton->setPosition(m_body->getPosition() + Vector2(m_body->getSize().x*0.5f, 48.0f));
-	m_animation->update(Graphics::getTimeStep());
-
 	// Use current item
 	if(Input::getKeyState(XD_LMB) && m_currentItem != nullptr)
 	{
 		m_currentItem->use(this);
+		Animation *anim = m_skeleton->findAnimation("mine");
+		if(anim != m_itemAnimation)
+		{
+			m_itemAnimationState->setAnimation(anim);
+			m_itemAnimation = anim;
+		}
 	}
+	else
+	{
+		m_itemAnimation = nullptr;
+	}
+
+	// Move camera
+	m_camera->lookAt(m_body->getPosition());
+
+	// Update animations
+	m_skeleton->setPosition(m_body->getPosition() + Vector2(m_body->getSize().x*0.5f, 48.0f));
+	m_walkAnimationState->update(Graphics::getTimeStep());
+	if(m_itemAnimation) m_itemAnimationState->update(Graphics::getTimeStep());
 }
 
 void Player::draw(SpriteBatch *spriteBatch)
