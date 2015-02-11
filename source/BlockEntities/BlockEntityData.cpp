@@ -34,7 +34,7 @@ bool BlockEntityData::tryPlace(const int x, const int y)
 		}
 	}
 
-	if(m_placementRule & NEED_FLOOR != 0)
+	if((m_placementRule & NEED_FLOOR) != 0)
 	{
 		for(int i = 0; i < m_width; ++i)
 		{
@@ -44,13 +44,6 @@ bool BlockEntityData::tryPlace(const int x, const int y)
 			}
 		}
 	}
-
-	//switch(m_placementRule) {
-	// case NEED_FLOOR:
-	// case NEED_WALL:
-	// case NEED_ROOF:
-	// case NEED_BACKGROUND:
-	// }
 
 	for(int i = 0; i < m_height; ++i)
 	{

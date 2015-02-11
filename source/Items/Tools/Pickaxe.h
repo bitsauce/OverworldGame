@@ -14,6 +14,7 @@ public:
 private:
 	Sprite m_cracksSprite;
 	SpriteAnimation m_cracksAnimation;
+	Sprite m_sprite;
 	Vector2 m_prevBlockPosition;
 	float m_mineCounter;
 	float m_mineTime;
