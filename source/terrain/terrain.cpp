@@ -93,8 +93,8 @@ void Terrain::update()
 // DRAWING
 void Terrain::draw(SpriteBatch *spriteBatch)
 {
-	spriteBatch->end();
-	spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, World::getCamera()->getProjectionMatrix()));
+	// Flush to set the draw ordering straight
+	spriteBatch->flush();
 
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 

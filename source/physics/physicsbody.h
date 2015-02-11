@@ -1,7 +1,9 @@
 #ifndef PHYSICS_BODY_H
 #define PHYSICS_BODY_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
+
+class Terrain;
 
 class PhysicsBody
 {
@@ -35,8 +37,7 @@ private:
 	float m_gravityScale;
 	bool m_allowRotation;
 	uint m_contact;
-
-	class Terrain *m_terrain;
+	Terrain *m_terrain;
 };
 
 #endif // PHYSICS_BODY_H

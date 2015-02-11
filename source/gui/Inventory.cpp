@@ -1,5 +1,5 @@
 #include "Inventory.h"
-#include "Items/ItemContainer.h"
+#include "Game/ItemContainer.h"
 
 Inventory::Inventory(UiObject *parent, ItemContainer *itemContainer) :
 	UiObject(parent),

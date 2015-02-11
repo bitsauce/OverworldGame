@@ -9,6 +9,38 @@
 
 #define BLOCK_INDEX(x, y, z) (x) + (CHUNK_BLOCKS) * ((y) + (CHUNK_BLOCKS) * (z))
 
+#define BLOCK_X0 0.00f
+#define BLOCK_Y0 0.00f
+#define BLOCK_X1 0.25f
+#define BLOCK_Y1 0.25f
+#define BLOCK_X2 0.50f
+#define BLOCK_Y2 0.50f
+#define BLOCK_X3 0.75f
+#define BLOCK_Y3 0.75f
+#define BLOCK_X4 1.00f
+#define BLOCK_Y4 1.00f
+
+#define BLOCK_U0 (0.0f / 6.0f)
+#define BLOCK_V0 (0.0f / 10.0f)
+#define BLOCK_U1 (1.0f / 6.0f)
+#define BLOCK_V1 (1.0f / 10.0f)
+#define BLOCK_U2 (2.0f / 6.0f)
+#define BLOCK_V2 (2.0f / 10.0f)
+#define BLOCK_U3 (3.0f / 6.0f)
+#define BLOCK_V3 (3.0f / 10.0f)
+#define BLOCK_U4 (4.0f / 6.0f)
+#define BLOCK_V4 (4.0f / 10.0f)
+#define BLOCK_U5 (5.0f / 6.0f)
+#define BLOCK_V5 (5.0f / 10.0f)
+#define BLOCK_U6 (6.0f / 6.0f)
+#define BLOCK_V6 (6.0f / 10.0f)
+#define BLOCK_V7 (8.0f / 10.0f)
+#define BLOCK_V8 (10.0f / 10.0f)
+
+Vertex *TerrainChunk::s_vertices = nullptr;
+uint *TerrainChunk::s_indices = new uint[6*12*16*16*3];
+
+// BLOCK QUADS
 TerrainChunk::BlockQuad::BlockQuad() :
 	block(BLOCK_EMPTY)
 {
@@ -27,6 +59,7 @@ TerrainChunk::BlockQuad::BlockQuad(BlockID block, const float x0, const float y0
 {
 }
 
+// CONSTRUCTOR
 TerrainChunk::TerrainChunk()
 {
 	// A dummy
@@ -52,8 +85,8 @@ TerrainChunk::TerrainChunk()
 		m_adjacentChunks[i] = nullptr;
 	}
 }
-	
-// SERIALIZATION
+
+// CHUNK LOADING
 void TerrainChunk::load(int chunkX, int chunkY)
 {
 	m_x = chunkX;
@@ -96,37 +129,6 @@ void TerrainChunk::load(int chunkX, int chunkY)
 	LOG("Chunk [%i, %i] generated", m_x, m_y);
 }
 
-// Block texture coordinates
-#define BLOCK_X0 0.00f
-#define BLOCK_Y0 0.00f
-#define BLOCK_X1 0.25f
-#define BLOCK_Y1 0.25f
-#define BLOCK_X2 0.50f
-#define BLOCK_Y2 0.50f
-#define BLOCK_X3 0.75f
-#define BLOCK_Y3 0.75f
-#define BLOCK_X4 1.00f
-#define BLOCK_Y4 1.00f
-
-#define BLOCK_U0 (0.0f / 6.0f)
-#define BLOCK_V0 (0.0f / 10.0f)
-#define BLOCK_U1 (1.0f / 6.0f)
-#define BLOCK_V1 (1.0f / 10.0f)
-#define BLOCK_U2 (2.0f / 6.0f)
-#define BLOCK_V2 (2.0f / 10.0f)
-#define BLOCK_U3 (3.0f / 6.0f)
-#define BLOCK_V3 (3.0f / 10.0f)
-#define BLOCK_U4 (4.0f / 6.0f)
-#define BLOCK_V4 (4.0f / 10.0f)
-#define BLOCK_U5 (5.0f / 6.0f)
-#define BLOCK_V5 (5.0f / 10.0f)
-#define BLOCK_U6 (6.0f / 6.0f)
-#define BLOCK_V6 (6.0f / 10.0f)
-#define BLOCK_V7 (8.0f / 10.0f)
-#define BLOCK_V8 (10.0f / 10.0f)
-
-Vertex *TerrainChunk::s_vertices = nullptr;
-uint *TerrainChunk::s_indices = new uint[6*12*16*16*3];
 void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
 {
 	// Get adjacent chunks
@@ -430,6 +432,7 @@ void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
 	m_dirty = false;
 }
 
+// SERIALIZATION
 void TerrainChunk::serialize(FileWriter &ss)
 {
 	/*LOG("Saving chunk [%i, %i]...", m_x, m_y);
@@ -480,7 +483,8 @@ void TerrainChunk::deserialize(stringstream &ss)
 	m_state = CHUNK_INITIALIZED;
 	generateVBO();*/
 }
-	
+
+// BLOCKS
 BlockID TerrainChunk::getBlockAt(const int x, const int y, TerrainLayer layer) const
 {
 	return m_blocks[BLOCK_INDEX(x, y, layer)];

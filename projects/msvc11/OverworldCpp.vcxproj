@@ -107,6 +107,7 @@
     <ClCompile Include="..\..\source\game\Debug.cpp" />
     <ClCompile Include="..\..\source\game\GameManager.cpp" />
     <ClCompile Include="..\..\source\game\GameObject.cpp" />
+    <ClCompile Include="..\..\source\Game\ItemContainer.cpp" />
     <ClCompile Include="..\..\source\game\Player.cpp" />
     <ClCompile Include="..\..\source\game\RayCast.cpp" />
     <ClCompile Include="..\..\source\game\World.cpp" />
@@ -115,8 +116,7 @@
     <ClCompile Include="..\..\source\gui\Inventory.cpp" />
     <ClCompile Include="..\..\source\gui\LineEdit.cpp" />
     <ClCompile Include="..\..\source\gui\UiObject.cpp" />
-    <ClCompile Include="..\..\source\items\Item.cpp" />
-    <ClCompile Include="..\..\source\items\ItemContainer.cpp" />
+    <ClCompile Include="..\..\source\items\ItemData.cpp" />
     <ClCompile Include="..\..\source\Items\Tools\Pickaxe.cpp" />
     <ClCompile Include="..\..\source\Lighting\LightSource.cpp" />
     <ClCompile Include="..\..\source\Lighting\Lighting.cpp" />
@@ -157,6 +157,7 @@
     <ClInclude Include="..\..\source\game\Debug.h" />
     <ClInclude Include="..\..\source\game\GameManager.h" />
     <ClInclude Include="..\..\source\game\GameObject.h" />
+    <ClInclude Include="..\..\source\Game\ItemContainer.h" />
     <ClInclude Include="..\..\source\game\Player.h" />
     <ClInclude Include="..\..\source\game\RayCast.h" />
     <ClInclude Include="..\..\source\game\World.h" />
@@ -165,8 +166,8 @@
     <ClInclude Include="..\..\source\gui\Inventory.h" />
     <ClInclude Include="..\..\source\gui\LineEdit.h" />
     <ClInclude Include="..\..\source\gui\UiObject.h" />
-    <ClInclude Include="..\..\source\items\Item.h" />
-    <ClInclude Include="..\..\source\items\ItemContainer.h" />
+    <ClInclude Include="..\..\source\Items\Items.h" />
+    <ClInclude Include="..\..\source\items\ItemData.h" />
     <ClInclude Include="..\..\source\Items\Tools\Pickaxe.h" />
     <ClInclude Include="..\..\source\Lighting\LightSource.h" />
     <ClInclude Include="..\..\source\Lighting\Lighting.h" />

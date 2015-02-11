@@ -1,21 +1,22 @@
-#include "player.h"
-#include "game/world.h"
-#include "game/camera.h"
-#include "terrain/terrain.h"
-#include "constants.h"
-#include "physics/physicsbody.h"
+#include "Player.h"
+#include "Game/World.h"
+#include "Game/Camera.h"
+#include "Terrain/Terrain.h"
+#include "Constants.h"
+#include "Physics/PhysicsBody.h"
+#include "Game.h"
 
-#include "animation/animation.h"
-#include "animation/skeleton.h"
-
-#include <stdlib.h>
+#include "Animation/Animation.h"
+#include "Animation/Skeleton.h"
 
 Player::Player() :
 	GameObject(DRAW_ORDER_PLAYER),
 	m_camera(World::getCamera()),
+	m_terrain(World::getTerrain()),
 	m_jumpTimer(1.0f),
 	m_canJump(false),
-	m_currentAnim(nullptr)
+	m_currentAnim(nullptr),
+	m_currentItem(nullptr)
 {
 	// Load physics
 	m_body = new PhysicsBody();
@@ -23,7 +24,7 @@ Player::Player() :
 
 	// Load skeleton data
 	m_skeleton = new Skeleton(":/sprites/characters/anim/skeleton.json", ":/sprites/characters/anim/skeleton.atlas", 1.0f);
-	m_skeleton->getTexture()->setFiltering(xd::Texture2D::LINEAR);
+	m_skeleton->getTexture()->setFiltering(Texture2D::LINEAR);
 	
 	// Setup spine animations // TODO: Move to global scope (as only one copy of this is strictly neseccary)
 	AnimationStateData *data = new AnimationStateData(m_skeleton);
@@ -40,6 +41,8 @@ Player::Player() :
 	m_animation->setLooping(true);
 	m_skeleton->setFlipY(true); // TODO: Investigate why this is needed
 	changeAnimation("idle");
+
+	m_currentItem = ItemData::get(ITEM_PICKAXE_IRON);
 }
 
 // ANIMATIONS
@@ -49,7 +52,7 @@ void Player::changeAnimation(const string &name)
 	Animation *anim = m_skeleton->findAnimation(name);
 	if(anim == nullptr)
 	{
-		xd::LOG("Humanoid::changeAnimation() - Animation '%s' does not exists.", name);
+		LOG("Humanoid::changeAnimation() - Animation '%s' does not exists.", name);
 		return;
 	}
 		
@@ -61,13 +64,12 @@ void Player::changeAnimation(const string &name)
 	}
 }
 
-
 void Player::update()
 {
 	// Jumping
 	if(m_body->isContact(SOUTH))
 	{
-		if(xd::Input::getKeyState(xd::XD_KEY_SPACE))
+		if(Input::getKeyState(XD_KEY_SPACE))
 		{
 			if(m_canJump)
 			{
@@ -85,16 +87,16 @@ void Player::update()
 	{
 		if(m_jumpTimer < 0.1f)
 		{
-			if(xd::Input::getKeyState(xd::XD_KEY_SPACE)) // High/low jumping
+			if(Input::getKeyState(XD_KEY_SPACE)) // High/low jumping
 			{
 				m_body->applyImpulse(Vector2(0.0f, -0.75f));
 			}
-			m_jumpTimer += xd::Graphics::getTimeStep();
+			m_jumpTimer += Graphics::getTimeStep();
 		}
 		else if(m_body->isContact(WEST) || m_body->isContact(EAST)) // Wall jumping
 		{
 			m_body->setVelocityY(m_body->getVelocity().y*0.5f);
-			if(xd::Input::getKeyState(xd::XD_KEY_SPACE))
+			if(Input::getKeyState(XD_KEY_SPACE))
 			{
 				if(m_canJump)
 				{
@@ -114,14 +116,14 @@ void Player::update()
 	// Walking
 	if(abs(m_body->getVelocity().x) < 10.0f)
 	{
-		m_body->applyImpulse(Vector2((xd::Input::getKeyState(xd::XD_KEY_D) - xd::Input::getKeyState(xd::XD_KEY_A)) * (xd::Input::getKeyState(xd::XD_KEY_SHIFT) ? 1.0f : 0.5f), 0.0f));
+		m_body->applyImpulse(Vector2((Input::getKeyState(XD_KEY_D) - Input::getKeyState(XD_KEY_A)) * (Input::getKeyState(XD_KEY_SHIFT) ? 1.0f : 0.5f), 0.0f));
 	}
 
 	// Apply friction
 	m_body->setVelocityX(m_body->getVelocity().x * 0.85f);
 	
 	// Set animations
-	m_animation->setTimeScale(xd::math::abs(m_body->getVelocity().x) * 0.5f);
+	m_animation->setTimeScale(math::abs(m_body->getVelocity().x) * 0.5f);
 	if(m_body->isContact(SOUTH))
 	{
 		m_animation->setLooping(true);
@@ -173,10 +175,21 @@ void Player::update()
 	m_camera->lookAt(m_body->getPosition());
 
 	m_skeleton->setPosition(m_body->getPosition() + Vector2(m_body->getSize().x*0.5f, 48.0f));
-	m_animation->update(xd::Graphics::getTimeStep());
+	m_animation->update(Graphics::getTimeStep());
+
+	// Use current item
+	if(Input::getKeyState(XD_LMB) && m_currentItem != nullptr)
+	{
+		m_currentItem->use(this);
+	}
 }
 
-void Player::draw(xd::SpriteBatch *SpriteBatch)
+void Player::draw(SpriteBatch *spriteBatch)
 {
-	m_skeleton->draw(SpriteBatch);
+	m_skeleton->draw(spriteBatch);
+
+	if(m_currentItem != nullptr)
+	{
+		m_currentItem->draw(this, spriteBatch);
+	}
 }

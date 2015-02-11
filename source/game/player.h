@@ -1,15 +1,16 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <x2d/x2d.h>
-
-#include "game/gameobject.h"
+#include "Config.h"
+#include "Game/GameObject.h"
 
 class Skeleton;
 class AnimationState;
 class Animation;
 class Camera;
 class PhysicsBody;
+class Terrain;
+class ItemData;
 
 class Player : public GameObject
 {
@@ -17,19 +18,26 @@ public:
 	Player();
 
 	void update();
-	void draw(xd::SpriteBatch *SpriteBatch);
+	void draw(SpriteBatch *SpriteBatch);
 	void changeAnimation(const string &name);
 
 	PhysicsBody *getBody() const { return m_body; }
+	Camera *getCamera() const { return m_camera; }
+	Terrain *getTerrain() const { return m_terrain; }
 
 private:
 
 	Camera *m_camera;
+
+	Terrain *m_terrain;
+
+	ItemData *m_currentItem;
+
+	// Physics
+	PhysicsBody *m_body;
 	float m_jumpTimer;
 	bool m_canJump;
 
-	PhysicsBody *m_body;
-	
 	// Skeletal animations
 	Skeleton *m_skeleton;
 	AnimationState *m_animation;

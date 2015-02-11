@@ -40,9 +40,6 @@
     <ClCompile Include="..\..\source\mobs\Zombie.cpp">
       <Filter>source\Mobs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\items\Item.cpp">
-      <Filter>source\Items</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\gui\Button.cpp">
       <Filter>source\Gui</Filter>
     </ClCompile>
@@ -106,9 +103,6 @@
     <ClCompile Include="..\..\source\Lighting\Lighting.cpp">
       <Filter>source\Lighting</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\items\ItemContainer.cpp">
-      <Filter>source\Items</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\Terrain\ChunkLoader.cpp">
       <Filter>source\Terrain</Filter>
     </ClCompile>
@@ -134,6 +128,12 @@
       <Filter>source\Items\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="..\..\source\items\ItemData.cpp">
+      <Filter>source\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Game\ItemContainer.cpp">
+      <Filter>source\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -234,9 +234,6 @@
     <ClInclude Include="..\..\source\mobs\Zombie.h">
       <Filter>source\Mobs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\items\Item.h">
-      <Filter>source\Items</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\gui\Button.h">
       <Filter>source\Gui</Filter>
     </ClInclude>
@@ -300,9 +297,6 @@
     <ClInclude Include="..\..\source\Lighting\Lighting.h">
       <Filter>source\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\items\ItemContainer.h">
-      <Filter>source\Items</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Terrain\ChunkLoader.h">
       <Filter>source\Terrain</Filter>
     </ClInclude>
@@ -329,6 +323,15 @@
     </ClInclude>
     <ClInclude Include="..\..\source\Items\Tools\Pickaxe.h">
       <Filter>source\Items\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\items\ItemData.h">
+      <Filter>source\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Items\Items.h">
+      <Filter>source\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Game\ItemContainer.h">
+      <Filter>source\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

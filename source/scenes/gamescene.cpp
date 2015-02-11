@@ -1,18 +1,15 @@
-#include "gamescene.h"
-#include "game.h"
+#include "Game.h"
+#include "Game/World.h"
 
-#include "game/world.h"
+#include "Gui/UiObject.h"
+#include "Gui/Canvas.h"
+#include "Gui/Inventory.h"
 
-#include "gui/uiobject.h"
-#include "gui/canvas.h"
-
-#include "gui/Inventory.h"
-
-#include "constants.h"
+#include "Constants.h"
 
 void GameScene::showEvent()
 {
-	xd::LOG("Scene: Game Scene");
+	LOG("Scene: Game Scene");
 
 	// Setup canvas
 	canvas = new Canvas();
