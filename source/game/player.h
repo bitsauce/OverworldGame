@@ -4,6 +4,8 @@
 #include "Config.h"
 #include "Game/GameObject.h"
 
+#include "Game/ItemContainer.h"
+
 class Skeleton;
 class AnimationStateData;
 class AnimationState;
@@ -12,6 +14,7 @@ class Camera;
 class PhysicsBody;
 class Terrain;
 class ItemData;
+class ItemContainer;
 
 class Player : public GameObject
 {
@@ -19,13 +22,17 @@ public:
 	Player();
 
 	void update();
-	void draw(SpriteBatch *SpriteBatch);
+	void draw(SpriteBatch *spriteBatch);
 	void changeAnimation(const string &name);
+	
+	void setSelectedItemSlot(const int slot) { m_selectedItemSlot = slot; }
+	int getSelectedItemSlot() const { return m_selectedItemSlot; }
 
 	PhysicsBody *getBody() const { return m_body; }
 	Skeleton *getSkeleton() const { return m_skeleton; }
 	Camera *getCamera() const { return m_camera; }
 	Terrain *getTerrain() const { return m_terrain; }
+	ItemContainer &getItemContainer() { return m_itemContainer; }
 
 private:
 
@@ -33,7 +40,8 @@ private:
 
 	Terrain *m_terrain;
 
-	ItemData *m_currentItem;
+	ItemContainer m_itemContainer;
+	int m_selectedItemSlot;
 
 	// Physics
 	PhysicsBody *m_body;

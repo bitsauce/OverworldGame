@@ -4,7 +4,7 @@
 #include <x2d/x2d.h>
 #include "scene.h"
 
-class Inventory;
+class GameOverlay;
 
 class GameScene : public Scene
 {
@@ -16,7 +16,7 @@ public:
 
 public:
 
-	Inventory *m_inventory;
+	GameOverlay *m_inventory;
 };
 
 #endif // GAME_SCENE_H

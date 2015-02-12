@@ -1,23 +1,27 @@
 #include "Inventory.h"
 #include "Game/ItemContainer.h"
+#include "Game/Player.h"
 
-Inventory::Inventory(UiObject *parent, ItemContainer *itemContainer) :
+GameOverlay::GameOverlay(Player *player, UiObject *parent) :
 	UiObject(parent),
-	m_itemContainer(itemContainer),
-	m_sprite(new Sprite(ResourceManager::get<Texture2D>(":/Sprites/Inventory/item_slot.png")))
+	m_player(player),
+	m_spriteItemSlot(ResourceManager::get<Texture2D>(":/Sprites/Inventory/ItemSlot.png")),
+	m_spriteItemSlotSelected(ResourceManager::get<Texture2D>(":/Sprites/Inventory/ItemSlotSelected.png"))
 {
-	m_sprite->setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
+	m_spriteItemSlot.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
+	m_spriteItemSlotSelected.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 }
 
-void Inventory::update()
+void GameOverlay::update()
 {
 }
 
-void Inventory::draw(SpriteBatch *spriteBatch)
+void GameOverlay::draw(SpriteBatch *spriteBatch)
 {
-	for(uint i = 0; i < m_itemContainer->getSize(); ++i)
+	for(uint i = 0; i < m_player->getItemContainer().getSize(); ++i)
 	{
-		m_sprite->setPosition(5 + i*34, 5);
-		spriteBatch->drawSprite(*m_sprite);
+		Sprite &sprite = i == m_player->getSelectedItemSlot() ? m_spriteItemSlotSelected : m_spriteItemSlot;
+		sprite.setPosition(5 + i * 34, 5);
+		spriteBatch->drawSprite(sprite);
 	}
 }

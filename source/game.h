@@ -3,6 +3,10 @@
 
 #include "Constants.h"
 
+#include "Animation/Animation.h"
+#include "Animation/Bone.h"
+#include "Animation/Slot.h"
+
 #include "Gui/Inventory.h"
 
 #include "Environment/Background.h"

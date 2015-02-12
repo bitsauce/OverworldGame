@@ -1,7 +1,8 @@
 #ifndef ITEM_CONTAINER_H
 #define ITEM_CONTAINER_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
+#include "Constants.h"
 
 class ItemData;
 
@@ -10,7 +11,11 @@ class ItemContainer
 public:
 	ItemContainer(const int size);
 
-	bool addItem(ItemData *item, const uint amount = 1);
+	bool addItem(ItemID item, const uint amount = 1);
+
+	ItemID getItemAt(const int idx) const { return m_items[idx].item; }
+	uint getItemAmountAt(const int idx) const { return m_items[idx].amount; }
+
 	int getSize() const { return m_size; }
 
 private:
@@ -19,15 +24,15 @@ private:
 	struct ItemSlot
 	{
 		ItemSlot() :
-			item(nullptr),
+			item(ITEM_NONE),
 			amount(0)
 		{
 		}
 
-		void set(ItemData *item, const uint amount) { this->item = item; this->amount = amount; }
-		bool isEmpty() const { return item == nullptr; }
+		void set(ItemID item, const uint amount) { this->item = item; this->amount = amount; }
+		bool isEmpty() const { return item == ITEM_NONE; }
 
-		ItemData *item;
+		ItemID item;
 		uint amount;
 	};
 

@@ -7,9 +7,9 @@ ItemContainer::ItemContainer(const int size) :
 	m_items = new ItemSlot[size];
 }
 
-bool ItemContainer::addItem(ItemData *item, const uint amount)
+bool ItemContainer::addItem(ItemID item, const uint amount)
 {
-	if(item == nullptr || amount == 0)
+	if(amount == 0)
 	{
 		return false;
 	}
@@ -27,8 +27,7 @@ bool ItemContainer::addItem(ItemData *item, const uint amount)
 
 int ItemContainer::findEmptySlot() const
 {
-	uint slot = 0;
-	for(; slot < m_size; slot++)
+	for(int slot = 0; slot < m_size; slot++)
 	{
 		if(m_items[slot].isEmpty())
 		{

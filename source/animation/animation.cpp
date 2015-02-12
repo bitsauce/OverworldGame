@@ -1,8 +1,7 @@
-#include "animation.h"
-#include "skeleton.h"
-//#include "event.h"
-
 #include <spine/spine.h>
+#include "Animation.h"
+#include "Skeleton.h"
+//#include "event.h"
 
 Animation::Animation(spSkeleton *skeleton, spAnimation *anim) :
 	m_self(anim),

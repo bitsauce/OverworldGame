@@ -14,8 +14,12 @@ void GameScene::showEvent()
 	// Setup canvas
 	canvas = new Canvas();
 	canvas->update();
+	
+	Player *player = new Player();
+	player->getBody()->setPosition(0, 0);
+	player->getItemContainer().addItem(ITEM_PICKAXE_IRON, 1);
 
-	m_inventory = new Inventory(canvas, new ItemContainer(9));
+	m_inventory = new GameOverlay(player, canvas);
 }
 
 void GameScene::hideEvent()

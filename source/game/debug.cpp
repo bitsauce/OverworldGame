@@ -72,6 +72,7 @@ void Debug::draw(xd::SpriteBatch *spriteBatch)
 	if(!m_enabled) return;
 	
 	setVariable("Chunks", xd::util::intToStr(m_terrain->getChunkLoader()->m_chunks.size()) + " / " + xd::util::intToStr(m_terrain->getChunkLoader()->m_optimalChunkCount));
+	//setVariable("Time", util::intToStr(m_timeOfDay->getHour()) + ":" + util::intToStr(m_timeOfDay->getMinute()));
 
 	// Draw debug info
 	string drawString;

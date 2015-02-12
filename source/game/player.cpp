@@ -16,7 +16,8 @@ Player::Player() :
 	m_jumpTimer(1.0f),
 	m_canJump(false),
 	m_currentAnim(nullptr),
-	m_currentItem(nullptr)
+	m_selectedItemSlot(0),
+	m_itemContainer(10)
 {
 	// Load physics
 	m_body = new PhysicsBody();
@@ -37,7 +38,7 @@ Player::Player() :
 	
 	// Create spine animation states
 	m_walkAnimationState = new AnimationState(m_animationStateData);
-	//m_animation.setEventCallback(animationEvent);
+	//m_walkAnimationState->setEventCallback(animationEvent);
 	m_walkAnimationState->setLooping(true);
 	
 	m_itemAnimationState = new AnimationState(m_animationStateData);
@@ -46,7 +47,17 @@ Player::Player() :
 	m_skeleton->setFlipY(true); // TODO: Investigate why this is needed
 	changeAnimation("idle");
 
-	m_currentItem = ItemData::get(ITEM_PICKAXE_IRON);
+	// Bind keys to item slots
+	Input::bind(XD_KEY_1, bind(&Player::setSelectedItemSlot, this, 0));
+	Input::bind(XD_KEY_2, bind(&Player::setSelectedItemSlot, this, 1));
+	Input::bind(XD_KEY_3, bind(&Player::setSelectedItemSlot, this, 2));
+	Input::bind(XD_KEY_4, bind(&Player::setSelectedItemSlot, this, 3));
+	Input::bind(XD_KEY_5, bind(&Player::setSelectedItemSlot, this, 4));
+	Input::bind(XD_KEY_6, bind(&Player::setSelectedItemSlot, this, 5));
+	Input::bind(XD_KEY_7, bind(&Player::setSelectedItemSlot, this, 6));
+	Input::bind(XD_KEY_8, bind(&Player::setSelectedItemSlot, this, 7));
+	Input::bind(XD_KEY_9, bind(&Player::setSelectedItemSlot, this, 8));
+	Input::bind(XD_KEY_0, bind(&Player::setSelectedItemSlot, this, 9));
 }
 
 // ANIMATIONS
@@ -176,9 +187,10 @@ void Player::update()
 	m_body->update();
 
 	// Use current item
-	if(Input::getKeyState(XD_LMB) && m_currentItem != nullptr)
+	ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
+	if(Input::getKeyState(XD_LMB) && item != nullptr)
 	{
-		m_currentItem->use(this);
+		item->use(this);
 		Animation *anim = m_skeleton->findAnimation("mine");
 		if(anim != m_itemAnimation)
 		{
@@ -203,9 +215,10 @@ void Player::update()
 void Player::draw(SpriteBatch *spriteBatch)
 {
 	m_skeleton->draw(spriteBatch);
-
-	if(m_currentItem != nullptr)
+	
+	ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
+	if(item != nullptr)
 	{
-		m_currentItem->draw(this, spriteBatch);
+		item->draw(this, spriteBatch);
 	}
 }

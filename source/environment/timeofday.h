@@ -38,8 +38,8 @@ public:
 	{
 		// Apply time
 		time += xd::Graphics::getTimeStep();
-		
-		// Debug: Time speedup (0 forwards, 9 backwards)
+
+		/*// Debug: Time speedup (0 forwards, 9 backwards)
 		if(xd::Input::getKeyState(xd::XD_KEY_0))
 		{
 			time += 10.0f;
@@ -47,20 +47,22 @@ public:
 		else if(xd::Input::getKeyState(xd::XD_KEY_9))
 		{
 			time -= 10.0f;
-		}
+		}*/
 
 		// Make sure time loops around to 00:00
-		if(time >= 1440.0f) {
+		if(time >= 1440.0f)
+		{
 			time = 0.0f;
 		}
 
 		// Make sure time loops back to 24:59
-		if(time < 0.0f) {
+		if(time < 0.0f)
+		{
 			time = 1440.0f;
 		}
 		
 		// Draw time
-		//Debug.setVariable("Time", formatInt(getHour(), "0", 2) + ":" + formatInt(getMinute(), "0", 2));
+		//World::getDebug()->setVariable("Time", formatInt(getHour(), "0", 2) + ":" + formatInt(getMinute(), "0", 2));
 	}
 
 private:

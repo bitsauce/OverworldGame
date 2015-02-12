@@ -5,19 +5,21 @@
 #include "UiObject.h"
 
 class ItemContainer;
+class Player;
 
-class Inventory : public UiObject, public xd::MouseListener
+class GameOverlay : public UiObject, public MouseListener
 {
 public:
-	Inventory(UiObject *object, ItemContainer *itemContainer);
+	GameOverlay(Player *player, UiObject *object);
 
 	void update();
 	void draw(SpriteBatch *spriteBatch);
 
 private:
 
-	ItemContainer *m_itemContainer;
-	Sprite *m_sprite;
+	Player *m_player;
+	Sprite m_spriteItemSlot;
+	Sprite m_spriteItemSlotSelected;
 };
 
 #endif // INVENTORY_H
