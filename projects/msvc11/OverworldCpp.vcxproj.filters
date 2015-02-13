@@ -121,9 +121,6 @@
     <ClCompile Include="..\..\source\BlockEntities\BlockEntity.cpp">
       <Filter>Source\BlockEntities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\gui\Inventory.cpp">
-      <Filter>Source\Gui</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\Items\Tools\Pickaxe.cpp">
       <Filter>Source\Items\Tools</Filter>
     </ClCompile>
@@ -133,6 +130,12 @@
     </ClCompile>
     <ClCompile Include="..\..\source\Game\ItemContainer.cpp">
       <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\gui\GameOverlay.cpp">
+      <Filter>Source\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Items\BlockItem.cpp">
+      <Filter>Source\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -318,9 +321,6 @@
     <ClInclude Include="..\..\source\BlockEntities\BlockEntity.h">
       <Filter>Source\BlockEntities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\gui\Inventory.h">
-      <Filter>Source\Gui</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Items\Tools\Pickaxe.h">
       <Filter>Source\Items\Tools</Filter>
     </ClInclude>
@@ -332,6 +332,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\Game\ItemContainer.h">
       <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\GameOverlay.h">
+      <Filter>Source\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Items\BlockItem.h">
+      <Filter>Source\Items</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -25,8 +25,8 @@ public:
 	void draw(SpriteBatch *spriteBatch);
 	void changeAnimation(const string &name);
 	
-	void setSelectedItemSlot(const int slot) { m_selectedItemSlot = slot; }
-	int getSelectedItemSlot() const { return m_selectedItemSlot; }
+	void setSelectedItemSlot(const uint slot) { m_selectedItemSlot = slot; }
+	uint getSelectedItemSlot() const { return m_selectedItemSlot; }
 
 	PhysicsBody *getBody() const { return m_body; }
 	Skeleton *getSkeleton() const { return m_skeleton; }
@@ -41,7 +41,7 @@ private:
 	Terrain *m_terrain;
 
 	ItemContainer m_itemContainer;
-	int m_selectedItemSlot;
+	uint m_selectedItemSlot;
 
 	// Physics
 	PhysicsBody *m_body;

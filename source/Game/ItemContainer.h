@@ -9,14 +9,15 @@ class ItemData;
 class ItemContainer
 {
 public:
-	ItemContainer(const int size);
+	ItemContainer(const uint size);
 
-	bool addItem(ItemID item, const uint amount = 1);
+	bool addItem(const ItemID item, const uint amount = 1);
+	bool removeItem(const ItemID item, const uint amount = 1);
 
 	ItemID getItemAt(const int idx) const { return m_items[idx].item; }
 	uint getItemAmountAt(const int idx) const { return m_items[idx].amount; }
 
-	int getSize() const { return m_size; }
+	uint getSize() const { return m_size; }
 
 private:
 	int findEmptySlot() const;
@@ -37,7 +38,7 @@ private:
 	};
 
 	ItemSlot *m_items;
-	const int m_size;
+	const uint m_size;
 };
 
 #endif // ITEM_CONTAINER_H

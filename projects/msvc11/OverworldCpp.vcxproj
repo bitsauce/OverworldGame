@@ -113,9 +113,10 @@
     <ClCompile Include="..\..\source\game\World.cpp" />
     <ClCompile Include="..\..\source\gui\Button.cpp" />
     <ClCompile Include="..\..\source\gui\Canvas.cpp" />
-    <ClCompile Include="..\..\source\gui\Inventory.cpp" />
+    <ClCompile Include="..\..\source\gui\GameOverlay.cpp" />
     <ClCompile Include="..\..\source\gui\LineEdit.cpp" />
     <ClCompile Include="..\..\source\gui\UiObject.cpp" />
+    <ClCompile Include="..\..\source\Items\BlockItem.cpp" />
     <ClCompile Include="..\..\source\items\ItemData.cpp" />
     <ClCompile Include="..\..\source\Items\Tools\Pickaxe.cpp" />
     <ClCompile Include="..\..\source\Lighting\LightSource.cpp" />
@@ -163,9 +164,10 @@
     <ClInclude Include="..\..\source\game\World.h" />
     <ClInclude Include="..\..\source\gui\Button.h" />
     <ClInclude Include="..\..\source\gui\Canvas.h" />
-    <ClInclude Include="..\..\source\gui\Inventory.h" />
+    <ClInclude Include="..\..\source\gui\GameOverlay.h" />
     <ClInclude Include="..\..\source\gui\LineEdit.h" />
     <ClInclude Include="..\..\source\gui\UiObject.h" />
+    <ClInclude Include="..\..\source\Items\BlockItem.h" />
     <ClInclude Include="..\..\source\Items\Items.h" />
     <ClInclude Include="..\..\source\items\ItemData.h" />
     <ClInclude Include="..\..\source\Items\Tools\Pickaxe.h" />

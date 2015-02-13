@@ -7,7 +7,7 @@
 #include "Animation/Bone.h"
 #include "Animation/Slot.h"
 
-#include "Gui/Inventory.h"
+#include "Gui/GameOverlay.h"
 
 #include "Environment/Background.h"
 #include "Environment/TimeOfDay.h"

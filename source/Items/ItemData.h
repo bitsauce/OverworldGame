@@ -15,6 +15,9 @@ public:
 	virtual void draw(Player *player, SpriteBatch *spriteBatch) = 0;
 	static ItemData *get(const ItemID id) { return s_itemData[id]; }
 
+	ItemID getID() const { return m_id; }
+	Texture2DPtr getIconTexture() const { return m_iconTexture; }
+
 protected:
 	virtual void set(const ItemID id, const string &name, const string &desc, const string &texture, const uint maxStack, const bool singleShot);
 
@@ -23,7 +26,7 @@ private:
 	string m_name;
 	string m_desc;
 	uint m_maxStack;
-	Sprite *m_icon;
+	Texture2DPtr m_iconTexture;
 	bool m_singleShot;
 
 	static void init();
