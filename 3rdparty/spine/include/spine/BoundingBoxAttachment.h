@@ -38,6 +38,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#pragma warning(disable : 4510 4512 4610)
 
 typedef struct spBoundingBoxAttachment spBoundingBoxAttachment;
 struct spBoundingBoxAttachment {

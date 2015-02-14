@@ -38,6 +38,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#pragma warning(disable : 4510 4512 4610)
 
 typedef enum {
 	SP_VERTEX_X1 = 0, SP_VERTEX_Y1, SP_VERTEX_X2, SP_VERTEX_Y2, SP_VERTEX_X3, SP_VERTEX_Y3, SP_VERTEX_X4, SP_VERTEX_Y4

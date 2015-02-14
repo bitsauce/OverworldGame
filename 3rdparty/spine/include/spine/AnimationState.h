@@ -38,6 +38,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#pragma warning(disable : 4510 4512 4610)
 
 typedef enum {
 	SP_ANIMATION_START, SP_ANIMATION_END, SP_ANIMATION_COMPLETE, SP_ANIMATION_EVENT

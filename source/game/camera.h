@@ -54,7 +54,7 @@ public:
 
 private:
 	// Position
-	Vector2i m_position;
+	Vector2 m_position;
 
 	// Size
 	Vector2i m_size;

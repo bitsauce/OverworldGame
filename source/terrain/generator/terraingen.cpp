@@ -30,7 +30,7 @@ BlockID TerrainGen::getBlockAt(const int x, const int y, const TerrainLayer laye
 	}
 		
 	// Apply structures
-	int64_t blockKey = BLOCK_KEY(x, y);
+	/*int64_t blockKey = BLOCK_KEY(x, y);
 	if(s_structureMap.find(blockKey) != s_structureMap.end())
 	{
 		BlockUnion &blocks = s_structureMap[blockKey];
@@ -40,7 +40,7 @@ BlockID TerrainGen::getBlockAt(const int x, const int y, const TerrainLayer laye
 		case TERRAIN_LAYER_MIDDLE: if(blocks.middle > 0) block = blocks.middle; break;
 		case TERRAIN_LAYER_FRONT: if(blocks.front > 0) block = blocks.front; break;
 		}
-	}
+	}*/
 	return block;
 }
 	
@@ -53,7 +53,7 @@ BlockID TerrainGen::getGroundAt(const int x, const int y, const TerrainLayer lay
 			float h = s_noise.valueAt(x*0.1f, y + 710239) * 7;
 
 			// Ground
-			if((xd::math::clamp((100 - y)/100.0f, 0.0f, 1.0f) + (s_noise.valueAt(x, y) * 0.5f + 0.5f)) * step(0, y + h) > 0.5f)
+			if((math::clamp((100 - y)/100.0f, 0.0f, 1.0f) + (s_noise.valueAt(x, y) * 0.5f + 0.5f)) * step(0, y + h) > 0.5f)
 			{
 				return BLOCK_GRASS;
 			}
@@ -91,7 +91,7 @@ void TerrainGen::loadStructures(const int superChunkX, const int superChunkY)
 			int length = 8 + s_random.getDouble(tileX + s_seed + 8572) * 32;
 
 			// Stem and lower branches
-			for(int h = length * 0.5f; h >= 0; --h)
+			for(int h = int(length * 0.5f); h >= 0; --h)
 			{
 				/*if(h > length * 0.2f && s_random.getDouble(tileX + s_seed + h) < 0.1)
 				{

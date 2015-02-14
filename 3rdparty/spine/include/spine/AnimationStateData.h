@@ -37,6 +37,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#pragma warning(disable : 4510 4610)
 
 typedef struct {
 	spSkeletonData* const skeletonData;

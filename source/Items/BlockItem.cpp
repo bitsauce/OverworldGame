@@ -9,7 +9,7 @@ BlockItem::BlockItem(const TerrainLayer layer, const BlockID blockID) :
 void BlockItem::use(Player *player)
 {
 	// Get block input position
-	Vector2 blockPos = player->getCamera()->getInputPosition();
+	Vector2i blockPos = player->getCamera()->getInputPosition();
 	blockPos.x = floor(blockPos.x/BLOCK_PXF);
 	blockPos.y = floor(blockPos.y/BLOCK_PXF);
 

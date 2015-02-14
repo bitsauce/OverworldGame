@@ -18,7 +18,7 @@ Pickaxe::Pickaxe() :
 void Pickaxe::use(Player *player)
 {
 	// Get block input position
-	Vector2 position = player->getCamera()->getInputPosition();
+	Vector2i position = player->getCamera()->getInputPosition();
 	position.x = floor(position.x/BLOCK_PXF);
 	position.y = floor(position.y/BLOCK_PXF);
 

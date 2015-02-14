@@ -33,7 +33,7 @@ void ChunkLoader::setOptimalChunkCount(const uint optimalChunkCount)
 	}
 
 	// Create new chunks
-	m_chunkPool.resize(optimalChunkCount * 1.1f);
+	m_chunkPool.resize(uint(optimalChunkCount * 1.1f));
 	for(uint i = 0; i < m_chunkPool.size(); ++i)
 	{
 		m_chunkPool[i] = new TerrainChunk();
@@ -126,7 +126,7 @@ ChunkLoader::ChunkArea ChunkLoader::getLoadArea() const
 
 float round(float d)
 {
-	return floor(d + 0.5);
+	return floor(d + 0.5f);
 }
 
 void ChunkLoader::update()
@@ -136,10 +136,10 @@ void ChunkLoader::update()
 	Vector2 size = m_applyZoom ? m_camera->getSize() : xd::Window::getSize();
 
 	// Active area should have the same center as the view
-	m_activeArea.x0 = (int)floor(center.x/CHUNK_PXF) - floor(size.x*0.5f/CHUNK_PXF) - 1;
-	m_activeArea.y0 = (int)floor(center.y/CHUNK_PXF) - floor(size.y*0.5f/CHUNK_PXF) - 1;
-	m_activeArea.x1 = (int)floor(center.x/CHUNK_PXF) + floor(size.x*0.5f/CHUNK_PXF) + 1;
-	m_activeArea.y1 = (int)floor(center.y/CHUNK_PXF) + floor(size.y*0.5f/CHUNK_PXF) + 1;
+	m_activeArea.x0 = (int)floor(center.x/CHUNK_PXF) - (int)floor(size.x*0.5f/CHUNK_PXF) - 1;
+	m_activeArea.y0 = (int)floor(center.y/CHUNK_PXF) - (int)floor(size.y*0.5f/CHUNK_PXF) - 1;
+	m_activeArea.x1 = (int)floor(center.x/CHUNK_PXF) + (int)floor(size.x*0.5f/CHUNK_PXF) + 1;
+	m_activeArea.y1 = (int)floor(center.y/CHUNK_PXF) + (int)floor(size.y*0.5f/CHUNK_PXF) + 1;
 
 	// Update load area
 	m_loadArea.x0 = m_activeArea.x0 - m_loadAreaRadius;
@@ -204,7 +204,7 @@ void ChunkLoader::resizeEvent(uint width, uint height)
 
 	setOptimalChunkCount(loadAreaWidth * loadAreaHeight);
 	
-	int r = sqrt(loadAreaWidth*loadAreaWidth + loadAreaHeight*loadAreaHeight) * 0.5f;
+	int r = int(sqrt(double(loadAreaWidth * loadAreaWidth + loadAreaHeight * loadAreaHeight)) * 0.5f);
 	priority_queue<Vector2i, vector<Vector2i>, VectorComparator> minHeap;
 	for(int y = -r; y <= r; ++y)
 	{
