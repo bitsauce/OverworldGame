@@ -17,8 +17,7 @@ void GameScene::showEvent()
 	
 	Player *player = new Player();
 	player->getBody()->setPosition(0, 0);
-	player->getItemContainer().addItem(ITEM_PICKAXE_IRON, 1);
-	player->getItemContainer().addItem(ITEM_GRASS_BLOCK, 255);
+	player->getItemContainer().addItem(ITEM_PICKAXE_IRON);
 
 	m_inventory = new GameOverlay(player, canvas);
 }

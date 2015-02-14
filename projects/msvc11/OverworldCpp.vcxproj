@@ -108,6 +108,7 @@
     <ClCompile Include="..\..\source\game\GameManager.cpp" />
     <ClCompile Include="..\..\source\game\GameObject.cpp" />
     <ClCompile Include="..\..\source\Game\ItemContainer.cpp" />
+    <ClCompile Include="..\..\Source\Game\ItemDrop.cpp" />
     <ClCompile Include="..\..\source\game\Player.cpp" />
     <ClCompile Include="..\..\source\game\RayCast.cpp" />
     <ClCompile Include="..\..\source\game\World.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="..\..\source\game\GameManager.h" />
     <ClInclude Include="..\..\source\game\GameObject.h" />
     <ClInclude Include="..\..\source\Game\ItemContainer.h" />
+    <ClInclude Include="..\..\Source\Game\ItemDrop.h" />
     <ClInclude Include="..\..\source\game\Player.h" />
     <ClInclude Include="..\..\source\game\RayCast.h" />
     <ClInclude Include="..\..\source\game\World.h" />

@@ -137,6 +137,9 @@
     <ClCompile Include="..\..\source\Items\BlockItem.cpp">
       <Filter>Source\Items</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Game\ItemDrop.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -338,6 +341,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\Items\BlockItem.h">
       <Filter>Source\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\ItemDrop.h">
+      <Filter>Source\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

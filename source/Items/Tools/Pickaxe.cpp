@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
+#include "Game/ItemDrop.h"
 
 Pickaxe::Pickaxe() :
 	m_cracksSprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Tools/Pickaxes/MiningCracks.png")),
@@ -22,7 +23,8 @@ void Pickaxe::use(Player *player)
 	position.y = floor(position.y/BLOCK_PXF);
 
 	// Is there a block at this position?
-	if(player->getTerrain()->isBlockAt(position.x, position.y, TERRAIN_LAYER_MIDDLE))
+	Terrain *terrain = player->getTerrain();
+	if(terrain->isBlockAt(position.x, position.y, TERRAIN_LAYER_MIDDLE))
 	{
 		// Reset timer if block position have changed
 		if(position != m_prevBlockPosition)
@@ -37,10 +39,15 @@ void Pickaxe::use(Player *player)
 		m_mineCounter -= Graphics::getTimeStep();
 		if(m_mineCounter <= 0.0f)
 		{
-			player->getTerrain()->removeBlockAt(position.x, position.y, TERRAIN_LAYER_MIDDLE);
+			ItemID itemID = (ItemID)terrain->getBlockAt(position.x, position.y, TERRAIN_LAYER_MIDDLE);
+			terrain->removeBlockAt(position.x, position.y, TERRAIN_LAYER_MIDDLE);
+			new ItemDrop(Vector2(position.x * BLOCK_PXF, position.y * BLOCK_PXF), itemID);
 		}
-		m_cracksSprite.setPosition(position * BLOCK_PXF);
-		m_cracksSprite.setRegion(m_cracksAnimation.getKeyFrame(4 * (1.0f - m_mineCounter/m_mineTime)));
+		else
+		{
+			m_cracksSprite.setPosition(position * BLOCK_PXF);
+			m_cracksSprite.setRegion(m_cracksAnimation.getKeyFrame(4 * (1.0f - m_mineCounter/m_mineTime)));
+		}
 	}
 }
 

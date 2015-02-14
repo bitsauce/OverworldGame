@@ -31,7 +31,7 @@ void GameOverlay::draw(SpriteBatch *spriteBatch)
 		ItemData *item;
 		if((item = ItemData::get(itemContainer.getItemAt(i))) != nullptr)
 		{
-			spriteBatch->drawSprite(Sprite(item->getIconTexture(), Rect(5.f + i * 34.f, 5.f, 32.f, 32.f)));
+			spriteBatch->drawSprite(Sprite(item->getIconTexture(), Rect(13.f + i * 34.f, 13.f, 16.f, 16.f)));
 		}
 		spriteBatch->drawText(Vector2(7.f + i * 34.f, 7.f), util::intToStr(itemContainer.getItemAmountAt(i)), m_font);
 	}

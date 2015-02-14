@@ -5,6 +5,7 @@
 #include "terrain/terrain.h"
 
 PhysicsBody::PhysicsBody() :
+	m_acceleration(0.0f, 0.0f),
 	m_velocity(0.0f, 0.0f),
 	m_position(0.0f, 0.0f),
 	m_rotation(45.0f),

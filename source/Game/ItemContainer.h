@@ -11,7 +11,7 @@ class ItemContainer
 public:
 	ItemContainer(const uint size);
 
-	bool addItem(const ItemID item, const uint amount = 1);
+	bool addItem(const ItemID item, int amount = 1);
 	bool removeItem(const ItemID item, const uint amount = 1);
 
 	ItemID getItemAt(const int idx) const { return m_items[idx].item; }

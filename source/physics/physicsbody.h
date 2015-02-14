@@ -22,8 +22,10 @@ public:
 	Vector2 getVelocity() const { return m_velocity; }
 	void setVelocityX(const float x) { m_velocity.x = x; }
 	void setVelocityY(const float y) { m_velocity.y = y; }
+	Vector2 getCenter() const { return m_position + m_size * 0.5f; }
+	Rect getRect() const { return Rect(m_position, m_size); }
 	bool isContact(const uint dir) { return (m_contact & dir) != 0; }
-	
+
 	void applyImpulse(const Vector2 &impulse) { m_acceleration += impulse; }
 	void setAccelerationX(const float ax) { m_acceleration.x = ax; }
 	void setAccelerationY(const float ay) { m_acceleration.y = ay; }

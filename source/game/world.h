@@ -1,7 +1,7 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
 
 class Terrain;
 class TimeOfDay;
@@ -11,6 +11,7 @@ class Lighting;
 
 class World
 {
+	friend class Player;
 public:
 	static void init();
 	static void create(const string &name);
@@ -24,16 +25,17 @@ public:
 	static Camera *getCamera();
 	static Debug *getDebug();
 	static Lighting *getLighting();
+	static vector<Player*> getPlayers();
 
 private:
-	
 	static Terrain *s_terrain;
 	static TimeOfDay *s_timeOfDay;
 	static string s_worldPath;
-	static xd::IniFile *s_worldFile;
+	static IniFile *s_worldFile;
 	static Camera *s_camera;
 	static Debug *s_debug;
 	static Lighting *s_lighting;
+	static vector<Player*> s_players;
 };
 
 #endif // WORLD_H

@@ -58,6 +58,8 @@ Player::Player() :
 	Input::bind(XD_KEY_8, bind(&Player::setSelectedItemSlot, this, 7));
 	Input::bind(XD_KEY_9, bind(&Player::setSelectedItemSlot, this, 8));
 	Input::bind(XD_KEY_0, bind(&Player::setSelectedItemSlot, this, 9));
+
+	World::s_players.push_back(this);
 }
 
 // ANIMATIONS

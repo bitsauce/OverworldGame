@@ -14,10 +14,11 @@
 string World::s_worldPath = "";
 Terrain *World::s_terrain = nullptr;
 TimeOfDay *World::s_timeOfDay = nullptr;
-xd::IniFile *World::s_worldFile = nullptr;
+IniFile *World::s_worldFile = nullptr;
 Camera *World::s_camera = nullptr;
 Debug *World::s_debug = nullptr;
 Lighting *World::s_lighting = nullptr;
+vector<Player*> World::s_players;
 
 void World::init()
 {
@@ -96,4 +97,9 @@ Debug *World::getDebug()
 Lighting *World::getLighting()
 {
 	return s_lighting;
+}
+
+vector<Player*> World::getPlayers()
+{
+	return s_players;
 }

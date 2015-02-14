@@ -42,7 +42,8 @@ void GameManager::exit()
 
 void GameManager::update()
 {
-	for(list<GameObject*>::iterator itr = s_gameObjects.begin(); itr != s_gameObjects.end(); ++itr)
+	list<GameObject*> gameObjects(s_gameObjects);
+	for(list<GameObject*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
 	{
 		(*itr)->update();
 	}
