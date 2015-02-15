@@ -89,6 +89,8 @@ enum ItemID
 
 	ITEM_PICKAXE_IRON,
 
+	ITEM_TORCH,
+
 	ITEM_COUNT
 };
 

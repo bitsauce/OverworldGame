@@ -1,4 +1,3 @@
-#include "ItemData.h"
 #include "Game.h"
 
 vector<ItemData*> ItemData::s_itemData(ITEM_COUNT);
@@ -25,6 +24,7 @@ void ItemData::set(const ItemID id, const string &name, const string &desc, cons
 
 void ItemData::init()
 {
-	(s_itemData[ITEM_GRASS_BLOCK] = new BlockItem(TERRAIN_LAYER_BACK, BLOCK_GRASS))->set(ITEM_GRASS_BLOCK, "Dirt block", "A block of dirt", ":/Sprites/ItemIcons/DirtBlock.png", 255, false);
+	(s_itemData[ITEM_GRASS_BLOCK] = new BlockItem(TERRAIN_LAYER_MIDDLE, BLOCK_GRASS))->set(ITEM_GRASS_BLOCK, "Dirt block", "A block of dirt", ":/Sprites/ItemIcons/DirtBlock.png", 255, false);
 	(s_itemData[ITEM_PICKAXE_IRON] = new Pickaxe())->set(ITEM_PICKAXE_IRON, "Iron Pickaxe", "An iron pickaxe", ":/Sprites/ItemIcons/IronPickaxe.png", 1, false);
+	(s_itemData[ITEM_TORCH] = new BlockEntityItem(BLOCK_ENTITY_RED_CURRANT_BUSH))->set(ITEM_TORCH, "Red currant bush", "Grows red currants", ":/Sprites/ItemIcons/Torch.png", 255, false);
 }

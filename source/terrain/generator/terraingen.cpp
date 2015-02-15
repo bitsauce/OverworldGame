@@ -21,7 +21,7 @@ BlockID TerrainGen::getBlockAt(const int x, const int y, const TerrainLayer laye
 	BlockID block = getGroundAt(x, y, layer);
 		
 	// TODO: Move this check somewhere else
-	int superChunkX = xd::math::floor(x/SUPER_CHUNK_BLOCKSF), superChunkY = xd::math::floor(y/SUPER_CHUNK_BLOCKSF);
+	/*int superChunkX = xd::math::floor(x/SUPER_CHUNK_BLOCKSF), superChunkY = xd::math::floor(y/SUPER_CHUNK_BLOCKSF);
 	uint key = CHUNK_KEY(superChunkX, superChunkY);
 	if(s_loadedSuperChunks.find(key) == s_loadedSuperChunks.end())
 	{
@@ -30,7 +30,7 @@ BlockID TerrainGen::getBlockAt(const int x, const int y, const TerrainLayer laye
 	}
 		
 	// Apply structures
-	/*int64_t blockKey = BLOCK_KEY(x, y);
+	int64_t blockKey = BLOCK_KEY(x, y);
 	if(s_structureMap.find(blockKey) != s_structureMap.end())
 	{
 		BlockUnion &blocks = s_structureMap[blockKey];
@@ -53,7 +53,7 @@ BlockID TerrainGen::getGroundAt(const int x, const int y, const TerrainLayer lay
 			float h = s_noise.valueAt(x*0.1f, y + 710239) * 7;
 
 			// Ground
-			if((math::clamp((100 - y)/100.0f, 0.0f, 1.0f) + (s_noise.valueAt(x, y) * 0.5f + 0.5f)) * step(0, y + h) > 0.5f)
+			if((math::clamp((32 - y)/32.0f, 0.0f, 1.0f) + (s_noise.valueAt(x, y) * 0.5f + 0.5f)) * step(0, y + h) > 0.5f)
 			{
 				return BLOCK_GRASS;
 			}

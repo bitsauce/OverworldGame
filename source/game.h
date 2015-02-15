@@ -12,7 +12,7 @@
 #include "Environment/Background.h"
 #include "Environment/TimeOfDay.h"
 
-#include "Items/Items.h"
+#include "Items/Include.h"
 
 #include "Blocks/BlockData.h"
 

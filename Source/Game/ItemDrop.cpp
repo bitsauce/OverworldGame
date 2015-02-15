@@ -20,7 +20,7 @@ void ItemDrop::update()
 	{
 		Player *player = players[i];
 		Vector2 deltaPosition = player->getBody()->getCenter() - m_body.getCenter();
-		if(m_body.getRect().contains(m_body.getCenter()))
+		if(player->getBody()->getRect().contains(m_body.getCenter()))
 		{
 			players[i]->getItemContainer().addItem(m_itemID);
 			delete this;

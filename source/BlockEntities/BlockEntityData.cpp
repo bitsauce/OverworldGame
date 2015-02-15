@@ -10,18 +10,20 @@ void BlockEntityData::init(Terrain *terrain)
 {
 	s_terrain = terrain;
 
-	s_blockEntityData[BLOCK_ENTITY_RED_CURRANT_BUSH] = new BlockEntityData(4, 2, NEED_FLOOR, function<void(int, int)>(RedCurrantBush::Factory));
+	s_blockEntityData[BLOCK_ENTITY_RED_CURRANT_BUSH] = new BlockEntityData(4, 2, NEED_FLOOR, ":/Sprites/BlockEntities/Bushes/RedCurrantBush.png", TextureRegion(0.0f, 0.0f, 1.0f, 0.5f), function<void(int, int)>(RedCurrantBush::Factory));
 }
 
-BlockEntityData::BlockEntityData(const int width, const int height, const PlacementRule rule, function<void(int, int)> factory) :
+BlockEntityData::BlockEntityData(const int width, const int height, const PlacementRule rule, const string &texture, const TextureRegion &textureRegion, function<void(int, int)> factory) :
 	m_width(width),
 	m_height(height),
 	m_placementRule(rule),
+	m_sprite(Sprite(ResourceManager::get<Texture2D>(texture))),
 	m_factory(factory)
 {
+	m_sprite.setRegion(textureRegion, true);
 }
 
-bool BlockEntityData::tryPlace(const int x, const int y)
+bool BlockEntityData::canPlace(const int x, const int y)
 {
 	for(int i = 0; i < m_height; ++i)
 	{
@@ -44,16 +46,24 @@ bool BlockEntityData::tryPlace(const int x, const int y)
 			}
 		}
 	}
-
-	for(int i = 0; i < m_height; ++i)
-	{
-		for(int j = 0; j < m_width; ++j)
-		{
-			s_terrain->setBlockAt(x + j, y + i, BLOCK_ENTITY, TERRAIN_LAYER_MIDDLE);
-		}
-	}
-	m_factory(x, y);
 	return true;
+}
+
+bool BlockEntityData::tryPlace(const int x, const int y)
+{
+	if(canPlace(x, y))
+	{
+		for(int i = 0; i < m_height; ++i)
+		{
+			for(int j = 0; j < m_width; ++j)
+			{
+				s_terrain->setBlockAt(x + j, y + i, BLOCK_ENTITY, TERRAIN_LAYER_MIDDLE);
+			}
+		}
+		m_factory(x, y);
+		return true;
+	}
+	return false;
 }
 
 BlockEntityData &BlockEntityData::get(const BlockEntityID id)

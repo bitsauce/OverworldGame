@@ -134,11 +134,14 @@
     <ClCompile Include="..\..\source\gui\GameOverlay.cpp">
       <Filter>Source\Gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\Items\BlockItem.cpp">
-      <Filter>Source\Items</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Game\ItemDrop.cpp">
       <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Items\BlockItem.cpp">
+      <Filter>Source\Items\Placeable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Items\Placeable\BlockEntityItem.cpp">
+      <Filter>Source\Items\Placeable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +195,9 @@
     </Filter>
     <Filter Include="Source\Animation">
       <UniqueIdentifier>{30ad5ef0-d9bb-4e01-b029-5debc3059e46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Items\Placeable">
+      <UniqueIdentifier>{3c316f0b-f928-40a7-b202-9482ba4935f4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -330,20 +336,23 @@
     <ClInclude Include="..\..\source\items\ItemData.h">
       <Filter>Source\Items</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\Items\Items.h">
-      <Filter>Source\Items</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Game\ItemContainer.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\gui\GameOverlay.h">
       <Filter>Source\Gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\Items\BlockItem.h">
-      <Filter>Source\Items</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Game\ItemDrop.h">
       <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Items\Include.h">
+      <Filter>Source\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Items\BlockItem.h">
+      <Filter>Source\Items\Placeable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Items\Placeable\BlockEntityItem.h">
+      <Filter>Source\Items\Placeable</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

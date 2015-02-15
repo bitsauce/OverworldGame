@@ -119,6 +119,7 @@
     <ClCompile Include="..\..\source\gui\UiObject.cpp" />
     <ClCompile Include="..\..\source\Items\BlockItem.cpp" />
     <ClCompile Include="..\..\source\items\ItemData.cpp" />
+    <ClCompile Include="..\..\Source\Items\Placeable\BlockEntityItem.cpp" />
     <ClCompile Include="..\..\source\Items\Tools\Pickaxe.cpp" />
     <ClCompile Include="..\..\source\Lighting\LightSource.cpp" />
     <ClCompile Include="..\..\source\Lighting\Lighting.cpp" />
@@ -170,8 +171,9 @@
     <ClInclude Include="..\..\source\gui\LineEdit.h" />
     <ClInclude Include="..\..\source\gui\UiObject.h" />
     <ClInclude Include="..\..\source\Items\BlockItem.h" />
-    <ClInclude Include="..\..\source\Items\Items.h" />
+    <ClInclude Include="..\..\source\Items\Include.h" />
     <ClInclude Include="..\..\source\items\ItemData.h" />
+    <ClInclude Include="..\..\Source\Items\Placeable\BlockEntityItem.h" />
     <ClInclude Include="..\..\source\Items\Tools\Pickaxe.h" />
     <ClInclude Include="..\..\source\Lighting\LightSource.h" />
     <ClInclude Include="..\..\source\Lighting\Lighting.h" />

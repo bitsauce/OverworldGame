@@ -14,7 +14,7 @@ public:
 	void draw(SpriteBatch *spriteBatch);
 
 private:
-	Sprite *m_sprite;
+	Sprite m_sprite;
 	float m_growTimer;
 
 	static void Factory(const int x, const int y) { new RedCurrantBush(x, y); }

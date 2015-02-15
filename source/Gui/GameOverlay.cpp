@@ -1,7 +1,7 @@
 #include "GameOverlay.h"
 #include "Game/ItemContainer.h"
 #include "Game/Player.h"
-#include "Items/Items.h"
+#include "Game.h"
 
 GameOverlay::GameOverlay(Player *player, UiObject *parent) :
 	UiObject(parent),

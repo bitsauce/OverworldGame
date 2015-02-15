@@ -24,7 +24,7 @@ void Pickaxe::use(Player *player)
 
 	// Is there a block at this position?
 	Terrain *terrain = player->getTerrain();
-	if(terrain->isBlockAt(position.x, position.y, TERRAIN_LAYER_MIDDLE))
+	if(terrain->getBlockAt(position.x, position.y, TERRAIN_LAYER_MIDDLE) > BLOCK_ENTITY)
 	{
 		// Reset timer if block position have changed
 		if(position != m_prevBlockPosition)

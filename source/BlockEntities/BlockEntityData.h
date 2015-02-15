@@ -15,9 +15,12 @@ class BlockEntityData
 	};
 
 public:
-	BlockEntityData(const int width, const int height, const PlacementRule rule, function<void(int, int)> factory);
+	BlockEntityData(const int width, const int height, const PlacementRule rule, const string &texture, const TextureRegion &textureRegion, function<void(int, int)> factory);
 
+	bool canPlace(const int x, const int y);
 	bool tryPlace(const int x, const int y);
+
+	Sprite getSprite() { return m_sprite; }
 
 	static void init(Terrain *terrain);
 	static BlockEntityData &get(const BlockEntityID id);
@@ -26,6 +29,7 @@ private:
 	const int m_width, m_height;
 	const int m_placementRule;
 	const function<void(int, int)> m_factory;
+	Sprite m_sprite;
 
 	static Terrain *s_terrain;
 	static vector<BlockEntityData*> s_blockEntityData;
