@@ -354,5 +354,11 @@
     <ClInclude Include="..\..\Source\Items\Placeable\BlockEntityItem.h">
       <Filter>Source\Items\Placeable</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\BlockEntities\Include.h">
+      <Filter>Source\BlockEntities</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

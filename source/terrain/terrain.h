@@ -11,7 +11,7 @@
 enum TerrainLayer;
 enum BlockID;
 
-class Terrain : public GameObject, public xd::WindowListener
+class Terrain : public WindowListener
 {
 public:
 	Terrain();
@@ -29,25 +29,38 @@ public:
 	
 	// BLOCK ENTITIES
 	bool setBlockEntityAt(const int x, const int y, BlockEntityID blockEntity);
-	
-	// UPDATING
-	void update();
-	
-	// DRAWING
-	void draw(SpriteBatch *spriteBatch);
 
-	// WINDOW
-	void resizeEvent(uint width, uint height);
-
+	// CHUNK LOADER
 	ChunkLoader *getChunkLoader() { return &m_chunkLoader; }
 
 private:
-
-	// CHUNKS
+	// CHUNK LOADER
 	ChunkLoader m_chunkLoader;
 	
 	// GENERATOR
 	TerrainGen generator;
+	
+	// TERRAIN DRAWER
+	class Drawer : public GameObject
+	{
+	public:
+		// CONSTRUCTOR
+		Drawer(Terrain *terrain, const DrawOrder drawOrder, const TerrainLayer layer);
+
+		// DRAWING
+		void draw(SpriteBatch *spriteBatch);
+
+	private:
+		// CHUNK LOADER
+		ChunkLoader *m_chunkLoader;
+
+		// LAYER
+		TerrainLayer m_layer;
+	};
+
+	Drawer m_background;
+	Drawer m_middleground;
+	Drawer m_foreground;
 };
 
 #endif // TERRAIN_H

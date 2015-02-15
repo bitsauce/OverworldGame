@@ -18,7 +18,7 @@ void GameScene::showEvent()
 	Player *player = new Player();
 	player->getBody()->setPosition(0, 0);
 	player->getItemContainer().addItem(ITEM_PICKAXE_IRON);
-	player->getItemContainer().addItem(ITEM_TORCH);
+	player->getItemContainer().addItem(ITEM_TORCH, 255);
 
 	m_inventory = new GameOverlay(player, canvas);
 }

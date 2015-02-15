@@ -18,8 +18,7 @@
 
 #include "Physics/PhysicsBody.h"
 
-#include "BlockEntities/BlockEntityData.h"
-#include "BlockEntities/BlockEntity.h"
+#include "BlockEntities/Include.h"
 
 #include "Game/Camera.h"
 #include "Game/Debug.h"

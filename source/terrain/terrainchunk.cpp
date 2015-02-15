@@ -63,7 +63,7 @@ TerrainChunk::BlockQuad::BlockQuad(BlockID block, const float x0, const float y0
 TerrainChunk::TerrainChunk()
 {
 	// A dummy
-	m_dirty = m_modified = false; // not modified
+	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] = m_modified = false; // not modified
 	m_shadowMap = Texture2DPtr(new Texture2D(Pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS)));
 
 	// Initialize blocks
@@ -123,13 +123,13 @@ void TerrainChunk::load(int chunkX, int chunkY)
 	m_shadowMap->updatePixmap(pixmap);
 		
 	// Mark as dirty
-	m_dirty = true;
+	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] = true;
 
 	// Mark chunk as initialized
 	LOG("Chunk [%i, %i] generated", m_x, m_y);
 }
 
-void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
+void TerrainChunk::generateVertexBuffer(ChunkLoader *chunkLoader, TerrainLayer z)
 {
 	// Get adjacent chunks
 	m_adjacentChunks[0] = &chunkLoader->getChunkAt(m_x-1, m_y-1);
@@ -141,295 +141,293 @@ void TerrainChunk::generateVertexBuffers(ChunkLoader *chunkLoader)
 	m_adjacentChunks[6] = &chunkLoader->getChunkAt(m_x-1, m_y+1);
 	m_adjacentChunks[7] = &chunkLoader->getChunkAt(m_x-1, m_y  );
 
-	// Allocate vertices
-	uint vertexCount = 0, indexCount = 0;
-
 	// Load all vertex data
 	BlockID block;
 	BlockID adjacentBlocks[8];
+
+	// Setup counters
+	uint vertexCount = 0, indexCount = 0;
+
 	for(int y = 0; y < CHUNK_BLOCKS; ++y)
 	{
 		for(int x = 0; x < CHUNK_BLOCKS; ++x)
 		{
-			for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+			block = m_blocks[BLOCK_INDEX(x , y, z)];
+
+			if(x == 0)
 			{
-				block = m_blocks[BLOCK_INDEX(x , y, z)];
-
-				if(x == 0)
-				{
-					if(y == 0) adjacentBlocks[0] = m_adjacentChunks[0]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, CHUNK_BLOCKS-1, z)];
-					else       adjacentBlocks[0] = m_adjacentChunks[7]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, y-1, z)];
-				}
-				else if(y == 0)
-				{
-					adjacentBlocks[0] = m_adjacentChunks[1]->m_blocks[BLOCK_INDEX(x-1, CHUNK_BLOCKS-1, z)];
-				}
-				else
-				{
-					adjacentBlocks[0] = m_blocks[BLOCK_INDEX(x-1, y-1, z)];
-				}
+				if(y == 0) adjacentBlocks[0] = m_adjacentChunks[0]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, CHUNK_BLOCKS-1, z)];
+				else       adjacentBlocks[0] = m_adjacentChunks[7]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, y-1, z)];
+			}
+			else if(y == 0)
+			{
+				adjacentBlocks[0] = m_adjacentChunks[1]->m_blocks[BLOCK_INDEX(x-1, CHUNK_BLOCKS-1, z)];
+			}
+			else
+			{
+				adjacentBlocks[0] = m_blocks[BLOCK_INDEX(x-1, y-1, z)];
+			}
 				
-				adjacentBlocks[1] = (y != 0) ? m_blocks[BLOCK_INDEX(x, y-1, z)] : m_adjacentChunks[1]->m_blocks[BLOCK_INDEX(x, CHUNK_BLOCKS-1, z)];
+			adjacentBlocks[1] = (y != 0) ? m_blocks[BLOCK_INDEX(x, y-1, z)] : m_adjacentChunks[1]->m_blocks[BLOCK_INDEX(x, CHUNK_BLOCKS-1, z)];
 
-				if(x == CHUNK_BLOCKS-1)
-				{
-					if(y == 0) adjacentBlocks[2] = m_adjacentChunks[2]->m_blocks[BLOCK_INDEX(0, CHUNK_BLOCKS-1, z)];
-					else       adjacentBlocks[2] = m_adjacentChunks[3]->m_blocks[BLOCK_INDEX(0, y-1, z)];
-				}
-				else if(y == 0)
-				{
-					adjacentBlocks[2] = m_adjacentChunks[1]->m_blocks[BLOCK_INDEX(x+1, CHUNK_BLOCKS-1, z)];
-				}
-				else
-				{
-					adjacentBlocks[2] = m_blocks[BLOCK_INDEX(x+1, y-1, z)];
-				}
+			if(x == CHUNK_BLOCKS-1)
+			{
+				if(y == 0) adjacentBlocks[2] = m_adjacentChunks[2]->m_blocks[BLOCK_INDEX(0, CHUNK_BLOCKS-1, z)];
+				else       adjacentBlocks[2] = m_adjacentChunks[3]->m_blocks[BLOCK_INDEX(0, y-1, z)];
+			}
+			else if(y == 0)
+			{
+				adjacentBlocks[2] = m_adjacentChunks[1]->m_blocks[BLOCK_INDEX(x+1, CHUNK_BLOCKS-1, z)];
+			}
+			else
+			{
+				adjacentBlocks[2] = m_blocks[BLOCK_INDEX(x+1, y-1, z)];
+			}
 
-				adjacentBlocks[3] = (x != CHUNK_BLOCKS-1) ? m_blocks[BLOCK_INDEX(x+1, y, z)] : m_adjacentChunks[3]->m_blocks[BLOCK_INDEX(0, y, z)];
+			adjacentBlocks[3] = (x != CHUNK_BLOCKS-1) ? m_blocks[BLOCK_INDEX(x+1, y, z)] : m_adjacentChunks[3]->m_blocks[BLOCK_INDEX(0, y, z)];
 				
-				if(x == CHUNK_BLOCKS-1)
-				{
-					if(y == CHUNK_BLOCKS-1) adjacentBlocks[4] = m_adjacentChunks[4]->m_blocks[BLOCK_INDEX(0, 0, z)];
-					else                    adjacentBlocks[4] = m_adjacentChunks[3]->m_blocks[BLOCK_INDEX(0, y+1, z)];
-				}
-				else if(y == CHUNK_BLOCKS-1)
-				{
-					adjacentBlocks[4] = m_adjacentChunks[5]->m_blocks[BLOCK_INDEX(x+1, 0, z)];
-				}
-				else
-				{
-					adjacentBlocks[4] = m_blocks[BLOCK_INDEX(x+1, y+1, z)];
-				}
+			if(x == CHUNK_BLOCKS-1)
+			{
+				if(y == CHUNK_BLOCKS-1) adjacentBlocks[4] = m_adjacentChunks[4]->m_blocks[BLOCK_INDEX(0, 0, z)];
+				else                    adjacentBlocks[4] = m_adjacentChunks[3]->m_blocks[BLOCK_INDEX(0, y+1, z)];
+			}
+			else if(y == CHUNK_BLOCKS-1)
+			{
+				adjacentBlocks[4] = m_adjacentChunks[5]->m_blocks[BLOCK_INDEX(x+1, 0, z)];
+			}
+			else
+			{
+				adjacentBlocks[4] = m_blocks[BLOCK_INDEX(x+1, y+1, z)];
+			}
 
-				adjacentBlocks[5] = (y != CHUNK_BLOCKS-1) ? m_blocks[BLOCK_INDEX(x, y+1, z)] : m_adjacentChunks[5]->m_blocks[BLOCK_INDEX(x, 0, z)];
+			adjacentBlocks[5] = (y != CHUNK_BLOCKS-1) ? m_blocks[BLOCK_INDEX(x, y+1, z)] : m_adjacentChunks[5]->m_blocks[BLOCK_INDEX(x, 0, z)];
 				
-				if(x == 0)
-				{
-					if(y == CHUNK_BLOCKS-1) adjacentBlocks[6] = m_adjacentChunks[6]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, 0, z)];
-					else                    adjacentBlocks[6] = m_adjacentChunks[7]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, y+1, z)];
-				}
-				else if(y == CHUNK_BLOCKS-1)
-				{
-					adjacentBlocks[6] = m_adjacentChunks[5]->m_blocks[BLOCK_INDEX(x-1, 0, z)];
-				}
-				else
-				{
-					adjacentBlocks[6] = m_blocks[BLOCK_INDEX(x-1, y+1, z)];
-				}
+			if(x == 0)
+			{
+				if(y == CHUNK_BLOCKS-1) adjacentBlocks[6] = m_adjacentChunks[6]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, 0, z)];
+				else                    adjacentBlocks[6] = m_adjacentChunks[7]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, y+1, z)];
+			}
+			else if(y == CHUNK_BLOCKS-1)
+			{
+				adjacentBlocks[6] = m_adjacentChunks[5]->m_blocks[BLOCK_INDEX(x-1, 0, z)];
+			}
+			else
+			{
+				adjacentBlocks[6] = m_blocks[BLOCK_INDEX(x-1, y+1, z)];
+			}
 
-				adjacentBlocks[7] = (x != 0) ? m_blocks[BLOCK_INDEX(x-1, y, z)] : m_adjacentChunks[7]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, y, z)];
+			adjacentBlocks[7] = (x != 0) ? m_blocks[BLOCK_INDEX(x-1, y, z)] : m_adjacentChunks[7]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS-1, y, z)];
 
-				if(block > BLOCK_ENTITY)
+			if(block > BLOCK_ENTITY)
+			{
+				m_tmpQuads.push_back(BlockQuad(block, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V1, BLOCK_U5, BLOCK_V5));
+				push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
+			}
+	
+			// Bottom-right outer-corner
+			if(adjacentBlocks[0] > BLOCK_ENTITY)
+			{
+				if(adjacentBlocks[0] != block && adjacentBlocks[0] != adjacentBlocks[1] && adjacentBlocks[0] != adjacentBlocks[7])
 				{
-					m_tmpQuads.push_back(BlockQuad(block, BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V1, BLOCK_U5, BLOCK_V5));
+					m_tmpQuads.push_back(BlockQuad(adjacentBlocks[0], BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y1, BLOCK_U5, BLOCK_V0, BLOCK_U6, BLOCK_V1));
 					push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
 				}
-	
-				// Bottom-right outer-corner
-				if(adjacentBlocks[0] > BLOCK_ENTITY)
-				{
-					if(adjacentBlocks[0] != block && adjacentBlocks[0] != adjacentBlocks[1] && adjacentBlocks[0] != adjacentBlocks[7])
-					{
-						m_tmpQuads.push_back(BlockQuad(adjacentBlocks[0], BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y1, BLOCK_U5, BLOCK_V0, BLOCK_U6, BLOCK_V1));
-						push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
-					}
-				}
+			}
 
-				// Draw bottom edge
-				if(adjacentBlocks[1] > BLOCK_ENTITY)
+			// Draw bottom edge
+			if(adjacentBlocks[1] > BLOCK_ENTITY)
+			{
+				if(adjacentBlocks[1] != block)
 				{
-					if(adjacentBlocks[1] != block)
+					if(adjacentBlocks[1] == adjacentBlocks[3])
 					{
-						if(adjacentBlocks[1] == adjacentBlocks[3])
+						if(adjacentBlocks[1] == adjacentBlocks[7])
 						{
-							if(adjacentBlocks[1] == adjacentBlocks[7])
-							{
-								m_tmpQuads.push_back(BlockQuad(adjacentBlocks[1], BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U2, BLOCK_V7, BLOCK_U4, BLOCK_V8));
-								push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
-								m_tmpQuads.push_back(BlockQuad(adjacentBlocks[1], BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y2, BLOCK_U0, BLOCK_V7, BLOCK_U2, BLOCK_V8));
-								push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
-							}
-							else
-							{
-								m_tmpQuads.push_back(BlockQuad(adjacentBlocks[1], BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U3, BLOCK_V1));
-								push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
-								m_tmpQuads.push_back(BlockQuad(adjacentBlocks[1], BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U2, BLOCK_V7, BLOCK_U4, BLOCK_V8));
-								push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
-							}
-						}
-						else if(adjacentBlocks[1] == adjacentBlocks[7])
-						{
-							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[1], BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U3, BLOCK_V0, BLOCK_U5, BLOCK_V1));
+							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[1], BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U2, BLOCK_V7, BLOCK_U4, BLOCK_V8));
 							push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
 							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[1], BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y2, BLOCK_U0, BLOCK_V7, BLOCK_U2, BLOCK_V8));
 							push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
 						}
 						else
 						{
-							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[1], BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U5, BLOCK_V1));
+							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[1], BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U3, BLOCK_V1));
+							push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
+							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[1], BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U2, BLOCK_V7, BLOCK_U4, BLOCK_V8));
 							push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
 						}
 					}
-				}
-
-				// Bottom-left outer-corner
-				if(adjacentBlocks[2] > BLOCK_ENTITY)
-				{
-					if(adjacentBlocks[2] != block && adjacentBlocks[2] != adjacentBlocks[1] && adjacentBlocks[2] != adjacentBlocks[3])
+					else if(adjacentBlocks[1] == adjacentBlocks[7])
 					{
-						m_tmpQuads.push_back(BlockQuad(adjacentBlocks[2], BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U0, BLOCK_V0, BLOCK_U1, BLOCK_V1));
+						m_tmpQuads.push_back(BlockQuad(adjacentBlocks[1], BLOCK_X2, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U3, BLOCK_V0, BLOCK_U5, BLOCK_V1));
+						push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
+						m_tmpQuads.push_back(BlockQuad(adjacentBlocks[1], BLOCK_X0, BLOCK_Y0, BLOCK_X2, BLOCK_Y2, BLOCK_U0, BLOCK_V7, BLOCK_U2, BLOCK_V8));
+						push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
+					}
+					else
+					{
+						m_tmpQuads.push_back(BlockQuad(adjacentBlocks[1], BLOCK_X0, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U1, BLOCK_V0, BLOCK_U5, BLOCK_V1));
 						push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
 					}
 				}
+			}
 
-				// Draw left edge
-				if(adjacentBlocks[3] > BLOCK_ENTITY)
+			// Bottom-left outer-corner
+			if(adjacentBlocks[2] > BLOCK_ENTITY)
+			{
+				if(adjacentBlocks[2] != block && adjacentBlocks[2] != adjacentBlocks[1] && adjacentBlocks[2] != adjacentBlocks[3])
 				{
-					if(adjacentBlocks[3] != block)
+					m_tmpQuads.push_back(BlockQuad(adjacentBlocks[2], BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y1, BLOCK_U0, BLOCK_V0, BLOCK_U1, BLOCK_V1));
+					push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
+				}
+			}
+
+			// Draw left edge
+			if(adjacentBlocks[3] > BLOCK_ENTITY)
+			{
+				if(adjacentBlocks[3] != block)
+				{
+					if(adjacentBlocks[3] == adjacentBlocks[1])
 					{
-						if(adjacentBlocks[3] == adjacentBlocks[1])
+						if(adjacentBlocks[3] != adjacentBlocks[5])
 						{
-							if(adjacentBlocks[3] != adjacentBlocks[5])
-							{
-								m_tmpQuads.push_back(BlockQuad(adjacentBlocks[3], BLOCK_X3, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V3));
-								push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
-							}
-						}
-						else if(adjacentBlocks[3] == adjacentBlocks[5])
-						{
-							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[3], BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U0, BLOCK_V3, BLOCK_U1, BLOCK_V5));
-							push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
-						}
-						else
-						{
-							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[3], BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V5));
+							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[3], BLOCK_X3, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V3));
 							push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
 						}
 					}
-				}
-
-				// Top-left outer-corner
-				if(adjacentBlocks[4] > BLOCK_ENTITY)
-				{
-					if(adjacentBlocks[4] != block && adjacentBlocks[4] != adjacentBlocks[3] && adjacentBlocks[4] != adjacentBlocks[5])
+					else if(adjacentBlocks[3] == adjacentBlocks[5])
 					{
-						m_tmpQuads.push_back(BlockQuad(adjacentBlocks[4], BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V5, BLOCK_U1, BLOCK_V6));
+						m_tmpQuads.push_back(BlockQuad(adjacentBlocks[3], BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y2, BLOCK_U0, BLOCK_V3, BLOCK_U1, BLOCK_V5));
+						push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
+					}
+					else
+					{
+						m_tmpQuads.push_back(BlockQuad(adjacentBlocks[3], BLOCK_X3, BLOCK_Y0, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V1, BLOCK_U1, BLOCK_V5));
 						push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
 					}
 				}
+			}
 
-				// Draw top edge
-				if(adjacentBlocks[5] > BLOCK_ENTITY)
+			// Top-left outer-corner
+			if(adjacentBlocks[4] > BLOCK_ENTITY)
+			{
+				if(adjacentBlocks[4] != block && adjacentBlocks[4] != adjacentBlocks[3] && adjacentBlocks[4] != adjacentBlocks[5])
 				{
-					if(adjacentBlocks[5] != block)
+					m_tmpQuads.push_back(BlockQuad(adjacentBlocks[4], BLOCK_X3, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U0, BLOCK_V5, BLOCK_U1, BLOCK_V6));
+					push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
+				}
+			}
+
+			// Draw top edge
+			if(adjacentBlocks[5] > BLOCK_ENTITY)
+			{
+				if(adjacentBlocks[5] != block)
+				{
+					if(adjacentBlocks[5] == adjacentBlocks[3])
 					{
-						if(adjacentBlocks[5] == adjacentBlocks[3])
+						if(adjacentBlocks[5] == adjacentBlocks[7])
 						{
-							if(adjacentBlocks[5] == adjacentBlocks[7])
-							{
-								m_tmpQuads.push_back(BlockQuad(adjacentBlocks[5], BLOCK_X2, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V6, BLOCK_U4, BLOCK_V7));
-								push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
-								m_tmpQuads.push_back(BlockQuad(adjacentBlocks[5], BLOCK_X0, BLOCK_Y2, BLOCK_X2, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U2, BLOCK_V7));
-								push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
-							}
-							else
-							{
-								m_tmpQuads.push_back(BlockQuad(adjacentBlocks[5], BLOCK_X0, BLOCK_Y3, BLOCK_X2, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U3, BLOCK_V6));
-								push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
-								m_tmpQuads.push_back(BlockQuad(adjacentBlocks[5], BLOCK_X2, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V6, BLOCK_U4, BLOCK_V7));
-								push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
-							}
-						}
-						else if(adjacentBlocks[5] == adjacentBlocks[7])
-						{
-							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[5], BLOCK_X2, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U3, BLOCK_V5, BLOCK_U5, BLOCK_V6));
+							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[5], BLOCK_X2, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V6, BLOCK_U4, BLOCK_V7));
 							push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
 							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[5], BLOCK_X0, BLOCK_Y2, BLOCK_X2, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U2, BLOCK_V7));
 							push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
 						}
 						else
 						{
-							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[5], BLOCK_X0, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U5, BLOCK_V6));
+							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[5], BLOCK_X0, BLOCK_Y3, BLOCK_X2, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U3, BLOCK_V6));
+							push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
+							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[5], BLOCK_X2, BLOCK_Y2, BLOCK_X4, BLOCK_Y4, BLOCK_U2, BLOCK_V6, BLOCK_U4, BLOCK_V7));
 							push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
 						}
 					}
-				}
-	
-				// Top-right outer-corner
-				if(adjacentBlocks[6] > BLOCK_ENTITY)
-				{
-					if(adjacentBlocks[6] != block && adjacentBlocks[6] != adjacentBlocks[7] && adjacentBlocks[6] != adjacentBlocks[5])
+					else if(adjacentBlocks[5] == adjacentBlocks[7])
 					{
-						m_tmpQuads.push_back(BlockQuad(adjacentBlocks[6], BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V5, BLOCK_U6, BLOCK_V6));
+						m_tmpQuads.push_back(BlockQuad(adjacentBlocks[5], BLOCK_X2, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U3, BLOCK_V5, BLOCK_U5, BLOCK_V6));
+						push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
+						m_tmpQuads.push_back(BlockQuad(adjacentBlocks[5], BLOCK_X0, BLOCK_Y2, BLOCK_X2, BLOCK_Y4, BLOCK_U0, BLOCK_V6, BLOCK_U2, BLOCK_V7));
+						push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
+					}
+					else
+					{
+						m_tmpQuads.push_back(BlockQuad(adjacentBlocks[5], BLOCK_X0, BLOCK_Y3, BLOCK_X4, BLOCK_Y4, BLOCK_U1, BLOCK_V5, BLOCK_U5, BLOCK_V6));
 						push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
 					}
 				}
-
-				// Draw right edge
-				if(adjacentBlocks[7] > BLOCK_ENTITY)
+			}
+	
+			// Top-right outer-corner
+			if(adjacentBlocks[6] > BLOCK_ENTITY)
+			{
+				if(adjacentBlocks[6] != block && adjacentBlocks[6] != adjacentBlocks[7] && adjacentBlocks[6] != adjacentBlocks[5])
 				{
-					if(adjacentBlocks[7] != block)
+					m_tmpQuads.push_back(BlockQuad(adjacentBlocks[6], BLOCK_X0, BLOCK_Y3, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V5, BLOCK_U6, BLOCK_V6));
+					push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
+				}
+			}
+
+			// Draw right edge
+			if(adjacentBlocks[7] > BLOCK_ENTITY)
+			{
+				if(adjacentBlocks[7] != block)
+				{
+					if(adjacentBlocks[7] == adjacentBlocks[1])
 					{
-						if(adjacentBlocks[7] == adjacentBlocks[1])
+						if(adjacentBlocks[7] != adjacentBlocks[5])
 						{
-							if(adjacentBlocks[7] != adjacentBlocks[5])
-							{
-								m_tmpQuads.push_back(BlockQuad(adjacentBlocks[7], BLOCK_X0, BLOCK_Y2, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V1, BLOCK_U6, BLOCK_V3));
-								push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
-							}
-						}
-						else if(adjacentBlocks[7] == adjacentBlocks[5])
-						{
-							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[7], BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y2, BLOCK_U5, BLOCK_V3, BLOCK_U6, BLOCK_V5));
-							push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
-						}
-						else
-						{
-							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[7], BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V1, BLOCK_U6, BLOCK_V5));
+							m_tmpQuads.push_back(BlockQuad(adjacentBlocks[7], BLOCK_X0, BLOCK_Y2, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V1, BLOCK_U6, BLOCK_V3));
 							push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
 						}
 					}
+					else if(adjacentBlocks[7] == adjacentBlocks[5])
+					{
+						m_tmpQuads.push_back(BlockQuad(adjacentBlocks[7], BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y2, BLOCK_U5, BLOCK_V3, BLOCK_U6, BLOCK_V5));
+						push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
+					}
+					else
+					{
+						m_tmpQuads.push_back(BlockQuad(adjacentBlocks[7], BLOCK_X0, BLOCK_Y0, BLOCK_X1, BLOCK_Y4, BLOCK_U5, BLOCK_V1, BLOCK_U6, BLOCK_V5));
+						push_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
+					}
 				}
-
-				while(!m_tmpQuads.empty())
-				{
-					BlockQuad &quad = m_tmpQuads[0];
-
-					s_vertices[0 + vertexCount].set4f(VERTEX_POSITION, x + quad.x0, y + quad.y0);
-					s_vertices[1 + vertexCount].set4f(VERTEX_POSITION, x + quad.x1, y + quad.y0);
-					s_vertices[2 + vertexCount].set4f(VERTEX_POSITION, x + quad.x1, y + quad.y1);
-					s_vertices[3 + vertexCount].set4f(VERTEX_POSITION, x + quad.x0, y + quad.y1);
-					TextureRegion region = BlockData::getBlockAtlas()->get(quad.block, quad.u0, quad.v0, quad.u1, quad.v1);
-					s_vertices[0 + vertexCount].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
-					s_vertices[1 + vertexCount].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv1.y);
-					s_vertices[2 + vertexCount].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
-					s_vertices[3 + vertexCount].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
-		
-					s_indices[0 + indexCount] = QUAD_INDICES[0] + vertexCount;
-					s_indices[1 + indexCount] = QUAD_INDICES[1] + vertexCount;
-					s_indices[2 + indexCount] = QUAD_INDICES[2] + vertexCount;
-					s_indices[3 + indexCount] = QUAD_INDICES[3] + vertexCount;
-					s_indices[4 + indexCount] = QUAD_INDICES[4] + vertexCount;
-					s_indices[5 + indexCount] = QUAD_INDICES[5] + vertexCount;
-
-					vertexCount += 4;
-					indexCount += 6;
-					
-					pop_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
-					m_tmpQuads.pop_back();  
-				}
-
-				m_tmpQuads.clear();
 			}
+
+			while(!m_tmpQuads.empty())
+			{
+				BlockQuad &quad = m_tmpQuads[0];
+
+				s_vertices[0 + vertexCount].set4f(VERTEX_POSITION, x + quad.x0, y + quad.y0);
+				s_vertices[1 + vertexCount].set4f(VERTEX_POSITION, x + quad.x1, y + quad.y0);
+				s_vertices[2 + vertexCount].set4f(VERTEX_POSITION, x + quad.x1, y + quad.y1);
+				s_vertices[3 + vertexCount].set4f(VERTEX_POSITION, x + quad.x0, y + quad.y1);
+				TextureRegion region = BlockData::getBlockAtlas()->get(quad.block, quad.u0, quad.v0, quad.u1, quad.v1);
+				s_vertices[0 + vertexCount].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
+				s_vertices[1 + vertexCount].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv1.y);
+				s_vertices[2 + vertexCount].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
+				s_vertices[3 + vertexCount].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
+		
+				s_indices[0 + indexCount] = QUAD_INDICES[0] + vertexCount;
+				s_indices[1 + indexCount] = QUAD_INDICES[1] + vertexCount;
+				s_indices[2 + indexCount] = QUAD_INDICES[2] + vertexCount;
+				s_indices[3 + indexCount] = QUAD_INDICES[3] + vertexCount;
+				s_indices[4 + indexCount] = QUAD_INDICES[4] + vertexCount;
+				s_indices[5 + indexCount] = QUAD_INDICES[5] + vertexCount;
+
+				vertexCount += 4;
+				indexCount += 6;
+					
+				pop_heap(m_tmpQuads.begin(), m_tmpQuads.end(), greater<BlockQuad>());
+				m_tmpQuads.pop_back();  
+			}
+
+			m_tmpQuads.clear();
 		}
 	}
-	
-	// Create static vbo
-	m_vbo.setData(s_vertices, vertexCount);
-	m_ibo.setData(s_indices, indexCount);
+		
+	// Set static vertex buffer data
+	m_vertexBuffers[z].setData(s_vertices, vertexCount);
+	m_indexBuffers[z].setData(s_indices, indexCount);
 
 	// Not dirty
-	m_dirty = false;
+	m_dirty[z] = false;
 }
 
 // SERIALIZATION
@@ -507,15 +505,15 @@ bool TerrainChunk::setBlockAt(const int x, const int y, const BlockID block, Ter
 	{
 		// Set the block value
 		m_blocks[BLOCK_INDEX(x, y, layer)] = block;
-		m_dirty = m_modified = true; // mark chunk as modified
-		if(m_adjacentChunks[0] && x == 0 && y == 0)								m_adjacentChunks[0]->m_dirty = true;
-		if(m_adjacentChunks[1] && y == 0)										m_adjacentChunks[1]->m_dirty = true;
-		if(m_adjacentChunks[2] && x == CHUNK_BLOCKS-1 && y == 0)				m_adjacentChunks[2]->m_dirty = true;
-		if(m_adjacentChunks[3] && x == CHUNK_BLOCKS-1)							m_adjacentChunks[3]->m_dirty = true;
-		if(m_adjacentChunks[4] && x == CHUNK_BLOCKS-1 && y == CHUNK_BLOCKS-1)	m_adjacentChunks[4]->m_dirty = true;
-		if(m_adjacentChunks[5] && y == CHUNK_BLOCKS-1)							m_adjacentChunks[5]->m_dirty = true;
-		if(m_adjacentChunks[6] && x == 0 && y == CHUNK_BLOCKS-1)				m_adjacentChunks[6]->m_dirty = true;
-		if(m_adjacentChunks[7] && x == 0)										m_adjacentChunks[7]->m_dirty = true;
+		m_dirty[layer] = m_modified = true; // mark chunk as modified
+		if(m_adjacentChunks[0] && x == 0 && y == 0)								m_adjacentChunks[0]->m_dirty[layer] = true;
+		if(m_adjacentChunks[1] && y == 0)										m_adjacentChunks[1]->m_dirty[layer] = true;
+		if(m_adjacentChunks[2] && x == CHUNK_BLOCKS-1 && y == 0)				m_adjacentChunks[2]->m_dirty[layer] = true;
+		if(m_adjacentChunks[3] && x == CHUNK_BLOCKS-1)							m_adjacentChunks[3]->m_dirty[layer] = true;
+		if(m_adjacentChunks[4] && x == CHUNK_BLOCKS-1 && y == CHUNK_BLOCKS-1)	m_adjacentChunks[4]->m_dirty[layer] = true;
+		if(m_adjacentChunks[5] && y == CHUNK_BLOCKS-1)							m_adjacentChunks[5]->m_dirty[layer] = true;
+		if(m_adjacentChunks[6] && x == 0 && y == CHUNK_BLOCKS-1)				m_adjacentChunks[6]->m_dirty[layer] = true;
+		if(m_adjacentChunks[7] && x == 0)										m_adjacentChunks[7]->m_dirty[layer] = true;
 		
 		// Update shadow map
 		float shadow = 1.0f;
@@ -533,8 +531,8 @@ bool TerrainChunk::setBlockAt(const int x, const int y, const BlockID block, Ter
 }
 
 // DRAWING
-void TerrainChunk::draw(GraphicsContext &gfxContext)
+void TerrainChunk::draw(GraphicsContext &gfxContext, const TerrainLayer layer)
 {
 	// Draw vertex buffers
-	gfxContext.drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, &m_vbo, &m_ibo);
+	gfxContext.drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, &m_vertexBuffers[layer], &m_indexBuffers[layer]);
 }

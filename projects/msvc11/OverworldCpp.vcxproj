@@ -148,6 +148,7 @@
     <ClInclude Include="..\..\source\animation\Slot.h" />
     <ClInclude Include="..\..\source\BlockEntities\BlockEntity.h" />
     <ClInclude Include="..\..\source\BlockEntities\BlockEntityData.h" />
+    <ClInclude Include="..\..\Source\BlockEntities\Include.h" />
     <ClInclude Include="..\..\source\BlockEntities\RedCurrantBush.h" />
     <ClInclude Include="..\..\source\BlockEntities\Torch.h" />
     <ClInclude Include="..\..\source\Blocks\BlockData.h" />
@@ -193,6 +194,9 @@
     <ClInclude Include="..\..\source\terrain\generator\TerrainGen.h" />
     <ClInclude Include="..\..\source\terrain\Terrain.h" />
     <ClInclude Include="..\..\source\terrain\TerrainChunk.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

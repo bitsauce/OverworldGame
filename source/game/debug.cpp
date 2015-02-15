@@ -159,7 +159,7 @@ void Debug::draw(SpriteBatch *spriteBatch)
 				{
 					gfxContext.drawRectangle(x * CHUNK_PX, y * CHUNK_PX, CHUNK_PX, CHUNK_PX, Color(255, 0, 0, 127));
 				}
-				else if(m_terrain->getChunkLoader()->getChunkAt(x, y).isDirty())
+				else if(m_terrain->getChunkLoader()->getChunkAt(x, y).isDirty(TERRAIN_LAYER_MIDDLE))
 				{
 					gfxContext.drawRectangle(x * CHUNK_PX, y * CHUNK_PX, CHUNK_PX, CHUNK_PX, Color(0, 0, 255, 127));
 				}

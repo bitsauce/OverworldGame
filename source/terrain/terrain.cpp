@@ -8,8 +8,10 @@
 #include "lighting/spotlight.h"
 
 Terrain::Terrain() :
-	GameObject(DRAW_ORDER_TERRAIN),
-	m_chunkLoader(World::getCamera())
+	m_chunkLoader(World::getCamera()),
+	m_background(this, DRAW_ORDER_TERRAIN_BACKGROUND, TERRAIN_LAYER_BACK),
+	m_middleground(this, DRAW_ORDER_TERRAIN_MIDDLEGROUND, TERRAIN_LAYER_MIDDLE),
+	m_foreground(this, DRAW_ORDER_TERRAIN_FOREGROUND, TERRAIN_LAYER_FRONT)
 {
 	LOG("Initializing terrain");
 
@@ -85,46 +87,46 @@ bool Terrain::setBlockEntityAt(const int x, const int y, BlockEntityID blockEnti
 	return BlockEntityData::get(blockEntity).tryPlace(x, y);
 }
 
-// UPDATING
-void Terrain::update()
+// DRAWING
+Terrain::Drawer::Drawer(Terrain *terrain, const DrawOrder drawOrder, const TerrainLayer layer) :
+	GameObject(drawOrder),
+	m_chunkLoader(terrain->getChunkLoader()),
+	m_layer(layer)
 {
 }
-	
-// DRAWING
-void Terrain::draw(SpriteBatch *spriteBatch)
+
+void Terrain::Drawer::draw(SpriteBatch *spriteBatch)
 {
 	// Flush to set the draw ordering straight
 	spriteBatch->flush();
 
+	// Setup graphics context
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
-
-	ChunkLoader::ChunkArea area = m_chunkLoader.getActiveArea();
 	gfxContext.setTexture(BlockData::getBlockAtlas()->getTexture());
 	gfxContext.setProjectionMatrix(World::getCamera()->getProjectionMatrix());
+
+	// Draw chunk area
+	ChunkLoader::ChunkArea area = m_chunkLoader->getActiveArea();
 	for(int y = area.y0; y <= area.y1; ++y)
 	{
 		for(int x = area.x0; x <= area.x1; ++x)
 		{
-			TerrainChunk &chunk = m_chunkLoader.getChunkAt(x, y);
+			TerrainChunk &chunk = m_chunkLoader->getChunkAt(x, y);
 
-			// Should we generate new vertex buffers
-			if(chunk.isDirty())
-			{
-				chunk.generateVertexBuffers(&m_chunkLoader);
+			// Should we generate new vertex buffers?
+			if(chunk.isDirty(m_layer)) {
+				chunk.generateVertexBuffer(m_chunkLoader, m_layer);
 			}
 
+			// Apply block-space matrix
 			Matrix4 mat;
 			mat.scale(BLOCK_PXF, BLOCK_PXF, 1.0f);
 			mat.translate(x * CHUNK_PXF, y * CHUNK_PXF, 0.0f);
 
+			// Draw chunk
 			gfxContext.pushMatrix(mat);
-			chunk.draw(gfxContext);
+			chunk.draw(gfxContext, m_layer);
 			gfxContext.popMatrix();
 		}
 	}
-}
-
-// WINDOW
-void Terrain::resizeEvent(uint width, uint height)
-{
 }

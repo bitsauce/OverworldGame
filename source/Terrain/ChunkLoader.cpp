@@ -52,7 +52,9 @@ void ChunkLoader::loadActiveArea()
 		{
 			if(chunk = &getChunkAt(x, y))
 			{
-				chunk->generateVertexBuffers(this);
+				chunk->generateVertexBuffer(this, TERRAIN_LAYER_BACK);
+				chunk->generateVertexBuffer(this, TERRAIN_LAYER_MIDDLE);
+				chunk->generateVertexBuffer(this, TERRAIN_LAYER_FRONT);
 			}
 		}
 	}
@@ -184,7 +186,9 @@ void ChunkLoader::update()
 		// Load offscren chunks
 		Vector2i centerChunkPosition = center/CHUNK_PXF;
 		TerrainChunk &chunk = getChunkAt(centerChunkPosition.x + m_circleLoadPattern[m_circleLoadIndex].x, centerChunkPosition.y + m_circleLoadPattern[m_circleLoadIndex].y);
-		if(chunk.isDirty()) chunk.generateVertexBuffers(this);
+		if(chunk.isDirty(TERRAIN_LAYER_BACK)) chunk.generateVertexBuffer(this, TERRAIN_LAYER_BACK);
+		if(chunk.isDirty(TERRAIN_LAYER_MIDDLE)) chunk.generateVertexBuffer(this, TERRAIN_LAYER_MIDDLE);
+		if(chunk.isDirty(TERRAIN_LAYER_FRONT)) chunk.generateVertexBuffer(this, TERRAIN_LAYER_FRONT);
 		m_circleLoadIndex = (m_circleLoadIndex + 1) % m_optimalChunkCount;
 	}
 }

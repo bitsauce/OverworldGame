@@ -2,6 +2,7 @@
 #define TERRAIN_CHUNK_H
 
 #include "Config.h"
+#include "Constants.h"
 
 enum BlockID;
 enum TerrainLayer;
@@ -16,8 +17,8 @@ public:
 	void load(int chunkX, int chunkY);
 	
 	// VBO LOADING
-	void generateVertexBuffers(ChunkLoader *chunkLoader);
-	bool isDirty() const { return m_dirty; }
+	void generateVertexBuffer(ChunkLoader *chunkLoader, const TerrainLayer layer);
+	bool isDirty(const TerrainLayer layer) const { return m_dirty[layer]; }
 
 	// SERIALIZATION
 	void serialize(FileWriter &ss);
@@ -33,7 +34,7 @@ public:
 	bool setBlockAt(const int x, const int y, const BlockID block, TerrainLayer layer);
 	
 	// DRAWING
-	void draw(GraphicsContext &gfxContext);
+	void draw(GraphicsContext &gfxContext, const TerrainLayer layer);
 
 private:
 	TerrainChunk(const TerrainChunk &) {}
@@ -60,14 +61,16 @@ private:
 	static Vertex *s_vertices;
 	static uint *s_indices;
 	
-	// DRAWING
-	StaticVertexBuffer m_vbo;
-	StaticIndexBuffer m_ibo;
+	// VERTEX BUFFERS
+	StaticVertexBuffer m_vertexBuffers[TERRAIN_LAYER_COUNT];
+	StaticIndexBuffer m_indexBuffers[TERRAIN_LAYER_COUNT];
+
+	// LIGHTING
 	Texture2DPtr m_shadowMap;
 	
 	// MISC
 	bool m_modified;
-	bool m_dirty;
+	bool m_dirty[TERRAIN_LAYER_COUNT];
 };
 
 #endif // TERRAIN_CHUNK_H
