@@ -17,7 +17,7 @@ void BlockEntityItem::use(Player *player)
 	if(terrain->setBlockEntityAt(blockPos.x, blockPos.y, m_blockEntityID))
 	{
 		// Remove item from player inventory
-		//player->getItemContainer().removeItem(getID(), 1);
+		player->getItemContainer().removeItem(getID(), 1);
 	}
 }
 

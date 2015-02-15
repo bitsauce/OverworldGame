@@ -79,3 +79,5 @@ $RECYCLE.BIN/
 *.opensdf
 *.suo
 *.vcxproj.user
+*.unsuccessfulbuild
+*.ilk

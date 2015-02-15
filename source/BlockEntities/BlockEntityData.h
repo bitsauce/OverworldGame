@@ -11,11 +11,15 @@ class BlockEntityData
 {
 	enum PlacementRule
 	{
-		NEED_FLOOR = 1 << 0
+		NEED_FLOOR		= 1 << 0,
+		NEED_WALLS		= 1 << 1,
+		NEED_ROOF		= 1 << 2,
+		NEED_BACKGROUND	= 1 << 3
+		//NEED_FOREGROUND = 1 << 0,
 	};
 
 public:
-	BlockEntityData(const int width, const int height, const PlacementRule rule, const string &texture, const TextureRegion &textureRegion, function<void(int, int)> factory);
+	BlockEntityData(const int width, const int height, const int rule, const string &texture, const TextureRegion &textureRegion, function<void(int, int)> factory);
 
 	bool canPlace(const int x, const int y);
 	bool tryPlace(const int x, const int y);
