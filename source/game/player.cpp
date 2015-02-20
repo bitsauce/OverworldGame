@@ -26,6 +26,7 @@ Player::Player() :
 	// Load skeleton data
 	m_skeleton = new Skeleton(":/sprites/characters/anim/skeleton.json", ":/sprites/characters/anim/skeleton.atlas", 1.0f);
 	m_skeleton->getTexture()->setFiltering(Texture2D::LINEAR);
+	m_skeleton->setFlipY(true); // Not sure why this is needed, oh well
 
 	// Setup spine animations
 	m_animationStateData = new AnimationStateData(m_skeleton);
@@ -44,7 +45,6 @@ Player::Player() :
 	m_itemAnimationState = new AnimationState(m_animationStateData);
 	m_itemAnimationState->setLooping(true);
 
-	m_skeleton->setFlipY(true); // TODO: Investigate why this is needed
 	changeAnimation("idle");
 
 	// Bind keys to item slots
@@ -58,6 +58,14 @@ Player::Player() :
 	Input::bind(XD_KEY_8, bind(&Player::setSelectedItemSlot, this, 7));
 	Input::bind(XD_KEY_9, bind(&Player::setSelectedItemSlot, this, 8));
 	Input::bind(XD_KEY_0, bind(&Player::setSelectedItemSlot, this, 9));
+
+	/*TextureRegion region = m_skeleton->getTextureRegion("head");
+	Texture2DPtr texture = m_skeleton->getTexture();
+	uint x0 = region.uv0.x * texture->getWidth(), y0 = region.uv0.y * texture->getHeight(),
+		x1 = region.uv1.x * texture->getWidth(), y1 = region.uv1.y * texture->getHeight();
+	Pixmap pixmap(x1-x0, y0-y1);
+	pixmap.fill(Color(255, 0, 0, 255));
+	m_skeleton->getTexture()->updatePixmap(x0, y1, pixmap);*/
 
 	World::s_players.push_back(this);
 }
@@ -216,7 +224,7 @@ void Player::update()
 
 void Player::draw(SpriteBatch *spriteBatch)
 {
-	m_skeleton->draw(spriteBatch);
+	m_skeleton->draw(spriteBatch->getGraphicsContext());
 	
 	ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
 	if(item != nullptr)

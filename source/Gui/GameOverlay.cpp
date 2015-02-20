@@ -22,7 +22,7 @@ void GameOverlay::update()
 
 void GameOverlay::draw(SpriteBatch *spriteBatch)
 {
-	ItemContainer &itemContainer = m_player->getItemContainer();
+	/*ItemContainer &itemContainer = m_player->getItemContainer();
 	for(uint i = 0; i < itemContainer.getSize(); ++i)
 	{
 		Sprite &sprite = i == m_player->getSelectedItemSlot() ? m_spriteItemSlotSelected : m_spriteItemSlot;
@@ -34,5 +34,5 @@ void GameOverlay::draw(SpriteBatch *spriteBatch)
 			spriteBatch->drawSprite(Sprite(item->getIconTexture(), Rect(13.f + i * 34.f, 13.f, 16.f, 16.f)));
 		}
 		spriteBatch->drawText(Vector2(7.f + i * 34.f, 7.f), util::intToStr(itemContainer.getItemAmountAt(i)), m_font);
-	}
+	}*/
 }

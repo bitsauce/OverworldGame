@@ -2,7 +2,7 @@
 #define SKELETON_H
 
 #include <spine/spine.h>
-#include <x2d/x2d.h>
+#include "Config.h"
 
 class Animation;
 class Slot;
@@ -25,9 +25,10 @@ public:
 	bool getFlipX() const;
 	void setFlipY(const bool flip);
 	bool getFlipY() const;
-	xd::Texture2DPtr getTexture() const;
+	Texture2DPtr getTexture() const;
+	TextureRegion getTextureRegion(const string &name) const;
 
-	void draw(xd::SpriteBatch *spriteBatch);
+	void draw(GraphicsContext &gfxContext);
 
 private:
 	spSkeleton *m_self;

@@ -10,7 +10,7 @@
 
 void _spAtlasPage_createTexture(spAtlasPage* self, const char* path)
 {
-	xd::Texture2DPtr *texture = new xd::Texture2DPtr(xd::ResourceManager::get<xd::Texture2D>(path));
+	Texture2DPtr *texture = new Texture2DPtr(ResourceManager::get<Texture2D>(path));
 	if(texture)
 	{
 		self->rendererObject = texture;
@@ -22,7 +22,7 @@ void _spAtlasPage_createTexture(spAtlasPage* self, const char* path)
 void _spAtlasPage_disposeTexture(spAtlasPage* self)
 {
 	if(self->rendererObject) {
-		delete ((xd::Texture2DPtr*)self->rendererObject);
+		delete ((Texture2DPtr*)self->rendererObject);
 	}
 }
 
@@ -30,7 +30,7 @@ char* _spUtil_readFile(const char* path, int* length)
 {
 	string content;
 	char *data = 0;
-	if(xd::FileSystem::ReadFile(path, content))
+	if(FileSystem::ReadFile(path, content))
 	{
 		*length = content.size();
 		data = MALLOC(char, *length);
@@ -50,29 +50,31 @@ Skeleton::Skeleton(const string &jsonFile, const string &atlasFile, const float 
 	m_data = spSkeletonJson_readSkeletonDataFile(json, jsonFile.c_str());
 	if(!m_data)
 	{
-		xd::LOG("Skeleton::Skeleton(): %s", json->error);
+		LOG("Skeleton::Skeleton(): JSON Error '%s'", json->error);
 		return;
 	}
 
-	xd::LOG("Skeleton::Skeleton: Default skin name '%s'", m_data->defaultSkin->name);
+	LOG("Skeleton::Skeleton(): Default skin name '%s'", m_data->defaultSkin->name);
 	spSkeletonJson_dispose(json);
 
 	m_worldVertices = MALLOC(float, SPINE_MESH_VERTEX_COUNT_MAX);
 	m_self = spSkeleton_create(m_data);
 
-	// Pre-load animation objects
+	// Load animations
 	for(int i = 0; i < m_data->animationCount; i++)
 	{
 		spAnimation *anim = m_data->animations[i];
 		m_animations[anim->name] = new Animation(m_self, anim);
 	}
 
+	// Load slots
 	for(int i = 0; i < m_self->slotCount; i++)
 	{
 		spSlot *slot = m_self->slots[i];
 		m_slots[slot->data->name] = new Slot(slot);
 	}
 
+	// Load bone
 	for(int i = 0; i < m_self->boneCount; i++)
 	{
 		spBone *bone = m_self->bones[i];
@@ -142,30 +144,42 @@ bool Skeleton::getFlipY() const
 	return m_self->flipY != 0;
 }
 
-xd::Texture2DPtr Skeleton::getTexture() const
+Texture2DPtr Skeleton::getTexture() const
 {
-	return *(xd::Texture2DPtr*)m_atlas->pages->rendererObject;
+	return *(Texture2DPtr*)m_atlas->pages->rendererObject;
 }
 
-void Skeleton::draw(xd::SpriteBatch *spriteBatch)
+TextureRegion Skeleton::getTextureRegion(const string &name) const
 {
-	if(!spriteBatch) return;
+	spAtlasRegion *region = m_atlas->regions;
+	while(region)
+	{
+		if(string(region->name) == name)
+		{
+			return TextureRegion(region->u, 1.f - region->v, region->u2, 1.f - region->v2);
+		}
+		region = region->next;
+	}
+	return TextureRegion();
+}
 
+void Skeleton::draw(GraphicsContext &gfxContext)
+{
+	// Update world transform
 	spSkeleton_updateWorldTransform(m_self);
 
-	xd::GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
-
-	xd::Vertex vertices[4];
+	// Draw vertices
+	Vertex vertices[4];
 	for(int i = 0; i < m_self->slotCount; i++)
 	{
 		spSlot *slot = m_self->drawOrder[i];
 		spAttachment *attachment = slot->attachment;
 		if(!attachment) continue;
-		xd::Texture2DPtr texture;
+		Texture2DPtr texture;
 		if(attachment->type == SP_ATTACHMENT_REGION)
 		{
 			spRegionAttachment* regionAttachment = SUB_CAST(spRegionAttachment, attachment);
-			texture = *(xd::Texture2DPtr*)((spAtlasRegion*)regionAttachment->rendererObject)->page->rendererObject;
+			texture = *(Texture2DPtr*)((spAtlasRegion*)regionAttachment->rendererObject)->page->rendererObject;
 			spRegionAttachment_computeWorldVertices(regionAttachment, slot->skeleton->x, slot->skeleton->y, slot->bone, m_worldVertices);
 
 			uchar r = uchar(m_self->r * slot->r * 255);
@@ -173,25 +187,27 @@ void Skeleton::draw(xd::SpriteBatch *spriteBatch)
 			uchar b = uchar(m_self->b * slot->b * 255);
 			uchar a = uchar(m_self->a * slot->a * 255);
 
-			vertices[0].set4ub(xd::VERTEX_COLOR, r, g, b, a);
-			vertices[0].set4f(xd::VERTEX_POSITION, m_worldVertices[SP_VERTEX_X1], m_worldVertices[SP_VERTEX_Y1]);
-			vertices[0].set4f(xd::VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X1], 1.0f - regionAttachment->uvs[SP_VERTEX_Y1]);
+			vertices[0].set4ub(VERTEX_COLOR, r, g, b, a);
+			vertices[0].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X1], m_worldVertices[SP_VERTEX_Y1]);
+			vertices[0].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X1], 1.0f - regionAttachment->uvs[SP_VERTEX_Y1]);
 
-			vertices[1].set4ub(xd::VERTEX_COLOR, r, g, b, a);
-			vertices[1].set4f(xd::VERTEX_POSITION, m_worldVertices[SP_VERTEX_X2], m_worldVertices[SP_VERTEX_Y2]);
-			vertices[1].set4f(xd::VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X2], 1.0f - regionAttachment->uvs[SP_VERTEX_Y2]);
+			vertices[1].set4ub(VERTEX_COLOR, r, g, b, a);
+			vertices[1].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X2], m_worldVertices[SP_VERTEX_Y2]);
+			vertices[1].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X2], 1.0f - regionAttachment->uvs[SP_VERTEX_Y2]);
 
-			vertices[2].set4ub(xd::VERTEX_COLOR, r, g, b, a);
-			vertices[2].set4f(xd::VERTEX_POSITION, m_worldVertices[SP_VERTEX_X4], m_worldVertices[SP_VERTEX_Y4]);
-			vertices[2].set4f(xd::VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X4], 1.0f - regionAttachment->uvs[SP_VERTEX_Y4]);
+			vertices[2].set4ub(VERTEX_COLOR, r, g, b, a);
+			vertices[2].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X4], m_worldVertices[SP_VERTEX_Y4]);
+			vertices[2].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X4], 1.0f - regionAttachment->uvs[SP_VERTEX_Y4]);
 			
-			vertices[3].set4ub(xd::VERTEX_COLOR, r, g, b, a);
-			vertices[3].set4f(xd::VERTEX_POSITION, m_worldVertices[SP_VERTEX_X3], m_worldVertices[SP_VERTEX_Y3]);
-			vertices[3].set4f(xd::VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X3], 1.0f - regionAttachment->uvs[SP_VERTEX_Y3]);
+			vertices[3].set4ub(VERTEX_COLOR, r, g, b, a);
+			vertices[3].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X3], m_worldVertices[SP_VERTEX_Y3]);
+			vertices[3].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X3], 1.0f - regionAttachment->uvs[SP_VERTEX_Y3]);
 
 			gfxContext.setTexture(texture);
-			gfxContext.drawPrimitives(xd::GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
-		} /*else if (attachment->type == ATTACHMENT_MESH) {
+			gfxContext.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
+		}
+		/*else if (attachment->type == ATTACHMENT_MESH)
+		{
 			MeshAttachment* mesh = (MeshAttachment*)attachment;
 			if (mesh->verticesCount > SPINE_MESH_VERTEX_COUNT_MAX) continue;
 			texture = (Texture*)((AtlasRegion*)mesh->rendererObject)->page->rendererObject;
