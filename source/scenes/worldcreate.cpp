@@ -15,7 +15,7 @@ void WorldCreateScene::showEvent()
 	xd::LOG("Scene: World Create");
 	
 	// Setup canvas
-	canvas = new Canvas();
+	canvas = new Canvas(800, 600);
 	canvas->update();
 		
 	m_worldNameEdit = new LineEdit(canvas);

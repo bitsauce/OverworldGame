@@ -15,7 +15,6 @@ public:
 	void updateEvent();
 
 public:
-
 	GameOverlay *m_inventory;
 };
 

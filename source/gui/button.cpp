@@ -1,10 +1,10 @@
-#include "button.h"
-#include "constants.h"
+#include "Button.h"
+#include "Game.h"
 
 Button::Button(string text, function<void()> onClick, UiObject *parent) :
 	UiObject(parent),
-	m_font(xd::ResourceManager::get<xd::Font>(UI_MENU_BUTTON_FONT)),
-	m_btnTexture(xd::ResourceManager::get<xd::Texture2D>(UI_MENU_BUTTON_TEXTURE)),
+	m_font(ResourceManager::get<Font>(UI_MENU_BUTTON_FONT)),
+	m_btnTexture(ResourceManager::get<Texture2D>(UI_MENU_BUTTON_TEXTURE)),
 	m_textTexture(0),
 	m_animTime(0.0f),
 	m_userData(0)
@@ -13,7 +13,7 @@ Button::Button(string text, function<void()> onClick, UiObject *parent) :
 	m_callback = onClick;
 
 	// Set sprite
-	m_buttonSprite = new xd::Sprite(m_btnTexture);
+	m_buttonSprite = new Sprite(m_btnTexture);
 		
 	// Set text
 	setText(text);
@@ -29,7 +29,7 @@ Button::Button(string text, function<void()> onClick, UiObject *parent) :
 	m_callbackThis = onClick;
 
 	// Set sprite
-	m_buttonSprite = new xd::Sprite(xd::TextureRegion());
+	m_buttonSprite = new Sprite(TextureRegion());
 		
 	// Set text
 	setText(text);
@@ -46,7 +46,7 @@ void Button::setText(string text)
 	m_text = text;
 		
 	// Store text render texture
-	m_font->setColor(xd::Color(255, 255, 255, 255));
+	m_font->setColor(Color(255, 255, 255, 255));
 	m_textTexture = nullptr; // Flag for re-draw
 }
 
@@ -69,16 +69,16 @@ void Button::update()
 {
 	if(isHovered())
 	{
-		m_animTime = min(m_animTime + xd::Graphics::getTimeStep()*4.0f, 1.0f);
+		m_animTime = min(m_animTime + Graphics::getTimeStep()*4.0f, 1.0f);
 	}
 	else
 	{
-		m_animTime = max(m_animTime - xd::Graphics::getTimeStep()*4.0f, 0.0f);
+		m_animTime = max(m_animTime - Graphics::getTimeStep()*4.0f, 0.0f);
 	}
 	UiObject::update();
 }
 	
-void Button::draw(xd::SpriteBatch *spriteBatch)
+void Button::draw(SpriteBatch *spriteBatch)
 {
 	//if(!m_textTexture) m_textTexture = m_font->renderToTexture(spriteBatch->getGraphicsContext(), text, 128);
 
@@ -93,18 +93,18 @@ void Button::draw(xd::SpriteBatch *spriteBatch)
 	// Draw hovered sprite
 	if(m_animTime > 0.0f)
 	{
-		m_buttonSprite->setColor(xd::Color(255, 255, 255, m_animTime));
-		m_buttonSprite->setRegion(xd::TextureRegion(0.0f, 0.0f, 1.0f, 0.5f));
+		m_buttonSprite->setColor(Color(255, 255, 255, m_animTime));
+		m_buttonSprite->setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 0.5f));
 		spriteBatch->drawSprite(*m_buttonSprite);
 	}
 
 	// Draw default sprite
-	m_buttonSprite->setColor(xd::Color(255, 255, 255, 255));
-	m_buttonSprite->setRegion(xd::TextureRegion(0.0f, 0.5f, 1.0f, 1.0f));
+	m_buttonSprite->setColor(Color(255, 255, 255, 255));
+	m_buttonSprite->setRegion(TextureRegion(0.0f, 0.5f, 1.0f, 1.0f));
 	spriteBatch->drawSprite(*m_buttonSprite);
 		
 	// Draw text
-	m_font->setColor(xd::Color(0, 0, 0, 255));
+	m_font->setColor(Color(0, 0, 0, 255));
 	spriteBatch->drawText(position - (Vector2(m_font->getStringWidth(m_text), m_font->getStringHeight(m_text))-size)*0.5f, m_text, m_font);
 }
 	

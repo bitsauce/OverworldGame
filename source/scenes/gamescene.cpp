@@ -12,7 +12,7 @@ void GameScene::showEvent()
 	LOG("Scene: Game Scene");
 
 	// Setup canvas
-	canvas = new Canvas();
+	canvas = new Canvas(numeric_limits<int>::max(), numeric_limits<int>::max());
 	canvas->update();
 	
 	Player *player = new Player();

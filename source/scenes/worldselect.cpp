@@ -15,7 +15,7 @@ void WorldSelectScene::showEvent()
 	xd::LOG("Scene: Select World");
 	
 	// Setup canvas
-	canvas = new Canvas();
+	canvas = new Canvas(800, 600);
 	canvas->update();
 
 	xd::FileSystemIterator itr("saves:/Overworld/", "*", xd::FileSystemIterator::DIRECTORIES);

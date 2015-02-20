@@ -20,7 +20,7 @@ void MainMenuScene::showEvent()
 	xd::LOG("Scene: Main menu");
 	
 	// Setup canvas
-	canvas = new Canvas();
+	canvas = new Canvas(800, 600);
 	canvas->setSize(Vector2(1.0f, 1.0f));
 
 	// Create and setup menu buttons

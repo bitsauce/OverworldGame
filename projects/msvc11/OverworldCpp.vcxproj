@@ -115,6 +115,7 @@
     <ClCompile Include="..\..\source\gui\Button.cpp" />
     <ClCompile Include="..\..\source\gui\Canvas.cpp" />
     <ClCompile Include="..\..\source\gui\GameOverlay.cpp" />
+    <ClCompile Include="..\..\source\gui\GameOverlay\Hotbar.cpp" />
     <ClCompile Include="..\..\source\gui\LineEdit.cpp" />
     <ClCompile Include="..\..\source\gui\UiObject.cpp" />
     <ClCompile Include="..\..\source\Items\BlockItem.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="..\..\source\gui\Button.h" />
     <ClInclude Include="..\..\source\gui\Canvas.h" />
     <ClInclude Include="..\..\source\gui\GameOverlay.h" />
+    <ClInclude Include="..\..\source\gui\GameOverlay\Hotbar.h" />
     <ClInclude Include="..\..\source\gui\LineEdit.h" />
     <ClInclude Include="..\..\source\gui\UiObject.h" />
     <ClInclude Include="..\..\source\Items\BlockItem.h" />

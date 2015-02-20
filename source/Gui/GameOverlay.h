@@ -6,6 +6,7 @@
 
 class ItemContainer;
 class Player;
+class Hotbar;
 
 class GameOverlay : public UiObject, public MouseListener
 {
@@ -18,9 +19,8 @@ public:
 private:
 
 	Player *m_player;
-	Sprite m_spriteItemSlot;
-	Sprite m_spriteItemSlotSelected;
 	FontPtr m_font;
+	Hotbar *m_hotbar;
 };
 
 #endif // INVENTORY_H
