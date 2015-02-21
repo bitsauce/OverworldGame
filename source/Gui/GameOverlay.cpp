@@ -6,8 +6,7 @@
 
 GameOverlay::GameOverlay(Player *player, UiObject *parent) :
 	UiObject(parent),
-	m_player(player),
-	m_font(ResourceManager::get<Font>("Consolas 10"))
+	m_player(player)
 {
 	m_hotbar = new Hotbar(player, parent);
 }

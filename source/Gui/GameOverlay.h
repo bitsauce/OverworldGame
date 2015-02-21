@@ -19,7 +19,6 @@ public:
 private:
 
 	Player *m_player;
-	FontPtr m_font;
 	Hotbar *m_hotbar;
 };
 
