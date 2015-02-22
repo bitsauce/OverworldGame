@@ -59,13 +59,13 @@ Player::Player() :
 	Input::bind(XD_KEY_9, bind(&Player::setSelectedItemSlot, this, 8));
 	Input::bind(XD_KEY_0, bind(&Player::setSelectedItemSlot, this, 9));
 
+	// Test code for replacing body parts/clothing
 	/*TextureRegion region = m_skeleton->getTextureRegion("head");
 	Texture2DPtr texture = m_skeleton->getTexture();
 	uint x0 = region.uv0.x * texture->getWidth(), y0 = region.uv0.y * texture->getHeight(),
 		x1 = region.uv1.x * texture->getWidth(), y1 = region.uv1.y * texture->getHeight();
-	Pixmap pixmap(x1-x0, y0-y1);
-	pixmap.fill(Color(255, 0, 0, 255));
-	m_skeleton->getTexture()->updatePixmap(x0, y1, pixmap);*/
+	Pixmap pixmap = ResourceManager::get<Texture2D>(":/Sprites/Characters/head2.png")->getPixmap();
+	m_skeleton->getTexture()->updatePixmap(x0, y0, pixmap);*/
 
 	World::s_players.push_back(this);
 }

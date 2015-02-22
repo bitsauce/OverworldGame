@@ -156,7 +156,7 @@ TextureRegion Skeleton::getTextureRegion(const string &name) const
 	{
 		if(string(region->name) == name)
 		{
-			return TextureRegion(region->u, 1.f - region->v, region->u2, 1.f - region->v2);
+			return TextureRegion(region->u, 1.f - region->v2, region->u2, 1.f - region->v);
 		}
 		region = region->next;
 	}

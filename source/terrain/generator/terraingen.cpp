@@ -55,7 +55,7 @@ BlockID TerrainGen::getGroundAt(const int x, const int y, const TerrainLayer lay
 			// Ground
 			if((math::clamp((32 - y)/32.0f, 0.0f, 1.0f) + (s_noise.valueAt(x, y) * 0.5f + 0.5f)) * step(0, y + h) > 0.5f)
 			{
-				return BLOCK_GRASS;
+				return y <= 100 ? BLOCK_GRASS : BLOCK_STONE;
 			}
 		}
 		break;
@@ -64,7 +64,7 @@ BlockID TerrainGen::getGroundAt(const int x, const int y, const TerrainLayer lay
 		{
 			if(y > 20)
 			{
-				return BLOCK_STONE;
+				return BLOCK_DIRT_BACK;
 			}
 		}
 		break;
