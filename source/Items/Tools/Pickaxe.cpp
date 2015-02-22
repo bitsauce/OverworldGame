@@ -58,19 +58,5 @@ void Pickaxe::draw(Player *player, SpriteBatch *spriteBatch)
 	{
 		spriteBatch->drawSprite(m_cracksSprite);
 	}
-	
-	Skeleton *skeleton = player->getSkeleton();
-	float angle = skeleton->findBone("rarm")->getWorldRotation();
-	if(!skeleton->getFlipX())
-	{
-		angle *= -1;
-		m_sprite.setPosition(skeleton->getPosition() + skeleton->findBone("rarm")->getWorldPosition() - Vector2(16, 32) + Vector2(cos(angle * 0.0174532925f), sin(angle * 0.0174532925f)) * 10);
-	}
-	else
-	{
-		m_sprite.setPosition(skeleton->getPosition() + skeleton->findBone("rarm")->getWorldPosition() - Vector2(16, 32) - Vector2(cos(angle * 0.0174532925f), sin(angle * 0.0174532925f)) * 10);
-	}
-	m_sprite.setOrigin(Vector2(16, 32));
-	m_sprite.setRotation(angle);
-	spriteBatch->drawSprite(m_sprite);
+	player->drawSpriteInHand(m_sprite, Vector2(16.f, 32.f), spriteBatch);
 }

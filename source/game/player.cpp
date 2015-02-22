@@ -232,3 +232,20 @@ void Player::draw(SpriteBatch *spriteBatch)
 		item->draw(this, spriteBatch);
 	}
 }
+
+void Player::drawSpriteInHand(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch)
+{
+	float angle = m_skeleton->findBone("rarm")->getWorldRotation();
+	if(!m_skeleton->getFlipX())
+	{
+		angle *= -1;
+		sprite.setPosition(m_skeleton->getPosition() + m_skeleton->findBone("rarm")->getWorldPosition() - origin + Vector2(cos(angle * 0.0174532925f), sin(angle * 0.0174532925f)) * 10);
+	}
+	else
+	{
+		sprite.setPosition(m_skeleton->getPosition() + m_skeleton->findBone("rarm")->getWorldPosition() - origin - Vector2(cos(angle * 0.0174532925f), sin(angle * 0.0174532925f)) * 10);
+	}
+	sprite.setOrigin(origin);
+	sprite.setRotation(angle);
+	spriteBatch->drawSprite(sprite);
+}

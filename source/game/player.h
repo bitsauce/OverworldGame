@@ -23,6 +23,7 @@ public:
 
 	void update();
 	void draw(SpriteBatch *spriteBatch);
+	void drawSpriteInHand(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch);
 	void changeAnimation(const string &name);
 	
 	void setSelectedItemSlot(const uint slot) { m_selectedItemSlot = slot; }
