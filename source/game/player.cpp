@@ -38,14 +38,14 @@ Player::Player() :
 	m_animationStateData->setMix("idle", "jump", 0.2f);
 	
 	// Create spine animation states
-	m_walkAnimationState = new AnimationState(m_animationStateData);
-	//m_walkAnimationState->setEventCallback(animationEvent);
-	m_walkAnimationState->setLooping(true);
+	m_mainAnimationState = new AnimationState(m_animationStateData);
+	//m_mainAnimationState->setEventCallback(animationEvent);
+	m_mainAnimationState->setLooping(true);
 	
 	m_itemAnimationState = new AnimationState(m_animationStateData);
 	m_itemAnimationState->setLooping(true);
 
-	changeAnimation("idle");
+	setMainAnimation("idle");
 
 	// Bind keys to item slots
 	Input::bind(XD_KEY_1, bind(&Player::setSelectedItemSlot, this, 0));
@@ -71,21 +71,34 @@ Player::Player() :
 }
 
 // ANIMATIONS
-void Player::changeAnimation(const string &name)
+void Player::setMainAnimation(const string &name)
 {
 	// Get animation by name
 	Animation *anim = m_skeleton->findAnimation(name);
 	if(anim == nullptr)
 	{
-		LOG("Humanoid::changeAnimation() - Animation '%s' does not exists.", name);
+		LOG("Humanoid::setMainAnimation() - Animation '%s' does not exists.", name);
 		return;
 	}
 		
 	// Make sure this animation isn't current
 	if(m_currentAnim != anim)
 	{
-		m_walkAnimationState->setAnimation(anim);
+		m_mainAnimationState->setAnimation(anim);
 		m_currentAnim = anim;
+	}
+}
+
+void Player::setItemAnimation(Animation *anim)
+{
+	// Make sure this animation isn't current
+	if(m_itemAnimation != anim)
+	{
+		if(anim != nullptr)
+		{
+			m_itemAnimationState->setAnimation(anim);
+		}
+		m_itemAnimation = anim;
 	}
 }
 
@@ -148,25 +161,25 @@ void Player::update()
 	m_body->setVelocityX(m_body->getVelocity().x * 0.85f);
 	
 	// Set animations
-	m_walkAnimationState->setTimeScale(math::abs(m_body->getVelocity().x) * 0.5f);
+	m_mainAnimationState->setTimeScale(math::abs(m_body->getVelocity().x) * 0.5f);
 	if(m_body->isContact(SOUTH))
 	{
-		m_walkAnimationState->setLooping(true);
+		m_mainAnimationState->setLooping(true);
 		if(m_body->getVelocity().x >= 0.01f)
 		{
-			changeAnimation("walk");
+			setMainAnimation("walk");
 			m_skeleton->setFlipX(false);
 		}
 		else if(m_body->getVelocity().x <= -0.01f)
 		{
-			changeAnimation("walk");
+			setMainAnimation("walk");
 			m_skeleton->setFlipX(true);
 		}
 		else
 		{
-			changeAnimation("idle");
+			setMainAnimation("idle");
 			m_body->setVelocityX(0.0f);
-			m_walkAnimationState->setTimeScale(1.0f);
+			m_mainAnimationState->setTimeScale(1.0f);
 		}
 	}
 	else
@@ -174,22 +187,22 @@ void Player::update()
 		if(m_body->isContact(WEST)/* >= 3*/) // TODO: I should check for a column of 3 rows of blocks instead of simlply one
 		{
 			m_skeleton->setFlipX(false);
-			m_walkAnimationState->setLooping(false);
-			m_walkAnimationState->setTimeScale(5.0f);
-			changeAnimation("wall-slide");
+			m_mainAnimationState->setLooping(false);
+			m_mainAnimationState->setTimeScale(5.0f);
+			setMainAnimation("wall-slide");
 		}
 		else if(m_body->isContact(EAST))
 		{
 			m_skeleton->setFlipX(true);
-			m_walkAnimationState->setLooping(false);
-			m_walkAnimationState->setTimeScale(5.0f);
-			changeAnimation("wall-slide");
+			m_mainAnimationState->setLooping(false);
+			m_mainAnimationState->setTimeScale(5.0f);
+			setMainAnimation("wall-slide");
 		}
 		else
 		{
-			m_walkAnimationState->setLooping(false);
-			m_walkAnimationState->setTimeScale(1.0f);
-			changeAnimation("jump");
+			m_mainAnimationState->setLooping(false);
+			m_mainAnimationState->setTimeScale(1.0f);
+			setMainAnimation("jump");
 		}
 	}
 
@@ -201,12 +214,6 @@ void Player::update()
 	if(Input::getKeyState(XD_LMB) && item != nullptr)
 	{
 		item->use(this);
-		Animation *anim = m_skeleton->findAnimation("mine");
-		if(anim != m_itemAnimation)
-		{
-			m_itemAnimationState->setAnimation(anim);
-			m_itemAnimation = anim;
-		}
 	}
 	else
 	{
@@ -218,7 +225,7 @@ void Player::update()
 
 	// Update animations
 	m_skeleton->setPosition(m_body->getPosition() + Vector2(m_body->getSize().x*0.5f, 48.0f));
-	m_walkAnimationState->update(Graphics::getTimeStep());
+	m_mainAnimationState->update(Graphics::getTimeStep());
 	if(m_itemAnimation) m_itemAnimationState->update(Graphics::getTimeStep());
 }
 

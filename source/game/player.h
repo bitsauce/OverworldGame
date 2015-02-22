@@ -24,7 +24,8 @@ public:
 	void update();
 	void draw(SpriteBatch *spriteBatch);
 	void drawSpriteInHand(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch);
-	void changeAnimation(const string &name);
+	void setMainAnimation(const string &name);
+	void setItemAnimation(Animation *anim);
 	
 	void setSelectedItemSlot(const uint slot) { m_selectedItemSlot = slot; }
 	uint getSelectedItemSlot() const { return m_selectedItemSlot; }
@@ -52,7 +53,7 @@ private:
 	// Skeletal animations
 	Skeleton *m_skeleton;
 	AnimationStateData *m_animationStateData;
-	AnimationState *m_walkAnimationState;
+	AnimationState *m_mainAnimationState;
 	Animation *m_currentAnim;
 	AnimationState *m_itemAnimationState;
 	Animation *m_itemAnimation;

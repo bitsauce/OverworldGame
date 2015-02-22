@@ -48,6 +48,12 @@ void Pickaxe::use(Player *player)
 			m_cracksSprite.setPosition(position * BLOCK_PXF);
 			m_cracksSprite.setRegion(m_cracksAnimation.getKeyFrame(4 * (1.0f - m_mineCounter/m_mineTime)));
 		}
+
+		player->setItemAnimation(player->getSkeleton()->findAnimation("mine"));
+	}
+	else
+	{
+		player->setItemAnimation(nullptr);
 	}
 }
 

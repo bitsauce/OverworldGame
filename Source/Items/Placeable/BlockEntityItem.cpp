@@ -30,8 +30,18 @@ void BlockEntityItem::draw(Player *player, SpriteBatch *spriteBatch)
 
 	// Draw preview sprite
 	BlockEntityData &data = BlockEntityData::get(m_blockEntityID);
+
 	Sprite sprite = data.getSprite();
 	sprite.setColor(data.canPlace(blockPos.x, blockPos.y) ? Color(240, 240, 240, 215) : Color(255, 90, 90, 215));
 	sprite.setPosition(blockPos.x * BLOCK_PXF, blockPos.y * BLOCK_PXF);
 	spriteBatch->drawSprite(sprite);
+	
+	sprite = data.getSprite();
+	sprite.setSize(16.0f, 16.0f);
+	player->drawSpriteInHand(sprite, Vector2(8.0f, 16.0f), spriteBatch);
+
+	if(m_blockEntityID == BLOCK_ENTITY_TORCH)
+	{
+		//player->setItemAnimation(player->getSkeleton()->findAnimation("hold-torch"));
+	}
 }
