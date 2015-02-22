@@ -25,9 +25,10 @@
 #include "Game/GameManager.h"
 #include "Game/GameObject.h"
 #include "Game/Player.h"
-#include "Game/World.h"
 #include "Game/RayCast.h"
 #include "Game/ItemContainer.h"
+
+#include "World/World.h"
 
 #include "Lighting/Lighting.h"
 #include "Lighting/Spotlight.h"

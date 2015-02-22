@@ -5,7 +5,7 @@
 #include "gui/canvas.h"
 
 #include "game/gameobject.h"
-#include "game/world.h"
+#include "World/World.h"
 
 #include "game.h"
 #include "constants.h"

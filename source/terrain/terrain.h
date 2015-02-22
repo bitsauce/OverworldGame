@@ -5,8 +5,8 @@
 
 #include "Game/GameObject.h"
 #include "Terrain/ChunkLoader.h"
-#include "Terrain/TerrainChunk.h"
-#include "Terrain/Generator/TerrainGen.h"
+#include "Terrain/Chunk.h"
+#include "World/WorldGenerator.h"
 
 enum TerrainLayer;
 enum BlockID;
@@ -14,12 +14,8 @@ enum BlockID;
 class Terrain : public WindowListener
 {
 public:
-	Terrain();
+	Terrain(WorldGenerator *generator, Camera *camera);
 	~Terrain();
-	
-	// Move?
-	void saveChunks();
-	void load(const IniFile &file);
 	
 	// BLOCKS
 	bool setBlockAt(const int x, const int y, BlockID block, const TerrainLayer layer);
@@ -36,9 +32,6 @@ public:
 private:
 	// CHUNK LOADER
 	ChunkLoader m_chunkLoader;
-	
-	// GENERATOR
-	TerrainGen generator;
 	
 	// TERRAIN DRAWER
 	class Drawer : public GameObject

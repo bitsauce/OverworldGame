@@ -3,7 +3,7 @@
 
 #include "constants.h"
 
-#include "game/world.h"
+#include "World/World.h"
 
 Color mixColors(Color c1, Color c2, const float a)
 {

@@ -1,5 +1,5 @@
 #include "BlockData.h"
-#include "Game/World.h"
+#include "World/World.h"
 #include "Terrain/Terrain.h"
 
 vector<BlockData*> BlockData::s_blockData(BLOCK_COUNT);

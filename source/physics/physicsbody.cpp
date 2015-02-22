@@ -1,7 +1,7 @@
 #include "physicsbody.h"
 #include "constants.h"
 
-#include "game/world.h"
+#include "World/World.h"
 #include "terrain/terrain.h"
 
 PhysicsBody::PhysicsBody() :

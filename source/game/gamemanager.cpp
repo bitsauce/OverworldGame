@@ -9,14 +9,14 @@
 UiObject *canvas = nullptr;
 
 list<GameObject*> GameManager::s_gameObjects;
-xd::SpriteBatch *GameManager::s_spriteBatch = nullptr;
+SpriteBatch *GameManager::s_spriteBatch = nullptr;
 bool GameManager::s_takeScreenshot = false;
 
 void GameManager::main()
 {
 	// Set some key bindings
-	xd::Input::bind(xd::XD_KEY_ESCAPE, function<void()>(xd::Engine::exit));
-	xd::Input::bind(xd::XD_KEY_SNAPSHOT, function<void()>(GameManager::takeScreenshot));
+	Input::bind(XD_KEY_ESCAPE, function<void()>(Engine::exit));
+	Input::bind(XD_KEY_SNAPSHOT, function<void()>(GameManager::takeScreenshot));
 	
 	// Initialize game managers
 	SceneManager::init();
@@ -29,14 +29,18 @@ void GameManager::main()
 	World::getDebug()->toggle();
 
 	// Resize the window
-	xd::Window::setSize(Vector2i(1280, 720));
+	Window::setSize(Vector2i(1280, 720));
 
 	// Show main menu
-	SceneManager::gotoScene(SCENE_GAME);
+	if(!World::load("Debug"))
+	{
+		World::create("Debug");
+	}
 }
 
 void GameManager::exit()
 {
+	World::save();
 	delete canvas;
 }
 
@@ -49,19 +53,19 @@ void GameManager::update()
 	}
 }
 
-void GameManager::draw(xd::GraphicsContext &context)
+void GameManager::draw(GraphicsContext &context)
 {
-	if(!s_spriteBatch) s_spriteBatch = new xd::SpriteBatch(context);
+	if(!s_spriteBatch) s_spriteBatch = new SpriteBatch(context);
 
 	if(s_takeScreenshot)
 	{
 		int i = 0;
-		while(xd::util::fileExists("C:\\Users\\Marcus\\Desktop\\screenshot_" + xd::util::intToStr(i) + ".png")) i++;
-		context.saveScreenshot("C:\\Users\\Marcus\\Desktop\\screenshot_" + xd::util::intToStr(i) + ".png");
+		while(util::fileExists("C:\\Users\\Marcus\\Desktop\\screenshot_" + util::intToStr(i) + ".png")) i++;
+		context.saveScreenshot("C:\\Users\\Marcus\\Desktop\\screenshot_" + util::intToStr(i) + ".png");
 		s_takeScreenshot = false;
 	}
 	
-	World::getDebug()->setVariable("FPS", xd::util::intToStr((int)xd::Graphics::getFPS()));
+	World::getDebug()->setVariable("FPS", util::intToStr((int)Graphics::getFPS()));
 
 	s_spriteBatch->begin();
 	bool usingSceneMat = false;
@@ -72,7 +76,7 @@ void GameManager::draw(xd::GraphicsContext &context)
 			if(!usingSceneMat)
 			{
 				s_spriteBatch->end();
-				s_spriteBatch->begin(xd::SpriteBatch::State(xd::SpriteBatch::DEFERRED, xd::BlendState::PRESET_ALPHA_BLEND, World::getCamera()->getProjectionMatrix()));
+				s_spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, World::getCamera()->getProjectionMatrix()));
 				usingSceneMat = true;
 			}
 		}

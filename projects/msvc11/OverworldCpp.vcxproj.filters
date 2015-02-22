@@ -1,20 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\source\terrain\TerrainChunk.cpp">
-      <Filter>Source\Terrain</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\terrain\Terrain.cpp">
       <Filter>Source\Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\terrain\generator\TerrainGen.cpp">
-      <Filter>Source\Terrain\Generator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\terrain\generator\Grassland.cpp">
-      <Filter>Source\Terrain\Generator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\terrain\generator\Structure.cpp">
-      <Filter>Source\Terrain\Generator</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\Noise\Simplex.cpp">
       <Filter>Source\Noise</Filter>
@@ -77,9 +65,6 @@
       <Filter>Source\Game</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\game\RayCast.cpp">
-      <Filter>Source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\game\World.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\scenes\GameScene.cpp">
@@ -146,6 +131,21 @@
     <ClCompile Include="..\..\source\gui\GameOverlay\Hotbar.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\World\Structure.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Grassland.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\WorldGenerator.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\terrain\Chunk.cpp">
+      <Filter>Source\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\World.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -162,9 +162,6 @@
     </Filter>
     <Filter Include="Source\Terrain">
       <UniqueIdentifier>{acdbe615-25b7-49dc-9dd6-17c021361fc7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Terrain\Generator">
-      <UniqueIdentifier>{f67dfadc-f3b6-4079-aa67-7fc81aa5053b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Game">
       <UniqueIdentifier>{18bc6b9a-571d-4fa2-8cc2-faf75c39f783}</UniqueIdentifier>
@@ -205,22 +202,13 @@
     <Filter Include="Source\Gui\GameOverlay">
       <UniqueIdentifier>{0fd551cc-bb89-4e7f-b942-9ddd7dd4cb8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\World">
+      <UniqueIdentifier>{706e8d91-9eee-467b-abcd-e94748a397ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\source\terrain\TerrainChunk.h">
-      <Filter>Source\Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\terrain\Terrain.h">
       <Filter>Source\Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\terrain\generator\TerrainGen.h">
-      <Filter>Source\Terrain\Generator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\terrain\generator\Grassland.h">
-      <Filter>Source\Terrain\Generator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\terrain\generator\Structure.h">
-      <Filter>Source\Terrain\Generator</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\Noise\Simplex.h">
       <Filter>Source\Noise</Filter>
@@ -289,9 +277,6 @@
       <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\game\RayCast.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\game\World.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\scenes\GameScene.h">
@@ -366,8 +351,20 @@
     <ClInclude Include="..\..\source\gui\GameOverlay\Hotbar.h">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClInclude Include="..\..\Source\World\Structure.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Grassland.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\WorldGenerator.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\terrain\Chunk.h">
+      <Filter>Source\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\World.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

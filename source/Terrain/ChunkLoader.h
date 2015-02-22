@@ -2,7 +2,7 @@
 #define CHUNK_LOADER_H
 
 #include "Game/GameObject.h"
-#include "Terrain/TerrainChunk.h"
+#include "Terrain/Chunk.h"
 
 class Camera;
 
@@ -10,9 +10,11 @@ class ChunkLoader : public GameObject, public xd::WindowListener
 {
 	friend class Debug;
 public:
-	ChunkLoader(Camera *camera);
+	ChunkLoader(Camera *camera, WorldGenerator *generator);
 
-	TerrainChunk &getChunkAt(const int chunkX, const int chunkY);
+	void clear();
+
+	Chunk &getChunkAt(const int chunkX, const int chunkY);
 	bool isChunkLoadedAt(const int chunkX, const int chunkY) const;
 
 	void setOptimalChunkCount(const uint maxChunkCount);
@@ -32,15 +34,21 @@ public:
 	void update();
 
 private:
-	TerrainChunk *loadChunkAt(const int chunkX, const int chunkY);
+	Chunk *loadChunkAt(const int chunkX, const int chunkY);
+	
+	void saveBlockData(const string &filePath, BlockID *blockData);
+	void loadBlockData(const string &filePath, BlockID *blockData);
+	bool freeInactiveChunk();
+	void freeChunk(unordered_map<uint, Chunk*>::iterator itr);
 	
 	void resizeEvent(uint width, uint height);
 
 	bool m_applyZoom;
 	Camera *m_camera;
+	WorldGenerator *m_generator;
 
-	unordered_map<uint, TerrainChunk*> m_chunks;
-	TerrainChunk m_dummyChunk;
+	unordered_map<uint, Chunk*> m_chunks;
+	Chunk m_dummyChunk;
 
 	// Active area
 	ChunkArea m_activeArea;
@@ -50,7 +58,7 @@ private:
 	uint m_loadAreaRadius;
 
 	// Chunk pool
-	vector<TerrainChunk*> m_chunkPool;
+	vector<Chunk*> m_chunkPool;
 	uint m_optimalChunkCount;
 
 	// Prev chunk pos

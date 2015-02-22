@@ -1,14 +1,12 @@
 #include "terrain.h"
 #include "constants.h"
-#include "game/debug.h"
-#include "game/camera.h"
-#include "game/world.h"
+#include "Game.h"
 #include "Blocks/BlockData.h"
 #include "BlockEntities/BlockEntityData.h"
 #include "lighting/spotlight.h"
 
-Terrain::Terrain() :
-	m_chunkLoader(World::getCamera()),
+Terrain::Terrain(WorldGenerator *generator, Camera *camera) :
+	m_chunkLoader(camera, generator),
 	m_background(this, DRAW_ORDER_TERRAIN_BACKGROUND, TERRAIN_LAYER_BACK),
 	m_middleground(this, DRAW_ORDER_TERRAIN_MIDDLEGROUND, TERRAIN_LAYER_MIDDLE),
 	m_foreground(this, DRAW_ORDER_TERRAIN_FOREGROUND, TERRAIN_LAYER_FRONT)
@@ -20,44 +18,11 @@ Terrain::Terrain() :
 	resizeEvent(Window::getSize().x, Window::getSize().y);
 
 	Spotlight::s_vertices = new Vertex[SPOTLIGHT_SEGMENTS+2];
-	
-	// Get terrain seed
-	TerrainGen::s_seed = Random().nextInt();
 }
 
 Terrain::~Terrain()
 {
 	Window::removeWindowListener(this);
-}
-	
-// Move?
-void Terrain::saveChunks()
-{
-	LOG("Saving chunks...");
-
-	// Iterate loaded chunks
-	/*for(unordered_map<uint, TerrainChunk*>::iterator itr = m_chunks.begin(); itr != m_chunks.end(); ++itr)
-	{
-		// Skip unmodified chunks
-		if(!itr->second->m_modified) continue;
-
-		// Save chunk
-		string path = World::getWorldPath() + "/chunks/" + util::intToStr(CHUNK_KEY(itr->second->getX(), itr->second->getY())) + ".obj";
-		FileWriter writer(path);
-		if(!writer)
-		{
-			LOG("Error opening chunk file: '%s'", path);
-			continue;
-		}
-		itr->second->serialize(writer);
-	}*/
-}
-	
-void Terrain::load(const IniFile &file)
-{
-	LOG("Loading terrain...");
-		
-	TerrainGen::s_seed = 0;// parseInt(file.getValue("terrain", "seed"));
 }
 	
 // BLOCKS
@@ -70,7 +35,7 @@ BlockID Terrain::getBlockAt(const int x, const int y, const TerrainLayer layer =
 {
 	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
 }
-	
+
 bool Terrain::isBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
 {
 	return getBlockAt(x, y, layer) != BLOCK_EMPTY;
@@ -111,7 +76,7 @@ void Terrain::Drawer::draw(SpriteBatch *spriteBatch)
 	{
 		for(int x = area.x0; x <= area.x1; ++x)
 		{
-			TerrainChunk &chunk = m_chunkLoader->getChunkAt(x, y);
+			Chunk &chunk = m_chunkLoader->getChunkAt(x, y);
 
 			// Should we generate new vertex buffers?
 			if(chunk.isDirty(m_layer)) {

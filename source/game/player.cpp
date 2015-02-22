@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "Game/World.h"
+#include "World/World.h"
 #include "Game/Camera.h"
 #include "Terrain/Terrain.h"
 #include "Constants.h"

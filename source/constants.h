@@ -30,6 +30,8 @@
 #define SUPER_CHUNK_PX (SUPER_CHUNK_CHUNKS*CHUNK_BLOCKS*BLOCK_PX)
 #define SUPER_CHUNK_PXF float(SUPER_CHUNK_PX)
 
+#define BLOCK_INDEX(x, y, z) (x) + (CHUNK_BLOCKS) * ((y) + (CHUNK_BLOCKS) * (z))
+
 enum DrawOrder
 {
 	DRAW_ORDER_CAMERA,

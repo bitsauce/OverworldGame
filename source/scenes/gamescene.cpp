@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "Game/World.h"
+#include "World/World.h"
 
 #include "Gui/UiObject.h"
 #include "Gui/Canvas.h"
@@ -15,12 +15,7 @@ void GameScene::showEvent()
 	canvas = new Canvas(numeric_limits<int>::max(), numeric_limits<int>::max());
 	canvas->update();
 	
-	Player *player = new Player();
-	player->getBody()->setPosition(0, 0);
-	player->getItemContainer().addItem(ITEM_PICKAXE_IRON);
-	player->getItemContainer().addItem(ITEM_TORCH, 255);
-
-	m_inventory = new GameOverlay(player, canvas);
+	m_inventory = new GameOverlay(World::getPlayers()[0], canvas);
 }
 
 void GameScene::hideEvent()
