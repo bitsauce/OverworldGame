@@ -40,6 +40,9 @@ void World::create(const string &name)
 	// Set the world path
 	s_worldPath = "saves:/Overworld/" + name;
 	s_worldFile = new IniFile(s_worldPath + "/World.ini");
+
+	FileSystem::MakeDir(s_worldPath);
+	FileSystem::MakeDir(s_worldPath + "/Chunks");
 		
 	// Create world file
 	uint seed = Random().nextInt();
