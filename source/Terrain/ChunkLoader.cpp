@@ -1,5 +1,8 @@
 #include "ChunkLoader.h"
-#include "Game.h"
+#include "Game/Debug.h"
+#include "Entities/Camera.h"
+#include "World/World.h"
+#include "Generation/Generator.h"
 
 #define CHUNK_KEY(X, Y) ((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000)
 

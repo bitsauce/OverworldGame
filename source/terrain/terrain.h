@@ -6,7 +6,7 @@
 #include "Game/GameObject.h"
 #include "Terrain/ChunkLoader.h"
 #include "Terrain/Chunk.h"
-#include "World/WorldGenerator.h"
+#include "Generation/Generator.h"
 
 enum TerrainLayer;
 enum BlockID;
@@ -24,7 +24,7 @@ public:
 	bool removeBlockAt(const int x, const int y, TerrainLayer layer);
 	
 	// BLOCK ENTITIES
-	bool setBlockEntityAt(const int x, const int y, BlockEntityID blockEntity);
+	bool setThingAt(const int x, const int y, ThingID blockEntity);
 
 	// CHUNK LOADER
 	ChunkLoader *getChunkLoader() { return &m_chunkLoader; }

@@ -1,5 +1,6 @@
 #include "spotlight.h"
-#include "game.h"
+#include "World/World.h"
+#include "Lighting/Lighting.h"
 
 xd::Vertex *Spotlight::s_vertices;
 

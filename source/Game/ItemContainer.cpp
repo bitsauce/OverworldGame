@@ -1,5 +1,6 @@
 #include "ItemContainer.h"
-#include "Game.h"
+#include "Items/ItemData.h"
+#include "Constants.h"
 
 ItemContainer::ItemContainer(const uint size) :
 	m_size(size)
@@ -61,4 +62,21 @@ int ItemContainer::findEmptySlot() const
 		}
 	}
 	return -1;
+}
+
+ItemContainer::ItemSlot::ItemSlot() :
+	item(ITEM_NONE),
+	amount(0)
+{
+}
+
+void ItemContainer::ItemSlot::set(ItemID item, const uint amount)
+{
+	this->item = item;
+	this->amount = amount;
+}
+
+bool ItemContainer::ItemSlot::isEmpty() const
+{
+	return item == ITEM_NONE;
 }

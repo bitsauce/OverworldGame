@@ -4,8 +4,6 @@
 #include "Config.h"
 #include "Constants.h"
 
-enum BlockID;
-enum TerrainLayer;
 class WorldGenerator;
 
 class Chunk

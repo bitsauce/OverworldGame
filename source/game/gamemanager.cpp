@@ -1,10 +1,15 @@
-#include "gamemanager.h"
-#include "game.h"
-
-#include "gui/canvas.h"
-#include "gui/uiobject.h"
-
-#include "lighting/spotlight.h"
+#include "GameManager.h"
+#include "Constants.h"
+#include "Gui/Canvas.h"
+#include "Gui/UiObject.h"
+#include "Lighting/Spotlight.h"
+#include "World/World.h"
+#include "Scenes/SceneManager.h"
+#include "Blocks/BlockData.h"
+#include "Items/ItemData.h"
+#include "Things/ThingData.h"
+#include "Game/Debug.h"
+#include "Entities/Camera.h"
 
 UiObject *canvas = nullptr;
 
@@ -23,7 +28,7 @@ void GameManager::main()
 	BlockData::init();
 	ItemData::init();
 	World::init();
-	BlockEntityData::init(World::getTerrain());
+	ThingData::init(World::getTerrain());
 
 	// Enable debugger
 	World::getDebug()->toggle();

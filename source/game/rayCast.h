@@ -1,7 +1,7 @@
 #ifndef RAY_CAST_H
 #define RAY_CAST_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
 
 class RayCast
 {

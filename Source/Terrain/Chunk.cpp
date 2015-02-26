@@ -5,7 +5,7 @@
 #include "World/World.h"
 #include "Blocks/BlockData.h"
 
-#include "World/WorldGenerator.h"
+#include "Generation/Generator.h"
 
 #define BLOCK_X0 0.00f
 #define BLOCK_Y0 0.00f

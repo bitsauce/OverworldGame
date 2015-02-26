@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "GameScene.h"
 #include "World/World.h"
 
 #include "Gui/UiObject.h"

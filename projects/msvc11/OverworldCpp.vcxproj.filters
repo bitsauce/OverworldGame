@@ -10,12 +10,6 @@
     <ClCompile Include="..\..\source\lighting\Spotlight.cpp">
       <Filter>Source\Lighting</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\environment\Background.cpp">
-      <Filter>Source\Environment</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\environment\TimeOfDay.cpp">
-      <Filter>Source\Environment</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\game\GameManager.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
@@ -52,16 +46,10 @@
     <ClCompile Include="..\..\source\animation\Slot.cpp">
       <Filter>Source\Animation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\game\Camera.cpp">
-      <Filter>Source\Game</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\game\Debug.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\game\GameObject.cpp">
-      <Filter>Source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\game\Player.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\game\RayCast.cpp">
@@ -94,18 +82,6 @@
     <ClCompile Include="..\..\source\Blocks\BlockData.cpp">
       <Filter>Source\Blocks</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\BlockEntities\RedCurrantBush.cpp">
-      <Filter>Source\BlockEntities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\BlockEntities\Torch.cpp">
-      <Filter>Source\BlockEntities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\BlockEntities\BlockEntityData.cpp">
-      <Filter>Source\BlockEntities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\BlockEntities\BlockEntity.cpp">
-      <Filter>Source\BlockEntities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\Items\Tools\Pickaxe.cpp">
       <Filter>Source\Items\Tools</Filter>
     </ClCompile>
@@ -119,26 +95,11 @@
     <ClCompile Include="..\..\source\gui\GameOverlay.cpp">
       <Filter>Source\Gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Game\ItemDrop.cpp">
-      <Filter>Source\Game</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\Items\BlockItem.cpp">
-      <Filter>Source\Items\Placeable</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Items\Placeable\BlockEntityItem.cpp">
       <Filter>Source\Items\Placeable</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\gui\GameOverlay\Hotbar.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\World\Structure.cpp">
-      <Filter>Source\World</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\World\Grassland.cpp">
-      <Filter>Source\World</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\World\WorldGenerator.cpp">
-      <Filter>Source\World</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\terrain\Chunk.cpp">
       <Filter>Source\Terrain</Filter>
@@ -148,6 +109,45 @@
     </ClCompile>
     <ClCompile Include="..\..\source\scenes\Multiplayer.cpp">
       <Filter>Source\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Things\RedCurrantBush.cpp">
+      <Filter>Source\Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Things\Torch.cpp">
+      <Filter>Source\Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Generation\Grassland.cpp">
+      <Filter>Source\Generation\Biomes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Generation\Structure.cpp">
+      <Filter>Source\Generation\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Generation\Generator.cpp">
+      <Filter>Source\Generation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\ItemDrop.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\Player.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\Camera.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Things\Thing.cpp">
+      <Filter>Source\Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Things\ThingData.cpp">
+      <Filter>Source\Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\Background.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\TimeOfDay.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Items\Placeable\ThingItem.cpp">
+      <Filter>Source\Items\Placeable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -168,9 +168,6 @@
     </Filter>
     <Filter Include="Source\Game">
       <UniqueIdentifier>{18bc6b9a-571d-4fa2-8cc2-faf75c39f783}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Environment">
-      <UniqueIdentifier>{60063404-bf8e-4d1f-91c0-9ce7bdaa6c13}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Scenes">
       <UniqueIdentifier>{a771c727-de3c-48d8-93c5-0076f2474292}</UniqueIdentifier>
@@ -193,9 +190,6 @@
     <Filter Include="Source\Blocks">
       <UniqueIdentifier>{fb4d1b3c-43e7-4a49-b971-c9dec50ba86d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\BlockEntities">
-      <UniqueIdentifier>{4d55008b-8f3b-45b7-a689-715e577275fd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Animation">
       <UniqueIdentifier>{30ad5ef0-d9bb-4e01-b029-5debc3059e46}</UniqueIdentifier>
     </Filter>
@@ -208,6 +202,21 @@
     <Filter Include="Source\World">
       <UniqueIdentifier>{706e8d91-9eee-467b-abcd-e94748a397ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Things">
+      <UniqueIdentifier>{4d55008b-8f3b-45b7-a689-715e577275fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Generation">
+      <UniqueIdentifier>{0ff5a936-9fef-4717-8bd5-d0f819a0c11c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Generation\Biomes">
+      <UniqueIdentifier>{ecfd21b3-ff40-495b-adf9-1964df633df3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Generation\Structures">
+      <UniqueIdentifier>{a2b439fd-88b0-4404-bd8a-b887a73116df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Entities">
+      <UniqueIdentifier>{c8a444ed-dfdc-4bf8-b372-18c5f3168179}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\terrain\Terrain.h">
@@ -216,20 +225,11 @@
     <ClInclude Include="..\..\source\Noise\Simplex.h">
       <Filter>Source\Noise</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\Game.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Constants.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\lighting\Spotlight.h">
       <Filter>Source\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\environment\Background.h">
-      <Filter>Source\Environment</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\environment\TimeOfDay.h">
-      <Filter>Source\Environment</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\game\GameManager.h">
       <Filter>Source\Game</Filter>
@@ -267,16 +267,10 @@
     <ClInclude Include="..\..\source\animation\Slot.h">
       <Filter>Source\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\game\Camera.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\game\Debug.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\game\GameObject.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\game\Player.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\game\RayCast.h">
@@ -312,18 +306,6 @@
     <ClInclude Include="..\..\source\Blocks\BlockData.h">
       <Filter>Source\Blocks</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\BlockEntities\RedCurrantBush.h">
-      <Filter>Source\BlockEntities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\BlockEntities\Torch.h">
-      <Filter>Source\BlockEntities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\BlockEntities\BlockEntityData.h">
-      <Filter>Source\BlockEntities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\BlockEntities\BlockEntity.h">
-      <Filter>Source\BlockEntities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Items\Tools\Pickaxe.h">
       <Filter>Source\Items\Tools</Filter>
     </ClInclude>
@@ -336,32 +318,11 @@
     <ClInclude Include="..\..\source\gui\GameOverlay.h">
       <Filter>Source\Gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Game\ItemDrop.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\Items\Include.h">
-      <Filter>Source\Items</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Items\BlockItem.h">
       <Filter>Source\Items\Placeable</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Items\Placeable\BlockEntityItem.h">
-      <Filter>Source\Items\Placeable</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\BlockEntities\Include.h">
-      <Filter>Source\BlockEntities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\gui\GameOverlay\Hotbar.h">
       <Filter>Source\Gui\GameOverlay</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\World\Structure.h">
-      <Filter>Source\World</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\World\Grassland.h">
-      <Filter>Source\World</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\World\WorldGenerator.h">
-      <Filter>Source\World</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\terrain\Chunk.h">
       <Filter>Source\Terrain</Filter>
@@ -371,6 +332,48 @@
     </ClInclude>
     <ClInclude Include="..\..\source\scenes\Multiplayer.h">
       <Filter>Source\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Things\RedCurrantBush.h">
+      <Filter>Source\Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Things\Torch.h">
+      <Filter>Source\Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Generation\Grassland.h">
+      <Filter>Source\Generation\Biomes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Generation\Structure.h">
+      <Filter>Source\Generation\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Generation\Generator.h">
+      <Filter>Source\Generation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Strings.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\ItemDrop.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\Player.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\Camera.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Things\Thing.h">
+      <Filter>Source\Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Things\ThingData.h">
+      <Filter>Source\Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\Background.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\TimeOfDay.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Items\Placeable\ThingItem.h">
+      <Filter>Source\Items\Placeable</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

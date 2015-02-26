@@ -1,8 +1,8 @@
 #ifndef SKELETON_H
 #define SKELETON_H
 
-#include <spine/spine.h>
 #include "Config.h"
+#include <spine/spine.h>
 
 class Animation;
 class Slot;

@@ -1,15 +1,17 @@
 #include "World.h"
 #include "Constants.h"
 
-#include "Environment/TimeOfDay.h"
-#include "Environment/Background.h"
-
+#include "Entities/Player.h"
+#include "Entities/Background.h"
 #include "Terrain/Terrain.h"
-
-#include "Game.h"
-
-#include "Game/Player.h"
+#include "Generation/Generator.h"
 #include "Physics/PhysicsBody.h"
+#include "Entities/Player.h"
+#include "Entities/Camera.h"
+#include "Entities/TimeOfDay.h"
+#include "Lighting/Lighting.h"
+#include "Game/Debug.h"
+#include "Scenes/SceneManager.h"
 
 string World::s_worldPath = "";
 Terrain *World::s_terrain = nullptr;

@@ -1,9 +1,10 @@
-#include "terrain.h"
-#include "constants.h"
-#include "Game.h"
+#include "Terrain.h"
+#include "Constants.h"
 #include "Blocks/BlockData.h"
-#include "BlockEntities/BlockEntityData.h"
-#include "lighting/spotlight.h"
+#include "Things/ThingData.h"
+#include "World/World.h"
+#include "Lighting/Spotlight.h"
+#include "Entities/Camera.h"
 
 Terrain::Terrain(WorldGenerator *generator, Camera *camera) :
 	m_chunkLoader(camera, generator),
@@ -47,9 +48,9 @@ bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRA
 }
 
 // BLOCK ENTITIES
-bool Terrain::setBlockEntityAt(const int x, const int y, BlockEntityID blockEntity)
+bool Terrain::setThingAt(const int x, const int y, ThingID blockEntity)
 {
-	return BlockEntityData::get(blockEntity).tryPlace(x, y);
+	return ThingData::get(blockEntity).tryPlace(x, y);
 }
 
 // DRAWING

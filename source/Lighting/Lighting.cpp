@@ -1,4 +1,11 @@
-#include "Game.h"
+#include "Lighting.h"
+#include "Constants.h"
+#include "Spotlight.h"
+#include "World/World.h"
+#include "Entities/TimeOfDay.h"
+#include "Entities/Camera.h"
+#include "Terrain/Terrain.h"
+#include "Terrain/ChunkLoader.h"
 
 Lighting::Lighting(Terrain *terrain) :
 	GameObject(DRAW_ORDER_LIGHTING),

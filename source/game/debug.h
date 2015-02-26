@@ -1,8 +1,8 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-#include <x2d/x2d.h>
-#include "game/gameObject.h"
+#include "Config.h"
+#include "Game/GameObject.h"
 
 class Terrain;
 class Lighting;

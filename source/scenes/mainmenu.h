@@ -1,7 +1,7 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
 #include "scene.h"
 
 class GameObject;

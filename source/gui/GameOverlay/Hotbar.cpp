@@ -1,6 +1,9 @@
 #include "Hotbar.h"
-#include "Game.h"
+#include "Constants.h"
 #include "Gui/Canvas.h"
+#include "Game/ItemContainer.h"
+#include "Items/ItemData.h"
+#include "Entities/Player.h"
 
 Hotbar::Hotbar(Player *player, UiObject *parent) :
 	UiObject(parent),
@@ -38,7 +41,7 @@ void Hotbar::draw(SpriteBatch *spriteBatch)
 	spriteBatch->drawSprite(m_spriteBackground);
 
 	ItemContainer &itemContainer = m_player->getItemContainer();
-	for(int i = 0; i < 10; ++i)
+	for(uint i = 0; i < 10; ++i)
 	{
 		Sprite &sprite = i == m_player->getSelectedItemSlot() ? m_spriteItemSlotSelected : m_spriteItemSlot;
 		sprite.setPosition(position + Vector2(8.f + i * 48.f, 7.f));

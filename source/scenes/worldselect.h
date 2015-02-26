@@ -1,8 +1,8 @@
 #ifndef WORLD_SELECT_H
 #define WORLD_SELECT_H
 
-#include <x2d/x2d.h>
-#include "scene.h"
+#include "Config.h"
+#include "Scene.h"
 
 class GameObject;
 

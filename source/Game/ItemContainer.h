@@ -2,9 +2,9 @@
 #define ITEM_CONTAINER_H
 
 #include "Config.h"
-#include "Constants.h"
 
 class ItemData;
+enum ItemID;
 
 class ItemContainer
 {
@@ -24,14 +24,10 @@ private:
 
 	struct ItemSlot
 	{
-		ItemSlot() :
-			item(ITEM_NONE),
-			amount(0)
-		{
-		}
+		ItemSlot();
 
-		void set(ItemID item, const uint amount) { this->item = item; this->amount = amount; }
-		bool isEmpty() const { return item == ITEM_NONE; }
+		void set(ItemID item, const uint amount);
+		bool isEmpty() const;
 
 		ItemID item;
 		uint amount;

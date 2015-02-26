@@ -1,7 +1,7 @@
 #ifndef SLOT_H
 #define SLOT_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
 #include <spine/spine.h>
 
 class Slot

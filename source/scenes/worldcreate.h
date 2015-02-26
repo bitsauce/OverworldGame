@@ -1,7 +1,7 @@
 #ifndef WORLD_CREATE_H
 #define WORLD_CREATE_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
 #include "scene.h"
 
 class GameObject;

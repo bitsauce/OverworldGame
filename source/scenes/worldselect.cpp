@@ -1,29 +1,29 @@
-#include "worldselect.h"
-#include "worldcreate.h"
-#include "scenemanager.h"
+#include "WorldSelect.h"
+#include "WorldCreate.h"
+#include "SceneManager.h"
 
-#include "gui/uiobject.h"
-#include "gui/button.h"
-#include "gui/canvas.h"
+#include "Gui/UiObject.h"
+#include "Gui/Button.h"
+#include "Gui/Canvas.h"
 
-#include "constants.h"
-#include "game.h"
-#include "physics/physicsbody.h"
+#include "Constants.h"
+#include "Physics/PhysicsBody.h"
+#include "Entities/Player.h"
 
 void WorldSelectScene::showEvent()
 {
-	xd::LOG("Scene: Select World");
+	LOG("Scene: Select World");
 	
 	// Setup canvas
 	canvas = new Canvas(800, 600);
 	canvas->update();
 
-	xd::FileSystemIterator itr("saves:/Overworld/", "*", xd::FileSystemIterator::DIRECTORIES);
+	FileSystemIterator itr("saves:/Overworld/", "*", FileSystemIterator::DIRECTORIES);
 	int i = 0;
 	while(itr)
 	{
 		string worldDir = itr.next();
-		Button *button = new Button(xd::IniFile(worldDir + "/world.ini").getValue("world", "name"), function<void()>(bind(&WorldSelectScene::worldClicked, this)), canvas);
+		Button *button = new Button(IniFile(worldDir + "/world.ini").getValue("world", "name"), function<void()>(bind(&WorldSelectScene::worldClicked, this)), canvas);
 		button->setAnchor(Vector2(0.5f, 0.5f));
 		button->setPosition(Vector2(0.0f, -0.3f + i++*0.1f));
 		button->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));

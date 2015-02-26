@@ -1,7 +1,7 @@
 #ifndef SPOTLIGHT_H
 #define SPOTLIGHT_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
 #include "LightSource.h"
 
 #define SPOTLIGHT_SEGMENTS 32

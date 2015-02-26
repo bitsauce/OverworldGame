@@ -7,7 +7,6 @@
 #include "Gui/Canvas.h"
 
 #include "Constants.h"
-#include "Game.h"
 
 void MultiplayerScene::showEvent()
 {

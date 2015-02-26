@@ -1,5 +1,11 @@
-#include "debug.h"
-#include "game.h"
+#include "Debug.h"
+#include "Constants.h"
+#include "Lighting/Lighting.h"
+#include "Lighting/Spotlight.h"
+#include "World/World.h"
+#include "Entities/Camera.h"
+#include "Terrain/Terrain.h"
+#include "Blocks/BlockData.h"
 
 Debug::Debug(Terrain *terrain, Lighting *lighting) :
 	GameObject(DRAW_ORDER_DEBUG),
@@ -46,7 +52,7 @@ void Debug::debugF4()
 
 void Debug::debugF5()
 {
-	m_terrain->setBlockEntityAt(World::getCamera()->getInputPosition().x/BLOCK_PXF, World::getCamera()->getInputPosition().y/BLOCK_PXF, BLOCK_ENTITY_RED_CURRANT_BUSH);
+	m_terrain->setThingAt(World::getCamera()->getInputPosition().x/BLOCK_PXF, World::getCamera()->getInputPosition().y/BLOCK_PXF, BLOCK_ENTITY_RED_CURRANT_BUSH);
 }
 
 void Debug::update()

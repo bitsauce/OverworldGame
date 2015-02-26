@@ -1,7 +1,7 @@
 #ifndef SIMPLEX_H
 #define SIMPLEX_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
 
 class Simplex2D
 {

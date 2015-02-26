@@ -1,5 +1,5 @@
 #include "Button.h"
-#include "Game.h"
+#include "Constants.h"
 
 Button::Button(string text, function<void()> onClick, UiObject *parent) :
 	UiObject(parent),

@@ -1,7 +1,6 @@
 #include "GameOverlay.h"
 #include "Game/ItemContainer.h"
-#include "Game/Player.h"
-#include "Game.h"
+#include "Entities/Player.h"
 #include "Gui/GameOverlay/Hotbar.h"
 
 GameOverlay::GameOverlay(Player *player, UiObject *parent) :

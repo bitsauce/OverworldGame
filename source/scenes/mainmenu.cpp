@@ -1,12 +1,11 @@
-#include "mainmenu.h"
-#include "worldselect.h"
-#include "scenemanager.h"
+#include "MainMenu.h"
+#include "WorldSelect.h"
+#include "SceneManager.h"
 
-#include "gui/button.h"
-#include "gui/canvas.h"
+#include "Gui/Button.h"
+#include "Gui/Canvas.h"
 
-#include "game.h"
-#include "constants.h"
+#include "Constants.h"
 
 int TITLE_BLOCKS[4][37] = {
 	{ 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0 },

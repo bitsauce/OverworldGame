@@ -1,7 +1,11 @@
-#include "Game.h"
+#include "Pickaxe.h"
+#include "Constants.h"
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
-#include "Game/ItemDrop.h"
+#include "Entities/Player.h"
+#include "Entities/Camera.h"
+#include "Entities/ItemDrop.h"
+#include "Terrain/Terrain.h"
 
 Pickaxe::Pickaxe() :
 	m_cracksSprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Tools/Pickaxes/MiningCracks.png")),

@@ -1,7 +1,7 @@
 #ifndef LIGHT_SOURCE_H
 #define LIGHT_SOURCE_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
 
 class LightSource
 {

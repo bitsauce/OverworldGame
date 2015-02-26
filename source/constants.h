@@ -73,7 +73,7 @@ enum BlockID
 };
 
 // BLOCK ENTITY IDS
-enum BlockEntityID
+enum ThingID
 {
 	BLOCK_ENTITY_NONE,
 

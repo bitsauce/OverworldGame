@@ -1,4 +1,8 @@
-#include "Game.h"
+#include "ItemData.h"
+#include "Constants.h"
+#include "BlockItem.h"
+#include "Tools/Pickaxe.h"
+#include "Placeable/ThingItem.h"
 
 vector<ItemData*> ItemData::s_itemData(ITEM_COUNT);
 
@@ -28,6 +32,6 @@ void ItemData::init()
 	(s_itemData[ITEM_DIRT_BACK_BLOCK] = new BlockItem(TERRAIN_LAYER_BACK, BLOCK_DIRT_BACK))->set(ITEM_DIRT_BACK_BLOCK, "Dirt backdrop", "", ":/Sprites/ItemIcons/DirtBackBlock.png", 255, false);
 	(s_itemData[ITEM_STONE_BLOCK] = new BlockItem(TERRAIN_LAYER_MIDDLE, BLOCK_STONE))->set(ITEM_STONE_BLOCK, "Cobblestone", "A block of stone", ":/Sprites/ItemIcons/StoneBlock.png", 255, false);
 	(s_itemData[ITEM_PICKAXE_IRON] = new Pickaxe())->set(ITEM_PICKAXE_IRON, "Iron Pickaxe", "An iron pickaxe", ":/Sprites/ItemIcons/IronPickaxe.png", 1, false);
-	(s_itemData[ITEM_TORCH] = new BlockEntityItem(BLOCK_ENTITY_TORCH))->set(ITEM_TORCH, "Torch", "Useful light source", ":/Sprites/ItemIcons/Torch.png", 255, false);
-	(s_itemData[ITEM_RED_CURRANT_BUSH] = new BlockEntityItem(BLOCK_ENTITY_RED_CURRANT_BUSH))->set(ITEM_RED_CURRANT_BUSH, "Red currant bush", "Grows red currants", ":/Sprites/ItemIcons/Torch.png", 255, false);
+	(s_itemData[ITEM_TORCH] = new ThingItem(BLOCK_ENTITY_TORCH))->set(ITEM_TORCH, "Torch", "Useful light source", ":/Sprites/ItemIcons/Torch.png", 255, false);
+	(s_itemData[ITEM_RED_CURRANT_BUSH] = new ThingItem(BLOCK_ENTITY_RED_CURRANT_BUSH))->set(ITEM_RED_CURRANT_BUSH, "Red currant bush", "Grows red currants", ":/Sprites/ItemIcons/Torch.png", 255, false);
 }

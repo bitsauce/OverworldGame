@@ -1,5 +1,10 @@
-#include "scenemanager.h"
-#include "game.h"
+#include "SceneManager.h"
+#include "Constants.h"
+#include "MainMenu.h"
+#include "WorldSelect.h"
+#include "WorldCreate.h"
+#include "Multiplayer.h"
+#include "GameScene.h"
 
 // Init static members
 Scene *SceneManager::s_scenes[SCENE_COUNT];

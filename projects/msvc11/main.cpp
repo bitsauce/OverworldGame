@@ -8,7 +8,7 @@
 //									2011-2014 (C)
 
 #include "Config.h"
-#include "Game.h"
+#include "Game/GameManager.h"
 
 #if defined(X2D_WINDOWS) && defined(X2D_DEBUG)
 //#include <vld.h> // Visual Leak Detector

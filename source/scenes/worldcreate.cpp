@@ -1,18 +1,16 @@
-#include "worldcreate.h"
+#include "WorldCreate.h"
 
-#include "gui/lineedit.h"
-#include "gui/button.h"
-#include "gui/canvas.h"
+#include "Gui/LineEdit.h"
+#include "Gui/Button.h"
+#include "Gui/Canvas.h"
 
-#include "game/gameobject.h"
+#include "Game/GameObject.h"
 #include "World/World.h"
-
-#include "game.h"
-#include "constants.h"
+#include "Constants.h"
 
 void WorldCreateScene::showEvent()
 {
-	xd::LOG("Scene: World Create");
+	LOG("Scene: World Create");
 	
 	// Setup canvas
 	canvas = new Canvas(800, 600);

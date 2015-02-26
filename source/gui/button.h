@@ -1,8 +1,8 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include <x2d/x2d.h>
-#include "uiobject.h"
+#include "Config.h"
+#include "UiObject.h"
 
 class Button : public UiObject
 {
@@ -18,7 +18,7 @@ public:
 	void *getUserData() const;
 
 	void update();
-	void draw(xd::SpriteBatch *SpriteBatch);
+	void draw(SpriteBatch *SpriteBatch);
 	void clickEvent();
 
 private:
@@ -26,10 +26,10 @@ private:
 	string m_text;
 
 	// Button font
-	xd::FontPtr m_font;
+	FontPtr m_font;
 
 	// Button sprite texture
-	xd::Texture2DPtr m_btnTexture;
+	Texture2DPtr m_btnTexture;
 		
 	// Button callback
 	function<void()> m_callback;
@@ -39,10 +39,10 @@ private:
 	void *m_userData;
 	
 	// Text texture
-	xd::Texture2DPtr m_textTexture;
+	Texture2DPtr m_textTexture;
 		
 	// Button sprite
-	xd::Sprite *m_buttonSprite;
+	Sprite *m_buttonSprite;
 
 	// SkeletalAnimation time
 	float m_animTime;

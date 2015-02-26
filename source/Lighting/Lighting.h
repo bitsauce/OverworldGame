@@ -1,7 +1,8 @@
 #ifndef LIGHTING_H
 #define LIGHTING_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
+#include "Game/GameObject.h"
 
 class Terrain;
 class LightSource;
