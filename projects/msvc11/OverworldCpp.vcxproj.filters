@@ -146,6 +146,9 @@
     <ClCompile Include="..\..\Source\World\World.cpp">
       <Filter>Source\World</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\scenes\Multiplayer.cpp">
+      <Filter>Source\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -365,6 +368,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\World\World.h">
       <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\scenes\Multiplayer.h">
+      <Filter>Source\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

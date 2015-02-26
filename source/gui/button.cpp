@@ -14,6 +14,7 @@ Button::Button(string text, function<void()> onClick, UiObject *parent) :
 
 	// Set sprite
 	m_buttonSprite = new Sprite(m_btnTexture);
+	m_buttonSprite->setDepth(-1.0f);
 		
 	// Set text
 	setText(text);

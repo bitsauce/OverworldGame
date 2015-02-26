@@ -12,6 +12,7 @@ void SceneManager::init()
 	s_scenes[SCENE_MAIN_MENU] = new MainMenuScene;
 	s_scenes[SCENE_WORLD_SELECT] = new WorldSelectScene;
 	s_scenes[SCENE_WORLD_CREATE] = new WorldCreateScene;
+	s_scenes[SCENE_MULTIPLAYER] = new MultiplayerScene;
 	s_scenes[SCENE_GAME] = new GameScene;
 }
 

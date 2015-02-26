@@ -1117,7 +1117,8 @@ int main(void)
 					printf("Host sent us system list. Doing NAT punch to each system...\n");
 					DataStructures::List<SystemAddress> addresses;
 					DataStructures::List<RakNetGUID> guids;
-					fullyConnectedMesh2->GetVerifiedJoinRequiredProcessingList(packet->guid, addresses, guids);
+					DataStructures::List<BitStream*> userData;
+					fullyConnectedMesh2->GetVerifiedJoinRequiredProcessingList(packet->guid, addresses, guids, userData);
 					for (unsigned int i=0; i < guids.Size(); i++)
 						natPunchthroughClient->OpenNAT(guids[i], game->natPunchServerAddress);
 				}

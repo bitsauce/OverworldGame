@@ -1,7 +1,7 @@
 #ifndef UI_OBJECT_H
 #define UI_OBJECT_H
 
-#include <x2d/x2d.h>
+#include "Config.h"
 
 #include "game/gameobject.h"
 
@@ -47,7 +47,7 @@ public:
 	
 	// Update & draw
 	virtual void update();
-	virtual void draw(xd::SpriteBatch *SpriteBatch) { }
+	virtual void draw(SpriteBatch *SpriteBatch) { }
 
 protected:
 	// Parent object

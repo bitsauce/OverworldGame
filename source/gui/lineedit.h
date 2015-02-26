@@ -1,12 +1,12 @@
 #ifndef LINE_EDIT_H
 #define LINE_EDIT_H
 
-#include "game.h"
-#include "uiobject.h"
+#include "Config.h"
+#include "UiObject.h"
 
 class UiObject;
 
-class LineEdit : public UiObject, public xd::KeyboardListener
+class LineEdit : public UiObject, public KeyboardListener
 {
 public:
 	LineEdit(UiObject *parent = nullptr);
@@ -17,16 +17,20 @@ public:
 	string getText() const;
 
 	void update();
-	void draw(xd::SpriteBatch *SpriteBatch);
+	void draw(SpriteBatch *SpriteBatch);
+
+	void clickEvent() { LOG("Clicked"); }
+	void activateEvent() { LOG("Activated"); }
+	void deactivateEvent() { LOG("Activated"); }
 
 private:
 	void insertAt(const uint at, const string &str);
 	void removeAt(const uint at);
 	void charEvent(const wchar_t code);
-	void keyPressEvent(const xd::VirtualKey key);
-	void keyReleaseEvent(const xd::VirtualKey key);
+	void keyPressEvent(const VirtualKey key);
+	void keyReleaseEvent(const VirtualKey key);
 
-	xd::FontPtr m_font;
+	FontPtr m_font;
 	string m_text;
 	int m_cursorPos;
 	float m_cursorTime;

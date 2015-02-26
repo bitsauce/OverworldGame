@@ -32,10 +32,12 @@ void GameManager::main()
 	Window::setSize(Vector2i(1280, 720));
 
 	// Show main menu
-	if(!World::load("Debug"))
-	{
-		World::create("Debug");
-	}
+	//if(!World::load("Debug"))
+	//{
+	//	World::create("Debug");
+	//}
+
+	SceneManager::gotoScene(SCENE_MULTIPLAYER);
 }
 
 void GameManager::exit()

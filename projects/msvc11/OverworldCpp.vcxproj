@@ -128,6 +128,7 @@
     <ClCompile Include="..\..\source\Noise\Simplex.cpp" />
     <ClCompile Include="..\..\source\physics\PhysicsBody.cpp" />
     <ClCompile Include="..\..\source\scenes\GameScene.cpp" />
+    <ClCompile Include="..\..\source\scenes\Multiplayer.cpp" />
     <ClCompile Include="..\..\source\scenes\Scene.cpp" />
     <ClCompile Include="..\..\source\scenes\SceneManager.cpp" />
     <ClCompile Include="..\..\source\scenes\WorldCreate.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="..\..\source\Noise\Simplex.h" />
     <ClInclude Include="..\..\source\physics\PhysicsBody.h" />
     <ClInclude Include="..\..\source\scenes\GameScene.h" />
+    <ClInclude Include="..\..\source\scenes\Multiplayer.h" />
     <ClInclude Include="..\..\source\scenes\Scene.h" />
     <ClInclude Include="..\..\source\scenes\SceneManager.h" />
     <ClInclude Include="..\..\source\scenes\WorldCreate.h" />

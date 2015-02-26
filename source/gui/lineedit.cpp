@@ -5,14 +5,15 @@ LineEdit::LineEdit(UiObject *parent) :
 	UiObject(parent),
 	m_cursorPos(0),
 	m_cursorTime(0.0f),
-	m_font(xd::ResourceManager::get<xd::Font>(UI_MENU_BUTTON_FONT))
+	m_font(ResourceManager::get<Font>(UI_MENU_BUTTON_FONT))
 {
-	xd::Input::addKeyboardListener(this);
+	Input::addKeyboardListener(this);
 }
 
 void LineEdit::setText(const string &text)
 {
 	m_text = text;
+	m_cursorPos = m_text.size();
 }
 
 string LineEdit::getText() const
@@ -22,14 +23,15 @@ string LineEdit::getText() const
 
 void LineEdit::update()
 {
-	m_cursorTime -= xd::Graphics::getTimeStep();
+	m_cursorTime -= Graphics::getTimeStep();
 	if(m_cursorTime <= 0.0f)
 	{
 		m_cursorTime = 1.0f;
 	}
+	UiObject::update();
 }
 
-void LineEdit::draw(xd::SpriteBatch *spriteBatch)
+void LineEdit::draw(SpriteBatch *spriteBatch)
 {
 	Vector2 position = getPosition();
 	Vector2 size = getSize();
@@ -37,13 +39,13 @@ void LineEdit::draw(xd::SpriteBatch *spriteBatch)
 	// Apply center alignment
 	position.x += (size.x - m_font->getStringWidth(m_text))*0.5f;
 		
-	m_font->setColor(xd::Color(255, 255, 255, 255));
+	m_font->setColor(Color(255, 255, 255, 255));
 	m_font->draw(spriteBatch, position, m_text);
 	
-	xd::GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
-	if(m_cursorTime >= 0.5f)
+	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
+	if(m_active && m_cursorTime >= 0.5f)
 	{
-		gfxContext.drawRectangle(position.x + m_font->getStringWidth(m_text.substr(0, m_cursorPos)), position.y, 2, m_font->getStringHeight(""), xd::Color(0, 0, 0, 255));
+		gfxContext.drawRectangle(position.x + m_font->getStringWidth(m_text.substr(0, m_cursorPos)), position.y, 2, m_font->getStringHeight(""), Color(0, 0, 0, 255));
 	}
 }
 
@@ -74,13 +76,11 @@ void LineEdit::removeAt(const uint at)
 void LineEdit::charEvent(const wchar_t c)
 {
 	// Only add text if active
-	//if(!isActive())
-	//	return;
-
+	if(!m_active) return;
 		
 	switch(c)
 	{
-	case xd::XD_KEY_BACKSPACE:
+	case XD_KEY_BACKSPACE:
 		// Remove char behind
 		if(m_cursorPos != 0) {
 			removeAt(m_cursorPos);
@@ -88,7 +88,7 @@ void LineEdit::charEvent(const wchar_t c)
 		}
 		break;
 			
-	case xd::XD_KEY_ENTER:
+	case XD_KEY_ENTER:
 		// Call accept function
 		if(m_acceptFunc) {
 			m_acceptFunc();
@@ -103,12 +103,15 @@ void LineEdit::charEvent(const wchar_t c)
 	}
 }
 	
-void LineEdit::keyPressEvent(const xd::VirtualKey key)
+void LineEdit::keyPressEvent(const VirtualKey key)
 {
+	// Only add text if active
+	if(!m_active) return;
+
 	switch(key)
 	{
 		// Delete
-		case xd::XD_KEY_DELETE:
+		case XD_KEY_DELETE:
 		{
 			// Remove char in front
 			if(m_cursorPos + 1 <= (int)m_text.size()) {
@@ -118,7 +121,7 @@ void LineEdit::keyPressEvent(const xd::VirtualKey key)
 		break;
 			
 		// Left cursor key
-		case xd::XD_KEY_LEFT:
+		case XD_KEY_LEFT:
 		{
 			// Decrease cursor position
 			if(--m_cursorPos < 0) {
@@ -128,7 +131,7 @@ void LineEdit::keyPressEvent(const xd::VirtualKey key)
 		break;
 			
 		// Right cursor key
-		case xd::XD_KEY_RIGHT:
+		case XD_KEY_RIGHT:
 		{
 			if(++m_cursorPos >= (int)m_text.size()) {
 				m_cursorPos = m_text.size();
@@ -138,6 +141,6 @@ void LineEdit::keyPressEvent(const xd::VirtualKey key)
 	}
 }
 	
-void LineEdit::keyReleaseEvent(const xd::VirtualKey key)
+void LineEdit::keyReleaseEvent(const VirtualKey key)
 {
 }

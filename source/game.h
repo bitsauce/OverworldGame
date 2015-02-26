@@ -40,6 +40,7 @@
 #include "Scenes/WorldCreate.h"
 #include "Scenes/WorldSelect.h"
 //#include "charactercreate.h"
+#include "Scenes/Multiplayer.h"
 
 #include "Terrain/Terrain.h"
 
