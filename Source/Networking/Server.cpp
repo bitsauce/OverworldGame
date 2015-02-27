@@ -5,6 +5,7 @@
 #include "BitStream.h"
 #include "NetworkIDObject.h"
 #include "NetworkIDManager.h"
+#include "PacketLogger.h"
 
 #include "Server.h"
 #include "Constants.h"
@@ -26,6 +27,10 @@ void Server::update()
 		{
 		case ID_NEW_INCOMING_CONNECTION:
 			LOG("Client connected from %s with GUID %s", packet->systemAddress.ToString(true), packet->guid.ToString());
+			break;
+
+		default:
+			LOG("Received packet type %s", RakNet::PacketLogger::BaseIDTOString(packet->data[0]));
 			break;
 		}
 	}

@@ -33,6 +33,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 	}
 	flags |= XD_EXPORT_LOG; // For now we force this flag
 	flags |= XD_RUN_IN_BACKGROUND;
+	flags |= XD_BLOCK_BACKGROUND_INPUT;
 
 	Engine *engine = CreateEngine();
 

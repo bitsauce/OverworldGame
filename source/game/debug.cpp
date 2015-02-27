@@ -55,6 +55,8 @@ void Debug::debugF5()
 	m_terrain->setThingAt(World::getCamera()->getInputPosition().x/BLOCK_PXF, World::getCamera()->getInputPosition().y/BLOCK_PXF, BLOCK_ENTITY_RED_CURRANT_BUSH);
 }
 
+//#include "BitStream.h"
+
 void Debug::update()
 {
 	if(!m_enabled) return;
@@ -65,7 +67,18 @@ void Debug::update()
 	if(Input::getKeyState(XD_KEY_LCONTROL)) layer = TERRAIN_LAYER_BACK;
 	if(Input::getKeyState(XD_LMB))
 	{
-		m_terrain->setBlockAt(floor((World::getCamera()->getPosition().x + Input::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + Input::getPosition().y)/BLOCK_PXF), m_block, layer);
+		int x = floor(World::getCamera()->getInputPosition().x/BLOCK_PXF), y = floor(World::getCamera()->getInputPosition().y/BLOCK_PXF);
+
+		m_terrain->setBlockAt(x, y, m_block, layer);
+
+		/*RakNet::BitStream bitStream;
+		bitStream.Write((RakNet::MessageID)ID_SET_BLOCK);
+		bitStream.Write(x);
+		bitStream.Write(y);
+		bitStream.Write(m_block);
+		bitStream.Write(layer);*/
+		//Server::getInstance()->sendPacket(bitStream);
+
 	}
 	else if(Input::getKeyState(XD_RMB))
 	{
@@ -86,7 +99,7 @@ void Debug::draw(SpriteBatch *spriteBatch)
 	{
 		drawString += itr->first + ": " + itr->second + "\n";
 	}
-	m_font->draw(spriteBatch, Vector2(5.0f, 48.0f), drawString);
+	m_font->draw(spriteBatch, Vector2(0.0f), drawString);
 
 	// Block painter
 	spriteBatch->drawText(Vector2(5.0f, Window::getSize().y - 48.0f), "Current block:    (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (Input::getKeyState(XD_KEY_LCONTROL) ? "BACK" : (Input::getKeyState(XD_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font);

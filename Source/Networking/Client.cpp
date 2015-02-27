@@ -5,6 +5,7 @@
 #include "BitStream.h"
 #include "NetworkIDObject.h"
 #include "NetworkIDManager.h"
+#include "PacketLogger.h"
 
 #include "Client.h"
 #include "Constants.h"
@@ -20,5 +21,13 @@ Client::Client(const string &ip, const ushort port) :
 
 void Client::update()
 {
-
+	for(RakNet::Packet *packet = m_rakPeer->Receive(); packet; m_rakPeer->DeallocatePacket(packet), packet = m_rakPeer->Receive())
+	{
+		switch(packet->data[0])
+		{
+		default:
+			LOG("Received packet type %s", RakNet::PacketLogger::BaseIDTOString(packet->data[0]));
+			break;
+		}
+	}
 }
