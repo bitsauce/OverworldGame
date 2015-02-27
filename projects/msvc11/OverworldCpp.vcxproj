@@ -52,13 +52,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\vld\include;..\..\3rdparty\Box2D\Box2D;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\glew\include;..\..\..\x2D-Game-Engine\3rdparty\openal\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\vld\include;..\..\3rdparty\Box2D\Box2D;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\glew\include;..\..\..\x2D-Game-Engine\3rdparty\openal\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>X2D_DEBUG;X2D_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\..\3rdparty\vld\lib;..\..\3rdparty\spine\lib;..\..\..\x2D-Game-Engine\build\Win32\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>x2dd.lib;spined.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\3rdparty\RakNet\Lib\RakNet_VS2008_DLL_Debug_Win32.lib;ws2_32.lib;x2dd.lib;spined.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
@@ -124,6 +124,8 @@
     <ClCompile Include="..\..\source\Lighting\Lighting.cpp" />
     <ClCompile Include="..\..\source\lighting\Spotlight.cpp" />
     <ClCompile Include="..\..\source\mobs\Zombie.cpp" />
+    <ClCompile Include="..\..\Source\Networking\Client.cpp" />
+    <ClCompile Include="..\..\Source\Networking\Server.cpp" />
     <ClCompile Include="..\..\source\Noise\Simplex.cpp" />
     <ClCompile Include="..\..\source\physics\PhysicsBody.cpp" />
     <ClCompile Include="..\..\source\scenes\GameScene.cpp" />
@@ -178,6 +180,8 @@
     <ClInclude Include="..\..\source\Lighting\Lighting.h" />
     <ClInclude Include="..\..\source\lighting\Spotlight.h" />
     <ClInclude Include="..\..\source\mobs\Zombie.h" />
+    <ClInclude Include="..\..\Source\Networking\Client.h" />
+    <ClInclude Include="..\..\Source\Networking\Server.h" />
     <ClInclude Include="..\..\source\Noise\Simplex.h" />
     <ClInclude Include="..\..\source\physics\PhysicsBody.h" />
     <ClInclude Include="..\..\source\scenes\GameScene.h" />

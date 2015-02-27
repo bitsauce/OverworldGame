@@ -19,10 +19,6 @@ public:
 	void update();
 	void draw(SpriteBatch *SpriteBatch);
 
-	void clickEvent() { LOG("Clicked"); }
-	void activateEvent() { LOG("Activated"); }
-	void deactivateEvent() { LOG("Activated"); }
-
 private:
 	void insertAt(const uint at, const string &str);
 	void removeAt(const uint at);

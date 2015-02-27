@@ -1,5 +1,9 @@
 #include "Multiplayer.h"
 #include "SceneManager.h"
+#include "GameScene.h"
+
+#include "Networking/Client.h"
+#include "Networking/Server.h"
 
 #include "Gui/UiObject.h"
 #include "Gui/Button.h"
@@ -16,19 +20,19 @@ MultiplayerScene::MultiplayerScene()
 	canvas = new Canvas(800, 600);
 	canvas->update();
 	
-	LineEdit *ipEdit = new LineEdit(canvas);
-	ipEdit->setText("127.0.0.1");
-	ipEdit->setAnchor(Vector2(0.5f, 0.5f));
-	ipEdit->setPosition(Vector2(-0.2f, -0.1f));
-	ipEdit->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
-	addSceneObject(ipEdit);
+	m_ipLineEdit = new LineEdit(canvas);
+	m_ipLineEdit->setText("127.0.0.1");
+	m_ipLineEdit->setAnchor(Vector2(0.5f, 0.5f));
+	m_ipLineEdit->setPosition(Vector2(-0.2f, -0.1f));
+	m_ipLineEdit->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
+	addSceneObject(m_ipLineEdit);
 	
-	LineEdit *portEdit = new LineEdit(canvas);
-	portEdit->setText("5555");
-	portEdit->setAnchor(Vector2(0.5f, 0.5f));
-	portEdit->setPosition(Vector2(0.2f, -0.1f));
-	portEdit->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
-	addSceneObject(portEdit);
+	m_portLineEdit = new LineEdit(canvas);
+	m_portLineEdit->setText("5555");
+	m_portLineEdit->setAnchor(Vector2(0.5f, 0.5f));
+	m_portLineEdit->setPosition(Vector2(0.2f, -0.1f));
+	m_portLineEdit->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
+	addSceneObject(m_portLineEdit);
 	
 	Button *joinBtn = new Button("Join", function<void()>(bind(&MultiplayerScene::join, this)), canvas);
 	joinBtn->setAnchor(Vector2(0.5f, 1.0f));
@@ -41,4 +45,19 @@ MultiplayerScene::MultiplayerScene()
 	hostBtn->setPosition(Vector2(-0.2f, -0.1f));
 	hostBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 	addSceneObject(hostBtn);
+}
+
+void MultiplayerScene::host()
+{
+	new Server(util::strToInt(m_portLineEdit->getText()));
+	SceneManager::setScene(new GameScene());
+}
+
+void MultiplayerScene::join()
+{
+	vector<string> ipStrings = util::splitString(m_ipLineEdit->getText(), ".");
+	if(ipStrings.size() != 4) return;
+
+	new Client(m_ipLineEdit->getText(), util::strToInt(m_portLineEdit->getText()));
+	SceneManager::setScene(new GameScene());
 }

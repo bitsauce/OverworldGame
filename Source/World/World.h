@@ -9,6 +9,8 @@ class Camera;
 class Debug;
 class Lighting;
 class WorldGenerator;
+class Server;
+class Client;
 
 class World
 {
@@ -39,6 +41,8 @@ private:
 	static Debug *s_debug;
 	static Lighting *s_lighting;
 	static vector<Player*> s_players;
+	static Server *s_server;
+	static Client *s_client;
 };
 
 #endif // WORLD_H

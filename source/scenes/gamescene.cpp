@@ -15,7 +15,7 @@ GameScene::GameScene()
 	canvas = new Canvas(numeric_limits<int>::max(), numeric_limits<int>::max());
 	canvas->update();
 	
-	m_inventory = new GameOverlay(World::getPlayers()[0], canvas);
+	if(World::getPlayers().size() > 0) m_inventory = new GameOverlay(World::getPlayers()[0], canvas);
 }
 
 GameScene::~GameScene()

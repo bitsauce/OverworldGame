@@ -149,6 +149,12 @@
     <ClCompile Include="..\..\Source\Items\Placeable\ThingItem.cpp">
       <Filter>Source\Items\Placeable</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Networking\Server.cpp">
+      <Filter>Source\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Networking\Client.cpp">
+      <Filter>Source\Networking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -216,6 +222,9 @@
     </Filter>
     <Filter Include="Source\Entities">
       <UniqueIdentifier>{c8a444ed-dfdc-4bf8-b372-18c5f3168179}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Networking">
+      <UniqueIdentifier>{464af6f7-b4b6-4bf3-9be0-2ec11795c021}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -374,6 +383,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Items\Placeable\ThingItem.h">
       <Filter>Source\Items\Placeable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Networking\Server.h">
+      <Filter>Source\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Networking\Client.h">
+      <Filter>Source\Networking</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
