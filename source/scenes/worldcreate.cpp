@@ -8,7 +8,7 @@
 #include "World/World.h"
 #include "Constants.h"
 
-void WorldCreateScene::showEvent()
+WorldCreateScene::WorldCreateScene()
 {
 	LOG("Scene: World Create");
 	
@@ -21,20 +21,13 @@ void WorldCreateScene::showEvent()
 	m_worldNameEdit->setPosition(Vector2(0.0f, 0.0f));
 	m_worldNameEdit->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 	m_worldNameEdit->setAcceptFunc(function<void()>(bind(&WorldCreateScene::createWorld, this))); // TODO: Accept func should probably be connected to the canvas instead
-	m_sceneObjects.push_back(m_worldNameEdit);
+	addSceneObject(m_worldNameEdit);
 	
 	Button *createWorldButton = new Button("Create!", function<void()>(bind(&WorldCreateScene::createWorld, this)), canvas);
 	createWorldButton->setAnchor(Vector2(0.5f, 1.0f));
 	createWorldButton->setPosition(Vector2(0.0f, -0.1f));
 	createWorldButton->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
-	m_sceneObjects.push_back(createWorldButton);
-}
-
-void WorldCreateScene::hideEvent()
-{
-	for(uint i = 0; i < m_sceneObjects.size(); ++i)
-		delete m_sceneObjects[i];
-	m_sceneObjects.clear();
+	addSceneObject(createWorldButton);
 }
 
 void WorldCreateScene::createWorld()

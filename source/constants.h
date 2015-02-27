@@ -126,18 +126,6 @@ enum Direction
 	NESW		= NORTH | EAST | SOUTH | WEST
 };
 
-// SCENE IDS
-enum SceneID
-{
-	SCENE_MAIN_MENU,
-	SCENE_GAME,
-	SCENE_WORLD_SELECT,
-	SCENE_WORLD_CREATE,
-	//SCENE_CHARACTER_CREATE,
-	SCENE_MULTIPLAYER,
-	SCENE_COUNT
-};
-
 extern class UiObject *canvas;
 
 #endif // CONSTANTS_H

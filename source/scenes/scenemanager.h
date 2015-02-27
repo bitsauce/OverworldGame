@@ -1,7 +1,8 @@
 #ifndef SCENE_MANAGER_H
 #define SCENE_MANAGER_H
 
-#include "scene.h"
+#include "Config.h"
+#include "Scene.h"
 
 enum SceneID;
 
@@ -9,32 +10,19 @@ class SceneManager
 {
 	friend class GameManager;
 public:
-
-	// Initialize scenes
-	static void init();
-
-	// Clear scenes
-	static void clear();
-
 	// Go to scene
-	static void gotoScene(const SceneID scene/*, const float time, const TransitionType transition*/);
-	//static void setTransition(const float time, const TransitionType transition);
+	static void setScene(Scene *scene/*, const float time, const TransitionType transition*/);
 
 protected:
-
 	// Update (called by GameManager)
 	static void update();
 
 private:
-
-	// Array of scenes
-	static Scene *s_scenes[];
-
 	// Current scene
-	static Scene *s_currentScene;
+	static Scene *s_scene;
 
-	// Next scene
-	static Scene *s_nextScene;
+	// Scene to delete
+	static stack<Scene*> s_scenesToDelete;
 };
 
 #endif // SCENE_MANAGER_H

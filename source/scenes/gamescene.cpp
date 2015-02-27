@@ -7,7 +7,7 @@
 
 #include "Constants.h"
 
-void GameScene::showEvent()
+GameScene::GameScene()
 {
 	LOG("Scene: Game Scene");
 
@@ -18,7 +18,7 @@ void GameScene::showEvent()
 	m_inventory = new GameOverlay(World::getPlayers()[0], canvas);
 }
 
-void GameScene::hideEvent()
+GameScene::~GameScene()
 {
 	// Save and clear
 	World::save();

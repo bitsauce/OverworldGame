@@ -2,7 +2,7 @@
 #define WORLD_CREATE_H
 
 #include "Config.h"
-#include "scene.h"
+#include "Scene.h"
 
 class GameObject;
 class LineEdit;
@@ -10,19 +10,13 @@ class LineEdit;
 class WorldCreateScene : public Scene
 {
 public:
-	void showEvent();
-	void hideEvent();
-	void drawEvent();
-	void updateEvent();
+	WorldCreateScene();
 
-	void showWorldSelect();
-
+	void showWorldSelectScene();
 	void createWorld();
 
 private:
 	LineEdit *m_worldNameEdit;
-
-	vector<GameObject*> m_sceneObjects;
 };
 
 #endif // WORLD_CREATE_H

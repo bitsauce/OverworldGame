@@ -6,42 +6,27 @@
 #include "Multiplayer.h"
 #include "GameScene.h"
 
-// Init static members
-Scene *SceneManager::s_scenes[SCENE_COUNT];
-Scene *SceneManager::s_currentScene = nullptr;
-Scene *SceneManager::s_nextScene = nullptr;
+Scene *SceneManager::s_scene = nullptr;
+stack<Scene*> SceneManager::s_scenesToDelete;
 
-void SceneManager::init()
+void SceneManager::setScene(Scene *scene)
 {
-	// Init scene objects
-	s_scenes[SCENE_MAIN_MENU] = new MainMenuScene;
-	s_scenes[SCENE_WORLD_SELECT] = new WorldSelectScene;
-	s_scenes[SCENE_WORLD_CREATE] = new WorldCreateScene;
-	s_scenes[SCENE_MULTIPLAYER] = new MultiplayerScene;
-	s_scenes[SCENE_GAME] = new GameScene;
-}
+	// Queue scene for deletion
+	if(s_scene)
+	{
+		s_scenesToDelete.push(s_scene);
+	}
 
-void SceneManager::clear()
-{
-	// Delete scene objects
-	for(uint i = 0; i < SCENE_COUNT; ++i) delete s_scenes[i]; 
-}
-
-void SceneManager::gotoScene(const SceneID scene)
-{
 	// Set next scene
-	s_nextScene = s_scenes[scene];
+	s_scene = scene;
 }
 
 void SceneManager::update()
 {
-	// Load next scene if any
-	if(s_nextScene)
+	// Delete scenes
+	while(!s_scenesToDelete.empty())
 	{
-		s_nextScene->showEvent();
-		if(s_currentScene) s_currentScene->hideEvent();
-
-		s_currentScene = s_nextScene;
-		s_nextScene = nullptr;
+		delete s_scenesToDelete.top();
+		s_scenesToDelete.pop();
 	}
 }

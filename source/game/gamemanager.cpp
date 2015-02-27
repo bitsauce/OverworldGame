@@ -5,6 +5,7 @@
 #include "Lighting/Spotlight.h"
 #include "World/World.h"
 #include "Scenes/SceneManager.h"
+#include "Scenes/Multiplayer.h"
 #include "Blocks/BlockData.h"
 #include "Items/ItemData.h"
 #include "Things/ThingData.h"
@@ -24,7 +25,6 @@ void GameManager::main()
 	Input::bind(XD_KEY_SNAPSHOT, function<void()>(GameManager::takeScreenshot));
 	
 	// Initialize game managers
-	SceneManager::init();
 	BlockData::init();
 	ItemData::init();
 	World::init();
@@ -42,7 +42,7 @@ void GameManager::main()
 	//	World::create("Debug");
 	//}
 
-	SceneManager::gotoScene(SCENE_MULTIPLAYER);
+	SceneManager::setScene(new MultiplayerScene());
 }
 
 void GameManager::exit()

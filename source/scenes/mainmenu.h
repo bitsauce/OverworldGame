@@ -9,15 +9,10 @@ class GameObject;
 class MainMenuScene : public Scene
 {
 public:
-	void showEvent();
-	void hideEvent();
-	void drawEvent();
-	void updateEvent();
+	MainMenuScene();
 
 private:
-	void showWorldSelect();
-
-	vector<GameObject*> m_sceneObjects;
+	void showWorldSelectScene();
 };
 
 #endif // MAINMENU_H

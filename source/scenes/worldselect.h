@@ -5,20 +5,15 @@
 #include "Scene.h"
 
 class GameObject;
+class Canvas;
 
 class WorldSelectScene : public Scene
 {
 public:
-	void showEvent();
-	void hideEvent();
-	void drawEvent();
-	void updateEvent();
+	WorldSelectScene();
 
 	void worldClicked();
 	void showCreateWorld();
-
-private:
-	vector<GameObject*> m_sceneObjects;
 };
 
 #endif // WORLD_SELECT_H

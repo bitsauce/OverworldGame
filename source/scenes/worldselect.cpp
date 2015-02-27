@@ -1,6 +1,7 @@
 #include "WorldSelect.h"
 #include "WorldCreate.h"
 #include "SceneManager.h"
+#include "GameScene.h"
 
 #include "Gui/UiObject.h"
 #include "Gui/Button.h"
@@ -10,7 +11,7 @@
 #include "Physics/PhysicsBody.h"
 #include "Entities/Player.h"
 
-void WorldSelectScene::showEvent()
+WorldSelectScene::WorldSelectScene()
 {
 	LOG("Scene: Select World");
 	
@@ -28,21 +29,14 @@ void WorldSelectScene::showEvent()
 		button->setPosition(Vector2(0.0f, -0.3f + i++*0.1f));
 		button->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 		button->setUserData(new string(worldDir));
-		m_sceneObjects.push_back(button);
+		addSceneObject(button);
 	}
 
 	Button *cwBtn = new Button("Create World", function<void()>(bind(&WorldSelectScene::showCreateWorld, this)), canvas);
 	cwBtn->setAnchor(Vector2(0.5f, 1.0f));
 	cwBtn->setPosition(Vector2(0.0f, -0.1f));
 	cwBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
-	m_sceneObjects.push_back(cwBtn);
-}
-
-void WorldSelectScene::hideEvent()
-{
-	for(uint i = 0; i < m_sceneObjects.size(); ++i)
-		delete m_sceneObjects[i];
-	m_sceneObjects.clear();
+	addSceneObject(cwBtn);
 }
 
 void WorldSelectScene::worldClicked()
@@ -52,10 +46,10 @@ void WorldSelectScene::worldClicked()
 	p->getBody()->setPosition(0, 0);
 
 	// Go to game
-	SceneManager::gotoScene(SCENE_GAME);
+	SceneManager::setScene(new GameScene());
 }
 
 void WorldSelectScene::showCreateWorld()
 {
-	SceneManager::gotoScene(SCENE_WORLD_CREATE);
+	SceneManager::setScene(new WorldCreateScene());
 }

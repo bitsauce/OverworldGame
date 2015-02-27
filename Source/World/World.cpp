@@ -12,6 +12,7 @@
 #include "Lighting/Lighting.h"
 #include "Game/Debug.h"
 #include "Scenes/SceneManager.h"
+#include "Scenes/GameScene.h"
 
 string World::s_worldPath = "";
 Terrain *World::s_terrain = nullptr;
@@ -63,7 +64,7 @@ void World::create(const string &name)
 	player->getItemContainer().addItem(ITEM_TORCH, 255);
 		
 	// Show game
-	SceneManager::gotoScene(SCENE_GAME);
+	SceneManager::setScene(new GameScene());
 }
 
 void World::save()

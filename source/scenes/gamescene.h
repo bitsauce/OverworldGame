@@ -2,17 +2,15 @@
 #define GAME_SCENE_H
 
 #include "Config.h"
-#include "scene.h"
+#include "Scene.h"
 
 class GameOverlay;
 
 class GameScene : public Scene
 {
 public:
-	void showEvent();
-	void hideEvent();
-	void drawEvent();
-	void updateEvent();
+	GameScene();
+	~GameScene();
 
 public:
 	GameOverlay *m_inventory;
