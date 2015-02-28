@@ -1,3 +1,7 @@
+#include "BitStream.h"
+#include "Networking/Server.h"
+#include "Networking/Client.h"
+
 #include "Terrain.h"
 #include "Constants.h"
 #include "Blocks/BlockData.h"
@@ -29,6 +33,27 @@ Terrain::~Terrain()
 // BLOCKS
 bool Terrain::setBlockAt(const int x, const int y, BlockID block, const TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
 {
+	if(Server::getInstance())
+	{
+		RakNet::BitStream bitStream;
+		bitStream.Write((RakNet::MessageID)ID_SET_BLOCK);
+		bitStream.Write(x);
+		bitStream.Write(y);
+		bitStream.Write(block);
+		bitStream.Write(layer);
+		Server::getInstance()->sendPacket(&bitStream);
+	}
+	else if(Client::getInstance())
+	{
+		RakNet::BitStream bitStream;
+		bitStream.Write((RakNet::MessageID)ID_SET_BLOCK);
+		bitStream.Write(x);
+		bitStream.Write(y);
+		bitStream.Write(block);
+		bitStream.Write(layer);
+		Client::getInstance()->sendPacket(&bitStream);
+	}
+
 	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), block, layer);
 }
 
@@ -44,7 +69,7 @@ bool Terrain::isBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_L
 
 bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
 {
-	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), BLOCK_EMPTY, layer);
+	return setBlockAt(x, y, BLOCK_EMPTY, layer);
 }
 
 // BLOCK ENTITIES

@@ -125,6 +125,8 @@
     <ClCompile Include="..\..\source\lighting\Spotlight.cpp" />
     <ClCompile Include="..\..\source\mobs\Zombie.cpp" />
     <ClCompile Include="..\..\Source\Networking\Client.cpp" />
+    <ClCompile Include="..\..\source\Networking\Conneciton.cpp" />
+    <ClCompile Include="..\..\source\Networking\NetworkObject.cpp" />
     <ClCompile Include="..\..\Source\Networking\Server.cpp" />
     <ClCompile Include="..\..\source\Noise\Simplex.cpp" />
     <ClCompile Include="..\..\source\physics\PhysicsBody.cpp" />
@@ -181,6 +183,8 @@
     <ClInclude Include="..\..\source\lighting\Spotlight.h" />
     <ClInclude Include="..\..\source\mobs\Zombie.h" />
     <ClInclude Include="..\..\Source\Networking\Client.h" />
+    <ClInclude Include="..\..\source\Networking\Connection.h" />
+    <ClInclude Include="..\..\source\Networking\NetworkObject.h" />
     <ClInclude Include="..\..\Source\Networking\Server.h" />
     <ClInclude Include="..\..\source\Noise\Simplex.h" />
     <ClInclude Include="..\..\source\physics\PhysicsBody.h" />

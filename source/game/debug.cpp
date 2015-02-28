@@ -1,3 +1,5 @@
+#include "BitStream.h"
+
 #include "Debug.h"
 #include "Constants.h"
 #include "Lighting/Lighting.h"
@@ -6,6 +8,7 @@
 #include "Entities/Camera.h"
 #include "Terrain/Terrain.h"
 #include "Blocks/BlockData.h"
+#include "Networking/Server.h"
 
 Debug::Debug(Terrain *terrain, Lighting *lighting) :
 	GameObject(DRAW_ORDER_DEBUG),
@@ -55,12 +58,10 @@ void Debug::debugF5()
 	m_terrain->setThingAt(World::getCamera()->getInputPosition().x/BLOCK_PXF, World::getCamera()->getInputPosition().y/BLOCK_PXF, BLOCK_ENTITY_RED_CURRANT_BUSH);
 }
 
-//#include "BitStream.h"
-
 void Debug::update()
 {
 	if(!m_enabled) return;
-
+	/*
 	// Block painting
 	TerrainLayer layer = TERRAIN_LAYER_MIDDLE;
 	if(Input::getKeyState(XD_KEY_LSHIFT)) layer = TERRAIN_LAYER_FRONT;
@@ -71,19 +72,21 @@ void Debug::update()
 
 		m_terrain->setBlockAt(x, y, m_block, layer);
 
-		/*RakNet::BitStream bitStream;
-		bitStream.Write((RakNet::MessageID)ID_SET_BLOCK);
-		bitStream.Write(x);
-		bitStream.Write(y);
-		bitStream.Write(m_block);
-		bitStream.Write(layer);*/
-		//Server::getInstance()->sendPacket(bitStream);
-
+		if(Server::getInstance())
+		{
+			RakNet::BitStream bitStream;
+			bitStream.Write((RakNet::MessageID)ID_SET_BLOCK);
+			bitStream.Write(x);
+			bitStream.Write(y);
+			bitStream.Write(m_block);
+			bitStream.Write(layer);
+			Server::getInstance()->sendPacket(&bitStream);
+		}
 	}
 	else if(Input::getKeyState(XD_RMB))
 	{
 		m_terrain->setBlockAt(floor((World::getCamera()->getPosition().x + Input::getPosition().x)/BLOCK_PXF), floor((World::getCamera()->getPosition().y + Input::getPosition().y)/BLOCK_PXF), BLOCK_EMPTY, layer);
-	}
+	}*/
 }
 
 void Debug::draw(SpriteBatch *spriteBatch)

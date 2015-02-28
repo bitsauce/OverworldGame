@@ -4,6 +4,7 @@
 #include "Config.h"
 #include "Game/GameObject.h"
 #include "Game/ItemContainer.h"
+#include "Networking/NetworkObject.h"
 
 class Skeleton;
 class AnimationStateData;
@@ -15,12 +16,14 @@ class Terrain;
 class ItemData;
 class ItemContainer;
 
-class Player : public GameObject
+class Player : public GameObject, public NetworkObject
 {
 public:
 	Player();
 
 	void update();
+	void pack(RakNet::BitStream *bitStream);
+	void unpack(RakNet::BitStream *bitStream);
 	void draw(SpriteBatch *spriteBatch);
 	void drawSpriteInHand(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch);
 	void setMainAnimation(const string &name);
@@ -38,11 +41,20 @@ public:
 private:
 
 	Camera *m_camera;
-
 	Terrain *m_terrain;
-
 	ItemContainer m_itemContainer;
 	uint m_selectedItemSlot;
+
+	RakNet::RakNetGUID m_owner;
+	
+	enum
+	{
+		INPUT_MOVE_LEFT,
+		INPUT_MOVE_RIGHT,
+		INPUT_JUMP,
+		INPUT_COUNT
+	};
+	bool m_inputState[INPUT_COUNT];
 
 	// Physics
 	PhysicsBody *m_body;

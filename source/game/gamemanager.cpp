@@ -31,7 +31,7 @@ void GameManager::main()
 	ThingData::init(World::getTerrain());
 
 	// Enable debugger
-	World::getDebug()->toggle();
+	//World::getDebug()->toggle();
 
 	// Resize the window
 	Window::setSize(Vector2i(1280, 720));

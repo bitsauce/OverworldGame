@@ -10,6 +10,11 @@ LineEdit::LineEdit(UiObject *parent) :
 	Input::addKeyboardListener(this);
 }
 
+LineEdit::~LineEdit()
+{
+	Input::removeKeyboardListener(this);
+}
+
 void LineEdit::setText(const string &text)
 {
 	m_text = text;

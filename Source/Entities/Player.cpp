@@ -1,3 +1,5 @@
+#include "BitStream.h"
+
 #include "Player.h"
 #include "World/World.h"
 #include "Entities/Camera.h"
@@ -102,44 +104,20 @@ void Player::setItemAnimation(Animation *anim)
 	}
 }
 
+#include "Networking/Server.h"
+
 void Player::update()
 {
-	// Jumping
-	if(m_body->isContact(SOUTH))
+	if(Server::getInstance())
 	{
-		if(Input::getKeyState(XD_KEY_SPACE))
+		// Jumping
+		if(m_body->isContact(SOUTH))
 		{
-			if(m_canJump)
-			{
-				m_body->applyImpulse(Vector2(0.0f, -4.5f));
-				m_jumpTimer = 0.0f;
-				m_canJump = false;
-			}
-		}
-		else
-		{
-			m_canJump = true;
-		}
-	}
-	else
-	{
-		if(m_jumpTimer < 0.1f)
-		{
-			if(Input::getKeyState(XD_KEY_SPACE)) // High/low jumping
-			{
-				m_body->applyImpulse(Vector2(0.0f, -0.75f));
-			}
-			m_jumpTimer += Graphics::getTimeStep();
-		}
-		else if(m_body->isContact(WEST) || m_body->isContact(EAST)) // Wall jumping
-		{
-			m_body->setVelocityY(m_body->getVelocity().y*0.5f);
-			if(Input::getKeyState(XD_KEY_SPACE))
+			if(m_inputState[INPUT_JUMP])
 			{
 				if(m_canJump)
 				{
-					m_body->setVelocityX((m_body->isContact(WEST) - m_body->isContact(EAST)) * 14.0f);
-					m_body->setVelocityY(-4.5f);
+					m_body->applyImpulse(Vector2(0.0f, -4.5f));
 					m_jumpTimer = 0.0f;
 					m_canJump = false;
 				}
@@ -149,84 +127,130 @@ void Player::update()
 				m_canJump = true;
 			}
 		}
-	}
+		else
+		{
+			if(m_jumpTimer < 0.1f)
+			{
+				if(m_inputState[INPUT_JUMP]) // High/low jumping
+				{
+					m_body->applyImpulse(Vector2(0.0f, -0.75f));
+				}
+				m_jumpTimer += Graphics::getTimeStep();
+			}
+			else if(m_body->isContact(WEST) || m_body->isContact(EAST)) // Wall jumping
+			{
+				m_body->setVelocityY(m_body->getVelocity().y*0.5f);
+				if(m_inputState[INPUT_JUMP])
+				{
+					if(m_canJump)
+					{
+						m_body->setVelocityX((m_body->isContact(WEST) - m_body->isContact(EAST)) * 14.0f);
+						m_body->setVelocityY(-4.5f);
+						m_jumpTimer = 0.0f;
+						m_canJump = false;
+					}
+				}
+				else
+				{
+					m_canJump = true;
+				}
+			}
+		}
 
-	// Walking
-	if(abs(m_body->getVelocity().x) < 10.0f)
-	{
-		m_body->applyImpulse(Vector2((Input::getKeyState(XD_KEY_D) - Input::getKeyState(XD_KEY_A)) * (Input::getKeyState(XD_KEY_SHIFT) ? 1.0f : 0.5f), 0.0f));
-	}
+		// Walking
+		if(abs(m_body->getVelocity().x) < 10.0f)
+		{
+			m_body->applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (Input::getKeyState(XD_KEY_SHIFT) ? 1.0f : 0.5f), 0.0f));
+		}
 
-	// Apply friction
-	m_body->setVelocityX(m_body->getVelocity().x * 0.85f);
+		// Apply friction
+		m_body->setVelocityX(m_body->getVelocity().x * 0.85f);
 	
-	// Set animations
-	m_mainAnimationState->setTimeScale(math::abs(m_body->getVelocity().x) * 0.5f);
-	if(m_body->isContact(SOUTH))
-	{
-		m_mainAnimationState->setLooping(true);
-		if(m_body->getVelocity().x >= 0.01f)
+		// Set animations
+		m_mainAnimationState->setTimeScale(math::abs(m_body->getVelocity().x) * 0.5f);
+		if(m_body->isContact(SOUTH))
 		{
-			setMainAnimation("walk");
-			m_skeleton->setFlipX(false);
-		}
-		else if(m_body->getVelocity().x <= -0.01f)
-		{
-			setMainAnimation("walk");
-			m_skeleton->setFlipX(true);
-		}
-		else
-		{
-			setMainAnimation("idle");
-			m_body->setVelocityX(0.0f);
-			m_mainAnimationState->setTimeScale(1.0f);
-		}
-	}
-	else
-	{
-		if(m_body->isContact(WEST)/* >= 3*/) // TODO: I should check for a column of 3 rows of blocks instead of simlply one
-		{
-			m_skeleton->setFlipX(false);
-			m_mainAnimationState->setLooping(false);
-			m_mainAnimationState->setTimeScale(5.0f);
-			setMainAnimation("wall-slide");
-		}
-		else if(m_body->isContact(EAST))
-		{
-			m_skeleton->setFlipX(true);
-			m_mainAnimationState->setLooping(false);
-			m_mainAnimationState->setTimeScale(5.0f);
-			setMainAnimation("wall-slide");
+			m_mainAnimationState->setLooping(true);
+			if(m_body->getVelocity().x >= 0.01f)
+			{
+				setMainAnimation("walk");
+				m_skeleton->setFlipX(false);
+			}
+			else if(m_body->getVelocity().x <= -0.01f)
+			{
+				setMainAnimation("walk");
+				m_skeleton->setFlipX(true);
+			}
+			else
+			{
+				setMainAnimation("idle");
+				m_body->setVelocityX(0.0f);
+				m_mainAnimationState->setTimeScale(1.0f);
+			}
 		}
 		else
 		{
-			m_mainAnimationState->setLooping(false);
-			m_mainAnimationState->setTimeScale(1.0f);
-			setMainAnimation("jump");
+			if(m_body->isContact(WEST)/* >= 3*/) // TODO: I should check for a column of 3 rows of blocks instead of simlply one
+			{
+				m_skeleton->setFlipX(false);
+				m_mainAnimationState->setLooping(false);
+				m_mainAnimationState->setTimeScale(5.0f);
+				setMainAnimation("wall-slide");
+			}
+			else if(m_body->isContact(EAST))
+			{
+				m_skeleton->setFlipX(true);
+				m_mainAnimationState->setLooping(false);
+				m_mainAnimationState->setTimeScale(5.0f);
+				setMainAnimation("wall-slide");
+			}
+			else
+			{
+				m_mainAnimationState->setLooping(false);
+				m_mainAnimationState->setTimeScale(1.0f);
+				setMainAnimation("jump");
+			}
 		}
-	}
 
-	// Update physics
-	m_body->update();
+		// Update physics
+		m_body->update();
 
-	// Use current item
-	ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
-	if(Input::getKeyState(XD_LMB) && item != nullptr)
-	{
-		item->use(this);
+		// Use current item
+		ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
+		if(Input::getKeyState(XD_LMB) && item != nullptr)
+		{
+			item->use(this);
+		}
+		else
+		{
+			m_itemAnimation = nullptr;
+		}
+
+		// Move camera
+		m_camera->lookAt(m_body->getPosition());
+
+		// Update animations
+		m_skeleton->setPosition(m_body->getPosition() + Vector2(m_body->getSize().x*0.5f, 48.0f));
+		m_mainAnimationState->update(Graphics::getTimeStep());
+		if(m_itemAnimation) m_itemAnimationState->update(Graphics::getTimeStep());
 	}
 	else
 	{
-		m_itemAnimation = nullptr;
 	}
+}
 
-	// Move camera
-	m_camera->lookAt(m_body->getPosition());
+void Player::pack(RakNet::BitStream *bitStream)
+{
+	bitStream->Write(Input::getKeyState(XD_KEY_A));
+	bitStream->Write(Input::getKeyState(XD_KEY_D));
+	bitStream->Write(Input::getKeyState(XD_KEY_SPACE));
+}
 
-	// Update animations
-	m_skeleton->setPosition(m_body->getPosition() + Vector2(m_body->getSize().x*0.5f, 48.0f));
-	m_mainAnimationState->update(Graphics::getTimeStep());
-	if(m_itemAnimation) m_itemAnimationState->update(Graphics::getTimeStep());
+void Player::unpack(RakNet::BitStream *bitStream)
+{
+	bitStream->Read(m_inputState[INPUT_MOVE_LEFT]);
+	bitStream->Read(m_inputState[INPUT_MOVE_RIGHT]);
+	bitStream->Read(m_inputState[INPUT_JUMP]);
 }
 
 void Player::draw(SpriteBatch *spriteBatch)

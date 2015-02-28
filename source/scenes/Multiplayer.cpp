@@ -1,3 +1,5 @@
+#include "Entities/Player.h"
+
 #include "Multiplayer.h"
 #include "SceneManager.h"
 #include "GameScene.h"
@@ -46,10 +48,17 @@ MultiplayerScene::MultiplayerScene()
 	hostBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 	addSceneObject(hostBtn);
 }
-
+#include "physics\physicsbody.h"
 void MultiplayerScene::host()
 {
 	new Server(util::strToInt(m_portLineEdit->getText()));
+	//new Client("127.0.0.1", 0);
+	
+	// Create player
+	Player *player = new Player();
+	player->getBody()->setPosition(0, 0);
+	player->getItemContainer().addItem(ITEM_PICKAXE_IRON);
+	player->getItemContainer().addItem(ITEM_TORCH, 255);
 	SceneManager::setScene(new GameScene());
 }
 
@@ -60,4 +69,10 @@ void MultiplayerScene::join()
 
 	new Client(m_ipLineEdit->getText(), util::strToInt(m_portLineEdit->getText()));
 	SceneManager::setScene(new GameScene());
+	
+	// Create player
+	Player *player = new Player();
+	player->getBody()->setPosition(0, 0);
+	player->getItemContainer().addItem(ITEM_PICKAXE_IRON);
+	player->getItemContainer().addItem(ITEM_TORCH, 255);
 }

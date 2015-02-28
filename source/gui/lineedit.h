@@ -10,6 +10,7 @@ class LineEdit : public UiObject, public KeyboardListener
 {
 public:
 	LineEdit(UiObject *parent = nullptr);
+	~LineEdit();
 
 	void setAcceptFunc(function<void()> func) { m_acceptFunc = func ; }
 
