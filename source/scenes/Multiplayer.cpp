@@ -1,3 +1,12 @@
+#include "MessageIdentifiers.h"
+#include "RakPeerInterface.h"
+#include "RakNetTypes.h"
+#include "PacketPriority.h"
+#include "BitStream.h"
+#include "NetworkIDObject.h"
+#include "NetworkIDManager.h"
+#include "PacketLogger.h"
+
 #include "Entities/Player.h"
 
 #include "Multiplayer.h"
@@ -53,14 +62,12 @@ void MultiplayerScene::host()
 {
 	ushort port = util::strToInt(m_portLineEdit->getText());
 	new Server(port);
-	new Client("127.0.0.1", port);
-	//new Client("127.0.0.1", 0);
+
+	RakNet::BitStream bitStream;
+	bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
+	//bitStream.Write(ENTITY_PLAYER);
+	((Server*)Connection::getInstance())->getRakPeer()->SendLoopback((const char*)bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
 	
-	// Create player
-	Player *player = new Player(true);
-	player->getBody()->setPosition(0, 0);
-	player->getItemContainer().addItem(ITEM_PICKAXE_IRON);
-	player->getItemContainer().addItem(ITEM_TORCH, 255);
 	SceneManager::setScene(new GameScene());
 }
 
@@ -70,11 +77,6 @@ void MultiplayerScene::join()
 	if(ipStrings.size() != 4) return;
 
 	new Client(m_ipLineEdit->getText(), util::strToInt(m_portLineEdit->getText()));
-	
-	// Create player
-	Player *player = new Player(true);
-	player->getBody()->setPosition(0, 0);
-	player->getItemContainer().addItem(ITEM_PICKAXE_IRON);
-	player->getItemContainer().addItem(ITEM_TORCH, 255);
+
 	SceneManager::setScene(new GameScene());
 }

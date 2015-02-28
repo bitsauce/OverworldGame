@@ -42,8 +42,8 @@ WorldSelectScene::WorldSelectScene()
 void WorldSelectScene::worldClicked()
 {
 	// Create a player
-	Player *p = new Player();
-	p->getBody()->setPosition(0, 0);
+	//Player *p = new Player();
+	//p->getBody()->setPosition(0, 0);
 
 	// Go to game
 	SceneManager::setScene(new GameScene());

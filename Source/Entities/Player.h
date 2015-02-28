@@ -15,15 +15,16 @@ class PhysicsBody;
 class Terrain;
 class ItemData;
 class ItemContainer;
+class Connection;
 
 class Player : public GameObject, public NetworkObject
 {
 public:
-	Player(bool controlled=false);
+	Player(RakNet::RakNetGUID guid);
 
 	void update();
-	void pack(RakNet::BitStream *bitStream);
-	void unpack(RakNet::BitStream *bitStream);
+	void pack(RakNet::BitStream *bitStream, const Connection *conn);
+	void unpack(RakNet::BitStream *bitStream, const Connection *conn);
 	void draw(SpriteBatch *spriteBatch);
 	void drawSpriteInHand(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch);
 	void setMainAnimation(const string &name);
@@ -45,7 +46,7 @@ private:
 	ItemContainer m_itemContainer;
 	uint m_selectedItemSlot;
 
-	bool m_controlled;
+	RakNet::RakNetGUID m_guid;
 	
 	enum
 	{

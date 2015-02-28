@@ -58,10 +58,10 @@ void World::create(const string &name)
 	LOG("Creating player...");
 		
 	// Create player
-	Player *player = new Player();
-	player->getBody()->setPosition(0, 0);
-	player->getItemContainer().addItem(ITEM_PICKAXE_IRON);
-	player->getItemContainer().addItem(ITEM_TORCH, 255);
+	//Player *player = new Player();
+	//player->getBody()->setPosition(0, 0);
+	//player->getItemContainer().addItem(ITEM_PICKAXE_IRON);
+	//player->getItemContainer().addItem(ITEM_TORCH, 255);
 		
 	// Show game
 	SceneManager::setScene(new GameScene());

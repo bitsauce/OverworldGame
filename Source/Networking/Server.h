@@ -16,14 +16,8 @@ public:
 
 	void update();
 	void sendPacket(RakNet::BitStream *bitStream);
-	bool isServer() const { return true; }
 
-	static Server *getInstance() { return s_instance; }
-
-private:
-	RakNet::RakPeerInterface *m_rakPeer;
-
-	static Server *s_instance;
+	RakNet::RakPeerInterface *getRakPeer() const { return m_rakPeer; }
 };
 
 #endif // SERVER_H

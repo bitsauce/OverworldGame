@@ -17,13 +17,6 @@ public:
 
 	void update();
 	void sendPacket(RakNet::BitStream *bitStream);
-
-	static Client *getInstance() { return s_instance; }
-
-private:
-	RakNet::RakPeerInterface *m_rakPeer;
-
-	static Client *s_instance;
 };
 
 #endif // CLIENT_H

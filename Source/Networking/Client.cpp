@@ -14,33 +14,32 @@
 #include "World/World.h"
 #include "Terrain/Terrain.h"
 
-Client *Client::s_instance = nullptr;
+#include "Entities/Player.h"
+#include "Physics/PhysicsBody.h"
 
 Client::Client(const string &ip, const ushort port) :
-	GameObject(DRAW_ORDER_CLIENT)
+	GameObject(DRAW_ORDER_CLIENT),
+	Connection(false)
 {
-	s_instance = this;
 	m_rakPeer = RakNet::RakPeerInterface::GetInstance();
 	RakNet::SocketDescriptor socketDescriptor;
 	assert(m_rakPeer->Startup(1, &socketDescriptor, 1) == RakNet::RAKNET_STARTED);
 	assert(m_rakPeer->Connect(ip.c_str(), port, 0, 0) == RakNet::CONNECTION_ATTEMPT_STARTED);
 }
-#include "Entities/Player.h"
-float t = 0.0f;
 
 void Client::update()
 {
-	t += Graphics::getTimeStep();
-	if(t <= 1.0f) return;
-	t = 0.0f;
-
-	for(NetworkObject *object : s_networkObjects)
+	for(NetworkObject *object : m_networkObjects)
 	{
 		RakNet::BitStream bitStream;
 		bitStream.Write((RakNet::MessageID)ID_NETWORK_OBJECT_UPDATE);
 		bitStream.Write(object->GetNetworkID());
-		object->pack(&bitStream);
-		sendPacket(&bitStream);
+		uint bitsBefore = bitStream.GetNumberOfBitsUsed();
+		object->pack(&bitStream, this);
+		if(bitsBefore < bitStream.GetNumberOfBitsUsed())
+		{
+			sendPacket(&bitStream);
+		}
 	}
 
 	for(RakNet::Packet *packet = m_rakPeer->Receive(); packet; m_rakPeer->DeallocatePacket(packet), packet = m_rakPeer->Receive())
@@ -59,9 +58,24 @@ void Client::update()
 			}
 			break;
 
-		case ID_PLAYER_CREATE:
+		case ID_CREATE_ENTITY:
 			{
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
+				//bitStream.Read(entityID);
+				RakNet::NetworkID networkID; bitStream.Read(networkID);
+				RakNet::RakNetGUID guid; bitStream.Read(guid);
 
+				// Create player
+				Player *player = new Player(guid);
+				player->SetNetworkIDManager(&m_networkIDManager);
+				player->SetNetworkID(networkID);
+
+				m_networkObjects.push_back(player);
+
+				player->getBody()->setPosition(0, 0);
+				player->getItemContainer().addItem(ITEM_PICKAXE_IRON);
+				player->getItemContainer().addItem(ITEM_TORCH, 255);
 			}
 			break;
 			
@@ -71,13 +85,19 @@ void Client::update()
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
 				RakNet::NetworkID id; bitStream.Read(id);
-				NetworkObject *object = s_networkIDManager.GET_OBJECT_FROM_ID<NetworkObject*>(id);
+				NetworkObject *object = m_networkIDManager.GET_OBJECT_FROM_ID<NetworkObject*>(id);
 				if(object) {
-					object->unpack(&bitStream);
+					object->unpack(&bitStream, this);
 				}
-				else {
-					(new Player(false))->SetNetworkID(id);
-				}
+			}
+			break;
+
+		case ID_CONNECTION_REQUEST_ACCEPTED:
+			{
+				RakNet::BitStream bitStream;
+				bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
+				//bitStream.Write(ENTITY_PLAYER);
+				sendPacket(&bitStream);
 			}
 			break;
 

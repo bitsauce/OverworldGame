@@ -5,8 +5,8 @@
 
 NetworkObject::NetworkObject()
 {
-	SetNetworkIDManager(Connection::getNetworkIDManager());
-	if(Client::getInstance()) Client::getInstance()->addNetworkObject(this);
+	//SetNetworkIDManager(Connection::getNetworkIDManager());
+	//if(Client::getInstance()) Client::getInstance()->addNetworkObject(this);
 }
 
 NetworkObject::~NetworkObject()

@@ -33,7 +33,7 @@ Terrain::~Terrain()
 // BLOCKS
 bool Terrain::setBlockAt(const int x, const int y, BlockID block, const TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
 {
-	if(Server::getInstance())
+	if(Connection::getInstance()->isServer())
 	{
 		RakNet::BitStream bitStream;
 		bitStream.Write((RakNet::MessageID)ID_SET_BLOCK);
@@ -41,7 +41,7 @@ bool Terrain::setBlockAt(const int x, const int y, BlockID block, const TerrainL
 		bitStream.Write(y);
 		bitStream.Write(block);
 		bitStream.Write(layer);
-		Server::getInstance()->sendPacket(&bitStream);
+		((Server*)Connection::getInstance())->sendPacket(&bitStream);
 	}
 	else if(Client::getInstance())
 	{
@@ -51,7 +51,7 @@ bool Terrain::setBlockAt(const int x, const int y, BlockID block, const TerrainL
 		bitStream.Write(y);
 		bitStream.Write(block);
 		bitStream.Write(layer);
-		Client::getInstance()->sendPacket(&bitStream);
+		((Client*)Connection::getInstance())->sendPacket(&bitStream);
 	}
 
 	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), block, layer);

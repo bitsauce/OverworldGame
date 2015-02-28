@@ -4,14 +4,16 @@
 #include "NetworkIDObject.h"
 #include "BitStream.h"
 
+class Connection;
+
 class NetworkObject : public RakNet::NetworkIDObject
 {
 public:
 	NetworkObject();
 	~NetworkObject();
 	
-	virtual void pack(RakNet::BitStream *bitStream) = 0;
-	virtual void unpack(RakNet::BitStream *bitStream) = 0;
+	virtual void pack(RakNet::BitStream *bitStream, const Connection *conn) = 0;
+	virtual void unpack(RakNet::BitStream *bitStream, const Connection *conn) = 0;
 
 private:
 };

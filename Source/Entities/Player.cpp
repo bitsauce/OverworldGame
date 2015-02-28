@@ -10,8 +10,9 @@
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
 #include "Items/ItemData.h"
+#include "Networking/Connection.h"
 
-Player::Player(bool c) :
+Player::Player(RakNet::RakNetGUID guid) :
 	GameObject(DRAW_ORDER_PLAYER),
 	m_camera(World::getCamera()),
 	m_terrain(World::getTerrain()),
@@ -19,7 +20,8 @@ Player::Player(bool c) :
 	m_canJump(false),
 	m_currentAnim(nullptr),
 	m_selectedItemSlot(0),
-	m_itemContainer(10),m_controlled(c)
+	m_itemContainer(10),
+	m_guid(guid)
 {
 	// Load physics
 	m_body = new PhysicsBody();
@@ -227,6 +229,7 @@ void Player::update()
 		}
 
 		// Move camera
+		if(Connection::getInstance()->getGUID() == m_guid)
 		m_camera->lookAt(m_body->getPosition());
 
 		// Update animations
@@ -234,23 +237,43 @@ void Player::update()
 		m_mainAnimationState->update(Graphics::getTimeStep());
 		if(m_itemAnimation) m_itemAnimationState->update(Graphics::getTimeStep());
 	}
-	//else
+}
+
+void Player::pack(RakNet::BitStream *bitStream, const Connection *conn)
+{
+	if(conn->isServer())
 	{
+		bitStream->Write(m_body->getPosition().x);
+		bitStream->Write(m_body->getPosition().y);
+		bitStream->Write(m_body->getVelocity().x);
+		bitStream->Write(m_body->getVelocity().y);
+	}
+	else if(conn->getGUID() == m_guid)
+	{
+		bitStream->Write(Input::getKeyState(XD_KEY_A));
+		bitStream->Write(Input::getKeyState(XD_KEY_D));
+		bitStream->Write(Input::getKeyState(XD_KEY_SPACE));
 	}
 }
 
-void Player::pack(RakNet::BitStream *bitStream)
-{if(!m_controlled) return;
-	bitStream->Write(Input::getKeyState(XD_KEY_A));
-	bitStream->Write(Input::getKeyState(XD_KEY_D));
-	bitStream->Write(Input::getKeyState(XD_KEY_SPACE));
-}
-
-void Player::unpack(RakNet::BitStream *bitStream)
+void Player::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 {
-	bitStream->Read(m_inputState[INPUT_MOVE_LEFT]);
-	bitStream->Read(m_inputState[INPUT_MOVE_RIGHT]);
-	bitStream->Read(m_inputState[INPUT_JUMP]);
+	if(conn->isServer())
+	{
+		bitStream->Read(m_inputState[INPUT_MOVE_LEFT]);
+		bitStream->Read(m_inputState[INPUT_MOVE_RIGHT]);
+		bitStream->Read(m_inputState[INPUT_JUMP]);
+	}
+	else
+	{
+		float x; bitStream->Read(x);
+		float y; bitStream->Read(y);
+		m_body->setPosition(x, y);
+		bitStream->Read(x);
+		bitStream->Read(y);
+		m_body->setVelocityX(x);
+		m_body->setVelocityY(y);
+	}
 }
 
 void Player::draw(SpriteBatch *spriteBatch)
