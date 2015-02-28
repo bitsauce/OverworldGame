@@ -61,7 +61,7 @@ BlockID WorldGenerator::getGroundAt(const int x, const int y, const TerrainLayer
 			// Ground
 			if((math::clamp((32 - y)/32.0f, 0.0f, 1.0f) + (m_noise.valueAt(x, y) * 0.5f + 0.5f)) * step(0, y + h) > 0.5f)
 			{
-				return y <= 100 ? BLOCK_GRASS : BLOCK_STONE;
+				return m_noise.valueAt(x + 2989, y + 7238) < 0.0 ? BLOCK_GRASS : BLOCK_STONE;//y <= 100 ? BLOCK_GRASS : BLOCK_STONE;
 			}
 		}
 		break;
