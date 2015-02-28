@@ -19,7 +19,7 @@ class ItemContainer;
 class Player : public GameObject, public NetworkObject
 {
 public:
-	Player();
+	Player(bool controlled=false);
 
 	void update();
 	void pack(RakNet::BitStream *bitStream);
@@ -45,7 +45,7 @@ private:
 	ItemContainer m_itemContainer;
 	uint m_selectedItemSlot;
 
-	RakNet::RakNetGUID m_owner;
+	bool m_controlled;
 	
 	enum
 	{

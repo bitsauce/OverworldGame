@@ -11,7 +11,7 @@
 #include "Animation/Bone.h"
 #include "Items/ItemData.h"
 
-Player::Player() :
+Player::Player(bool c) :
 	GameObject(DRAW_ORDER_PLAYER),
 	m_camera(World::getCamera()),
 	m_terrain(World::getTerrain()),
@@ -19,7 +19,7 @@ Player::Player() :
 	m_canJump(false),
 	m_currentAnim(nullptr),
 	m_selectedItemSlot(0),
-	m_itemContainer(10)
+	m_itemContainer(10),m_controlled(c)
 {
 	// Load physics
 	m_body = new PhysicsBody();
@@ -108,7 +108,7 @@ void Player::setItemAnimation(Animation *anim)
 
 void Player::update()
 {
-	if(Server::getInstance())
+	//if(Server::getInstance())
 	{
 		// Jumping
 		if(m_body->isContact(SOUTH))
@@ -234,13 +234,13 @@ void Player::update()
 		m_mainAnimationState->update(Graphics::getTimeStep());
 		if(m_itemAnimation) m_itemAnimationState->update(Graphics::getTimeStep());
 	}
-	else
+	//else
 	{
 	}
 }
 
 void Player::pack(RakNet::BitStream *bitStream)
-{
+{if(!m_controlled) return;
 	bitStream->Write(Input::getKeyState(XD_KEY_A));
 	bitStream->Write(Input::getKeyState(XD_KEY_D));
 	bitStream->Write(Input::getKeyState(XD_KEY_SPACE));

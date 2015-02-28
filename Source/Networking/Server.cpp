@@ -8,6 +8,7 @@
 #include "PacketLogger.h"
 
 #include "Server.h"
+#include "NetworkObject.h"
 #include "Constants.h"
 #include "World/World.h"
 #include "Terrain/Terrain.h"
@@ -17,20 +18,21 @@ Server *Server::s_instance = nullptr;
 Server::Server(const ushort port) :
 	GameObject(DRAW_ORDER_SERVER)
 {
-	setInstance(this);
+	s_instance = this;
 	m_rakPeer = RakNet::RakPeerInterface::GetInstance();
 	RakNet::SocketDescriptor socketDescriptor(port, 0);
 	assert(m_rakPeer->Startup(2, &socketDescriptor, 1) == RakNet::RAKNET_STARTED);
 	m_rakPeer->SetMaximumIncomingConnections(2);
 }
 
+float t1 = 0.0f;
+
 void Server::update()
 {
-	for(NetworkIDObject)
-	{
-		object->unpack();
-	}
-
+	t1 += Graphics::getTimeStep();
+	if(t1 <= 1.0f) return;
+	t1 = 0.0f;
+	
 	for(RakNet::Packet *packet = m_rakPeer->Receive(); packet; m_rakPeer->DeallocatePacket(packet), packet = m_rakPeer->Receive())
 	{
 		switch(packet->data[0])
@@ -48,6 +50,13 @@ void Server::update()
 			BlockID block; bitStream.Read(block);
 			TerrainLayer layer; bitStream.Read(layer);
 			World::getTerrain()->setBlockAt(x, y, block, layer);
+			}
+			break;
+			
+		case ID_NETWORK_OBJECT_UPDATE:
+			{
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				sendPacket(&bitStream);
 			}
 			break;
 

@@ -4,14 +4,14 @@
 #include "NetworkIDObject.h"
 #include "BitStream.h"
 
-class NetworkObject : RakNet::NetworkIDObject
+class NetworkObject : public RakNet::NetworkIDObject
 {
 public:
 	NetworkObject();
 	~NetworkObject();
 	
-	virtual void pack(RakNet::BitStream *bitStream);
-	virtual void unpack(RakNet::BitStream *bitStream);
+	virtual void pack(RakNet::BitStream *bitStream) = 0;
+	virtual void unpack(RakNet::BitStream *bitStream) = 0;
 
 private:
 };
