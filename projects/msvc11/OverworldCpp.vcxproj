@@ -73,7 +73,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\vld\include;..\..\3rdparty\Box2D\Box2D;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\glew\include;..\..\..\x2D-Game-Engine\3rdparty\openal\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\vld\include;..\..\3rdparty\Box2D\Box2D;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\glew\include;..\..\..\x2D-Game-Engine\3rdparty\openal\include</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <PreprocessorDefinitions>X2D_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -81,7 +81,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>x2d.lib;spine.lib;box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\3rdparty\RakNet\Lib\RakNet_VS2008_DLL_Release_Win32.lib;x2d.lib;spine.lib;box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\3rdparty\vld\lib;..\..\3rdparty\Box2D\Box2D\Lib;..\..\3rdparty\spine\lib;..\..\..\x2D-Game-Engine\build\Win32\Release</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -100,6 +100,7 @@
     <ClCompile Include="..\..\Source\Entities\Background.cpp" />
     <ClCompile Include="..\..\Source\Entities\Camera.cpp" />
     <ClCompile Include="..\..\Source\Entities\ItemDrop.cpp" />
+    <ClCompile Include="..\..\source\Entities\Mobs\Zombie.cpp" />
     <ClCompile Include="..\..\Source\Entities\Player.cpp" />
     <ClCompile Include="..\..\Source\Entities\TimeOfDay.cpp" />
     <ClCompile Include="..\..\source\game\Debug.cpp" />
@@ -121,10 +122,10 @@
     <ClCompile Include="..\..\source\items\ItemData.cpp" />
     <ClCompile Include="..\..\Source\Items\Placeable\ThingItem.cpp" />
     <ClCompile Include="..\..\source\Items\Tools\Pickaxe.cpp" />
+    <ClCompile Include="..\..\source\Items\Weapons\Bow.cpp" />
     <ClCompile Include="..\..\source\Lighting\LightSource.cpp" />
     <ClCompile Include="..\..\source\Lighting\Lighting.cpp" />
     <ClCompile Include="..\..\source\lighting\Spotlight.cpp" />
-    <ClCompile Include="..\..\source\mobs\Zombie.cpp" />
     <ClCompile Include="..\..\Source\Networking\Client.cpp" />
     <ClCompile Include="..\..\source\Networking\Conneciton.cpp" />
     <ClCompile Include="..\..\source\Networking\NetworkObject.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="..\..\Source\Entities\Background.h" />
     <ClInclude Include="..\..\Source\Entities\Camera.h" />
     <ClInclude Include="..\..\Source\Entities\ItemDrop.h" />
+    <ClInclude Include="..\..\source\Entities\Mobs\Zombie.h" />
     <ClInclude Include="..\..\Source\Entities\Player.h" />
     <ClInclude Include="..\..\Source\Entities\TimeOfDay.h" />
     <ClInclude Include="..\..\source\game\Debug.h" />
@@ -180,10 +182,10 @@
     <ClInclude Include="..\..\source\items\ItemData.h" />
     <ClInclude Include="..\..\Source\Items\Placeable\ThingItem.h" />
     <ClInclude Include="..\..\source\Items\Tools\Pickaxe.h" />
+    <ClInclude Include="..\..\source\Items\Weapons\Bow.h" />
     <ClInclude Include="..\..\source\Lighting\LightSource.h" />
     <ClInclude Include="..\..\source\Lighting\Lighting.h" />
     <ClInclude Include="..\..\source\lighting\Spotlight.h" />
-    <ClInclude Include="..\..\source\mobs\Zombie.h" />
     <ClInclude Include="..\..\Source\Networking\Client.h" />
     <ClInclude Include="..\..\source\Networking\Connection.h" />
     <ClInclude Include="..\..\source\Networking\NetworkObject.h" />

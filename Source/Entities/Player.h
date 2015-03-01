@@ -52,6 +52,8 @@ private:
 	uint m_maxHealth;
 	uint m_health;
 
+	bool m_lmbPressed;
+
 	RakNet::RakNetGUID m_guid;
 	
 	enum

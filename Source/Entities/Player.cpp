@@ -25,14 +25,9 @@ Player::Player(RakNet::RakNetGUID guid) :
 	m_itemContainer(10),
 	m_guid(guid),
 	m_maxHealth(12),
-	m_health(m_maxHealth)
+	m_health(m_maxHealth),
+	m_lmbPressed(false)
 {
-	// If player is local, create overlay for this player
-	if(Connection::getInstance()->getGUID() == guid)
-	{
-		new GameOverlay(this, canvas);
-	}
-
 	// Load physics
 	m_body = new PhysicsBody();
 	m_body->setSize(24, 48);
@@ -60,18 +55,24 @@ Player::Player(RakNet::RakNetGUID guid) :
 	m_itemAnimationState->setLooping(true);
 
 	setMainAnimation("idle");
+	
+	// If player is local, do extra stuff
+	if(Connection::getInstance()->getGUID() == guid)
+	{
+		new GameOverlay(this, canvas);
 
-	// Bind keys to item slots
-	Input::bind(XD_KEY_1, bind(&Player::setSelectedItemSlot, this, 0));
-	Input::bind(XD_KEY_2, bind(&Player::setSelectedItemSlot, this, 1));
-	Input::bind(XD_KEY_3, bind(&Player::setSelectedItemSlot, this, 2));
-	Input::bind(XD_KEY_4, bind(&Player::setSelectedItemSlot, this, 3));
-	Input::bind(XD_KEY_5, bind(&Player::setSelectedItemSlot, this, 4));
-	Input::bind(XD_KEY_6, bind(&Player::setSelectedItemSlot, this, 5));
-	Input::bind(XD_KEY_7, bind(&Player::setSelectedItemSlot, this, 6));
-	Input::bind(XD_KEY_8, bind(&Player::setSelectedItemSlot, this, 7));
-	Input::bind(XD_KEY_9, bind(&Player::setSelectedItemSlot, this, 8));
-	Input::bind(XD_KEY_0, bind(&Player::setSelectedItemSlot, this, 9));
+		// Bind keys to item slots
+		Input::bind(XD_KEY_1, bind(&Player::setSelectedItemSlot, this, 0));
+		Input::bind(XD_KEY_2, bind(&Player::setSelectedItemSlot, this, 1));
+		Input::bind(XD_KEY_3, bind(&Player::setSelectedItemSlot, this, 2));
+		Input::bind(XD_KEY_4, bind(&Player::setSelectedItemSlot, this, 3));
+		Input::bind(XD_KEY_5, bind(&Player::setSelectedItemSlot, this, 4));
+		Input::bind(XD_KEY_6, bind(&Player::setSelectedItemSlot, this, 5));
+		Input::bind(XD_KEY_7, bind(&Player::setSelectedItemSlot, this, 6));
+		Input::bind(XD_KEY_8, bind(&Player::setSelectedItemSlot, this, 7));
+		Input::bind(XD_KEY_9, bind(&Player::setSelectedItemSlot, this, 8));
+		Input::bind(XD_KEY_0, bind(&Player::setSelectedItemSlot, this, 9));
+	}
 
 	// Test code for replacing body parts/clothing
 	/*TextureRegion region = m_skeleton->getTextureRegion("head");
@@ -228,14 +229,19 @@ void Player::update()
 		m_body->update();
 
 		// Use current item
-		ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
-		if(Input::getKeyState(XD_LMB) && item != nullptr)
+		if(Input::getKeyState(XD_LMB))
 		{
-			item->use(this);
+			ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
+			if(item != nullptr && (!item->isSingleShot() || !m_lmbPressed))
+			{
+				item->use(this);
+			}
+			m_lmbPressed = true;
 		}
 		else
 		{
 			m_itemAnimation = nullptr;
+			m_lmbPressed = false;
 		}
 
 		// Move camera
@@ -300,16 +306,18 @@ void Player::draw(SpriteBatch *spriteBatch)
 void Player::drawSpriteInHand(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch)
 {
 	float angle = m_skeleton->findBone("rarm")->getWorldRotation();
-	if(!m_skeleton->getFlipX())
+	Vector2 size = sprite.getSize();
+	if(m_skeleton->getFlipX())
 	{
-		angle *= -1;
-		sprite.setPosition(m_skeleton->getPosition() + m_skeleton->findBone("rarm")->getWorldPosition() - origin + Vector2(cos(angle * 0.0174532925f), sin(angle * 0.0174532925f)) * 10);
+		sprite.setSize(sprite.getSize() * Vector2(-1.0f, 1.0f));
 	}
 	else
 	{
-		sprite.setPosition(m_skeleton->getPosition() + m_skeleton->findBone("rarm")->getWorldPosition() - origin - Vector2(cos(angle * 0.0174532925f), sin(angle * 0.0174532925f)) * 10);
+		angle *= -1;
 	}
+	sprite.setPosition(m_skeleton->getPosition() + m_skeleton->findBone("rarm")->getWorldPosition() - origin + Vector2(cos(angle * 0.0174532925f), sin(angle * 0.0174532925f)) * 10);
 	sprite.setOrigin(origin);
 	sprite.setRotation(angle);
 	spriteBatch->drawSprite(sprite);
+	sprite.setSize(size);
 }

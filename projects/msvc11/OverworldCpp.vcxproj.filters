@@ -19,9 +19,6 @@
     <ClCompile Include="..\..\source\physics\PhysicsBody.cpp">
       <Filter>Source\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\mobs\Zombie.cpp">
-      <Filter>Source\Mobs</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\gui\Button.cpp">
       <Filter>Source\Gui</Filter>
     </ClCompile>
@@ -164,6 +161,12 @@
     <ClCompile Include="..\..\source\gui\GameOverlay\HealthManaStatus.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\Entities\Mobs\Zombie.cpp">
+      <Filter>Source\Entities\Mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Items\Weapons\Bow.cpp">
+      <Filter>Source\Items\Weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -189,9 +192,6 @@
     </Filter>
     <Filter Include="Source\Physics">
       <UniqueIdentifier>{e03c2679-3c51-49ab-a1d8-899ba002d17a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Mobs">
-      <UniqueIdentifier>{e4431234-8aa8-4683-9b3c-7898bc8ecc33}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Items">
       <UniqueIdentifier>{1f91a026-3a45-40fe-ac3f-6910a38f5067}</UniqueIdentifier>
@@ -235,6 +235,12 @@
     <Filter Include="Source\Networking">
       <UniqueIdentifier>{464af6f7-b4b6-4bf3-9be0-2ec11795c021}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Entities\Mobs">
+      <UniqueIdentifier>{e4431234-8aa8-4683-9b3c-7898bc8ecc33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Items\Weapons">
+      <UniqueIdentifier>{db3e34cc-807e-4345-8f45-54ab11c8212c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\terrain\Terrain.h">
@@ -257,9 +263,6 @@
     </ClInclude>
     <ClInclude Include="..\..\source\physics\PhysicsBody.h">
       <Filter>Source\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\mobs\Zombie.h">
-      <Filter>Source\Mobs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\gui\Button.h">
       <Filter>Source\Gui</Filter>
@@ -407,6 +410,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\gui\GameOverlay\HealthManaStatus.h">
       <Filter>Source\Gui\GameOverlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Entities\Mobs\Zombie.h">
+      <Filter>Source\Entities\Mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Items\Weapons\Bow.h">
+      <Filter>Source\Items\Weapons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

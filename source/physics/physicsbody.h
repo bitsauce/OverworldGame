@@ -15,6 +15,7 @@ public:
 	void draw(xd::SpriteBatch *);
 
 	void setPosition(const float x, const float y) { m_position.set(x, y); }
+	void setPosition(const Vector2 &pos) { m_position = pos; }
 	Vector2 getPosition() const { return m_position; }
 	void setSize(const float w, const float h) { m_size.set(w, h); }
 	Vector2 getSize() const { return m_size; }
@@ -25,6 +26,7 @@ public:
 	Vector2 getCenter() const { return m_position + m_size * 0.5f; }
 	Rect getRect() const { return Rect(m_position, m_size); }
 	bool isContact(const uint dir) { return (m_contact & dir) != 0; }
+	void setGravityScale(const float gs) { m_gravityScale = gs; }
 
 	void applyImpulse(const Vector2 &impulse) { m_acceleration += impulse; }
 	void setAccelerationX(const float ax) { m_acceleration.x = ax; }

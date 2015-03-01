@@ -18,6 +18,7 @@ public:
 	ItemID getID() const { return m_id; }
 	Texture2DPtr getIconTexture() const { return m_iconTexture; }
 	uint getMaxStack() const { return m_maxStack; }
+	bool isSingleShot() const { return m_singleShot; }
 
 protected:
 	virtual void set(const ItemID id, const string &name, const string &desc, const string &texture, const uint maxStack, const bool singleShot);
