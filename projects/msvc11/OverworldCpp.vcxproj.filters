@@ -167,6 +167,12 @@
     <ClCompile Include="..\..\source\Items\Weapons\Bow.cpp">
       <Filter>Source\Items\Weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\Entities\Humanoid.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Entities\Entity.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -416,6 +422,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\Items\Weapons\Bow.h">
       <Filter>Source\Items\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Entities\Humanoid.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Entities\Entity.h">
+      <Filter>Source\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

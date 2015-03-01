@@ -99,6 +99,8 @@
     <ClCompile Include="..\..\source\Blocks\BlockData.cpp" />
     <ClCompile Include="..\..\Source\Entities\Background.cpp" />
     <ClCompile Include="..\..\Source\Entities\Camera.cpp" />
+    <ClCompile Include="..\..\source\Entities\Entity.cpp" />
+    <ClCompile Include="..\..\source\Entities\Humanoid.cpp" />
     <ClCompile Include="..\..\Source\Entities\ItemDrop.cpp" />
     <ClCompile Include="..\..\source\Entities\Mobs\Zombie.cpp" />
     <ClCompile Include="..\..\Source\Entities\Player.cpp" />
@@ -159,6 +161,8 @@
     <ClInclude Include="..\..\source\Constants.h" />
     <ClInclude Include="..\..\Source\Entities\Background.h" />
     <ClInclude Include="..\..\Source\Entities\Camera.h" />
+    <ClInclude Include="..\..\source\Entities\Entity.h" />
+    <ClInclude Include="..\..\source\Entities\Humanoid.h" />
     <ClInclude Include="..\..\Source\Entities\ItemDrop.h" />
     <ClInclude Include="..\..\source\Entities\Mobs\Zombie.h" />
     <ClInclude Include="..\..\Source\Entities\Player.h" />

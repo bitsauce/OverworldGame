@@ -5,20 +5,18 @@
 #include "Game/GameObject.h"
 #include "Game/ItemContainer.h"
 #include "Networking/NetworkObject.h"
+#include "Entity.h"
+#include "Humanoid.h"
+#include "Physics/PhysicsBody.h"
 
-class Skeleton;
-class AnimationStateData;
-class AnimationState;
-class Animation;
 class Camera;
-class PhysicsBody;
 class Terrain;
 class ItemData;
 class ItemContainer;
 class Connection;
 
-class Player : public GameObject, public NetworkObject
-{friend class GameOverlay;
+class Player : public Entity, public NetworkObject
+{
 public:
 	Player(RakNet::RakNetGUID guid);
 
@@ -26,9 +24,6 @@ public:
 	void pack(RakNet::BitStream *bitStream, const Connection *conn);
 	void unpack(RakNet::BitStream *bitStream, const Connection *conn);
 	void draw(SpriteBatch *spriteBatch);
-	void drawSpriteInHand(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch);
-	void setMainAnimation(const string &name);
-	void setItemAnimation(Animation *anim);
 
 	uint getMaxHealth() const { return m_maxHealth; }
 	uint getHealth() const { return m_health; }
@@ -36,21 +31,28 @@ public:
 	void setSelectedItemSlot(const uint slot) { m_selectedItemSlot = slot; }
 	uint getSelectedItemSlot() const { return m_selectedItemSlot; }
 
-	PhysicsBody *getBody() const { return m_body; }
-	Skeleton *getSkeleton() const { return m_skeleton; }
 	Camera *getCamera() const { return m_camera; }
 	Terrain *getTerrain() const { return m_terrain; }
+
 	ItemContainer &getItemContainer() { return m_itemContainer; }
+	Humanoid &getHumanoid() { return m_humanoid; }
+	PhysicsBody &getBody() { return m_body; }
 
 private:
-
+	// Managers
 	Camera *m_camera;
 	Terrain *m_terrain;
+
+	// Inventory
 	ItemContainer m_itemContainer;
 	uint m_selectedItemSlot;
 
+	// Player health
 	uint m_maxHealth;
 	uint m_health;
+
+	// Player-human model
+	Humanoid m_humanoid;
 
 	bool m_lmbPressed;
 
@@ -66,17 +68,9 @@ private:
 	bool m_inputState[INPUT_COUNT];
 
 	// Physics
-	PhysicsBody *m_body;
+	PhysicsBody m_body;
 	float m_jumpTimer;
 	bool m_canJump;
-
-	// Skeletal animations
-	Skeleton *m_skeleton;
-	AnimationStateData *m_animationStateData;
-	AnimationState *m_mainAnimationState;
-	Animation *m_currentAnim;
-	AnimationState *m_itemAnimationState;
-	Animation *m_itemAnimation;
 };
 
 #endif // PLAYER_H

@@ -30,5 +30,5 @@ void BlockItem::use(Player *player)
 
 void BlockItem::draw(Player *player, SpriteBatch *spriteBatch)
 {
-	player->drawSpriteInHand(Sprite(BlockData::getBlockAtlas()->getTexture(), Rect(0,0,16,16), Vector2(), 0.0, BlockData::getBlockAtlas()->get(m_blockID, 0,0,1,0.6)), Vector2(8.0f, 16.0f), spriteBatch);
+	player->getHumanoid().drawRightHandSprite(Sprite(BlockData::getBlockAtlas()->getTexture(), Rect(0,0,16,16), Vector2(), 0.0, BlockData::getBlockAtlas()->get(m_blockID, 0,0,1,0.6)), Vector2(8.0f, 16.0f), spriteBatch);
 }

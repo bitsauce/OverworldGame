@@ -21,8 +21,8 @@ void ItemDrop::update()
 	for(uint i = 0; i < players.size(); ++i)
 	{
 		Player *player = players[i];
-		Vector2 deltaPosition = player->getBody()->getCenter() - m_body.getCenter();
-		if(player->getBody()->getRect().contains(m_body.getCenter()))
+		Vector2 deltaPosition = player->getBody().getCenter() - m_body.getCenter();
+		if(player->getBody().getRect().contains(m_body.getCenter()))
 		{
 			players[i]->getItemContainer().addItem(m_itemID);
 			delete this;

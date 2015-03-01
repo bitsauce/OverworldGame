@@ -64,10 +64,10 @@ private:
 
 void Bow::use(Player *player)
 {
-	new Arrow(player->getBody()->getCenter(), World::getCamera()->getInputPosition() - player->getBody()->getCenter(), 25.0f);
+	new Arrow(player->getBody().getCenter(), World::getCamera()->getInputPosition() - player->getBody().getCenter(), 25.0f);
 }
 
 void Bow::draw(Player *player, SpriteBatch *spriteBatch)
 {
-	player->drawSpriteInHand(m_bowSprite, Vector2(10.0f, 24.0f), spriteBatch);
+	player->getHumanoid().drawRightHandSprite(m_bowSprite, Vector2(10.0f, 24.0f), spriteBatch);
 }

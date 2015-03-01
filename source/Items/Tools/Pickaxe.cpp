@@ -53,11 +53,11 @@ void Pickaxe::use(Player *player)
 			m_cracksSprite.setRegion(m_cracksAnimation.getKeyFrame(4 * (1.0f - m_mineCounter/m_mineTime)));
 		}
 
-		player->setItemAnimation(player->getSkeleton()->findAnimation("mine"));
+		player->getHumanoid().setItemAnimation(player->getHumanoid().getSkeleton()->findAnimation("mine"));
 	}
 	else
 	{
-		player->setItemAnimation(nullptr);
+		player->getHumanoid().setItemAnimation(nullptr);
 	}
 }
 
@@ -68,5 +68,5 @@ void Pickaxe::draw(Player *player, SpriteBatch *spriteBatch)
 	{
 		spriteBatch->drawSprite(m_cracksSprite);
 	}
-	player->drawSpriteInHand(m_sprite, Vector2(16.f, 32.f), spriteBatch);
+	player->getHumanoid().drawRightHandSprite(m_sprite, Vector2(16.f, 32.f), spriteBatch);
 }

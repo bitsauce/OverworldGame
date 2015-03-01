@@ -1,10 +1,14 @@
 #ifndef ZOMBIE_H
 #define ZOMBIE_H
 
-class Zombie
+#include "Entities/Humanoid.h"
+
+class Zombie : public Humanoid
 {
 public:
+	Zombie();
 
+	void update();
 private:
 };
 
