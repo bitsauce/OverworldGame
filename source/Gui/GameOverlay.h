@@ -7,6 +7,7 @@
 class ItemContainer;
 class Player;
 class Hotbar;
+class HealthManaStatus;
 
 class GameOverlay : public UiObject, public MouseListener
 {
@@ -20,6 +21,7 @@ private:
 
 	Player *m_player;
 	Hotbar *m_hotbar;
+	HealthManaStatus *m_healthManaStatus;
 };
 
 #endif // INVENTORY_H

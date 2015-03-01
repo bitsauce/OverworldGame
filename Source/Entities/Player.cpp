@@ -12,6 +12,8 @@
 #include "Items/ItemData.h"
 #include "Networking/Connection.h"
 
+#include "Gui/GameOverlay.h"
+
 Player::Player(RakNet::RakNetGUID guid) :
 	GameObject(DRAW_ORDER_PLAYER),
 	m_camera(World::getCamera()),
@@ -21,8 +23,16 @@ Player::Player(RakNet::RakNetGUID guid) :
 	m_currentAnim(nullptr),
 	m_selectedItemSlot(0),
 	m_itemContainer(10),
-	m_guid(guid)
+	m_guid(guid),
+	m_maxHealth(12),
+	m_health(m_maxHealth)
 {
+	// If player is local, create overlay for this player
+	if(Connection::getInstance()->getGUID() == guid)
+	{
+		new GameOverlay(this, canvas);
+	}
+
 	// Load physics
 	m_body = new PhysicsBody();
 	m_body->setSize(24, 48);

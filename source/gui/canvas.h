@@ -7,6 +7,7 @@
 class Canvas : public UiObject
 {
 public:
+	Canvas();
 	Canvas(const uint w, const uint h);
 
 	Vector2i getCanvasSize() const { return m_canvasSize; }
@@ -15,6 +16,7 @@ public:
 
 private:
 	Vector2i m_canvasSize;
+	bool m_useWindowSize;
 };
 
 #endif // CANVAS_H

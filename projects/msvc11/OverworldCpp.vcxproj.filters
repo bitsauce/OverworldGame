@@ -161,6 +161,9 @@
     <ClCompile Include="..\..\source\Networking\Conneciton.cpp">
       <Filter>Source\Networking</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\gui\GameOverlay\HealthManaStatus.cpp">
+      <Filter>Source\Gui\GameOverlay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -401,6 +404,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\Networking\Connection.h">
       <Filter>Source\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\gui\GameOverlay\HealthManaStatus.h">
+      <Filter>Source\Gui\GameOverlay</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

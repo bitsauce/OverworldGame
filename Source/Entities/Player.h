@@ -18,7 +18,7 @@ class ItemContainer;
 class Connection;
 
 class Player : public GameObject, public NetworkObject
-{
+{friend class GameOverlay;
 public:
 	Player(RakNet::RakNetGUID guid);
 
@@ -29,6 +29,9 @@ public:
 	void drawSpriteInHand(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch);
 	void setMainAnimation(const string &name);
 	void setItemAnimation(Animation *anim);
+
+	uint getMaxHealth() const { return m_maxHealth; }
+	uint getHealth() const { return m_health; }
 	
 	void setSelectedItemSlot(const uint slot) { m_selectedItemSlot = slot; }
 	uint getSelectedItemSlot() const { return m_selectedItemSlot; }
@@ -45,6 +48,9 @@ private:
 	Terrain *m_terrain;
 	ItemContainer m_itemContainer;
 	uint m_selectedItemSlot;
+
+	uint m_maxHealth;
+	uint m_health;
 
 	RakNet::RakNetGUID m_guid;
 	
