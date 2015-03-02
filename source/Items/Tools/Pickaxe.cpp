@@ -53,11 +53,11 @@ void Pickaxe::use(Player *player)
 			m_cracksSprite.setRegion(m_cracksAnimation.getKeyFrame(4 * (1.0f - m_mineCounter/m_mineTime)));
 		}
 
-		player->getHumanoid().setItemAnimation(player->getHumanoid().getSkeleton()->findAnimation("mine"));
+		player->getHumanoid().setPostAnimation(Humanoid::ANIM_MINE);
 	}
 	else
 	{
-		player->getHumanoid().setItemAnimation(nullptr);
+		player->getHumanoid().setPostAnimation(Humanoid::ANIM_NULL);
 	}
 }
 

@@ -4,7 +4,7 @@
 #include "Animation/Bone.h"
 
 Humanoid::Humanoid() :
-	m_currentAnim(nullptr)
+	m_mainAnimation(nullptr)
 {
 	// Load skeleton data
 	m_skeleton = new Skeleton(":/sprites/characters/anim/skeleton.json", ":/sprites/characters/anim/skeleton.atlas", 1.0f);
@@ -25,59 +25,89 @@ Humanoid::Humanoid() :
 	//m_mainAnimationState->setEventCallback(animationEvent);
 	m_mainAnimationState->setLooping(true);
 	
-	m_itemAnimationState = new AnimationState(m_animationStateData);
-	m_itemAnimationState->setLooping(true);
+	m_postAnimationState = new AnimationState(m_animationStateData);
+	m_postAnimationState->setLooping(true);
+	
+	m_preAnimationState = new AnimationState(m_animationStateData);
+	m_preAnimationState->setLooping(true);
 }
 
 string Humanoid::getBodyPartName(const BodyPart part)
 {
 	switch(part)
 	{
-	case HEAD: return "head";
-	case NECK: return "neck";
-	case TORSO: return "torso";
-	case HIPS: return "hips";
-	case THIGH_LEFT: return "lthigh";
-	case THIGH_RIGHT: return "rthigh";
-	case SHOULDER_RIGHT: return "rshoulder";
-	case SHOULDER_LEFT: return "lshoulder";
-	case ARM_RIGHT: return "rarm";
-	case ARM_LEFT: return "larm";
-	case LEG_RIGHT: return "rleg";
-	case LEG_LEFT: return "lleg";
-	default: return "null";
+	case HEAD:				return "head";
+	case NECK:				return "neck";
+	case TORSO:				return "torso";
+	case HIPS:				return "hips";
+	case THIGH_LEFT:		return "lthigh";
+	case THIGH_RIGHT:		return "rthigh";
+	case SHOULDER_RIGHT:	return "rshoulder";
+	case SHOULDER_LEFT:		return "lshoulder";
+	case ARM_RIGHT:			return "rarm";
+	case ARM_LEFT:			return "larm";
+	case LEG_RIGHT:			return "rleg";
+	case LEG_LEFT:			return "lleg";
+	default:				return "null";
 	}
+}
+
+Animation *Humanoid::getAnimation(const Anim anim)
+{
+	string animName = "default";
+	switch(anim)
+	{
+	case ANIM_NULL: return nullptr;
+	case ANIM_DEFAULT: animName = "default"; break;
+	case ANIM_IDLE: animName = "idle"; break;
+	case ANIM_JUMP: animName = "jump"; break;
+	case ANIM_WALK: animName = "walk"; break;
+	case ANIM_WALL_SLIDE: animName = "wall-slide"; break;
+	case ANIM_MINE: animName = "mine"; break;
+	}
+	return m_skeleton->findAnimation(animName);
 }
 
 // ANIMATIONS
-void Humanoid::setMainAnimation(const string &name)
+void Humanoid::setPreAnimation(const Anim anim)
 {
-	// Get animation by name
-	Animation *anim = m_skeleton->findAnimation(name);
-	if(anim == nullptr)
+	// Set item animation
+	Animation *animations = getAnimation(anim);
+	if(m_preAnimation != animations)
 	{
-		LOG("Humanoid::setMainAnimation() - Animation '%s' does not exists.", name);
-		return;
-	}
-		
-	// Make sure this animation isn't current
-	if(m_currentAnim != anim)
-	{
-		m_mainAnimationState->setAnimation(anim);
-		m_currentAnim = anim;
+		if(animations != nullptr)
+		{
+			m_preAnimationState->setAnimation(animations);
+		}
+		m_preAnimation = animations;
 	}
 }
 
-void Humanoid::setItemAnimation(Animation *anim)
+void Humanoid::setMainAnimation(const Anim anim)
 {
-	// Make sure this animation isn't current
-	if(m_itemAnimation != anim)
+	// Set main animation
+	Animation *animations = getAnimation(anim);
+	if(m_mainAnimation != animations)
 	{
-		if(anim != nullptr)
+		if(animations != nullptr)
 		{
-			m_itemAnimationState->setAnimation(anim);
+			m_mainAnimationState->setAnimation(animations);
 		}
-		m_itemAnimation = anim;
+		m_mainAnimation = animations;
+	}
+}
+
+void Humanoid::setPostAnimation(const Anim anim)
+{
+	// Set item animation
+	Animation *animations = getAnimation(anim);
+	if(m_postAnimation != animations)
+	{
+		if(animations != nullptr)
+		{
+			m_postAnimationState->setAnimation(animations);
+		}
+		m_postAnimation = animations;
 	}
 }
 
@@ -93,11 +123,20 @@ void Humanoid::setBodyPart(const BodyPart part, const Pixmap &pixmap)
 
 void Humanoid::update()
 {
-	// Update animations
-	m_mainAnimationState->update(Graphics::getTimeStep());
-	if(m_itemAnimation)
+	// Update all animations
+	if(m_preAnimation)
 	{
-		m_itemAnimationState->update(Graphics::getTimeStep());
+		m_preAnimationState->update(Graphics::getTimeStep());
+	}
+
+	if(m_mainAnimation)
+	{
+		m_mainAnimationState->update(Graphics::getTimeStep());
+	}
+
+	if(m_postAnimation)
+	{
+		m_postAnimationState->update(Graphics::getTimeStep());
 	}
 }
 
@@ -106,52 +145,6 @@ void Humanoid::update()
 
 void Humanoid::draw(PhysicsBody *m_body, SpriteBatch *spriteBatch)
 {
-	// Set animations
-	m_mainAnimationState->setTimeScale(math::abs(m_body->getVelocity().x) * 0.5f);
-	if(m_body->isContact(SOUTH))
-	{
-		m_mainAnimationState->setLooping(true);
-		if(m_body->getVelocity().x >= 0.01f)
-		{
-			setMainAnimation("walk");
-			m_skeleton->setFlipX(false);
-		}
-		else if(m_body->getVelocity().x <= -0.01f)
-		{
-			setMainAnimation("walk");
-			m_skeleton->setFlipX(true);
-		}
-		else
-		{
-			setMainAnimation("idle");
-			m_body->setVelocityX(0.0f);
-			m_mainAnimationState->setTimeScale(1.0f);
-		}
-	}
-	else
-	{
-		if(m_body->isContact(WEST)/* >= 3*/) // TODO: I should check for a column of 3 rows of blocks instead of simlply one
-		{
-			m_skeleton->setFlipX(false);
-			m_mainAnimationState->setLooping(false);
-			m_mainAnimationState->setTimeScale(5.0f);
-			setMainAnimation("wall-slide");
-		}
-		else if(m_body->isContact(EAST))
-		{
-			m_skeleton->setFlipX(true);
-			m_mainAnimationState->setLooping(false);
-			m_mainAnimationState->setTimeScale(5.0f);
-			setMainAnimation("wall-slide");
-		}
-		else
-		{
-			m_mainAnimationState->setLooping(false);
-			m_mainAnimationState->setTimeScale(1.0f);
-			setMainAnimation("jump");
-		}
-	}
-
 	// Draw skeleton
 	m_skeleton->setPosition(m_body->getPosition() + Vector2(m_body->getSize().x*0.5f, 48.0f));
 	m_skeleton->draw(spriteBatch->getGraphicsContext());

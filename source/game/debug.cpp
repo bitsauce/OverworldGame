@@ -53,9 +53,12 @@ void Debug::debugF4()
 	m_terrain->getChunkLoader()->m_applyZoom = !m_terrain->getChunkLoader()->m_applyZoom;
 }
 
+#include "Entities/Mobs/Zombie.h"
 void Debug::debugF5()
 {
-	m_terrain->setThingAt(World::getCamera()->getInputPosition().x/BLOCK_PXF, World::getCamera()->getInputPosition().y/BLOCK_PXF, BLOCK_ENTITY_RED_CURRANT_BUSH);
+	
+	Zombie *zombie = new Zombie();
+	zombie->getBody().setPosition(0, 0);
 }
 
 void Debug::update()

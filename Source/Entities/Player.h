@@ -71,6 +71,8 @@ private:
 	PhysicsBody m_body;
 	float m_jumpTimer;
 	bool m_canJump;
+
+	//static vector<Player*> s_playerList;
 };
 
 #endif // PLAYER_H

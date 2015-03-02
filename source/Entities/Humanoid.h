@@ -30,18 +30,23 @@ public:
 		LEG_RIGHT
 	};
 
-	enum Animation
+	enum Anim
 	{
-		DEFAULT,
-		IDLE,
-		JUMP,
-		WALK,
-		WALL_SLIDE,
-		MINE
+		ANIM_NULL,
+		ANIM_DEFAULT,
+		ANIM_IDLE,
+		ANIM_JUMP,
+		ANIM_WALK,
+		ANIM_WALL_SLIDE,
+		ANIM_MINE
 	};
 	
-	void setMainAnimation(const string &name);
-	void setItemAnimation(Animation *anim);
+	void setPreAnimation(const Anim anim);
+	AnimationState *getPreAnimationState() const { return m_preAnimationState; }
+	void setMainAnimation(const Anim anim);
+	AnimationState *getMainAnimationState() const { return m_mainAnimationState; }
+	void setPostAnimation(const Anim anim);
+	AnimationState *getPostAnimationState() const { return m_postAnimationState; }
 	void setBodyPart(const BodyPart part, const Pixmap &pixmap);
 
 	Skeleton *getSkeleton() { return m_skeleton; }
@@ -53,14 +58,17 @@ public:
 
 private:
 	string getBodyPartName(const BodyPart part);
+	Animation *getAnimation(const Anim anim);
 
 	// Skeletal animations
 	Skeleton *m_skeleton;
 	AnimationStateData *m_animationStateData;
+	AnimationState *m_preAnimationState;
+	Animation *m_preAnimation;
 	AnimationState *m_mainAnimationState;
-	Animation *m_currentAnim;
-	AnimationState *m_itemAnimationState;
-	Animation *m_itemAnimation;
+	Animation *m_mainAnimation;
+	AnimationState *m_postAnimationState;
+	Animation *m_postAnimation;
 };
 
 #endif // HUMANOID_H

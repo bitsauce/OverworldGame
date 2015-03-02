@@ -9,7 +9,9 @@
 #include "Items/ItemData.h"
 #include "Networking/Connection.h"
 #include "Networking/Server.h"
-
+#include "Animation/Animation.h"
+#include "Animation/Skeleton.h"
+#include "Animation/Bone.h"
 #include "Gui/GameOverlay.h"
 
 Player::Player(RakNet::RakNetGUID guid) :
@@ -27,8 +29,6 @@ Player::Player(RakNet::RakNetGUID guid) :
 {
 	// Set body size
 	m_body.setSize(24, 48);
-
-	m_humanoid.setMainAnimation("idle");
 	
 	// If player is local, do extra stuff
 	if(Connection::getInstance()->getGUID() == guid)
@@ -48,21 +48,48 @@ Player::Player(RakNet::RakNetGUID guid) :
 		Input::bind(XD_KEY_0, bind(&Player::setSelectedItemSlot, this, 9));
 	}
 
+	// Add to player list
 	World::s_players.push_back(this);
 }
 
 void Player::update()
 {
-	//if(Server::getInstance())
+	// Jumping
+	if(m_body.isContact(SOUTH))
 	{
-		// Jumping
-		if(m_body.isContact(SOUTH))
+		if(m_inputState[INPUT_JUMP])
 		{
+			if(m_canJump)
+			{
+				m_body.applyImpulse(Vector2(0.0f, -4.5f));
+				m_jumpTimer = 0.0f;
+				m_canJump = false;
+			}
+		}
+		else
+		{
+			m_canJump = true;
+		}
+	}
+	else
+	{
+		if(m_jumpTimer < 0.1f)
+		{
+			if(m_inputState[INPUT_JUMP]) // High/low jumping
+			{
+				m_body.applyImpulse(Vector2(0.0f, -0.75f));
+			}
+			m_jumpTimer += Graphics::getTimeStep();
+		}
+		else if(m_body.isContact(WEST) || m_body.isContact(EAST)) // Wall jumping
+		{
+			m_body.setVelocityY(m_body.getVelocity().y*0.5f);
 			if(m_inputState[INPUT_JUMP])
 			{
 				if(m_canJump)
 				{
-					m_body.applyImpulse(Vector2(0.0f, -4.5f));
+					m_body.setVelocityX((m_body.isContact(WEST) - m_body.isContact(EAST)) * 14.0f);
+					m_body.setVelocityY(-4.5f);
 					m_jumpTimer = 0.0f;
 					m_canJump = false;
 				}
@@ -72,70 +99,89 @@ void Player::update()
 				m_canJump = true;
 			}
 		}
-		else
+	}
+
+	// Walking
+	if(abs(m_body.getVelocity().x) < 10.0f)
+	{
+		m_body.applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (Input::getKeyState(XD_KEY_SHIFT) ? 1.0f : 0.5f), 0.0f));
+	}
+
+	// Apply friction
+	m_body.setVelocityX(m_body.getVelocity().x * 0.85f);
+
+	// Update physics
+	m_body.update();
+
+	// Use current item
+	if(Input::getKeyState(XD_LMB))
+	{
+		ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
+		if(item != nullptr && (!item->isSingleShot() || !m_lmbPressed))
 		{
-			if(m_jumpTimer < 0.1f)
-			{
-				if(m_inputState[INPUT_JUMP]) // High/low jumping
-				{
-					m_body.applyImpulse(Vector2(0.0f, -0.75f));
-				}
-				m_jumpTimer += Graphics::getTimeStep();
-			}
-			else if(m_body.isContact(WEST) || m_body.isContact(EAST)) // Wall jumping
-			{
-				m_body.setVelocityY(m_body.getVelocity().y*0.5f);
-				if(m_inputState[INPUT_JUMP])
-				{
-					if(m_canJump)
-					{
-						m_body.setVelocityX((m_body.isContact(WEST) - m_body.isContact(EAST)) * 14.0f);
-						m_body.setVelocityY(-4.5f);
-						m_jumpTimer = 0.0f;
-						m_canJump = false;
-					}
-				}
-				else
-				{
-					m_canJump = true;
-				}
-			}
+			item->use(this);
 		}
-
-		// Walking
-		if(abs(m_body.getVelocity().x) < 10.0f)
+		m_lmbPressed = true;
+	}
+	else
+	{
+		m_humanoid.setPostAnimation(Humanoid::ANIM_NULL);
+		m_lmbPressed = false;
+	}
+	
+	// Set animations
+	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(m_body.getVelocity().x) * 0.5f);
+	if(m_body.isContact(SOUTH))
+	{
+		m_humanoid.getMainAnimationState()->setLooping(true);
+		if(m_body.getVelocity().x >= 0.01f)
 		{
-			m_body.applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (Input::getKeyState(XD_KEY_SHIFT) ? 1.0f : 0.5f), 0.0f));
+			m_humanoid.setMainAnimation(Humanoid::ANIM_WALK);
+			m_humanoid.getSkeleton()->setFlipX(false);
 		}
-
-		// Apply friction
-		m_body.setVelocityX(m_body.getVelocity().x * 0.85f);
-
-		// Update physics
-		m_body.update();
-
-		// Use current item
-		if(Input::getKeyState(XD_LMB))
+		else if(m_body.getVelocity().x <= -0.01f)
 		{
-			ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
-			if(item != nullptr && (!item->isSingleShot() || !m_lmbPressed))
-			{
-				item->use(this);
-			}
-			m_lmbPressed = true;
+			m_humanoid.setMainAnimation(Humanoid::ANIM_WALK);
+			m_humanoid.getSkeleton()->setFlipX(true);
 		}
 		else
 		{
-			//m_itemAnimation = nullptr;
-			m_lmbPressed = false;
+			m_humanoid.setMainAnimation(Humanoid::ANIM_IDLE);
+			m_body.setVelocityX(0.0f);
+			m_humanoid.getMainAnimationState()->setTimeScale(1.0f);
 		}
+	}
+	else
+	{
+		if(m_body.isContact(WEST)/* >= 3*/) // TODO: I should check for a column of 3 rows of blocks instead of simlply one
+		{
+			m_humanoid.getSkeleton()->setFlipX(false);
+			m_humanoid.getMainAnimationState()->setLooping(false);
+			m_humanoid.getMainAnimationState()->setTimeScale(5.0f);
+			m_humanoid.setMainAnimation(Humanoid::ANIM_WALL_SLIDE);
+		}
+		else if(m_body.isContact(EAST))
+		{
+			m_humanoid.getSkeleton()->setFlipX(true);
+			m_humanoid.getMainAnimationState()->setLooping(false);
+			m_humanoid.getMainAnimationState()->setTimeScale(5.0f);
+			m_humanoid.setMainAnimation(Humanoid::ANIM_WALL_SLIDE);
+		}
+		else
+		{
+			m_humanoid.getMainAnimationState()->setLooping(false);
+			m_humanoid.getMainAnimationState()->setTimeScale(1.0f);
+			m_humanoid.setMainAnimation(Humanoid::ANIM_JUMP);
+		}
+	}
 
-		// Move camera
-		if(Connection::getInstance()->getGUID() == m_guid)
+	// Update animations
+	m_humanoid.update();
+
+	// Move camera
+	if(Connection::getInstance()->getGUID() == m_guid)
+	{
 		m_camera->lookAt(m_body.getPosition());
-
-		// Update animations
-		m_humanoid.update();
 	}
 }
 
