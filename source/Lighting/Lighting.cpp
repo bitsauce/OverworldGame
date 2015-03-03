@@ -53,11 +53,11 @@ void Lighting::draw(xd::SpriteBatch *spriteBatch)
 		// Render lightmaps to texture (pass 0)
 		gfxContext.setRenderTarget(m_lightingRenderTarget);
 		gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
-		for(int y = area.y0; y <= area.y1; ++y)
+		for(int y = area.y0+1; y <= area.y1+1; ++y)
 		{
-			for(int x = area.x0; x <= area.x1; ++x)
+			for(int x = area.x0+1; x <= area.x1+1; ++x)
 			{
-				gfxContext.setTexture(m_terrain->getChunkLoader()->getChunkAt(x, y).getLightMap());
+				gfxContext.setTexture(m_terrain->getChunkLoader()->getChunkAt(x-1, y-1).getLightMap());
 				gfxContext.drawRectangle((x - area.x0) * CHUNK_BLOCKSF, (y - area.y0) * CHUNK_BLOCKSF, CHUNK_BLOCKSF, CHUNK_BLOCKSF);
 			}
 		}
@@ -117,7 +117,7 @@ void Lighting::draw(xd::SpriteBatch *spriteBatch)
 
 		gfxContext.setProjectionMatrix(World::getCamera()->getProjectionMatrix());
 		gfxContext.setTexture(m_lightingPass2->getTexture());
-		gfxContext.drawRectangle((area.x0) * CHUNK_PXF, (area.y0) * CHUNK_PXF, m_width * BLOCK_PXF, m_height * BLOCK_PXF);
+		gfxContext.drawRectangle((area.x0 - 1) * CHUNK_PXF, (area.y0 - 1) * CHUNK_PXF, m_width * BLOCK_PXF, m_height * BLOCK_PXF);
 		
 		gfxContext.setBlendState(xd::BlendState::PRESET_ALPHA_BLEND);
 	}
@@ -132,8 +132,8 @@ void Lighting::resizeEvent(uint width, uint height)
 	delete m_lightingRenderTarget;
 
 	// Create shadow textures
-	uint targetWidth = (uint)(floor(width*0.5f/CHUNK_PXF) * 2 + 3) * CHUNK_BLOCKS;
-	uint targetHeight = (uint)(floor(height*0.5f/CHUNK_PXF) * 2 + 3) * CHUNK_BLOCKS;
+	uint targetWidth = (uint)(floor(width*0.5f/CHUNK_PXF) * 2 + 5) * CHUNK_BLOCKS;
+	uint targetHeight = (uint)(floor(height*0.5f/CHUNK_PXF) * 2 + 5) * CHUNK_BLOCKS;
 	m_lightingRenderTarget = new xd::RenderTarget2D(targetWidth, targetHeight);
 	m_lightingRenderTarget->getTexture()->setFiltering(xd::Texture2D::LINEAR);
 	m_lightingPass0 = new xd::RenderTarget2D(targetWidth, targetHeight);

@@ -179,7 +179,7 @@ void Player::update()
 	m_humanoid.update();
 
 	// Move camera
-	if(Connection::getInstance()->getGUID() == m_guid)
+	if(Connection::getInstance()->getGUID() == m_guid && !Input::getKeyState(XD_KEY_L))
 	{
 		m_camera->lookAt(m_body.getPosition());
 	}
