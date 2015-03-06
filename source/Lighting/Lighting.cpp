@@ -18,7 +18,8 @@ Lighting::Lighting(Terrain *terrain) :
 	m_radialLightingShader(ResourceManager::get<Shader>(":/shaders/radial_lighting")),
 	m_blurHShader(ResourceManager::get<Shader>(":/shaders/blur_h")),
 	m_blurVShader(ResourceManager::get<Shader>(":/shaders/blur_v")),
-	m_lightRadius(6)
+	m_lightRadius(6),
+	m_enabled(true)
 {
 	// Resize render targets
 	Window::addWindowListener(this);
@@ -37,6 +38,8 @@ void Lighting::addLightSource(LightSource *source)
 
 void Lighting::draw(SpriteBatch *spriteBatch)
 {
+	if(!m_enabled) return;
+
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 
 	ChunkLoader::ChunkArea area = m_terrain->getChunkLoader()->getActiveArea();

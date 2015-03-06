@@ -46,6 +46,10 @@ Player::Player(RakNet::RakNetGUID guid) :
 		Input::bind(XD_KEY_8, bind(&Player::setSelectedItemSlot, this, 7));
 		Input::bind(XD_KEY_9, bind(&Player::setSelectedItemSlot, this, 8));
 		Input::bind(XD_KEY_0, bind(&Player::setSelectedItemSlot, this, 9));
+
+		World::getCamera()->setTargetEntity(this);
+
+		World::s_localPlayer = this;
 	}
 
 	// Add to player list
@@ -177,12 +181,6 @@ void Player::update()
 
 	// Update animations
 	m_humanoid.update();
-
-	// Move camera
-	if(Connection::getInstance()->getGUID() == m_guid && !Input::getKeyState(XD_KEY_L))
-	{
-		m_camera->lookAt(m_body.getPosition());
-	}
 }
 
 void Player::pack(RakNet::BitStream *bitStream, const Connection *conn)

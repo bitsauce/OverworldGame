@@ -23,6 +23,7 @@ Camera *World::s_camera = nullptr;
 Debug *World::s_debug = nullptr;
 Lighting *World::s_lighting = nullptr;
 vector<Player*> World::s_players;
+Player *World::s_localPlayer = nullptr;
 
 void World::init()
 {
@@ -54,17 +55,6 @@ void World::create(const string &name)
 	s_worldFile->save();
 
 	s_generator->setSeed(seed);
-
-	LOG("Creating player...");
-		
-	// Create player
-	//Player *player = new Player();
-	//player->getBody()->setPosition(0, 0);
-	//player->getItemContainer().addItem(ITEM_PICKAXE_IRON);
-	//player->getItemContainer().addItem(ITEM_TORCH, 255);
-		
-	// Show game
-	SceneManager::setScene(new GameScene());
 }
 
 void World::save()

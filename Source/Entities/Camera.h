@@ -4,6 +4,8 @@
 #include "Config.h"
 #include "Game/GameObject.h"
 
+class Entity;
+
 class Camera : public GameObject, public MouseListener, public WindowListener
 {
 public:
@@ -12,6 +14,10 @@ public:
 
 	// Look at point
 	void lookAt(Vector2i worldPoint);
+
+	// Entity to follow
+	void setTargetEntity(Entity *target) { m_tagetEntity = target; }
+	Entity *getTargetEntity() const { return m_tagetEntity; }
 	
 	// Get current projection matrix
 	Matrix4 getProjectionMatrix() const;
@@ -60,6 +66,9 @@ private:
 
 	// Zoom
 	float m_zoomLevel;
+
+	// Target entity
+	Entity *m_tagetEntity;
 };
 
 #endif // CAMERA_H

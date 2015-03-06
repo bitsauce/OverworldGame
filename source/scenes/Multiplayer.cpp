@@ -57,11 +57,10 @@ MultiplayerScene::MultiplayerScene()
 	hostBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 	addSceneObject(hostBtn);
 }
-#include "physics\physicsbody.h"
+
 void MultiplayerScene::host()
 {
-	ushort port = util::strToInt(m_portLineEdit->getText());
-	new Server(port);
+	new Server(util::strToInt(m_portLineEdit->getText()));
 
 	RakNet::BitStream bitStream;
 	bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);

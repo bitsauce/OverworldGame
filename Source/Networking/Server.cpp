@@ -73,6 +73,8 @@ void Server::update()
 
 		case ID_CREATE_ENTITY:
 			{
+				LOG("Creating player...");
+
 				// Create player
 				Player *player = new Player(packet->guid);
 				player->SetNetworkIDManager(&m_networkIDManager);

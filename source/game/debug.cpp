@@ -6,9 +6,14 @@
 #include "Lighting/Spotlight.h"
 #include "World/World.h"
 #include "Entities/Camera.h"
+#include "Entities/Player.h"
 #include "Terrain/Terrain.h"
 #include "Blocks/BlockData.h"
 #include "Networking/Server.h"
+#include "Entities/Mobs/Zombie.h"
+#include "Scenes/SceneManager.h"
+#include "Scenes/Multiplayer.h"
+#include "Scenes/GameScene.h"
 
 Debug::Debug(Terrain *terrain, Lighting *lighting) :
 	GameObject(DRAW_ORDER_DEBUG),
@@ -30,35 +35,116 @@ Debug::Debug(Terrain *terrain, Lighting *lighting) :
 	Input::bind(XD_KEY_PERIOD, function<void()>(bind(&Debug::nextBlock, this)));
 	Input::bind(XD_KEY_COMMA, function<void()>(bind(&Debug::prevBlock, this)));
 	
-	Input::bind(XD_KEY_F2, function<void()>(bind(&Debug::debugF2, this)));
-	Input::bind(XD_KEY_F3, function<void()>(bind(&Debug::debugF3, this)));
-	Input::bind(XD_KEY_F4, function<void()>(bind(&Debug::debugF4, this)));
-	Input::bind(XD_KEY_F5, function<void()>(bind(&Debug::debugF5, this)));
+	Input::bind(XD_KEY_F1, function<void()>(bind(&Debug::debugFunction, this, 1)));
+	Input::bind(XD_KEY_F2, function<void()>(bind(&Debug::debugFunction, this, 2)));
+	Input::bind(XD_KEY_F3, function<void()>(bind(&Debug::debugFunction, this, 3)));
+	Input::bind(XD_KEY_F4, function<void()>(bind(&Debug::debugFunction, this, 4)));
+	Input::bind(XD_KEY_F5, function<void()>(bind(&Debug::debugFunction, this, 5)));
+	Input::bind(XD_KEY_F6, function<void()>(bind(&Debug::debugFunction, this, 6)));
+	Input::bind(XD_KEY_F7, function<void()>(bind(&Debug::debugFunction, this, 7)));
+	Input::bind(XD_KEY_F8, function<void()>(bind(&Debug::debugFunction, this, 8)));
+	Input::bind(XD_KEY_F9, function<void()>(bind(&Debug::debugFunction, this, 9)));
+	Input::bind(XD_KEY_F10, function<void()>(bind(&Debug::debugFunction, this, 10)));
+	Input::bind(XD_KEY_F11, function<void()>(bind(&Debug::debugFunction, this, 11)));
+	Input::bind(XD_KEY_F12, function<void()>(bind(&Debug::debugFunction, this, 12)));
 }
 
-void Debug::debugF2()
-{
-	toggle();
-}
+MultiplayerScene *multiplayerScene = nullptr;
 
-Random random;
-void Debug::debugF3()
+void Debug::debugFunction(const int i)
 {
-	new Spotlight(World::getCamera()->getInputPosition()/BLOCK_PXF, 20, Color((uchar)random.nextInt(255), (uchar)random.nextInt(255), (uchar)random.nextInt(255)));
-}
-
-void Debug::debugF4()
-{
-	m_debugChunkLoader = !m_debugChunkLoader;
-	m_terrain->getChunkLoader()->m_applyZoom = !m_terrain->getChunkLoader()->m_applyZoom;
-}
-
-#include "Entities/Mobs/Zombie.h"
-void Debug::debugF5()
-{
-	
-	Zombie *zombie = new Zombie();
-	zombie->getBody().setPosition(0, 0);
+	switch(i)
+	{
+	case 1:
+		{
+			// Toggle debug info
+			toggle();
+		}
+		break;
+		
+	case 2:
+		{
+			// Attach/detach camera
+			Camera *camera = World::getCamera();
+			if(camera->getTargetEntity())
+			{
+				camera->setTargetEntity(nullptr);
+			}
+			else
+			{
+				camera->setTargetEntity(World::getLocalPlayer());
+			}
+		}
+		break;
+		
+	case 3:
+		{
+			// Toggle lighting
+			m_lighting->m_enabled = !m_lighting->m_enabled;
+		}
+		break;
+		
+	case 4:
+		{
+			// Toggle chunk loader debugging
+			m_debugChunkLoader = !m_debugChunkLoader;
+			m_terrain->getChunkLoader()->m_applyZoom = !m_terrain->getChunkLoader()->m_applyZoom;
+		}
+		break;
+		
+	case 5:
+		{
+			// Spawn light
+			new Spotlight(World::getCamera()->getInputPosition()/BLOCK_PXF, 20, Color((uchar)m_random.nextInt(255), (uchar)m_random.nextInt(255), (uchar)m_random.nextInt(255)));
+			// Spawn zombie
+			//Zombie *zombie = new Zombie();
+			//zombie->getBody().setPosition(0, 0);
+		}
+		break;
+		
+	case 6:
+		{
+		}
+		break;
+		
+	case 7:
+		{
+		}
+		break;
+		
+	case 8:
+		{
+		}
+		break;
+		
+	case 9:
+		{
+		}
+		break;
+		
+	case 10:
+		{
+		}
+		break;
+		
+	case 11:
+		{
+			if(SceneManager::getScene() == multiplayerScene)
+			{
+				SceneManager::setScene(new GameScene());
+			}
+			else
+			{
+				SceneManager::setScene(multiplayerScene = new MultiplayerScene());
+			}
+		}
+		break;
+		
+	case 12:
+		{
+		}
+		break;
+	}
 }
 
 void Debug::update()

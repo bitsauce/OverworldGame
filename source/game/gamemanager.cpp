@@ -5,12 +5,13 @@
 #include "Lighting/Spotlight.h"
 #include "World/World.h"
 #include "Scenes/SceneManager.h"
-#include "Scenes/Multiplayer.h"
+#include "Scenes/GameScene.h"
 #include "Blocks/BlockData.h"
 #include "Items/ItemData.h"
 #include "Things/ThingData.h"
 #include "Game/Debug.h"
 #include "Entities/Camera.h"
+#include "Networking/Server.h"
 
 UiObject *canvas = nullptr;
 
@@ -21,7 +22,7 @@ bool GameManager::s_takeScreenshot = false;
 void GameManager::main()
 {
 	// Set some key bindings
-	Input::bind(XD_KEY_ESCAPE, function<void()>(Engine::exit));
+	//Input::bind(XD_KEY_ESCAPE, function<void()>(Engine::exit));
 	Input::bind(XD_KEY_SNAPSHOT, function<void()>(GameManager::takeScreenshot));
 	
 	// Initialize game managers
@@ -37,12 +38,13 @@ void GameManager::main()
 	Window::setSize(Vector2i(1280, 720));
 
 	// Show main menu
-	//if(!World::load("Debug"))
-	//{
-	//	World::create("Debug");
-	//}
-
-	SceneManager::setScene(new MultiplayerScene());
+	if(!World::load("Debug"))
+	{
+		World::create("Debug");
+	}
+		
+	// Show game
+	SceneManager::setScene(new GameScene());
 }
 
 void GameManager::exit()
@@ -67,8 +69,8 @@ void GameManager::draw(GraphicsContext &context)
 	if(s_takeScreenshot)
 	{
 		int i = 0;
-		while(util::fileExists("C:\\Users\\Marcus\\Desktop\\screenshot_" + util::intToStr(i) + ".png")) i++;
-		context.saveScreenshot("C:\\Users\\Marcus\\Desktop\\screenshot_" + util::intToStr(i) + ".png");
+		while(util::fileExists("C:\\Users\\Marcus\\Desktop\\Screenshot_" + util::intToStr(i) + ".png")) i++;
+		context.saveScreenshot("C:\\Users\\Marcus\\Desktop\\Screenshot_" + util::intToStr(i) + ".png");
 		s_takeScreenshot = false;
 	}
 	

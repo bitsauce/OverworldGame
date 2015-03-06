@@ -23,10 +23,7 @@ public:
 
 	void setVariable(const string &name, const string &value);
 
-	void debugF2();
-	void debugF3();
-	void debugF4();
-	void debugF5();
+	void debugFunction(const int i);
 
 	bool isEnabled() { return m_enabled; }
 
@@ -54,6 +51,8 @@ private:
 
 	// Paint block
 	BlockID m_block;
+
+	Random m_random;
 };
 
 #endif // DEBUG_H

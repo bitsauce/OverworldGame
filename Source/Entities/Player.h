@@ -31,6 +31,9 @@ public:
 	void setSelectedItemSlot(const uint slot) { m_selectedItemSlot = slot; }
 	uint getSelectedItemSlot() const { return m_selectedItemSlot; }
 
+	Vector2 getPosition() const { return m_body.getPosition(); }
+	Vector2 getSize() const { return m_body.getSize(); }
+
 	Camera *getCamera() const { return m_camera; }
 	Terrain *getTerrain() const { return m_terrain; }
 

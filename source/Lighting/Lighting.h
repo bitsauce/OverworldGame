@@ -7,7 +7,7 @@
 class Terrain;
 class LightSource;
 
-class Lighting : public GameObject, public xd::WindowListener
+class Lighting : public GameObject, public WindowListener
 {
 	friend class Lighting;
 	friend class Debug;
@@ -39,6 +39,7 @@ private:
 	xd::ShaderPtr m_blurHShader;
 	xd::ShaderPtr m_blurVShader;
 	int m_lightRadius;
+	bool m_enabled;
 
 	list<LightSource*> m_lightSources;
 };

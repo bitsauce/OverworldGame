@@ -30,6 +30,7 @@ public:
 	static Debug *getDebug();
 	static Lighting *getLighting();
 	static vector<Player*> getPlayers();
+	static Player *getLocalPlayer() { return s_localPlayer; }
 
 private:
 	static Terrain *s_terrain;
@@ -41,6 +42,7 @@ private:
 	static Debug *s_debug;
 	static Lighting *s_lighting;
 	static vector<Player*> s_players;
+	static Player* s_localPlayer;
 	static Server *s_server;
 	static Client *s_client;
 };

@@ -2,6 +2,7 @@
 #include "Constants.h"
 #include "World/World.h"
 #include "Game/Debug.h"
+#include "Entities/Entity.h"
 
 Camera::Camera() :
 	GameObject(DRAW_ORDER_CAMERA),
@@ -65,21 +66,28 @@ float Camera::getZoomLevel() const
 
 void Camera::update()
 {
-	float speed = Input::getKeyState(XD_KEY_LCONTROL) ? 1.0f : 16.0f;
-	if(Input::getKeyState(XD_KEY_LEFT)) {
-		m_position.x -= speed/m_zoomLevel;
+	if(m_tagetEntity)
+	{
+		lookAt(m_tagetEntity->getCenter());
 	}
+	else
+	{
+		float speed = Input::getKeyState(XD_KEY_LCONTROL) ? 1.0f : 16.0f;
+		if(Input::getKeyState(XD_KEY_LEFT)) {
+			m_position.x -= speed/m_zoomLevel;
+		}
 	
-	if(Input::getKeyState(XD_KEY_RIGHT)) {
-		m_position.x += speed/m_zoomLevel;
-	}
+		if(Input::getKeyState(XD_KEY_RIGHT)) {
+			m_position.x += speed/m_zoomLevel;
+		}
 	
-	if(Input::getKeyState(XD_KEY_UP)) {
-		m_position.y -= speed/m_zoomLevel;
-	}
+		if(Input::getKeyState(XD_KEY_UP)) {
+			m_position.y -= speed/m_zoomLevel;
+		}
 	
-	if(Input::getKeyState(XD_KEY_DOWN)) {
-		m_position.y += speed/m_zoomLevel;
+		if(Input::getKeyState(XD_KEY_DOWN)) {
+			m_position.y += speed/m_zoomLevel;
+		}
 	}
 }
 
