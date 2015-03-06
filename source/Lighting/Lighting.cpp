@@ -14,20 +14,20 @@ Lighting::Lighting(Terrain *terrain) :
 	m_lightingPass1(nullptr),
 	m_lightingPass2(nullptr),
 	m_lightingRenderTarget(nullptr),
-	m_directionalLightingShader(xd::ResourceManager::get<xd::Shader>(":/shaders/directional_lighting")),
-	m_radialLightingShader(xd::ResourceManager::get<xd::Shader>(":/shaders/radial_lighting")),
-	m_blurHShader(xd::ResourceManager::get<xd::Shader>(":/shaders/blur_h")),
-	m_blurVShader(xd::ResourceManager::get<xd::Shader>(":/shaders/blur_v")),
+	m_directionalLightingShader(ResourceManager::get<Shader>(":/shaders/directional_lighting")),
+	m_radialLightingShader(ResourceManager::get<Shader>(":/shaders/radial_lighting")),
+	m_blurHShader(ResourceManager::get<Shader>(":/shaders/blur_h")),
+	m_blurVShader(ResourceManager::get<Shader>(":/shaders/blur_v")),
 	m_lightRadius(6)
 {
 	// Resize render targets
-	xd::Window::addWindowListener(this);
-	resizeEvent(xd::Window::getSize().x, xd::Window::getSize().y);
+	Window::addWindowListener(this);
+	resizeEvent(Window::getSize().x, Window::getSize().y);
 }
 
 Lighting::~Lighting()
 {
-	xd::Window::removeWindowListener(this);
+	Window::removeWindowListener(this);
 }
 
 void Lighting::addLightSource(LightSource *source)
@@ -35,9 +35,9 @@ void Lighting::addLightSource(LightSource *source)
 	m_lightSources.push_back(source);
 }
 
-void Lighting::draw(xd::SpriteBatch *spriteBatch)
+void Lighting::draw(SpriteBatch *spriteBatch)
 {
-	xd::GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
+	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 
 	ChunkLoader::ChunkArea area = m_terrain->getChunkLoader()->getActiveArea();
 
@@ -48,11 +48,11 @@ void Lighting::draw(xd::SpriteBatch *spriteBatch)
 		gfxContext.setProjectionMatrix(Matrix4());
 
 		// Disable alpha blend when drawing to render targets
-		gfxContext.disable(xd::GraphicsContext::BLEND);
+		gfxContext.disable(GraphicsContext::BLEND);
 
 		// Render lightmaps to texture (pass 0)
 		gfxContext.setRenderTarget(m_lightingRenderTarget);
-		gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
+		gfxContext.clear(GraphicsContext::COLOR_BUFFER);
 		for(int y = area.y0+1; y <= area.y1+1; ++y)
 		{
 			for(int x = area.x0+1; x <= area.x1+1; ++x)
@@ -64,7 +64,7 @@ void Lighting::draw(xd::SpriteBatch *spriteBatch)
 		
 		// Directional light
 		gfxContext.setRenderTarget(m_lightingPass0);
-		gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
+		gfxContext.clear(GraphicsContext::COLOR_BUFFER);
 		m_directionalLightingShader->setSampler2D("u_texture", m_lightingRenderTarget->getTexture());
 		m_directionalLightingShader->setUniform1f("u_direction", 0.0174532925f * 180.0f * (World::getTimeOfDay()->isDay() ? (1140.0f - World::getTimeOfDay()->getTime()) : (1860.0f - (World::getTimeOfDay()->getTime() >= 1140.0f ? World::getTimeOfDay()->getTime() : World::getTimeOfDay()->getTime() + 1440.0f)))/720.0f);
 		m_directionalLightingShader->setUniform1f("u_offsetY", (area.y0 * CHUNK_BLOCKSF - 32.0f)/m_height);
@@ -74,9 +74,9 @@ void Lighting::draw(xd::SpriteBatch *spriteBatch)
 		gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
 		
 		// Draw light sources
-		gfxContext.enable(xd::GraphicsContext::BLEND);
+		gfxContext.enable(GraphicsContext::BLEND);
 		gfxContext.setShader(m_radialLightingShader);
-		gfxContext.setBlendState(xd::BlendState::PRESET_ADDITIVE);
+		gfxContext.setBlendState(BlendState::PRESET_ADDITIVE);
 		for(list<LightSource*>::iterator itr = m_lightSources.begin(); itr != m_lightSources.end(); ++itr)
 		{
 			LightSource *light = *itr;
@@ -89,11 +89,11 @@ void Lighting::draw(xd::SpriteBatch *spriteBatch)
 			m_radialLightingShader->setUniform3f("u_color", light->getColor().r/255.0f, light->getColor().g/255.0f, light->getColor().b/255.0f);
 			gfxContext.drawCircle(pos, light->getRadius(), light->getRadius()*1.5f);
 		}
-		gfxContext.disable(xd::GraphicsContext::BLEND);
+		gfxContext.disable(GraphicsContext::BLEND);
 
 		// Blur horizontally (pass 1)
 		gfxContext.setRenderTarget(m_lightingPass1);
-		gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
+		gfxContext.clear(GraphicsContext::COLOR_BUFFER);
 		m_blurHShader->setSampler2D("u_texture", m_lightingPass0->getTexture());
 		m_blurHShader->setUniform1i("u_width", m_width);
 		gfxContext.setShader(m_blurHShader);
@@ -101,7 +101,7 @@ void Lighting::draw(xd::SpriteBatch *spriteBatch)
 
 		// Blur vertically (pass 2)
 		gfxContext.setRenderTarget(m_lightingPass2);
-		gfxContext.clear(xd::GraphicsContext::COLOR_BUFFER);
+		gfxContext.clear(GraphicsContext::COLOR_BUFFER);
 		m_blurVShader->setSampler2D("u_texture", m_lightingPass1->getTexture());
 		m_blurVShader->setUniform1i("u_height", m_height);
 		m_blurVShader->setUniform1f("u_exponent", 2.0);
@@ -112,14 +112,33 @@ void Lighting::draw(xd::SpriteBatch *spriteBatch)
 		gfxContext.setRenderTarget(nullptr);
 		gfxContext.setShader(nullptr);
 		
-		gfxContext.enable(xd::GraphicsContext::BLEND);
-		gfxContext.setBlendState(xd::BlendState::PRESET_MULTIPLY);
+		gfxContext.enable(GraphicsContext::BLEND);
+		gfxContext.setBlendState(BlendState::PRESET_MULTIPLY);
 
 		gfxContext.setProjectionMatrix(World::getCamera()->getProjectionMatrix());
 		gfxContext.setTexture(m_lightingPass2->getTexture());
-		gfxContext.drawRectangle((area.x0 - 1) * CHUNK_PXF, (area.y0 - 1) * CHUNK_PXF, m_width * BLOCK_PXF, m_height * BLOCK_PXF);
+
+		Vector2 position((area.x0) * CHUNK_PXF, (area.y0) * CHUNK_PXF);
+		Vector2 size((m_width - 2 * CHUNK_BLOCKS) * BLOCK_PXF, (m_height - 2 * CHUNK_BLOCKS) * BLOCK_PXF);
+		TextureRegion textureRegion(CHUNK_BLOCKSF/m_width, CHUNK_BLOCKSF/m_height, 1.0f - CHUNK_BLOCKSF/m_width, 1.0f - CHUNK_BLOCKSF/m_height);
 		
-		gfxContext.setBlendState(xd::BlendState::PRESET_ALPHA_BLEND);
+		VertexFormat format;
+		format.set(VertexAttribute::VERTEX_POSITION, 2);
+		format.set(VertexAttribute::VERTEX_TEX_COORD, 2);
+
+		Vertex *vertices = format.createVertices(4);
+		vertices[0].set4f(VERTEX_POSITION, position.x,				position.y);
+		vertices[1].set4f(VERTEX_POSITION, position.x + size.x,		position.y);
+		vertices[2].set4f(VERTEX_POSITION, position.x,				position.y + size.y);
+		vertices[3].set4f(VERTEX_POSITION, position.x + size.x,		position.y + size.y);
+		vertices[0].set4f(VERTEX_TEX_COORD, textureRegion.uv0.x, textureRegion.uv1.y);
+		vertices[1].set4f(VERTEX_TEX_COORD, textureRegion.uv1.x, textureRegion.uv1.y);
+		vertices[2].set4f(VERTEX_TEX_COORD, textureRegion.uv0.x, textureRegion.uv0.y);
+		vertices[3].set4f(VERTEX_TEX_COORD, textureRegion.uv1.x, textureRegion.uv0.y);
+		gfxContext.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
+		delete[] vertices;
+		
+		gfxContext.setBlendState(BlendState::PRESET_ALPHA_BLEND);
 	}
 }
 
@@ -134,14 +153,14 @@ void Lighting::resizeEvent(uint width, uint height)
 	// Create shadow textures
 	uint targetWidth = (uint)(floor(width*0.5f/CHUNK_PXF) * 2 + 5) * CHUNK_BLOCKS;
 	uint targetHeight = (uint)(floor(height*0.5f/CHUNK_PXF) * 2 + 5) * CHUNK_BLOCKS;
-	m_lightingRenderTarget = new xd::RenderTarget2D(targetWidth, targetHeight);
-	m_lightingRenderTarget->getTexture()->setFiltering(xd::Texture2D::LINEAR);
-	m_lightingPass0 = new xd::RenderTarget2D(targetWidth, targetHeight);
-	m_lightingPass0->getTexture()->setFiltering(xd::Texture2D::LINEAR);
-	m_lightingPass1 = new xd::RenderTarget2D(targetWidth, targetHeight);
-	m_lightingPass1->getTexture()->setFiltering(xd::Texture2D::LINEAR);
-	m_lightingPass2 = new xd::RenderTarget2D(targetWidth, targetHeight);
-	m_lightingPass2->getTexture()->setFiltering(xd::Texture2D::LINEAR);
+	m_lightingRenderTarget = new RenderTarget2D(targetWidth, targetHeight);
+	m_lightingRenderTarget->getTexture()->setFiltering(Texture2D::LINEAR);
+	m_lightingPass0 = new RenderTarget2D(targetWidth, targetHeight);
+	m_lightingPass0->getTexture()->setFiltering(Texture2D::LINEAR);
+	m_lightingPass1 = new RenderTarget2D(targetWidth, targetHeight);
+	m_lightingPass1->getTexture()->setFiltering(Texture2D::LINEAR);
+	m_lightingPass2 = new RenderTarget2D(targetWidth, targetHeight);
+	m_lightingPass2->getTexture()->setFiltering(Texture2D::LINEAR);
 
 	// Set size
 	m_width = targetWidth;

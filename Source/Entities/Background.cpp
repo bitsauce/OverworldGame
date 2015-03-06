@@ -94,9 +94,9 @@ void Background::draw(SpriteBatch *spriteBatch)
 
 	// Draw sky gradient
 	//gfxContext.setRenderTarget(m_renderTarget);
-	m_vertices[0].set4f(VERTEX_POSITION, 0.0f,								0.0f);
+	m_vertices[0].set4f(VERTEX_POSITION, 0.0f,							0.0f);
 	m_vertices[1].set4f(VERTEX_POSITION, (float)Window::getSize().x,	0.0f);
-	m_vertices[2].set4f(VERTEX_POSITION, 0.0f,								(float)Window::getSize().y);
+	m_vertices[2].set4f(VERTEX_POSITION, 0.0f,							(float)Window::getSize().y);
 	m_vertices[3].set4f(VERTEX_POSITION, (float)Window::getSize().x,	(float)Window::getSize().y);
 	m_vertices[0].set4ub(VERTEX_COLOR, m_topColor.r, m_topColor.g, m_topColor.b, m_topColor.a);
 	m_vertices[1].set4ub(VERTEX_COLOR, m_topColor.r, m_topColor.g, m_topColor.b, m_topColor.a);
