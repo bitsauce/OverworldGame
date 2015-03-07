@@ -2,9 +2,8 @@
 #define BLOCK_ENTITY_H
 
 #include "Config.h"
-#include "Game/GameObject.h"
 
-class Thing : public GameObject
+class Thing
 {
 public:
 	Thing(const int x, const int y);

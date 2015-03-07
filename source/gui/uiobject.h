@@ -3,11 +3,9 @@
 
 #include "Config.h"
 
-#include "game/gameobject.h"
-
 #pragma warning(disable : 4717)
 
-class UiObject : public GameObject
+class UiObject
 {
 public:
 	UiObject(UiObject *parent);

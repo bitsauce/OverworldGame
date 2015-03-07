@@ -2,7 +2,6 @@
 #define CLIENT_H
 
 #include "Config.h"
-#include "Game/GameObject.h"
 #include "Connection.h"
 
 namespace RakNet {
@@ -12,7 +11,7 @@ namespace RakNet {
 
 class World;
 
-class Client : public GameObject, public Connection
+class Client : public Connection
 {
 public:
 	Client(World &world, const string &ip, const ushort port);

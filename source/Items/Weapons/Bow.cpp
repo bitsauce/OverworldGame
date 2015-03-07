@@ -2,7 +2,7 @@
 #include "Constants.h"
 #include "Entities/Player.h"
 #include "Physics/PhysicsBody.h"
-#include "Entities/Camera.h"
+#include "World/Camera.h"
 #include "World/World.h"
 
 Bow::Bow() :

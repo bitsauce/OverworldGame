@@ -1,10 +1,9 @@
 #include "Entity.h"
 #include "Constants.h"
 #include "World/World.h"
-#include "Entities/Camera.h"
+#include "World/Camera.h"
 
 Entity::Entity(World &world, const EntityID id) :
-	GameObject(PRIORITY_ENTITY),
 	m_world(world),
 	m_id(id)
 {

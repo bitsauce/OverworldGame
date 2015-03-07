@@ -2,15 +2,18 @@
 #include "Constants.h"
 
 #include "Entities/Player.h"
-#include "Entities/Background.h"
+
+#include "World/Background.h"
+#include "World/Camera.h"
+#include "World/TimeOfDay.h"
+#include "World/Debug.h"
+
 #include "Terrain/Terrain.h"
+
 #include "Generation/Generator.h"
 #include "Physics/PhysicsBody.h"
 #include "Entities/Player.h"
-#include "Entities/Camera.h"
-#include "Entities/TimeOfDay.h"
 #include "Lighting/Lighting.h"
-#include "Game/Debug.h"
 #include "Scenes/SceneManager.h"
 #include "Scenes/GameScene.h"
 

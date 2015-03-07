@@ -2,7 +2,7 @@
 #include "Things/ThingData.h"
 #include "Terrain/Terrain.h"
 #include "Entities/Player.h"
-#include "Entities/Camera.h"
+#include "World/Camera.h"
 
 ThingItem::ThingItem(const ThingID id) :
 	m_blockEntityID(id)

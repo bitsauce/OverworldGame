@@ -11,7 +11,6 @@ Color mixColors(Color c1, Color c2, const float a)
 }
 
 Background::Background(TimeOfDay *timeOfDay) :
-	GameObject(PRIORITY_BACKGROUND),
 	m_timeOfDay(timeOfDay),
 	m_topColor(255, 255, 255, 255),
 	m_bottomColor(90, 170, 255, 255),

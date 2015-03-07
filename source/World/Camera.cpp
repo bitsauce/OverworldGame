@@ -1,11 +1,10 @@
 #include "Camera.h"
 #include "Constants.h"
 #include "World/World.h"
-#include "Game/Debug.h"
+#include "World/Debug.h"
 #include "Entities/Entity.h"
 
 Camera::Camera() :
-	GameObject(PRIORITY_CAMERA),
 	m_position(0.0f, 0.0f)
 {
 	Input::bind(XD_KEY_PLUS, function<void()>(bind(&Camera::zoomIn, this)));

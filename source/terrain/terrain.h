@@ -3,7 +3,6 @@
 
 #include "Config.h"
 
-#include "Game/GameObject.h"
 #include "Terrain/ChunkLoader.h"
 #include "Terrain/Chunk.h"
 #include "Generation/Generator.h"
@@ -34,7 +33,7 @@ private:
 	ChunkLoader m_chunkLoader;
 	
 	// TERRAIN DRAWER
-	class Drawer : public GameObject
+	class Drawer
 	{
 	public:
 		// CONSTRUCTOR

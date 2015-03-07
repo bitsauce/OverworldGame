@@ -5,7 +5,7 @@
 #include "Lighting/Lighting.h"
 #include "Lighting/Spotlight.h"
 #include "World/World.h"
-#include "Entities/Camera.h"
+#include "World/Camera.h"
 #include "Entities/Player.h"
 #include "Terrain/Terrain.h"
 #include "Blocks/BlockData.h"
@@ -16,7 +16,6 @@
 #include "Scenes/GameScene.h"
 
 Debug::Debug(World &world) :
-	GameObject(PRIORITY_DEBUG),
 	m_world(world),
 	m_block(BLOCK_GRASS),
 	m_enabled(false),

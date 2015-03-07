@@ -2,19 +2,19 @@
 #define SCENE_H
 
 #include "Config.h"
-#include "Game/GameObject.h"
+#include "Gui/uiobject.h"
 
 class Scene
 {
 	friend class SceneManager;
 protected:
-	virtual ~Scene() { for(GameObject *object : m_sceneObjects) delete object; }
+	virtual ~Scene() { for(UiObject *object : m_sceneObjects) delete object; }
 
-	void addSceneObject(GameObject *object) { m_sceneObjects.push_back(object); }
-	void removeSceneObject(GameObject *object) { m_sceneObjects.remove(object); }
+	void addSceneObject(UiObject *object) { m_sceneObjects.push_back(object); }
+	void removeSceneObject(UiObject *object) { m_sceneObjects.remove(object); }
 
 private:
-	list<GameObject*> m_sceneObjects;
+	list<UiObject*> m_sceneObjects;
 };
 
 #endif // SCENE_H

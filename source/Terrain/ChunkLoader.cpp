@@ -1,13 +1,12 @@
 #include "ChunkLoader.h"
-#include "Game/Debug.h"
-#include "Entities/Camera.h"
+#include "World/Debug.h"
+#include "World/Camera.h"
 #include "World/World.h"
 #include "Generation/Generator.h"
 
 #define CHUNK_KEY(X, Y) ((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000)
 
 ChunkLoader::ChunkLoader(World &world) :
-	GameObject(PRIORITY_CHUNK_LOADER),
 	m_applyZoom(true),
 	m_camera(world.getCamera()),
 	m_generator(world.getGenerator()),

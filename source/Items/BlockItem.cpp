@@ -1,6 +1,6 @@
 #include "BlockItem.h"
 #include "Entities/Player.h"
-#include "Entities/Camera.h"
+#include "World/Camera.h"
 #include "Terrain/Terrain.h"
 #include "Blocks/BlockData.h"
 

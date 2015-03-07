@@ -2,11 +2,9 @@
 #define BACKGROUND_H
 
 #include "Config.h"
-#include "Game/GameObject.h"
-
 class TimeOfDay;
 
-class Background : public GameObject
+class Background
 {
 public:
 	Background(TimeOfDay *timeOfDay);

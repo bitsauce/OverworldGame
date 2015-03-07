@@ -2,13 +2,12 @@
 #include "Constants.h"
 #include "Spotlight.h"
 #include "World/World.h"
-#include "Entities/TimeOfDay.h"
-#include "Entities/Camera.h"
+#include "World/TimeOfDay.h"
+#include "World/Camera.h"
 #include "Terrain/Terrain.h"
 #include "Terrain/ChunkLoader.h"
 
 Lighting::Lighting(World &world) :
-	GameObject(PRIORITY_LIGHTING),
 	m_terrain(world.getTerrain()),
 	m_world(world),
 	m_lightingPass0(nullptr),

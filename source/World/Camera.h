@@ -2,11 +2,10 @@
 #define CAMERA_H
 
 #include "Config.h"
-#include "Game/GameObject.h"
 
 class Entity;
 
-class Camera : public GameObject, public MouseListener, public WindowListener
+class Camera : public MouseListener, public WindowListener
 {
 public:
 	// Constructor

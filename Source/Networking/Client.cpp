@@ -18,7 +18,6 @@
 #include "Physics/PhysicsBody.h"
 
 Client::Client(World &world, const string &ip, const ushort port) :
-	GameObject(PRIORITY_CLIENT),
 	Connection(false),
 	m_world(world)
 {

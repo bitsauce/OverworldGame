@@ -2,7 +2,6 @@
 #define DEBUG_H
 
 #include "Config.h"
-#include "Game/GameObject.h"
 
 class Terrain;
 class Lighting;
@@ -10,7 +9,7 @@ class ChunkLoader;
 class World;
 enum BlockID;
 
-class Debug : public GameObject
+class Debug
 {
 public:
 	Debug(World &world);

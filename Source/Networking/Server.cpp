@@ -16,7 +16,6 @@
 #include "Physics/PhysicsBody.h"
 
 Server::Server(World &world, const ushort port) :
-	GameObject(PRIORITY_SERVER),
 	Connection(true),
 	m_world(world)
 {

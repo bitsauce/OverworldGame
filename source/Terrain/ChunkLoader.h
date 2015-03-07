@@ -1,13 +1,13 @@
 #ifndef CHUNK_LOADER_H
 #define CHUNK_LOADER_H
 
-#include "Game/GameObject.h"
+#include "Config.h"
 #include "Terrain/Chunk.h"
 
 class Camera;
 class World;
 
-class ChunkLoader : public GameObject, public xd::WindowListener
+class ChunkLoader : public WindowListener
 {
 	friend class Debug;
 public:

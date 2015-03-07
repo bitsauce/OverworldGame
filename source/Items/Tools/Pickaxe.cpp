@@ -3,7 +3,7 @@
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
 #include "Entities/Player.h"
-#include "Entities/Camera.h"
+#include "World/Camera.h"
 #include "Entities/ItemDrop.h"
 #include "Terrain/Terrain.h"
 

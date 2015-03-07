@@ -30,6 +30,7 @@ public:
 
 	// Game managers
 	Terrain *getTerrain() const { return m_terrain; }
+	Background *getBackground() const { return m_background; }
 	TimeOfDay *getTimeOfDay() const { return m_timeOfDay; }
 	Camera *getCamera() const { return m_camera; }
 	Lighting *getLighting() const { return m_lighting; }

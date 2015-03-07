@@ -8,7 +8,7 @@
 #include "Things/ThingData.h"
 #include "World/World.h"
 #include "Lighting/Spotlight.h"
-#include "Entities/Camera.h"
+#include "World/Camera.h"
 
 Terrain::Terrain(World &world) :
 	m_chunkLoader(world),
@@ -78,7 +78,6 @@ bool Terrain::setThingAt(const int x, const int y, ThingID blockEntity)
 
 // DRAWING
 Terrain::Drawer::Drawer(Terrain *terrain, Camera *camera, const Priority drawOrder, const TerrainLayer layer) :
-	GameObject(drawOrder),
 	m_chunkLoader(terrain->getChunkLoader()),
 	m_camera(camera),
 	m_layer(layer)

@@ -4,7 +4,6 @@
 #include "Gui/Button.h"
 #include "Gui/Canvas.h"
 
-#include "Game/GameObject.h"
 #include "World/World.h"
 #include "Constants.h"
 

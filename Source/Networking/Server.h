@@ -1,7 +1,6 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "Game/GameObject.h"
 #include "Connection.h"
 
 namespace RakNet {
@@ -11,7 +10,7 @@ namespace RakNet {
 
 class World;
 
-class Server : public GameObject, public Connection
+class Server : public Connection
 {
 public:
 	Server(World &world, const ushort port);

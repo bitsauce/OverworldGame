@@ -6,16 +6,26 @@
 #include "World/World.h"
 #include "Scenes/SceneManager.h"
 #include "Scenes/GameScene.h"
+
 #include "Blocks/BlockData.h"
+
 #include "Items/ItemData.h"
+
 #include "Things/ThingData.h"
-#include "Game/Debug.h"
-#include "Entities/Camera.h"
+
+#include "World/Debug.h"
+#include "World/Camera.h"
+#include "World/Background.h"
+
 #include "Networking/Server.h"
+#include "Networking/Client.h"
+
+#include "Entities/Entity.h"
+
+#include "Terrain/Terrain.h"
 
 UiObject *canvas = nullptr;
 
-list<GameObject*> GameManager::s_gameObjects;
 SpriteBatch *GameManager::s_spriteBatch = nullptr;
 bool GameManager::s_takeScreenshot = false;
 World *GameManager::m_world = nullptr;
@@ -56,10 +66,23 @@ void GameManager::exit()
 
 void GameManager::update()
 {
-	list<GameObject*> gameObjects(s_gameObjects);
-	for(list<GameObject*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
+	if(Connection::getInstance()->isServer())
 	{
-		(*itr)->update();
+		((Server*)Connection::getInstance())->update();
+	}
+	else
+	{
+		((Client*)Connection::getInstance())->update();
+	}
+
+	//m_world->getTerrain()->getChunkLoader()->update();
+
+	m_world->getBackground()->update();
+
+	list<Entity*> gameObjects = m_world->getEntities();
+	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
+	{
+		(*itr)->update(Graphics::getTimeStep());
 	}
 }
 
@@ -76,49 +99,15 @@ void GameManager::draw(GraphicsContext &context)
 	}
 	
 	m_world->getDebug()->setVariable("FPS", util::intToStr((int)Graphics::getFPS()));
+	m_world->getBackground()->draw(s_spriteBatch);
 
-	s_spriteBatch->begin();
-	bool usingSceneMat = false;
-	for(list<GameObject*>::iterator itr = s_gameObjects.begin(); itr != s_gameObjects.end(); ++itr)
+	s_spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_world->getCamera()->getProjectionMatrix()));
+	list<Entity*> gameObjects = m_world->getEntities();
+	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
 	{
-		if(PRIORITY_SCENE_START < (*itr)->m_depth && PRIORITY_SCENE_END > (*itr)->m_depth)
-		{
-			if(!usingSceneMat)
-			{
-				s_spriteBatch->end();
-				s_spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_world->getCamera()->getProjectionMatrix()));
-				usingSceneMat = true;
-			}
-		}
-		else
-		{
-			if(usingSceneMat)
-			{
-				s_spriteBatch->end();
-				s_spriteBatch->begin();
-				usingSceneMat = false;
-			}
-		}
 		(*itr)->draw(s_spriteBatch);
 	}
 	s_spriteBatch->end();
 
 	SceneManager::update();
-}
-
-void GameManager::addGameObject(GameObject *object)
-{
-	list<GameObject*>::iterator itr;
-	for(itr = s_gameObjects.begin(); itr != s_gameObjects.end(); ++itr)
-	{
-		if((*itr)->m_depth < object->m_depth)
-			continue;
-		break;
-	}
-	s_gameObjects.insert(itr, object);
-}
-
-void GameManager::removeGameObject(GameObject *object)
-{
-	s_gameObjects.remove(object);
 }

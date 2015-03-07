@@ -10,9 +10,6 @@
     <ClCompile Include="..\..\source\lighting\Spotlight.cpp">
       <Filter>Source\Lighting</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\game\GameManager.cpp">
-      <Filter>Source\Game</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\Lighting\LightSource.cpp">
       <Filter>Source\Lighting</Filter>
     </ClCompile>
@@ -42,15 +39,6 @@
     </ClCompile>
     <ClCompile Include="..\..\source\animation\Slot.cpp">
       <Filter>Source\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\game\Debug.cpp">
-      <Filter>Source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\game\GameObject.cpp">
-      <Filter>Source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\game\RayCast.cpp">
-      <Filter>Source\Game</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\scenes\GameScene.cpp">
       <Filter>Source\Scenes</Filter>
@@ -86,9 +74,6 @@
     <ClCompile Include="..\..\source\items\ItemData.cpp">
       <Filter>Source\Items</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\Game\ItemContainer.cpp">
-      <Filter>Source\Game</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\gui\GameOverlay.cpp">
       <Filter>Source\Gui</Filter>
     </ClCompile>
@@ -122,26 +107,11 @@
     <ClCompile Include="..\..\Source\Generation\Generator.cpp">
       <Filter>Source\Generation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Entities\ItemDrop.cpp">
-      <Filter>Source\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Entities\Player.cpp">
-      <Filter>Source\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Entities\Camera.cpp">
-      <Filter>Source\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Things\Thing.cpp">
       <Filter>Source\Things</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Things\ThingData.cpp">
       <Filter>Source\Things</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Entities\Background.cpp">
-      <Filter>Source\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Entities\TimeOfDay.cpp">
-      <Filter>Source\Entities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Items\Placeable\ThingItem.cpp">
       <Filter>Source\Items\Placeable</Filter>
@@ -167,11 +137,38 @@
     <ClCompile Include="..\..\source\Items\Weapons\Bow.cpp">
       <Filter>Source\Items\Weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\Entities\Entity.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\source\Entities\Humanoid.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\Entities\Entity.cpp">
+    <ClCompile Include="..\..\source\Entities\ItemDrop.cpp">
       <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Entities\Player.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\World\TimeOfDay.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\World\Background.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\World\Camera.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\World\Debug.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Game\ItemContainer.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Game\RayCast.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Game\GameManager.cpp">
+      <Filter>Source\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -261,9 +258,6 @@
     <ClInclude Include="..\..\source\lighting\Spotlight.h">
       <Filter>Source\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\game\GameManager.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Lighting\LightSource.h">
       <Filter>Source\Lighting</Filter>
     </ClInclude>
@@ -293,15 +287,6 @@
     </ClInclude>
     <ClInclude Include="..\..\source\animation\Slot.h">
       <Filter>Source\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\game\Debug.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\game\GameObject.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\game\RayCast.h">
-      <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\scenes\GameScene.h">
       <Filter>Source\Scenes</Filter>
@@ -339,9 +324,6 @@
     <ClInclude Include="..\..\source\items\ItemData.h">
       <Filter>Source\Items</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\Game\ItemContainer.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\gui\GameOverlay.h">
       <Filter>Source\Gui</Filter>
     </ClInclude>
@@ -378,26 +360,11 @@
     <ClInclude Include="..\..\Source\Strings.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\ItemDrop.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Player.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Camera.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Things\Thing.h">
       <Filter>Source\Things</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Things\ThingData.h">
       <Filter>Source\Things</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Background.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\TimeOfDay.h">
-      <Filter>Source\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Items\Placeable\ThingItem.h">
       <Filter>Source\Items\Placeable</Filter>
@@ -423,11 +390,38 @@
     <ClInclude Include="..\..\source\Items\Weapons\Bow.h">
       <Filter>Source\Items\Weapons</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\Entities\Entity.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\source\Entities\Humanoid.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\Entities\Entity.h">
+    <ClInclude Include="..\..\source\Entities\ItemDrop.h">
       <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Entities\Player.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\World\Debug.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\World\TimeOfDay.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\World\Background.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\World\Camera.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Game\GameManager.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Game\ItemContainer.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Game\RayCast.h">
+      <Filter>Source\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

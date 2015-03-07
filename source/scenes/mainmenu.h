@@ -4,7 +4,6 @@
 #include "Config.h"
 #include "scene.h"
 
-class GameObject;
 class World;
 
 class MainMenuScene : public Scene

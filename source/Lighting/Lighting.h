@@ -2,13 +2,12 @@
 #define LIGHTING_H
 
 #include "Config.h"
-#include "Game/GameObject.h"
 
 class Terrain;
 class LightSource;
 class World;
 
-class Lighting : public GameObject, public WindowListener
+class Lighting : public WindowListener
 {
 	friend class Lighting;
 	friend class Debug;

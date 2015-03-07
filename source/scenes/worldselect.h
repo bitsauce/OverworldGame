@@ -4,7 +4,6 @@
 #include "Config.h"
 #include "Scene.h"
 
-class GameObject;
 class Canvas;
 class World;
 

@@ -2,7 +2,7 @@
 
 #include "Player.h"
 #include "World/World.h"
-#include "Entities/Camera.h"
+#include "World/Camera.h"
 #include "Terrain/Terrain.h"
 #include "Constants.h"
 #include "Physics/PhysicsBody.h"

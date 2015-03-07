@@ -2,7 +2,6 @@
 #define PLAYER_H
 
 #include "Config.h"
-#include "Game/GameObject.h"
 #include "Game/ItemContainer.h"
 #include "Networking/NetworkObject.h"
 #include "Entity.h"

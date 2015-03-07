@@ -1,9 +1,9 @@
 #ifndef TIME_OF_DAY_H
 #define TIME_OF_DAY_H
 
-#include "Game/GameObject.h"
+#include "Config.h"
 
-class TimeOfDay : public GameObject
+class TimeOfDay
 {
 public:
 	TimeOfDay();
@@ -37,7 +37,7 @@ public:
 	void update()
 	{
 		// Apply time
-		time += xd::Graphics::getTimeStep();
+		time += Graphics::getTimeStep();
 
 		/*// Debug: Time speedup (0 forwards, 9 backwards)
 		if(xd::Input::getKeyState(xd::XD_KEY_0))

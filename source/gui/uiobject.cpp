@@ -3,7 +3,6 @@
 #include "constants.h"
 
 UiObject::UiObject(UiObject *parent) :
-	GameObject(PRIORITY_UI),
 	m_parent(parent),
 	m_anchor(0.0f, 0.0f),
 	m_rect(),
