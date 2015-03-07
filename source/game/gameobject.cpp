@@ -1,7 +1,7 @@
 #include "gameobject.h"
 #include "gamemanager.h"
 
-GameObject::GameObject(DrawOrder depth) :
+GameObject::GameObject(Priority depth) :
 	m_depth(depth)
 {
 	GameManager::addGameObject(this);

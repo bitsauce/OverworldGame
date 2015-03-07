@@ -88,6 +88,8 @@ void World::clear()
 	LOG("Reseting world...");
 
 	s_worldPath.clear();
+	delete s_localPlayer;
+	s_localPlayer = nullptr;
 }
 
 string World::getWorldPath()

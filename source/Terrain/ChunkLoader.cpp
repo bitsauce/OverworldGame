@@ -7,7 +7,7 @@
 #define CHUNK_KEY(X, Y) ((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000)
 
 ChunkLoader::ChunkLoader(Camera *camera, WorldGenerator *generator) :
-	GameObject(DRAW_ORDER_CHUNK_LOADER),
+	GameObject(PRIORITY_CHUNK_LOADER),
 	m_applyZoom(true),
 	m_camera(camera),
 	m_generator(generator),

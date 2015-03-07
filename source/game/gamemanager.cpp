@@ -31,9 +31,6 @@ void GameManager::main()
 	World::init();
 	ThingData::init(World::getTerrain());
 
-	// Enable debugger
-	//World::getDebug()->toggle();
-
 	// Resize the window
 	Window::setSize(Vector2i(1280, 720));
 
@@ -42,6 +39,8 @@ void GameManager::main()
 	{
 		World::create("Debug");
 	}
+	
+	new Server(5555);
 		
 	// Show game
 	SceneManager::setScene(new GameScene());
@@ -80,7 +79,7 @@ void GameManager::draw(GraphicsContext &context)
 	bool usingSceneMat = false;
 	for(list<GameObject*>::iterator itr = s_gameObjects.begin(); itr != s_gameObjects.end(); ++itr)
 	{
-		if(DRAW_ORDER_SCENE_START < (*itr)->m_depth && DRAW_ORDER_SCENE_END > (*itr)->m_depth)
+		if(PRIORITY_SCENE_START < (*itr)->m_depth && PRIORITY_SCENE_END > (*itr)->m_depth)
 		{
 			if(!usingSceneMat)
 			{

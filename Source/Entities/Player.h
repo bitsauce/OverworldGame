@@ -19,6 +19,7 @@ class Player : public Entity, public NetworkObject
 {
 public:
 	Player(RakNet::RakNetGUID guid);
+	~Player();
 
 	void update();
 	void pack(RakNet::BitStream *bitStream, const Connection *conn);
@@ -49,6 +50,8 @@ private:
 	// Inventory
 	ItemContainer m_itemContainer;
 	uint m_selectedItemSlot;
+
+	class GameOverlay *m_gameOverlay;
 
 	// Player health
 	uint m_maxHealth;

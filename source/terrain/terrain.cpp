@@ -12,9 +12,9 @@
 
 Terrain::Terrain(WorldGenerator *generator, Camera *camera) :
 	m_chunkLoader(camera, generator),
-	m_background(this, DRAW_ORDER_TERRAIN_BACKGROUND, TERRAIN_LAYER_BACK),
-	m_middleground(this, DRAW_ORDER_TERRAIN_MIDDLEGROUND, TERRAIN_LAYER_MIDDLE),
-	m_foreground(this, DRAW_ORDER_TERRAIN_FOREGROUND, TERRAIN_LAYER_FRONT)
+	m_background(this, PRIORITY_TERRAIN_BACKGROUND, TERRAIN_LAYER_BACK),
+	m_middleground(this, PRIORITY_TERRAIN_MIDDLEGROUND, TERRAIN_LAYER_MIDDLE),
+	m_foreground(this, PRIORITY_TERRAIN_FOREGROUND, TERRAIN_LAYER_FRONT)
 {
 	LOG("Initializing terrain");
 
@@ -79,7 +79,7 @@ bool Terrain::setThingAt(const int x, const int y, ThingID blockEntity)
 }
 
 // DRAWING
-Terrain::Drawer::Drawer(Terrain *terrain, const DrawOrder drawOrder, const TerrainLayer layer) :
+Terrain::Drawer::Drawer(Terrain *terrain, const Priority drawOrder, const TerrainLayer layer) :
 	GameObject(drawOrder),
 	m_chunkLoader(terrain->getChunkLoader()),
 	m_layer(layer)

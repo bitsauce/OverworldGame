@@ -4,19 +4,21 @@
 #include "Config.h"
 #include "Game/GameObject.h"
 
-enum DrawOrder;
+enum Priority;
+enum EntityID;
 
 class Entity : public GameObject
 {
 public:
-	Entity(const DrawOrder o) : GameObject(o) {}
+	Entity(const EntityID id);
+	virtual ~Entity();
 
 	virtual Vector2 getPosition() const = 0;
 	virtual Vector2 getSize() const = 0;
 	virtual Vector2 getCenter() const { return getPosition() + getSize() * 0.5f; }
 
 private:
-	//EntityID id;
+	const EntityID m_id;
 };
 
 #endif // ENTITY_H

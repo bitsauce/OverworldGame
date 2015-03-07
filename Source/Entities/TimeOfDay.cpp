@@ -3,7 +3,7 @@
 #include "constants.h"
 
 TimeOfDay::TimeOfDay() :
-	GameObject(DRAW_ORDER_TIME_OF_DAY),
+	GameObject(PRIORITY_TIME_OF_DAY),
 	time(60*10)
 {
 }

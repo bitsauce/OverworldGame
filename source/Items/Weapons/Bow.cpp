@@ -15,7 +15,7 @@ class Arrow : public GameObject//: public Entitiy
 {
 public:
 	Arrow(const Vector2 &pos, const Vector2 &dir, const float speed) :
-		GameObject(DRAW_ORDER_BLOCK_ENTITY),
+		GameObject(PRIORITY_BLOCK_ENTITY),
 		m_sprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Weapons/Arrow.png")),
 		m_hasHit(false),
 		m_deleteTime(0.0f)

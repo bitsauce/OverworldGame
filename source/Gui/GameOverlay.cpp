@@ -15,6 +15,12 @@ GameOverlay::GameOverlay(Player *player, UiObject *parent) :
 	m_healthManaStatus = new HealthManaStatus(player, parent);
 }
 
+GameOverlay::~GameOverlay()
+{
+	delete m_hotbar;
+	delete m_healthManaStatus;
+}
+
 void GameOverlay::update()
 {
 }

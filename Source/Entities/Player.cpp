@@ -15,7 +15,7 @@
 #include "Gui/GameOverlay.h"
 
 Player::Player(RakNet::RakNetGUID guid) :
-	Entity(DRAW_ORDER_PLAYER),
+	Entity(ENTITY_PLAYER),
 	m_camera(World::getCamera()),
 	m_terrain(World::getTerrain()),
 	m_jumpTimer(1.0f),
@@ -33,7 +33,7 @@ Player::Player(RakNet::RakNetGUID guid) :
 	// If player is local, do extra stuff
 	if(Connection::getInstance()->getGUID() == guid)
 	{
-		new GameOverlay(this, canvas);
+		m_gameOverlay = new GameOverlay(this, canvas);
 
 		// Bind keys to item slots
 		Input::bind(XD_KEY_1, bind(&Player::setSelectedItemSlot, this, 0));
@@ -54,6 +54,11 @@ Player::Player(RakNet::RakNetGUID guid) :
 
 	// Add to player list
 	World::s_players.push_back(this);
+}
+
+Player::~Player()
+{
+	delete m_gameOverlay;
 }
 
 void Player::update()

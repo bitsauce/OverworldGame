@@ -60,12 +60,12 @@ MultiplayerScene::MultiplayerScene()
 
 void MultiplayerScene::host()
 {
-	new Server(util::strToInt(m_portLineEdit->getText()));
+	//new Server(util::strToInt(m_portLineEdit->getText()));
 
-	RakNet::BitStream bitStream;
+	/*RakNet::BitStream bitStream;
 	bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
 	//bitStream.Write(ENTITY_PLAYER);
-	((Server*)Connection::getInstance())->getRakPeer()->SendLoopback((const char*)bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
+	((Server*)Connection::getInstance())->getRakPeer()->SendLoopback((const char*)bitStream.GetData(), bitStream.GetNumberOfBytesUsed());*/
 	
 	SceneManager::setScene(new GameScene());
 }

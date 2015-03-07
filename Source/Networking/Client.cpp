@@ -18,7 +18,7 @@
 #include "Physics/PhysicsBody.h"
 
 Client::Client(const string &ip, const ushort port) :
-	GameObject(DRAW_ORDER_CLIENT),
+	GameObject(PRIORITY_CLIENT),
 	Connection(false)
 {
 	m_rakPeer = RakNet::RakPeerInterface::GetInstance();

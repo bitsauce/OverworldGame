@@ -3,20 +3,20 @@
 
 #include "Config.h"
 
-enum DrawOrder;
+enum Priority;
 
 class GameObject
 {
 	friend class GameManager;
 public:
-	GameObject(DrawOrder depth);
+	GameObject(Priority depth);
 	virtual ~GameObject();
 
 	virtual void update() { }
 	virtual void draw(xd::SpriteBatch*) { }
 
 private:
-	const DrawOrder m_depth;
+	const Priority m_depth;
 };
 
 #endif // GAME_OBJECT_H

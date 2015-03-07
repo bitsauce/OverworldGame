@@ -16,7 +16,7 @@
 #include "Scenes/GameScene.h"
 
 Debug::Debug(Terrain *terrain, Lighting *lighting) :
-	GameObject(DRAW_ORDER_DEBUG),
+	GameObject(PRIORITY_DEBUG),
 	m_terrain(terrain),
 	m_lighting(lighting),
 	m_block(BLOCK_GRASS),

@@ -16,13 +16,18 @@
 #include "Physics/PhysicsBody.h"
 
 Server::Server(const ushort port) :
-	GameObject(DRAW_ORDER_SERVER),
+	GameObject(PRIORITY_SERVER),
 	Connection(true)
 {
 	m_rakPeer = RakNet::RakPeerInterface::GetInstance();
 	RakNet::SocketDescriptor socketDescriptor(port, 0);
-	assert(m_rakPeer->Startup(2, &socketDescriptor, 1) == RakNet::RAKNET_STARTED);
+	if(m_rakPeer->Startup(2, &socketDescriptor, 1) != RakNet::RAKNET_STARTED)
+	{
+		socketDescriptor.port = 0;
+		assert(m_rakPeer->Startup(2, &socketDescriptor, 1) == RakNet::RAKNET_STARTED);
+	}
 	m_rakPeer->SetMaximumIncomingConnections(2);
+	LOG("Port: %i", socketDescriptor.port);
 }
 
 void Server::update()

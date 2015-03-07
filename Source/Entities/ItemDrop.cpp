@@ -5,7 +5,7 @@
 #include "Items/ItemData.h"
 
 ItemDrop::ItemDrop(const Vector2 position, const ItemID item) :
-	GameObject(DRAW_ORDER_ITEM_DROP),
+	GameObject(PRIORITY_ITEM_DROP),
 	m_itemID(item),
 	m_body(),
 	m_dragDistance(16.0f * BLOCK_PXF),

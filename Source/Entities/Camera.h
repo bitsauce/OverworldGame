@@ -57,6 +57,8 @@ public:
 	// WindowListener event
 	void resizeEvent(uint width, uint height);
 
+	//static Camera *getInstance() { return s_instance; }
+
 private:
 	// Position
 	Vector2 m_position;

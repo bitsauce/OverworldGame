@@ -38,7 +38,7 @@ private:
 	{
 	public:
 		// CONSTRUCTOR
-		Drawer(Terrain *terrain, const DrawOrder drawOrder, const TerrainLayer layer);
+		Drawer(Terrain *terrain, const Priority drawOrder, const TerrainLayer layer);
 
 		// DRAWING
 		void draw(SpriteBatch *spriteBatch);

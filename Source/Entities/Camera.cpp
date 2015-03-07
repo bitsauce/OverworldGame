@@ -5,7 +5,7 @@
 #include "Entities/Entity.h"
 
 Camera::Camera() :
-	GameObject(DRAW_ORDER_CAMERA),
+	GameObject(PRIORITY_CAMERA),
 	m_position(0.0f, 0.0f)
 {
 	Input::addMouseListener(this);

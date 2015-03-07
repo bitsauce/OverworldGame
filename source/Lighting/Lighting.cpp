@@ -8,7 +8,7 @@
 #include "Terrain/ChunkLoader.h"
 
 Lighting::Lighting(Terrain *terrain) :
-	GameObject(DRAW_ORDER_LIGHTING),
+	GameObject(PRIORITY_LIGHTING),
 	m_terrain(terrain),
 	m_lightingPass0(nullptr),
 	m_lightingPass1(nullptr),

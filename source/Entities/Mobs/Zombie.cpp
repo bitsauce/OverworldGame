@@ -4,7 +4,7 @@
 #include "Constants.h"
 
 Zombie::Zombie() :
-	Entity(DRAW_ORDER_PLAYER)
+	Entity(ENTITY_ZOMBIE)
 {
 	// Set body size
 	m_body.setSize(24, 48);

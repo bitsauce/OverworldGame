@@ -28,7 +28,7 @@ public:
 
 	static const Connection *getInstance() { return s_instance; }
 
-protected:
+public://protected:
 	bool m_isServer;
 	RakNet::RakPeerInterface *m_rakPeer;
 	RakNet::NetworkIDManager m_networkIDManager;

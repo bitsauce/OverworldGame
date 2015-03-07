@@ -13,6 +13,7 @@ class GameOverlay : public UiObject, public MouseListener
 {
 public:
 	GameOverlay(Player *player, UiObject *object);
+	~GameOverlay();
 
 	void update();
 	void draw(SpriteBatch *spriteBatch);
