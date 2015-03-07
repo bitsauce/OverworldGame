@@ -18,7 +18,7 @@ class Connection;
 class Player : public Entity, public NetworkObject
 {
 public:
-	Player(RakNet::RakNetGUID guid);
+	Player(World &world, RakNet::RakNetGUID guid);
 	~Player();
 
 	void update();
@@ -35,6 +35,7 @@ public:
 	Vector2 getPosition() const { return m_body.getPosition(); }
 	Vector2 getSize() const { return m_body.getSize(); }
 
+	World &getWorld() const { return m_world; }
 	Camera *getCamera() const { return m_camera; }
 	Terrain *getTerrain() const { return m_terrain; }
 

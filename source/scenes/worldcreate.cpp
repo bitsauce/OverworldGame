@@ -8,7 +8,8 @@
 #include "World/World.h"
 #include "Constants.h"
 
-WorldCreateScene::WorldCreateScene()
+WorldCreateScene::WorldCreateScene(World &world) :
+	m_world(world)
 {
 	LOG("Scene: World Create");
 	
@@ -37,5 +38,5 @@ void WorldCreateScene::createWorld()
 	if(worldName.empty()) return;
 
 	// Create world
-	World::create(worldName);
+	m_world.create(worldName);
 }

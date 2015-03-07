@@ -17,9 +17,10 @@
 #include "Entities/Player.h"
 #include "Physics/PhysicsBody.h"
 
-Client::Client(const string &ip, const ushort port) :
+Client::Client(World &world, const string &ip, const ushort port) :
 	GameObject(PRIORITY_CLIENT),
-	Connection(false)
+	Connection(false),
+	m_world(world)
 {
 	m_rakPeer = RakNet::RakPeerInterface::GetInstance();
 	RakNet::SocketDescriptor socketDescriptor;
@@ -54,7 +55,7 @@ void Client::update()
 				int y; bitStream.Read(y);
 				BlockID block; bitStream.Read(block);
 				TerrainLayer layer; bitStream.Read(layer);
-				World::getTerrain()->setBlockAt(x, y, block, layer);
+				m_world.getTerrain()->setBlockAt(x, y, block, layer);
 			}
 			break;
 
@@ -67,7 +68,7 @@ void Client::update()
 				RakNet::RakNetGUID guid; bitStream.Read(guid);
 
 				// Create player
-				Player *player = new Player(guid);
+				Player *player = new Player(m_world, guid);
 				player->SetNetworkIDManager(&m_networkIDManager);
 				player->SetNetworkID(networkID);
 

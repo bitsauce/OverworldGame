@@ -4,11 +4,12 @@
 #include "Config.h"
 
 class Terrain;
+class World;
 
 class PhysicsBody
 {
 public:
-	PhysicsBody();
+	PhysicsBody(World &world);
 
 	void update();
 

@@ -10,12 +10,13 @@ class LineEdit;
 class MultiplayerScene : public Scene
 {
 public:
-	MultiplayerScene();
+	MultiplayerScene(World &world);
 
 	void host();
 	void join();
 
 private:
+	World &m_world;
 	LineEdit *m_ipLineEdit;
 	LineEdit *m_portLineEdit;
 };

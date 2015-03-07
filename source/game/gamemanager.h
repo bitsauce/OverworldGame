@@ -3,6 +3,8 @@
 
 #include "Config.h"
 
+class World;
+
 class GameManager
 {
 	friend class GameObject;
@@ -21,6 +23,7 @@ private:
 	static SpriteBatch *s_spriteBatch;
 	static list<GameObject*> s_gameObjects;
 	static bool s_takeScreenshot;
+	static World *m_world;
 };
 
 #endif // GAME_MANAGER_H

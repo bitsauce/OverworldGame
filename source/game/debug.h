@@ -7,15 +7,16 @@
 class Terrain;
 class Lighting;
 class ChunkLoader;
+class World;
 enum BlockID;
 
 class Debug : public GameObject
 {
 public:
-	Debug(Terrain *terrain, Lighting *lighting);
+	Debug(World &world);
 
 	void update();
-	void draw(xd::SpriteBatch *spriteBatch);
+	void draw(SpriteBatch *spriteBatch);
 	void toggle();
 
 	void nextBlock();
@@ -35,19 +36,16 @@ private:
 	// Debug variables
 	map<string, string> m_variables;
 
-	// Terrain pointer
-	Terrain *m_terrain;
-
-	// Lighting potiner
-	Lighting *m_lighting;
+	// World pointer
+	World &m_world;
 
 	// Debug sprites
-	xd::Sprite m_bulbSprite;
+	Sprite m_bulbSprite;
 
 	// Debug font
-	xd::FontPtr m_font;
+	FontPtr m_font;
 
-	//xd::Texture2DPtr m_loadedChunks;
+	//Texture2DPtr m_loadedChunks;
 
 	// Paint block
 	BlockID m_block;

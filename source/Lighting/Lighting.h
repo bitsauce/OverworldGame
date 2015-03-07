@@ -6,6 +6,7 @@
 
 class Terrain;
 class LightSource;
+class World;
 
 class Lighting : public GameObject, public WindowListener
 {
@@ -13,7 +14,7 @@ class Lighting : public GameObject, public WindowListener
 	friend class Debug;
 public:
 	// CONSTRUCTOR
-	Lighting(Terrain *terrain);
+	Lighting(World &world);
 	~Lighting();
 
 	// DRAWING
@@ -29,6 +30,8 @@ public:
 
 private:
 	Terrain *m_terrain;
+	World &m_world;
+
 	uint m_width, m_height;
 	xd::RenderTarget2D *m_lightingRenderTarget;
 	xd::RenderTarget2D *m_lightingPass0;

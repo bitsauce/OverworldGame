@@ -9,15 +9,20 @@ namespace RakNet {
 	class BitStream;
 }
 
+class World;
+
 class Server : public GameObject, public Connection
 {
 public:
-	Server(const ushort port);
+	Server(World &world, const ushort port);
 
 	void update();
 	void sendPacket(RakNet::BitStream *bitStream);
 
 	RakNet::RakPeerInterface *getRakPeer() const { return m_rakPeer; }
+
+private:
+	World &m_world;
 };
 
 #endif // SERVER_H

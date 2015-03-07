@@ -5,12 +5,13 @@
 #include "Terrain/Chunk.h"
 
 class Camera;
+class World;
 
 class ChunkLoader : public GameObject, public xd::WindowListener
 {
 	friend class Debug;
 public:
-	ChunkLoader(Camera *camera, WorldGenerator *generator);
+	ChunkLoader(World &world);
 
 	void clear();
 
@@ -46,6 +47,7 @@ private:
 	bool m_applyZoom;
 	Camera *m_camera;
 	WorldGenerator *m_generator;
+	World &m_world;
 
 	unordered_map<uint, Chunk*> m_chunks;
 	Chunk m_dummyChunk;

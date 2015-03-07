@@ -5,14 +5,17 @@
 #include "scene.h"
 
 class GameObject;
+class World;
 
 class MainMenuScene : public Scene
 {
 public:
-	MainMenuScene();
+	MainMenuScene(World &world);
 
 private:
 	void showWorldSelectScene();
+
+	World &m_world;
 };
 
 #endif // MAINMENU_H

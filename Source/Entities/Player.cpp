@@ -14,10 +14,10 @@
 #include "Animation/Bone.h"
 #include "Gui/GameOverlay.h"
 
-Player::Player(RakNet::RakNetGUID guid) :
-	Entity(ENTITY_PLAYER),
-	m_camera(World::getCamera()),
-	m_terrain(World::getTerrain()),
+Player::Player(World &world, RakNet::RakNetGUID guid) :
+	Entity(world, ENTITY_PLAYER),
+	m_camera(world.getCamera()),
+	m_terrain(world.getTerrain()),
 	m_jumpTimer(1.0f),
 	m_canJump(false),
 	m_selectedItemSlot(0),
@@ -25,7 +25,8 @@ Player::Player(RakNet::RakNetGUID guid) :
 	m_guid(guid),
 	m_maxHealth(12),
 	m_health(m_maxHealth),
-	m_lmbPressed(false)
+	m_lmbPressed(false),
+	m_body(world)
 {
 	// Set body size
 	m_body.setSize(24, 48);
@@ -47,13 +48,13 @@ Player::Player(RakNet::RakNetGUID guid) :
 		Input::bind(XD_KEY_9, bind(&Player::setSelectedItemSlot, this, 8));
 		Input::bind(XD_KEY_0, bind(&Player::setSelectedItemSlot, this, 9));
 
-		World::getCamera()->setTargetEntity(this);
+		m_camera->setTargetEntity(this);
 
-		World::s_localPlayer = this;
+		m_world.m_localPlayer = this;
 	}
 
 	// Add to player list
-	World::s_players.push_back(this);
+	m_world.m_players.push_back(this);
 }
 
 Player::~Player()

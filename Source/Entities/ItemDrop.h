@@ -2,15 +2,18 @@
 #define ITEM_DROP_H
 
 #include "Config.h"
-#include "Game/GameObject.h"
+#include "Entities/Entity.h"
 #include "Physics/PhysicsBody.h"
 
 enum ItemID;
 
-class ItemDrop : public GameObject
+class ItemDrop : public Entity
 {
 public:
-	ItemDrop(const Vector2 position, const ItemID item);
+	ItemDrop(World &world, const Vector2 position, const ItemID item);
+
+	Vector2 getPosition() const { return m_body.getPosition(); }
+	Vector2 getSize() const { return m_body.getSize(); }
 
 	void update();
 	void draw(SpriteBatch *spriteBatch);

@@ -18,37 +18,39 @@ UiObject *canvas = nullptr;
 list<GameObject*> GameManager::s_gameObjects;
 SpriteBatch *GameManager::s_spriteBatch = nullptr;
 bool GameManager::s_takeScreenshot = false;
+World *GameManager::m_world = nullptr;
 
 void GameManager::main()
 {
 	// Set some key bindings
-	//Input::bind(XD_KEY_ESCAPE, function<void()>(Engine::exit));
+	Input::bind(XD_KEY_ESCAPE, function<void()>(Engine::exit));
 	Input::bind(XD_KEY_SNAPSHOT, function<void()>(GameManager::takeScreenshot));
 	
 	// Initialize game managers
 	BlockData::init();
 	ItemData::init();
-	World::init();
-	ThingData::init(World::getTerrain());
+	m_world = new World();
+	ThingData::init(m_world);
 
 	// Resize the window
 	Window::setSize(Vector2i(1280, 720));
 
 	// Show main menu
-	if(!World::load("Debug"))
+	if(!m_world->load("Debug"))
 	{
-		World::create("Debug");
+		m_world->create("Debug");
 	}
 	
-	new Server(5555);
+	new Server(*m_world, 5555);
 		
 	// Show game
-	SceneManager::setScene(new GameScene());
+	SceneManager::setScene(new GameScene(*m_world));
 }
 
 void GameManager::exit()
 {
-	World::save();
+	m_world->save();
+	delete m_world;
 	delete canvas;
 }
 
@@ -73,7 +75,7 @@ void GameManager::draw(GraphicsContext &context)
 		s_takeScreenshot = false;
 	}
 	
-	World::getDebug()->setVariable("FPS", util::intToStr((int)Graphics::getFPS()));
+	m_world->getDebug()->setVariable("FPS", util::intToStr((int)Graphics::getFPS()));
 
 	s_spriteBatch->begin();
 	bool usingSceneMat = false;
@@ -84,7 +86,7 @@ void GameManager::draw(GraphicsContext &context)
 			if(!usingSceneMat)
 			{
 				s_spriteBatch->end();
-				s_spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, World::getCamera()->getProjectionMatrix()));
+				s_spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_world->getCamera()->getProjectionMatrix()));
 				usingSceneMat = true;
 			}
 		}

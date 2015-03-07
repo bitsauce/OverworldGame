@@ -11,14 +11,15 @@ Bow::Bow() :
 	m_bowSprite.setRegion(TextureRegion(), true);
 }
 
-class Arrow : public GameObject//: public Entitiy
+class Arrow : public Entity
 {
 public:
-	Arrow(const Vector2 &pos, const Vector2 &dir, const float speed) :
-		GameObject(PRIORITY_BLOCK_ENTITY),
+	Arrow(World &world, const Vector2 &pos, const Vector2 &dir, const float speed) :
+		Entity(world, ENTITY_ARROW),
 		m_sprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Weapons/Arrow.png")),
 		m_hasHit(false),
-		m_deleteTime(0.0f)
+		m_deleteTime(0.0f),
+		m_body(world)
 	{
 		m_sprite.getTexture()->setFiltering(Texture2D::LINEAR);
 		m_sprite.setRegion(TextureRegion(), true);
@@ -54,6 +55,9 @@ public:
 			m_hasHit = true;
 		}
 	}
+	
+	Vector2 getPosition() const { return m_body.getPosition(); }
+	Vector2 getSize() const { return m_body.getSize(); }
 
 private:
 	PhysicsBody m_body;
@@ -64,7 +68,7 @@ private:
 
 void Bow::use(Player *player)
 {
-	new Arrow(player->getBody().getCenter(), World::getCamera()->getInputPosition() - player->getBody().getCenter(), 25.0f);
+	new Arrow(player->getWorld(), player->getBody().getCenter(), player->getWorld().getCamera()->getInputPosition() - player->getBody().getCenter(), 25.0f);
 }
 
 void Bow::draw(Player *player, SpriteBatch *spriteBatch)

@@ -5,10 +5,10 @@
 xd::Vertex *Spotlight::s_vertices;
 
 // TODO: This is NOT a spotlight. This is a pointlight.
-Spotlight::Spotlight(const Vector2 &position, const float radius, const xd::Color &color) :
+Spotlight::Spotlight(Lighting *lighting, const Vector2 &position, const float radius, const xd::Color &color) :
 	LightSource(position, radius, color)
 {
-	World::getLighting()->addLightSource(this);
+	lighting->addLightSource(this);
 }
 
 void Spotlight::draw(xd::SpriteBatch *spriteBatch)

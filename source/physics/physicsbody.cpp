@@ -4,7 +4,7 @@
 #include "World/World.h"
 #include "terrain/terrain.h"
 
-PhysicsBody::PhysicsBody() :
+PhysicsBody::PhysicsBody(World &world) :
 	m_acceleration(0.0f, 0.0f),
 	m_velocity(0.0f, 0.0f),
 	m_position(0.0f, 0.0f),
@@ -13,7 +13,7 @@ PhysicsBody::PhysicsBody() :
 	m_gravityScale(1.0f),
 	m_allowRotation(false),
 	m_contact(0),
-	m_terrain(World::getTerrain())
+	m_terrain(world.getTerrain())
 {
 }
 

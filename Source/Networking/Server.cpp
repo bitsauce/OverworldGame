@@ -15,9 +15,10 @@
 #include "Entities/Player.h"
 #include "Physics/PhysicsBody.h"
 
-Server::Server(const ushort port) :
+Server::Server(World &world, const ushort port) :
 	GameObject(PRIORITY_SERVER),
-	Connection(true)
+	Connection(true),
+	m_world(world)
 {
 	m_rakPeer = RakNet::RakPeerInterface::GetInstance();
 	RakNet::SocketDescriptor socketDescriptor(port, 0);
@@ -27,7 +28,6 @@ Server::Server(const ushort port) :
 		assert(m_rakPeer->Startup(2, &socketDescriptor, 1) == RakNet::RAKNET_STARTED);
 	}
 	m_rakPeer->SetMaximumIncomingConnections(2);
-	LOG("Port: %i", socketDescriptor.port);
 }
 
 void Server::update()
@@ -72,7 +72,7 @@ void Server::update()
 				int y; bitStream.Read(y);
 				BlockID block; bitStream.Read(block);
 				TerrainLayer layer; bitStream.Read(layer);
-				World::getTerrain()->setBlockAt(x, y, block, layer);
+				m_world.getTerrain()->setBlockAt(x, y, block, layer);
 			}
 			break;
 
@@ -81,7 +81,7 @@ void Server::update()
 				LOG("Creating player...");
 
 				// Create player
-				Player *player = new Player(packet->guid);
+				Player *player = new Player(m_world, packet->guid);
 				player->SetNetworkIDManager(&m_networkIDManager);
 				m_networkObjects.push_back(player);
 

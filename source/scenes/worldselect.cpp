@@ -11,7 +11,8 @@
 #include "Physics/PhysicsBody.h"
 #include "Entities/Player.h"
 
-WorldSelectScene::WorldSelectScene()
+WorldSelectScene::WorldSelectScene(World &world) :
+	m_world(world)
 {
 	LOG("Scene: Select World");
 	
@@ -46,10 +47,10 @@ void WorldSelectScene::worldClicked()
 	//p->getBody()->setPosition(0, 0);
 
 	// Go to game
-	SceneManager::setScene(new GameScene());
+	SceneManager::setScene(new GameScene(m_world));
 }
 
 void WorldSelectScene::showCreateWorld()
 {
-	SceneManager::setScene(new WorldCreateScene());
+	SceneManager::setScene(new WorldCreateScene(m_world));
 }

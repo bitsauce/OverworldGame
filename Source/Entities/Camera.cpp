@@ -8,9 +8,6 @@ Camera::Camera() :
 	GameObject(PRIORITY_CAMERA),
 	m_position(0.0f, 0.0f)
 {
-	Input::addMouseListener(this);
-	Window::addWindowListener(this);
-	
 	Input::bind(XD_KEY_PLUS, function<void()>(bind(&Camera::zoomIn, this)));
 	Input::bind(XD_KEY_MINUS, function<void()>(bind(&Camera::zoomOut, this)));
 
@@ -93,9 +90,6 @@ void Camera::update()
 
 void Camera::draw(SpriteBatch*)
 {
-	Vector2 center = getCenter();
-	World::getDebug()->setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
-	World::getDebug()->setVariable("Zoom", util::intToStr(m_zoomLevel*100) + "%");
 }
 
 void Camera::mouseWheelEvent(const int dt)

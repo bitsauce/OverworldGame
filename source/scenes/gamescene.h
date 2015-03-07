@@ -5,15 +5,17 @@
 #include "Scene.h"
 
 class GameOverlay;
+class World;
 
 class GameScene : public Scene
 {
 public:
-	GameScene();
+	GameScene(World &world);
 	~GameScene();
 
 public:
 	GameOverlay *m_inventory;
+	World &m_world;
 };
 
 #endif // GAME_SCENE_H

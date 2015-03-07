@@ -14,27 +14,18 @@
 #include "Scenes/SceneManager.h"
 #include "Scenes/GameScene.h"
 
-string World::s_worldPath = "";
-Terrain *World::s_terrain = nullptr;
-WorldGenerator *World::s_generator = nullptr;
-TimeOfDay *World::s_timeOfDay = nullptr;
-IniFile *World::s_worldFile = nullptr;
-Camera *World::s_camera = nullptr;
-Debug *World::s_debug = nullptr;
-Lighting *World::s_lighting = nullptr;
-vector<Player*> World::s_players;
-Player *World::s_localPlayer = nullptr;
-
-void World::init()
+World::World() :
+	m_worldPath(""),
+	m_worldFile(nullptr)
 {
-	s_timeOfDay = new TimeOfDay();
-	new Background(s_timeOfDay);
-	s_camera = new Camera();
-	s_generator = new WorldGenerator();
-	s_terrain = new Terrain(s_generator, s_camera);
-	s_worldFile = nullptr;
-	s_lighting = new Lighting(s_terrain);
-	s_debug = new Debug(s_terrain, s_lighting);
+	// Load game managers
+	m_timeOfDay = new TimeOfDay();
+	m_background = new Background(m_timeOfDay);
+	m_camera = new Camera();
+	m_generator = new WorldGenerator();
+	m_terrain = new Terrain(*this);
+	m_lighting = new Lighting(*this);
+	m_debug = new Debug(*this);
 }
 
 void World::create(const string &name)
@@ -42,26 +33,26 @@ void World::create(const string &name)
 	LOG("Creating world '%s'...", name.c_str());
 	
 	// Set the world path
-	s_worldPath = "saves:/Overworld/" + name;
-	s_worldFile = new IniFile(s_worldPath + "/World.ini");
+	m_worldPath = "saves:/Overworld/" + name;
+	m_worldFile = new IniFile(m_worldPath + "/World.ini");
 
-	FileSystem::MakeDir(s_worldPath);
-	FileSystem::MakeDir(s_worldPath + "/Chunks");
+	FileSystem::MakeDir(m_worldPath);
+	FileSystem::MakeDir(m_worldPath + "/Chunks");
 		
 	// Create world file
 	uint seed = Random().nextInt();
-	s_worldFile->setValue("world", "name", name);
-	s_worldFile->setValue("world", "seed", util::intToStr(seed));
-	s_worldFile->save();
+	m_worldFile->setValue("world", "name", name);
+	m_worldFile->setValue("world", "seed", util::intToStr(seed));
+	m_worldFile->save();
 
-	s_generator->setSeed(seed);
+	m_generator->setSeed(seed);
 }
 
 void World::save()
 {
 	LOG("Saving world...");
 
-	s_terrain->getChunkLoader()->clear();
+	m_terrain->getChunkLoader()->clear();
 }
 
 bool World::load(const string &name)
@@ -72,8 +63,8 @@ bool World::load(const string &name)
 		LOG("Loading world '%s'...", name.c_str());
 	
 		// Set the world path
-		s_worldPath = "saves:/Overworld/" + name;
-		s_worldFile = new IniFile(worldFile);
+		m_worldPath = "saves:/Overworld/" + name;
+		m_worldFile = new IniFile(worldFile);
 	}
 	else
 	{
@@ -87,42 +78,18 @@ void World::clear()
 {
 	LOG("Reseting world...");
 
-	s_worldPath.clear();
-	delete s_localPlayer;
-	s_localPlayer = nullptr;
-}
+	// Reset world path and file
+	m_worldPath.clear();
+	m_worldFile->save();
+	delete m_worldFile;
+	m_worldFile = nullptr;
 
-string World::getWorldPath()
-{
-	return s_worldPath;
-}
-
-Terrain *World::getTerrain()
-{
-	return s_terrain;
-}
-
-TimeOfDay *World::getTimeOfDay()
-{
-	return s_timeOfDay;
-}
-
-Camera *World::getCamera()
-{
-	return s_camera;
-}
-
-Debug *World::getDebug()
-{
-	return s_debug;
-}
-
-Lighting *World::getLighting()
-{
-	return s_lighting;
-}
-
-vector<Player*> World::getPlayers()
-{
-	return s_players;
+	// Delete all entities
+	for(Entity *entity : m_entities)
+	{
+		delete entity;
+	}
+	m_entities.clear();
+	m_players.clear();
+	m_localPlayer = nullptr;
 }

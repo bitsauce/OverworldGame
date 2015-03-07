@@ -11,7 +11,8 @@
 
 #include "Constants.h"
 
-GameScene::GameScene()
+GameScene::GameScene(World &world) :
+	m_world(world)
 {
 	LOG("Scene: Game Scene");
 
@@ -35,8 +36,8 @@ GameScene::GameScene()
 GameScene::~GameScene()
 {
 	// Save and clear
-	World::save();
-	World::clear();
+	m_world.save();
+	m_world.clear();
 
 	((Connection*)Connection::getInstance())->m_networkObjects.clear();
 }

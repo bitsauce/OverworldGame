@@ -7,9 +7,10 @@
 #include "Terrain/Terrain.h"
 #include "Terrain/ChunkLoader.h"
 
-Lighting::Lighting(Terrain *terrain) :
+Lighting::Lighting(World &world) :
 	GameObject(PRIORITY_LIGHTING),
-	m_terrain(terrain),
+	m_terrain(world.getTerrain()),
+	m_world(world),
 	m_lightingPass0(nullptr),
 	m_lightingPass1(nullptr),
 	m_lightingPass2(nullptr),
@@ -22,13 +23,11 @@ Lighting::Lighting(Terrain *terrain) :
 	m_enabled(true)
 {
 	// Resize render targets
-	Window::addWindowListener(this);
 	resizeEvent(Window::getSize().x, Window::getSize().y);
 }
 
 Lighting::~Lighting()
 {
-	Window::removeWindowListener(this);
 }
 
 void Lighting::addLightSource(LightSource *source)
@@ -56,9 +55,9 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 		// Render lightmaps to texture (pass 0)
 		gfxContext.setRenderTarget(m_lightingRenderTarget);
 		gfxContext.clear(GraphicsContext::COLOR_BUFFER);
-		for(int y = area.y0+1; y <= area.y1+1; ++y)
+		for(int y = area.y0; y <= area.y1+2; ++y)
 		{
-			for(int x = area.x0+1; x <= area.x1+1; ++x)
+			for(int x = area.x0; x <= area.x1+2; ++x)
 			{
 				gfxContext.setTexture(m_terrain->getChunkLoader()->getChunkAt(x-1, y-1).getLightMap());
 				gfxContext.drawRectangle((x - area.x0) * CHUNK_BLOCKSF, (y - area.y0) * CHUNK_BLOCKSF, CHUNK_BLOCKSF, CHUNK_BLOCKSF);
@@ -69,7 +68,7 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 		gfxContext.setRenderTarget(m_lightingPass0);
 		gfxContext.clear(GraphicsContext::COLOR_BUFFER);
 		m_directionalLightingShader->setSampler2D("u_texture", m_lightingRenderTarget->getTexture());
-		m_directionalLightingShader->setUniform1f("u_direction", 0.0174532925f * 180.0f * (World::getTimeOfDay()->isDay() ? (1140.0f - World::getTimeOfDay()->getTime()) : (1860.0f - (World::getTimeOfDay()->getTime() >= 1140.0f ? World::getTimeOfDay()->getTime() : World::getTimeOfDay()->getTime() + 1440.0f)))/720.0f);
+		m_directionalLightingShader->setUniform1f("u_direction", 0.0174532925f * 180.0f * (m_world.getTimeOfDay()->isDay() ? (1140.0f - m_world.getTimeOfDay()->getTime()) : (1860.0f - (m_world.getTimeOfDay()->getTime() >= 1140.0f ? m_world.getTimeOfDay()->getTime() : m_world.getTimeOfDay()->getTime() + 1440.0f)))/720.0f);
 		m_directionalLightingShader->setUniform1f("u_offsetY", (area.y0 * CHUNK_BLOCKSF - 32.0f)/m_height);
 		m_directionalLightingShader->setUniform1f("u_width", m_width);
 		m_directionalLightingShader->setUniform1f("u_height", m_height);
@@ -118,7 +117,7 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 		gfxContext.enable(GraphicsContext::BLEND);
 		gfxContext.setBlendState(BlendState::PRESET_MULTIPLY);
 
-		gfxContext.setProjectionMatrix(World::getCamera()->getProjectionMatrix());
+		gfxContext.setProjectionMatrix(m_world.getCamera()->getProjectionMatrix());
 		gfxContext.setTexture(m_lightingPass2->getTexture());
 
 		Vector2 position((area.x0) * CHUNK_PXF, (area.y0) * CHUNK_PXF);

@@ -11,40 +11,54 @@ class Lighting;
 class WorldGenerator;
 class Server;
 class Client;
+class Entity;
+class Background;
 
 class World
 {
 	friend class Player;
 public:
-	static void init();
-	static void create(const string &name);
-	static bool load(const string &name);
-	static void save();
-	static void clear();
+	World();
+	void create(const string &name);
+	bool load(const string &name);
+	void save();
+	void clear();
 
-	static string getWorldPath();
+	// World path
+	string getWorldPath() const { return m_worldPath; }
+	IniFile *getWorldFile() const { return m_worldFile; }
 
-	static Terrain *getTerrain();
-	static TimeOfDay *getTimeOfDay();
-	static Camera *getCamera();
-	static Debug *getDebug();
-	static Lighting *getLighting();
-	static vector<Player*> getPlayers();
-	static Player *getLocalPlayer() { return s_localPlayer; }
+	// Game managers
+	Terrain *getTerrain() const { return m_terrain; }
+	TimeOfDay *getTimeOfDay() const { return m_timeOfDay; }
+	Camera *getCamera() const { return m_camera; }
+	Lighting *getLighting() const { return m_lighting; }
+	Debug *getDebug() const { return m_debug; }
+	WorldGenerator *getGenerator() const { return m_generator; }
+
+	// Entities
+	void addEntity(Entity *entity) { m_entities.push_back(entity); }
+	void removeEntity(Entity *entity) { m_entities.remove(entity); }
+	list<Entity*> getEntities() const { return m_entities; }
+	list<Player*> getPlayers() const { return m_players; }
+	Player *getLocalPlayer() const { return m_localPlayer; }
 
 private:
-	static Terrain *s_terrain;
-	static WorldGenerator *s_generator;
-	static TimeOfDay *s_timeOfDay;
-	static string s_worldPath;
-	static IniFile *s_worldFile;
-	static Camera *s_camera;
-	static Debug *s_debug;
-	static Lighting *s_lighting;
-	static vector<Player*> s_players;
-	static Player* s_localPlayer;
-	static Server *s_server;
-	static Client *s_client;
+	Terrain *m_terrain;
+	Background *m_background;
+
+	WorldGenerator *m_generator;
+	TimeOfDay *m_timeOfDay;
+	string m_worldPath;
+	IniFile *m_worldFile;
+	Camera *m_camera;
+	Debug *m_debug;
+	Lighting *m_lighting;
+	list<Player*> m_players;
+	Player* m_localPlayer;
+	Server *m_server;
+	Client *m_client;
+	list<Entity*> m_entities;
 };
 
 #endif // WORLD_H

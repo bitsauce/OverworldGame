@@ -8,7 +8,7 @@
 class Zombie : public Entity
 {
 public:
-	Zombie();
+	Zombie(World &world);
 
 	void update();
 	void draw(SpriteBatch *spriteBatch);

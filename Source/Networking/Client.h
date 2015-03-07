@@ -10,13 +10,18 @@ namespace RakNet {
 	class BitStream;
 }
 
+class World;
+
 class Client : public GameObject, public Connection
 {
 public:
-	Client(const string &ip, const ushort port);
+	Client(World &world, const string &ip, const ushort port);
 
 	void update();
 	void sendPacket(RakNet::BitStream *bitStream);
+
+private:
+	World &m_world;
 };
 
 #endif // CLIENT_H

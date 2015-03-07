@@ -7,12 +7,10 @@ LineEdit::LineEdit(UiObject *parent) :
 	m_cursorTime(0.0f),
 	m_font(ResourceManager::get<Font>(UI_MENU_BUTTON_FONT))
 {
-	Input::addKeyboardListener(this);
 }
 
 LineEdit::~LineEdit()
 {
-	Input::removeKeyboardListener(this);
 }
 
 void LineEdit::setText(const string &text)

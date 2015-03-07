@@ -5,11 +5,13 @@
 #include "Thing.h"
 #include "Lighting/Spotlight.h"
 
+class World;
+
 class Torch : public Thing
 {
 	friend class ThingData;
 public:
-	Torch(const int x, const int y);
+	Torch(World &world, const int x, const int y);
 
 	void draw(SpriteBatch *spriteBatch);
 
@@ -18,7 +20,7 @@ private:
 	Spotlight m_spotlight;
 	//float durration;?
 
-	static void Factory(const int x, const int y) { new Torch(x, y); }
+	static void Factory(World &world, const int x, const int y) { new Torch(world, x, y); }
 };
 
 #endif // TORCH_H

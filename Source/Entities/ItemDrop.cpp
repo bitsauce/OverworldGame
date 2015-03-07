@@ -4,10 +4,10 @@
 #include "World/World.h"
 #include "Items/ItemData.h"
 
-ItemDrop::ItemDrop(const Vector2 position, const ItemID item) :
-	GameObject(PRIORITY_ITEM_DROP),
+ItemDrop::ItemDrop(World &world, const Vector2 position, const ItemID item) :
+	Entity(world, ENTITY_ITEM_DROP),
 	m_itemID(item),
-	m_body(),
+	m_body(world),
 	m_dragDistance(16.0f * BLOCK_PXF),
 	m_pickupDistance(16.0f)
 {
@@ -17,14 +17,13 @@ ItemDrop::ItemDrop(const Vector2 position, const ItemID item) :
 
 void ItemDrop::update()
 {
-	vector<Player*> players = World::getPlayers();
-	for(uint i = 0; i < players.size(); ++i)
+	list<Player*> players = m_world.getPlayers();
+	for(Player *player : players)
 	{
-		Player *player = players[i];
 		Vector2 deltaPosition = player->getBody().getCenter() - m_body.getCenter();
 		if(player->getBody().getRect().contains(m_body.getCenter()))
 		{
-			players[i]->getItemContainer().addItem(m_itemID);
+			player->getItemContainer().addItem(m_itemID);
 			delete this;
 			return;
 		}

@@ -3,8 +3,9 @@
 #include "Entities/Player.h"
 #include "Constants.h"
 
-Zombie::Zombie() :
-	Entity(ENTITY_ZOMBIE)
+Zombie::Zombie(World &world) :
+	Entity(world, ENTITY_ZOMBIE),
+	m_body(world)
 {
 	// Set body size
 	m_body.setSize(24, 48);
@@ -17,7 +18,7 @@ Zombie::Zombie() :
 void Zombie::update()
 {
 	Player *closestPlayer = nullptr;
-	for(Player *player : World::getPlayers())
+	for(Player *player : m_world.getPlayers())
 	{
 		if(!closestPlayer || (player->getBody().getCenter() - m_body.getCenter()).magnitude() < (closestPlayer->getBody().getCenter() - m_body.getCenter()).magnitude())
 		{

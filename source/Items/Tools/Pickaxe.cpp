@@ -45,7 +45,7 @@ void Pickaxe::use(Player *player)
 		{
 			ItemID itemID = (ItemID)terrain->getBlockAt(position.x, position.y, TERRAIN_LAYER_MIDDLE);
 			terrain->removeBlockAt(position.x, position.y, TERRAIN_LAYER_MIDDLE);
-			new ItemDrop(Vector2(position.x * BLOCK_PXF, position.y * BLOCK_PXF), itemID);
+			new ItemDrop(player->getWorld(), Vector2(position.x * BLOCK_PXF, position.y * BLOCK_PXF), itemID);
 		}
 		else
 		{

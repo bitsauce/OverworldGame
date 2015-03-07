@@ -14,7 +14,7 @@ enum BlockID;
 class Terrain : public WindowListener
 {
 public:
-	Terrain(WorldGenerator *generator, Camera *camera);
+	Terrain(World &world);
 	~Terrain();
 	
 	// BLOCKS
@@ -38,7 +38,7 @@ private:
 	{
 	public:
 		// CONSTRUCTOR
-		Drawer(Terrain *terrain, const Priority drawOrder, const TerrainLayer layer);
+		Drawer(Terrain *terrain, Camera *camera, const Priority drawOrder, const TerrainLayer layer);
 
 		// DRAWING
 		void draw(SpriteBatch *spriteBatch);
@@ -46,6 +46,9 @@ private:
 	private:
 		// CHUNK LOADER
 		ChunkLoader *m_chunkLoader;
+
+		// Camera
+		Camera *m_camera;
 
 		// LAYER
 		TerrainLayer m_layer;

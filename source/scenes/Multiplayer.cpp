@@ -23,7 +23,8 @@
 
 #include "Constants.h"
 
-MultiplayerScene::MultiplayerScene()
+MultiplayerScene::MultiplayerScene(World &world) :
+	m_world(world)
 {
 	LOG("Scene: Multiplayer");
 	
@@ -67,7 +68,7 @@ void MultiplayerScene::host()
 	//bitStream.Write(ENTITY_PLAYER);
 	((Server*)Connection::getInstance())->getRakPeer()->SendLoopback((const char*)bitStream.GetData(), bitStream.GetNumberOfBytesUsed());*/
 	
-	SceneManager::setScene(new GameScene());
+	SceneManager::setScene(new GameScene(m_world));
 }
 
 void MultiplayerScene::join()
@@ -75,7 +76,7 @@ void MultiplayerScene::join()
 	vector<string> ipStrings = util::splitString(m_ipLineEdit->getText(), ".");
 	if(ipStrings.size() != 4) return;
 
-	new Client(m_ipLineEdit->getText(), util::strToInt(m_portLineEdit->getText()));
+	new Client(m_world, m_ipLineEdit->getText(), util::strToInt(m_portLineEdit->getText()));
 
-	SceneManager::setScene(new GameScene());
+	SceneManager::setScene(new GameScene(m_world));
 }

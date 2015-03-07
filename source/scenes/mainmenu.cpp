@@ -14,7 +14,8 @@ int TITLE_BLOCKS[4][37] = {
 	{ 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0 }
 };
 
-MainMenuScene::MainMenuScene()
+MainMenuScene::MainMenuScene(World &world) :
+	m_world(world)
 {
 	LOG("Scene: Main menu");
 	
@@ -39,5 +40,5 @@ MainMenuScene::MainMenuScene()
 
 void MainMenuScene::showWorldSelectScene()
 {
-	SceneManager::setScene(new WorldSelectScene());
+	SceneManager::setScene(new WorldSelectScene(m_world));
 }

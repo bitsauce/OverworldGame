@@ -6,11 +6,12 @@
 
 #define CHUNK_KEY(X, Y) ((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000)
 
-ChunkLoader::ChunkLoader(Camera *camera, WorldGenerator *generator) :
+ChunkLoader::ChunkLoader(World &world) :
 	GameObject(PRIORITY_CHUNK_LOADER),
 	m_applyZoom(true),
-	m_camera(camera),
-	m_generator(generator),
+	m_camera(world.getCamera()),
+	m_generator(world.getGenerator()),
+	m_world(world),
 	m_chunkPositionIndex(0),
 	m_loadAreaRadius(5),
 	m_circleLoadIndex(0)
@@ -23,9 +24,6 @@ ChunkLoader::ChunkLoader(Camera *camera, WorldGenerator *generator) :
 
 	// Set max chunks to some value
 	setOptimalChunkCount(512);
-
-	// Add window listener
-	Window::addWindowListener(this);
 }
 
 void ChunkLoader::clear()
@@ -107,7 +105,7 @@ void ChunkLoader::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 	// Free it
 	Chunk *chunk = itr->second;
 	if(chunk->isModified()) {
-		saveBlockData(util::getAbsoluteFilePath(World::getWorldPath() + "/Chunks/" + util::intToStr(itr->first) + ".obj"), chunk->m_blocks);
+		saveBlockData(util::getAbsoluteFilePath(m_world.getWorldPath() + "/Chunks/" + util::intToStr(itr->first) + ".obj"), chunk->m_blocks);
 	}
 	m_chunkPool.push_back(chunk);
 	m_chunks.erase(itr->first);
@@ -172,7 +170,7 @@ Chunk *ChunkLoader::loadChunkAt(const int chunkX, const int chunkY)
 
 	// Get chunk file path
 	uint key = CHUNK_KEY(chunkX, chunkY);
-	string chunkFilePath = World::getWorldPath() + "/Chunks/" + util::intToStr(key) + ".obj";
+	string chunkFilePath = m_world.getWorldPath() + "/Chunks/" + util::intToStr(key) + ".obj";
 
 	// Get block data
 	BlockID blocks[CHUNK_BLOCKS*CHUNK_BLOCKS*TERRAIN_LAYER_COUNT];
@@ -250,7 +248,7 @@ void ChunkLoader::update()
 	}
 
 	Vector2 dir = Vector2(chunkPosition) - m_averagePosition;
-	World::getDebug()->setVariable("Chunk load direction", "[" + util::floatToStr(dir.x) + ", " + util::floatToStr(dir.y) + "]");
+	//World::getDebug()->setVariable("Chunk load direction", "[" + util::floatToStr(dir.x) + ", " + util::floatToStr(dir.y) + "]");
 
 	if(m_chunks.size() >= m_optimalChunkCount)
 	{

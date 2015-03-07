@@ -10,16 +10,15 @@
 #include "Lighting/Spotlight.h"
 #include "Entities/Camera.h"
 
-Terrain::Terrain(WorldGenerator *generator, Camera *camera) :
-	m_chunkLoader(camera, generator),
-	m_background(this, PRIORITY_TERRAIN_BACKGROUND, TERRAIN_LAYER_BACK),
-	m_middleground(this, PRIORITY_TERRAIN_MIDDLEGROUND, TERRAIN_LAYER_MIDDLE),
-	m_foreground(this, PRIORITY_TERRAIN_FOREGROUND, TERRAIN_LAYER_FRONT)
+Terrain::Terrain(World &world) :
+	m_chunkLoader(world),
+	m_background(this, world.getCamera(), PRIORITY_TERRAIN_BACKGROUND, TERRAIN_LAYER_BACK),
+	m_middleground(this, world.getCamera(), PRIORITY_TERRAIN_MIDDLEGROUND, TERRAIN_LAYER_MIDDLE),
+	m_foreground(this, world.getCamera(), PRIORITY_TERRAIN_FOREGROUND, TERRAIN_LAYER_FRONT)
 {
 	LOG("Initializing terrain");
 
 	// Window
-	Window::addWindowListener(this);
 	resizeEvent(Window::getSize().x, Window::getSize().y);
 
 	Spotlight::s_vertices = new Vertex[SPOTLIGHT_SEGMENTS+2];
@@ -27,7 +26,6 @@ Terrain::Terrain(WorldGenerator *generator, Camera *camera) :
 
 Terrain::~Terrain()
 {
-	Window::removeWindowListener(this);
 }
 	
 // BLOCKS
@@ -79,9 +77,10 @@ bool Terrain::setThingAt(const int x, const int y, ThingID blockEntity)
 }
 
 // DRAWING
-Terrain::Drawer::Drawer(Terrain *terrain, const Priority drawOrder, const TerrainLayer layer) :
+Terrain::Drawer::Drawer(Terrain *terrain, Camera *camera, const Priority drawOrder, const TerrainLayer layer) :
 	GameObject(drawOrder),
 	m_chunkLoader(terrain->getChunkLoader()),
+	m_camera(camera),
 	m_layer(layer)
 {
 }
@@ -94,7 +93,7 @@ void Terrain::Drawer::draw(SpriteBatch *spriteBatch)
 	// Setup graphics context
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 	gfxContext.setTexture(BlockData::getBlockAtlas()->getTexture());
-	gfxContext.setProjectionMatrix(World::getCamera()->getProjectionMatrix());
+	gfxContext.setProjectionMatrix(m_camera->getProjectionMatrix());
 
 	// Draw chunk area
 	ChunkLoader::ChunkArea area = m_chunkLoader->getActiveArea();
