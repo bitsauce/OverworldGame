@@ -120,9 +120,6 @@
     <ClCompile Include="..\..\Source\Items\Placeable\ThingItem.cpp" />
     <ClCompile Include="..\..\source\Items\Tools\Pickaxe.cpp" />
     <ClCompile Include="..\..\source\Items\Weapons\Bow.cpp" />
-    <ClCompile Include="..\..\source\Lighting\LightSource.cpp" />
-    <ClCompile Include="..\..\source\Lighting\Lighting.cpp" />
-    <ClCompile Include="..\..\source\lighting\Spotlight.cpp" />
     <ClCompile Include="..\..\Source\Networking\Client.cpp" />
     <ClCompile Include="..\..\source\Networking\Conneciton.cpp" />
     <ClCompile Include="..\..\source\Networking\NetworkObject.cpp" />
@@ -136,9 +133,6 @@
     <ClCompile Include="..\..\source\scenes\WorldCreate.cpp" />
     <ClCompile Include="..\..\source\scenes\MainMenu.cpp" />
     <ClCompile Include="..\..\source\scenes\WorldSelect.cpp" />
-    <ClCompile Include="..\..\source\Terrain\ChunkLoader.cpp" />
-    <ClCompile Include="..\..\source\terrain\Terrain.cpp" />
-    <ClCompile Include="..\..\source\terrain\Chunk.cpp" />
     <ClCompile Include="..\..\Source\Things\Thing.cpp" />
     <ClCompile Include="..\..\Source\Things\ThingData.cpp" />
     <ClCompile Include="..\..\Source\Things\RedCurrantBush.cpp" />
@@ -146,6 +140,12 @@
     <ClCompile Include="..\..\source\World\Background.cpp" />
     <ClCompile Include="..\..\source\World\Camera.cpp" />
     <ClCompile Include="..\..\source\World\Debug.cpp" />
+    <ClCompile Include="..\..\source\World\Lighting\Lighting.cpp" />
+    <ClCompile Include="..\..\source\World\Lighting\LightSource.cpp" />
+    <ClCompile Include="..\..\source\World\Lighting\Spotlight.cpp" />
+    <ClCompile Include="..\..\source\World\Terrain\Chunk.cpp" />
+    <ClCompile Include="..\..\source\World\Terrain\ChunkLoader.cpp" />
+    <ClCompile Include="..\..\source\World\Terrain\Terrain.cpp" />
     <ClCompile Include="..\..\source\World\TimeOfDay.cpp" />
     <ClCompile Include="..\..\Source\World\World.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -181,9 +181,6 @@
     <ClInclude Include="..\..\Source\Items\Placeable\ThingItem.h" />
     <ClInclude Include="..\..\source\Items\Tools\Pickaxe.h" />
     <ClInclude Include="..\..\source\Items\Weapons\Bow.h" />
-    <ClInclude Include="..\..\source\Lighting\LightSource.h" />
-    <ClInclude Include="..\..\source\Lighting\Lighting.h" />
-    <ClInclude Include="..\..\source\lighting\Spotlight.h" />
     <ClInclude Include="..\..\Source\Networking\Client.h" />
     <ClInclude Include="..\..\source\Networking\Connection.h" />
     <ClInclude Include="..\..\source\Networking\NetworkObject.h" />
@@ -198,9 +195,6 @@
     <ClInclude Include="..\..\source\scenes\MainMenu.h" />
     <ClInclude Include="..\..\source\scenes\WorldSelect.h" />
     <ClInclude Include="..\..\Source\Strings.h" />
-    <ClInclude Include="..\..\source\Terrain\ChunkLoader.h" />
-    <ClInclude Include="..\..\source\terrain\Terrain.h" />
-    <ClInclude Include="..\..\source\terrain\Chunk.h" />
     <ClInclude Include="..\..\Source\Things\Thing.h" />
     <ClInclude Include="..\..\Source\Things\ThingData.h" />
     <ClInclude Include="..\..\Source\Things\RedCurrantBush.h" />
@@ -208,6 +202,12 @@
     <ClInclude Include="..\..\source\World\Background.h" />
     <ClInclude Include="..\..\source\World\Camera.h" />
     <ClInclude Include="..\..\source\World\Debug.h" />
+    <ClInclude Include="..\..\source\World\Lighting\Lighting.h" />
+    <ClInclude Include="..\..\source\World\Lighting\LightSource.h" />
+    <ClInclude Include="..\..\source\World\Lighting\Spotlight.h" />
+    <ClInclude Include="..\..\source\World\Terrain\Chunk.h" />
+    <ClInclude Include="..\..\source\World\Terrain\ChunkLoader.h" />
+    <ClInclude Include="..\..\source\World\Terrain\Terrain.h" />
     <ClInclude Include="..\..\source\World\TimeOfDay.h" />
     <ClInclude Include="..\..\Source\World\World.h" />
   </ItemGroup>

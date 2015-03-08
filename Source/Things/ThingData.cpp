@@ -2,8 +2,8 @@
 #include "Constants.h"
 #include "RedCurrantBush.h"
 #include "Torch.h"
-#include "Terrain/Terrain.h"
 #include "World/World.h"
+#include "World/Terrain/Terrain.h"
 
 vector<ThingData*> ThingData::s_blockEntityData(BLOCK_ENTITY_COUNT);
 World *ThingData::s_world = nullptr;

@@ -1,17 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\source\terrain\Terrain.cpp">
-      <Filter>Source\Terrain</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\Noise\Simplex.cpp">
       <Filter>Source\Noise</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\lighting\Spotlight.cpp">
-      <Filter>Source\Lighting</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\Lighting\LightSource.cpp">
-      <Filter>Source\Lighting</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\physics\PhysicsBody.cpp">
       <Filter>Source\Physics</Filter>
@@ -58,12 +49,6 @@
     <ClCompile Include="..\..\source\scenes\WorldSelect.cpp">
       <Filter>Source\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\Lighting\Lighting.cpp">
-      <Filter>Source\Lighting</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\Terrain\ChunkLoader.cpp">
-      <Filter>Source\Terrain</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\Blocks\BlockData.cpp">
       <Filter>Source\Blocks</Filter>
     </ClCompile>
@@ -82,9 +67,6 @@
     </ClCompile>
     <ClCompile Include="..\..\source\gui\GameOverlay\Hotbar.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\terrain\Chunk.cpp">
-      <Filter>Source\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\World\World.cpp">
       <Filter>Source\World</Filter>
@@ -170,6 +152,24 @@
     <ClCompile Include="..\..\source\Game\GameManager.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\World\Terrain\ChunkLoader.cpp">
+      <Filter>Source\World\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\World\Terrain\Chunk.cpp">
+      <Filter>Source\World\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\World\Lighting\Lighting.cpp">
+      <Filter>Source\World\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\World\Lighting\LightSource.cpp">
+      <Filter>Source\World\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\World\Lighting\Spotlight.cpp">
+      <Filter>Source\World\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\World\Terrain\Terrain.cpp">
+      <Filter>Source\World\Terrain</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -180,12 +180,6 @@
     </Filter>
     <Filter Include="Source\Noise">
       <UniqueIdentifier>{dc4c3fe4-09e5-417a-a2dd-12ea31f47404}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Lighting">
-      <UniqueIdentifier>{533c6540-500f-49f1-8b01-a8401b317f0f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Terrain">
-      <UniqueIdentifier>{acdbe615-25b7-49dc-9dd6-17c021361fc7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Game">
       <UniqueIdentifier>{18bc6b9a-571d-4fa2-8cc2-faf75c39f783}</UniqueIdentifier>
@@ -244,22 +238,19 @@
     <Filter Include="Source\Items\Weapons">
       <UniqueIdentifier>{db3e34cc-807e-4345-8f45-54ab11c8212c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\World\Lighting">
+      <UniqueIdentifier>{345a8e8c-8251-427b-9965-f9f9666a426a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\World\Terrain">
+      <UniqueIdentifier>{36e472f3-e1ff-4bf6-8120-0dbec018c0fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\source\terrain\Terrain.h">
-      <Filter>Source\Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Noise\Simplex.h">
       <Filter>Source\Noise</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\Constants.h">
       <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\lighting\Spotlight.h">
-      <Filter>Source\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\Lighting\LightSource.h">
-      <Filter>Source\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\physics\PhysicsBody.h">
       <Filter>Source\Physics</Filter>
@@ -306,12 +297,6 @@
     <ClInclude Include="..\..\source\scenes\WorldSelect.h">
       <Filter>Source\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\Lighting\Lighting.h">
-      <Filter>Source\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\Terrain\ChunkLoader.h">
-      <Filter>Source\Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Config.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -332,9 +317,6 @@
     </ClInclude>
     <ClInclude Include="..\..\source\gui\GameOverlay\Hotbar.h">
       <Filter>Source\Gui\GameOverlay</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\terrain\Chunk.h">
-      <Filter>Source\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\World\World.h">
       <Filter>Source\World</Filter>
@@ -422,6 +404,24 @@
     </ClInclude>
     <ClInclude Include="..\..\source\Game\RayCast.h">
       <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\World\Terrain\ChunkLoader.h">
+      <Filter>Source\World\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\World\Terrain\Chunk.h">
+      <Filter>Source\World\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\World\Lighting\LightSource.h">
+      <Filter>Source\World\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\World\Lighting\Lighting.h">
+      <Filter>Source\World\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\World\Lighting\Spotlight.h">
+      <Filter>Source\World\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\World\Terrain\Terrain.h">
+      <Filter>Source\World\Terrain</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

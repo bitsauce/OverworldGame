@@ -1,6 +1,6 @@
 #include "BlockData.h"
 #include "World/World.h"
-#include "Terrain/Terrain.h"
+#include "World/Terrain/Terrain.h"
 
 vector<BlockData*> BlockData::s_blockData(BLOCK_COUNT);
 TextureAtlas *BlockData::s_blockAtlas = nullptr;

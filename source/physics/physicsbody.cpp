@@ -2,7 +2,7 @@
 #include "constants.h"
 
 #include "World/World.h"
-#include "terrain/terrain.h"
+#include "World/Terrain/Terrain.h"
 
 PhysicsBody::PhysicsBody(World &world) :
 	m_acceleration(0.0f, 0.0f),

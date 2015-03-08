@@ -2,8 +2,6 @@
 #include "Constants.h"
 #include "Gui/Canvas.h"
 #include "Gui/UiObject.h"
-#include "Lighting/Spotlight.h"
-#include "World/World.h"
 #include "Scenes/SceneManager.h"
 #include "Scenes/GameScene.h"
 
@@ -13,16 +11,20 @@
 
 #include "Things/ThingData.h"
 
+#include "World/World.h"
 #include "World/Debug.h"
 #include "World/Camera.h"
 #include "World/Background.h"
+#include "World/TimeOfDay.h"
+#include "World/Lighting/Lighting.h"
+#include "World/Lighting/Spotlight.h"
 
 #include "Networking/Server.h"
 #include "Networking/Client.h"
 
 #include "Entities/Entity.h"
 
-#include "Terrain/Terrain.h"
+#include "World/Terrain/Terrain.h"
 
 UiObject *canvas = nullptr;
 
@@ -74,10 +76,13 @@ void GameManager::update()
 	{
 		((Client*)Connection::getInstance())->update();
 	}
-
-	//m_world->getTerrain()->getChunkLoader()->update();
-
+	
+	m_world->getTimeOfDay()->update();
 	m_world->getBackground()->update();
+	m_world->getCamera()->update();
+	m_world->getDebug()->update();
+
+	m_world->getTerrain()->getChunkLoader()->update();
 
 	list<Entity*> gameObjects = m_world->getEntities();
 	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
@@ -97,17 +102,33 @@ void GameManager::draw(GraphicsContext &context)
 		context.saveScreenshot("C:\\Users\\Marcus\\Desktop\\Screenshot_" + util::intToStr(i) + ".png");
 		s_takeScreenshot = false;
 	}
+
+	s_spriteBatch->begin();
 	
 	m_world->getDebug()->setVariable("FPS", util::intToStr((int)Graphics::getFPS()));
 	m_world->getBackground()->draw(s_spriteBatch);
+	m_world->getCamera()->draw(s_spriteBatch);
+	
 
+	m_world->getTerrain()->m_background.draw(s_spriteBatch);
+	
+	m_world->getTerrain()->m_middleground.draw(s_spriteBatch);
+
+	s_spriteBatch->end();
 	s_spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_world->getCamera()->getProjectionMatrix()));
 	list<Entity*> gameObjects = m_world->getEntities();
 	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
 	{
 		(*itr)->draw(s_spriteBatch);
 	}
+	
+	m_world->getTerrain()->m_foreground.draw(s_spriteBatch);
+	m_world->getLighting()->draw(s_spriteBatch);
+
 	s_spriteBatch->end();
+	
+
+	m_world->getDebug()->draw(s_spriteBatch);
 
 	SceneManager::update();
 }

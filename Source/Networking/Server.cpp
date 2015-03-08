@@ -11,7 +11,7 @@
 #include "NetworkObject.h"
 #include "Constants.h"
 #include "World/World.h"
-#include "Terrain/Terrain.h"
+#include "World/Terrain/Terrain.h"
 #include "Entities/Player.h"
 #include "Physics/PhysicsBody.h"
 

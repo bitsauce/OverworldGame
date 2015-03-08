@@ -1,6 +1,6 @@
 #include "ThingItem.h"
 #include "Things/ThingData.h"
-#include "Terrain/Terrain.h"
+#include "World/Terrain/Terrain.h"
 #include "Entities/Player.h"
 #include "World/Camera.h"
 

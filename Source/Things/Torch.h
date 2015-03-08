@@ -3,7 +3,7 @@
 
 #include "Config.h"
 #include "Thing.h"
-#include "Lighting/Spotlight.h"
+#include "World/Lighting/Spotlight.h"
 
 class World;
 

@@ -1,7 +1,7 @@
 #include "BlockItem.h"
 #include "Entities/Player.h"
 #include "World/Camera.h"
-#include "Terrain/Terrain.h"
+#include "World/Terrain/Terrain.h"
 #include "Blocks/BlockData.h"
 
 BlockItem::BlockItem(const TerrainLayer layer, const BlockID blockID) :
