@@ -11,8 +11,8 @@ class ItemData
 	friend class GameManager;
 public:
 	ItemData();
-	virtual void use(Player *player) = 0;
-	virtual void draw(Player *player, SpriteBatch *spriteBatch) = 0;
+	virtual void use(Player *player, const float dt) = 0;
+	virtual void draw(Player *player, SpriteBatch *spriteBatch, const float alpha) = 0;
 	static ItemData *get(const ItemID id) { return s_itemData[id]; }
 
 	ItemID getID() const { return m_id; }

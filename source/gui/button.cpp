@@ -66,17 +66,17 @@ void *Button::getUserData() const
 	return m_userData;
 }
 
-void Button::update()
+void Button::update(const float dt)
 {
 	if(isHovered())
 	{
-		m_animTime = min(m_animTime + Graphics::getTimeStep()*4.0f, 1.0f);
+		m_animTime = min(m_animTime + dt*4.0f, 1.0f);
 	}
 	else
 	{
-		m_animTime = max(m_animTime - Graphics::getTimeStep()*4.0f, 0.0f);
+		m_animTime = max(m_animTime - dt*4.0f, 0.0f);
 	}
-	UiObject::update();
+	UiObject::update(dt);
 }
 	
 void Button::draw(SpriteBatch *spriteBatch)

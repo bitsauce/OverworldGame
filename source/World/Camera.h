@@ -12,7 +12,7 @@ public:
 	Camera();
 
 	// Look at point
-	void lookAt(Vector2i worldPoint);
+	void lookAt(Vector2 worldPoint);
 
 	// Entity to follow
 	void setTargetEntity(Entity *target) { m_tagetEntity = target; }
@@ -48,7 +48,7 @@ public:
 
 	// Update & draw
 	void update();
-	void draw(SpriteBatch *SpriteBatch);
+	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 	// MouseListener event
 	void mouseWheelEvent(const int dt);

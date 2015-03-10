@@ -9,8 +9,8 @@ class Background
 public:
 	Background(TimeOfDay *timeOfDay);
 
-	void update();
-	void draw(SpriteBatch *SpriteBatch);
+	void update(const float dt);
+	void draw(SpriteBatch *SpriteBatch, const float alpha);
 
 private:
 	

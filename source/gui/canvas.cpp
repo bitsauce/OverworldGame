@@ -16,7 +16,7 @@ Canvas::Canvas(const uint w, const uint h) :
 	m_anchor.set(0.5f, 0.5f);
 }
 
-void Canvas::update()
+void Canvas::updateSize()
 {
 	if(m_useWindowSize)
 	{
@@ -40,5 +40,10 @@ void Canvas::update()
 		m_rect.size = size/Vector2(Window::getSize());
 	}
 	//Debug::setVaraible("Canvas", "("+util::floatToStr(size.x)+", "+util::floatToStr(size.y)+")");
-	UiObject::update();
+}
+
+void Canvas::update(const float dt)
+{
+	updateSize();
+	UiObject::update(dt);
 }

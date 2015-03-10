@@ -18,7 +18,7 @@ GameScene::GameScene(World &world) :
 
 	// Setup canvas
 	canvas = new Canvas();
-	canvas->update();
+	canvas->updateSize();
 
 	RakNet::BitStream bitStream;
 	bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);

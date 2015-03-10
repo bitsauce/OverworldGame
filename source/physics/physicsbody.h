@@ -13,7 +13,7 @@ public:
 
 	void update();
 
-	void draw(xd::SpriteBatch *);
+	void draw(SpriteBatch *);
 
 	void setPosition(const float x, const float y) { m_position.set(x, y); }
 	void setPosition(const Vector2 &pos) { m_position = pos; }
@@ -33,15 +33,22 @@ public:
 	void setAccelerationX(const float ax) { m_acceleration.x = ax; }
 	void setAccelerationY(const float ay) { m_acceleration.y = ay; }
 
+	Vector2 getDrawPosition(const float alpha) {
+		return Vector2(math::lerp(m_prevPosition.x, m_position.x, alpha), math::lerp(m_prevPosition.y, m_position.y, alpha));
+	}
+
 private:
+
 	Vector2 m_acceleration;
 	Vector2 m_velocity;
 	Vector2 m_position;
+	Vector2 m_prevPosition;
 	Vector2 m_size;
 	float m_rotation;
 	float m_gravityScale;
 	bool m_allowRotation;
 	uint m_contact;
+
 	Terrain *m_terrain;
 };
 

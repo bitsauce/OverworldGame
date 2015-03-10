@@ -44,8 +44,8 @@ public:
 	void setAnchor(const Vector2 &anchor);
 	
 	// Update & draw
-	virtual void update();
-	virtual void draw(SpriteBatch *SpriteBatch) { }
+	virtual void update(const float dt);
+	virtual void draw(SpriteBatch *SpriteBatch, const float alpha) { }
 
 protected:
 	// Parent object

@@ -1,10 +1,20 @@
 #include "Humanoid.h"
+#include "Constants.h"
+
 #include "Animation/Animation.h"
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
 
+#include "Physics/PhysicsBody.h"
+
 Humanoid::Humanoid() :
-	m_mainAnimation(nullptr)
+	m_preAnimation(nullptr),
+	m_mainAnimation(nullptr),
+	m_postAnimation(nullptr),
+	m_dt(0.0f),
+	m_preAnimationTime(0.0f),
+	m_mainAnimationTime(0.0f),
+	m_postAnimationTime(0.0f)
 {
 	// Load skeleton data
 	m_skeleton = new Skeleton(":/sprites/characters/anim/skeleton.json", ":/sprites/characters/anim/skeleton.atlas", 1.0f);
@@ -121,33 +131,54 @@ void Humanoid::setBodyPart(const BodyPart part, const Pixmap &pixmap)
 	m_skeleton->getTexture()->updatePixmap(x0, y0, pixmap);
 }
 
-void Humanoid::update()
+void Humanoid::update(const float dt)
 {
+	m_dt = dt;
 	// Update all animations
 	if(m_preAnimation)
 	{
-		m_preAnimationState->update(Graphics::getTimeStep());
+		m_preAnimationTime = 0.0f;
 	}
 
 	if(m_mainAnimation)
 	{
-		m_mainAnimationState->update(Graphics::getTimeStep());
+		m_mainAnimationTime = 0.0f;
 	}
 
 	if(m_postAnimation)
 	{
-		m_postAnimationState->update(Graphics::getTimeStep());
+		m_postAnimationTime = 0.0f;
 	}
 }
 
-#include "physics/physicsbody.h"
-#include "constants.h"
-
-void Humanoid::draw(PhysicsBody *m_body, SpriteBatch *spriteBatch)
+void Humanoid::draw(PhysicsBody *body, SpriteBatch *spriteBatch, const float alpha)
 {
+	// Update all animations
+	if(m_preAnimation)
+	{
+		float next = m_dt * alpha;
+		m_preAnimationState->update(next - m_preAnimationTime);
+		m_preAnimationTime = next;
+	}
+
+	if(m_mainAnimation)
+	{
+		float next = m_dt * alpha;
+		m_mainAnimationState->update(next - m_mainAnimationTime);
+		m_mainAnimationTime = next;
+	}
+
+	if(m_postAnimation)
+	{
+		m_postAnimationState->update(m_postAnimationTime * m_dt * (1.0f-alpha));
+	}
+
 	// Draw skeleton
-	m_skeleton->setPosition(m_body->getPosition() + Vector2(m_body->getSize().x*0.5f, 48.0f));
-	m_skeleton->draw(spriteBatch->getGraphicsContext());
+	m_skeleton->setPosition(body->getDrawPosition(alpha) + Vector2(body->getSize().x*0.5f, 48.0f));
+	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
+	gfxContext.setProjectionMatrix(spriteBatch->getState().projectionMatix);
+	m_skeleton->draw(gfxContext);
+	gfxContext.setProjectionMatrix(Matrix4());
 }
 
 void Humanoid::drawRightHandSprite(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch)

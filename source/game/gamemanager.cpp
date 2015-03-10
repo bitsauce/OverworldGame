@@ -26,14 +26,17 @@
 
 #include "World/Terrain/Terrain.h"
 
-UiObject *canvas = nullptr;
+Canvas *canvas = nullptr;
 
 SpriteBatch *GameManager::s_spriteBatch = nullptr;
 bool GameManager::s_takeScreenshot = false;
 World *GameManager::m_world = nullptr;
 
-void GameManager::main()
+void GameManager::main(GraphicsContext &context)
 {
+	// Sprite batch
+	s_spriteBatch = new SpriteBatch(context);
+
 	// Set some key bindings
 	Input::bind(XD_KEY_ESCAPE, function<void()>(Engine::exit));
 	Input::bind(XD_KEY_SNAPSHOT, function<void()>(GameManager::takeScreenshot));
@@ -66,7 +69,7 @@ void GameManager::exit()
 	delete canvas;
 }
 
-void GameManager::update()
+void GameManager::update(const float dt)
 {
 	if(Connection::getInstance()->isServer())
 	{
@@ -77,9 +80,9 @@ void GameManager::update()
 		((Client*)Connection::getInstance())->update();
 	}
 	
-	m_world->getTimeOfDay()->update();
-	m_world->getBackground()->update();
-	m_world->getCamera()->update();
+	m_world->getTimeOfDay()->update(dt);
+	m_world->getBackground()->update(dt);
+	//m_world->getCamera()->update();
 	m_world->getDebug()->update();
 
 	m_world->getTerrain()->getChunkLoader()->update();
@@ -87,14 +90,12 @@ void GameManager::update()
 	list<Entity*> gameObjects = m_world->getEntities();
 	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
 	{
-		(*itr)->update(Graphics::getTimeStep());
+		(*itr)->update(dt);
 	}
 }
 
-void GameManager::draw(GraphicsContext &context)
+void GameManager::draw(GraphicsContext &context, const float alpha)
 {
-	if(!s_spriteBatch) s_spriteBatch = new SpriteBatch(context);
-
 	if(s_takeScreenshot)
 	{
 		int i = 0;
@@ -106,12 +107,11 @@ void GameManager::draw(GraphicsContext &context)
 	s_spriteBatch->begin();
 	
 	m_world->getDebug()->setVariable("FPS", util::intToStr((int)Graphics::getFPS()));
-	m_world->getBackground()->draw(s_spriteBatch);
-	m_world->getCamera()->draw(s_spriteBatch);
+	m_world->getBackground()->draw(s_spriteBatch, alpha);
 	
+	m_world->getCamera()->draw(s_spriteBatch, alpha);
 
 	m_world->getTerrain()->m_background.draw(s_spriteBatch);
-	
 	m_world->getTerrain()->m_middleground.draw(s_spriteBatch);
 
 	s_spriteBatch->end();
@@ -119,16 +119,17 @@ void GameManager::draw(GraphicsContext &context)
 	list<Entity*> gameObjects = m_world->getEntities();
 	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
 	{
-		(*itr)->draw(s_spriteBatch);
+		(*itr)->draw(s_spriteBatch, alpha);
 	}
 	
 	m_world->getTerrain()->m_foreground.draw(s_spriteBatch);
 	m_world->getLighting()->draw(s_spriteBatch);
-
-	s_spriteBatch->end();
 	
+	s_spriteBatch->end();
 
+	s_spriteBatch->begin();
 	m_world->getDebug()->draw(s_spriteBatch);
+	s_spriteBatch->end();
 
 	SceneManager::update();
 }

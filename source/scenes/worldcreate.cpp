@@ -14,7 +14,7 @@ WorldCreateScene::WorldCreateScene(World &world) :
 	
 	// Setup canvas
 	canvas = new Canvas(800, 600);
-	canvas->update();
+	canvas->updateSize();
 		
 	m_worldNameEdit = new LineEdit(canvas);
 	m_worldNameEdit->setAnchor(Vector2(0.5f, 0.5f));

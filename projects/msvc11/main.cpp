@@ -38,10 +38,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 	Engine *engine = CreateEngine();
 
 	Config config;
-	config.main = &GameManager::main;
-	config.update = &GameManager::update;
-	config.draw = &GameManager::draw;
-	config.end = &GameManager::exit;
+	config.mainFunc = &GameManager::main;
+	config.updateFunc = &GameManager::update;
+	config.drawFunc = &GameManager::draw;
+	config.endFunc = &GameManager::exit;
+
 #ifdef X2D_DEBUG
 	config.workDir = "..\\..\\game\\";
 #endif

@@ -14,6 +14,8 @@
 #include "Animation/Bone.h"
 #include "Gui/GameOverlay.h"
 
+#include "Gui/Canvas.h"
+
 Player::Player(World &world, RakNet::RakNetGUID guid) :
 	Entity(world, ENTITY_PLAYER),
 	m_camera(world.getCamera()),
@@ -62,7 +64,7 @@ Player::~Player()
 	delete m_gameOverlay;
 }
 
-void Player::update()
+void Player::update(const float dt)
 {
 	// Jumping
 	if(m_body.isContact(SOUTH))
@@ -89,7 +91,7 @@ void Player::update()
 			{
 				m_body.applyImpulse(Vector2(0.0f, -0.75f));
 			}
-			m_jumpTimer += Graphics::getTimeStep();
+			m_jumpTimer += dt;
 		}
 		else if(m_body.isContact(WEST) || m_body.isContact(EAST)) // Wall jumping
 		{
@@ -114,7 +116,7 @@ void Player::update()
 	// Walking
 	if(abs(m_body.getVelocity().x) < 10.0f)
 	{
-		m_body.applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (Input::getKeyState(XD_KEY_SHIFT) ? 1.0f : 0.5f), 0.0f));
+		m_body.applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (Input::getKeyState(XD_KEY_SHIFT) ? 50.0f : 25.0f) * dt, 0.0f));
 	}
 
 	// Apply friction
@@ -129,7 +131,7 @@ void Player::update()
 		ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
 		if(item != nullptr && (!item->isSingleShot() || !m_lmbPressed))
 		{
-			item->use(this);
+			item->use(this, dt);
 		}
 		m_lmbPressed = true;
 	}
@@ -140,7 +142,7 @@ void Player::update()
 	}
 	
 	// Set animations
-	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(m_body.getVelocity().x) * 0.5f);
+	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(m_body.getVelocity().x) * 10.0f * dt);
 	if(m_body.isContact(SOUTH))
 	{
 		m_humanoid.getMainAnimationState()->setLooping(true);
@@ -186,7 +188,7 @@ void Player::update()
 	}
 
 	// Update animations
-	m_humanoid.update();
+	m_humanoid.update(dt);
 }
 
 void Player::pack(RakNet::BitStream *bitStream, const Connection *conn)
@@ -226,12 +228,13 @@ void Player::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 	}
 }
 
-void Player::draw(SpriteBatch *spriteBatch)
+void Player::draw(SpriteBatch *spriteBatch, const float alpha)
 {
-	m_humanoid.draw(&m_body, spriteBatch);
+	m_humanoid.draw(&m_body, spriteBatch, alpha);
+
 	ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
 	if(item != nullptr)
 	{
-		item->draw(this, spriteBatch);
+		item->draw(this, spriteBatch, alpha);
 	}
 }

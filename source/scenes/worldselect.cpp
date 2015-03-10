@@ -18,7 +18,7 @@ WorldSelectScene::WorldSelectScene(World &world) :
 	
 	// Setup canvas
 	canvas = new Canvas(800, 600);
-	canvas->update();
+	canvas->updateSize();
 
 	FileSystemIterator itr("saves:/Overworld/", "*", FileSystemIterator::DIRECTORIES);
 	int i = 0;

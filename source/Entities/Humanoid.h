@@ -51,8 +51,8 @@ public:
 
 	Skeleton *getSkeleton() { return m_skeleton; }
 
-	void update();
-	void draw(PhysicsBody *body, SpriteBatch *spriteBatch);
+	void update(const float dt);
+	void draw(PhysicsBody *body, SpriteBatch *spriteBatch, const float alpha);
 	void drawLeftHandSprite(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch);
 	void drawRightHandSprite(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch);
 
@@ -69,6 +69,11 @@ private:
 	Animation *m_mainAnimation;
 	AnimationState *m_postAnimationState;
 	Animation *m_postAnimation;
+
+	float m_dt;
+	float m_preAnimationTime;
+	float m_mainAnimationTime;
+	float m_postAnimationTime;
 };
 
 #endif // HUMANOID_H

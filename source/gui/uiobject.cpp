@@ -27,7 +27,7 @@ bool UiObject::isActive() const
 	return m_active;
 }
 	
-void UiObject::update()
+void UiObject::update(const float)
 {
 	if(getRect().contains(Input::getPosition())) {
 		m_hovered = true;

@@ -12,8 +12,8 @@ class BlockItem : public ItemData
 public:
 	BlockItem(const TerrainLayer layer, const BlockID blockID);
 
-	void use(Player *player);
-	void draw(Player *player, SpriteBatch *spriteBatch);
+	void use(Player *player, const float dt);
+	void draw(Player *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:
 	const TerrainLayer m_layer;

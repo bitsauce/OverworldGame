@@ -18,8 +18,7 @@ public:
 	virtual Vector2 getCenter() const { return getPosition() + getSize() * 0.5f; }
 
 	virtual void update(const float dt) {}
-	virtual void interpolate(const float alpha) {}
-	virtual void draw(SpriteBatch *spriteBatch) {}
+	virtual void draw(SpriteBatch *spriteBatch, const float alpha) {}
 
 protected:
 	World &m_world;

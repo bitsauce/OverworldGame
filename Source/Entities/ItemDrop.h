@@ -15,7 +15,8 @@ public:
 	Vector2 getPosition() const { return m_body.getPosition(); }
 	Vector2 getSize() const { return m_body.getSize(); }
 
-	void update();
+	void update(const float dt);
+	void interpolate(const float alpha) {}
 	void draw(SpriteBatch *spriteBatch);
 
 private:

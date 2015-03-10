@@ -20,10 +20,11 @@ public:
 	Player(World &world, RakNet::RakNetGUID guid);
 	~Player();
 
-	void update();
+	void update(const float dt);
+	void draw(SpriteBatch *spriteBatch, const float alpha);
+
 	void pack(RakNet::BitStream *bitStream, const Connection *conn);
 	void unpack(RakNet::BitStream *bitStream, const Connection *conn);
-	void draw(SpriteBatch *spriteBatch);
 
 	uint getMaxHealth() const { return m_maxHealth; }
 	uint getHealth() const { return m_health; }

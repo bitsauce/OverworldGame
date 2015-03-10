@@ -24,14 +24,14 @@ string LineEdit::getText() const
 	return m_text;
 }
 
-void LineEdit::update()
+void LineEdit::update(const float dt)
 {
-	m_cursorTime -= Graphics::getTimeStep();
+	m_cursorTime -= dt;
 	if(m_cursorTime <= 0.0f)
 	{
 		m_cursorTime = 1.0f;
 	}
-	UiObject::update();
+	UiObject::update(dt);
 }
 
 void LineEdit::draw(SpriteBatch *spriteBatch)

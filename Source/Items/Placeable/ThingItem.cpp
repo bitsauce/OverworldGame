@@ -9,7 +9,7 @@ ThingItem::ThingItem(const ThingID id) :
 {
 }
 
-void ThingItem::use(Player *player)
+void ThingItem::use(Player *player, const float dt)
 {
 	// Get block input position
 	Vector2i blockPos = player->getCamera()->getInputPosition();
@@ -25,7 +25,7 @@ void ThingItem::use(Player *player)
 	}
 }
 
-void ThingItem::draw(Player *player, SpriteBatch *spriteBatch)
+void ThingItem::draw(Player *player, SpriteBatch *spriteBatch, const float alpha)
 {
 	// Get block input position
 	Vector2i blockPos = player->getCamera()->getInputPosition();

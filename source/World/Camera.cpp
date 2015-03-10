@@ -26,7 +26,7 @@ Matrix4 Camera::getProjectionMatrix() const
 	return mat;
 }
 
-void Camera::lookAt(Vector2i worldPoint)
+void Camera::lookAt(Vector2 worldPoint)
 {
 	worldPoint -= m_size * 0.5f;
 	m_position = worldPoint;
@@ -62,9 +62,15 @@ float Camera::getZoomLevel() const
 
 void Camera::update()
 {
+}
+#include "Entities/Player.h"
+
+void Camera::draw(SpriteBatch*, const float alpha)
+{
 	if(m_tagetEntity)
 	{
-		lookAt(m_tagetEntity->getCenter());
+		PhysicsBody *body = &((Player*)m_tagetEntity)->getBody();
+		lookAt(body->getDrawPosition(alpha) + body->getSize() * 0.5f);
 	}
 	else
 	{
@@ -85,10 +91,6 @@ void Camera::update()
 			m_position.y += speed/m_zoomLevel;
 		}
 	}
-}
-
-void Camera::draw(SpriteBatch*)
-{
 }
 
 void Camera::mouseWheelEvent(const int dt)

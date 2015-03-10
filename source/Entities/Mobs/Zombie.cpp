@@ -15,7 +15,7 @@ Zombie::Zombie(World &world) :
 
 #define SGN(x) ((x < 0) ? -1 : (x > 0))
 
-void Zombie::update()
+void Zombie::update(const float dt)
 {
 	Player *closestPlayer = nullptr;
 	for(Player *player : m_world.getPlayers())
@@ -33,10 +33,10 @@ void Zombie::update()
 	}
 
 	m_body.update();
-	m_humanoid.update();
+	m_humanoid.update(dt);
 }
 
 void Zombie::draw(SpriteBatch *spriteBatch)
 {
-	m_humanoid.draw(&m_body, spriteBatch);
+	m_humanoid.draw(&m_body, spriteBatch, 0.0f);
 }

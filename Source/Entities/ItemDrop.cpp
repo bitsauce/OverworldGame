@@ -15,7 +15,7 @@ ItemDrop::ItemDrop(World &world, const Vector2 position, const ItemID item) :
 	m_body.setSize(16.f, 16.f);
 }
 
-void ItemDrop::update()
+void ItemDrop::update(const float dt)
 {
 	list<Player*> players = m_world.getPlayers();
 	for(Player *player : players)

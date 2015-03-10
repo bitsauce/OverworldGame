@@ -30,7 +30,7 @@ MultiplayerScene::MultiplayerScene(World &world) :
 	
 	// Setup canvas
 	canvas = new Canvas(800, 600);
-	canvas->update();
+	canvas->updateSize();
 	
 	m_ipLineEdit = new LineEdit(canvas);
 	m_ipLineEdit->setText("127.0.0.1");

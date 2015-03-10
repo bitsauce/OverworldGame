@@ -12,7 +12,7 @@ class HealthManaStatus : public UiObject
 public:
 	HealthManaStatus(Player *player, UiObject *parent);
 
-	void update();
+	void update(const float dt);
 	void draw(SpriteBatch *spriteBatch);
 
 private:

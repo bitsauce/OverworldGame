@@ -26,7 +26,7 @@ Background::Background(TimeOfDay *timeOfDay) :
 	m_moon.setOrigin(m_moon.getCenter());
 }
 
-void Background::update()
+void Background::update(const float dt)
 {
 	// Get hour and mintue
 	int hour = m_timeOfDay->getHour();
@@ -84,10 +84,10 @@ void Background::update()
 	}
 		
 	// Apply wind
-	m_cloudTime += m_wind * Graphics::getTimeStep();
+	m_cloudTime += m_wind * dt;
 }
 
-void Background::draw(SpriteBatch *spriteBatch)
+void Background::draw(SpriteBatch *spriteBatch, const float alpha)
 {
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 

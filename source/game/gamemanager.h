@@ -8,10 +8,10 @@ class World;
 class GameManager
 {
 public:
-	static void main();
+	static void main(GraphicsContext &context);
 	static void exit();
-	static void update();
-	static void draw(GraphicsContext &context);
+	static void update(const float dt);
+	static void draw(GraphicsContext &context, const float alpha);
 
 	static void takeScreenshot() { s_takeScreenshot = true; }
 

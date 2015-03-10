@@ -22,10 +22,11 @@ HealthManaStatus::HealthManaStatus(Player *player, UiObject *parent) :
 	setPosition(Vector2(-48.0f, 48.0f)/canvas->getSize());
 }
 
-void HealthManaStatus::update()
+void HealthManaStatus::update(const float dt)
 {
 	setSize(Vector2(338.0f, 168.0f)/canvas->getSize());
-	m_heartTime += Graphics::getTimeStep();
+	m_heartTime += dt;
+	UiObject::update(dt);
 }
 
 void HealthManaStatus::draw(SpriteBatch *spriteBatch)

@@ -19,7 +19,7 @@ Pickaxe::Pickaxe() :
 	m_sprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 }
 
-void Pickaxe::use(Player *player)
+void Pickaxe::use(Player *player, const float dt)
 {
 	// Get block input position
 	Vector2i position = player->getCamera()->getInputPosition();
@@ -40,7 +40,7 @@ void Pickaxe::use(Player *player)
 		m_prevBlockPosition = position;
 
 		// Count down and remove block when counter is 0
-		m_mineCounter -= Graphics::getTimeStep();
+		m_mineCounter -= dt;
 		if(m_mineCounter <= 0.0f)
 		{
 			ItemID itemID = (ItemID)terrain->getBlockAt(position.x, position.y, TERRAIN_LAYER_MIDDLE);
@@ -61,7 +61,7 @@ void Pickaxe::use(Player *player)
 	}
 }
 
-void Pickaxe::draw(Player *player, SpriteBatch *spriteBatch)
+void Pickaxe::draw(Player *player, SpriteBatch *spriteBatch, const float alpha)
 {
 	// Is there a block at this position?
 	if(player->getTerrain()->isBlockAt(m_prevBlockPosition.x, m_prevBlockPosition.y, TERRAIN_LAYER_MIDDLE))

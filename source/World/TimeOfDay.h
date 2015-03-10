@@ -34,10 +34,10 @@ public:
 		return !isDay();
 	}
 
-	void update()
+	void update(const float dt)
 	{
 		// Apply time
-		time += Graphics::getTimeStep();
+		time += dt;
 
 		/*// Debug: Time speedup (0 forwards, 9 backwards)
 		if(xd::Input::getKeyState(xd::XD_KEY_0))

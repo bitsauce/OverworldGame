@@ -8,6 +8,7 @@ PhysicsBody::PhysicsBody(World &world) :
 	m_acceleration(0.0f, 0.0f),
 	m_velocity(0.0f, 0.0f),
 	m_position(0.0f, 0.0f),
+	m_prevPosition(0.0f, 0.0f),
 	m_size(1.0f, 1.0f),
 	m_rotation(45.0f),
 	m_gravityScale(1.0f),
@@ -19,6 +20,7 @@ PhysicsBody::PhysicsBody(World &world) :
 
 void PhysicsBody::update()
 {
+	m_prevPosition = m_position;
 	m_contact = 0; 
 	m_acceleration.y += 0.5f;
 	m_velocity += m_acceleration;
@@ -131,6 +133,6 @@ void PhysicsBody::update()
 	}
 }
 
-void PhysicsBody::draw(xd::SpriteBatch *SpriteBatch)
+void PhysicsBody::draw(SpriteBatch *SpriteBatch)
 {
 }

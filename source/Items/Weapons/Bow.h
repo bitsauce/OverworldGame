@@ -8,8 +8,8 @@ class Bow : public ItemData
 {
 public:
 	Bow();
-	void use(Player *player);
-	void draw(Player *player, SpriteBatch *spriteBatch);
+	void use(Player *player, const float dt);
+	void draw(Player *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:
 	Sprite m_bowSprite;

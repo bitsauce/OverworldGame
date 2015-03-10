@@ -8,8 +8,8 @@ class Pickaxe : public ItemData
 {
 public:
 	Pickaxe();
-	void use(Player *player);
-	void draw(Player *player, SpriteBatch *spriteBatch);
+	void use(Player *player, const float dt);
+	void draw(Player *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:
 	Sprite m_cracksSprite;

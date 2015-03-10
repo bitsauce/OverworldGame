@@ -17,7 +17,7 @@ public:
 	void setText(const string &text);
 	string getText() const;
 
-	void update();
+	void update(const float dt);
 	void draw(SpriteBatch *SpriteBatch);
 
 private:

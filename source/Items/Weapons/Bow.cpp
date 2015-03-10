@@ -36,11 +36,11 @@ public:
 		spriteBatch->drawSprite(m_sprite);
 	}
 
-	void update()
+	void update(const float dt)
 	{
 		if(m_hasHit)
 		{
-			m_deleteTime += Graphics::getTimeStep();
+			m_deleteTime += dt;
 			if(m_deleteTime > 10.0f)
 			{
 				delete this;
@@ -66,12 +66,12 @@ private:
 	float m_deleteTime;
 };
 
-void Bow::use(Player *player)
+void Bow::use(Player *player, const float dt)
 {
 	new Arrow(player->getWorld(), player->getBody().getCenter(), player->getWorld().getCamera()->getInputPosition() - player->getBody().getCenter(), 25.0f);
 }
 
-void Bow::draw(Player *player, SpriteBatch *spriteBatch)
+void Bow::draw(Player *player, SpriteBatch *spriteBatch, const float alpha)
 {
 	player->getHumanoid().drawRightHandSprite(m_bowSprite, Vector2(10.0f, 24.0f), spriteBatch);
 }

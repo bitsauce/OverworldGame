@@ -10,7 +10,8 @@ class Zombie : public Entity
 public:
 	Zombie(World &world);
 
-	void update();
+	void update(const float dt);
+	void interpolate(const float alpha) { }
 	void draw(SpriteBatch *spriteBatch);
 
 	PhysicsBody &getBody() { return m_body; }

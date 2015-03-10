@@ -12,7 +12,8 @@ public:
 
 	Vector2i getCanvasSize() const { return m_canvasSize; }
 
-	void update();
+	void updateSize();
+	void update(const float dt);
 
 private:
 	Vector2i m_canvasSize;
