@@ -81,3 +81,4 @@ $RECYCLE.BIN/
 *.vcxproj.user
 *.unsuccessfulbuild
 *.ilk
+*.exp
