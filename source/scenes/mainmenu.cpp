@@ -30,12 +30,10 @@ MainMenuScene::MainMenuScene(World &world) :
 	spBtn->setPosition(Vector2(0.0f, -0.1f));
 	spBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 	spBtn->setAnchor(Vector2(0.5f, 0.5f));
-	addSceneObject(spBtn);
 
 	mpBtn->setPosition(Vector2(0.0f, 0.0f));
 	mpBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 	mpBtn->setAnchor(Vector2(0.5f, 0.5f));
-	addSceneObject(mpBtn);
 }
 
 void MainMenuScene::showWorldSelectScene()

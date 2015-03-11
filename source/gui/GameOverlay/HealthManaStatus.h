@@ -13,7 +13,7 @@ public:
 	HealthManaStatus(Player *player, UiObject *parent);
 
 	void update(const float dt);
-	void draw(SpriteBatch *spriteBatch);
+	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 private:
 	Player *m_player;

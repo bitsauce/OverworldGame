@@ -21,10 +21,10 @@ GameOverlay::~GameOverlay()
 	delete m_healthManaStatus;
 }
 
-void GameOverlay::update()
+void GameOverlay::update(const float dt)
 {
 }
 
-void GameOverlay::draw(SpriteBatch *spriteBatch)
+void GameOverlay::draw(SpriteBatch *spriteBatch, const float dt)
 {
 }

@@ -29,7 +29,7 @@ void HealthManaStatus::update(const float dt)
 	UiObject::update(dt);
 }
 
-void HealthManaStatus::draw(SpriteBatch *spriteBatch)
+void HealthManaStatus::draw(SpriteBatch *spriteBatch, const float alpha)
 {
 	Vector2 position = getPosition();
 	Vector2 size = getSize();
@@ -38,16 +38,18 @@ void HealthManaStatus::draw(SpriteBatch *spriteBatch)
 	{
 		uint x = i % 10, y = i / 10;
 		m_heartSprite.setPosition(position + Vector2(x * 34, y * 34));
+		m_heartSprite.setOrigin(Vector2(16));
 		if(i == m_player->getMaxHealth()/4 - 1)
 		{
-			m_heartSprite.setSize(Vector2(32.0f * (sin(m_heartTime*5.0f) * 0.5f + 0.5f)));
-			m_heartSprite.move((Vector2(32.0f) - m_heartSprite.getSize())/2.0f);
+			m_heartSprite.setScale(Vector2(sin(m_heartTime*5.0f) * 0.5f + 0.5f));
+			m_heartSprite.setRotation(32.0f * m_heartTime * 10.0f);
 		}
 		else
 		{
-			m_heartSprite.setSize(Vector2(32.0f));
+			m_heartSprite.setScale(Vector2(1.0f));
+			m_heartSprite.setRotation(0.0f);
 		}
-		m_heartSprite.setOrigin(m_heartSprite.getCenter());
+		//m_heartSprite.setOrigin(m_heartSprite.getCenter());
 		spriteBatch->drawSprite(m_heartSprite);
 	}
 	

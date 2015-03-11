@@ -30,14 +30,12 @@ WorldSelectScene::WorldSelectScene(World &world) :
 		button->setPosition(Vector2(0.0f, -0.3f + i++*0.1f));
 		button->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 		button->setUserData(new string(worldDir));
-		addSceneObject(button);
 	}
 
 	Button *cwBtn = new Button("Create World", function<void()>(bind(&WorldSelectScene::showCreateWorld, this)), canvas);
 	cwBtn->setAnchor(Vector2(0.5f, 1.0f));
 	cwBtn->setPosition(Vector2(0.0f, -0.1f));
 	cwBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
-	addSceneObject(cwBtn);
 }
 
 void WorldSelectScene::worldClicked()

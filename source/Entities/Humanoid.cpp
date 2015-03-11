@@ -183,19 +183,18 @@ void Humanoid::draw(PhysicsBody *body, SpriteBatch *spriteBatch, const float alp
 
 void Humanoid::drawRightHandSprite(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch)
 {
-	float angle = m_skeleton->findBone("rarm")->getWorldRotation();
-	Vector2 size = sprite.getSize();
+	float angle = m_skeleton->findBone("rhand")->getWorldRotation() + 180.0f;
 	if(m_skeleton->getFlipX())
 	{
-		sprite.setSize(sprite.getSize() * Vector2(-1.0f, 1.0f));
+		sprite.setScaleX(-1.0f);
 	}
 	else
 	{
+		sprite.setScaleX(1.0f);
 		angle *= -1;
 	}
-	sprite.setPosition(m_skeleton->getPosition() + m_skeleton->findBone("rarm")->getWorldPosition() - origin + Vector2(cos(angle * 0.0174532925f), sin(angle * 0.0174532925f)) * 10);
+	sprite.setPosition(m_skeleton->getPosition() + m_skeleton->findBone("rhand")->getWorldPosition() - origin);
 	sprite.setOrigin(origin);
 	sprite.setRotation(angle);
 	spriteBatch->drawSprite(sprite);
-	sprite.setSize(size);
 }

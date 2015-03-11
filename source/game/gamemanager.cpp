@@ -26,6 +26,8 @@
 
 #include "World/Terrain/Terrain.h"
 
+#include "Scenes/Scene.h"
+
 Canvas *canvas = nullptr;
 
 SpriteBatch *GameManager::s_spriteBatch = nullptr;
@@ -40,6 +42,7 @@ void GameManager::main(GraphicsContext &context)
 	// Set some key bindings
 	Input::bind(XD_KEY_ESCAPE, function<void()>(Engine::exit));
 	Input::bind(XD_KEY_SNAPSHOT, function<void()>(GameManager::takeScreenshot));
+	//Window::enableFullscreen();
 	
 	// Initialize game managers
 	BlockData::init();
@@ -92,6 +95,12 @@ void GameManager::update(const float dt)
 	{
 		(*itr)->update(dt);
 	}
+
+	list<UiObject*> uiObjects = SceneManager::getScene()->getUiObjects();
+	for(UiObject *object : uiObjects)
+	{
+		object->update(dt);
+	}
 }
 
 void GameManager::draw(GraphicsContext &context, const float alpha)
@@ -116,6 +125,7 @@ void GameManager::draw(GraphicsContext &context, const float alpha)
 
 	s_spriteBatch->end();
 	s_spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_world->getCamera()->getProjectionMatrix()));
+
 	list<Entity*> gameObjects = m_world->getEntities();
 	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
 	{
@@ -126,8 +136,14 @@ void GameManager::draw(GraphicsContext &context, const float alpha)
 	m_world->getLighting()->draw(s_spriteBatch);
 	
 	s_spriteBatch->end();
-
 	s_spriteBatch->begin();
+
+	list<UiObject*> uiObjects = SceneManager::getScene()->getUiObjects();
+	for(UiObject *object : uiObjects)
+	{
+		object->draw(s_spriteBatch, alpha);
+	}
+
 	m_world->getDebug()->draw(s_spriteBatch);
 	s_spriteBatch->end();
 

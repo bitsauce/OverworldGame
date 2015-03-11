@@ -28,7 +28,7 @@ public:
 		m_body.setGravityScale(0.1f);
 	}
 
-	void draw(SpriteBatch *spriteBatch)
+	void draw(SpriteBatch *spriteBatch, const float alpha)
 	{
 		float angle = m_hasHit ? (m_sprite.getRotation()/180.0f * PI) : atan2(m_body.getVelocity().y, m_body.getVelocity().x);
 		m_sprite.setRotation(angle * (180.0f/PI));

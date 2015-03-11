@@ -1,6 +1,8 @@
-#include "uiobject.h"
+#include "UiObject.h"
 
-#include "constants.h"
+#include "Scenes/Scene.h"
+
+#include "Constants.h"
 
 UiObject::UiObject(UiObject *parent) :
 	m_parent(parent),
@@ -10,6 +12,12 @@ UiObject::UiObject(UiObject *parent) :
 	m_pressed(false),
 	m_active(false)
 {
+	Scene::addUiObject(this);
+}
+
+UiObject::~UiObject()
+{
+	Scene::removeUiObject(this);
 }
 	
 bool UiObject::isPressed() const

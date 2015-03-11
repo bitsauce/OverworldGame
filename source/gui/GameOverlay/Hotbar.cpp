@@ -25,12 +25,12 @@ Hotbar::Hotbar(Player *player, UiObject *parent) :
 	setPosition(Vector2(.0f));
 }
 
-void Hotbar::update()
+void Hotbar::update(const float dt)
 {
 	setSize(Vector2(490.f, 56.f)/canvas->getSize());
 }
 
-void Hotbar::draw(SpriteBatch *spriteBatch)
+void Hotbar::draw(SpriteBatch *spriteBatch, const float alpha)
 {
 	// Get size and position
 	Vector2 position = getPosition();

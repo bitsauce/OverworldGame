@@ -15,8 +15,8 @@ public:
 	GameOverlay(Player *player, UiObject *object);
 	~GameOverlay();
 
-	void update();
-	void draw(SpriteBatch *spriteBatch);
+	void update(const float dt);
+	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 private:
 

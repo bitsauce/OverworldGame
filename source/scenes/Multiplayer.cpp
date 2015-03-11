@@ -37,26 +37,22 @@ MultiplayerScene::MultiplayerScene(World &world) :
 	m_ipLineEdit->setAnchor(Vector2(0.5f, 0.5f));
 	m_ipLineEdit->setPosition(Vector2(-0.2f, -0.1f));
 	m_ipLineEdit->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
-	addSceneObject(m_ipLineEdit);
 	
 	m_portLineEdit = new LineEdit(canvas);
 	m_portLineEdit->setText("5555");
 	m_portLineEdit->setAnchor(Vector2(0.5f, 0.5f));
 	m_portLineEdit->setPosition(Vector2(0.2f, -0.1f));
 	m_portLineEdit->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
-	addSceneObject(m_portLineEdit);
 	
 	Button *joinBtn = new Button("Join", function<void()>(bind(&MultiplayerScene::join, this)), canvas);
 	joinBtn->setAnchor(Vector2(0.5f, 1.0f));
 	joinBtn->setPosition(Vector2(0.2f, -0.1f));
 	joinBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
-	addSceneObject(joinBtn);
 	
 	Button *hostBtn = new Button("Host", function<void()>(bind(&MultiplayerScene::host, this)), canvas);
 	hostBtn->setAnchor(Vector2(0.5f, 1.0f));
 	hostBtn->setPosition(Vector2(-0.2f, -0.1f));
 	hostBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
-	addSceneObject(hostBtn);
 }
 
 void MultiplayerScene::host()

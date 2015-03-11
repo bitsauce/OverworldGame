@@ -7,14 +7,18 @@
 class Scene
 {
 	friend class SceneManager;
+	friend class UiObject;
 protected:
 	virtual ~Scene() { for(UiObject *object : m_sceneObjects) delete object; }
 
-	void addSceneObject(UiObject *object) { m_sceneObjects.push_back(object); }
-	void removeSceneObject(UiObject *object) { m_sceneObjects.remove(object); }
+	static void addUiObject(UiObject *object) { m_sceneObjects.push_back(object); }
+	static void removeUiObject(UiObject *object) { m_sceneObjects.remove(object); }
+
+public:
+	static list<UiObject*> getUiObjects() { return m_sceneObjects; }
 
 private:
-	list<UiObject*> m_sceneObjects;
+	static list<UiObject*> m_sceneObjects;
 };
 
 #endif // SCENE_H
