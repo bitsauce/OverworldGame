@@ -16,12 +16,12 @@ public:
 	Vector2 getSize() const { return m_body.getSize(); }
 
 	void update(const float dt);
-	void interpolate(const float alpha) {}
-	void draw(SpriteBatch *spriteBatch);
+	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 private:
 	const ItemID m_itemID;
 	PhysicsBody m_body;
+	Vector2 m_prevPosition;
 	float m_dragDistance;
 	float m_pickupDistance;
 };

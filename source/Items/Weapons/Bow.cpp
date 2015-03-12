@@ -17,9 +17,7 @@ public:
 	Arrow(World &world, const Vector2 &pos, const Vector2 &dir, const float speed) :
 		Entity(world, ENTITY_ARROW),
 		m_sprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Weapons/Arrow.png")),
-		m_prevPosition(0.0f, 0.0f),
-		m_angle(0.0f),
-		m_prevAngle(0.0f),
+		m_prevPosition(pos),
 		m_hasHit(false),
 		m_deleteTime(0.0f),
 		m_body(world)
@@ -29,9 +27,7 @@ public:
 		m_body.setPosition(pos);
 		m_body.setVelocity(dir.normalized() * speed);
 		m_body.setGravityScale(0.1f);
-
-		update(0.0f);
-		update(0.0f);
+		m_angle = m_prevAngle = atan2(dir.y, dir.x);
 	}
 
 	void draw(SpriteBatch *spriteBatch, const float alpha)

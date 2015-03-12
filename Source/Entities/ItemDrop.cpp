@@ -17,6 +17,8 @@ ItemDrop::ItemDrop(World &world, const Vector2 position, const ItemID item) :
 
 void ItemDrop::update(const float dt)
 {
+	m_prevPosition = m_body.getPosition();
+
 	list<Player*> players = m_world.getPlayers();
 	for(Player *player : players)
 	{
@@ -36,7 +38,7 @@ void ItemDrop::update(const float dt)
 	m_body.update(dt);
 }
 
-void ItemDrop::draw(SpriteBatch *spriteBatch)
+void ItemDrop::draw(SpriteBatch *spriteBatch, const float alpha)
 {
-	spriteBatch->drawSprite(Sprite(ItemData::get(m_itemID)->getIconTexture(), Rect(m_body.getPosition(), m_body.getSize())));
+	spriteBatch->drawSprite(Sprite(ItemData::get(m_itemID)->getIconTexture(), Rect(math::lerp(m_prevPosition, m_body.getPosition(), alpha), m_body.getSize())));
 }
