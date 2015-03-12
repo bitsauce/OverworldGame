@@ -11,7 +11,7 @@ class PhysicsBody
 public:
 	PhysicsBody(World &world);
 
-	void update();
+	void update(const float dt);
 
 	void draw(SpriteBatch *);
 

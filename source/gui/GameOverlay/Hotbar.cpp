@@ -20,6 +20,8 @@ Hotbar::Hotbar(Player *player, UiObject *parent) :
 	m_spriteBackground.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 	m_spriteBackground.setDepth(-2.f);
 
+	m_font->setDepth(1.f);
+
 	setAnchor(Vector2(0.5f, 0.98f));
 	setSize(Vector2(490.f, 56.f)/canvas->getSize());
 	setPosition(Vector2(.0f));

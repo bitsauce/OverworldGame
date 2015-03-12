@@ -32,7 +32,7 @@ void Zombie::update(const float dt)
 		m_body.setVelocityX(SGN(playerPosition.x - position.x) * 10.0f);
 	}
 
-	m_body.update();
+	m_body.update(dt);
 	m_humanoid.update(dt);
 }
 

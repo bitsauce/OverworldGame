@@ -18,11 +18,11 @@ PhysicsBody::PhysicsBody(World &world) :
 {
 }
 
-void PhysicsBody::update()
+void PhysicsBody::update(const float dt)
 {
 	m_prevPosition = m_position;
 	m_contact = 0; 
-	m_acceleration.y += 0.5f;
+	m_acceleration.y += 2.0f;
 	m_velocity += m_acceleration;
 	m_acceleration.set(0.0f, 0.0f);
 

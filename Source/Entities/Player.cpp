@@ -64,6 +64,32 @@ Player::~Player()
 	delete m_gameOverlay;
 }
 
+void Player::mouseWheelEvent(const int dt)
+{
+	if(dt < 0)
+	{
+		if(m_selectedItemSlot == 9)
+		{
+			m_selectedItemSlot = 0;
+		}
+		else
+		{
+			m_selectedItemSlot += 1;
+		}
+	}
+	else
+	{
+		if(m_selectedItemSlot == 0)
+		{
+			m_selectedItemSlot = 9;
+		}
+		else
+		{
+			m_selectedItemSlot -= 1;
+		}
+	}
+}
+
 void Player::update(const float dt)
 {
 	// Jumping
@@ -73,7 +99,7 @@ void Player::update(const float dt)
 		{
 			if(m_canJump)
 			{
-				m_body.applyImpulse(Vector2(0.0f, -4.5f));
+				m_body.applyImpulse(Vector2(0.0f, -12.0f));
 				m_jumpTimer = 0.0f;
 				m_canJump = false;
 			}
@@ -89,13 +115,13 @@ void Player::update(const float dt)
 		{
 			if(m_inputState[INPUT_JUMP]) // High/low jumping
 			{
-				m_body.applyImpulse(Vector2(0.0f, -0.75f));
+				m_body.applyImpulse(Vector2(0.0f, -2.5f));
 			}
 			m_jumpTimer += dt;
 		}
 		else if(m_body.isContact(WEST) || m_body.isContact(EAST)) // Wall jumping
 		{
-			m_body.setVelocityY(m_body.getVelocity().y*0.5f);
+			m_body.setVelocityY(m_body.getVelocity().y * 0.5f);
 			if(m_inputState[INPUT_JUMP])
 			{
 				if(m_canJump)
@@ -114,16 +140,25 @@ void Player::update(const float dt)
 	}
 
 	// Walking
-	if(abs(m_body.getVelocity().x) < 10.0f)
+	m_body.applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (Input::getKeyState(XD_KEY_SHIFT) ? 2.0f : 1.0f) * 10.0f, 0.0f));
+	if(m_body.getVelocity().x < -5.0f)
 	{
-		m_body.applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (Input::getKeyState(XD_KEY_SHIFT) ? 50.0f : 25.0f) * dt, 0.0f));
+		m_body.setVelocityX(-5.0f);
+		m_body.setAccelerationX(0.0f);
+	}
+	else if(m_body.getVelocity().x > 5.0f)
+	{
+		m_body.setVelocityX(5.0f);
+		m_body.setAccelerationX(0.0f);
+	}
+	else
+	{
+		// Apply friction
+		m_body.setVelocityX(m_body.getVelocity().x * 0.85f * dt);
 	}
 
-	// Apply friction
-	m_body.setVelocityX(m_body.getVelocity().x * 0.85f);
-
 	// Update physics
-	m_body.update();
+	m_body.update(dt);
 
 	// Use current item
 	if(Input::getKeyState(XD_LMB))

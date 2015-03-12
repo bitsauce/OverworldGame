@@ -18,7 +18,7 @@ private:
 	Sprite m_sprite;
 	float m_growTimer;
 
-	static void Factory(World &, const int x, const int y) { new RedCurrantBush(x, y); }
+	static Thing *Factory(World &, const int x, const int y) { return new RedCurrantBush(x, y); }
 };
 
 #endif // RED_CURRANT_BUSH_H

@@ -8,6 +8,8 @@ class Thing
 public:
 	Thing(const int x, const int y);
 
+	virtual void draw(SpriteBatch *spriteBatch, const float alpha) { }
+
 private:
 	const int m_x, m_y;
 };

@@ -9,6 +9,7 @@
 
 #include "Items/ItemData.h"
 
+#include "Things/Thing.h"
 #include "Things/ThingData.h"
 
 #include "World/World.h"
@@ -85,7 +86,6 @@ void GameManager::update(const float dt)
 	
 	m_world->getTimeOfDay()->update(dt);
 	m_world->getBackground()->update(dt);
-	//m_world->getCamera()->update();
 	m_world->getDebug()->update();
 
 	m_world->getTerrain()->getChunkLoader()->update();
@@ -118,13 +118,20 @@ void GameManager::draw(GraphicsContext &context, const float alpha)
 	m_world->getDebug()->setVariable("FPS", util::intToStr((int)Graphics::getFPS()));
 	m_world->getBackground()->draw(s_spriteBatch, alpha);
 	
-	m_world->getCamera()->draw(s_spriteBatch, alpha);
-
-	m_world->getTerrain()->m_background.draw(s_spriteBatch);
-	m_world->getTerrain()->m_middleground.draw(s_spriteBatch);
-
+	m_world->getCamera()->update(alpha);
+	
 	s_spriteBatch->end();
 	s_spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_world->getCamera()->getProjectionMatrix()));
+
+	m_world->getTerrain()->m_background.draw(s_spriteBatch);
+
+	set<Thing*> things = m_world->getTerrain()->getChunkLoader()->getActiveThings();
+	for(Thing *thing : things)
+	{
+		thing->draw(s_spriteBatch, alpha);
+	}
+
+	m_world->getTerrain()->m_middleground.draw(s_spriteBatch);
 
 	list<Entity*> gameObjects = m_world->getEntities();
 	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)

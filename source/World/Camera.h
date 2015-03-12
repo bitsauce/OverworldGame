@@ -46,9 +46,8 @@ public:
 	// Get input position
 	Vector2 getInputPosition() const;
 
-	// Update & draw
-	void update();
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	// Update
+	void update(const float alpha);
 
 	// MouseListener event
 	void mouseWheelEvent(const int dt);

@@ -60,12 +60,9 @@ float Camera::getZoomLevel() const
 	return m_zoomLevel;
 }
 
-void Camera::update()
-{
-}
 #include "Entities/Player.h"
 
-void Camera::draw(SpriteBatch*, const float alpha)
+void Camera::update(const float alpha)
 {
 	if(m_tagetEntity)
 	{
@@ -95,10 +92,10 @@ void Camera::draw(SpriteBatch*, const float alpha)
 
 void Camera::mouseWheelEvent(const int dt)
 {
-	Vector2 center = getCenter();
+	/*Vector2 center = getCenter();
 	if(dt > 0) zoomIn();
 	if(dt < 0) zoomOut();
-	lookAt(center);
+	lookAt(center);*/
 }
 
 void Camera::resizeEvent(uint width, uint height)

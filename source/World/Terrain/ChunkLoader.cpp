@@ -206,6 +206,25 @@ ChunkLoader::ChunkArea ChunkLoader::getLoadArea() const
 	return m_loadArea;
 }
 
+set<Thing*> ChunkLoader::getActiveThings()
+{
+	set<Thing*> things;
+	for(int y = m_activeArea.y0-1; y <= m_activeArea.y1+1; y++)
+	{
+		for(int x = m_activeArea.x0-1; x <= m_activeArea.x1+1; x++)
+		{
+			for(Thing *thing : getChunkAt(x, y).getThings())
+			{
+				if(things.find(thing) == things.end())
+				{
+					things.insert(thing);
+				}
+			}
+		}
+	}
+	return things;
+}
+
 float round(float d)
 {
 	return floor(d + 0.5f);

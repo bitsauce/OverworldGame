@@ -14,7 +14,7 @@ class ItemData;
 class ItemContainer;
 class Connection;
 
-class Player : public Entity, public NetworkObject
+class Player : public Entity, public NetworkObject, public MouseListener
 {
 public:
 	Player(World &world, RakNet::RakNetGUID guid);
@@ -42,6 +42,8 @@ public:
 	ItemContainer &getItemContainer() { return m_itemContainer; }
 	Humanoid &getHumanoid() { return m_humanoid; }
 	PhysicsBody &getBody() { return m_body; }
+
+	void mouseWheelEvent(const int dt);
 
 private:
 	// Managers

@@ -5,6 +5,7 @@
 #include "Constants.h"
 
 class WorldGenerator;
+class Thing;
 
 class Chunk
 {
@@ -28,6 +29,10 @@ public:
 	bool isBlockAt(const int x, const int y, TerrainLayer layer) const;
 	bool isBlockOccupied(const int x, const int y, TerrainLayer layer) const;
 	bool setBlockAt(const int x, const int y, const BlockID block, TerrainLayer layer);
+
+	void addThing(Thing *thing) { m_things.push_back(thing); }//bool setThingAt(const int x, const int y, Thing *thing);
+	void removeThing(Thing *thing) { m_things.remove(thing); }//Thing *getThingAt(const int x, const int y) const;
+	list<Thing*> getThings() const { return m_things; }
 	
 	// DRAWING
 	void draw(GraphicsContext &gfxContext, const TerrainLayer layer);
@@ -64,6 +69,9 @@ private:
 	// LIGHTING
 	Texture2DPtr m_shadowMap;
 	
+	// THINGS
+	list<Thing*> m_things;
+
 	// MISC
 	bool m_modified;
 	bool m_dirty[TERRAIN_LAYER_COUNT];

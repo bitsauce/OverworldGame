@@ -5,7 +5,10 @@
 #include "Terrain.h"
 #include "Constants.h"
 #include "Blocks/BlockData.h"
+
+#include "Things/Thing.h"
 #include "Things/ThingData.h"
+
 #include "World/World.h"
 #include "World/Lighting/Spotlight.h"
 #include "World/Camera.h"
@@ -73,7 +76,13 @@ bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRA
 // BLOCK ENTITIES
 bool Terrain::setThingAt(const int x, const int y, ThingID blockEntity)
 {
-	return ThingData::get(blockEntity).tryPlace(x, y);
+	Thing *thing = ThingData::get(blockEntity).tryPlace(x, y);
+	if(thing != nullptr)
+	{
+		m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).addThing(thing);
+		return true;
+	}
+	return false;
 }
 
 // DRAWING

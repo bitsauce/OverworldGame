@@ -6,6 +6,7 @@
 
 class Camera;
 class World;
+class Thing;
 
 class ChunkLoader : public WindowListener
 {
@@ -31,6 +32,8 @@ public:
 
 	ChunkArea getActiveArea() const;
 	ChunkArea getLoadArea(/*const uint areaIndex*/) const;
+
+	set<Thing*> getActiveThings();
 
 	void update();
 

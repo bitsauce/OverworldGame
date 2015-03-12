@@ -33,7 +33,7 @@ void ItemDrop::update(const float dt)
 		}
 	}
 
-	m_body.update();
+	m_body.update(dt);
 }
 
 void ItemDrop::draw(SpriteBatch *spriteBatch)

@@ -11,7 +11,7 @@ Torch::Torch(World &world, const int x, const int y) :
 	m_sprite.setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
 }
 
-void Torch::draw(SpriteBatch *spriteBatch)
+void Torch::draw(SpriteBatch *spriteBatch, const float alpha)
 {
 	spriteBatch->drawSprite(m_sprite);
 }

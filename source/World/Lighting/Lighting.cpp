@@ -78,11 +78,9 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 		gfxContext.enable(GraphicsContext::BLEND);
 		gfxContext.setShader(m_radialLightingShader);
 		gfxContext.setBlendState(BlendState::PRESET_ADDITIVE);
-		for(list<LightSource*>::iterator itr = m_lightSources.begin(); itr != m_lightSources.end(); ++itr)
+		for(LightSource *light : m_lightSources)
 		{
-			LightSource *light = *itr;
-
-			Vector2 pos = light->getPosition() - Vector2(area.x0, area.y0)*CHUNK_BLOCKSF + Vector2(0.5f, 0.5f);
+			Vector2 pos = light->getPosition() - Vector2(area.x0 - 1, area.y0 - 1) * CHUNK_BLOCKSF + Vector2(0.5f, 0.5f);
 			m_radialLightingShader->setSampler2D("u_lightMap", m_lightingRenderTarget->getTexture());
 			m_radialLightingShader->setUniform2f("u_lightTexCoord", pos.x/m_width, 1.0f - (pos.y/m_height));
 			m_radialLightingShader->setUniform2f("u_radius", light->getRadius()/m_width, light->getRadius()/m_height);
