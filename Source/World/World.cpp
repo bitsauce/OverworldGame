@@ -11,7 +11,7 @@
 #include "Terrain/Terrain.h"
 
 #include "Generation/Generator.h"
-#include "Physics/PhysicsBody.h"
+#include "Entities/Physics/DynamicEntity.h"
 #include "Entities/Player.h"
 #include "Lighting/Lighting.h"
 #include "Scenes/SceneManager.h"

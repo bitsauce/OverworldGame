@@ -66,8 +66,7 @@ void Camera::update(const float alpha)
 {
 	if(m_tagetEntity)
 	{
-		PhysicsBody *body = &((Player*)m_tagetEntity)->getBody();
-		lookAt(body->getDrawPosition(alpha) + body->getSize() * 0.5f);
+		lookAt(m_tagetEntity->getDrawPosition(alpha) + m_tagetEntity->getSize() * 0.5f);
 	}
 	else
 	{

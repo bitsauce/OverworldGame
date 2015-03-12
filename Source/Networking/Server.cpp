@@ -13,7 +13,7 @@
 #include "World/World.h"
 #include "World/Terrain/Terrain.h"
 #include "Entities/Player.h"
-#include "Physics/PhysicsBody.h"
+#include "Entities/Physics/DynamicEntity.h"
 
 Server::Server(World &world, const ushort port) :
 	Connection(true),
@@ -84,7 +84,7 @@ void Server::update()
 				player->SetNetworkIDManager(&m_networkIDManager);
 				m_networkObjects.push_back(player);
 
-				player->getBody().setPosition(0, 0);
+				player->setPosition(Vector2(0, 0));
 				player->getItemContainer().addItem(ITEM_PICKAXE_IRON);
 				player->getItemContainer().addItem(ITEM_TORCH, 255);
 				player->getItemContainer().addItem(ITEM_BOW_WOODEN);

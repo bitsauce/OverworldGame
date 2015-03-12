@@ -1,10 +1,11 @@
-#include "physicsbody.h"
-#include "constants.h"
+#include "DynamicEntity.h"
+#include "Constants.h"
 
 #include "World/World.h"
 #include "World/Terrain/Terrain.h"
 
-PhysicsBody::PhysicsBody(World &world) :
+DynamicEntity::DynamicEntity(World &world, const EntityID id) :
+	Entity(world, id),
 	m_acceleration(0.0f, 0.0f),
 	m_velocity(0.0f, 0.0f),
 	m_position(0.0f, 0.0f),
@@ -18,7 +19,7 @@ PhysicsBody::PhysicsBody(World &world) :
 {
 }
 
-void PhysicsBody::update(const float dt)
+void DynamicEntity::update(const float dt)
 {
 	m_prevPosition = m_position;
 	m_contact = 0; 
@@ -131,8 +132,4 @@ void PhysicsBody::update(const float dt)
 			}
 		}
 	}
-}
-
-void PhysicsBody::draw(SpriteBatch *SpriteBatch)
-{
 }

@@ -15,7 +15,7 @@
 #include "World/Terrain/Terrain.h"
 
 #include "Entities/Player.h"
-#include "Physics/PhysicsBody.h"
+#include "Entities/Physics/DynamicEntity.h"
 
 Client::Client(World &world, const string &ip, const ushort port) :
 	Connection(false),
@@ -73,7 +73,7 @@ void Client::update()
 
 				m_networkObjects.push_back(player);
 
-				player->getBody().setPosition(0, 0);
+				player->setPosition(Vector2(0, 0));
 				player->getItemContainer().addItem(ITEM_PICKAXE_IRON);
 				player->getItemContainer().addItem(ITEM_TORCH, 255);
 			}

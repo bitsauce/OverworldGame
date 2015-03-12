@@ -2,43 +2,41 @@
 #define PHYSICS_BODY_H
 
 #include "Config.h"
+#include "Entities/Entity.h"
 
 class Terrain;
 class World;
 
-class PhysicsBody
+class DynamicEntity : public Entity
 {
 public:
-	PhysicsBody(World &world);
+	DynamicEntity(World &world, const EntityID id);
 
-	void update(const float dt);
+	virtual void update(const float dt);
+	//void debugDraw(SpriteBatch *spriteBatch, const float alpha);
 
-	void draw(SpriteBatch *);
-
-	void setPosition(const float x, const float y) { m_position.set(x, y); }
 	void setPosition(const Vector2 &pos) { m_position = pos; }
 	Vector2 getPosition() const { return m_position; }
-	void setSize(const float w, const float h) { m_size.set(w, h); }
+
+	void setSize(const Vector2 &size) { m_size = size; }
 	Vector2 getSize() const { return m_size; }
+
 	void setVelocity(const Vector2 &velocity) { m_velocity = velocity; }
 	Vector2 getVelocity() const { return m_velocity; }
-	void setVelocityX(const float x) { m_velocity.x = x; }
-	void setVelocityY(const float y) { m_velocity.y = y; }
-	Vector2 getCenter() const { return m_position + m_size * 0.5f; }
-	Rect getRect() const { return Rect(m_position, m_size); }
+
 	bool isContact(const uint dir) { return (m_contact & dir) != 0; }
+	
 	void setGravityScale(const float gs) { m_gravityScale = gs; }
+	float getGravityScale() const { return m_gravityScale; }
 
+	void setAcceleration(const Vector2 &acc) { m_acceleration = acc; }
+	Vector2 getAcceleration() const { return m_acceleration; }
+	
 	void applyImpulse(const Vector2 &impulse) { m_acceleration += impulse; }
-	void setAccelerationX(const float ax) { m_acceleration.x = ax; }
-	void setAccelerationY(const float ay) { m_acceleration.y = ay; }
 
-	Vector2 getDrawPosition(const float alpha) {
-		return Vector2(math::lerp(m_prevPosition.x, m_position.x, alpha), math::lerp(m_prevPosition.y, m_position.y, alpha));
-	}
+	Vector2 getDrawPosition(const float alpha) { return math::lerp(m_prevPosition, m_position, alpha); }
 
 private:
-
 	Vector2 m_acceleration;
 	Vector2 m_velocity;
 	Vector2 m_position;

@@ -5,7 +5,7 @@
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
 
-#include "Physics/PhysicsBody.h"
+#include "Entities/Physics/DynamicEntity.h"
 
 Humanoid::Humanoid() :
 	m_preAnimation(nullptr),
@@ -157,7 +157,7 @@ void Humanoid::update(const float dt)
 	}
 }
 
-void Humanoid::draw(PhysicsBody *body, SpriteBatch *spriteBatch, const float alpha)
+void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha)
 {
 	// Update all animations
 	if(m_preAnimation)

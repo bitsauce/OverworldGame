@@ -4,11 +4,10 @@
 #include "Constants.h"
 
 Zombie::Zombie(World &world) :
-	Entity(world, ENTITY_ZOMBIE),
-	m_body(world)
+	DynamicEntity(world, ENTITY_ZOMBIE)
 {
 	// Set body size
-	m_body.setSize(24, 48);
+	Entity::setSize(24, 48);
 
 	//setBodyPart(HEAD, ResourceManager::get<Texture2D>(":/Sprites/Mobs/Zombie/Head.png")->getPixmap());
 }
@@ -20,7 +19,7 @@ void Zombie::update(const float dt)
 	Player *closestPlayer = nullptr;
 	for(Player *player : m_world.getPlayers())
 	{
-		if(!closestPlayer || (player->getBody().getCenter() - m_body.getCenter()).magnitude() < (closestPlayer->getBody().getCenter() - m_body.getCenter()).magnitude())
+		if(!closestPlayer || (player->getCenter() - getCenter()).magnitude() < (closestPlayer->getCenter() - getCenter()).magnitude())
 		{
 			closestPlayer = player;
 		}
@@ -28,15 +27,15 @@ void Zombie::update(const float dt)
 
 	if(closestPlayer)
 	{
-		Vector2 playerPosition = closestPlayer->getBody().getCenter(), position = m_body.getCenter();
-		m_body.setVelocityX(SGN(playerPosition.x - position.x) * 10.0f);
+		Vector2 playerPosition = closestPlayer->getCenter(), position = getCenter();
+		setVelocityX(SGN(playerPosition.x - position.x) * 10.0f);
 	}
 
-	m_body.update(dt);
 	m_humanoid.update(dt);
+	DynamicEntity::update(dt);
 }
 
-void Zombie::draw(SpriteBatch *spriteBatch)
+void Zombie::draw(SpriteBatch *spriteBatch, const float alpha)
 {
-	m_humanoid.draw(&m_body, spriteBatch, 0.0f);
+	m_humanoid.draw(this, spriteBatch, 0.0f);
 }

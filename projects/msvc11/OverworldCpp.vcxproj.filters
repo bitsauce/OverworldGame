@@ -4,9 +4,6 @@
     <ClCompile Include="..\..\source\Noise\Simplex.cpp">
       <Filter>Source\Noise</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\physics\PhysicsBody.cpp">
-      <Filter>Source\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\gui\Button.cpp">
       <Filter>Source\Gui</Filter>
     </ClCompile>
@@ -170,6 +167,9 @@
     <ClCompile Include="..\..\source\World\Terrain\Terrain.cpp">
       <Filter>Source\World\Terrain</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\Physics\DynamicEntity.cpp">
+      <Filter>Source\Entities\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -186,9 +186,6 @@
     </Filter>
     <Filter Include="Source\Scenes">
       <UniqueIdentifier>{a771c727-de3c-48d8-93c5-0076f2474292}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Physics">
-      <UniqueIdentifier>{e03c2679-3c51-49ab-a1d8-899ba002d17a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Items">
       <UniqueIdentifier>{1f91a026-3a45-40fe-ac3f-6910a38f5067}</UniqueIdentifier>
@@ -244,6 +241,9 @@
     <Filter Include="Source\World\Terrain">
       <UniqueIdentifier>{36e472f3-e1ff-4bf6-8120-0dbec018c0fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Entities\Physics">
+      <UniqueIdentifier>{e03c2679-3c51-49ab-a1d8-899ba002d17a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\Noise\Simplex.h">
@@ -251,9 +251,6 @@
     </ClInclude>
     <ClInclude Include="..\..\source\Constants.h">
       <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\physics\PhysicsBody.h">
-      <Filter>Source\Physics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\gui\Button.h">
       <Filter>Source\Gui</Filter>
@@ -422,6 +419,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\World\Terrain\Terrain.h">
       <Filter>Source\World\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\Physics\DynamicEntity.h">
+      <Filter>Source\Entities\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

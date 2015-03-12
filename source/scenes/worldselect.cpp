@@ -8,7 +8,7 @@
 #include "Gui/Canvas.h"
 
 #include "Constants.h"
-#include "Physics/PhysicsBody.h"
+#include "Entities/Physics/DynamicEntity.h"
 #include "Entities/Player.h"
 
 WorldSelectScene::WorldSelectScene(World &world) :

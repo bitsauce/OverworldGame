@@ -4,9 +4,8 @@
 #include "Config.h"
 #include "Game/ItemContainer.h"
 #include "Networking/NetworkObject.h"
-#include "Entity.h"
 #include "Humanoid.h"
-#include "Physics/PhysicsBody.h"
+#include "Entities/Physics/DynamicEntity.h"
 
 class Camera;
 class Terrain;
@@ -14,7 +13,7 @@ class ItemData;
 class ItemContainer;
 class Connection;
 
-class Player : public Entity, public NetworkObject, public MouseListener
+class Player : public DynamicEntity, public NetworkObject, public MouseListener
 {
 public:
 	Player(World &world, RakNet::RakNetGUID guid);
@@ -32,16 +31,12 @@ public:
 	void setSelectedItemSlot(const uint slot) { m_selectedItemSlot = slot; }
 	uint getSelectedItemSlot() const { return m_selectedItemSlot; }
 
-	Vector2 getPosition() const { return m_body.getPosition(); }
-	Vector2 getSize() const { return m_body.getSize(); }
-
 	World &getWorld() const { return m_world; }
 	Camera *getCamera() const { return m_camera; }
 	Terrain *getTerrain() const { return m_terrain; }
 
 	ItemContainer &getItemContainer() { return m_itemContainer; }
 	Humanoid &getHumanoid() { return m_humanoid; }
-	PhysicsBody &getBody() { return m_body; }
 
 	void mouseWheelEvent(const int dt);
 
@@ -77,7 +72,6 @@ private:
 	bool m_inputState[INPUT_COUNT];
 
 	// Physics
-	PhysicsBody m_body;
 	float m_jumpTimer;
 	bool m_canJump;
 

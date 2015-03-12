@@ -5,25 +5,24 @@
 #include "Items/ItemData.h"
 
 ItemDrop::ItemDrop(World &world, const Vector2 position, const ItemID item) :
-	Entity(world, ENTITY_ITEM_DROP),
+	DynamicEntity(world, ENTITY_ITEM_DROP),
 	m_itemID(item),
-	m_body(world),
 	m_dragDistance(16.0f * BLOCK_PXF),
 	m_pickupDistance(16.0f)
 {
-	m_body.setPosition(position.x, position.y);
-	m_body.setSize(16.f, 16.f);
+	setPosition(position);
+	Entity::setSize(16.f, 16.f);
 }
 
 void ItemDrop::update(const float dt)
 {
-	m_prevPosition = m_body.getPosition();
+	m_prevPosition = getPosition();
 
 	list<Player*> players = m_world.getPlayers();
 	for(Player *player : players)
 	{
-		Vector2 deltaPosition = player->getBody().getCenter() - m_body.getCenter();
-		if(player->getBody().getRect().contains(m_body.getCenter()))
+		Vector2 deltaPosition = player->getCenter() - getCenter();
+		if(player->getRect().contains(getCenter()))
 		{
 			player->getItemContainer().addItem(m_itemID);
 			delete this;
@@ -31,14 +30,14 @@ void ItemDrop::update(const float dt)
 		}
 		else if(deltaPosition.magnitude() <= m_dragDistance)
 		{
-			m_body.applyImpulse(deltaPosition.normalized());
+			applyImpulse(deltaPosition.normalized());
 		}
 	}
 
-	m_body.update(dt);
+	update(dt);
 }
 
 void ItemDrop::draw(SpriteBatch *spriteBatch, const float alpha)
 {
-	spriteBatch->drawSprite(Sprite(ItemData::get(m_itemID)->getIconTexture(), Rect(math::lerp(m_prevPosition, m_body.getPosition(), alpha), m_body.getSize())));
+	spriteBatch->drawSprite(Sprite(ItemData::get(m_itemID)->getIconTexture(), Rect(math::lerp(m_prevPosition, getPosition(), alpha), getSize())));
 }

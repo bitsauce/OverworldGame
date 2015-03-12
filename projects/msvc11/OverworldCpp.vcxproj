@@ -101,6 +101,7 @@
     <ClCompile Include="..\..\source\Entities\Humanoid.cpp" />
     <ClCompile Include="..\..\source\Entities\ItemDrop.cpp" />
     <ClCompile Include="..\..\source\Entities\Mobs\Zombie.cpp" />
+    <ClCompile Include="..\..\Source\Entities\Physics\DynamicEntity.cpp" />
     <ClCompile Include="..\..\source\Entities\Player.cpp" />
     <ClCompile Include="..\..\source\Game\GameManager.cpp" />
     <ClCompile Include="..\..\source\Game\ItemContainer.cpp" />
@@ -125,7 +126,6 @@
     <ClCompile Include="..\..\source\Networking\NetworkObject.cpp" />
     <ClCompile Include="..\..\Source\Networking\Server.cpp" />
     <ClCompile Include="..\..\source\Noise\Simplex.cpp" />
-    <ClCompile Include="..\..\source\physics\PhysicsBody.cpp" />
     <ClCompile Include="..\..\source\scenes\GameScene.cpp" />
     <ClCompile Include="..\..\source\scenes\Multiplayer.cpp" />
     <ClCompile Include="..\..\source\scenes\Scene.cpp" />
@@ -162,6 +162,7 @@
     <ClInclude Include="..\..\source\Entities\Humanoid.h" />
     <ClInclude Include="..\..\source\Entities\ItemDrop.h" />
     <ClInclude Include="..\..\source\Entities\Mobs\Zombie.h" />
+    <ClInclude Include="..\..\Source\Entities\Physics\DynamicEntity.h" />
     <ClInclude Include="..\..\source\Entities\Player.h" />
     <ClInclude Include="..\..\source\Game\GameManager.h" />
     <ClInclude Include="..\..\source\Game\ItemContainer.h" />
@@ -186,7 +187,6 @@
     <ClInclude Include="..\..\source\Networking\NetworkObject.h" />
     <ClInclude Include="..\..\Source\Networking\Server.h" />
     <ClInclude Include="..\..\source\Noise\Simplex.h" />
-    <ClInclude Include="..\..\source\physics\PhysicsBody.h" />
     <ClInclude Include="..\..\source\scenes\GameScene.h" />
     <ClInclude Include="..\..\source\scenes\Multiplayer.h" />
     <ClInclude Include="..\..\source\scenes\Scene.h" />

@@ -7,7 +7,7 @@ class Skeleton;
 class AnimationStateData;
 class AnimationState;
 class Animation;
-class PhysicsBody;
+class DynamicEntity;
 
 class Humanoid
 {
@@ -52,7 +52,7 @@ public:
 	Skeleton *getSkeleton() { return m_skeleton; }
 
 	void update(const float dt);
-	void draw(PhysicsBody *body, SpriteBatch *spriteBatch, const float alpha);
+	void draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha);
 	void drawLeftHandSprite(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch);
 	void drawRightHandSprite(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch);
 

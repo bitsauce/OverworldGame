@@ -5,7 +5,7 @@
 #include "World/Camera.h"
 #include "World/Terrain/Terrain.h"
 #include "Constants.h"
-#include "Physics/PhysicsBody.h"
+#include "Entities/Physics/DynamicEntity.h"
 #include "Items/ItemData.h"
 #include "Networking/Connection.h"
 #include "Networking/Server.h"
@@ -17,7 +17,7 @@
 #include "Gui/Canvas.h"
 
 Player::Player(World &world, RakNet::RakNetGUID guid) :
-	Entity(world, ENTITY_PLAYER),
+	DynamicEntity(world, ENTITY_PLAYER),
 	m_camera(world.getCamera()),
 	m_terrain(world.getTerrain()),
 	m_jumpTimer(1.0f),
@@ -27,11 +27,11 @@ Player::Player(World &world, RakNet::RakNetGUID guid) :
 	m_guid(guid),
 	m_maxHealth(12),
 	m_health(m_maxHealth),
-	m_lmbPressed(false),
-	m_body(world)
+	m_lmbPressed(false)
 {
 	// Set body size
-	m_body.setSize(24, 48);
+	//setSize(24, 48);
+	Entity::setSize(24, 48);
 	
 	// If player is local, do extra stuff
 	if(Connection::getInstance()->getGUID() == guid)
@@ -93,13 +93,13 @@ void Player::mouseWheelEvent(const int dt)
 void Player::update(const float dt)
 {
 	// Jumping
-	if(m_body.isContact(SOUTH))
+	if(isContact(SOUTH))
 	{
 		if(m_inputState[INPUT_JUMP])
 		{
 			if(m_canJump)
 			{
-				m_body.applyImpulse(Vector2(0.0f, -12.0f));
+				applyImpulse(Vector2(0.0f, -12.0f));
 				m_jumpTimer = 0.0f;
 				m_canJump = false;
 			}
@@ -115,19 +115,19 @@ void Player::update(const float dt)
 		{
 			if(m_inputState[INPUT_JUMP]) // High/low jumping
 			{
-				m_body.applyImpulse(Vector2(0.0f, -2.5f));
+				applyImpulse(Vector2(0.0f, -2.5f));
 			}
 			m_jumpTimer += dt;
 		}
-		else if(m_body.isContact(WEST) || m_body.isContact(EAST)) // Wall jumping
+		else if(isContact(WEST) || isContact(EAST)) // Wall jumping
 		{
-			m_body.setVelocityY(m_body.getVelocity().y * 0.5f);
+			setVelocityY(getVelocity().y * 0.5f);
 			if(m_inputState[INPUT_JUMP])
 			{
 				if(m_canJump)
 				{
-					m_body.setVelocityX((m_body.isContact(WEST) - m_body.isContact(EAST)) * 14.0f);
-					m_body.setVelocityY(-4.5f);
+					setVelocityX((isContact(WEST) - isContact(EAST)) * 14.0f);
+					setVelocityY(-4.5f);
 					m_jumpTimer = 0.0f;
 					m_canJump = false;
 				}
@@ -140,25 +140,25 @@ void Player::update(const float dt)
 	}
 
 	// Walking
-	m_body.applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (Input::getKeyState(XD_KEY_SHIFT) ? 1.5f : 1.0f) * 10.0f, 0.0f));
-	if(m_body.getVelocity().x < -5.0f)
+	applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (Input::getKeyState(XD_KEY_SHIFT) ? 1.5f : 1.0f) * 10.0f, 0.0f));
+	if(getVelocity().x < -5.0f)
 	{
-		m_body.setVelocityX(-5.0f);
-		m_body.setAccelerationX(0.0f);
+		setVelocityX(-5.0f);
+		setAccelerationX(0.0f);
 	}
-	else if(m_body.getVelocity().x > 5.0f)
+	else if(getVelocity().x > 5.0f)
 	{
-		m_body.setVelocityX(5.0f);
-		m_body.setAccelerationX(0.0f);
+		setVelocityX(5.0f);
+		setAccelerationX(0.0f);
 	}
 	else
 	{
 		// Apply friction
-		m_body.setVelocityX(m_body.getVelocity().x * 0.85f * dt);
+		setVelocityX(getVelocity().x * 0.85f * dt);
 	}
 
 	// Update physics
-	m_body.update(dt);
+	update(dt);
 
 	// Use current item
 	if(Input::getKeyState(XD_LMB))
@@ -177,16 +177,16 @@ void Player::update(const float dt)
 	}
 	
 	// Set animations
-	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(m_body.getVelocity().x) * 5.0f * dt);
-	if(m_body.isContact(SOUTH))
+	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(getVelocity().x) * 5.0f * dt);
+	if(isContact(SOUTH))
 	{
 		m_humanoid.getMainAnimationState()->setLooping(true);
-		if(m_body.getVelocity().x >= 0.01f)
+		if(getVelocity().x >= 0.01f)
 		{
 			m_humanoid.setMainAnimation(Humanoid::ANIM_WALK);
 			m_humanoid.getSkeleton()->setFlipX(false);
 		}
-		else if(m_body.getVelocity().x <= -0.01f)
+		else if(getVelocity().x <= -0.01f)
 		{
 			m_humanoid.setMainAnimation(Humanoid::ANIM_WALK);
 			m_humanoid.getSkeleton()->setFlipX(true);
@@ -194,20 +194,20 @@ void Player::update(const float dt)
 		else
 		{
 			m_humanoid.setMainAnimation(Humanoid::ANIM_IDLE);
-			m_body.setVelocityX(0.0f);
+			setVelocityX(0.0f);
 			m_humanoid.getMainAnimationState()->setTimeScale(1.0f);
 		}
 	}
 	else
 	{
-		if(m_body.isContact(WEST)/* >= 3*/) // TODO: I should check for a column of 3 rows of blocks instead of simlply one
+		if(isContact(WEST)/* >= 3*/) // TODO: I should check for a column of 3 rows of blocks instead of simlply one
 		{
 			m_humanoid.getSkeleton()->setFlipX(false);
 			m_humanoid.getMainAnimationState()->setLooping(false);
 			m_humanoid.getMainAnimationState()->setTimeScale(5.0f);
 			m_humanoid.setMainAnimation(Humanoid::ANIM_WALL_SLIDE);
 		}
-		else if(m_body.isContact(EAST))
+		else if(isContact(EAST))
 		{
 			m_humanoid.getSkeleton()->setFlipX(true);
 			m_humanoid.getMainAnimationState()->setLooping(false);
@@ -230,10 +230,10 @@ void Player::pack(RakNet::BitStream *bitStream, const Connection *conn)
 {
 	if(conn->isServer())
 	{
-		bitStream->Write(m_body.getPosition().x);
-		bitStream->Write(m_body.getPosition().y);
-		bitStream->Write(m_body.getVelocity().x);
-		bitStream->Write(m_body.getVelocity().y);
+		bitStream->Write(getPosition().x);
+		bitStream->Write(getPosition().y);
+		bitStream->Write(getVelocity().x);
+		bitStream->Write(getVelocity().y);
 	}
 	else if(conn->getGUID() == m_guid)
 	{
@@ -255,17 +255,17 @@ void Player::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 	{
 		float x; bitStream->Read(x);
 		float y; bitStream->Read(y);
-		m_body.setPosition(x, y);
+		Entity::setPosition(x, y);
 		bitStream->Read(x);
 		bitStream->Read(y);
-		m_body.setVelocityX(x);
-		m_body.setVelocityY(y);
+		setVelocityX(x);
+		setVelocityY(y);
 	}
 }
 
 void Player::draw(SpriteBatch *spriteBatch, const float alpha)
 {
-	m_humanoid.draw(&m_body, spriteBatch, alpha);
+	m_humanoid.draw(this, spriteBatch, alpha);
 
 	ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
 	if(item != nullptr)

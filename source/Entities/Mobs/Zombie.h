@@ -1,26 +1,20 @@
 #ifndef ZOMBIE_H
 #define ZOMBIE_H
 
-#include "Entities/Entity.h"
 #include "Entities/Humanoid.h"
-#include "Physics/PhysicsBody.h"
+#include "Entities/Physics/DynamicEntity.h"
 
-class Zombie : public Entity
+class Zombie : public DynamicEntity
 {
 public:
 	Zombie(World &world);
 
 	void update(const float dt);
-	void interpolate(const float alpha) { }
-	void draw(SpriteBatch *spriteBatch);
+	void draw(SpriteBatch *spriteBatch, const float alpha);
 
-	PhysicsBody &getBody() { return m_body; }
 private:
 	// Human model
 	Humanoid m_humanoid;
-	
-	// Physics body
-	PhysicsBody m_body;
 };
 
 #endif // ZOMBIE_H
