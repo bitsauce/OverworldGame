@@ -13,6 +13,7 @@ Animation::Animation(spSkeleton *skeleton, spAnimation *anim) :
 
 void Animation::setTime(const float time)
 {
+	spAnimation_apply(m_self, m_skeleton, m_lastTime, time, m_looping, 0, 0);
 	m_lastTime = time;
 }
 
@@ -80,8 +81,9 @@ float AnimationStateData::getMix(Animation *from, Animation *to) const
 
 AnimationState::AnimationState(AnimationStateData *data) :
 	m_data(data),
-	m_looping(false)//,
-	//m_eventCallback(0)
+	m_looping(false),
+	m_prevTime(0.0f)/*,
+	m_eventCallback(0)*/
 {
 	m_self = spAnimationState_create(data->m_self);
 	//m_self->listener = &eventListener;
@@ -141,6 +143,7 @@ void AnimationState::setAnimation(Animation *anim)
 
 void AnimationState::update(const float delta)
 {
+	m_prevTime += delta;
 	spAnimationState_update(m_self, delta);
 	spAnimationState_apply(m_self, m_data->m_skeleton->m_self);
 }
@@ -155,18 +158,14 @@ void AnimationState::addAnimation(const string &name, const float delay)
 	spAnimationState_addAnimationByName(m_self, 0, name.c_str(), m_looping, delay);
 }
 
-/*void AnimationState::enumReferences(asIScriptEngine *engine)
+void AnimationState::setTime(const float time)
 {
-	engine->GCEnumCallback(m_data);
-	if(m_eventCallback) {
-		engine->GCEnumCallback(m_eventCallback);
-	}
+	spAnimationState_update(m_self, time - m_prevTime);
+	spAnimationState_apply(m_self, m_data->m_skeleton->m_self);
+	m_prevTime = time;
 }
 
-void spAnimationStateWrapper::releaseReferences(asIScriptEngine *engine)
+float AnimationState::getTime() const
 {
-	m_data->release();
-	if(m_eventCallback) {
-		m_eventCallback->Release();
-	}
-}*/
+	return m_prevTime;
+}

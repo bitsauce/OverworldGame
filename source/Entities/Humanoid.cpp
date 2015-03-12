@@ -11,9 +11,11 @@ Humanoid::Humanoid() :
 	m_preAnimation(nullptr),
 	m_mainAnimation(nullptr),
 	m_postAnimation(nullptr),
-	m_dt(0.0f),
+	m_prevPreAnimationTime(0.0f),
 	m_preAnimationTime(0.0f),
+	m_prevMainAnimationTime(0.0f),
 	m_mainAnimationTime(0.0f),
+	m_prevPostAnimationTime(0.0f),
 	m_postAnimationTime(0.0f)
 {
 	// Load skeleton data
@@ -90,6 +92,7 @@ void Humanoid::setPreAnimation(const Anim anim)
 			m_preAnimationState->setAnimation(animations);
 		}
 		m_preAnimation = animations;
+		m_prevPreAnimationTime = m_preAnimationTime = 0.0f;
 	}
 }
 
@@ -104,6 +107,7 @@ void Humanoid::setMainAnimation(const Anim anim)
 			m_mainAnimationState->setAnimation(animations);
 		}
 		m_mainAnimation = animations;
+		m_prevPreAnimationTime = m_preAnimationTime = 0.0f;
 	}
 }
 
@@ -133,21 +137,23 @@ void Humanoid::setBodyPart(const BodyPart part, const Pixmap &pixmap)
 
 void Humanoid::update(const float dt)
 {
-	m_dt = dt;
 	// Update all animations
 	if(m_preAnimation)
 	{
-		m_preAnimationTime = 0.0f;
+		m_prevPreAnimationTime = m_preAnimationTime;
+		m_preAnimationTime += dt;
 	}
 
 	if(m_mainAnimation)
 	{
-		m_mainAnimationTime = 0.0f;
+		m_prevMainAnimationTime = m_mainAnimationTime;
+		m_mainAnimationTime += dt;
 	}
 
 	if(m_postAnimation)
 	{
-		m_postAnimationTime = 0.0f;
+		m_prevPreAnimationTime = m_preAnimationTime;
+		m_preAnimationTime += dt;
 	}
 }
 
@@ -156,21 +162,17 @@ void Humanoid::draw(PhysicsBody *body, SpriteBatch *spriteBatch, const float alp
 	// Update all animations
 	if(m_preAnimation)
 	{
-		float next = m_dt * alpha;
-		m_preAnimationState->update(next - m_preAnimationTime);
-		m_preAnimationTime = next;
+		m_preAnimationState->setTime(math::lerp(m_prevPreAnimationTime, m_preAnimationTime, alpha));
 	}
 
 	if(m_mainAnimation)
 	{
-		float next = m_dt * alpha;
-		m_mainAnimationState->update(next - m_mainAnimationTime);
-		m_mainAnimationTime = next;
+		m_mainAnimationState->setTime(math::lerp(m_prevMainAnimationTime, m_mainAnimationTime, alpha));
 	}
 
 	if(m_postAnimation)
 	{
-		m_postAnimationState->update(m_postAnimationTime * m_dt * (1.0f-alpha));
+		m_postAnimationState->setTime(math::lerp(m_prevPostAnimationTime, m_postAnimationTime, alpha));
 	}
 
 	// Draw skeleton

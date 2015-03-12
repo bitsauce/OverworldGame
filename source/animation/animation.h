@@ -63,12 +63,16 @@ public:
 	void addAnimation(const string &name, const float delay);
 	void addAnimation(Animation *anim, const float delay);
 
+	void setTime(const float time);
+	float getTime() const;
+
 	void update(const float delta);
 
 private:
 	AnimationStateData *m_data;
 	spAnimationState *m_self;
 	bool m_looping;
+	float m_prevTime;
 	//asIScriptFunction *m_eventCallback;
 };
 

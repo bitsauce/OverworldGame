@@ -140,7 +140,7 @@ void Player::update(const float dt)
 	}
 
 	// Walking
-	m_body.applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (Input::getKeyState(XD_KEY_SHIFT) ? 2.0f : 1.0f) * 10.0f, 0.0f));
+	m_body.applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (Input::getKeyState(XD_KEY_SHIFT) ? 1.5f : 1.0f) * 10.0f, 0.0f));
 	if(m_body.getVelocity().x < -5.0f)
 	{
 		m_body.setVelocityX(-5.0f);
@@ -177,7 +177,7 @@ void Player::update(const float dt)
 	}
 	
 	// Set animations
-	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(m_body.getVelocity().x) * 10.0f * dt);
+	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(m_body.getVelocity().x) * 5.0f * dt);
 	if(m_body.isContact(SOUTH))
 	{
 		m_humanoid.getMainAnimationState()->setLooping(true);

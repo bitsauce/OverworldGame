@@ -70,9 +70,11 @@ private:
 	AnimationState *m_postAnimationState;
 	Animation *m_postAnimation;
 
-	float m_dt;
+	float m_prevPreAnimationTime;
 	float m_preAnimationTime;
+	float m_prevMainAnimationTime;
 	float m_mainAnimationTime;
+	float m_prevPostAnimationTime;
 	float m_postAnimationTime;
 };
 
