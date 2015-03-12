@@ -32,16 +32,16 @@ public:
 	virtual void setVelocity(const Vector2 &vel) = 0;
 	virtual Vector2 getVelocity() const = 0;
 	void setVelocity(const float x, const float y) { setVelocity(Vector2(x, y)); }
-	void setVelocityX(const float x) { setVelocity(x, getY()); }
-	void setVelocityY(const float y) { setVelocity(getX(), y); }
+	void setVelocityX(const float x) { setVelocity(x, getVelocityY()); }
+	void setVelocityY(const float y) { setVelocity(getVelocityX(), y); }
 	float getVelocityX() const { return getVelocity().x; }
 	float getVelocityY() const { return getVelocity().y; }
 	
 	virtual void setAcceleration(const Vector2 &vel) = 0;
 	virtual Vector2 getAcceleration() const = 0;
 	void setAcceleration(const float x, const float y) { setAcceleration(Vector2(x, y)); }
-	void setAccelerationX(const float x) { setAcceleration(x, getY()); }
-	void setAccelerationY(const float y) { setAcceleration(getX(), y); }
+	void setAccelerationX(const float x) { setAcceleration(x, getAccelerationY()); }
+	void setAccelerationY(const float y) { setAcceleration(getAccelerationX(), y); }
 	float getAccelerationX() const { return getAcceleration().x; }
 	float getAccelerationY() const { return getAcceleration().y; }
 

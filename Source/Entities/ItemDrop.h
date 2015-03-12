@@ -20,6 +20,8 @@ private:
 	Vector2 m_prevPosition;
 	float m_dragDistance;
 	float m_pickupDistance;
+	float m_hoverTime;
+	float m_prevHoverTime;
 };
 
 #endif // ITEM_DROP_H

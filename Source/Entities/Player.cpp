@@ -158,7 +158,7 @@ void Player::update(const float dt)
 	}
 
 	// Update physics
-	update(dt);
+	DynamicEntity::update(dt);
 
 	// Use current item
 	if(Input::getKeyState(XD_LMB))
