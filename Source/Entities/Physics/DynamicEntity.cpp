@@ -23,7 +23,7 @@ void DynamicEntity::update(const float dt)
 {
 	m_prevPosition = m_position;
 	m_contact = 0; 
-	m_acceleration.y += 2.0f;
+	m_acceleration.y += 2.0f * m_gravityScale;
 	m_velocity += m_acceleration;
 	m_acceleration.set(0.0f, 0.0f);
 

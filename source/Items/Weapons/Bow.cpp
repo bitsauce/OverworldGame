@@ -25,7 +25,7 @@ public:
 		m_sprite.setRegion(TextureRegion(), true);
 		setPosition(pos);
 		setVelocity(dir.normalized() * speed);
-		setGravityScale(0.1f);
+		setGravityScale(1.0f);
 		m_angle = m_prevAngle = atan2(dir.y, dir.x);
 	}
 
@@ -73,7 +73,7 @@ private:
 
 void Bow::use(Player *player, const float dt)
 {
-	new Arrow(player->getWorld(), player->getCenter(), player->getWorld().getCamera()->getInputPosition() - player->getCenter(), 25.0f);
+	new Arrow(player->getWorld(), player->getCenter(), player->getWorld().getCamera()->getInputPosition() - player->getCenter(), 50.0f);
 }
 
 void Bow::draw(Player *player, SpriteBatch *spriteBatch, const float alpha)

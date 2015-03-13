@@ -13,6 +13,7 @@ ItemDrop::ItemDrop(World &world, const Vector2 position, const ItemID item) :
 	m_hoverTime(0.0f),
 	m_prevHoverTime(0.0f)
 {
+	setGravityScale(0.1f);
 	setPosition(position);
 	setSize(Vector2(16.0f));
 }

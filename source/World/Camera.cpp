@@ -39,7 +39,7 @@ Vector2i Camera::getPosition() const
 
 Vector2 Camera::getInputPosition() const
 {
-	return m_position + Input::getPosition();
+	return m_position + Input::getPosition() / m_zoomLevel;
 }
 
 Vector2i Camera::getSize() const

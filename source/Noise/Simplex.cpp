@@ -42,7 +42,7 @@ int perm[512] = {
 };
 
 Simplex2D::Simplex2D() :
-	m_octaves(8),
+	m_octaves(1),
 	m_gain(0.5f),
 	m_frequency(1.0f/32.0f)
 {
