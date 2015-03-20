@@ -177,7 +177,7 @@ void Player::update(const float dt)
 	}
 	
 	// Set animations
-	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(getVelocity().x) * 5.0f * dt);
+	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(getVelocity().x) * 4.0f * dt);
 	if(isContact(SOUTH))
 	{
 		m_humanoid.getMainAnimationState()->setLooping(true);
