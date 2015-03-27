@@ -17,13 +17,16 @@ Background::Background(TimeOfDay *timeOfDay) :
 	m_wind(0.04f),
 	m_cloudTime(0.0f),
 	m_sun(ResourceManager::get<Texture2D>(":/sprites/sky/sun.png")),
-	m_moon(ResourceManager::get<Texture2D>(":/sprites/sky/moon.png"))
+	m_moon(ResourceManager::get<Texture2D>(":/sprites/sky/moon.png")),
+	m_cloudSprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Clouds/Cloud_01.png"))
 {
 	m_sun.setSize(m_sun.getTexture()->getSize());
 	m_moon.setSize(m_moon.getTexture()->getSize());
+	m_cloudSprite.setSize(m_cloudSprite.getTexture()->getSize());
 
 	m_sun.setOrigin(m_sun.getCenter());
 	m_moon.setOrigin(m_moon.getCenter());
+	m_cloudSprite.setOrigin(m_cloudSprite.getCenter());
 }
 
 void Background::update(const float dt)
@@ -85,6 +88,7 @@ void Background::update(const float dt)
 		
 	// Apply wind
 	m_cloudTime += m_wind * dt;
+	m_cloudSprite.setPosition(((int)time % 51) / 50.0f * Window::getSize().x, 0);
 }
 
 void Background::draw(SpriteBatch *spriteBatch, const float alpha)
@@ -105,6 +109,8 @@ void Background::draw(SpriteBatch *spriteBatch, const float alpha)
 	//gfxContext.setRenderTarget(nullptr);
 
 	//spriteBatch->drawSprite(Sprite(m_rendetTarget->getTexture()));
+
+	spriteBatch->drawSprite(m_cloudSprite);
 	
 	// Place sun/moon
 	int hour = m_timeOfDay->getHour();
@@ -116,7 +122,7 @@ void Background::draw(SpriteBatch *spriteBatch, const float alpha)
 	{
 		spriteBatch->drawSprite(m_moon);
 	}
-		
+
 	// Draw background elements
 	/*hill1.setSize(XWindow::getSize().x, XWindow::getSize().y);
 	hill1.setPosition(XMath::mod(-Camera.position.x * 0.25f, Window.getSize().x*2) - Window.getSize().x, Window.getSize().y-hill1.getHeight());
