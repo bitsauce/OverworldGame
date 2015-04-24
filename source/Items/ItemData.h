@@ -8,7 +8,7 @@ enum ItemID;
 
 class ItemData
 {
-	friend class GameManager;
+	friend class Game;
 public:
 	ItemData();
 	virtual void use(Player *player, const float dt) = 0;

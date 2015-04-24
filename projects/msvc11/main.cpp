@@ -8,7 +8,7 @@
 //									2011-2014 (C)
 
 #include "Config.h"
-#include "Game/GameManager.h"
+#include "Game/Game.h"
 
 #if defined(X2D_WINDOWS) && defined(X2D_DEBUG)
 //#include <vld.h> // Visual Leak Detector
@@ -38,13 +38,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 	Engine *engine = CreateEngine();
 
 	Config config;
-	config.mainFunc = &GameManager::main;
-	config.updateFunc = &GameManager::update;
-	config.drawFunc = &GameManager::draw;
-	config.endFunc = &GameManager::exit;
+	Game *game = new Game();
+	config.mainFunc = bind(&Game::main, game, placeholders::_1);
+	config.updateFunc = bind(&Game::update, game, placeholders::_1);
+	config.drawFunc = bind(&Game::draw, game, placeholders::_1, placeholders::_2);
+	config.endFunc = bind(&Game::exit, game);
 
 #ifdef X2D_DEBUG
-	config.workDir = "..\\..\\game\\";
+	config.workDir = "..\\..\\Game\\";
 #endif
 	config.flags = flags;
 

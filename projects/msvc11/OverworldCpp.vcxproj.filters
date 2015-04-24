@@ -146,9 +146,6 @@
     <ClCompile Include="..\..\source\Game\RayCast.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\Game\GameManager.cpp">
-      <Filter>Source\Game</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\World\Terrain\ChunkLoader.cpp">
       <Filter>Source\World\Terrain</Filter>
     </ClCompile>
@@ -178,6 +175,12 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Omnicon.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandler.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game\Game.cpp">
+      <Filter>Source\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -324,9 +327,6 @@
     <ClInclude Include="..\..\source\gui\GameOverlay\Hotbar.h">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\World\World.h">
-      <Filter>Source\World</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\scenes\Multiplayer.h">
       <Filter>Source\Scenes</Filter>
     </ClInclude>
@@ -402,9 +402,6 @@
     <ClInclude Include="..\..\source\World\Camera.h">
       <Filter>Source\World</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\Game\GameManager.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Game\ItemContainer.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
@@ -440,6 +437,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Omnicon.h">
       <Filter>Source\Gui\GameOverlay</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHandler.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\World.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\Game.h">
+      <Filter>Source\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

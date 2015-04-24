@@ -8,14 +8,14 @@ enum SceneID;
 
 class SceneManager
 {
-	friend class GameManager;
+	friend class Game;
 public:
 	// Go to scene
 	static void setScene(Scene *scene/*, const float time, const TransitionType transition*/);
 	static Scene *getScene() { return s_scene; }
 
 protected:
-	// Update (called by GameManager)
+	// Update (called by Game)
 	static void update();
 
 private:

@@ -13,6 +13,10 @@ CraftingBench::CraftingBench(const int x, const int y) :
 void CraftingBench::activate(Player *player)
 {
 	player->setCrafting(!player->isCrafting());
+	//if(player->isLocal())
+	//{
+	//game->getGameOverlay()->toggleCraftingMode();
+	//}
 }
 
 void CraftingBench::draw(SpriteBatch *spriteBatch, const float alpha)
