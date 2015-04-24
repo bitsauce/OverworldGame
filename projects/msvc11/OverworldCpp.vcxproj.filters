@@ -170,6 +170,15 @@
     <ClCompile Include="..\..\Source\Entities\Physics\DynamicEntity.cpp">
       <Filter>Source\Entities\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Things\Flint.cpp">
+      <Filter>Source\Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Things\CraftingBench.cpp">
+      <Filter>Source\Things</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Omnicon.cpp">
+      <Filter>Source\Gui\GameOverlay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -422,6 +431,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Entities\Physics\DynamicEntity.h">
       <Filter>Source\Entities\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Things\Flint.h">
+      <Filter>Source\Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Things\CraftingBench.h">
+      <Filter>Source\Things</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Gui\GameOverlay\Omnicon.h">
+      <Filter>Source\Gui\GameOverlay</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

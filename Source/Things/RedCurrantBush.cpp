@@ -3,7 +3,7 @@
 #include "Constants.h"
 
 RedCurrantBush::RedCurrantBush(const int x, const int y) :
-	Thing(4, 2),
+	Thing(x, y),
 	m_sprite(ThingData::get(BLOCK_ENTITY_RED_CURRANT_BUSH).getSprite()),
 	m_growTimer(0.0f)
 {

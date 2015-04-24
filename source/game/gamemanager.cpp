@@ -37,13 +37,17 @@ World *GameManager::m_world = nullptr;
 
 void GameManager::main(GraphicsContext &context)
 {
-	// Sprite batch
+	// Setup sprite batch
 	s_spriteBatch = new SpriteBatch(context);
 
 	// Set some key bindings
 	Input::bind(XD_KEY_ESCAPE, function<void()>(Engine::exit));
 	Input::bind(XD_KEY_SNAPSHOT, function<void()>(GameManager::takeScreenshot));
-	//Window::enableFullscreen();
+
+	//if(Config::isFullscreenEnabled())
+	//{
+	//	Window::enableFullscreen();
+	//}
 	
 	// Initialize game managers
 	BlockData::init();
@@ -54,13 +58,14 @@ void GameManager::main(GraphicsContext &context)
 	// Resize the window
 	Window::setSize(Vector2i(1280, 720));
 
-	// Show main menu
+	// Load world "Debug", or create it if it doesn't exists
 	if(!m_world->load("Debug"))
 	{
 		m_world->create("Debug");
 	}
 	
-	new Server(*m_world, 5555);
+	// Create server object
+	new Server(*m_world, 45556);
 		
 	// Show game
 	SceneManager::setScene(new GameScene(*m_world));
@@ -68,6 +73,7 @@ void GameManager::main(GraphicsContext &context)
 
 void GameManager::exit()
 {
+	// Save the world as we're exiting
 	m_world->save();
 	delete m_world;
 	delete canvas;

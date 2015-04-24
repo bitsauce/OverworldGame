@@ -39,7 +39,7 @@ MultiplayerScene::MultiplayerScene(World &world) :
 	m_ipLineEdit->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 	
 	m_portLineEdit = new LineEdit(canvas);
-	m_portLineEdit->setText("5555");
+	m_portLineEdit->setText("45556");
 	m_portLineEdit->setAnchor(Vector2(0.5f, 0.5f));
 	m_portLineEdit->setPosition(Vector2(0.2f, -0.1f));
 	m_portLineEdit->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));

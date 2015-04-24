@@ -8,6 +8,7 @@ class ItemContainer;
 class Player;
 class Hotbar;
 class HealthManaStatus;
+class Omnicon;
 
 class GameOverlay : public UiObject, public MouseListener
 {
@@ -19,10 +20,10 @@ public:
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 private:
-
 	Player *m_player;
 	Hotbar *m_hotbar;
 	HealthManaStatus *m_healthManaStatus;
+	Omnicon *m_omnicon;
 };
 
 #endif // INVENTORY_H

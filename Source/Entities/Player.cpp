@@ -13,6 +13,7 @@
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
 #include "Gui/GameOverlay.h"
+#include "Things/Thing.h"
 
 #include "Gui/Canvas.h"
 
@@ -27,7 +28,8 @@ Player::Player(World &world, RakNet::RakNetGUID guid) :
 	m_guid(guid),
 	m_maxHealth(12),
 	m_health(m_maxHealth),
-	m_lmbPressed(false)
+	m_lmbPressed(false),
+	m_isCrafting(false)
 {
 	// Set body size
 	//setSize(24, 48);
@@ -49,6 +51,7 @@ Player::Player(World &world, RakNet::RakNetGUID guid) :
 		Input::bind(XD_KEY_8, bind(&Player::setSelectedItemSlot, this, 7));
 		Input::bind(XD_KEY_9, bind(&Player::setSelectedItemSlot, this, 8));
 		Input::bind(XD_KEY_0, bind(&Player::setSelectedItemSlot, this, 9));
+		Input::bind(XD_RMB, bind(&Player::activateThing, this));
 
 		m_camera->setTargetEntity(this);
 
@@ -224,6 +227,19 @@ void Player::update(const float dt)
 
 	// Update animations
 	m_humanoid.update(dt);
+}
+
+void Player::activateThing()
+{
+	Vector2 inputPosition = m_camera->getInputPosition();
+	int blockX = (int)floor(inputPosition.x / BLOCK_PXF), blockY = (int)floor(inputPosition.y / BLOCK_PXF);
+	for(Thing *thing : m_terrain->getChunkLoader()->getChunkAt((int)floor(inputPosition.x / CHUNK_PXF), (int)floor(inputPosition.y / CHUNK_PXF)).getThings())
+	{
+		if(thing->getX() == blockX && thing->getY() == blockY)
+		{
+			thing->activate(this);
+		}
+	}
 }
 
 void Player::pack(RakNet::BitStream *bitStream, const Connection *conn)

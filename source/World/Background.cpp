@@ -110,7 +110,7 @@ void Background::draw(SpriteBatch *spriteBatch, const float alpha)
 
 	//spriteBatch->drawSprite(Sprite(m_rendetTarget->getTexture()));
 
-	spriteBatch->drawSprite(m_cloudSprite);
+	//spriteBatch->drawSprite(m_cloudSprite);
 	
 	// Place sun/moon
 	int hour = m_timeOfDay->getHour();

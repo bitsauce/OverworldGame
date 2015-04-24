@@ -14,6 +14,7 @@ class Client;
 class Entity;
 class Background;
 
+// This class is concerned with the objects contained within the world
 class World
 {
 	friend class Player;

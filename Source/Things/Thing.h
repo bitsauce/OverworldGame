@@ -3,12 +3,19 @@
 
 #include "Config.h"
 
+class Player;
+
 class Thing
 {
 public:
 	Thing(const int x, const int y);
 
-	virtual void draw(SpriteBatch *spriteBatch, const float alpha) { }
+	virtual void activate(Player *player) {}
+
+	virtual void draw(SpriteBatch *spriteBatch, const float alpha) {}
+
+	int getX() const { return m_x; }
+	int getY() const { return m_y; }
 
 private:
 	const int m_x, m_y;

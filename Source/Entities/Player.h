@@ -22,6 +22,8 @@ public:
 	void update(const float dt);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
+	void activateThing();
+
 	void pack(RakNet::BitStream *bitStream, const Connection *conn);
 	void unpack(RakNet::BitStream *bitStream, const Connection *conn);
 
@@ -30,6 +32,9 @@ public:
 	
 	void setSelectedItemSlot(const uint slot) { m_selectedItemSlot = slot; }
 	uint getSelectedItemSlot() const { return m_selectedItemSlot; }
+
+	void setCrafting(const bool crafting) { m_isCrafting = crafting; }
+	bool isCrafting() const { return m_isCrafting; }
 
 	World &getWorld() const { return m_world; }
 	Camera *getCamera() const { return m_camera; }
@@ -48,6 +53,7 @@ private:
 	// Inventory
 	ItemContainer m_itemContainer;
 	uint m_selectedItemSlot;
+	bool m_isCrafting;
 
 	class GameOverlay *m_gameOverlay;
 
