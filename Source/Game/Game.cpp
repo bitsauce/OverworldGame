@@ -3,7 +3,6 @@
 #include "Constants.h"
 #include "Gui/Canvas.h"
 #include "Gui/UiObject.h"
-#include "Scenes/SceneManager.h"
 #include "Scenes/GameScene.h"
 #include "Blocks/BlockData.h"
 #include "Items/ItemData.h"
@@ -31,6 +30,10 @@ Game::Game() :
 {
 }
 
+class InGameState : public GameState
+{
+};
+
 void Game::main(GraphicsContext &context)
 {
 	// Setup sprite batch
@@ -49,7 +52,6 @@ void Game::main(GraphicsContext &context)
 	BlockData::init();
 	ItemData::init();
 
-
 	m_world = new World();
 	ThingData::init(m_world);
 
@@ -65,8 +67,27 @@ void Game::main(GraphicsContext &context)
 	// Create server object
 	new Server(*m_world, 45556);
 		
-	// Show game
-	SceneManager::setScene(new GameScene(*m_world));
+	// Push game state
+	pushState(new InGameState());
+}
+
+void Game::pushState(GameState *state)
+{
+	assert(state);
+	m_states.push(state);
+}
+
+void Game::popState()
+{
+	if(!m_states.empty())
+	{
+		delete m_states.top();
+		m_states.pop();
+	}
+	else
+	{
+		exit();
+	}
 }
 
 void Game::exit()
@@ -158,5 +179,5 @@ void Game::draw(GraphicsContext &context, const float alpha)
 	m_world->getDebug()->draw(m_spriteBatch);
 	m_spriteBatch->end();
 
-	SceneManager::update();
+	m_states.top()->draw();
 }
