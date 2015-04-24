@@ -5,8 +5,27 @@
 vector<BlockData*> BlockData::s_blockData(BLOCK_COUNT);
 TextureAtlas *BlockData::s_blockAtlas = nullptr;
 
+struct BlockDescriptor
+{
+	const BlockID id;
+	const string texturePath;
+	const ItemID itemID;
+	const float opacity;
+};
+
+static BlockDescriptor g_blockData[] = {
+	{ BLOCK_EMPTY, ":/Sprites/Blocks/Empty.png", ITEM_NONE, 0.0f },
+	{ BLOCK_COUNT, "", ITEM_NONE, 0.0f }
+};
+
 void BlockData::init()
 {
+	/*BlockDescriptor *blockData = &g_blockData[0];
+	while(blockData->id != BLOCK_COUNT)
+	{
+		s_blockData[blockData->id] = new BlockData(blockData->id, ResourceManager::get<Texture2D>(blockData->texturePath), blockData->itemID, blockData->opacity);
+	}*/
+
 	Texture2DPtr temp = ResourceManager::get<Texture2D>(":/sprites/blocks/template.png");
 	s_blockData[BLOCK_EMPTY] = new BlockData(BLOCK_EMPTY, ResourceManager::get<Texture2D>(":/sprites/blocks/empty.png"), ITEM_NONE, 0.0f);
 	s_blockData[BLOCK_ENTITY] = new BlockData(BLOCK_ENTITY, ResourceManager::get<Texture2D>(":/sprites/blocks/empty.png"), ITEM_NONE, 0.0f);
