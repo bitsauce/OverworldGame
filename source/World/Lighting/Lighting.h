@@ -2,9 +2,10 @@
 #define LIGHTING_H
 
 #include "Config.h"
+#include "LightSource.h"
+#include "Spotlight.h"
 
 class Terrain;
-class LightSource;
 class World;
 
 class Lighting : public WindowListener
@@ -32,14 +33,14 @@ private:
 	World *m_world;
 
 	uint m_width, m_height;
-	xd::RenderTarget2D *m_lightingRenderTarget;
-	xd::RenderTarget2D *m_lightingPass0;
-	xd::RenderTarget2D *m_lightingPass1;
-	xd::RenderTarget2D *m_lightingPass2;
-	xd::ShaderPtr m_directionalLightingShader;
-	xd::ShaderPtr m_radialLightingShader;
-	xd::ShaderPtr m_blurHShader;
-	xd::ShaderPtr m_blurVShader;
+	RenderTarget2D *m_lightingRenderTarget;
+	RenderTarget2D *m_lightingPass0;
+	RenderTarget2D *m_lightingPass1;
+	RenderTarget2D *m_lightingPass2;
+	ShaderPtr m_directionalLightingShader;
+	ShaderPtr m_radialLightingShader;
+	ShaderPtr m_blurHShader;
+	ShaderPtr m_blurVShader;
 	int m_lightRadius;
 	bool m_enabled;
 

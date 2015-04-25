@@ -13,7 +13,7 @@ enum BlockID;
 class Debug
 {
 public:
-	Debug(Game &game);
+	Debug(Game *game);
 
 	void update();
 	void draw(SpriteBatch *spriteBatch);
@@ -37,7 +37,7 @@ private:
 	map<string, string> m_variables;
 
 	// Game pointer
-	Game &m_game;
+	Game *m_game;
 	World *m_world;
 
 	// Debug sprites

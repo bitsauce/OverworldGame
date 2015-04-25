@@ -9,7 +9,7 @@
 #include "Things/Thing.h"
 #include "Things/ThingData.h"
 #include "World/World.h"
-#include "World/Debug.h"
+#include "Game/Debug.h"
 #include "World/Camera.h"
 #include "World/Background.h"
 #include "World/TimeOfDay.h"
@@ -51,7 +51,7 @@ void Game::main(GraphicsContext &context)
 	ThingData::init(m_world);
 
 	// Setup debug
-	m_debug = new Debug(*this);
+	m_debug = new Debug(this);
 
 	// Resize the window
 	Window::setSize(Vector2i(1280, 720));
@@ -63,7 +63,7 @@ void Game::main(GraphicsContext &context)
 	}
 	
 	// Create server object
-	new Server(this, 45556);
+	m_server = new Server(this, 45556);
 		
 	// Push game state
 	pushState(new InGameState(*this));

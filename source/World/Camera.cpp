@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include "Constants.h"
 #include "World/World.h"
-#include "World/Debug.h"
+#include "Game/Debug.h"
 #include "Entities/Entity.h"
 
 Camera::Camera() :

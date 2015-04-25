@@ -5,7 +5,7 @@
 #include "World/Background.h"
 #include "World/Camera.h"
 #include "World/TimeOfDay.h"
-#include "World/Debug.h"
+#include "Game/Debug.h"
 #include "Terrain/Terrain.h"
 #include "Generation/Generator.h"
 #include "Entities/Physics/DynamicEntity.h"

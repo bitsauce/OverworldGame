@@ -2,12 +2,9 @@
 
 #include "Debug.h"
 #include "Constants.h"
-#include "Lighting/Lighting.h"
-#include "Lighting/Spotlight.h"
 #include "World/World.h"
 #include "World/Camera.h"
 #include "Entities/Player.h"
-#include "Terrain/Terrain.h"
 #include "Blocks/BlockData.h"
 #include "Networking/Server.h"
 #include "Entities/Mobs/Zombie.h"
@@ -16,9 +13,9 @@
 #include "Game/GameStates/GameState.h"
 #include "Game/Game.h"
 
-Debug::Debug(Game &game) :
+Debug::Debug(Game *game) :
 	m_game(game),
-	m_world(game.getWorld()),
+	m_world(game->getWorld()),
 	m_block(BLOCK_GRASS),
 	m_enabled(false),
 	m_debugChunkLoader(false),
@@ -127,9 +124,9 @@ void Debug::debugFunction(const int i)
 		
 	case 11:
 		{
-			if(m_game.peekState()->getID() == GAME_STATE_MULTIPLAYER)
+			if(m_game->peekState()->getID() == GAME_STATE_MULTIPLAYER)
 			{
-				m_game.popState();
+				m_game->popState();
 			}
 			else
 			{

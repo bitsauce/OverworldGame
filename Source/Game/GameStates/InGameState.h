@@ -20,8 +20,6 @@ public:
 
 	void enter()
 	{
-		LOG("State: In Game");
-
 		// Setup canvas
 		m_scene->getCanvas()->updateSize();
 

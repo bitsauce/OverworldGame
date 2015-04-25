@@ -3,10 +3,12 @@
 
 #include "Config.h"
 
-class Terrain;
-class TimeOfDay;
-class Camera;
-class Lighting;
+#include "Terrain/Terrain.h"
+#include "Lighting/Lighting.h"
+#include "Background.h"
+#include "Camera.h"
+#include "TimeOfDay.h"
+
 class WorldGenerator;
 class Server;
 class Client;
@@ -59,8 +61,6 @@ private:
 	Lighting *m_lighting;
 	list<Player*> m_players;
 	Player* m_localPlayer;
-	Server *m_server;
-	Client *m_client;
 	list<Entity*> m_entities;
 };
 

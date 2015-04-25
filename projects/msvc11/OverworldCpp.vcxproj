@@ -103,6 +103,7 @@
     <ClCompile Include="..\..\source\Entities\Mobs\Zombie.cpp" />
     <ClCompile Include="..\..\Source\Entities\Physics\DynamicEntity.cpp" />
     <ClCompile Include="..\..\source\Entities\Player.cpp" />
+    <ClCompile Include="..\..\Source\Game\Debug.cpp" />
     <ClCompile Include="..\..\Source\Game\Game.cpp" />
     <ClCompile Include="..\..\Source\Game\GameStates\GameState.cpp" />
     <ClCompile Include="..\..\Source\Game\GameStates\InGameState.cpp" />
@@ -138,7 +139,6 @@
     <ClCompile Include="..\..\Source\Things\Torch.cpp" />
     <ClCompile Include="..\..\source\World\Background.cpp" />
     <ClCompile Include="..\..\source\World\Camera.cpp" />
-    <ClCompile Include="..\..\source\World\Debug.cpp" />
     <ClCompile Include="..\..\source\World\Lighting\Lighting.cpp" />
     <ClCompile Include="..\..\source\World\Lighting\LightSource.cpp" />
     <ClCompile Include="..\..\source\World\Lighting\Spotlight.cpp" />
@@ -164,6 +164,7 @@
     <ClInclude Include="..\..\source\Entities\Mobs\Zombie.h" />
     <ClInclude Include="..\..\Source\Entities\Physics\DynamicEntity.h" />
     <ClInclude Include="..\..\source\Entities\Player.h" />
+    <ClInclude Include="..\..\Source\Game\Debug.h" />
     <ClInclude Include="..\..\Source\Game\Game.h" />
     <ClInclude Include="..\..\Source\Game\GameStates\GameState.h" />
     <ClInclude Include="..\..\Source\Game\GameStates\InGameState.h" />
@@ -200,7 +201,6 @@
     <ClInclude Include="..\..\Source\Things\Torch.h" />
     <ClInclude Include="..\..\source\World\Background.h" />
     <ClInclude Include="..\..\source\World\Camera.h" />
-    <ClInclude Include="..\..\source\World\Debug.h" />
     <ClInclude Include="..\..\source\World\Lighting\Lighting.h" />
     <ClInclude Include="..\..\source\World\Lighting\LightSource.h" />
     <ClInclude Include="..\..\source\World\Lighting\Spotlight.h" />

@@ -116,9 +116,6 @@
     <ClCompile Include="..\..\source\World\Camera.cpp">
       <Filter>Source\World</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\World\Debug.cpp">
-      <Filter>Source\World</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\Game\ItemContainer.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
@@ -168,6 +165,9 @@
       <Filter>Source\Game\GameStates</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Game\Scene.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game\Debug.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -357,9 +357,6 @@
     <ClInclude Include="..\..\source\Entities\Player.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\World\Debug.h">
-      <Filter>Source\World</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\World\TimeOfDay.h">
       <Filter>Source\World</Filter>
     </ClInclude>
@@ -421,6 +418,9 @@
       <Filter>Source\Game\GameStates</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Game\Scene.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\Debug.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
   </ItemGroup>

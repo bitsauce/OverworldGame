@@ -1,5 +1,5 @@
 #include "ChunkLoader.h"
-#include "World/Debug.h"
+#include "Game/Debug.h"
 #include "World/Camera.h"
 #include "World/World.h"
 #include "Generation/Generator.h"
