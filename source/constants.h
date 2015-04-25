@@ -157,6 +157,4 @@ enum Direction
 	NESW		= NORTH | EAST | SOUTH | WEST
 };
 
-extern class Canvas *canvas;
-
 #endif // CONSTANTS_H

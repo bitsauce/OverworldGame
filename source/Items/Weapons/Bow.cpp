@@ -4,8 +4,10 @@
 #include "Entities/Physics/DynamicEntity.h"
 #include "World/Camera.h"
 #include "World/World.h"
+#include "Game/Game.h"
 
-Bow::Bow() :
+Bow::Bow(Game *game) :
+	m_game(game),
 	m_bowSprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Weapons/WoodenBow.png"))
 {
 	m_bowSprite.setRegion(TextureRegion(), true);
@@ -14,7 +16,7 @@ Bow::Bow() :
 class Arrow : public DynamicEntity
 {
 public:
-	Arrow(World &world, const Vector2 &pos, const Vector2 &dir, const float speed) :
+	Arrow(World *world, const Vector2 &pos, const Vector2 &dir, const float speed) :
 		DynamicEntity(world, ENTITY_ARROW),
 		m_sprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Weapons/Arrow.png")),
 		m_prevPosition(pos),
@@ -37,12 +39,12 @@ public:
 		spriteBatch->drawSprite(m_sprite);
 	}
 
-	void update(const float dt)
+	void update(const float delta)
 	{
 		m_prevPosition = getPosition();
 		if(m_hasHit)
 		{
-			m_deleteTime += dt;
+			m_deleteTime += delta;
 			if(m_deleteTime > 10.0f)
 			{
 				delete this;
@@ -59,7 +61,7 @@ public:
 		m_prevAngle = m_angle;
 		m_angle = m_hasHit ? (m_sprite.getRotation()/180.0f * PI) : atan2(getVelocity().y, getVelocity().x);
 		
-		DynamicEntity::update(dt);
+		DynamicEntity::update(delta);
 	}
 
 private:
@@ -71,9 +73,9 @@ private:
 	float m_deleteTime;
 };
 
-void Bow::use(Player *player, const float dt)
+void Bow::use(Player *player, const float delta)
 {
-	new Arrow(player->getWorld(), player->getCenter(), player->getWorld().getCamera()->getInputPosition() - player->getCenter(), 50.0f);
+	new Arrow(m_game->getWorld(), player->getCenter(), m_game->getWorld()->getCamera()->getInputPosition() - player->getCenter(), 50.0f);
 }
 
 void Bow::draw(Player *player, SpriteBatch *spriteBatch, const float alpha)

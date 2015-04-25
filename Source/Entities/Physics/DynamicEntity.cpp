@@ -4,7 +4,7 @@
 #include "World/World.h"
 #include "World/Terrain/Terrain.h"
 
-DynamicEntity::DynamicEntity(World &world, const EntityID id) :
+DynamicEntity::DynamicEntity(World *world, const EntityID id) :
 	Entity(world, id),
 	m_acceleration(0.0f, 0.0f),
 	m_velocity(0.0f, 0.0f),
@@ -15,11 +15,11 @@ DynamicEntity::DynamicEntity(World &world, const EntityID id) :
 	m_gravityScale(1.0f),
 	m_allowRotation(false),
 	m_contact(0),
-	m_terrain(world.getTerrain())
+	m_terrain(world->getTerrain())
 {
 }
 
-void DynamicEntity::update(const float dt)
+void DynamicEntity::update(const float delta)
 {
 	m_prevPosition = m_position;
 	m_contact = 0; 

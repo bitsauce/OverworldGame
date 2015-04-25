@@ -3,22 +3,23 @@
 #include "World/Terrain/Terrain.h"
 #include "Entities/Player.h"
 #include "World/Camera.h"
+#include "Game/Game.h"
 
-ThingItem::ThingItem(const ThingID id) :
+ThingItem::ThingItem(Game *game, const ThingID id) :
+	m_game(game),
 	m_blockEntityID(id)
 {
 }
 
-void ThingItem::use(Player *player, const float dt)
+void ThingItem::use(Player *player, const float delta)
 {
 	// Get block input position
-	Vector2i blockPos = player->getCamera()->getInputPosition();
+	Vector2i blockPos = m_game->getWorld()->getCamera()->getInputPosition();
 	blockPos.x = (int)floor(blockPos.x/BLOCK_PXF);
 	blockPos.y = (int)floor(blockPos.y/BLOCK_PXF);
 
 	// Set block if not occupied
-	Terrain *terrain = player->getTerrain();
-	if(terrain->setThingAt(blockPos.x, blockPos.y, m_blockEntityID))
+	if(m_game->getWorld()->getTerrain()->setThingAt(blockPos.x, blockPos.y, m_blockEntityID))
 	{
 		// Remove item from player inventory
 		player->getItemContainer().removeItem(getID(), 1);
@@ -28,7 +29,7 @@ void ThingItem::use(Player *player, const float dt)
 void ThingItem::draw(Player *player, SpriteBatch *spriteBatch, const float alpha)
 {
 	// Get block input position
-	Vector2i blockPos = player->getCamera()->getInputPosition();
+	Vector2i blockPos = m_game->getWorld()->getCamera()->getInputPosition();
 	blockPos.x = (int)floor(blockPos.x/BLOCK_PXF);
 	blockPos.y = (int)floor(blockPos.y/BLOCK_PXF);
 

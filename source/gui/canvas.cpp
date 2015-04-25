@@ -1,15 +1,15 @@
 #include "canvas.h"
 #include "constants.h"
 
-Canvas::Canvas() :
-	UiObject(nullptr),
+Canvas::Canvas(Scene *scene) :
+	UiObject(scene, nullptr),
 	m_canvasSize(1.0f),
 	m_useWindowSize(true)
 {
 }
 
-Canvas::Canvas(const uint w, const uint h) :
-	UiObject(nullptr),
+Canvas::Canvas(Scene *scene, const uint w, const uint h) :
+	UiObject(scene, nullptr),
 	m_canvasSize(w, h),
 	m_useWindowSize(false)
 {
@@ -42,8 +42,8 @@ void Canvas::updateSize()
 	//Debug::setVaraible("Canvas", "("+util::floatToStr(size.x)+", "+util::floatToStr(size.y)+")");
 }
 
-void Canvas::update(const float dt)
+void Canvas::update(const float delta)
 {
 	updateSize();
-	UiObject::update(dt);
+	UiObject::update(delta);
 }

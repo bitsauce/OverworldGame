@@ -13,10 +13,10 @@ class Omnicon;
 class GameOverlay : public UiObject, public MouseListener
 {
 public:
-	GameOverlay(Player *player, UiObject *object);
+	GameOverlay(Scene *scene, Player *player, UiObject *object);
 	~GameOverlay();
 
-	void update(const float dt);
+	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 private:

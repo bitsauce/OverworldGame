@@ -8,13 +8,13 @@
 #include "World/World.h"
 #include "Networking/Connection.h"
 
-GameOverlay::GameOverlay(Player *player, UiObject *parent) :
-	UiObject(parent),
+GameOverlay::GameOverlay(Scene *scene, Player *player, UiObject *parent) :
+	UiObject(scene, parent),
 	m_player(player)
 {
-	m_hotbar = new Hotbar(player, parent);
-	m_healthManaStatus = new HealthManaStatus(player, parent);
-	m_omnicon = new Omnicon(player, parent);
+	m_hotbar = new Hotbar(scene, player, parent);
+	m_healthManaStatus = new HealthManaStatus(scene, player, parent);
+	m_omnicon = new Omnicon(scene, player, parent);
 }
 
 GameOverlay::~GameOverlay()
@@ -24,10 +24,10 @@ GameOverlay::~GameOverlay()
 	delete m_omnicon;
 }
 
-void GameOverlay::update(const float dt)
+void GameOverlay::update(const float delta)
 {
 }
 
-void GameOverlay::draw(SpriteBatch *spriteBatch, const float dt)
+void GameOverlay::draw(SpriteBatch *spriteBatch, const float delta)
 {
 }

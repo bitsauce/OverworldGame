@@ -1,8 +1,9 @@
 #include "lineedit.h"
 #include "constants.h"
+#include "Game/Scene.h"
 
-LineEdit::LineEdit(UiObject *parent) :
-	UiObject(parent),
+LineEdit::LineEdit(Scene *scene, UiObject *parent) :
+	UiObject(scene, parent),
 	m_cursorPos(0),
 	m_cursorTime(0.0f),
 	m_font(ResourceManager::get<Font>(UI_MENU_BUTTON_FONT))
@@ -24,14 +25,14 @@ string LineEdit::getText() const
 	return m_text;
 }
 
-void LineEdit::update(const float dt)
+void LineEdit::update(const float delta)
 {
-	m_cursorTime -= dt;
+	m_cursorTime -= delta;
 	if(m_cursorTime <= 0.0f)
 	{
 		m_cursorTime = 1.0f;
 	}
-	UiObject::update(dt);
+	UiObject::update(delta);
 }
 
 void LineEdit::draw(SpriteBatch *spriteBatch)

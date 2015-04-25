@@ -14,13 +14,16 @@
 #include "Animation/Bone.h"
 #include "Gui/GameOverlay.h"
 #include "Things/Thing.h"
+#include "Game/Game.h"
+#include "Game/GameStates/GameState.h"
+#include "Game/Scene.h"
 
 #include "Gui/Canvas.h"
 
-Player::Player(World &world, RakNet::RakNetGUID guid) :
-	DynamicEntity(world, ENTITY_PLAYER),
-	m_camera(world.getCamera()),
-	m_terrain(world.getTerrain()),
+Player::Player(Game *game, RakNet::RakNetGUID guid) :
+	DynamicEntity(game->getWorld(), ENTITY_PLAYER),
+	m_camera(game->getWorld()->getCamera()),
+	m_terrain(game->getWorld()->getTerrain()),
 	m_jumpTimer(1.0f),
 	m_canJump(false),
 	m_selectedItemSlot(0),
@@ -38,7 +41,7 @@ Player::Player(World &world, RakNet::RakNetGUID guid) :
 	// If player is local, do extra stuff
 	if(Connection::getInstance()->getGUID() == guid)
 	{
-		m_gameOverlay = new GameOverlay(this, canvas);
+		m_gameOverlay = new GameOverlay(game->peekState()->getScene(), this, game->peekState()->getScene()->getCanvas());
 
 		// Bind keys to item slots
 		Input::bind(XD_KEY_1, bind(&Player::setSelectedItemSlot, this, 0));
@@ -55,11 +58,11 @@ Player::Player(World &world, RakNet::RakNetGUID guid) :
 
 		m_camera->setTargetEntity(this);
 
-		m_world.m_localPlayer = this;
+		m_world->m_localPlayer = this;
 	}
 
 	// Add to player list
-	m_world.m_players.push_back(this);
+	m_world->m_players.push_back(this);
 }
 
 Player::~Player()
@@ -67,9 +70,9 @@ Player::~Player()
 	delete m_gameOverlay;
 }
 
-void Player::mouseWheelEvent(const int dt)
+void Player::mouseWheelEvent(const int delta)
 {
-	if(dt < 0)
+	if(delta < 0)
 	{
 		if(m_selectedItemSlot == 9)
 		{
@@ -93,7 +96,7 @@ void Player::mouseWheelEvent(const int dt)
 	}
 }
 
-void Player::update(const float dt)
+void Player::update(const float delta)
 {
 	// Jumping
 	if(isContact(SOUTH))
@@ -120,7 +123,7 @@ void Player::update(const float dt)
 			{
 				applyImpulse(Vector2(0.0f, -2.5f));
 			}
-			m_jumpTimer += dt;
+			m_jumpTimer += delta;
 		}
 		else if(isContact(WEST) || isContact(EAST)) // Wall jumping
 		{
@@ -157,11 +160,11 @@ void Player::update(const float dt)
 	else
 	{
 		// Apply friction
-		setVelocityX(getVelocity().x * 0.85f * dt);
+		setVelocityX(getVelocity().x * 0.85f * delta);
 	}
 
 	// Update physics
-	DynamicEntity::update(dt);
+	DynamicEntity::update(delta);
 
 	// Use current item
 	if(Input::getKeyState(XD_LMB))
@@ -169,7 +172,7 @@ void Player::update(const float dt)
 		ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
 		if(item != nullptr && (!item->isSingleShot() || !m_lmbPressed))
 		{
-			item->use(this, dt);
+			item->use(this, delta);
 		}
 		m_lmbPressed = true;
 	}
@@ -180,7 +183,7 @@ void Player::update(const float dt)
 	}
 	
 	// Set animations
-	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(getVelocity().x) * 4.0f * dt);
+	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(getVelocity().x) * 4.0f * delta);
 	if(isContact(SOUTH))
 	{
 		m_humanoid.getMainAnimationState()->setLooping(true);
@@ -226,7 +229,7 @@ void Player::update(const float dt)
 	}
 
 	// Update animations
-	m_humanoid.update(dt);
+	m_humanoid.update(delta);
 }
 
 void Player::activateThing()

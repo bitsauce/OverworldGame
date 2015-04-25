@@ -2,20 +2,21 @@
 #define MULTIPLAYER_H
 
 #include "Config.h"
-#include "Scene.h"
+#include "Game/Scene.h"
+#include "Game/GameStates/GameState.h"
 
 class LineEdit;
 
-class MultiplayerScene : public Scene
+class MultiplayerScene : public GameState
 {
 public:
-	MultiplayerScene(World &world);
+	MultiplayerScene(Scene *scene, World *world);
 
 	void host();
 	void join();
 
 private:
-	World &m_world;
+	World *m_world;
 	LineEdit *m_ipLineEdit;
 	LineEdit *m_portLineEdit;
 };

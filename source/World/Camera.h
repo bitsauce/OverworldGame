@@ -50,7 +50,7 @@ public:
 	void update(const float alpha);
 
 	// MouseListener event
-	void mouseWheelEvent(const int dt);
+	void mouseWheelEvent(const int delta);
 
 	// WindowListener event
 	void resizeEvent(uint width, uint height);

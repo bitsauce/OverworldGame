@@ -10,7 +10,6 @@
 #include "Entities/Player.h"
 
 #include "Multiplayer.h"
-#include "SceneManager.h"
 #include "GameScene.h"
 
 #include "Networking/Client.h"
@@ -23,33 +22,34 @@
 
 #include "Constants.h"
 
-MultiplayerScene::MultiplayerScene(World &world) :
+MultiplayerScene::MultiplayerScene(Scene *scene, World *world) :
+	GameState(GAME_STATE_MULTIPLAYER, false),
 	m_world(world)
 {
 	LOG("Scene: Multiplayer");
 	
 	// Setup canvas
-	canvas = new Canvas(800, 600);
+	Canvas *canvas = new Canvas(scene, 800, 600);
 	canvas->updateSize();
 	
-	m_ipLineEdit = new LineEdit(canvas);
+	m_ipLineEdit = new LineEdit(scene, canvas);
 	m_ipLineEdit->setText("127.0.0.1");
 	m_ipLineEdit->setAnchor(Vector2(0.5f, 0.5f));
 	m_ipLineEdit->setPosition(Vector2(-0.2f, -0.1f));
 	m_ipLineEdit->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 	
-	m_portLineEdit = new LineEdit(canvas);
+	m_portLineEdit = new LineEdit(scene, canvas);
 	m_portLineEdit->setText("45556");
 	m_portLineEdit->setAnchor(Vector2(0.5f, 0.5f));
 	m_portLineEdit->setPosition(Vector2(0.2f, -0.1f));
 	m_portLineEdit->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 	
-	Button *joinBtn = new Button("Join", function<void()>(bind(&MultiplayerScene::join, this)), canvas);
+	Button *joinBtn = new Button(scene, "Join", function<void()>(bind(&MultiplayerScene::join, this)), canvas);
 	joinBtn->setAnchor(Vector2(0.5f, 1.0f));
 	joinBtn->setPosition(Vector2(0.2f, -0.1f));
 	joinBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 	
-	Button *hostBtn = new Button("Host", function<void()>(bind(&MultiplayerScene::host, this)), canvas);
+	Button *hostBtn = new Button(scene, "Host", function<void()>(bind(&MultiplayerScene::host, this)), canvas);
 	hostBtn->setAnchor(Vector2(0.5f, 1.0f));
 	hostBtn->setPosition(Vector2(-0.2f, -0.1f));
 	hostBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
@@ -64,7 +64,7 @@ void MultiplayerScene::host()
 	//bitStream.Write(ENTITY_PLAYER);
 	((Server*)Connection::getInstance())->getRakPeer()->SendLoopback((const char*)bitStream.GetData(), bitStream.GetNumberOfBytesUsed());*/
 	
-	SceneManager::setScene(new GameScene(m_world));
+	//SceneManager::setScene(new GameScene(m_world));
 }
 
 void MultiplayerScene::join()
@@ -74,5 +74,5 @@ void MultiplayerScene::join()
 
 	new Client(m_world, m_ipLineEdit->getText(), util::strToInt(m_portLineEdit->getText()));
 
-	SceneManager::setScene(new GameScene(m_world));
+	//SceneManager::setScene(new GameScene(m_world));
 }

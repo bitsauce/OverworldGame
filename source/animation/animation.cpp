@@ -32,16 +32,16 @@ bool Animation::getLooping() const
 	return m_looping;
 }
 
-void Animation::apply(const float dt)
+void Animation::apply(const float delta)
 {
-	float time = m_lastTime + dt;
+	float time = m_lastTime + delta;
 	spAnimation_apply(m_self, m_skeleton, m_lastTime, time, m_looping, 0, 0);
 	m_lastTime = time;
 }
 
-void Animation::mix(const float dt, const float alpha)
+void Animation::mix(const float delta, const float alpha)
 {
-	float time = m_lastTime + dt;
+	float time = m_lastTime + delta;
 	spAnimation_mix(m_self, m_skeleton, m_lastTime, time, m_looping, 0, 0, alpha);
 	m_lastTime = time;
 }

@@ -12,9 +12,9 @@ enum BlockID;
 
 class Terrain : public WindowListener
 {
-	friend class Game;
+	friend class World;
 public:
-	Terrain(World &world);
+	Terrain(World *world);
 	~Terrain();
 	
 	// BLOCKS

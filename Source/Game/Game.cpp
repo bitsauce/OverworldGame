@@ -19,9 +19,7 @@
 #include "Networking/Server.h"
 #include "Networking/Client.h"
 #include "Entities/Entity.h"
-#include "Scenes/Scene.h"
-
-Canvas *canvas = nullptr;
+#include "GameStates/InGameState.h"
 
 Game::Game() :
 	m_spriteBatch(nullptr),
@@ -29,10 +27,6 @@ Game::Game() :
 	m_takeScreenshot(false)
 {
 }
-
-class InGameState : public GameState
-{
-};
 
 void Game::main(GraphicsContext &context)
 {
@@ -48,12 +42,16 @@ void Game::main(GraphicsContext &context)
 	//	Window::enableFullscreen();
 	//}
 	
+	// Init world
+	m_world = new World();
+
 	// Initialize block and item data
 	BlockData::init();
-	ItemData::init();
-
-	m_world = new World();
+	ItemData::init(this);
 	ThingData::init(m_world);
+
+	// Setup debug
+	m_debug = new Debug(*this);
 
 	// Resize the window
 	Window::setSize(Vector2i(1280, 720));
@@ -65,24 +63,27 @@ void Game::main(GraphicsContext &context)
 	}
 	
 	// Create server object
-	new Server(*m_world, 45556);
+	new Server(this, 45556);
 		
 	// Push game state
-	pushState(new InGameState());
+	pushState(new InGameState(*this));
 }
 
 void Game::pushState(GameState *state)
 {
 	assert(state);
-	m_states.push(state);
+	m_states.push_front(state);
+	state->enter();
 }
 
 void Game::popState()
 {
 	if(!m_states.empty())
 	{
-		delete m_states.top();
-		m_states.pop();
+		GameState *front = m_states.front();
+		front->leave();
+		m_states.remove(front);
+		delete front;
 	}
 	else
 	{
@@ -90,16 +91,23 @@ void Game::popState()
 	}
 }
 
+GameState *Game::peekState(int level)
+{
+	list<GameState*>::iterator itr = m_states.begin();
+	advance(itr, level);
+	return *itr;
+}
+
 void Game::exit()
 {
 	// Save the world as we're exiting
 	m_world->save();
 	delete m_world;
-	delete canvas;
 }
 
-void Game::update(const float dt)
+void Game::update(const float delta)
 {
+	// Update game connections
 	if(Connection::getInstance()->isServer())
 	{
 		((Server*)Connection::getInstance())->update();
@@ -108,28 +116,24 @@ void Game::update(const float dt)
 	{
 		((Client*)Connection::getInstance())->update();
 	}
-	
-	m_world->getTimeOfDay()->update(dt);
-	m_world->getBackground()->update(dt);
-	m_world->getDebug()->update();
 
-	m_world->getTerrain()->getChunkLoader()->update();
-
-	list<Entity*> gameObjects = m_world->getEntities();
-	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
+	// Update game states
+	for(list<GameState*>::iterator itr = m_states.begin(); itr != m_states.end(); ++itr)
 	{
-		(*itr)->update(dt);
+		(*itr)->update(delta);
+		if(!(*itr)->isTransparent())
+		{
+			break;
+		}
 	}
 
-	list<UiObject*> uiObjects = SceneManager::getScene()->getUiObjects();
-	for(UiObject *object : uiObjects)
-	{
-		object->update(dt);
-	}
+	// Update debug
+	m_debug->update();
 }
 
 void Game::draw(GraphicsContext &context, const float alpha)
 {
+	// Take screen shot
 	if(m_takeScreenshot)
 	{
 		int i = 0;
@@ -137,47 +141,20 @@ void Game::draw(GraphicsContext &context, const float alpha)
 		context.saveScreenshot("C:\\Users\\Marcus\\Desktop\\Screenshot_" + util::intToStr(i) + ".png");
 		m_takeScreenshot = false;
 	}
-
-	m_spriteBatch->begin();
 	
-	m_world->getDebug()->setVariable("FPS", util::intToStr((int)Graphics::getFPS()));
-	m_world->getBackground()->draw(m_spriteBatch, alpha);
-	
-	m_world->getCamera()->update(alpha);
-	
-	m_spriteBatch->end();
-	m_spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_world->getCamera()->getProjectionMatrix()));
-
-	m_world->getTerrain()->m_background.draw(m_spriteBatch);
-
-	set<Thing*> things = m_world->getTerrain()->getChunkLoader()->getActiveThings();
-	for(Thing *thing : things)
-	{
-		thing->draw(m_spriteBatch, alpha);
-	}
-
-	m_world->getTerrain()->m_middleground.draw(m_spriteBatch);
-
-	list<Entity*> gameObjects = m_world->getEntities();
-	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
+	// Draw game states
+	for(list<GameState*>::iterator itr = m_states.begin(); itr != m_states.end(); ++itr)
 	{
 		(*itr)->draw(m_spriteBatch, alpha);
+		if(!(*itr)->isTransparent())
+		{
+			break;
+		}
 	}
 	
-	m_world->getTerrain()->m_foreground.draw(m_spriteBatch);
-	m_world->getLighting()->draw(m_spriteBatch);
-	
-	m_spriteBatch->end();
+	// Render debug stuff
+	m_debug->setVariable("FPS", util::intToStr((int)Graphics::getFPS()));
 	m_spriteBatch->begin();
-
-	list<UiObject*> uiObjects = SceneManager::getScene()->getUiObjects();
-	for(UiObject *object : uiObjects)
-	{
-		object->draw(m_spriteBatch, alpha);
-	}
-
-	m_world->getDebug()->draw(m_spriteBatch);
+	m_debug->draw(m_spriteBatch);
 	m_spriteBatch->end();
-
-	m_states.top()->draw();
 }

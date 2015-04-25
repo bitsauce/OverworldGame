@@ -13,7 +13,7 @@ class Lighting : public WindowListener
 	friend class Debug;
 public:
 	// CONSTRUCTOR
-	Lighting(World &world);
+	Lighting(World *world);
 	~Lighting();
 
 	// DRAWING
@@ -29,7 +29,7 @@ public:
 
 private:
 	Terrain *m_terrain;
-	World &m_world;
+	World *m_world;
 
 	uint m_width, m_height;
 	xd::RenderTarget2D *m_lightingRenderTarget;

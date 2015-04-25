@@ -7,13 +7,13 @@
 class Canvas : public UiObject
 {
 public:
-	Canvas();
-	Canvas(const uint w, const uint h);
+	Canvas(Scene *scene);
+	Canvas(Scene *scene, const uint w, const uint h);
 
 	Vector2i getCanvasSize() const { return m_canvasSize; }
 
 	void updateSize();
-	void update(const float dt);
+	void update(const float delta);
 
 private:
 	Vector2i m_canvasSize;

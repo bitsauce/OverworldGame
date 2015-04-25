@@ -8,12 +8,12 @@ namespace RakNet {
 	class BitStream;
 }
 
-class World;
+class Game;
 
 class Server : public Connection
 {
 public:
-	Server(World &world, const ushort port);
+	Server(Game *game, const ushort port);
 
 	void update();
 	void sendPacket(RakNet::BitStream *bitStream);
@@ -21,7 +21,7 @@ public:
 	RakNet::RakPeerInterface *getRakPeer() const { return m_rakPeer; }
 
 private:
-	World &m_world;
+	Game *m_game;
 };
 
 #endif // SERVER_H

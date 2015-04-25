@@ -12,7 +12,7 @@ class ChunkLoader : public WindowListener
 {
 	friend class Debug;
 public:
-	ChunkLoader(World &world);
+	ChunkLoader(World *world);
 
 	void clear();
 
@@ -50,7 +50,7 @@ private:
 	bool m_applyZoom;
 	Camera *m_camera;
 	WorldGenerator *m_generator;
-	World &m_world;
+	World *m_world;
 
 	unordered_map<uint, Chunk*> m_chunks;
 	Chunk m_dummyChunk;

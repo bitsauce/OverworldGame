@@ -135,25 +135,25 @@ void Humanoid::setBodyPart(const BodyPart part, const Pixmap &pixmap)
 	m_skeleton->getTexture()->updatePixmap(x0, y0, pixmap);
 }
 
-void Humanoid::update(const float dt)
+void Humanoid::update(const float delta)
 {
 	// Update all animations
 	if(m_preAnimation)
 	{
 		m_prevPreAnimationTime = m_preAnimationTime;
-		m_preAnimationTime += dt;
+		m_preAnimationTime += delta;
 	}
 
 	if(m_mainAnimation)
 	{
 		m_prevMainAnimationTime = m_mainAnimationTime;
-		m_mainAnimationTime += dt;
+		m_mainAnimationTime += delta;
 	}
 
 	if(m_postAnimation)
 	{
 		m_prevPreAnimationTime = m_preAnimationTime;
-		m_preAnimationTime += dt;
+		m_preAnimationTime += delta;
 	}
 }
 

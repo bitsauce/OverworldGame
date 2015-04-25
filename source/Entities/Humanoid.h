@@ -51,7 +51,7 @@ public:
 
 	Skeleton *getSkeleton() { return m_skeleton; }
 
-	void update(const float dt);
+	void update(const float delta);
 	void draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha);
 	void drawLeftHandSprite(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch);
 	void drawRightHandSprite(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch);

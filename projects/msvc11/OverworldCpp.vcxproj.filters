@@ -28,24 +28,6 @@
     <ClCompile Include="..\..\source\animation\Slot.cpp">
       <Filter>Source\Animation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\scenes\GameScene.cpp">
-      <Filter>Source\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\scenes\MainMenu.cpp">
-      <Filter>Source\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\scenes\Scene.cpp">
-      <Filter>Source\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\scenes\SceneManager.cpp">
-      <Filter>Source\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\scenes\WorldCreate.cpp">
-      <Filter>Source\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\scenes\WorldSelect.cpp">
-      <Filter>Source\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\Blocks\BlockData.cpp">
       <Filter>Source\Blocks</Filter>
     </ClCompile>
@@ -67,9 +49,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\World\World.cpp">
       <Filter>Source\World</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\scenes\Multiplayer.cpp">
-      <Filter>Source\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Things\RedCurrantBush.cpp">
       <Filter>Source\Things</Filter>
@@ -182,6 +161,15 @@
     <ClCompile Include="..\..\Source\Game\Game.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Game\GameStates\InGameState.cpp">
+      <Filter>Source\Game\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game\GameStates\GameState.cpp">
+      <Filter>Source\Game\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game\Scene.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -195,9 +183,6 @@
     </Filter>
     <Filter Include="Source\Game">
       <UniqueIdentifier>{18bc6b9a-571d-4fa2-8cc2-faf75c39f783}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Scenes">
-      <UniqueIdentifier>{a771c727-de3c-48d8-93c5-0076f2474292}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Items">
       <UniqueIdentifier>{1f91a026-3a45-40fe-ac3f-6910a38f5067}</UniqueIdentifier>
@@ -256,6 +241,9 @@
     <Filter Include="Source\Entities\Physics">
       <UniqueIdentifier>{e03c2679-3c51-49ab-a1d8-899ba002d17a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Game\GameStates">
+      <UniqueIdentifier>{499e0ea9-ab1d-4a31-acaa-818d18bbf5ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\Noise\Simplex.h">
@@ -288,24 +276,6 @@
     <ClInclude Include="..\..\source\animation\Slot.h">
       <Filter>Source\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\scenes\GameScene.h">
-      <Filter>Source\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\scenes\MainMenu.h">
-      <Filter>Source\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\scenes\Scene.h">
-      <Filter>Source\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\scenes\SceneManager.h">
-      <Filter>Source\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\scenes\WorldCreate.h">
-      <Filter>Source\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\scenes\WorldSelect.h">
-      <Filter>Source\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Config.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -326,9 +296,6 @@
     </ClInclude>
     <ClInclude Include="..\..\source\gui\GameOverlay\Hotbar.h">
       <Filter>Source\Gui\GameOverlay</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\scenes\Multiplayer.h">
-      <Filter>Source\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Things\RedCurrantBush.h">
       <Filter>Source\Things</Filter>
@@ -445,6 +412,15 @@
       <Filter>Source\World</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Game\Game.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\GameStates\InGameState.h">
+      <Filter>Source\Game\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\GameStates\GameState.h">
+      <Filter>Source\Game\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\Scene.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
   </ItemGroup>

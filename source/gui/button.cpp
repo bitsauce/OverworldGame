@@ -1,8 +1,8 @@
 #include "Button.h"
 #include "Constants.h"
 
-Button::Button(string text, function<void()> onClick, UiObject *parent) :
-	UiObject(parent),
+Button::Button(Scene *scene, string text, function<void()> onClick, UiObject *parent) :
+	UiObject(scene, parent),
 	m_font(ResourceManager::get<Font>(UI_MENU_BUTTON_FONT)),
 	m_btnTexture(ResourceManager::get<Texture2D>(UI_MENU_BUTTON_TEXTURE)),
 	m_textTexture(0),
@@ -66,17 +66,17 @@ void *Button::getUserData() const
 	return m_userData;
 }
 
-void Button::update(const float dt)
+void Button::update(const float delta)
 {
 	if(isHovered())
 	{
-		m_animTime = min(m_animTime + dt*4.0f, 1.0f);
+		m_animTime = min(m_animTime + delta*4.0f, 1.0f);
 	}
 	else
 	{
-		m_animTime = max(m_animTime - dt*4.0f, 0.0f);
+		m_animTime = max(m_animTime - delta*4.0f, 0.0f);
 	}
-	UiObject::update(dt);
+	UiObject::update(delta);
 }
 	
 void Button::draw(SpriteBatch *spriteBatch)

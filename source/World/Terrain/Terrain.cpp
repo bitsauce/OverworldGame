@@ -13,11 +13,11 @@
 #include "World/Lighting/Spotlight.h"
 #include "World/Camera.h"
 
-Terrain::Terrain(World &world) :
+Terrain::Terrain(World *world) :
 	m_chunkLoader(world),
-	m_background(this, world.getCamera(), PRIORITY_TERRAIN_BACKGROUND, TERRAIN_LAYER_BACK),
-	m_middleground(this, world.getCamera(), PRIORITY_TERRAIN_MIDDLEGROUND, TERRAIN_LAYER_MIDDLE),
-	m_foreground(this, world.getCamera(), PRIORITY_TERRAIN_FOREGROUND, TERRAIN_LAYER_FRONT)
+	m_background(this, world->getCamera(), PRIORITY_TERRAIN_BACKGROUND, TERRAIN_LAYER_BACK),
+	m_middleground(this, world->getCamera(), PRIORITY_TERRAIN_MIDDLEGROUND, TERRAIN_LAYER_MIDDLE),
+	m_foreground(this, world->getCamera(), PRIORITY_TERRAIN_FOREGROUND, TERRAIN_LAYER_FRONT)
 {
 	LOG("Initializing terrain");
 

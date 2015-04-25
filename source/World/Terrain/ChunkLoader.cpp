@@ -6,10 +6,10 @@
 
 #define CHUNK_KEY(X, Y) ((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000)
 
-ChunkLoader::ChunkLoader(World &world) :
+ChunkLoader::ChunkLoader(World *world) :
 	m_applyZoom(true),
-	m_camera(world.getCamera()),
-	m_generator(world.getGenerator()),
+	m_camera(world->getCamera()),
+	m_generator(world->getGenerator()),
 	m_world(world),
 	m_chunkPositionIndex(0),
 	m_loadAreaRadius(5),
@@ -104,7 +104,7 @@ void ChunkLoader::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 	// Free it
 	Chunk *chunk = itr->second;
 	if(chunk->isModified()) {
-		saveBlockData(util::getAbsoluteFilePath(m_world.getWorldPath() + "/Chunks/" + util::intToStr(itr->first) + ".obj"), chunk->m_blocks);
+		saveBlockData(util::getAbsoluteFilePath(m_world->getWorldPath() + "/Chunks/" + util::intToStr(itr->first) + ".obj"), chunk->m_blocks);
 	}
 	m_chunkPool.push_back(chunk);
 	m_chunks.erase(itr->first);
@@ -169,7 +169,7 @@ Chunk *ChunkLoader::loadChunkAt(const int chunkX, const int chunkY)
 
 	// Get chunk file path
 	uint key = CHUNK_KEY(chunkX, chunkY);
-	string chunkFilePath = m_world.getWorldPath() + "/Chunks/" + util::intToStr(key) + ".obj";
+	string chunkFilePath = m_world->getWorldPath() + "/Chunks/" + util::intToStr(key) + ".obj";
 
 	// Get block data
 	BlockID blocks[CHUNK_BLOCKS*CHUNK_BLOCKS*TERRAIN_LAYER_COUNT];

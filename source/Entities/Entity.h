@@ -10,7 +10,7 @@ class World;
 class Entity
 {
 public:
-	Entity(World &world, const EntityID id);
+	Entity(World *world, const EntityID id);
 	virtual ~Entity();
 
 	virtual void setPosition(const Vector2 &pos) = 0;
@@ -50,11 +50,11 @@ public:
 
 	virtual Vector2 getDrawPosition(const float alpha) = 0;
 
-	virtual void update(const float dt) {}
+	virtual void update(const float delta) {}
 	virtual void draw(SpriteBatch *spriteBatch, const float alpha) {}
 
 protected:
-	World &m_world;
+	World *m_world;
 
 private:
 	const EntityID m_id;

@@ -10,9 +10,9 @@ enum ItemID;
 class ItemDrop : public DynamicEntity
 {
 public:
-	ItemDrop(World &world, const Vector2 position, const ItemID item);
+	ItemDrop(World *world, const Vector2 position, const ItemID item);
 
-	void update(const float dt);
+	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 private:

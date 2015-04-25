@@ -11,7 +11,7 @@ class ItemData
 	friend class Game;
 public:
 	ItemData();
-	virtual void use(Player *player, const float dt) = 0;
+	virtual void use(Player *player, const float delta) = 0;
 	virtual void draw(Player *player, SpriteBatch *spriteBatch, const float alpha) = 0;
 	static ItemData *get(const ItemID id) { return s_itemData[id]; }
 
@@ -31,7 +31,7 @@ private:
 	Texture2DPtr m_iconTexture;
 	bool m_singleShot;
 
-	static void init();
+	static void init(Game *game);
 	static vector<ItemData*> s_itemData;
 };
 

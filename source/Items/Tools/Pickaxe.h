@@ -7,11 +7,12 @@
 class Pickaxe : public ItemData
 {
 public:
-	Pickaxe();
-	void use(Player *player, const float dt);
+	Pickaxe(Game *game);
+	void use(Player *player, const float delta);
 	void draw(Player *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:
+	Game *m_game;
 	Sprite m_cracksSprite;
 	SpriteAnimation m_cracksAnimation;
 	Sprite m_sprite;

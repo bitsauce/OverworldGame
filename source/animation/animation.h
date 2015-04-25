@@ -17,8 +17,8 @@ public:
 	float getTime() const;
 	void setLooping(const bool looping);
 	bool getLooping() const;
-	void apply(const float dt);
-	void mix(const float dt, const float alpha);
+	void apply(const float delta);
+	void mix(const float delta, const float alpha);
 
 private:
 	spAnimation *m_self;

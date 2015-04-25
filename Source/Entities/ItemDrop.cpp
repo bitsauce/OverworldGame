@@ -4,7 +4,7 @@
 #include "World/World.h"
 #include "Items/ItemData.h"
 
-ItemDrop::ItemDrop(World &world, const Vector2 position, const ItemID item) :
+ItemDrop::ItemDrop(World *world, const Vector2 position, const ItemID item) :
 	DynamicEntity(world, ENTITY_ITEM_DROP),
 	m_itemID(item),
 	m_dragDistance(16.0f * BLOCK_PXF),
@@ -18,11 +18,11 @@ ItemDrop::ItemDrop(World &world, const Vector2 position, const ItemID item) :
 	setSize(Vector2(16.0f));
 }
 
-void ItemDrop::update(const float dt)
+void ItemDrop::update(const float delta)
 {
 	m_prevPosition = getPosition();
 
-	list<Player*> players = m_world.getPlayers();
+	list<Player*> players = m_world->getPlayers();
 	for(Player *player : players)
 	{
 		Vector2 deltaPosition = player->getCenter() - getCenter();
@@ -39,9 +39,9 @@ void ItemDrop::update(const float dt)
 	}
 
 	m_prevHoverTime = m_hoverTime;
-	m_hoverTime += 5.0f * dt;
+	m_hoverTime += 5.0f * delta;
 
-	DynamicEntity::update(dt);
+	DynamicEntity::update(delta);
 }
 
 void ItemDrop::draw(SpriteBatch *spriteBatch, const float alpha)

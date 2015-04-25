@@ -7,9 +7,9 @@
 class Zombie : public DynamicEntity
 {
 public:
-	Zombie(World &world);
+	Zombie(World *world);
 
-	void update(const float dt);
+	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 private:

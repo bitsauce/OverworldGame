@@ -12,14 +12,15 @@ class Terrain;
 class ItemData;
 class ItemContainer;
 class Connection;
+class Game;
 
 class Player : public DynamicEntity, public NetworkObject, public MouseListener
 {
 public:
-	Player(World &world, RakNet::RakNetGUID guid);
+	Player(Game *game, RakNet::RakNetGUID guid);
 	~Player();
 
-	void update(const float dt);
+	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 	void activateThing();
@@ -36,14 +37,10 @@ public:
 	void setCrafting(const bool crafting) { m_isCrafting = crafting; }
 	bool isCrafting() const { return m_isCrafting; }
 
-	World &getWorld() const { return m_world; }
-	Camera *getCamera() const { return m_camera; }
-	Terrain *getTerrain() const { return m_terrain; }
-
 	ItemContainer &getItemContainer() { return m_itemContainer; }
 	Humanoid &getHumanoid() { return m_humanoid; }
 
-	void mouseWheelEvent(const int dt);
+	void mouseWheelEvent(const int delta);
 
 private:
 	// Managers
@@ -80,8 +77,6 @@ private:
 	// Physics
 	float m_jumpTimer;
 	bool m_canJump;
-
-	//static vector<Player*> s_playerList;
 };
 
 #endif // PLAYER_H

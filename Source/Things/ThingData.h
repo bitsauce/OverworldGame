@@ -20,7 +20,7 @@ class ThingData
 	};
 
 public:
-	ThingData(const int width, const int height, const int rule, const string &texture, const TextureRegion &textureRegion, function<Thing*(World&, int, int)> factory);
+	ThingData(const int width, const int height, const int rule, const string &texture, const TextureRegion &textureRegion, function<Thing*(World*, int, int)> factory);
 
 	bool canPlace(const int x, const int y);
 	Thing *tryPlace(const int x, const int y);
@@ -33,7 +33,7 @@ public:
 private:
 	const int m_width, m_height;
 	const int m_placementRule;
-	const function<Thing*(World&, int, int)> m_factory;
+	const function<Thing*(World*, int, int)> m_factory;
 	Sprite m_sprite;
 
 	static World *s_world;

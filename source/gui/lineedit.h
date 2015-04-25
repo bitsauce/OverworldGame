@@ -5,11 +5,12 @@
 #include "UiObject.h"
 
 class UiObject;
+class Scene;
 
 class LineEdit : public UiObject, public KeyboardListener
 {
 public:
-	LineEdit(UiObject *parent = nullptr);
+	LineEdit(Scene *scene, UiObject *parent = nullptr);
 	~LineEdit();
 
 	void setAcceptFunc(function<void()> func) { m_acceptFunc = func ; }
@@ -17,7 +18,7 @@ public:
 	void setText(const string &text);
 	string getText() const;
 
-	void update(const float dt);
+	void update(const float delta);
 	void draw(SpriteBatch *SpriteBatch);
 
 private:

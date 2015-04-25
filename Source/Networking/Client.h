@@ -9,18 +9,18 @@ namespace RakNet {
 	class BitStream;
 }
 
-class World;
+class Game;
 
 class Client : public Connection
 {
 public:
-	Client(World &world, const string &ip, const ushort port);
+	Client(Game *game, const string &ip, const ushort port);
 
 	void update();
 	void sendPacket(RakNet::BitStream *bitStream);
 
 private:
-	World &m_world;
+	Game *m_game;
 };
 
 #endif // CLIENT_H

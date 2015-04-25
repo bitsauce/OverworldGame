@@ -9,13 +9,13 @@ class Player;
 class Omnicon : public UiObject
 {
 public:
-	Omnicon(Player *player, UiObject *parent);
+	Omnicon(Scene *scene, Player *player, UiObject *parent);
 
 	void toggle();
 	void setVisible(const bool visible) { m_visible = visible; }
 	bool isVisible() const { return m_visible; }
 
-	void update(const float dt);
+	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 private:

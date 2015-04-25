@@ -11,13 +11,13 @@
 
 #include "Constants.h"
 
-GameScene::GameScene(World &world) :
+GameScene::GameScene(Scene *scene, World *world) :
 	m_world(world)
 {
 	LOG("Scene: Game Scene");
 
 	// Setup canvas
-	canvas = new Canvas();
+	Canvas *canvas = new Canvas(scene);
 	canvas->updateSize();
 
 	RakNet::BitStream bitStream;

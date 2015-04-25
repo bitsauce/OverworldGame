@@ -89,11 +89,11 @@ void Camera::update(const float alpha)
 	}
 }
 
-void Camera::mouseWheelEvent(const int dt)
+void Camera::mouseWheelEvent(const int delta)
 {
 	/*Vector2 center = getCenter();
-	if(dt > 0) zoomIn();
-	if(dt < 0) zoomOut();
+	if(delta > 0) zoomIn();
+	if(delta < 0) zoomOut();
 	lookAt(center);*/
 }
 

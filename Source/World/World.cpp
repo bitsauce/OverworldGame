@@ -2,19 +2,16 @@
 #include "Constants.h"
 
 #include "Entities/Player.h"
-
 #include "World/Background.h"
 #include "World/Camera.h"
 #include "World/TimeOfDay.h"
 #include "World/Debug.h"
-
 #include "Terrain/Terrain.h"
-
 #include "Generation/Generator.h"
 #include "Entities/Physics/DynamicEntity.h"
 #include "Entities/Player.h"
 #include "Lighting/Lighting.h"
-#include "Scenes/SceneManager.h"
+#include "Things/Thing.h"
 #include "Scenes/GameScene.h"
 
 World::World() :
@@ -26,9 +23,8 @@ World::World() :
 	m_background = new Background(m_timeOfDay);
 	m_camera = new Camera();
 	m_generator = new WorldGenerator();
-	m_terrain = new Terrain(*this);
-	m_lighting = new Lighting(*this);
-	m_debug = new Debug(*this);
+	m_terrain = new Terrain(this);
+	m_lighting = new Lighting(this);
 }
 
 void World::create(const string &name)
@@ -53,7 +49,7 @@ void World::create(const string &name)
 
 void World::save()
 {
-	LOG("Saving world...");
+	LOG("Saving world->..");
 
 	m_terrain->getChunkLoader()->clear();
 }
@@ -79,7 +75,7 @@ bool World::load(const string &name)
 
 void World::clear()
 {
-	LOG("Reseting world...");
+	LOG("Reseting world->..");
 
 	// Reset world path and file
 	m_worldPath.clear();
@@ -95,4 +91,49 @@ void World::clear()
 	m_entities.clear();
 	m_players.clear();
 	m_localPlayer = nullptr;
+}
+
+void World::update(const float delta)
+{
+	m_timeOfDay->update(delta);
+	m_background->update(delta);
+	m_terrain->getChunkLoader()->update();
+
+	list<Entity*> gameObjects = m_entities;
+	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
+	{
+		(*itr)->update(delta);
+	}
+}
+
+void World::draw(SpriteBatch *spriteBatch, const float alpha)
+{
+	spriteBatch->begin();
+
+	m_background->draw(spriteBatch, alpha);
+	m_camera->update(alpha);
+	
+	spriteBatch->end();
+	spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_camera->getProjectionMatrix()));
+
+	m_terrain->m_background.draw(spriteBatch);
+
+	set<Thing*> things = m_terrain->getChunkLoader()->getActiveThings();
+	for(Thing *thing : things)
+	{
+		thing->draw(spriteBatch, alpha);
+	}
+
+	m_terrain->m_middleground.draw(spriteBatch);
+
+	list<Entity*> gameObjects = m_entities;
+	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
+	{
+		(*itr)->draw(spriteBatch, alpha);
+	}
+	
+	m_terrain->m_foreground.draw(spriteBatch);
+	m_lighting->draw(spriteBatch);
+	
+	spriteBatch->end();
 }

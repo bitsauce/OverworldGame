@@ -7,22 +7,22 @@
 #include "World/World.h"
 #include "Constants.h"
 
-WorldCreateScene::WorldCreateScene(World &world) :
+WorldCreateScene::WorldCreateScene(Scene *scene, World *world) :
 	m_world(world)
 {
 	LOG("Scene: World Create");
 	
 	// Setup canvas
-	canvas = new Canvas(800, 600);
+	Canvas *canvas = new Canvas(scene, 800, 600);
 	canvas->updateSize();
 		
-	m_worldNameEdit = new LineEdit(canvas);
+	m_worldNameEdit = new LineEdit(scene, canvas);
 	m_worldNameEdit->setAnchor(Vector2(0.5f, 0.5f));
 	m_worldNameEdit->setPosition(Vector2(0.0f, 0.0f));
 	m_worldNameEdit->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
 	m_worldNameEdit->setAcceptFunc(function<void()>(bind(&WorldCreateScene::createWorld, this))); // TODO: Accept func should probably be connected to the canvas instead
 	
-	Button *createWorldButton = new Button("Create!", function<void()>(bind(&WorldCreateScene::createWorld, this)), canvas);
+	Button *createWorldButton = new Button(scene, "Create!", function<void()>(bind(&WorldCreateScene::createWorld, this)), canvas);
 	createWorldButton->setAnchor(Vector2(0.5f, 1.0f));
 	createWorldButton->setPosition(Vector2(0.0f, -0.1f));
 	createWorldButton->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));

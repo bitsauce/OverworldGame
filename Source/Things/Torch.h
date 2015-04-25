@@ -11,19 +11,19 @@ class Torch : public Thing
 {
 	friend class ThingData;
 public:
-	Torch(World &world, const int x, const int y);
+	Torch(World *world, const int x, const int y);
 
 	void activate();
 
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 private:
-	World &m_world;
+	World *m_world;
 	Sprite m_sprite;
 	Spotlight m_spotlight;
 	//float durration;?
 
-	static Thing *Factory(World &world, const int x, const int y) { return new Torch(world, x, y); }
+	static Thing *Factory(World *world, const int x, const int y) { return new Torch(world, x, y); }
 };
 
 #endif // TORCH_H

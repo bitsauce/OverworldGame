@@ -2,23 +2,10 @@
 #define GAME_MANAGER_H
 
 #include "Config.h"
+#include "World/World.h"
 
-class World;
-class GameState
-{
-	friend class Game;
-protected:
-	GameState();
-
-	virtual void update();
-	virtual void draw();
-
-	virtual void enter();
-	virtual void leave();
-
-private:
-	bool m_isTransparent;
-};
+class Debug;
+class GameState;
 
 class Game
 {
@@ -27,22 +14,28 @@ public:
 
 	void main(GraphicsContext &context);
 	void exit();
-	void update(const float dt);
+	void update(const float delta);
 	void draw(GraphicsContext &context, const float alpha);
 
-	void takeScreenshot() { m_takeScreenshot = true; }
+	SpriteBatch *getSpriteBatch() const { return m_spriteBatch; }
+	Debug *getDebug() const { return m_debug; }
+	World *getWorld() const { return m_world; }
 
 	void pushState(GameState *state);
 	void popState();
+	GameState *peekState(int level = 0);
+
+	void takeScreenshot() { m_takeScreenshot = true; }
 
 private:
 	SpriteBatch *m_spriteBatch;
 	bool m_takeScreenshot;
+	
+	Debug *m_debug;
 	World *m_world;
-	stack<GameState*> m_states;
+	list<GameState*> m_states;
 	
 	//Canvas *m_canvas;
-	//SceneManager *m_sceneManager;
 	//GameOverlay *m_gameOverlay;
 	//Player *m_localPlayer;
 };

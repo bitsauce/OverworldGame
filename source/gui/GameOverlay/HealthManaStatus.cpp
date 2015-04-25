@@ -3,8 +3,8 @@
 #include "Gui/Canvas.h"
 #include "Entities/Player.h"
 
-HealthManaStatus::HealthManaStatus(Player *player, UiObject *parent) :
-	UiObject(parent),
+HealthManaStatus::HealthManaStatus(Scene *scene, Player *player, UiObject *parent) :
+	UiObject(scene, parent),
 	m_player(player),
 	m_heartSprite(ResourceManager::get<Texture2D>(":/Sprites/Gui/GameOverlay/Heart.png")),
 	m_manaSprite(ResourceManager::get<Texture2D>(":/Sprites/Gui/GameOverlay/Mana.png")),
@@ -18,15 +18,15 @@ HealthManaStatus::HealthManaStatus(Player *player, UiObject *parent) :
 	m_manaSprite.getTexture()->setFiltering(Texture2D::LINEAR);
 
 	setAnchor(Vector2(1.0f, 0.0f));
-	setSize(Vector2(338.0f, 168.0f)/canvas->getSize());
-	setPosition(Vector2(-48.0f, 48.0f)/canvas->getSize());
+	setSize(Vector2(338.0f, 168.0f)/parent->getSize());
+	setPosition(Vector2(-48.0f, 48.0f)/parent->getSize());
 }
 
-void HealthManaStatus::update(const float dt)
+void HealthManaStatus::update(const float delta)
 {
-	setSize(Vector2(338.0f, 168.0f)/canvas->getSize());
-	m_heartTime += dt;
-	UiObject::update(dt);
+	setSize(Vector2(338.0f, 168.0f)/m_parent->getSize());
+	m_heartTime += delta;
+	UiObject::update(delta);
 }
 
 void HealthManaStatus::draw(SpriteBatch *spriteBatch, const float alpha)

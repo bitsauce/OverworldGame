@@ -9,9 +9,9 @@ class Player;
 class Hotbar : public UiObject
 {
 public:
-	Hotbar(Player *player, UiObject *parent);
+	Hotbar(Scene *scene, Player *player, UiObject *parent);
 
-	void update(const float dt);
+	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 private:

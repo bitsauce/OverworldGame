@@ -1,8 +1,8 @@
 #include "Omnicon.h"
 #include "Entities/Player.h"
 
-Omnicon::Omnicon(Player *player, UiObject *parent) :
-	UiObject(parent),
+Omnicon::Omnicon(Scene *scene, Player *player, UiObject *parent) :
+	UiObject(scene, parent),
 	m_visible(false),
 	m_player(player),
 	m_omnicon(ResourceManager::get<Texture2D>(":/Sprites/Gui/GameOverlay/Omnicon.png"))
@@ -18,7 +18,7 @@ void Omnicon::toggle()
 	m_visible = !m_visible;
 }
 
-void Omnicon::update(const float dt)
+void Omnicon::update(const float delta)
 {
 	if(!m_visible && !m_player->isCrafting()) return;
 }

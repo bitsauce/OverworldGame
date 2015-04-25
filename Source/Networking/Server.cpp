@@ -14,10 +14,11 @@
 #include "World/Terrain/Terrain.h"
 #include "Entities/Player.h"
 #include "Entities/Physics/DynamicEntity.h"
+#include "Game/Game.h"
 
-Server::Server(World &world, const ushort port) :
+Server::Server(Game *game, const ushort port) :
 	Connection(true),
-	m_world(world)
+	m_game(game)
 {
 	m_rakPeer = RakNet::RakPeerInterface::GetInstance();
 	RakNet::SocketDescriptor socketDescriptor(port, 0);
@@ -71,7 +72,7 @@ void Server::update()
 				int y; bitStream.Read(y);
 				BlockID block; bitStream.Read(block);
 				TerrainLayer layer; bitStream.Read(layer);
-				m_world.getTerrain()->setBlockAt(x, y, block, layer);
+				m_game->getWorld()->getTerrain()->setBlockAt(x, y, block, layer);
 			}
 			break;
 
@@ -80,7 +81,7 @@ void Server::update()
 				LOG("Creating player...");
 
 				// Create player
-				Player *player = new Player(m_world, packet->guid);
+				Player *player = new Player(m_game, packet->guid);
 				player->SetNetworkIDManager(&m_networkIDManager);
 				m_networkObjects.push_back(player);
 

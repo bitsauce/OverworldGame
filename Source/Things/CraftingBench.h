@@ -19,7 +19,7 @@ public:
 private:
 	Sprite m_sprite;
 
-	static Thing *Factory(World&, const int x, const int y) { return new CraftingBench(x, y); }
+	static Thing *Factory(World*, const int x, const int y) { return new CraftingBench(x, y); }
 };
 
 #endif // CRAFTING_BENCH_H

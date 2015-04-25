@@ -8,12 +8,13 @@ enum ThingID;
 class ThingItem : public ItemData
 {
 public:
-	ThingItem(const ThingID id);
+	ThingItem(Game *game, const ThingID id);
 
-	void use(Player *player, const float dt);
+	void use(Player *player, const float delta);
 	void draw(Player *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:
+	Game *m_game;
 	const ThingID m_blockEntityID;
 };
 

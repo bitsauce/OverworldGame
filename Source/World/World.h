@@ -6,7 +6,6 @@
 class Terrain;
 class TimeOfDay;
 class Camera;
-class Debug;
 class Lighting;
 class WorldGenerator;
 class Server;
@@ -20,10 +19,14 @@ class World
 	friend class Player;
 public:
 	World();
+
 	void create(const string &name);
 	bool load(const string &name);
 	void save();
 	void clear();
+
+	void update(const float delta);
+	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 	// World path
 	string getWorldPath() const { return m_worldPath; }
@@ -35,7 +38,6 @@ public:
 	TimeOfDay *getTimeOfDay() const { return m_timeOfDay; }
 	Camera *getCamera() const { return m_camera; }
 	Lighting *getLighting() const { return m_lighting; }
-	Debug *getDebug() const { return m_debug; }
 	WorldGenerator *getGenerator() const { return m_generator; }
 
 	// Entities
@@ -54,7 +56,6 @@ private:
 	string m_worldPath;
 	IniFile *m_worldFile;
 	Camera *m_camera;
-	Debug *m_debug;
 	Lighting *m_lighting;
 	list<Player*> m_players;
 	Player* m_localPlayer;

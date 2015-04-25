@@ -6,13 +6,14 @@
 class Terrain;
 class Lighting;
 class ChunkLoader;
+class Game;
 class World;
 enum BlockID;
 
 class Debug
 {
 public:
-	Debug(World &world);
+	Debug(Game &game);
 
 	void update();
 	void draw(SpriteBatch *spriteBatch);
@@ -35,8 +36,9 @@ private:
 	// Debug variables
 	map<string, string> m_variables;
 
-	// World pointer
-	World &m_world;
+	// Game pointer
+	Game &m_game;
+	World *m_world;
 
 	// Debug sprites
 	Sprite m_bulbSprite;

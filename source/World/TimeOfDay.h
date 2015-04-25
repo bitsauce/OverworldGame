@@ -34,10 +34,10 @@ public:
 		return !isDay();
 	}
 
-	void update(const float dt)
+	void update(const float delta)
 	{
 		// Apply time
-		time += dt;
+		time += delta;
 
 		/*// Debug: Time speedup (0 forwards, 9 backwards)
 		if(xd::Input::getKeyState(xd::XD_KEY_0))

@@ -5,8 +5,8 @@
 #include "Items/ItemData.h"
 #include "Entities/Player.h"
 
-Hotbar::Hotbar(Player *player, UiObject *parent) :
-	UiObject(parent),
+Hotbar::Hotbar(Scene *scene, Player *player, UiObject *parent) :
+	UiObject(scene, parent),
 	m_player(player),
 	m_spriteItemSlot(ResourceManager::get<Texture2D>(":/Sprites/Inventory/ItemSlot.png")),
 	m_spriteItemSlotSelected(ResourceManager::get<Texture2D>(":/Sprites/Inventory/ItemSlotSelected.png")),
@@ -23,13 +23,13 @@ Hotbar::Hotbar(Player *player, UiObject *parent) :
 	m_font->setDepth(1.f);
 
 	setAnchor(Vector2(0.5f, 0.98f));
-	setSize(Vector2(490.f, 56.f)/canvas->getSize());
+	setSize(Vector2(490.f, 56.f)/parent->getSize());
 	setPosition(Vector2(.0f));
 }
 
-void Hotbar::update(const float dt)
+void Hotbar::update(const float delta)
 {
-	setSize(Vector2(490.f, 56.f)/canvas->getSize());
+	setSize(Vector2(490.f, 56.f)/m_parent->getSize());
 }
 
 void Hotbar::draw(SpriteBatch *spriteBatch, const float alpha)

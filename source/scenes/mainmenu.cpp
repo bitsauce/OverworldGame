@@ -1,6 +1,5 @@
 #include "MainMenu.h"
 #include "WorldSelect.h"
-#include "SceneManager.h"
 
 #include "Gui/Button.h"
 #include "Gui/Canvas.h"
@@ -14,18 +13,18 @@ int TITLE_BLOCKS[4][37] = {
 	{ 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0 }
 };
 
-MainMenuScene::MainMenuScene(World &world) :
+MainMenuScene::MainMenuScene(Scene *scene, World *world) :
 	m_world(world)
 {
 	LOG("Scene: Main menu");
 	
 	// Setup canvas
-	canvas = new Canvas(800, 600);
+	Canvas *canvas = new Canvas(scene, 800, 600);
 	canvas->setSize(Vector2(1.0f, 1.0f));
 
 	// Create and setup menu buttons
-	Button *spBtn = new Button("Singleplayer", function<void()>(bind(&MainMenuScene::showWorldSelectScene, this)), canvas);
-	Button *mpBtn = new Button("Multiplayer", function<void()>(), canvas);
+	Button *spBtn = new Button(scene, "Singleplayer", function<void()>(bind(&MainMenuScene::showWorldSelectScene, this)), canvas);
+	Button *mpBtn = new Button(scene, "Multiplayer", function<void()>(), canvas);
 	
 	spBtn->setPosition(Vector2(0.0f, -0.1f));
 	spBtn->setSize(Vector2(300.0f/CANVAS_WIDTH, 70.0f/CANVAS_HEIGHT));
@@ -38,5 +37,5 @@ MainMenuScene::MainMenuScene(World &world) :
 
 void MainMenuScene::showWorldSelectScene()
 {
-	SceneManager::setScene(new WorldSelectScene(m_world));
+	//SceneManager::setScene(new WorldSelectScene(m_world));
 }

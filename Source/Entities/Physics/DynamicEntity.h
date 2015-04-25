@@ -10,9 +10,9 @@ class World;
 class DynamicEntity : public Entity
 {
 public:
-	DynamicEntity(World &world, const EntityID id);
+	DynamicEntity(World *world, const EntityID id);
 
-	virtual void update(const float dt);
+	virtual void update(const float delta);
 	//void debugDraw(SpriteBatch *spriteBatch, const float alpha);
 
 	void setPosition(const Vector2 &pos) { m_position = pos; }

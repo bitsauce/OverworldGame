@@ -6,17 +6,18 @@
 
 class Canvas;
 class World;
+class Scene;
 
 class WorldSelectScene : public Scene
 {
 public:
-	WorldSelectScene(World &world);
+	WorldSelectScene(Scene *scene, World *world);
 
 	void worldClicked();
 	void showCreateWorld();
 
 private:
-	World &m_world;
+	World *m_world;
 };
 
 #endif // WORLD_SELECT_H

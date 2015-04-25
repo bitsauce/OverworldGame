@@ -6,17 +6,18 @@
 
 class LineEdit;
 class World;
+class Scene;
 
 class WorldCreateScene : public Scene
 {
 public:
-	WorldCreateScene(World &world);
+	WorldCreateScene(Scene *scene, World *world);
 
 	void showWorldSelectScene();
 	void createWorld();
 
 private:
-	World &m_world;
+	World *m_world;
 	LineEdit *m_worldNameEdit;
 };
 

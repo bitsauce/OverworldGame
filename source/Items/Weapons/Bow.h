@@ -7,11 +7,12 @@
 class Bow : public ItemData
 {
 public:
-	Bow();
-	void use(Player *player, const float dt);
+	Bow(Game *game);
+	void use(Player *player, const float delta);
 	void draw(Player *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:
+	Game *m_game;
 	Sprite m_bowSprite;
 };
 

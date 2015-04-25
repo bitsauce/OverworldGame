@@ -13,12 +13,12 @@ void ThingData::init(World *world)
 {
 	s_world = world;
 	
-	s_blockEntityData[BLOCK_ENTITY_RED_CURRANT_BUSH] = new ThingData(4, 2, NEED_FLOOR, ":/Sprites/BlockEntities/Bushes/RedCurrantBush.png", TextureRegion(0.0f, 0.0f, 1.0f, 0.5f), function<Thing*(World&, int, int)>(RedCurrantBush::Factory));
-	s_blockEntityData[BLOCK_ENTITY_TORCH] = new ThingData(1, 1, NEED_FLOOR | NEED_ROOF | NEED_WALLS | NEED_BACKGROUND, ":/Sprites/BlockEntities/LightSources/Torch.png", TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), function<Thing*(World&, int, int)>(Torch::Factory));
-	s_blockEntityData[BLOCK_ENTITY_CRAFTING_BENCH] = new ThingData(1, 1, NEED_FLOOR, ":/Sprites/BlockEntities/Furniture/CraftingBench.png", TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), function<Thing*(World&, int, int)>(CraftingBench::Factory));
+	s_blockEntityData[BLOCK_ENTITY_RED_CURRANT_BUSH] = new ThingData(4, 2, NEED_FLOOR, ":/Sprites/BlockEntities/Bushes/RedCurrantBush.png", TextureRegion(0.0f, 0.0f, 1.0f, 0.5f), function<Thing*(World*, int, int)>(RedCurrantBush::Factory));
+	s_blockEntityData[BLOCK_ENTITY_TORCH] = new ThingData(1, 1, NEED_FLOOR | NEED_ROOF | NEED_WALLS | NEED_BACKGROUND, ":/Sprites/BlockEntities/LightSources/Torch.png", TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), function<Thing*(World*, int, int)>(Torch::Factory));
+	s_blockEntityData[BLOCK_ENTITY_CRAFTING_BENCH] = new ThingData(1, 1, NEED_FLOOR, ":/Sprites/BlockEntities/Furniture/CraftingBench.png", TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), function<Thing*(World*, int, int)>(CraftingBench::Factory));
 }
 
-ThingData::ThingData(const int width, const int height, const int rule, const string &texture, const TextureRegion &textureRegion, function<Thing*(World&, int, int)> factory) :
+ThingData::ThingData(const int width, const int height, const int rule, const string &texture, const TextureRegion &textureRegion, function<Thing*(World*, int, int)> factory) :
 	m_width(width),
 	m_height(height),
 	m_placementRule(rule),
@@ -126,7 +126,7 @@ Thing *ThingData::tryPlace(const int x, const int y)
 				s_world->getTerrain()->setBlockAt(x + j, y + i, BLOCK_ENTITY, TERRAIN_LAYER_MIDDLE);
 			}
 		}
-		return m_factory(*s_world, x, y);
+		return m_factory(s_world, x, y);
 	}
 	return nullptr;
 }

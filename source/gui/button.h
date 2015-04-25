@@ -7,7 +7,7 @@
 class Button : public UiObject
 {
 public:
-	Button(string text, function<void()> onClick, UiObject *parent = nullptr);
+	Button(Scene *scene, string text, function<void()> onClick, UiObject *parent = nullptr);
 	//Button(string text, function<void(Button*)> onClick, UiObject *parent = nullptr);
 	~Button();
 
@@ -17,7 +17,7 @@ public:
 	void setUserData(void *userData);
 	void *getUserData() const;
 
-	void update(const float dt);
+	void update(const float delta);
 	void draw(SpriteBatch *SpriteBatch);
 	void clickEvent();
 

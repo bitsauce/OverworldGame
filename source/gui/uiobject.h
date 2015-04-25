@@ -5,10 +5,12 @@
 
 #pragma warning(disable : 4717)
 
+class Scene;
+
 class UiObject
 {
 public:
-	UiObject(UiObject *parent);
+	UiObject(Scene *scene, UiObject *parent);
 	virtual ~UiObject();
 
 	// Mouse press event
@@ -44,10 +46,13 @@ public:
 	void setAnchor(const Vector2 &anchor);
 	
 	// Update & draw
-	virtual void update(const float dt);
+	virtual void update(const float delta);
 	virtual void draw(SpriteBatch *SpriteBatch, const float alpha) { }
 
 protected:
+	// Scene object
+	Scene *m_scene;
+
 	// Parent object
 	UiObject *m_parent;
 

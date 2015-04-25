@@ -29,7 +29,7 @@ Background::Background(TimeOfDay *timeOfDay) :
 	m_cloudSprite.setOrigin(m_cloudSprite.getCenter());
 }
 
-void Background::update(const float dt)
+void Background::update(const float delta)
 {
 	// Get hour and mintue
 	int hour = m_timeOfDay->getHour();
@@ -87,7 +87,7 @@ void Background::update(const float dt)
 	}
 		
 	// Apply wind
-	m_cloudTime += m_wind * dt;
+	m_cloudTime += m_wind * delta;
 	m_cloudSprite.setPosition(((int)time % 51) / 50.0f * Window::getSize().x, 0);
 }
 
