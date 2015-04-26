@@ -4,12 +4,12 @@
 #include "Config.h"
 #include "Gui/UiObject.h"
 
-class Player;
+class GameOverlay;
 
 class Omnicon : public UiObject
 {
 public:
-	Omnicon(Scene *scene, Player *player, UiObject *parent);
+	Omnicon(Scene *scene, GameOverlay *gameOverlay);
 
 	void toggle();
 	void setVisible(const bool visible) { m_visible = visible; }
@@ -19,8 +19,8 @@ public:
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 private:
-	Sprite m_omnicon;
-	Player *m_player;
+	GameOverlay *m_gameOverlay;
+	Sprite m_bookSprite;
 	bool m_visible;
 };
 

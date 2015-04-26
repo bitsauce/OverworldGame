@@ -7,18 +7,18 @@
 #include "World/Terrain/Terrain.h"
 
 vector<ThingData*> ThingData::s_blockEntityData(BLOCK_ENTITY_COUNT);
-World *ThingData::s_world = nullptr;
+Game *ThingData::s_game = nullptr;
 
-void ThingData::init(World *world)
+void ThingData::init(Game *game)
 {
-	s_world = world;
+	s_game = game;
 	
-	s_blockEntityData[BLOCK_ENTITY_RED_CURRANT_BUSH] = new ThingData(4, 2, NEED_FLOOR, ":/Sprites/BlockEntities/Bushes/RedCurrantBush.png", TextureRegion(0.0f, 0.0f, 1.0f, 0.5f), function<Thing*(World*, int, int)>(RedCurrantBush::Factory));
-	s_blockEntityData[BLOCK_ENTITY_TORCH] = new ThingData(1, 1, NEED_FLOOR | NEED_ROOF | NEED_WALLS | NEED_BACKGROUND, ":/Sprites/BlockEntities/LightSources/Torch.png", TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), function<Thing*(World*, int, int)>(Torch::Factory));
-	s_blockEntityData[BLOCK_ENTITY_CRAFTING_BENCH] = new ThingData(1, 1, NEED_FLOOR, ":/Sprites/BlockEntities/Furniture/CraftingBench.png", TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), function<Thing*(World*, int, int)>(CraftingBench::Factory));
+	s_blockEntityData[BLOCK_ENTITY_RED_CURRANT_BUSH] = new ThingData(4, 2, NEED_FLOOR, ":/Sprites/BlockEntities/Bushes/RedCurrantBush.png", TextureRegion(0.0f, 0.0f, 1.0f, 0.5f), function<Thing*(Game*, int, int)>(RedCurrantBush::Factory));
+	s_blockEntityData[BLOCK_ENTITY_TORCH] = new ThingData(1, 1, NEED_FLOOR | NEED_ROOF | NEED_WALLS | NEED_BACKGROUND, ":/Sprites/BlockEntities/LightSources/Torch.png", TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), function<Thing*(Game*, int, int)>(Torch::Factory));
+	s_blockEntityData[BLOCK_ENTITY_CRAFTING_BENCH] = new ThingData(1, 1, NEED_FLOOR, ":/Sprites/BlockEntities/Furniture/CraftingBench.png", TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), function<Thing*(Game*, int, int)>(CraftingBench::Factory));
 }
 
-ThingData::ThingData(const int width, const int height, const int rule, const string &texture, const TextureRegion &textureRegion, function<Thing*(World*, int, int)> factory) :
+ThingData::ThingData(const int width, const int height, const int rule, const string &texture, const TextureRegion &textureRegion, function<Thing*(Game*, int, int)> factory) :
 	m_width(width),
 	m_height(height),
 	m_placementRule(rule),
@@ -34,7 +34,7 @@ bool ThingData::canPlace(const int x, const int y)
 	{
 		for(int j = 0; j < m_width; ++j)
 		{
-			if(s_world->getTerrain()->getBlockAt(x + j, y + i, TERRAIN_LAYER_MIDDLE) != BLOCK_EMPTY)
+			if(s_game->getWorld()->getTerrain()->getBlockAt(x + j, y + i, TERRAIN_LAYER_MIDDLE) != BLOCK_EMPTY)
 			{
 				return false;
 			}
@@ -48,7 +48,7 @@ bool ThingData::canPlace(const int x, const int y)
 		valid = true;
 		for(int i = 0; i < m_width && valid; ++i)
 		{
-			if(s_world->getTerrain()->getBlockAt(x + i, y + m_height, TERRAIN_LAYER_MIDDLE) <= BLOCK_ENTITY)
+			if(s_game->getWorld()->getTerrain()->getBlockAt(x + i, y + m_height, TERRAIN_LAYER_MIDDLE) <= BLOCK_ENTITY)
 			{
 				valid = false;
 			}
@@ -62,7 +62,7 @@ bool ThingData::canPlace(const int x, const int y)
 		valid = true;
 		for(int i = 0; i < m_width && valid; ++i)
 		{
-			if(s_world->getTerrain()->getBlockAt(x + i, y - 1, TERRAIN_LAYER_MIDDLE) <= BLOCK_ENTITY)
+			if(s_game->getWorld()->getTerrain()->getBlockAt(x + i, y - 1, TERRAIN_LAYER_MIDDLE) <= BLOCK_ENTITY)
 			{
 				valid = false;
 			}
@@ -76,7 +76,7 @@ bool ThingData::canPlace(const int x, const int y)
 		valid = true;
 		for(int i = 0; i < m_height && valid; ++i)
 		{
-			if(s_world->getTerrain()->getBlockAt(x - 1, y + i, TERRAIN_LAYER_MIDDLE) <= BLOCK_ENTITY)
+			if(s_game->getWorld()->getTerrain()->getBlockAt(x - 1, y + i, TERRAIN_LAYER_MIDDLE) <= BLOCK_ENTITY)
 			{
 				valid = false;
 			}
@@ -86,7 +86,7 @@ bool ThingData::canPlace(const int x, const int y)
 		valid = true;
 		for(int i = 0; i < m_height && valid; ++i)
 		{
-			if(s_world->getTerrain()->getBlockAt(x + m_width, y + i, TERRAIN_LAYER_MIDDLE) <= BLOCK_ENTITY)
+			if(s_game->getWorld()->getTerrain()->getBlockAt(x + m_width, y + i, TERRAIN_LAYER_MIDDLE) <= BLOCK_ENTITY)
 			{
 				valid = false;
 			}
@@ -102,7 +102,7 @@ bool ThingData::canPlace(const int x, const int y)
 		{
 			for(int i = 0; i < m_width && valid; ++i)
 			{
-				if(s_world->getTerrain()->getBlockAt(x + i, y + j, TERRAIN_LAYER_BACK) <= BLOCK_ENTITY)
+				if(s_game->getWorld()->getTerrain()->getBlockAt(x + i, y + j, TERRAIN_LAYER_BACK) <= BLOCK_ENTITY)
 				{
 					valid = false;
 				}
@@ -123,10 +123,10 @@ Thing *ThingData::tryPlace(const int x, const int y)
 		{
 			for(int j = 0; j < m_width; ++j)
 			{
-				s_world->getTerrain()->setBlockAt(x + j, y + i, BLOCK_ENTITY, TERRAIN_LAYER_MIDDLE);
+				s_game->getWorld()->getTerrain()->setBlockAt(x + j, y + i, BLOCK_ENTITY, TERRAIN_LAYER_MIDDLE);
 			}
 		}
-		return m_factory(s_world, x, y);
+		return m_factory(s_game, x, y);
 	}
 	return nullptr;
 }

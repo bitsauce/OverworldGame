@@ -24,7 +24,10 @@
 Game::Game() :
 	m_spriteBatch(nullptr),
 	m_world(nullptr),
-	m_takeScreenshot(false)
+	m_takeScreenshot(false),
+	m_client(nullptr),
+	m_server(nullptr),
+	m_gameOverlay(nullptr)
 {
 }
 
@@ -48,7 +51,7 @@ void Game::main(GraphicsContext &context)
 	// Initialize block and item data
 	BlockData::init();
 	ItemData::init(this);
-	ThingData::init(m_world);
+	ThingData::init(this);
 
 	// Setup debug
 	m_debug = new Debug(this);
@@ -66,7 +69,7 @@ void Game::main(GraphicsContext &context)
 	m_server = new Server(this, 45556);
 		
 	// Push game state
-	pushState(new InGameState(*this));
+	pushState(new InGameState(this));
 }
 
 void Game::pushState(GameState *state)

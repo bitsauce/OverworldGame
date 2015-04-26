@@ -118,6 +118,7 @@
     <ClCompile Include="..\..\source\gui\GameOverlay.cpp" />
     <ClCompile Include="..\..\source\gui\GameOverlay\HealthManaStatus.cpp" />
     <ClCompile Include="..\..\source\gui\GameOverlay\Hotbar.cpp" />
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Inventory.cpp" />
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Omnicon.cpp" />
     <ClCompile Include="..\..\source\gui\LineEdit.cpp" />
     <ClCompile Include="..\..\source\gui\UiObject.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="..\..\source\gui\GameOverlay.h" />
     <ClInclude Include="..\..\source\gui\GameOverlay\HealthManaStatus.h" />
     <ClInclude Include="..\..\source\gui\GameOverlay\Hotbar.h" />
+    <ClInclude Include="..\..\Source\Gui\GameOverlay\Inventory.h" />
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Omnicon.h" />
     <ClInclude Include="..\..\source\gui\LineEdit.h" />
     <ClInclude Include="..\..\source\gui\UiObject.h" />

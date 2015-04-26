@@ -1,14 +1,14 @@
 #include "Omnicon.h"
-#include "Entities/Player.h"
+#include "Game/Game.h"
 
-Omnicon::Omnicon(Scene *scene, Player *player, UiObject *parent) :
-	UiObject(scene, parent),
+Omnicon::Omnicon(Scene *scene, GameOverlay *gameOverlay) :
+	UiObject(scene, gameOverlay),
 	m_visible(false),
-	m_player(player),
-	m_omnicon(ResourceManager::get<Texture2D>(":/Sprites/Gui/GameOverlay/Omnicon.png"))
+	m_gameOverlay(gameOverlay),
+	m_bookSprite(ResourceManager::get<Texture2D>(":/Sprites/Gui/GameOverlay/Omnicon.png"))
 {
-	m_omnicon.setSize(640, 400);
-	m_omnicon.setPosition(0,0);
+	m_bookSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
+	m_bookSprite.setDepth(0.f);
 
 	Input::bind(XD_KEY_B, bind(&Omnicon::toggle, this));
 }
@@ -20,12 +20,12 @@ void Omnicon::toggle()
 
 void Omnicon::update(const float delta)
 {
-	if(!m_visible && !m_player->isCrafting()) return;
+	if(!m_visible && !m_gameOverlay->isCrafting()) return;
 }
 
 void Omnicon::draw(SpriteBatch *spriteBatch, const float alpha)
 {
-	if(!m_visible && !m_player->isCrafting()) return;
+	if(!m_visible && !m_gameOverlay->isCrafting()) return;
 
-	spriteBatch->drawSprite(m_omnicon);
+	spriteBatch->drawSprite(m_bookSprite);
 }

@@ -7,7 +7,7 @@
 class UiObject;
 class Scene;
 
-class LineEdit : public UiObject, public KeyboardListener
+class LineEdit : public UiObject, public KeyListener
 {
 public:
 	LineEdit(Scene *scene, UiObject *parent = nullptr);

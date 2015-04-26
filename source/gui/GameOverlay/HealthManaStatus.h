@@ -4,19 +4,19 @@
 #include "Config.h"
 #include "Gui/UiObject.h"
 
-class Player;
+class GameOverlay;
 class Canvas;
 
 class HealthManaStatus : public UiObject
 {
 public:
-	HealthManaStatus(Scene *scene, Player *player, UiObject *parent);
+	HealthManaStatus(Scene *scene, GameOverlay *gameOverlay);
 
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 private:
-	Player *m_player;
+	GameOverlay *m_gameOverlay;
 	Sprite m_heartSprite;
 	float m_heartTime;
 	Sprite m_manaSprite;

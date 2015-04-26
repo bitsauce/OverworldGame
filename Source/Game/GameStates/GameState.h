@@ -3,6 +3,8 @@
 
 #include "Config.h"
 
+class Scene;
+
 enum GameStateID
 {
 	GAME_STATE_MULTIPLAYER,

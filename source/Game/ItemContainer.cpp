@@ -8,7 +8,7 @@ ItemContainer::ItemContainer(const uint size) :
 	m_items = new ItemSlot[size];
 }
 
-bool ItemContainer::addItem(const ItemID item, int amount)
+int ItemContainer::addItem(const ItemID item, int amount)
 {
 	if(amount > 0)
 	{
@@ -20,20 +20,19 @@ bool ItemContainer::addItem(const ItemID item, int amount)
 				m_items[i].amount += amount;
 				amount = m_items[i].amount - ItemData::get(item)->getMaxStack();
 				if(amount <= 0) {
-					return true;
+					return 0;
 				}
 				m_items[i].amount -= amount;
 			}
 			else if(m_items[i].item == ITEM_NONE)
 			{
 				m_items[i].set(item, amount);
-				return true;
+				return 0;
 			}
 		}
 	}
-	return false;
+	return amount;
 }
-
 
 bool ItemContainer::removeItem(const ItemID item, const uint amount)
 {
@@ -62,6 +61,11 @@ int ItemContainer::findEmptySlot() const
 		}
 	}
 	return -1;
+}
+
+void ItemContainer::removeItemsAt(const int idx)
+{
+	m_items[idx].set(ITEM_NONE, 0);
 }
 
 ItemContainer::ItemSlot::ItemSlot() :

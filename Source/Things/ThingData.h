@@ -5,7 +5,7 @@
 
 class Terrain;
 class Thing;
-class World;
+class Game;
 enum ThingID;
 
 class ThingData
@@ -20,23 +20,23 @@ class ThingData
 	};
 
 public:
-	ThingData(const int width, const int height, const int rule, const string &texture, const TextureRegion &textureRegion, function<Thing*(World*, int, int)> factory);
+	ThingData(const int width, const int height, const int rule, const string &texture, const TextureRegion &textureRegion, function<Thing*(Game*, int, int)> factory);
 
 	bool canPlace(const int x, const int y);
 	Thing *tryPlace(const int x, const int y);
 
 	Sprite getSprite() { return m_sprite; }
 
-	static void init(World *world);
+	static void init(Game *world);
 	static ThingData &get(const ThingID id);
 
 private:
 	const int m_width, m_height;
 	const int m_placementRule;
-	const function<Thing*(World*, int, int)> m_factory;
+	const function<Thing*(Game*, int, int)> m_factory;
 	Sprite m_sprite;
 
-	static World *s_world;
+	static Game *s_game;
 	static vector<ThingData*> s_blockEntityData;
 };
 

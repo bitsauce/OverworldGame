@@ -4,7 +4,7 @@
 #include "Config.h"
 #include "Thing.h"
 
-class World;
+class Game;
 
 class RedCurrantBush : public Thing
 {
@@ -18,7 +18,7 @@ private:
 	Sprite m_sprite;
 	float m_growTimer;
 
-	static Thing *Factory(World*, const int x, const int y) { return new RedCurrantBush(x, y); }
+	static Thing *Factory(Game*, const int x, const int y) { return new RedCurrantBush(x, y); }
 };
 
 #endif // RED_CURRANT_BUSH_H

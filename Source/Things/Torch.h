@@ -3,9 +3,9 @@
 
 #include "Config.h"
 #include "Thing.h"
-#include "World/Lighting/Spotlight.h"
+#include "Game/Game.h"
 
-class World;
+class Game;
 
 class Torch : public Thing
 {
@@ -23,7 +23,7 @@ private:
 	Spotlight m_spotlight;
 	//float durration;?
 
-	static Thing *Factory(World *world, const int x, const int y) { return new Torch(world, x, y); }
+	static Thing *Factory(Game *game, const int x, const int y) { return new Torch(game->getWorld(), x, y); }
 };
 
 #endif // TORCH_H

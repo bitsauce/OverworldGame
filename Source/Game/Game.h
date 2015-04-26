@@ -2,15 +2,20 @@
 #define GAME_MANAGER_H
 
 #include "Config.h"
+#include "Game/Scene.h"
+#include "Gui/GameOverlay.h"
+#include "Gui/Canvas.h"
 #include "World/World.h"
 #include "Networking/Client.h"
 #include "Networking/Server.h"
 
 class Debug;
 class GameState;
+class GameOverlay;
 
 class Game
 {
+	friend class InGameState;
 public:
 	Game();
 
@@ -24,6 +29,7 @@ public:
 	World *getWorld() const { return m_world; }
 	Client *getClient() const { return m_client; }
 	Server *getServer() const { return m_server; }
+	GameOverlay *getGameOverlay() const { return m_gameOverlay; }
 
 	void pushState(GameState *state);
 	void popState();
@@ -37,14 +43,11 @@ private:
 	
 	Debug *m_debug;
 	World *m_world;
+	GameOverlay *m_gameOverlay;
 	list<GameState*> m_states;
 
 	Server *m_server;
 	Client *m_client;
-	
-	//Canvas *m_canvas;
-	//GameOverlay *m_gameOverlay;
-	//Player *m_localPlayer;
 };
 
 #endif // GAME_MANAGER_H

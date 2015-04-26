@@ -4,18 +4,20 @@
 #include "Config.h"
 #include "Gui/UiObject.h"
 
-class Player;
+class GameOverlay;
 
-class Hotbar : public UiObject
+class Hotbar : public UiObject, public KeyListener
 {
 public:
-	Hotbar(Scene *scene, Player *player, UiObject *parent);
+	Hotbar(Scene *scene, GameOverlay *gameOverlay);
 
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
+	void keyPressEvent(const VirtualKey key);
+
 private:
-	Player *m_player;
+	GameOverlay *m_gameOverlay;
 	Sprite m_spriteItemSlot;
 	Sprite m_spriteItemSlotSelected;
 	Sprite m_spriteBackground;

@@ -24,15 +24,15 @@ Player::Player(Game *game, RakNet::RakNetGUID guid) :
 	DynamicEntity(game->getWorld(), ENTITY_PLAYER),
 	m_camera(game->getWorld()->getCamera()),
 	m_terrain(game->getWorld()->getTerrain()),
+	m_gameOverlay(game->getGameOverlay()),
 	m_jumpTimer(1.0f),
 	m_canJump(false),
 	m_selectedItemSlot(0),
-	m_itemContainer(10),
+	m_itemContainer(110),
 	m_guid(guid),
 	m_maxHealth(12),
 	m_health(m_maxHealth),
-	m_lmbPressed(false),
-	m_isCrafting(false)
+	m_lmbPressed(false)
 {
 	// Set body size
 	//setSize(24, 48);
@@ -41,7 +41,7 @@ Player::Player(Game *game, RakNet::RakNetGUID guid) :
 	// If player is local, do extra stuff
 	if(Connection::getInstance()->getGUID() == guid)
 	{
-		m_gameOverlay = new GameOverlay(game->peekState()->getScene(), this, game->peekState()->getScene()->getCanvas());
+		game->getGameOverlay()->setPlayer(this);
 
 		// Bind keys to item slots
 		Input::bind(XD_KEY_1, bind(&Player::setSelectedItemSlot, this, 0));
@@ -67,7 +67,7 @@ Player::Player(Game *game, RakNet::RakNetGUID guid) :
 
 Player::~Player()
 {
-	delete m_gameOverlay;
+	//delete m_gameOverlay;
 }
 
 void Player::mouseWheelEvent(const int delta)
@@ -167,13 +167,23 @@ void Player::update(const float delta)
 	DynamicEntity::update(delta);
 
 	// Use current item
-	if(Input::getKeyState(XD_LMB))
+	if(Input::getKeyState(XD_LMB) && !m_gameOverlay->isHovered())
 	{
-		ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
+		ItemData *item = nullptr;
+		if(!m_gameOverlay->getHoldItem().isEmpty())
+		{
+			item = ItemData::get(m_gameOverlay->getHoldItem().item);
+		}
+		else
+		{
+			item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
+		}
+
 		if(item != nullptr && (!item->isSingleShot() || !m_lmbPressed))
 		{
 			item->use(this, delta);
 		}
+
 		m_lmbPressed = true;
 	}
 	else
@@ -285,8 +295,17 @@ void Player::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 void Player::draw(SpriteBatch *spriteBatch, const float alpha)
 {
 	m_humanoid.draw(this, spriteBatch, alpha);
+	
+	ItemData *item = nullptr;
+	if(!m_gameOverlay->getHoldItem().isEmpty())
+	{
+		item = ItemData::get(m_gameOverlay->getHoldItem().item);
+	}
+	else
+	{
+		item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
+	}
 
-	ItemData *item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
 	if(item != nullptr)
 	{
 		item->draw(this, spriteBatch, alpha);

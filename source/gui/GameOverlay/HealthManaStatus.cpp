@@ -1,11 +1,11 @@
 #include "HealthManaStatus.h"
 #include "Constants.h"
-#include "Gui/Canvas.h"
+#include "Game/Game.h"
 #include "Entities/Player.h"
 
-HealthManaStatus::HealthManaStatus(Scene *scene, Player *player, UiObject *parent) :
-	UiObject(scene, parent),
-	m_player(player),
+HealthManaStatus::HealthManaStatus(Scene *scene, GameOverlay *gameOverlay) :
+	UiObject(scene, gameOverlay),
+	m_gameOverlay(gameOverlay),
 	m_heartSprite(ResourceManager::get<Texture2D>(":/Sprites/Gui/GameOverlay/Heart.png")),
 	m_manaSprite(ResourceManager::get<Texture2D>(":/Sprites/Gui/GameOverlay/Mana.png")),
 	m_heartTime(0.0f)
@@ -18,8 +18,8 @@ HealthManaStatus::HealthManaStatus(Scene *scene, Player *player, UiObject *paren
 	m_manaSprite.getTexture()->setFiltering(Texture2D::LINEAR);
 
 	setAnchor(Vector2(1.0f, 0.0f));
-	setSize(Vector2(338.0f, 168.0f)/parent->getSize());
-	setPosition(Vector2(-48.0f, 48.0f)/parent->getSize());
+	setSize(Vector2(338.0f, 168.0f)/m_parent->getSize());
+	setPosition(Vector2(-48.0f, 48.0f)/m_parent->getSize());
 }
 
 void HealthManaStatus::update(const float delta)
@@ -31,15 +31,17 @@ void HealthManaStatus::update(const float delta)
 
 void HealthManaStatus::draw(SpriteBatch *spriteBatch, const float alpha)
 {
+	if(!m_gameOverlay->getPlayer()) return;
+
 	Vector2 position = getPosition();
 	Vector2 size = getSize();
 
-	for(uint i = 0; i < m_player->getMaxHealth()/4; ++i)
+	for(uint i = 0; i < m_gameOverlay->getPlayer()->getMaxHealth()/4; ++i)
 	{
 		uint x = i % 10, y = i / 10;
 		m_heartSprite.setPosition(position + Vector2(x * 34, y * 34));
 		m_heartSprite.setOrigin(Vector2(16));
-		if(i == m_player->getMaxHealth()/4 - 1)
+		if(i == m_gameOverlay->getPlayer()->getMaxHealth()/4 - 1)
 		{
 			m_heartSprite.setScale(Vector2(sin(m_heartTime*5.0f) * 0.5f + 0.5f));
 			m_heartSprite.setRotation(32.0f * m_heartTime * 10.0f);

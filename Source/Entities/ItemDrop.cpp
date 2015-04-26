@@ -4,9 +4,11 @@
 #include "World/World.h"
 #include "Items/ItemData.h"
 
-ItemDrop::ItemDrop(World *world, const Vector2 position, const ItemID item) :
+ItemDrop::ItemDrop(World *world, const Vector2 position, const ItemID item, const int amount) :
 	DynamicEntity(world, ENTITY_ITEM_DROP),
 	m_itemID(item),
+	m_amount(amount),
+	m_noPickupTime(1.0f), // No pickup for 1 s
 	m_dragDistance(16.0f * BLOCK_PXF),
 	m_pickupDistance(16.0f),
 	m_prevPosition(position),
@@ -22,21 +24,28 @@ void ItemDrop::update(const float delta)
 {
 	m_prevPosition = getPosition();
 
-	list<Player*> players = m_world->getPlayers();
-	for(Player *player : players)
+	if(m_noPickupTime <= 0.0f)
 	{
-		Vector2 deltaPosition = player->getCenter() - getCenter();
-		if(player->getRect().contains(getCenter()))
+		list<Player*> players = m_world->getPlayers();
+		for(Player *player : players)
 		{
-			player->getItemContainer().addItem(m_itemID);
-			delete this;
-			return;
-		}
-		else if(deltaPosition.magnitude() <= m_dragDistance)
-		{
-			applyImpulse(deltaPosition.normalized());
+			Vector2 deltaPosition = player->getCenter() - getCenter();
+			if(player->getRect().contains(getCenter()))
+			{
+				m_amount -= m_amount - player->getItemContainer().addItem(m_itemID, m_amount);
+				if(m_amount <= 0)
+				{
+					delete this;
+					return;
+				}
+			}
+			else if(deltaPosition.magnitude() <= m_dragDistance)
+			{
+				applyImpulse(deltaPosition.normalized());
+			}
 		}
 	}
+	m_noPickupTime -= delta;
 
 	m_prevHoverTime = m_hoverTime;
 	m_hoverTime += 5.0f * delta;

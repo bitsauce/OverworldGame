@@ -13,6 +13,7 @@ class ItemData;
 class ItemContainer;
 class Connection;
 class Game;
+class GameOverlay;
 
 class Player : public DynamicEntity, public NetworkObject, public MouseListener
 {
@@ -34,9 +35,6 @@ public:
 	void setSelectedItemSlot(const uint slot) { m_selectedItemSlot = slot; }
 	uint getSelectedItemSlot() const { return m_selectedItemSlot; }
 
-	void setCrafting(const bool crafting) { m_isCrafting = crafting; }
-	bool isCrafting() const { return m_isCrafting; }
-
 	ItemContainer &getItemContainer() { return m_itemContainer; }
 	Humanoid &getHumanoid() { return m_humanoid; }
 
@@ -46,13 +44,11 @@ private:
 	// Managers
 	Camera *m_camera;
 	Terrain *m_terrain;
+	GameOverlay *m_gameOverlay;
 
 	// Inventory
 	ItemContainer m_itemContainer;
 	uint m_selectedItemSlot;
-	bool m_isCrafting;
-
-	class GameOverlay *m_gameOverlay;
 
 	// Player health
 	uint m_maxHealth;

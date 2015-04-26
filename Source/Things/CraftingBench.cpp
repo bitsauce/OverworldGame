@@ -2,9 +2,11 @@
 #include "ThingData.h"
 #include "Constants.h"
 #include "Entities/Player.h"
+#include "Game/Game.h"
 
-CraftingBench::CraftingBench(const int x, const int y) :
+CraftingBench::CraftingBench(Game *game, const int x, const int y) :
 	Thing(x, y),
+	m_game(game),
 	m_sprite(ThingData::get(BLOCK_ENTITY_CRAFTING_BENCH).getSprite())
 {
 	m_sprite.setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
@@ -12,11 +14,7 @@ CraftingBench::CraftingBench(const int x, const int y) :
 
 void CraftingBench::activate(Player *player)
 {
-	player->setCrafting(!player->isCrafting());
-	//if(player->isLocal())
-	//{
-	//game->getGameOverlay()->toggleCraftingMode();
-	//}
+	m_game->getGameOverlay()->toggleCrafting();
 }
 
 void CraftingBench::draw(SpriteBatch *spriteBatch, const float alpha)

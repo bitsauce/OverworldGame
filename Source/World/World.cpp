@@ -18,7 +18,7 @@ World::World() :
 	m_worldPath(""),
 	m_worldFile(nullptr)
 {
-	// Load game managers
+	// Load world content
 	m_timeOfDay = new TimeOfDay();
 	m_background = new Background(m_timeOfDay);
 	m_camera = new Camera();
