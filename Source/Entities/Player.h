@@ -15,30 +15,25 @@ class Connection;
 class Game;
 class GameOverlay;
 
-class Player : public DynamicEntity, public NetworkObject, public MouseListener
+class Player : public DynamicEntity, public NetworkObject
 {
 public:
 	Player(Game *game, RakNet::RakNetGUID guid);
 	~Player();
 
+	void activateThing();
+
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
-
-	void activateThing();
 
 	void pack(RakNet::BitStream *bitStream, const Connection *conn);
 	void unpack(RakNet::BitStream *bitStream, const Connection *conn);
 
 	uint getMaxHealth() const { return m_maxHealth; }
 	uint getHealth() const { return m_health; }
-	
-	void setSelectedItemSlot(const uint slot) { m_selectedItemSlot = slot; }
-	uint getSelectedItemSlot() const { return m_selectedItemSlot; }
 
-	ItemContainer &getItemContainer() { return m_itemContainer; }
+	ItemContainer *getItemContainer() { return &m_itemContainer; }
 	Humanoid &getHumanoid() { return m_humanoid; }
-
-	void mouseWheelEvent(const int delta);
 
 private:
 	// Managers
@@ -48,7 +43,6 @@ private:
 
 	// Inventory
 	ItemContainer m_itemContainer;
-	uint m_selectedItemSlot;
 
 	// Player health
 	uint m_maxHealth;

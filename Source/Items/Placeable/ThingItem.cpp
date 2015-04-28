@@ -11,7 +11,7 @@ ThingItem::ThingItem(Game *game, const ThingID id) :
 {
 }
 
-void ThingItem::use(Player *player, const float delta)
+void ThingItem::use(ItemContainer::Slot *slot, const float delta)
 {
 	// Get block input position
 	Vector2i blockPos = m_game->getWorld()->getCamera()->getInputPosition();
@@ -22,7 +22,8 @@ void ThingItem::use(Player *player, const float delta)
 	if(m_game->getWorld()->getTerrain()->setThingAt(blockPos.x, blockPos.y, m_blockEntityID))
 	{
 		// Remove item from player inventory
-		player->getItemContainer().removeItem(getID(), 1);
+		//player->getItemContainer()->removeItem(getID(), 1);
+		slot->amount--;
 	}
 }
 

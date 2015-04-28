@@ -16,6 +16,7 @@ enum PacketID
 
 #define DEFAULT_PORT 45557
 
+#define UI_INVENTORY_FONT "Consolas 11"
 #define UI_DEBUG_FONT "Consolas 18"
 #define UI_MENU_BUTTON_FONT "Arial Bold 27"
 #define UI_MENU_BUTTON_TEXTURE ":/sprites/gui/menu_button.png"

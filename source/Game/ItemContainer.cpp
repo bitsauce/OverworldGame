@@ -5,7 +5,7 @@
 ItemContainer::ItemContainer(const uint size) :
 	m_size(size)
 {
-	m_items = new ItemSlot[size];
+	m_items = new Slot[size];
 }
 
 int ItemContainer::addItem(const ItemID item, int amount)
@@ -68,19 +68,19 @@ void ItemContainer::removeItemsAt(const int idx)
 	m_items[idx].set(ITEM_NONE, 0);
 }
 
-ItemContainer::ItemSlot::ItemSlot() :
+ItemContainer::Slot::Slot() :
 	item(ITEM_NONE),
 	amount(0)
 {
 }
 
-void ItemContainer::ItemSlot::set(ItemID item, const uint amount)
+void ItemContainer::Slot::set(ItemID item, const uint amount)
 {
 	this->item = item;
 	this->amount = amount;
 }
 
-bool ItemContainer::ItemSlot::isEmpty() const
+bool ItemContainer::Slot::isEmpty() const
 {
-	return item == ITEM_NONE;
+	return item == ITEM_NONE || amount <= 0;
 }

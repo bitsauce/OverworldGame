@@ -11,9 +11,9 @@ class ItemContainer
 public:
 	ItemContainer(const uint size);
 
-	struct ItemSlot
+	struct Slot
 	{
-		ItemSlot();
+		Slot();
 
 		void set(ItemID item, const uint amount);
 		bool isEmpty() const;
@@ -25,10 +25,10 @@ public:
 	int addItem(const ItemID item, int amount = 1);
 	bool removeItem(const ItemID item, const uint amount = 1);
 
-	ItemSlot getItemSlotAt(const int idx) const { return m_items[idx]; }
+	Slot &getSlotAt(const int idx) const { return m_items[idx]; }
 	ItemID getItemAt(const int idx) const { return m_items[idx].item; }
 	uint getItemAmountAt(const int idx) const { return m_items[idx].amount; }
-	void setItemSlotAt(const int idx, ItemSlot slot) { m_items[idx] = slot; }
+	void setSlotAt(const int idx, Slot slot) { m_items[idx] = slot; }
 
 	void removeItemsAt(const int idx);
 
@@ -37,7 +37,7 @@ public:
 private:
 	int findEmptySlot() const;
 
-	ItemSlot *m_items;
+	Slot *m_items;
 	const uint m_size;
 };
 

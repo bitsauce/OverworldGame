@@ -73,9 +73,9 @@ private:
 	float m_deleteTime;
 };
 
-void Bow::use(Player *player, const float delta)
+void Bow::use(ItemContainer::Slot *slot, const float delta)
 {
-	new Arrow(m_game->getWorld(), player->getCenter(), m_game->getWorld()->getCamera()->getInputPosition() - player->getCenter(), 50.0f);
+	new Arrow(m_game->getWorld(), m_game->getWorld()->getLocalPlayer()->getCenter(), m_game->getWorld()->getCamera()->getInputPosition() - m_game->getWorld()->getLocalPlayer()->getCenter(), 50.0f);
 }
 
 void Bow::draw(Player *player, SpriteBatch *spriteBatch, const float alpha)

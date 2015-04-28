@@ -2,11 +2,12 @@
 #define INVENTORY_H
 
 #include "Gui/UiObject.h"
+#include "Game/ItemContainer.h"
 
 class Scene;
 class GameOverlay;
 
-class Inventory : public UiObject
+class Inventory : public UiObject, public KeyListener
 {
 public:
 	Inventory(Scene *scene, GameOverlay *gameOverlay);
@@ -17,11 +18,15 @@ public:
 	void toggle();
 	void show();
 	void hide();
+	
+	void keyPressEvent(const VirtualKey key);
 
 private:
 	GameOverlay *m_gameOverlay;
+	ItemContainer m_itemContainer;
 	Sprite m_itemSlotSprite;
 	Sprite m_backgroundSprite;
+	FontPtr m_font;
 
 	float m_fadeInAlpha;
 	float m_animationDuration;

@@ -15,7 +15,7 @@ GameOverlay::GameOverlay(Game *game, Scene *scene) :
 	m_game(game),
 	m_player(nullptr),
 	m_craftingEnabled(false),
-	m_font(ResourceManager::get<Font>("Consolas 11"))
+	m_font(ResourceManager::get<Font>(UI_INVENTORY_FONT))
 {
 	setPosition(Vector2(0.0f, 0.0f));
 	setSize(Vector2(1.0f, 1.0f));
@@ -48,12 +48,14 @@ void GameOverlay::draw(SpriteBatch *spriteBatch, const float delta)
 	if(!m_holdItem.isEmpty())
 	{
 		Vector2 position = Input::getPosition();
-		ItemData *item;
-		if((item = ItemData::get(m_holdItem.item)) != nullptr)
+		if(m_holdItem.item != ITEM_NONE)
 		{
-			spriteBatch->drawSprite(Sprite(item->getIconTexture(), Rect(position.x + 13.f, position.y + 12.f, 32.f, 32.f)));
+			spriteBatch->drawSprite(Sprite(ItemData::get(m_holdItem.item)->getIconTexture(), Rect(position.x + 13.f, position.y + 12.f, 32.f, 32.f)));
+			if(m_holdItem.amount > 1)
+			{
+				spriteBatch->drawText(Vector2(position.x + 11.f, position.y + 10.f), util::intToStr(m_holdItem.amount), m_font);
+			}
 		}
-		spriteBatch->drawText(Vector2(position.x + 11.f, position.y + 10.f), util::intToStr(m_holdItem.amount), m_font);
 	}
 }
 
@@ -71,12 +73,11 @@ void GameOverlay::toggleCrafting()
 	m_craftingEnabled = !m_craftingEnabled;
 }
 
-void GameOverlay::setHoldItem(const uint idx)
+void GameOverlay::takeItem(ItemContainer *itemContainer, const uint idx)
 {
-	ItemContainer &itemContainer = m_player->getItemContainer();
-	ItemContainer::ItemSlot tmp = m_holdItem;
-	m_holdItem = itemContainer.getItemSlotAt(idx);
-	itemContainer.setItemSlotAt(idx, tmp);
+	ItemContainer::Slot tmp = m_holdItem;
+	m_holdItem = itemContainer->getSlotAt(idx);
+	itemContainer->setSlotAt(idx, tmp);
 }
 
 bool GameOverlay::isHovered() const

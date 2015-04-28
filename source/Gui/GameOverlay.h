@@ -4,16 +4,15 @@
 #include "Config.h"
 #include "UiObject.h"
 #include "Game/ItemContainer.h"
+#include "GameOverlay/Hotbar.h"
+#include "GameOverlay/Inventory.h"
+#include "GameOverlay/HealthManaStatus.h"
+#include "GameOverlay/Omnicon.h"
 
-class ItemContainer;
-class Player;
-class Hotbar;
-class HealthManaStatus;
-class Omnicon;
-class Inventory;
 class Game;
+class Player;
 
-class GameOverlay : public UiObject, public MouseListener
+class GameOverlay : public UiObject
 {
 public:
 	GameOverlay(Game *game, Scene *scene);
@@ -21,17 +20,25 @@ public:
 
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
+	
+	// Getters/setters
+	void setPlayer(Player *player) { m_player = player; }
+	Player *getPlayer() const { return m_player; }
+	Hotbar *getHotbar() const { return m_hotbar; }
+	HealthManaStatus *getHealthManaStatus() const { return m_healthManaStatus; }
+	Omnicon *getOmnicon() const { return m_omnicon; }
+	Inventory *getInventory() const { return m_inventory; }
 
+	// Crafting overlay
 	void toggleCrafting();
 	bool isCrafting() const { return m_craftingEnabled; }
 
-	void setHoldItem(const uint idx);
-	ItemContainer::ItemSlot getHoldItem() const { return m_holdItem; }
+	// Hold item
+	void takeItem(ItemContainer *itemContainer, const uint idx);
+	ItemContainer::Slot &getHoldItem() { return m_holdItem; }
 
+	// Ui
 	bool isHovered() const;
-
-	void setPlayer(Player *player) { m_player = player; }
-	Player *getPlayer() const { return m_player; }
 
 private:
 	Game *m_game;
@@ -43,7 +50,7 @@ private:
 
 	bool m_craftingEnabled;
 
-	ItemContainer::ItemSlot m_holdItem;
+	ItemContainer::Slot m_holdItem;
 	FontPtr m_font;
 };
 

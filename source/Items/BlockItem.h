@@ -14,7 +14,7 @@ class BlockItem : public ItemData
 public:
 	BlockItem(Game *game, const TerrainLayer layer, const BlockID blockID);
 
-	void use(Player *player, const float delta);
+	void use(ItemContainer::Slot *slot, const float delta);
 	void draw(Player *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:

@@ -32,7 +32,7 @@ void ItemDrop::update(const float delta)
 			Vector2 deltaPosition = player->getCenter() - getCenter();
 			if(player->getRect().contains(getCenter()))
 			{
-				m_amount -= m_amount - player->getItemContainer().addItem(m_itemID, m_amount);
+				m_amount -= m_amount - player->getItemContainer()->addItem(m_itemID, m_amount);
 				if(m_amount <= 0)
 				{
 					delete this;

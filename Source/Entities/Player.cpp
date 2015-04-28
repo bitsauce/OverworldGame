@@ -27,15 +27,13 @@ Player::Player(Game *game, RakNet::RakNetGUID guid) :
 	m_gameOverlay(game->getGameOverlay()),
 	m_jumpTimer(1.0f),
 	m_canJump(false),
-	m_selectedItemSlot(0),
-	m_itemContainer(110),
+	m_itemContainer(10),
 	m_guid(guid),
 	m_maxHealth(12),
 	m_health(m_maxHealth),
 	m_lmbPressed(false)
 {
 	// Set body size
-	//setSize(24, 48);
 	Entity::setSize(24, 48);
 	
 	// If player is local, do extra stuff
@@ -43,17 +41,6 @@ Player::Player(Game *game, RakNet::RakNetGUID guid) :
 	{
 		game->getGameOverlay()->setPlayer(this);
 
-		// Bind keys to item slots
-		Input::bind(XD_KEY_1, bind(&Player::setSelectedItemSlot, this, 0));
-		Input::bind(XD_KEY_2, bind(&Player::setSelectedItemSlot, this, 1));
-		Input::bind(XD_KEY_3, bind(&Player::setSelectedItemSlot, this, 2));
-		Input::bind(XD_KEY_4, bind(&Player::setSelectedItemSlot, this, 3));
-		Input::bind(XD_KEY_5, bind(&Player::setSelectedItemSlot, this, 4));
-		Input::bind(XD_KEY_6, bind(&Player::setSelectedItemSlot, this, 5));
-		Input::bind(XD_KEY_7, bind(&Player::setSelectedItemSlot, this, 6));
-		Input::bind(XD_KEY_8, bind(&Player::setSelectedItemSlot, this, 7));
-		Input::bind(XD_KEY_9, bind(&Player::setSelectedItemSlot, this, 8));
-		Input::bind(XD_KEY_0, bind(&Player::setSelectedItemSlot, this, 9));
 		Input::bind(XD_RMB, bind(&Player::activateThing, this));
 
 		m_camera->setTargetEntity(this);
@@ -67,31 +54,17 @@ Player::Player(Game *game, RakNet::RakNetGUID guid) :
 
 Player::~Player()
 {
-	//delete m_gameOverlay;
 }
 
-void Player::mouseWheelEvent(const int delta)
+void Player::activateThing()
 {
-	if(delta < 0)
+	Vector2 inputPosition = m_camera->getInputPosition();
+	int blockX = (int)floor(inputPosition.x / BLOCK_PXF), blockY = (int)floor(inputPosition.y / BLOCK_PXF);
+	for(Thing *thing : m_terrain->getChunkLoader()->getChunkAt((int)floor(inputPosition.x / CHUNK_PXF), (int)floor(inputPosition.y / CHUNK_PXF)).getThings())
 	{
-		if(m_selectedItemSlot == 9)
+		if(thing->getX() == blockX && thing->getY() == blockY)
 		{
-			m_selectedItemSlot = 0;
-		}
-		else
-		{
-			m_selectedItemSlot += 1;
-		}
-	}
-	else
-	{
-		if(m_selectedItemSlot == 0)
-		{
-			m_selectedItemSlot = 9;
-		}
-		else
-		{
-			m_selectedItemSlot -= 1;
+			thing->activate(this);
 		}
 	}
 }
@@ -169,21 +142,13 @@ void Player::update(const float delta)
 	// Use current item
 	if(Input::getKeyState(XD_LMB) && !m_gameOverlay->isHovered())
 	{
-		ItemData *item = nullptr;
-		if(!m_gameOverlay->getHoldItem().isEmpty())
-		{
-			item = ItemData::get(m_gameOverlay->getHoldItem().item);
-		}
-		else
-		{
-			item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
-		}
-
+		ItemContainer::Slot &slot = m_gameOverlay->getHoldItem().isEmpty() ? m_itemContainer.getSlotAt(m_gameOverlay->getHotbar()->getSelectedSlot()) : m_gameOverlay->getHoldItem();
+		ItemData *item = ItemData::get(slot.item);
 		if(item != nullptr && (!item->isSingleShot() || !m_lmbPressed))
 		{
-			item->use(this, delta);
+			item->use(&slot, delta);
+			if(slot.isEmpty()) slot.item = ITEM_NONE;
 		}
-
 		m_lmbPressed = true;
 	}
 	else
@@ -242,16 +207,23 @@ void Player::update(const float delta)
 	m_humanoid.update(delta);
 }
 
-void Player::activateThing()
+void Player::draw(SpriteBatch *spriteBatch, const float alpha)
 {
-	Vector2 inputPosition = m_camera->getInputPosition();
-	int blockX = (int)floor(inputPosition.x / BLOCK_PXF), blockY = (int)floor(inputPosition.y / BLOCK_PXF);
-	for(Thing *thing : m_terrain->getChunkLoader()->getChunkAt((int)floor(inputPosition.x / CHUNK_PXF), (int)floor(inputPosition.y / CHUNK_PXF)).getThings())
+	m_humanoid.draw(this, spriteBatch, alpha);
+	
+	ItemData *item = nullptr;
+	if(!m_gameOverlay->getHoldItem().isEmpty())
 	{
-		if(thing->getX() == blockX && thing->getY() == blockY)
-		{
-			thing->activate(this);
-		}
+		item = ItemData::get(m_gameOverlay->getHoldItem().item);
+	}
+	else
+	{
+		item = ItemData::get(m_itemContainer.getItemAt(m_gameOverlay->getHotbar()->getSelectedSlot()));
+	}
+
+	if(item != nullptr)
+	{
+		item->draw(this, spriteBatch, alpha);
 	}
 }
 
@@ -289,25 +261,5 @@ void Player::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 		bitStream->Read(y);
 		setVelocityX(x);
 		setVelocityY(y);
-	}
-}
-
-void Player::draw(SpriteBatch *spriteBatch, const float alpha)
-{
-	m_humanoid.draw(this, spriteBatch, alpha);
-	
-	ItemData *item = nullptr;
-	if(!m_gameOverlay->getHoldItem().isEmpty())
-	{
-		item = ItemData::get(m_gameOverlay->getHoldItem().item);
-	}
-	else
-	{
-		item = ItemData::get(m_itemContainer.getItemAt(m_selectedItemSlot));
-	}
-
-	if(item != nullptr)
-	{
-		item->draw(this, spriteBatch, alpha);
 	}
 }
