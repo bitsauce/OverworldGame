@@ -13,6 +13,8 @@ public:
 	Entity(World *world, const EntityID id);
 	virtual ~Entity();
 
+	const EntityID getID() const { return m_id; }
+
 	virtual void setPosition(const Vector2 &pos) = 0;
 	virtual Vector2 getPosition() const = 0;
 	void setPosition(const float x, const float y) { setPosition(Vector2(x, y)); }

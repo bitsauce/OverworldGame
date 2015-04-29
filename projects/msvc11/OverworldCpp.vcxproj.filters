@@ -173,6 +173,12 @@
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Inventory.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Items\Weapons\Ammo.cpp">
+      <Filter>Source\Items\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Crafting.cpp">
+      <Filter>Source\Gui\GameOverlay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -427,6 +433,12 @@
       <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Inventory.h">
+      <Filter>Source\Gui\GameOverlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Items\Weapons\Ammo.h">
+      <Filter>Source\Items\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Gui\GameOverlay\Crafting.h">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClInclude>
   </ItemGroup>

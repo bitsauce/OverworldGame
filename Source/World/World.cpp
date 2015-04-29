@@ -124,12 +124,24 @@ void World::draw(SpriteBatch *spriteBatch, const float alpha)
 		thing->draw(spriteBatch, alpha);
 	}
 
-	m_terrain->m_middleground.draw(spriteBatch);
-
 	list<Entity*> gameObjects = m_entities;
 	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
 	{
-		(*itr)->draw(spriteBatch, alpha);
+		if((*itr)->getID() < ENTITY_BACKGROUND_END)
+		{
+			(*itr)->draw(spriteBatch, alpha);
+		}
+	}
+
+	m_terrain->m_middleground.draw(spriteBatch);
+
+	gameObjects = m_entities;
+	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
+	{
+		if((*itr)->getID() > ENTITY_BACKGROUND_END)
+		{
+			(*itr)->draw(spriteBatch, alpha);
+		}
 	}
 	
 	m_terrain->m_foreground.draw(spriteBatch);

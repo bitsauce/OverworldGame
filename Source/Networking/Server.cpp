@@ -89,6 +89,7 @@ void Server::update()
 				player->getItemContainer()->addItem(ITEM_PICKAXE_IRON);
 				player->getItemContainer()->addItem(ITEM_TORCH, 255);
 				player->getItemContainer()->addItem(ITEM_BOW_WOODEN);
+				player->getItemContainer()->addItem(ITEM_ARROW, 255);
 				player->getItemContainer()->addItem(ITEM_CRAFTING_BENCH);
 				
 				// Brodcast the packet to all clients with the network id of the object added

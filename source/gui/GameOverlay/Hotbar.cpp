@@ -80,7 +80,7 @@ void Hotbar::draw(SpriteBatch *spriteBatch, const float alpha)
 
 void Hotbar::keyPressEvent(const VirtualKey key)
 {
-	if(key == XD_LMB)
+	if(key == XD_LMB || key == XD_RMB)
 	{
 		Vector2 position = getPosition();
 		for(uint i = 0; i < 10; ++i)
@@ -88,20 +88,28 @@ void Hotbar::keyPressEvent(const VirtualKey key)
 			Rect rect(position.x + 8.f + i * 48.f, position.y + 7.f, 42.0f, 42.0f);
 			if(rect.contains(Input::getPosition()))
 			{
-				m_selectedSlot = i;
-				break;
-			}
-		}
-	}
-	else if(key == XD_RMB)
-	{
-		Vector2 position = getPosition();
-		for(uint i = 0; i < 10; ++i)
-		{
-			Rect rect(position.x + 8.f + i * 48.f, position.y + 7.f, 42.0f, 42.0f);
-			if(rect.contains(Input::getPosition()))
-			{
-				m_gameOverlay->takeItem(m_gameOverlay->getPlayer()->getItemContainer(), i);
+				if(key == XD_LMB)
+				{
+					if(m_gameOverlay->getHoldItem().isEmpty())
+					{
+						m_selectedSlot = i;
+					}
+					else
+					{
+						m_gameOverlay->takeItem(m_gameOverlay->getPlayer()->getItemContainer(), i);
+					}
+				}
+				else
+				{
+					if(m_gameOverlay->getHoldItem().isEmpty())
+					{
+						m_gameOverlay->takeItem(m_gameOverlay->getPlayer()->getItemContainer(), i);
+					}
+					else
+					{
+						m_gameOverlay->placeSingleItem(m_gameOverlay->getPlayer()->getItemContainer(), i);
+					}
+				}
 				break;
 			}
 		}

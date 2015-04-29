@@ -116,6 +116,7 @@
     <ClCompile Include="..\..\source\gui\Button.cpp" />
     <ClCompile Include="..\..\source\gui\Canvas.cpp" />
     <ClCompile Include="..\..\source\gui\GameOverlay.cpp" />
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Crafting.cpp" />
     <ClCompile Include="..\..\source\gui\GameOverlay\HealthManaStatus.cpp" />
     <ClCompile Include="..\..\source\gui\GameOverlay\Hotbar.cpp" />
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Inventory.cpp" />
@@ -126,6 +127,7 @@
     <ClCompile Include="..\..\source\items\ItemData.cpp" />
     <ClCompile Include="..\..\Source\Items\Placeable\ThingItem.cpp" />
     <ClCompile Include="..\..\source\Items\Tools\Pickaxe.cpp" />
+    <ClCompile Include="..\..\Source\Items\Weapons\Ammo.cpp" />
     <ClCompile Include="..\..\source\Items\Weapons\Bow.cpp" />
     <ClCompile Include="..\..\Source\Networking\Client.cpp" />
     <ClCompile Include="..\..\source\Networking\Conneciton.cpp" />
@@ -178,6 +180,7 @@
     <ClInclude Include="..\..\source\gui\Button.h" />
     <ClInclude Include="..\..\source\gui\Canvas.h" />
     <ClInclude Include="..\..\source\gui\GameOverlay.h" />
+    <ClInclude Include="..\..\Source\Gui\GameOverlay\Crafting.h" />
     <ClInclude Include="..\..\source\gui\GameOverlay\HealthManaStatus.h" />
     <ClInclude Include="..\..\source\gui\GameOverlay\Hotbar.h" />
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Inventory.h" />
@@ -188,6 +191,7 @@
     <ClInclude Include="..\..\source\items\ItemData.h" />
     <ClInclude Include="..\..\Source\Items\Placeable\ThingItem.h" />
     <ClInclude Include="..\..\source\Items\Tools\Pickaxe.h" />
+    <ClInclude Include="..\..\Source\Items\Weapons\Ammo.h" />
     <ClInclude Include="..\..\source\Items\Weapons\Bow.h" />
     <ClInclude Include="..\..\Source\Networking\Client.h" />
     <ClInclude Include="..\..\source\Networking\Connection.h" />

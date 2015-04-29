@@ -8,6 +8,7 @@
 #include "GameOverlay/Inventory.h"
 #include "GameOverlay/HealthManaStatus.h"
 #include "GameOverlay/Omnicon.h"
+#include "GameOverlay/Crafting.h"
 
 class Game;
 class Player;
@@ -35,6 +36,7 @@ public:
 
 	// Hold item
 	void takeItem(ItemContainer *itemContainer, const uint idx);
+	void placeSingleItem(ItemContainer *itemContainer, const uint idx);
 	ItemContainer::Slot &getHoldItem() { return m_holdItem; }
 
 	// Ui
@@ -47,6 +49,7 @@ private:
 	HealthManaStatus *m_healthManaStatus;
 	Omnicon *m_omnicon;
 	Inventory *m_inventory;
+	Crafting *m_crafting;
 
 	bool m_craftingEnabled;
 

@@ -4,6 +4,7 @@
 #include "Tools/Pickaxe.h"
 #include "Placeable/ThingItem.h"
 #include "Weapons/Bow.h"
+#include "Weapons/Ammo.h"
 
 vector<ItemData*> ItemData::s_itemData(ITEM_COUNT);
 
@@ -37,6 +38,7 @@ void ItemData::init(Game *game)
 	(s_itemData[ITEM_TORCH] = new ThingItem(game, BLOCK_ENTITY_TORCH))->set(ITEM_TORCH, "Torch", "Useful light source", ":/Sprites/ItemIcons/Torch.png", 255, false);
 	(s_itemData[ITEM_CRAFTING_BENCH] = new ThingItem(game, BLOCK_ENTITY_CRAFTING_BENCH))->set(ITEM_CRAFTING_BENCH, "Crafting Bench", "For crafting the items of your dreams", ":/Sprites/ItemIcons/CraftingBench.png", 1, false);
 	(s_itemData[ITEM_RED_CURRANT_BUSH] = new ThingItem(game, BLOCK_ENTITY_RED_CURRANT_BUSH))->set(ITEM_RED_CURRANT_BUSH, "Red Currant Bush", "Grows red currants", ":/Sprites/ItemIcons/Torch.png", 255, false);
-
+	
 	(s_itemData[ITEM_BOW_WOODEN] = new Bow(game))->set(ITEM_BOW_WOODEN, "Bow", "", ":/Sprites/ItemIcons/WoodenBow.png", 1, true);
+	(s_itemData[ITEM_ARROW] = new Ammo(game))->set(ITEM_ARROW, "Arrow", "Needs a bow to fire", ":/Sprites/ItemIcons/Arrow.png", 255, false);
 }

@@ -75,7 +75,10 @@ private:
 
 void Bow::use(ItemContainer::Slot *slot, const float delta)
 {
-	new Arrow(m_game->getWorld(), m_game->getWorld()->getLocalPlayer()->getCenter(), m_game->getWorld()->getCamera()->getInputPosition() - m_game->getWorld()->getLocalPlayer()->getCenter(), 50.0f);
+	if(m_game->getWorld()->getLocalPlayer()->getItemContainer()->removeItem(ITEM_ARROW))
+	{
+		new Arrow(m_game->getWorld(), m_game->getWorld()->getLocalPlayer()->getCenter(), m_game->getWorld()->getCamera()->getInputPosition() - m_game->getWorld()->getLocalPlayer()->getCenter(), 50.0f);
+	}
 }
 
 void Bow::draw(Player *player, SpriteBatch *spriteBatch, const float alpha)

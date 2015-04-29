@@ -19,14 +19,14 @@ Inventory::Inventory(Scene *scene, GameOverlay *gameOverlay) :
 	m_showing(false)
 {
 	m_itemSlotSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
-	m_itemSlotSprite.setDepth(-1.f);
+	m_itemSlotSprite.setDepth(-3.f);
 	m_backgroundSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
-	m_backgroundSprite.setDepth(-3.f);
+	m_backgroundSprite.setDepth(-4.f);
 	
 	Input::bind(XD_KEY_I, bind(&Inventory::toggle, this));
 
-	setAnchor(Vector2(0.5f, 0.98f));
-	setSize(Vector2(976.0f, 310.0f)/m_parent->getSize());
+	setAnchor(Vector2(0.5f, 0.85f));
+	setSize(Vector2(970.0f, 248.0f)/m_parent->getSize());
 	setPosition(Vector2(0.0f));
 }
 
@@ -47,7 +47,7 @@ void Inventory::hide()
 
 void Inventory::update(const float delta)
 {
-	setSize(Vector2(976.0f, 310.0f)/m_parent->getSize());
+	setSize(Vector2(970.0f, 248.0f)/m_parent->getSize());
 
 	m_animationTime += m_showing ? delta : -delta;
 	if(m_animationTime > m_animationDuration)
@@ -60,7 +60,7 @@ void Inventory::update(const float delta)
 	}
 
 	m_interpolateStartY = m_rect.position.y;
-	m_interpolateEndY = math::lerp(m_rect.size.y + 0.02f, 0.0f, m_animationTime/m_animationDuration);
+	m_interpolateEndY = math::lerp(m_rect.size.y + 0.15f, 0.0f, m_animationTime/m_animationDuration);
 	m_interpolateStartAlpha = m_fadeInAlpha;
 	m_interpolateEndAlpha = math::lerp(0.0f, 1.0f, m_animationTime/m_animationDuration);
 	
@@ -80,6 +80,8 @@ void Inventory::draw(SpriteBatch *spriteBatch, const float alpha)
 
 	Vector2 position = getPosition();
 	Vector2 size = getSize();
+	
+	m_backgroundSprite.setSize(size); // TODO: Remove once the sprite is of correct size
 
 	m_backgroundSprite.setPosition(position);
 	spriteBatch->drawSprite(m_backgroundSprite);

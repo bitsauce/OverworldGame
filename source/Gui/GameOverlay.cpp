@@ -24,6 +24,7 @@ GameOverlay::GameOverlay(Game *game, Scene *scene) :
 	m_healthManaStatus = new HealthManaStatus(scene, this);
 	m_omnicon = new Omnicon(scene, this);
 	m_inventory = new Inventory(scene, this);
+	m_crafting = new Crafting(scene, this);
 }
 
 GameOverlay::~GameOverlay()
@@ -78,6 +79,17 @@ void GameOverlay::takeItem(ItemContainer *itemContainer, const uint idx)
 	ItemContainer::Slot tmp = m_holdItem;
 	m_holdItem = itemContainer->getSlotAt(idx);
 	itemContainer->setSlotAt(idx, tmp);
+}
+
+void GameOverlay::placeSingleItem(ItemContainer *itemContainer, const uint idx)
+{
+	ItemContainer::Slot &slot = itemContainer->getSlotAt(idx);
+	if(slot.item == m_holdItem.item || slot.item == ITEM_NONE)
+	{
+		m_holdItem.amount--;
+		slot.item = m_holdItem.item;
+		slot.amount++;
+	}
 }
 
 bool GameOverlay::isHovered() const
