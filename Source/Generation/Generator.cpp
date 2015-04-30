@@ -1,53 +1,46 @@
 #include "Generator.h"
 #include "Grassland.h"
+#include "Game/RayCast.h"
 
 float step(float edge, float x)
 {
 	return x < edge ? 0.0f : 1.0f;
 }
 
-map<int64_t, WorldGenerator::BlockUnion> WorldGenerator::s_structureMap;
-unordered_set<uint> WorldGenerator::s_loadedSuperChunks;
-
 #define CHUNK_KEY(X, Y) (((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000))
-#define BLOCK_KEY(X, Y) ((int64_t(X) & 0x00000000FFFFFFFF) | ((int64_t(Y) << 32) & 0xFFFFFFFF00000000))
 
 void WorldGenerator::getChunkBlocks(const int chunkX, const int chunkY, BlockID *blocks)
 {
+	// Load super chunk if not loaded
+	int superChunkX = (int) floor(chunkX / SUPER_CHUNK_CHUNKSF), superChunkY = (int) floor(chunkY / SUPER_CHUNK_CHUNKSF);
+	uint key = CHUNK_KEY(superChunkX, superChunkY);
+	if(m_loadedSuperChunks.find(key) == m_loadedSuperChunks.end())
+	{
+		loadStructures(superChunkX, superChunkY);
+		m_loadedSuperChunks.insert(key);
+	}
+
+	// Load blocks
 	const int tileX = chunkX * CHUNK_BLOCKS;
 	const int tileY = chunkY * CHUNK_BLOCKS;
-	for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+	for(uint y = 0; y < CHUNK_BLOCKS; ++y)
 	{
-		for(int y = 0; y < CHUNK_BLOCKS; ++y)
+		for(uint x = 0; x < CHUNK_BLOCKS; ++x)
 		{
-			for(int x = 0; x < CHUNK_BLOCKS; ++x)
+			for(uint z = 0; z < TERRAIN_LAYER_COUNT; ++z)
 			{
-				blocks[BLOCK_INDEX(x, y, z)] = getGroundAt(tileX + x, tileY + y, (TerrainLayer)z);
+				tuple<int, int, int> key = make_tuple(tileX + x, tileY + y, z);
+				if(m_structureMap.find(key) != m_structureMap.end() && m_structureMap[key] > BLOCK_EMPTY)
+				{
+					blocks[BLOCK_INDEX(x, y, z)] = m_structureMap[key];
+				}
+				else
+				{
+					blocks[BLOCK_INDEX(x, y, z)] = getGroundAt(tileX + x, tileY + y, (TerrainLayer)z);
+				}
 			}
 		}
 	}
-		
-	// TODO: Move this check somewhere else
-	/*int superChunkX = xd::math::floor(x/SUPER_CHUNK_BLOCKSF), superChunkY = xd::math::floor(y/SUPER_CHUNK_BLOCKSF);
-	uint key = CHUNK_KEY(superChunkX, superChunkY);
-	if(s_loadedSuperChunks.find(key) == s_loadedSuperChunks.end())
-	{
-		loadStructures(superChunkX, superChunkY);
-		s_loadedSuperChunks.insert(key);
-	}
-		
-	// Apply structures
-	int64_t blockKey = BLOCK_KEY(x, y);
-	if(s_structureMap.find(blockKey) != s_structureMap.end())
-	{
-		BlockUnion &blocks = s_structureMap[blockKey];
-		switch(layer)
-		{
-		case TERRAIN_LAYER_BACK: if(blocks.back > 0) block = blocks.back; break;
-		case TERRAIN_LAYER_MIDDLE: if(blocks.middle > 0) block = blocks.middle; break;
-		case TERRAIN_LAYER_FRONT: if(blocks.front > 0) block = blocks.front; break;
-		}
-	}*/
 }
 	
 BlockID WorldGenerator::getGroundAt(const int x, const int y, const TerrainLayer layer)
@@ -78,16 +71,19 @@ BlockID WorldGenerator::getGroundAt(const int x, const int y, const TerrainLayer
 	return BLOCK_EMPTY;
 }
 
-#ifdef TODO
-
 void WorldGenerator::loadStructures(const int superChunkX, const int superChunkY)
 {
-	xd::LOG("Placing structures in super chunk [%i, %i]", superChunkX, superChunkY);
+	LOG("Placing structures in super chunk [%i, %i]", superChunkX, superChunkY);
+	
+	Random s_random;
+	uint s_seed = 0;
 	//vector<Structure*> structures;
+
+	// Load structures
 	for(int x = 0; x < SUPER_CHUNK_BLOCKS; ++x)
 	{
-		break;
 		int tileX = SUPER_CHUNK_BLOCKS * superChunkX + x;
+
 		if(s_random.getDouble(tileX + s_seed) < 0.005/*TREE_CHANCE*/)
 		{
 			//Tree *tree = new Tree;
@@ -131,7 +127,7 @@ void WorldGenerator::loadStructures(const int superChunkX, const int superChunkY
 				}
 				}*/
 
-				s_structureMap[BLOCK_KEY(tileX, tileY - h)].back = BLOCK_WOOD;
+				m_structureMap[make_tuple(tileX, tileY - h, TERRAIN_LAYER_BACK)] = BLOCK_WOOD;
 			}
 
 			// HOW IT (SHOULD) WORK(S):
@@ -156,7 +152,7 @@ void WorldGenerator::loadStructures(const int superChunkX, const int superChunkY
 					{
 						if(sqrt(j*j+i*i) < r)
 						{
-							s_structureMap[BLOCK_KEY(tileX + branch.x + i, tileY - branch.y + j)].front = BLOCK_LEAF;
+							m_structureMap[make_tuple(tileX + branch.x + i, tileY - branch.y + j, TERRAIN_LAYER_FRONT)] = BLOCK_LEAF;
 						}
 					}
 				}
@@ -175,7 +171,7 @@ void WorldGenerator::loadStructures(const int superChunkX, const int superChunkY
 						vector<Vector2i> points = ray.getPoints();
 						for(uint j = 0; j < points.size(); ++j)
 						{
-							s_structureMap[BLOCK_KEY(tileX + points[j].x, tileY - points[j].y)].back = BLOCK_WOOD;
+							m_structureMap[make_tuple(tileX + points[j].x, tileY - points[j].y, TERRAIN_LAYER_BACK)] = BLOCK_WOOD;
 						}
 
 						branchPoints.push_back(Vector4(points.back().x, points.back().y, segmentAngle, branch.w - segmentLength));
@@ -216,8 +212,6 @@ void WorldGenerator::loadStructures(const int superChunkX, const int superChunkY
 
 	//for(uint i = 0; i < structures.size(); ++i) delete structures[i];
 }
-
-#endif // TODO
 
 int WorldGenerator::getGroundHeight(const int x)
 {

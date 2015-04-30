@@ -21,25 +21,18 @@ public:
 
 	void getChunkBlocks(const int chunkX, const int chunkY, BlockID *blocks);
 	int getGroundHeight(const int x);
-	//void loadStructures(const int x, const int y);
 
 private:
+	void loadStructures(const int superChunkX, const int superChunkY);
+
 	BlockID getGroundAt(const int x, const int y, const TerrainLayer layer);
 
 	uint m_seed;
 	Simplex2D m_noise;
 	Random m_random;
 
-	struct BlockUnion
-	{
-		BlockUnion() : back(BLOCK_EMPTY), middle(BLOCK_EMPTY), front(BLOCK_EMPTY) {}
-		BlockID back;
-		BlockID middle;
-		BlockID front;
-	};
-
-	static map<int64_t, BlockUnion> s_structureMap;
-	static unordered_set<uint> s_loadedSuperChunks;
+	map<tuple<int, int, int>, BlockID> m_structureMap;
+	unordered_set<uint> m_loadedSuperChunks;
 };
 
 #endif // TERRAIN_GEN_H

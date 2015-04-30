@@ -71,6 +71,9 @@
     <Report>
       <Path>OverworldCpp Debug150126.vsp</Path>
     </Report>
+    <Report>
+      <Path>OverworldCpp Debug150429.vsp</Path>
+    </Report>
   </Reports>
   <Launches>
     <ProjBinary>
