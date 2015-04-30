@@ -21,6 +21,8 @@ public:
 	bool setBlockAt(const int x, const int y, BlockID block, const TerrainLayer layer);
 	BlockID getBlockAt(const int x, const int y, const TerrainLayer layer);
 	bool isBlockAt(const int x, const int y, TerrainLayer layer);
+
+	// Removes the block at xy, creating an ItemDrop for the block type in the process
 	bool removeBlockAt(const int x, const int y, TerrainLayer layer);
 	
 	// BLOCK ENTITIES
@@ -30,6 +32,9 @@ public:
 	ChunkLoader *getChunkLoader() { return &m_chunkLoader; }
 
 private:
+	// World pointer
+	World *m_world;
+
 	// CHUNK LOADER
 	ChunkLoader m_chunkLoader;
 	

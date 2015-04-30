@@ -44,9 +44,7 @@ void Pickaxe::use(ItemContainer::Slot *slot, const float delta)
 		m_mineCounter -= delta;
 		if(m_mineCounter <= 0.0f)
 		{
-			ItemID itemID = (ItemID)m_game->getWorld()->getTerrain()->getBlockAt(position.x, position.y, TERRAIN_LAYER_MIDDLE);
 			m_game->getWorld()->getTerrain()->removeBlockAt(position.x, position.y, TERRAIN_LAYER_MIDDLE);
-			new ItemDrop(m_game->getWorld(), Vector2(position.x * BLOCK_PXF, position.y * BLOCK_PXF), itemID);
 		}
 		else
 		{

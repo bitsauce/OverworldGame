@@ -67,14 +67,6 @@
       <ProjName>OverworldCpp</ProjName>
     </ProjBinary>
   </Binaries>
-  <Reports>
-    <Report>
-      <Path>OverworldCpp Debug150126.vsp</Path>
-    </Report>
-    <Report>
-      <Path>OverworldCpp Debug150429.vsp</Path>
-    </Report>
-  </Reports>
   <Launches>
     <ProjBinary>
       <Path>:PB:{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}|OverworldCpp.vcxproj</Path>

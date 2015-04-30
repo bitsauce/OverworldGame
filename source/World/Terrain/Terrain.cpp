@@ -13,7 +13,10 @@
 #include "World/Lighting/Spotlight.h"
 #include "World/Camera.h"
 
+#include "Entities/ItemDrop.h"
+
 Terrain::Terrain(World *world) :
+	m_world(world),
 	m_chunkLoader(world),
 	m_background(this, world->getCamera(), PRIORITY_TERRAIN_BACKGROUND, TERRAIN_LAYER_BACK),
 	m_middleground(this, world->getCamera(), PRIORITY_TERRAIN_MIDDLEGROUND, TERRAIN_LAYER_MIDDLE),
@@ -70,7 +73,13 @@ bool Terrain::isBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_L
 
 bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
 {
-	return setBlockAt(x, y, BLOCK_EMPTY, layer);
+	BlockID blockID = getBlockAt(x, y, layer);
+	if(setBlockAt(x, y, BLOCK_EMPTY, layer))
+	{
+		new ItemDrop(m_world, Vector2(x * BLOCK_PXF, y * BLOCK_PXF), BlockData::get(blockID).getItem());
+		return true;
+	}
+	return false;
 }
 
 // BLOCK ENTITIES

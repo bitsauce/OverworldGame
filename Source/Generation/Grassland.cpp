@@ -1,12 +1,8 @@
 #include "grassland.h"
 #include "constants.h"
 
-Tree::Tree()
+/*Tree::Tree()
 {
-	width = 10;
-	height = 15;
-	originX = 5;
-	originY = 15;
 }
 
 BlockID Tree::getBlockAt(const int x, const int y, const TerrainLayer layer)
@@ -17,7 +13,7 @@ BlockID Tree::getBlockAt(const int x, const int y, const TerrainLayer layer)
 		{
 			if(x == 5 && y >= 5)
 			{
-				return BLOCK_WOOD;
+				return BLOCK_WOOD_OAK;
 			}
 		}
 			
@@ -30,4 +26,4 @@ BlockID Tree::getBlockAt(const int x, const int y, const TerrainLayer layer)
 		}
 	}
 	return BlockID(-1);
-}
+}*/

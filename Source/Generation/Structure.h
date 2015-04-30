@@ -1,19 +1,17 @@
 #ifndef STRUCTURE_H
 #define STRUCTURE_H
 
-enum BlockID;
-enum TerrainLayer;
+#include "Constants.h"
+#include "Generator.h"
 
 class Structure
 {
 public:
-	Structure();
+	Structure(const int x, const int y);
 
-	virtual BlockID getBlockAt(const int x, const int y, const TerrainLayer layer);
-	
-	int x, y;
-	int width, height;
-	int originX, originY;
+	virtual void place(WorldGenerator *worldGenerator, StructurePlacer *structPlacer) { }
+
+	int m_x, m_y;
 };
 
 #endif // STRUCTURE_H

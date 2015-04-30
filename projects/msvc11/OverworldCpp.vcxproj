@@ -113,6 +113,7 @@
     <ClCompile Include="..\..\Source\Generation\Grassland.cpp" />
     <ClCompile Include="..\..\Source\Generation\Structure.cpp" />
     <ClCompile Include="..\..\Source\Generation\Generator.cpp" />
+    <ClCompile Include="..\..\Source\Generation\Structures\OakTree.cpp" />
     <ClCompile Include="..\..\source\gui\Button.cpp" />
     <ClCompile Include="..\..\source\gui\Canvas.cpp" />
     <ClCompile Include="..\..\source\gui\GameOverlay.cpp" />
@@ -126,6 +127,7 @@
     <ClCompile Include="..\..\source\Items\BlockItem.cpp" />
     <ClCompile Include="..\..\source\items\ItemData.cpp" />
     <ClCompile Include="..\..\Source\Items\Placeable\ThingItem.cpp" />
+    <ClCompile Include="..\..\Source\Items\Tools\Axe.cpp" />
     <ClCompile Include="..\..\source\Items\Tools\Pickaxe.cpp" />
     <ClCompile Include="..\..\Source\Items\Weapons\Ammo.cpp" />
     <ClCompile Include="..\..\source\Items\Weapons\Bow.cpp" />
@@ -177,6 +179,7 @@
     <ClInclude Include="..\..\Source\Generation\Grassland.h" />
     <ClInclude Include="..\..\Source\Generation\Structure.h" />
     <ClInclude Include="..\..\Source\Generation\Generator.h" />
+    <ClInclude Include="..\..\Source\Generation\Structures\OakTree.h" />
     <ClInclude Include="..\..\source\gui\Button.h" />
     <ClInclude Include="..\..\source\gui\Canvas.h" />
     <ClInclude Include="..\..\source\gui\GameOverlay.h" />
@@ -190,6 +193,7 @@
     <ClInclude Include="..\..\source\Items\BlockItem.h" />
     <ClInclude Include="..\..\source\items\ItemData.h" />
     <ClInclude Include="..\..\Source\Items\Placeable\ThingItem.h" />
+    <ClInclude Include="..\..\Source\Items\Tools\Axe.h" />
     <ClInclude Include="..\..\source\Items\Tools\Pickaxe.h" />
     <ClInclude Include="..\..\Source\Items\Weapons\Ammo.h" />
     <ClInclude Include="..\..\source\Items\Weapons\Bow.h" />

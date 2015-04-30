@@ -1,17 +1,7 @@
-#include "structure.h"
-#include "constants.h"
+#include "Structure.h"
 
-Structure::Structure() :
-	x(0),
-	y(0),
-	width(0),
-	height(0),
-	originX(0),
-	originY(0)
+Structure::Structure(const int x, const int y) :
+	m_x(x),
+	m_y(y)
 {
-}
-
-BlockID Structure::getBlockAt(const int /*x*/, const int /*y*/, const TerrainLayer /*layer*/)
-{
-	return BLOCK_EMPTY;
 }

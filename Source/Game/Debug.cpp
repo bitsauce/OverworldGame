@@ -180,8 +180,10 @@ void Debug::draw(SpriteBatch *spriteBatch)
 	setVariable("Chunks", util::intToStr(m_world->getTerrain()->getChunkLoader()->m_chunks.size()) + " / " + util::intToStr(m_world->getTerrain()->getChunkLoader()->m_optimalChunkCount));
 	//setVariable("Time", util::intToStr(m_timeOfDay->getHour()) + ":" + util::intToStr(m_timeOfDay->getMinute()));
 	Vector2 center = m_world->getCamera()->getCenter();
+	Vector2 inputPosition = m_world->getCamera()->getInputPosition();
 	setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
 	setVariable("Zoom", util::intToStr(m_world->getCamera()->getZoomLevel() * 100) + "%");
+	setVariable("Block Under Cursor", util::intToStr(m_world->getTerrain()->getBlockAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), TERRAIN_LAYER_MIDDLE)) + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
 
 	// Draw debug info
 	string drawString;

@@ -22,7 +22,7 @@ World::World() :
 	m_timeOfDay = new TimeOfDay();
 	m_background = new Background(m_timeOfDay);
 	m_camera = new Camera();
-	m_generator = new WorldGenerator();
+	m_generator = new WorldGenerator(9823);
 	m_terrain = new Terrain(this);
 	m_lighting = new Lighting(this);
 }
@@ -44,7 +44,7 @@ void World::create(const string &name)
 	m_worldFile->setValue("world", "seed", util::intToStr(seed));
 	m_worldFile->save();
 
-	m_generator->setSeed(seed);
+	//m_generator->setSeed(seed);
 }
 
 void World::save()

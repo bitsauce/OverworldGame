@@ -179,6 +179,12 @@
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Crafting.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Generation\Structures\OakTree.cpp">
+      <Filter>Source\Generation\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Items\Tools\Axe.cpp">
+      <Filter>Source\Items\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -440,6 +446,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Crafting.h">
       <Filter>Source\Gui\GameOverlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Generation\Structures\OakTree.h">
+      <Filter>Source\Generation\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Items\Tools\Axe.h">
+      <Filter>Source\Items\Tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
