@@ -10,10 +10,27 @@
 class Camera;
 class Terrain;
 class ItemData;
-class ItemContainer;
 class Connection;
 class Game;
 class GameOverlay;
+
+class Bag
+{
+public:
+	Bag(const uint width, const uint height) :
+		m_width(width),
+		m_height(height),
+		m_itemContainer(width * height)
+	{
+	}
+
+	ItemContainer *getItemContainer() { return &m_itemContainer; }
+
+private:
+	ItemContainer m_itemContainer;
+	const uint m_width;
+	const uint m_height;
+};
 
 class Player : public DynamicEntity, public NetworkObject
 {
@@ -32,8 +49,13 @@ public:
 	uint getMaxHealth() const { return m_maxHealth; }
 	uint getHealth() const { return m_health; }
 
-	ItemContainer *getItemContainer() { return &m_itemContainer; }
 	Humanoid &getHumanoid() { return m_humanoid; }
+	
+	ItemSlot &getHeldItem() { return m_heldItem; }
+	Bag *getBag() { return m_bag; }
+	ItemContainer *getHotbarContainer() { return &m_hotbar; }
+
+	ItemSlot &getCurrentItem();
 
 private:
 	// Managers
@@ -42,7 +64,9 @@ private:
 	GameOverlay *m_gameOverlay;
 
 	// Inventory
-	ItemContainer m_itemContainer;
+	ItemSlot m_heldItem;
+	Bag *m_bag;
+	ItemContainer m_hotbar;
 
 	// Player health
 	uint m_maxHealth;

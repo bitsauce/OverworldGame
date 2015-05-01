@@ -23,7 +23,6 @@ public:
 
 private:
 	GameOverlay *m_gameOverlay;
-	ItemContainer m_itemContainer;
 	Sprite m_itemSlotSprite;
 	Sprite m_backgroundSprite;
 	FontPtr m_font;

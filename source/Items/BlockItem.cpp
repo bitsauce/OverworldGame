@@ -13,7 +13,7 @@ BlockItem::BlockItem(Game *game, const TerrainLayer layer, const BlockID blockID
 {
 }
 
-void BlockItem::use(ItemContainer::Slot *slot, const float delta)
+void BlockItem::use(Player *player, const float delta)
 {
 	// Get block input position
 	Vector2i blockPos = m_camera->getInputPosition();
@@ -26,7 +26,7 @@ void BlockItem::use(ItemContainer::Slot *slot, const float delta)
 		m_terrain->setBlockAt(blockPos.x, blockPos.y, m_blockID, m_layer);
 
 		// Remove item from player inventory
-		slot->amount--;
+		player->getCurrentItem().dec();
 		//player->getItemContainer()->removeItem(getID(), 1);
 	}
 }

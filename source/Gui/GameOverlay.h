@@ -37,7 +37,6 @@ public:
 	// Hold item
 	void takeItem(ItemContainer *itemContainer, const uint idx);
 	void placeSingleItem(ItemContainer *itemContainer, const uint idx);
-	ItemContainer::Slot &getHoldItem() { return m_holdItem; }
 
 	// Ui
 	bool isHovered() const;
@@ -53,7 +52,6 @@ private:
 
 	bool m_craftingEnabled;
 
-	ItemContainer::Slot m_holdItem;
 	FontPtr m_font;
 };
 

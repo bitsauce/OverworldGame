@@ -74,8 +74,8 @@ void Client::update()
 				m_networkObjects.push_back(player);
 
 				player->setPosition(Vector2(0, 0));
-				player->getItemContainer()->addItem(ITEM_PICKAXE_IRON);
-				player->getItemContainer()->addItem(ITEM_TORCH, 255);
+				player->getHotbarContainer()->addItem(ITEM_PICKAXE_IRON);
+				player->getHotbarContainer()->addItem(ITEM_TORCH, 255);
 			}
 			break;
 			

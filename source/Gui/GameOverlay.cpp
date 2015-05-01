@@ -32,32 +32,24 @@ GameOverlay::~GameOverlay()
 	delete m_hotbar;
 	delete m_healthManaStatus;
 	delete m_omnicon;
+	delete m_inventory;
+	delete m_crafting;
 }
 
 void GameOverlay::update(const float delta)
 {
-	if(!m_holdItem.isEmpty() && !isHovered() && Input::getKeyState(XD_RMB))
+	ItemSlot &heldItem = m_player->getHeldItem();
+	if(!heldItem.isEmpty() && !isHovered() && Input::getKeyState(XD_RMB))
 	{
-		ItemDrop *itemDrop = new ItemDrop(m_game->getWorld(), m_player->getCenter() - Vector2(0.0f, 20.0f), m_holdItem.item, m_holdItem.amount);
+		ItemDrop *itemDrop = new ItemDrop(m_game->getWorld(), m_player->getCenter() - Vector2(0.0f, 20.0f), heldItem.getItem(), heldItem.getAmount());
 		itemDrop->applyImpulse(Vector2(m_game->getWorld()->getCamera()->getInputPosition() - m_player->getCenter()).normalized() * 4.0f);
-		m_holdItem.set(ITEM_NONE, 0);
+		heldItem.set(ITEM_NONE, 0);
 	}
 }
 
 void GameOverlay::draw(SpriteBatch *spriteBatch, const float delta)
 {
-	if(!m_holdItem.isEmpty())
-	{
-		Vector2 position = Input::getPosition();
-		if(m_holdItem.item != ITEM_NONE)
-		{
-			spriteBatch->drawSprite(Sprite(ItemData::get(m_holdItem.item)->getIconTexture(), Rect(position.x + 13.f, position.y + 12.f, 32.f, 32.f)));
-			if(m_holdItem.amount > 1)
-			{
-				spriteBatch->drawText(Vector2(position.x + 11.f, position.y + 10.f), util::intToStr(m_holdItem.amount), m_font);
-			}
-		}
-	}
+	m_player->getHeldItem().drawItem(Input::getPosition(), spriteBatch, m_font);
 }
 
 void GameOverlay::toggleCrafting()
@@ -76,19 +68,29 @@ void GameOverlay::toggleCrafting()
 
 void GameOverlay::takeItem(ItemContainer *itemContainer, const uint idx)
 {
-	ItemContainer::Slot tmp = m_holdItem;
-	m_holdItem = itemContainer->getSlotAt(idx);
-	itemContainer->setSlotAt(idx, tmp);
+	ItemSlot &heldItem = m_player->getHeldItem();
+	ItemSlot &slot = itemContainer->getSlotAt(idx);
+
+	ItemSlot tmp = heldItem;
+	heldItem.set(slot.getItem(), slot.getAmount());
+	itemContainer->getSlotAt(idx).set(tmp.getItem(), tmp.getAmount());
 }
 
 void GameOverlay::placeSingleItem(ItemContainer *itemContainer, const uint idx)
 {
-	ItemContainer::Slot &slot = itemContainer->getSlotAt(idx);
-	if(slot.item == m_holdItem.item || slot.item == ITEM_NONE)
+	ItemSlot &heldItem = m_player->getHeldItem();
+	ItemSlot &slot = itemContainer->getSlotAt(idx);
+	if(heldItem.isEmpty())
 	{
-		m_holdItem.amount--;
-		slot.item = m_holdItem.item;
-		slot.amount++;
+		if(slot.getItem() == ITEM_NONE)
+		{
+			slot.set(heldItem.getItem(), 1);
+		}
+		else if(slot.getItem() == heldItem.getItem())
+		{
+			slot.inc();
+		}
+		heldItem.dec();
 	}
 }
 

@@ -27,11 +27,12 @@ Player::Player(Game *game, RakNet::RakNetGUID guid) :
 	m_gameOverlay(game->getGameOverlay()),
 	m_jumpTimer(1.0f),
 	m_canJump(false),
-	m_itemContainer(10),
 	m_guid(guid),
 	m_maxHealth(12),
 	m_health(m_maxHealth),
-	m_lmbPressed(false)
+	m_lmbPressed(false),
+	m_hotbar(10),
+	m_bag(new Bag(20, 5))
 {
 	// Set body size
 	Entity::setSize(24, 48);
@@ -54,6 +55,15 @@ Player::Player(Game *game, RakNet::RakNetGUID guid) :
 
 Player::~Player()
 {
+}
+
+ItemSlot &Player::getCurrentItem()
+{
+	if(!m_heldItem.isEmpty())
+	{
+		return m_heldItem;
+	}
+	return m_hotbar.getSlotAt(m_gameOverlay->getHotbar()->getSelectedSlot());
 }
 
 void Player::activateThing()
@@ -142,12 +152,11 @@ void Player::update(const float delta)
 	// Use current item
 	if(Input::getKeyState(XD_LMB) && !m_gameOverlay->isHovered())
 	{
-		ItemContainer::Slot &slot = m_gameOverlay->getHoldItem().isEmpty() ? m_itemContainer.getSlotAt(m_gameOverlay->getHotbar()->getSelectedSlot()) : m_gameOverlay->getHoldItem();
-		ItemData *item = ItemData::get(slot.item);
+		ItemSlot &slot = getCurrentItem();
+		ItemData *item = ItemData::get(slot.getItem());
 		if(item != nullptr && (!item->isSingleShot() || !m_lmbPressed))
 		{
-			item->use(&slot, delta);
-			if(slot.isEmpty()) slot.item = ITEM_NONE;
+			item->use(this, delta);
 		}
 		m_lmbPressed = true;
 	}
@@ -211,16 +220,7 @@ void Player::draw(SpriteBatch *spriteBatch, const float alpha)
 {
 	m_humanoid.draw(this, spriteBatch, alpha);
 	
-	ItemData *item = nullptr;
-	if(!m_gameOverlay->getHoldItem().isEmpty())
-	{
-		item = ItemData::get(m_gameOverlay->getHoldItem().item);
-	}
-	else
-	{
-		item = ItemData::get(m_itemContainer.getItemAt(m_gameOverlay->getHotbar()->getSelectedSlot()));
-	}
-
+	ItemData *item = ItemData::get(getCurrentItem().getItem());
 	if(item != nullptr)
 	{
 		item->draw(this, spriteBatch, alpha);

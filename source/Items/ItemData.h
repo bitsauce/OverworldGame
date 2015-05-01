@@ -12,7 +12,7 @@ class ItemData
 	friend class Game;
 public:
 	ItemData();
-	virtual void use(ItemContainer::Slot *slot, const float delta) = 0;
+	virtual void use(Player *player, const float delta) = 0;
 	virtual void draw(Player *player, SpriteBatch *spriteBatch, const float alpha) = 0;
 	static ItemData *get(const ItemID id) { return s_itemData[id]; }
 

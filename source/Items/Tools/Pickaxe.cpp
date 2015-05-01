@@ -21,12 +21,12 @@ Pickaxe::Pickaxe(Game *game) :
 	m_sprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 }
 
-void Pickaxe::use(ItemContainer::Slot *slot, const float delta)
+void Pickaxe::use(Player *player, const float delta)
 {
 	// Get block input position
 	Vector2i position = m_game->getWorld()->getCamera()->getInputPosition();
-	position.x = floor(position.x/BLOCK_PXF);
-	position.y = floor(position.y/BLOCK_PXF);
+	position.x = (int) floor(position.x/BLOCK_PXF);
+	position.y = (int) floor(position.y/BLOCK_PXF);
 
 	// Is there a block at this position?
 	if(m_game->getWorld()->getTerrain()->getBlockAt(position.x, position.y, TERRAIN_LAYER_MIDDLE) > BLOCK_ENTITY)
@@ -49,7 +49,7 @@ void Pickaxe::use(ItemContainer::Slot *slot, const float delta)
 		else
 		{
 			m_cracksSprite.setPosition(position * BLOCK_PXF);
-			m_cracksSprite.setRegion(m_cracksAnimation.getKeyFrame(4 * (1.0f - m_mineCounter/m_mineTime)));
+			m_cracksSprite.setRegion(m_cracksAnimation.getKeyFrame((int) (4 * (1.0f - m_mineCounter/m_mineTime))));
 		}
 
 		m_game->getWorld()->getLocalPlayer()->getHumanoid().setPostAnimation(Humanoid::ANIM_MINE);

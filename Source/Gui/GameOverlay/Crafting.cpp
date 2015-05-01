@@ -45,15 +45,7 @@ void Crafting::draw(SpriteBatch *spriteBatch, float alpha)
 			m_itemSlotSprite.setPosition(position + Vector2(8.f + x * 48.f, 7.f + y * 48.f));
 			spriteBatch->drawSprite(m_itemSlotSprite);
 
-			ItemContainer::Slot &slot = m_itemContainer.getSlotAt(x + y * 3);
-			if(slot.item != ITEM_NONE)
-			{
-				spriteBatch->drawSprite(Sprite(ItemData::get(slot.item)->getIconTexture(), Rect(position.x + 13.f + x * 48.f, position.y + 12.f + y * 48.f, 32.f, 32.f)));
-				if(slot.amount > 1)
-				{
-					spriteBatch->drawText(Vector2(position.x + 11.f + x * 48.f, position.y + 10.f + y * 48.0f), util::intToStr(slot.amount), m_font);
-				}
-			}
+			m_itemContainer.getSlotAt(x + y * 3).drawItem(position + Vector2(x, y) * 48.0f, spriteBatch, m_font);
 		}
 	}
 

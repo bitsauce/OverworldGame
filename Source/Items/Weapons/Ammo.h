@@ -10,7 +10,7 @@ class Ammo : public ItemData
 public:
 	Ammo(Game *);
 	
-	void use(ItemContainer::Slot *slot, const float delta) { }
+	void use(Player *player, const float delta) { }
 	void draw(Player *player, SpriteBatch *spriteBatch, const float alpha) { }
 };
 

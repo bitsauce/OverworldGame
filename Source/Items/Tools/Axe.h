@@ -8,7 +8,7 @@ class Axe : public ItemData
 public:
 	Axe(Game *game);
 
-	void use(ItemContainer::Slot *slot, const float delta);
+	void use(Player *player, const float delta);
 	void draw(Player *player, SpriteBatch *spriteBatch, const float alpha);
 
 	void makeTreeFall(const int x, const int y);

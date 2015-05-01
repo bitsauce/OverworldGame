@@ -1,6 +1,8 @@
 #include "Inventory.h"
 #include "Game/Game.h"
 #include "Items/ItemData.h"
+#include "Game/ItemContainer.h"
+#include "Entities/Player.h"
 
 Inventory::Inventory(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(scene, gameOverlay),
@@ -8,7 +10,6 @@ Inventory::Inventory(Scene *scene, GameOverlay *gameOverlay) :
 	m_itemSlotSprite(ResourceManager::get<Texture2D>(":/Sprites/Inventory/ItemSlot.png")),
 	m_backgroundSprite(ResourceManager::get<Texture2D>(":/Sprites/Inventory/Inventory.png")),
 	m_font(ResourceManager::get<Font>(UI_INVENTORY_FONT)),
-	m_itemContainer(100),
 	m_fadeInAlpha(0.0f),
 	m_animationTime(0.0f),
 	m_animationDuration(0.5f),
@@ -74,7 +75,7 @@ void Inventory::draw(SpriteBatch *spriteBatch, const float alpha)
 
 	if(m_animationTime == 0.0f) return;
 
-	Color fadeColor(255, 255, 255, 255 * m_fadeInAlpha);
+	Color fadeColor(255, 255, 255, (uchar) (255 * m_fadeInAlpha));
 	m_backgroundSprite.setColor(fadeColor);
 	m_itemSlotSprite.setColor(fadeColor);
 
@@ -93,45 +94,41 @@ void Inventory::draw(SpriteBatch *spriteBatch, const float alpha)
 			m_itemSlotSprite.setPosition(position + Vector2(8.f + x * 48.f, 7.f + y * 48.f));
 			spriteBatch->drawSprite(m_itemSlotSprite);
 
-			ItemContainer::Slot &slot = m_itemContainer.getSlotAt(x + y * 20);
-			if(slot.item != ITEM_NONE)
-			{
-				spriteBatch->drawSprite(Sprite(ItemData::get(slot.item)->getIconTexture(), Rect(position.x + 13.f + x * 48.f, position.y + 12.f + y * 48.f, 32.f, 32.f)));
-				if(slot.amount > 1)
-				{
-					spriteBatch->drawText(Vector2(position.x + 11.f + x * 48.f, position.y + 10.f + y * 48.0f), util::intToStr(slot.amount), m_font);
-				}
-			}
+			m_gameOverlay->getPlayer()->getBag()->getItemContainer()->getSlotAt(x + y * 20).drawItem(position + Vector2(x, y) * 48.0f, spriteBatch, m_font);
 		}
 	}
 }
 
 void Inventory::keyPressEvent(const VirtualKey key)
 {
-	/*if(key == XD_LMB)
-	{
-		Vector2 position = getPosition();
-		for(uint i = 0; i < 10; ++i)
-		{
-			Rect rect(position.x + 8.f + i * 48.f, position.y + 7.f, 42.0f, 42.0f);
-			if(rect.contains(Input::getPosition()))
-			{
-				m_selectedSlot = i;
-				break;
-			}
-		}
-	}
-	else */if(key == XD_RMB)
+	if(key == XD_LMB || key == XD_RMB)
 	{
 		Vector2 position = getPosition();
 		for(int y = 0; y < 5; ++y)
 		{
 			for(int x = 0; x < 20; ++x)
 			{
-				Rect rect(position.x + 8.f + x * 48.f, position.y + 7.f + y * 48.f, 42.0f, 42.0f);
+				Rect rect(position.x + 8.0f + x * 48.0f, position.y + 7.f + y * 48.0f, 42.0f, 42.0f);
 				if(rect.contains(Input::getPosition()))
 				{
-					m_gameOverlay->takeItem(&m_itemContainer, x + y * 20);
+					if(key == XD_LMB)
+					{
+						if(!m_gameOverlay->getPlayer()->getHeldItem().isEmpty())
+						{
+							m_gameOverlay->takeItem(m_gameOverlay->getPlayer()->getBag()->getItemContainer(), x + y * 20);
+						}
+					}
+					else
+					{
+						if(m_gameOverlay->getPlayer()->getHeldItem().isEmpty())
+						{
+							m_gameOverlay->takeItem(m_gameOverlay->getPlayer()->getBag()->getItemContainer(), x + y * 20);
+						}
+						else
+						{
+							m_gameOverlay->placeSingleItem(m_gameOverlay->getPlayer()->getBag()->getItemContainer(), x + y * 20);
+						}
+					}
 					break;
 				}
 			}

@@ -6,29 +6,36 @@
 class ItemData;
 enum ItemID;
 
+class ItemSlot
+{
+public:
+	ItemSlot();
+
+	void set(const ItemID item, const uint amount);
+	
+	int inc(const uint amount = 1);
+	int dec(const uint amount = 1);
+
+	ItemID getItem() const { return m_item; }
+	int getAmount() const { return m_amount; }
+	bool isEmpty() const;
+
+	void drawItem(const Vector2 position, SpriteBatch *spriteBatch, FontPtr font);
+
+private:
+	ItemID m_item;
+	int m_amount;
+};
+
 class ItemContainer
 {
 public:
 	ItemContainer(const uint size);
 
-	struct Slot
-	{
-		Slot();
-
-		void set(ItemID item, const uint amount);
-		bool isEmpty() const;
-
-		ItemID item;
-		uint amount;
-	};
-
 	int addItem(const ItemID item, int amount = 1);
-	bool removeItem(const ItemID item, const uint amount = 1);
+	int removeItem(const ItemID item, int amount = 1);
 
-	Slot &getSlotAt(const int idx) const { return m_items[idx]; }
-	ItemID getItemAt(const int idx) const { return m_items[idx].item; }
-	uint getItemAmountAt(const int idx) const { return m_items[idx].amount; }
-	void setSlotAt(const int idx, Slot slot) { m_items[idx] = slot; }
+	ItemSlot &getSlotAt(const int idx) { return m_items[idx]; }
 
 	void removeItemsAt(const int idx);
 
@@ -37,7 +44,7 @@ public:
 private:
 	int findEmptySlot() const;
 
-	Slot *m_items;
+	ItemSlot *m_items;
 	const uint m_size;
 };
 

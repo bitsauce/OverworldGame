@@ -73,9 +73,9 @@ private:
 	float m_deleteTime;
 };
 
-void Bow::use(ItemContainer::Slot *slot, const float delta)
+void Bow::use(Player *player, const float delta)
 {
-	if(m_game->getWorld()->getLocalPlayer()->getItemContainer()->removeItem(ITEM_ARROW))
+	if(m_game->getWorld()->getLocalPlayer()->getHotbarContainer()->removeItem(ITEM_ARROW) == 0)
 	{
 		new Arrow(m_game->getWorld(), m_game->getWorld()->getLocalPlayer()->getCenter(), m_game->getWorld()->getCamera()->getInputPosition() - m_game->getWorld()->getLocalPlayer()->getCenter(), 50.0f);
 	}
