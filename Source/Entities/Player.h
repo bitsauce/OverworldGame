@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include "Config.h"
-#include "Game/ItemContainer.h"
+#include "Game/ItemStorage.h"
 #include "Networking/NetworkObject.h"
 #include "Humanoid.h"
 #include "Entities/Physics/DynamicEntity.h"
@@ -20,14 +20,14 @@ public:
 	Bag(const uint width, const uint height) :
 		m_width(width),
 		m_height(height),
-		m_itemContainer(width * height)
+		m_itemStorage(width * height)
 	{
 	}
 
-	ItemContainer *getItemContainer() { return &m_itemContainer; }
+	ItemStorage *getItemStorage() { return &m_itemStorage; }
 
 private:
-	ItemContainer m_itemContainer;
+	ItemStorage m_itemStorage;
 	const uint m_width;
 	const uint m_height;
 };
@@ -50,12 +50,11 @@ public:
 	uint getHealth() const { return m_health; }
 
 	Humanoid &getHumanoid() { return m_humanoid; }
-	
 	ItemSlot &getHeldItem() { return m_heldItem; }
-	Bag *getBag() { return m_bag; }
-	ItemContainer *getHotbarContainer() { return &m_hotbar; }
-
+	ItemStorage *getStorage() { return &m_hotbar; }
 	ItemSlot &getCurrentItem();
+	
+	Bag *getBag() { return m_bag; }
 
 private:
 	// Managers
@@ -66,7 +65,7 @@ private:
 	// Inventory
 	ItemSlot m_heldItem;
 	Bag *m_bag;
-	ItemContainer m_hotbar;
+	ItemStorage m_hotbar;
 
 	// Player health
 	uint m_maxHealth;

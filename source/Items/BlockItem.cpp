@@ -27,7 +27,7 @@ void BlockItem::use(Player *player, const float delta)
 
 		// Remove item from player inventory
 		player->getCurrentItem().dec();
-		//player->getItemContainer()->removeItem(getID(), 1);
+		//player->getItemStorage()->removeItem(getID(), 1);
 	}
 }
 

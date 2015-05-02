@@ -116,9 +116,6 @@
     <ClCompile Include="..\..\source\World\Camera.cpp">
       <Filter>Source\World</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\Game\ItemContainer.cpp">
-      <Filter>Source\Game</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\Game\RayCast.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
@@ -184,6 +181,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\Items\Tools\Axe.cpp">
       <Filter>Source\Items\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Game\ItemStorage.cpp">
+      <Filter>Source\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -381,9 +381,6 @@
     <ClInclude Include="..\..\source\World\Camera.h">
       <Filter>Source\World</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\Game\ItemContainer.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Game\RayCast.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
@@ -452,6 +449,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Items\Tools\Axe.h">
       <Filter>Source\Items\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Game\ItemStorage.h">
+      <Filter>Source\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

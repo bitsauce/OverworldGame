@@ -1,7 +1,7 @@
 #include "Hotbar.h"
 #include "Constants.h"
 #include "Game/Game.h"
-#include "Game/ItemContainer.h"
+#include "Game/ItemStorage.h"
 #include "Items/ItemData.h"
 #include "Entities/Player.h"
 
@@ -59,14 +59,14 @@ void Hotbar::draw(SpriteBatch *spriteBatch, const float alpha)
 	m_backgroundSprite.setSize(size);
 	spriteBatch->drawSprite(m_backgroundSprite);
 
-	ItemContainer *itemContainer = m_gameOverlay->getPlayer()->getHotbarContainer();
+	ItemStorage *storage = m_gameOverlay->getPlayer()->getStorage();
 	for(uint i = 0; i < 10; ++i)
 	{
 		Sprite &sprite = i == m_selectedSlot ? m_slotSelectedSprite : m_slotSprite;
 		sprite.setPosition(position + Vector2(8.f + i * 48.f, 7.f));
 		spriteBatch->drawSprite(sprite);
 
-		itemContainer->getSlotAt(i).drawItem(position + Vector2(i, 0.0f) * 48.0f, spriteBatch, m_font);
+		storage->getSlotAt(i).drawItem(position + Vector2(i, 0.0f) * 48.0f, spriteBatch, m_font);
 	}
 }
 
@@ -88,18 +88,18 @@ void Hotbar::keyPressEvent(const VirtualKey key)
 					}
 					else
 					{
-						m_gameOverlay->takeItem(m_gameOverlay->getPlayer()->getHotbarContainer(), i);
+						m_gameOverlay->takeItem(m_gameOverlay->getPlayer()->getStorage(), i);
 					}
 				}
 				else
 				{
 					if(m_gameOverlay->getPlayer()->getHeldItem().isEmpty())
 					{
-						m_gameOverlay->takeItem(m_gameOverlay->getPlayer()->getHotbarContainer(), i);
+						m_gameOverlay->takeItem(m_gameOverlay->getPlayer()->getStorage(), i);
 					}
 					else
 					{
-						m_gameOverlay->placeSingleItem(m_gameOverlay->getPlayer()->getHotbarContainer(), i);
+						m_gameOverlay->placeSingleItem(m_gameOverlay->getPlayer()->getStorage(), i);
 					}
 				}
 				break;

@@ -27,25 +27,25 @@ private:
 	int m_amount;
 };
 
-class ItemContainer
+class ItemStorage
 {
 public:
-	ItemContainer(const uint size);
+	ItemStorage(const uint size);
 
 	int addItem(const ItemID item, int amount = 1);
 	int removeItem(const ItemID item, int amount = 1);
 
 	ItemSlot &getSlotAt(const int idx) { return m_items[idx]; }
-
-	void removeItemsAt(const int idx);
-
 	uint getSize() const { return m_size; }
+	void setNext(ItemStorage *next) { m_next = next; }
+	ItemStorage *getNext() const { return m_next; }
 
 private:
 	int findEmptySlot() const;
 
 	ItemSlot *m_items;
 	const uint m_size;
+	ItemStorage *m_next;
 };
 
 #endif // ITEM_CONTAINER_H

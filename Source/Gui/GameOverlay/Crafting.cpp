@@ -8,7 +8,7 @@ Crafting::Crafting(Scene *scene, GameOverlay *gameOverlay) :
 	m_gameOverlay(gameOverlay),
 	m_itemSlotSprite(ResourceManager::get<Texture2D>(":/Sprites/Inventory/ItemSlot.png")),
 	m_backgroundSprite(ResourceManager::get<Texture2D>(":/Sprites/Inventory/Inventory.png")),
-	m_itemContainer(9)
+	m_ItemStorage(9)
 {
 	m_itemSlotSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 	m_itemSlotSprite.setDepth(-1.f);
@@ -45,7 +45,7 @@ void Crafting::draw(SpriteBatch *spriteBatch, float alpha)
 			m_itemSlotSprite.setPosition(position + Vector2(8.f + x * 48.f, 7.f + y * 48.f));
 			spriteBatch->drawSprite(m_itemSlotSprite);
 
-			m_itemContainer.getSlotAt(x + y * 3).drawItem(position + Vector2(x, y) * 48.0f, spriteBatch, m_font);
+			m_ItemStorage.getSlotAt(x + y * 3).drawItem(position + Vector2(x, y) * 48.0f, spriteBatch, m_font);
 		}
 	}
 

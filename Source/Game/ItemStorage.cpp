@@ -1,14 +1,15 @@
-#include "ItemContainer.h"
+#include "ItemStorage.h"
 #include "Items/ItemData.h"
 #include "Constants.h"
 
-ItemContainer::ItemContainer(const uint size) :
-	m_size(size)
+ItemStorage::ItemStorage(const uint size) :
+	m_size(size),
+	m_next(nullptr)
 {
 	m_items = new ItemSlot[size];
 }
 
-int ItemContainer::addItem(const ItemID item, int amount)
+int ItemStorage::addItem(const ItemID item, int amount)
 {
 	if(amount > 0)
 	{
@@ -29,10 +30,10 @@ int ItemContainer::addItem(const ItemID item, int amount)
 			}
 		}
 	}
-	return amount;
+	return m_next != nullptr ? m_next->addItem(item, amount) : amount;
 }
 
-int ItemContainer::removeItem(const ItemID item, int amount)
+int ItemStorage::removeItem(const ItemID item, int amount)
 {
 	for(uint i = 0; i < m_size; ++i)
 	{
@@ -44,10 +45,10 @@ int ItemContainer::removeItem(const ItemID item, int amount)
 			}
 		}
 	}
-	return amount;
+	return m_next != nullptr ? m_next->removeItem(item, amount) : amount;
 }
 
-int ItemContainer::findEmptySlot() const
+int ItemStorage::findEmptySlot() const
 {
 	for(uint slot = 0; slot < m_size; ++slot)
 	{
@@ -57,11 +58,6 @@ int ItemContainer::findEmptySlot() const
 		}
 	}
 	return -1;
-}
-
-void ItemContainer::removeItemsAt(const int idx)
-{
-	m_items[idx].set(ITEM_NONE, 0);
 }
 
 ItemSlot::ItemSlot() :

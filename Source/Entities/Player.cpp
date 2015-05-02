@@ -36,6 +36,9 @@ Player::Player(Game *game, RakNet::RakNetGUID guid) :
 {
 	// Set body size
 	Entity::setSize(24, 48);
+
+	// Init inventory things
+	m_hotbar.setNext(m_bag->getItemStorage());
 	
 	// If player is local, do extra stuff
 	if(Connection::getInstance()->getGUID() == guid)

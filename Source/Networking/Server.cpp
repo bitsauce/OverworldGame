@@ -86,12 +86,12 @@ void Server::update()
 				m_networkObjects.push_back(player);
 
 				player->setPosition(Vector2(0, 0));
-				player->getHotbarContainer()->addItem(ITEM_PICKAXE_IRON);
-				player->getHotbarContainer()->addItem(ITEM_TORCH, 255);
-				player->getHotbarContainer()->addItem(ITEM_BOW_WOODEN);
-				player->getHotbarContainer()->addItem(ITEM_ARROW, 255);
-				player->getHotbarContainer()->addItem(ITEM_CRAFTING_BENCH);
-				player->getHotbarContainer()->addItem(ITEM_AXE_IRON);
+				player->getStorage()->addItem(ITEM_PICKAXE_IRON);
+				player->getStorage()->addItem(ITEM_TORCH, 255);
+				player->getStorage()->addItem(ITEM_BOW_WOODEN);
+				player->getStorage()->addItem(ITEM_ARROW, 255);
+				player->getStorage()->addItem(ITEM_CRAFTING_BENCH);
+				player->getStorage()->addItem(ITEM_AXE_IRON);
 				
 				// Brodcast the packet to all clients with the network id of the object added
 				RakNet::BitStream bitStream(packet->data, packet->length, true);

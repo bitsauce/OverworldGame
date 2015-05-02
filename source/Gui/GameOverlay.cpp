@@ -1,5 +1,5 @@
 #include "GameOverlay.h"
-#include "Game/ItemContainer.h"
+#include "Game/ItemStorage.h"
 #include "Entities/Player.h"
 #include "GameOverlay/Hotbar.h"
 #include "GameOverlay/HealthManaStatus.h"
@@ -66,20 +66,20 @@ void GameOverlay::toggleCrafting()
 	m_craftingEnabled = !m_craftingEnabled;
 }
 
-void GameOverlay::takeItem(ItemContainer *itemContainer, const uint idx)
+void GameOverlay::takeItem(ItemStorage *ItemStorage, const uint idx)
 {
 	ItemSlot &heldItem = m_player->getHeldItem();
-	ItemSlot &slot = itemContainer->getSlotAt(idx);
+	ItemSlot &slot = ItemStorage->getSlotAt(idx);
 
 	ItemSlot tmp = heldItem;
 	heldItem.set(slot.getItem(), slot.getAmount());
-	itemContainer->getSlotAt(idx).set(tmp.getItem(), tmp.getAmount());
+	ItemStorage->getSlotAt(idx).set(tmp.getItem(), tmp.getAmount());
 }
 
-void GameOverlay::placeSingleItem(ItemContainer *itemContainer, const uint idx)
+void GameOverlay::placeSingleItem(ItemStorage *ItemStorage, const uint idx)
 {
 	ItemSlot &heldItem = m_player->getHeldItem();
-	ItemSlot &slot = itemContainer->getSlotAt(idx);
+	ItemSlot &slot = ItemStorage->getSlotAt(idx);
 	if(heldItem.isEmpty())
 	{
 		if(slot.getItem() == ITEM_NONE)

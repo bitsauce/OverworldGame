@@ -2,7 +2,7 @@
 #define CRAFTING_H
 
 #include "Gui/UiObject.h"
-#include "Game/ItemContainer.h"
+#include "Game/ItemStorage.h"
 
 class Scene;
 class GameOverlay;
@@ -17,7 +17,7 @@ public:
 
 private:
 	GameOverlay *m_gameOverlay;
-	ItemContainer m_itemContainer;
+	ItemStorage m_ItemStorage;
 	Sprite m_itemSlotSprite;
 	Sprite m_backgroundSprite;
 	FontPtr m_font;

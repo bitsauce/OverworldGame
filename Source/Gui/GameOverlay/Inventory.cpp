@@ -1,7 +1,7 @@
 #include "Inventory.h"
 #include "Game/Game.h"
 #include "Items/ItemData.h"
-#include "Game/ItemContainer.h"
+#include "Game/ItemStorage.h"
 #include "Entities/Player.h"
 
 Inventory::Inventory(Scene *scene, GameOverlay *gameOverlay) :
@@ -94,7 +94,7 @@ void Inventory::draw(SpriteBatch *spriteBatch, const float alpha)
 			m_itemSlotSprite.setPosition(position + Vector2(8.f + x * 48.f, 7.f + y * 48.f));
 			spriteBatch->drawSprite(m_itemSlotSprite);
 
-			m_gameOverlay->getPlayer()->getBag()->getItemContainer()->getSlotAt(x + y * 20).drawItem(position + Vector2(x, y) * 48.0f, spriteBatch, m_font);
+			m_gameOverlay->getPlayer()->getBag()->getItemStorage()->getSlotAt(x + y * 20).drawItem(position + Vector2(x, y) * 48.0f, spriteBatch, m_font);
 		}
 	}
 }
@@ -115,18 +115,18 @@ void Inventory::keyPressEvent(const VirtualKey key)
 					{
 						if(!m_gameOverlay->getPlayer()->getHeldItem().isEmpty())
 						{
-							m_gameOverlay->takeItem(m_gameOverlay->getPlayer()->getBag()->getItemContainer(), x + y * 20);
+							m_gameOverlay->takeItem(m_gameOverlay->getPlayer()->getBag()->getItemStorage(), x + y * 20);
 						}
 					}
 					else
 					{
 						if(m_gameOverlay->getPlayer()->getHeldItem().isEmpty())
 						{
-							m_gameOverlay->takeItem(m_gameOverlay->getPlayer()->getBag()->getItemContainer(), x + y * 20);
+							m_gameOverlay->takeItem(m_gameOverlay->getPlayer()->getBag()->getItemStorage(), x + y * 20);
 						}
 						else
 						{
-							m_gameOverlay->placeSingleItem(m_gameOverlay->getPlayer()->getBag()->getItemContainer(), x + y * 20);
+							m_gameOverlay->placeSingleItem(m_gameOverlay->getPlayer()->getBag()->getItemStorage(), x + y * 20);
 						}
 					}
 					break;
