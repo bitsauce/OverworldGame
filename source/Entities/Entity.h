@@ -52,6 +52,9 @@ public:
 
 	virtual Vector2 getDrawPosition(const float alpha) = 0;
 
+	virtual void createSaveData(FileWriter &saveData) {}
+	virtual void loadSaveData(FileReader &saveData) {}
+
 	virtual void update(const float delta) {}
 	virtual void draw(SpriteBatch *spriteBatch, const float alpha) {}
 

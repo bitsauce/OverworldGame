@@ -2,7 +2,7 @@
 #define ITEM_DATA_H
 
 #include "Config.h"
-#include "Game/ItemStorage.h"
+#include "Game/Storage.h"
 
 class Player;
 enum ItemID;

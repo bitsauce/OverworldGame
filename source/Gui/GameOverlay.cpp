@@ -1,5 +1,5 @@
 #include "GameOverlay.h"
-#include "Game/ItemStorage.h"
+#include "Game/Storage.h"
 #include "Entities/Player.h"
 #include "GameOverlay/Hotbar.h"
 #include "GameOverlay/HealthManaStatus.h"
@@ -38,18 +38,18 @@ GameOverlay::~GameOverlay()
 
 void GameOverlay::update(const float delta)
 {
-	ItemSlot &heldItem = m_player->getHeldItem();
-	if(!heldItem.isEmpty() && !isHovered() && Input::getKeyState(XD_RMB))
+	Storage::Slot *heldItem = m_player->getHeldItem();
+	if(!heldItem->isEmpty() && !isHovered() && Input::getKeyState(XD_RMB))
 	{
-		ItemDrop *itemDrop = new ItemDrop(m_game->getWorld(), m_player->getCenter() - Vector2(0.0f, 20.0f), heldItem.getItem(), heldItem.getAmount());
+		ItemDrop *itemDrop = new ItemDrop(m_game->getWorld(), m_player->getCenter() - Vector2(0.0f, 20.0f), heldItem->getItem(), heldItem->getAmount());
 		itemDrop->applyImpulse(Vector2(m_game->getWorld()->getCamera()->getInputPosition() - m_player->getCenter()).normalized() * 4.0f);
-		heldItem.set(ITEM_NONE, 0);
+		heldItem->set(ITEM_NONE, 0);
 	}
 }
 
 void GameOverlay::draw(SpriteBatch *spriteBatch, const float delta)
 {
-	m_player->getHeldItem().drawItem(Input::getPosition(), spriteBatch, m_font);
+	m_player->getHeldItem()->drawItem(Input::getPosition() + Vector2(5.0f, 0.0f), spriteBatch, m_font);
 }
 
 void GameOverlay::toggleCrafting()
@@ -66,35 +66,93 @@ void GameOverlay::toggleCrafting()
 	m_craftingEnabled = !m_craftingEnabled;
 }
 
-void GameOverlay::takeItem(ItemStorage *ItemStorage, const uint idx)
-{
-	ItemSlot &heldItem = m_player->getHeldItem();
-	ItemSlot &slot = ItemStorage->getSlotAt(idx);
-
-	ItemSlot tmp = heldItem;
-	heldItem.set(slot.getItem(), slot.getAmount());
-	ItemStorage->getSlotAt(idx).set(tmp.getItem(), tmp.getAmount());
-}
-
-void GameOverlay::placeSingleItem(ItemStorage *ItemStorage, const uint idx)
-{
-	ItemSlot &heldItem = m_player->getHeldItem();
-	ItemSlot &slot = ItemStorage->getSlotAt(idx);
-	if(heldItem.isEmpty())
-	{
-		if(slot.getItem() == ITEM_NONE)
-		{
-			slot.set(heldItem.getItem(), 1);
-		}
-		else if(slot.getItem() == heldItem.getItem())
-		{
-			slot.inc();
-		}
-		heldItem.dec();
-	}
-}
-
 bool GameOverlay::isHovered() const
 {
-	return m_hotbar->isHovered() || m_inventory->isHovered();
+	return m_hotbar->isHovered() || m_inventory->isHovered() || m_crafting->isHovered();
+}
+
+void GameOverlay::performSlotAction(Storage::Slot *slot, const VirtualKey type)
+{
+	Storage::Slot *heldSlot = m_player->getHeldItem();
+	if(type == XD_LMB)
+	{
+		if(!heldSlot->isEmpty())
+		{
+			// Left click with a held item...
+			if(heldSlot->getItem() == slot->getItem())
+			{
+				// ... and the items are of the same type -> Place items from the held slot into the clicked slot
+				int rest = slot->inc(heldSlot->getAmount());
+				if(rest == 0)
+				{
+					heldSlot->set(ITEM_NONE, 0);
+				}
+				else
+				{
+					heldSlot->set(heldSlot->getItem(), rest);
+				}
+			}
+			else
+			{
+				// ... and the items are of different types -> Swap held and clicked slot
+				Storage::Slot tmp = *slot;
+				*slot = *heldSlot;
+				*heldSlot = tmp;
+			}
+		}
+	}
+	else if(type == XD_RMB)
+	{
+		if(heldSlot->isEmpty())
+		{
+			// Right click with no held item...
+			if(Input::getKeyState(XD_KEY_LCONTROL))
+			{
+				// ... and with CTRL -> Take half of the clicked slot
+				int halfAmount = ceil(slot->getAmount() / 2.f);
+				heldSlot->set(slot->getItem(), halfAmount);
+				slot->dec(halfAmount);
+			}
+			else
+			{
+				// ... and without CTRL -> Take the clicked slot
+				Storage::Slot tmp = *slot;
+				*slot = *heldSlot;
+				*heldSlot = tmp;
+			}
+		}
+		else
+		{
+			// Right click with a held item -> Place one of the held items into the clicked slot
+			if(heldSlot->getItem() == slot->getItem())
+			{
+				if(Input::getKeyState(XD_KEY_LCONTROL))
+				{
+					int halfAmount = ceil(heldSlot->getAmount() / 2.f);
+					heldSlot->dec(halfAmount - slot->inc(halfAmount));
+				}
+				else
+				{
+					if(slot->inc() == 0)
+					{
+						heldSlot->dec();
+					}
+				}
+			}
+			else if(slot->isEmpty())
+			{
+				if(Input::getKeyState(XD_KEY_LCONTROL))
+				{
+					int halfAmount = ceil(heldSlot->getAmount() / 2.f);
+					slot->set(heldSlot->getItem(), halfAmount);
+					heldSlot->dec(halfAmount);
+				}
+				else
+				{
+					slot->set(heldSlot->getItem(), 1);
+					heldSlot->dec();
+				}
+			}
+		}
+	}
 }

@@ -2,7 +2,7 @@
 #define INVENTORY_H
 
 #include "Gui/UiObject.h"
-#include "Game/ItemStorage.h"
+#include "Game/Storage.h"
 
 class Scene;
 class GameOverlay;

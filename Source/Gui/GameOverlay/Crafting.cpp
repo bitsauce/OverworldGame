@@ -6,10 +6,12 @@
 Crafting::Crafting(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(scene, gameOverlay),
 	m_gameOverlay(gameOverlay),
+	m_font(ResourceManager::get<Font>(UI_INVENTORY_FONT)),
 	m_itemSlotSprite(ResourceManager::get<Texture2D>(":/Sprites/Inventory/ItemSlot.png")),
 	m_backgroundSprite(ResourceManager::get<Texture2D>(":/Sprites/Inventory/Inventory.png")),
-	m_ItemStorage(9)
+	m_storage(9)
 {
+	m_font->setDepth(1.f);
 	m_itemSlotSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 	m_itemSlotSprite.setDepth(-1.f);
 	m_backgroundSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
@@ -25,6 +27,8 @@ void Crafting::update(float delta)
 	if(!m_gameOverlay->isCrafting()) return;
 
 	setSize(Vector2(154.0f, 152.0f)/m_parent->getSize());
+
+	UiObject::update(delta);
 }
 
 void Crafting::draw(SpriteBatch *spriteBatch, float alpha)
@@ -44,10 +48,29 @@ void Crafting::draw(SpriteBatch *spriteBatch, float alpha)
 		{
 			m_itemSlotSprite.setPosition(position + Vector2(8.f + x * 48.f, 7.f + y * 48.f));
 			spriteBatch->drawSprite(m_itemSlotSprite);
-
-			m_ItemStorage.getSlotAt(x + y * 3).drawItem(position + Vector2(x, y) * 48.0f, spriteBatch, m_font);
+			m_storage.getSlotAt(x + y * 3)->drawItem(position + Vector2(8.f + x * 48.f, 7.f + y * 48.f), spriteBatch, m_font);
 		}
 	}
 
 	//spriteBatch->getGraphicsContext().drawRectangle(500, 50, 300, 300);
+}
+
+void Crafting::keyPressEvent(const VirtualKey key)
+{
+	if(key == XD_LMB || key == XD_RMB)
+	{
+		Vector2 position = getPosition();
+		for(uint y = 0; y < 3; ++y)
+		{
+			for(uint x = 0; x < 3; ++x)
+			{
+				Rect rect(position.x + 8.0f + x * 48.0f, position.y + 7.f + y * 48.0f, 42.0f, 42.0f);
+				if(rect.contains(Input::getPosition()))
+				{
+					m_gameOverlay->performSlotAction(m_storage.getSlotAt(x + y * 3), key);
+					break;
+				}
+			}
+		}
+	}
 }

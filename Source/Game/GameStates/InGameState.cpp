@@ -11,7 +11,7 @@ InGameState::InGameState(Game *game) :
 
 void InGameState::enter()
 {
-	RakNet::BitStream bitStream;
+	/*RakNet::BitStream bitStream;
 	bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
 	//bitStream.Write(ENTITY_PLAYER);
 	if(Connection::getInstance()->isServer())
@@ -21,7 +21,7 @@ void InGameState::enter()
 	else
 	{
 		((Client*)Connection::getInstance())->sendPacket(&bitStream);
-	}
+	}*/
 }
 
 void InGameState::update(const float delta)

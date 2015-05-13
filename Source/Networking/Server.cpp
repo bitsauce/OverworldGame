@@ -64,6 +64,73 @@ void Server::update()
 
 			break;
 
+		case ID_PLAYER_JOIN:
+			{
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
+
+				char *playerName = new char[512];
+				bitStream.Read(playerName);
+
+				string playerFilePath = m_game->getWorld()->getWorldPath() + "/Players/" + playerName + ".obj";
+				if(util::fileExists(playerFilePath))
+				{
+					LOG("Loading player '%s'...", playerName);
+
+					// Create player
+					Player *player = new Player(m_game, packet->guid);
+					player->SetNetworkIDManager(&m_networkIDManager);
+					m_networkObjects.push_back(player);
+					m_players[playerName] = player;
+
+					// Load player data
+					FileReader playerSaveFile(playerFilePath);
+					player->loadSaveData(playerSaveFile);
+					playerSaveFile.close();
+				}
+				else
+				{
+					LOG("Creating new player '%s'...", playerName);
+
+					// Create player
+					Player *player = new Player(m_game, packet->guid);
+					player->SetNetworkIDManager(&m_networkIDManager);
+					m_networkObjects.push_back(player);
+					m_players[playerName] = player;
+
+					player->setPosition(Vector2(0, 0));
+					player->getStorage()->addItem(ITEM_PICKAXE_IRON);
+					player->getStorage()->addItem(ITEM_TORCH, 255);
+					player->getStorage()->addItem(ITEM_BOW_WOODEN);
+					player->getStorage()->addItem(ITEM_ARROW, 255);
+					player->getStorage()->addItem(ITEM_ARROW, 255);
+					player->getStorage()->addItem(ITEM_CRAFTING_BENCH);
+					player->getStorage()->addItem(ITEM_AXE_IRON);
+				
+					// Brodcast the packet to all clients with the network id of the object added
+					RakNet::BitStream bitStream(packet->data, packet->length, true);
+					bitStream.Write(player->GetNetworkID());
+					bitStream.Write(packet->guid);
+					sendPacket(&bitStream);
+				}
+			}
+			break;
+
+		case ID_PLAYER_LEAVE:
+			{
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
+
+				char *playerName = new char[512];
+				bitStream.Read(playerName);
+
+				savePlayer(playerName);
+
+				delete m_players[playerName];
+				m_players.erase(playerName);
+			}
+			break;
+
 		case ID_SET_BLOCK:
 			{
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
@@ -78,7 +145,7 @@ void Server::update()
 
 		case ID_CREATE_ENTITY:
 			{
-				LOG("Creating player...");
+				/*LOG("Creating player...");
 
 				// Create player
 				Player *player = new Player(m_game, packet->guid);
@@ -90,6 +157,7 @@ void Server::update()
 				player->getStorage()->addItem(ITEM_TORCH, 255);
 				player->getStorage()->addItem(ITEM_BOW_WOODEN);
 				player->getStorage()->addItem(ITEM_ARROW, 255);
+				player->getStorage()->addItem(ITEM_ARROW, 255);
 				player->getStorage()->addItem(ITEM_CRAFTING_BENCH);
 				player->getStorage()->addItem(ITEM_AXE_IRON);
 				
@@ -97,7 +165,7 @@ void Server::update()
 				RakNet::BitStream bitStream(packet->data, packet->length, true);
 				bitStream.Write(player->GetNetworkID());
 				bitStream.Write(packet->guid);
-				sendPacket(&bitStream);
+				sendPacket(&bitStream);*/
 			}
 			break;
 			
@@ -131,4 +199,34 @@ void Server::update()
 void Server::sendPacket(RakNet::BitStream *bitStream)
 {
 	assert(m_rakPeer->Send(bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
+}
+
+void Server::save()
+{
+	LOG("Saving server...");
+
+	m_game->getWorld()->getTerrain()->getChunkLoader()->clear();
+
+	// Save all players
+	for(map<string, Player*>::iterator itr = m_players.begin(); itr != m_players.end(); ++itr)
+	{
+		savePlayer(itr->first);
+	}
+
+	/*for(Entity *e : m_entities)
+	{
+		FileWriter file(m_worldPath + "/Objects");
+		file << e->getID();
+		e->createSaveData(file);
+		file.close();
+	}*/
+}
+
+void Server::savePlayer(string playerName)
+{
+	Player *player = m_players[playerName];
+	string playerFilePath = m_game->getWorld()->getWorldPath() + "/Players/" + playerName + ".obj";
+	FileWriter file(playerFilePath);
+	player->createSaveData(file);
+	file.close();
 }

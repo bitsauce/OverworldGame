@@ -22,8 +22,7 @@ void ThingItem::use(Player *player, const float delta)
 	if(m_game->getWorld()->getTerrain()->setThingAt(blockPos.x, blockPos.y, m_blockEntityID))
 	{
 		// Remove item from player inventory
-		//player->getItemStorage()->removeItem(getID(), 1);
-		player->getCurrentItem().dec();
+		player->getCurrentItem()->dec();
 	}
 }
 

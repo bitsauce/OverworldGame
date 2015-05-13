@@ -31,14 +31,14 @@ Player::Player(Game *game, RakNet::RakNetGUID guid) :
 	m_maxHealth(12),
 	m_health(m_maxHealth),
 	m_lmbPressed(false),
-	m_hotbar(10),
+	m_storage(10),
 	m_bag(new Bag(20, 5))
 {
 	// Set body size
 	Entity::setSize(24, 48);
 
 	// Init inventory things
-	m_hotbar.setNext(m_bag->getItemStorage());
+	m_storage.setNext(m_bag->getStorage());
 	
 	// If player is local, do extra stuff
 	if(Connection::getInstance()->getGUID() == guid)
@@ -60,13 +60,13 @@ Player::~Player()
 {
 }
 
-ItemSlot &Player::getCurrentItem()
+Storage::Slot *Player::getCurrentItem()
 {
 	if(!m_heldItem.isEmpty())
 	{
-		return m_heldItem;
+		return &m_heldItem;
 	}
-	return m_hotbar.getSlotAt(m_gameOverlay->getHotbar()->getSelectedSlot());
+	return m_storage.getSlotAt(m_gameOverlay->getHotbar()->getSelectedSlot());
 }
 
 void Player::activateThing()
@@ -155,8 +155,8 @@ void Player::update(const float delta)
 	// Use current item
 	if(Input::getKeyState(XD_LMB) && !m_gameOverlay->isHovered())
 	{
-		ItemSlot &slot = getCurrentItem();
-		ItemData *item = ItemData::get(slot.getItem());
+		Storage::Slot *slot = getCurrentItem();
+		ItemData *item = ItemData::get(slot->getItem());
 		if(item != nullptr && (!item->isSingleShot() || !m_lmbPressed))
 		{
 			item->use(this, delta);
@@ -223,7 +223,7 @@ void Player::draw(SpriteBatch *spriteBatch, const float alpha)
 {
 	m_humanoid.draw(this, spriteBatch, alpha);
 	
-	ItemData *item = ItemData::get(getCurrentItem().getItem());
+	ItemData *item = ItemData::get(getCurrentItem()->getItem());
 	if(item != nullptr)
 	{
 		item->draw(this, spriteBatch, alpha);
@@ -264,5 +264,67 @@ void Player::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 		bitStream->Read(y);
 		setVelocityX(x);
 		setVelocityY(y);
+	}
+}
+
+void Player::createSaveData(FileWriter &saveData)
+{
+	// Save position
+	saveData << (int)getPosition().x << endl;
+	saveData << (int)getPosition().y << endl;
+
+	// Save hotbar
+	for(uint i = 0; i < 10; ++i)
+	{
+		saveData << m_storage.getSlotAt(i)->getItem() << endl;
+		saveData << m_storage.getSlotAt(i)->getAmount() << endl;
+	}
+
+	// Save bag and its content
+	saveData << (int)m_bag->getWidth() << endl;
+	saveData << (int)m_bag->getHeight() << endl;
+	for(uint y = 0; y < m_bag->getHeight(); ++y)
+	{
+		for(uint x = 0; x < m_bag->getWidth(); ++x)
+		{
+			saveData << m_bag->getStorage()->getSlotAt(x + y * m_bag->getWidth())->getItem() << endl;
+			saveData << m_bag->getStorage()->getSlotAt(x + y * m_bag->getWidth())->getAmount() << endl;
+		}
+	}
+}
+
+void Player::loadSaveData(FileReader &saveData)
+{
+	// Restore position
+	int x, y;
+	saveData >> x;
+	saveData >> y;
+	setPosition(Vector2(x, y));
+
+	// Restore hotbar
+	for(uint i = 0; i < 10; ++i)
+	{
+		int item, amount;
+		saveData >> item;
+		saveData >> amount;
+		m_storage.getSlotAt(i)->set((ItemID)item, amount);
+	}
+	
+	// Restore bag and its content
+	int bagWidth, bagHeight;
+	saveData >> bagWidth;
+	saveData >> bagHeight;
+
+	delete m_bag;
+	m_bag = new Bag(bagWidth, bagHeight);
+	for(uint y = 0; y < bagHeight; ++y)
+	{
+		for(uint x = 0; x < bagWidth; ++x)
+		{
+			int item, amount;
+			saveData >> item;
+			saveData >> amount;
+			m_bag->getStorage()->getSlotAt(x + y * bagWidth)->set((ItemID)item, amount);
+		}
 	}
 }

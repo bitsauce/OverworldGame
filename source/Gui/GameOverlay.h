@@ -3,7 +3,7 @@
 
 #include "Config.h"
 #include "UiObject.h"
-#include "Game/ItemStorage.h"
+#include "Game/Storage.h"
 #include "GameOverlay/Hotbar.h"
 #include "GameOverlay/Inventory.h"
 #include "GameOverlay/HealthManaStatus.h"
@@ -34,9 +34,7 @@ public:
 	void toggleCrafting();
 	bool isCrafting() const { return m_craftingEnabled; }
 
-	// Hold item
-	void takeItem(ItemStorage *ItemStorage, const uint idx);
-	void placeSingleItem(ItemStorage *ItemStorage, const uint idx);
+	void performSlotAction(Storage::Slot *slot, const VirtualKey type);
 
 	// Ui
 	bool isHovered() const;

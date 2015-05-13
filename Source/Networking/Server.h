@@ -9,6 +9,7 @@ namespace RakNet {
 }
 
 class Game;
+class Player;
 
 class Server : public Connection
 {
@@ -18,10 +19,15 @@ public:
 	void update();
 	void sendPacket(RakNet::BitStream *bitStream);
 
+	void save();
+
 	RakNet::RakPeerInterface *getRakPeer() const { return m_rakPeer; }
 
 private:
+	void savePlayer(string playerName);
+
 	Game *m_game;
+	map<string, Player*> m_players;
 };
 
 #endif // SERVER_H

@@ -215,10 +215,7 @@ set<Thing*> ChunkLoader::getActiveThings()
 		{
 			for(Thing *thing : getChunkAt(x, y).getThings())
 			{
-				if(things.find(thing) == things.end())
-				{
-					things.insert(thing);
-				}
+				things.insert(thing);
 			}
 		}
 	}

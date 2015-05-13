@@ -182,7 +182,7 @@
     <ClCompile Include="..\..\Source\Items\Tools\Axe.cpp">
       <Filter>Source\Items\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\Game\ItemStorage.cpp">
+    <ClCompile Include="..\..\source\Game\Storage.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -450,7 +450,7 @@
     <ClInclude Include="..\..\Source\Items\Tools\Axe.h">
       <Filter>Source\Items\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\Game\ItemStorage.h">
+    <ClInclude Include="..\..\source\Game\Storage.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
   </ItemGroup>

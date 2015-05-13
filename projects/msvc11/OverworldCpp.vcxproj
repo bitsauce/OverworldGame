@@ -107,7 +107,7 @@
     <ClCompile Include="..\..\Source\Game\Game.cpp" />
     <ClCompile Include="..\..\Source\Game\GameStates\GameState.cpp" />
     <ClCompile Include="..\..\Source\Game\GameStates\InGameState.cpp" />
-    <ClCompile Include="..\..\source\Game\ItemStorage.cpp" />
+    <ClCompile Include="..\..\source\Game\Storage.cpp" />
     <ClCompile Include="..\..\source\Game\RayCast.cpp" />
     <ClCompile Include="..\..\Source\Game\Scene.cpp" />
     <ClCompile Include="..\..\Source\Generation\Grassland.cpp" />
@@ -173,7 +173,7 @@
     <ClInclude Include="..\..\Source\Game\Game.h" />
     <ClInclude Include="..\..\Source\Game\GameStates\GameState.h" />
     <ClInclude Include="..\..\Source\Game\GameStates\InGameState.h" />
-    <ClInclude Include="..\..\source\Game\ItemStorage.h" />
+    <ClInclude Include="..\..\source\Game\Storage.h" />
     <ClInclude Include="..\..\source\Game\RayCast.h" />
     <ClInclude Include="..\..\Source\Game\Scene.h" />
     <ClInclude Include="..\..\Source\Generation\Grassland.h" />

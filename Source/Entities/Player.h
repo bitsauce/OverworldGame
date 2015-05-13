@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include "Config.h"
-#include "Game/ItemStorage.h"
+#include "Game/Storage.h"
 #include "Networking/NetworkObject.h"
 #include "Humanoid.h"
 #include "Entities/Physics/DynamicEntity.h"
@@ -24,10 +24,13 @@ public:
 	{
 	}
 
-	ItemStorage *getItemStorage() { return &m_itemStorage; }
+	Storage *getStorage() { return &m_itemStorage; }
+
+	uint getWidth() const { return m_width; }
+	uint getHeight() const { return m_height; }
 
 private:
-	ItemStorage m_itemStorage;
+	Storage m_itemStorage;
 	const uint m_width;
 	const uint m_height;
 };
@@ -46,13 +49,16 @@ public:
 	void pack(RakNet::BitStream *bitStream, const Connection *conn);
 	void unpack(RakNet::BitStream *bitStream, const Connection *conn);
 
+	void createSaveData(FileWriter &saveData);
+	void loadSaveData(FileReader &saveData);
+
 	uint getMaxHealth() const { return m_maxHealth; }
 	uint getHealth() const { return m_health; }
 
 	Humanoid &getHumanoid() { return m_humanoid; }
-	ItemSlot &getHeldItem() { return m_heldItem; }
-	ItemStorage *getStorage() { return &m_hotbar; }
-	ItemSlot &getCurrentItem();
+	Storage::Slot *getHeldItem() { return &m_heldItem; }
+	Storage *getStorage() { return &m_storage; }
+	Storage::Slot *getCurrentItem();
 	
 	Bag *getBag() { return m_bag; }
 
@@ -63,9 +69,9 @@ private:
 	GameOverlay *m_gameOverlay;
 
 	// Inventory
-	ItemSlot m_heldItem;
+	Storage::Slot m_heldItem;
 	Bag *m_bag;
-	ItemStorage m_hotbar;
+	Storage m_storage;
 
 	// Player health
 	uint m_maxHealth;

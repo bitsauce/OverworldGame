@@ -2,12 +2,14 @@
 #define GAME_MANAGER_H
 
 #include "Config.h"
+#include "Constants.h"
 #include "Game/Scene.h"
 #include "Gui/GameOverlay.h"
 #include "Gui/Canvas.h"
 #include "World/World.h"
 #include "Networking/Client.h"
 #include "Networking/Server.h"
+#include "Entities/Player.h"
 
 class Debug;
 class GameState;

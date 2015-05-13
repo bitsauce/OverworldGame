@@ -26,8 +26,7 @@ void BlockItem::use(Player *player, const float delta)
 		m_terrain->setBlockAt(blockPos.x, blockPos.y, m_blockID, m_layer);
 
 		// Remove item from player inventory
-		player->getCurrentItem().dec();
-		//player->getItemStorage()->removeItem(getID(), 1);
+		player->getCurrentItem()->dec();
 	}
 }
 

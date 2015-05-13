@@ -37,6 +37,8 @@ void World::create(const string &name)
 
 	FileSystem::MakeDir(m_worldPath);
 	FileSystem::MakeDir(m_worldPath + "/Chunks");
+	FileSystem::MakeDir(m_worldPath + "/Players");
+	FileSystem::MakeDir(m_worldPath + "/Entities");
 		
 	// Create world file
 	uint seed = Random().nextInt();
@@ -49,9 +51,6 @@ void World::create(const string &name)
 
 void World::save()
 {
-	LOG("Saving world->..");
-
-	m_terrain->getChunkLoader()->clear();
 }
 
 bool World::load(const string &name)
@@ -64,6 +63,20 @@ bool World::load(const string &name)
 		// Set the world path
 		m_worldPath = "saves:/Overworld/" + name;
 		m_worldFile = new IniFile(worldFile);
+
+		/*FileSystemIterator itr(m_worldPath + "/Objects", "*.obj", FileSystemIterator::FILES);
+		while(itr.hasNext())
+		{
+			FileReader file(itr.next());
+
+			int id;
+			file >> id;
+
+			switch(id)
+			{
+			case ENTITY_ITEM_DROP: new ItemDrop(this, file); break;
+			}
+		}*/
 	}
 	else
 	{
@@ -75,7 +88,7 @@ bool World::load(const string &name)
 
 void World::clear()
 {
-	LOG("Reseting world->..");
+	LOG("Reseting world...");
 
 	// Reset world path and file
 	m_worldPath.clear();
@@ -98,11 +111,11 @@ void World::update(const float delta)
 	m_timeOfDay->update(delta);
 	m_background->update(delta);
 	m_terrain->getChunkLoader()->update();
-
-	list<Entity*> gameObjects = m_entities;
-	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
+	
+	list<Entity*> entities = m_entities;
+	for(Entity *entity : entities)
 	{
-		(*itr)->update(delta);
+		entity->update(delta);
 	}
 }
 
@@ -124,23 +137,22 @@ void World::draw(SpriteBatch *spriteBatch, const float alpha)
 		thing->draw(spriteBatch, alpha);
 	}
 
-	list<Entity*> gameObjects = m_entities;
-	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
+	list<Entity*> entities = m_entities;
+	for(Entity *entity : entities)
 	{
-		if((*itr)->getID() < ENTITY_BACKGROUND_END)
+		if(entity->getID() < ENTITY_BACKGROUND_END)
 		{
-			(*itr)->draw(spriteBatch, alpha);
+			entity->draw(spriteBatch, alpha);
 		}
 	}
 
 	m_terrain->m_middleground.draw(spriteBatch);
 
-	gameObjects = m_entities;
-	for(list<Entity*>::iterator itr = gameObjects.begin(); itr != gameObjects.end(); ++itr)
+	for(Entity *entity : entities)
 	{
-		if((*itr)->getID() > ENTITY_BACKGROUND_END)
+		if(entity->getID() > ENTITY_BACKGROUND_END)
 		{
-			(*itr)->draw(spriteBatch, alpha);
+			entity->draw(spriteBatch, alpha);
 		}
 	}
 	

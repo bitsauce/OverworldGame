@@ -65,8 +65,16 @@ void Game::main(GraphicsContext &context)
 		m_world->create("Debug");
 	}
 	
+	LOG("Hosting local server on port '45556'...");
+
 	// Create server object
 	m_server = new Server(this, 45556);
+
+	// Join server as client
+	RakNet::BitStream bitStream;
+	bitStream.Write((RakNet::MessageID)ID_PLAYER_JOIN);
+	bitStream.Write("Bitsauce");
+	m_server->getRakPeer()->SendLoopback((const char*)bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
 		
 	// Push game state
 	pushState(new InGameState(this));
@@ -105,6 +113,7 @@ void Game::exit()
 {
 	// Save the world as we're exiting
 	m_world->save();
+	m_server->save();
 	delete m_world;
 }
 
