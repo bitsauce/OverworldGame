@@ -32,6 +32,7 @@ private:
 	// Enabled flag
 	bool m_enabled;
 	bool m_debugChunkLoader;
+	bool m_blockPainterEnabled;
 
 	// Debug variables
 	map<string, string> m_variables;

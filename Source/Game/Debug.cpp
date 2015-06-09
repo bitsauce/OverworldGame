@@ -19,6 +19,7 @@ Debug::Debug(Game *game) :
 	m_block(BLOCK_GRASS),
 	m_enabled(false),
 	m_debugChunkLoader(false),
+	m_blockPainterEnabled(false),
 	m_font(ResourceManager::get<Font>(UI_DEBUG_FONT)),
 	m_variables(),
 	m_bulbSprite(ResourceManager::get<Texture2D>(":/sprites/debug/icon_bulb.png"))
@@ -99,6 +100,7 @@ void Debug::debugFunction(const int i)
 		
 	case 6:
 		{
+			m_blockPainterEnabled = !m_blockPainterEnabled;
 		}
 		break;
 		
@@ -145,32 +147,24 @@ void Debug::debugFunction(const int i)
 void Debug::update()
 {
 	if(!m_enabled) return;
-	/*
-	// Block painting
-	TerrainLayer layer = TERRAIN_LAYER_MIDDLE;
-	if(Input::getKeyState(XD_KEY_LSHIFT)) layer = TERRAIN_LAYER_FRONT;
-	if(Input::getKeyState(XD_KEY_LCONTROL)) layer = TERRAIN_LAYER_BACK;
-	if(Input::getKeyState(XD_LMB))
+	
+	if(m_blockPainterEnabled)
 	{
-		int x = floor(m_world->getCamera()->getInputPosition().x/BLOCK_PXF), y = floor(m_world->getCamera()->getInputPosition().y/BLOCK_PXF);
-
-		m_world->getTerrain()->setBlockAt(x, y, m_block, layer);
-
-		if(Server::getInstance())
+		// Block painting
+		TerrainLayer layer = TERRAIN_LAYER_MIDDLE;
+		if(Input::getKeyState(XD_KEY_LSHIFT)) layer = TERRAIN_LAYER_FRONT;
+		if(Input::getKeyState(XD_KEY_LCONTROL)) layer = TERRAIN_LAYER_BACK;
+		if(Input::getKeyState(XD_LMB))
 		{
-			RakNet::BitStream bitStream;
-			bitStream.Write((RakNet::MessageID)ID_SET_BLOCK);
-			bitStream.Write(x);
-			bitStream.Write(y);
-			bitStream.Write(m_block);
-			bitStream.Write(layer);
-			Server::getInstance()->sendPacket(&bitStream);
+			int x = floor(m_world->getCamera()->getInputPosition().x/BLOCK_PXF), y = floor(m_world->getCamera()->getInputPosition().y/BLOCK_PXF);
+
+			m_world->getTerrain()->setBlockAt(x, y, m_block, layer);
+		}
+		else if(Input::getKeyState(XD_RMB))
+		{
+			m_world->getTerrain()->setBlockAt(floor((m_world->getCamera()->getPosition().x + Input::getPosition().x)/BLOCK_PXF), floor((m_world->getCamera()->getPosition().y + Input::getPosition().y)/BLOCK_PXF), BLOCK_EMPTY, layer);
 		}
 	}
-	else if(Input::getKeyState(XD_RMB))
-	{
-		m_world->getTerrain()->setBlockAt(floor((m_world->getCamera()->getPosition().x + Input::getPosition().x)/BLOCK_PXF), floor((m_world->getCamera()->getPosition().y + Input::getPosition().y)/BLOCK_PXF), BLOCK_EMPTY, layer);
-	}*/
 }
 
 void Debug::draw(SpriteBatch *spriteBatch)
@@ -194,10 +188,15 @@ void Debug::draw(SpriteBatch *spriteBatch)
 	m_font->draw(spriteBatch, Vector2(0.0f), drawString);
 
 	// Block painter
-	spriteBatch->drawText(Vector2(5.0f, Window::getSize().y - 48.0f), "Current block:    (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (Input::getKeyState(XD_KEY_LCONTROL) ? "BACK" : (Input::getKeyState(XD_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font);
-	Sprite blockSprite(BlockData::get(m_block).getTexture(), Rect(150.0f, Window::getSize().y - 58.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 0.0f, 1.0f, 0.6f));
-	spriteBatch->drawSprite(blockSprite);
-	
+	if(m_blockPainterEnabled)
+	{
+		m_font->setColor(Color(127, 127, 127, 255));
+		spriteBatch->drawText(Vector2(5.0f, Window::getSize().y - 48.0f), "Current block:    (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (Input::getKeyState(XD_KEY_LCONTROL) ? "BACK" : (Input::getKeyState(XD_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font);
+		Sprite blockSprite(BlockData::get(m_block).getTexture(), Rect(150.0f, Window::getSize().y - 58.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 0.0f, 1.0f, 0.6f));
+		spriteBatch->drawSprite(blockSprite);
+		m_font->setColor(Color(0, 0, 0, 255));
+	}
+
 	// Draw block grid
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 	gfxContext.setProjectionMatrix(m_world->getCamera()->getProjectionMatrix());
