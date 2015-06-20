@@ -103,7 +103,8 @@ void ChunkLoader::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 {
 	// Free it
 	Chunk *chunk = itr->second;
-	if(chunk->isModified()) {
+	//if(chunk->isModified())
+	{
 		saveBlockData(util::getAbsoluteFilePath(m_world->getWorldPath() + "/Chunks/" + util::intToStr(itr->first) + ".obj"), chunk->m_blocks);
 	}
 	m_chunkPool.push_back(chunk);

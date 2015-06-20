@@ -317,9 +317,9 @@ void Player::loadSaveData(FileReader &saveData)
 
 	delete m_bag;
 	m_bag = new Bag(bagWidth, bagHeight);
-	for(uint y = 0; y < bagHeight; ++y)
+	for(int y = 0; y < bagHeight; ++y)
 	{
-		for(uint x = 0; x < bagWidth; ++x)
+		for(int x = 0; x < bagWidth; ++x)
 		{
 			int item, amount;
 			saveData >> item;
