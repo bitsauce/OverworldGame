@@ -22,7 +22,7 @@ Debug::Debug(Game *game) :
 	m_blockPainterEnabled(false),
 	m_font(ResourceManager::get<Font>(UI_DEBUG_FONT)),
 	m_variables(),
-	m_bulbSprite(ResourceManager::get<Texture2D>(":/sprites/debug/icon_bulb.png"))
+	m_bulbSprite(ResourceManager::get<Texture2D>(":/Sprites/Debug/Icon_Bulb.png"))
 {
 	// Set font color
 	m_font->setColor(Color(0, 0, 0, 255));
@@ -106,6 +106,7 @@ void Debug::debugFunction(const int i)
 		
 	case 7:
 		{
+			m_world->getTimeOfDay()->setTime(m_world->getTimeOfDay()->getTime() + (Input::getKeyState(XD_KEY_SHIFT) ? -100 : 100));
 		}
 		break;
 		
@@ -172,12 +173,20 @@ void Debug::draw(SpriteBatch *spriteBatch)
 	if(!m_enabled) return;
 	
 	setVariable("Chunks", util::intToStr(m_world->getTerrain()->getChunkLoader()->m_chunks.size()) + " / " + util::intToStr(m_world->getTerrain()->getChunkLoader()->m_optimalChunkCount));
-	//setVariable("Time", util::intToStr(m_timeOfDay->getHour()) + ":" + util::intToStr(m_timeOfDay->getMinute()));
 	Vector2 center = m_world->getCamera()->getCenter();
 	Vector2 inputPosition = m_world->getCamera()->getInputPosition();
 	setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
 	setVariable("Zoom", util::intToStr(m_world->getCamera()->getZoomLevel() * 100) + "%");
 	setVariable("Block Under Cursor", util::intToStr(m_world->getTerrain()->getBlockAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), TERRAIN_LAYER_MIDDLE)) + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
+	
+	string hourStr, minStr;
+	{
+		int hour = m_world->getTimeOfDay()->getHour();
+		hourStr = hour < 10 ? ("0" + util::intToStr(hour)) : util::intToStr(hour);
+		int min = m_world->getTimeOfDay()->getHour();
+		minStr = min < 10 ? ("0" + util::intToStr(min)) : util::intToStr(min);
+	}
+	setVariable("Time", hourStr + ":" + minStr);
 
 	// Draw debug info
 	string drawString;

@@ -21,11 +21,6 @@ private:
 	Camera *m_camera;
 	TimeOfDay *m_timeOfDay;
 
-	struct SkyObject
-	{
-		virtual Vector2 getPosition() = 0;
-	};
-
 	struct Layer
 	{
 		Layer(Sprite sprite, float depth, float yOffset = 0.0f)
@@ -63,14 +58,13 @@ private:
 	float m_wind;
 	Shader *m_simplexNoise;
 	Texture2D *m_cloudGradient;
+	Sprite m_sun, m_moon;
 
 	vector<Cloud*> m_clouds;
-
 	vector<Layer*> m_layers;
 	
 	// Sky colors
-	Color m_topColor;
-	Color m_bottomColor;
+	Color m_topColor, m_bottomColor;
 
 	// Sky quad
 	Vertex m_vertices[4];

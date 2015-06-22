@@ -15,12 +15,18 @@ Background::Background(World *world) :
 	m_timeOfDay(world->getTimeOfDay()),
 	m_topColor(255, 255, 255, 255),
 	m_bottomColor(90, 170, 255, 255),
-	m_wind(20.0f)
-	//m_sun(ResourceManager::get<Texture2D>(":/Sprites/Sky/Sun.png")),
-	//m_moon(ResourceManager::get<Texture2D>(":/Sprites/Sky/Moon.png")),
+	m_wind(20.0f),
+	m_sun(ResourceManager::get<Texture2D>(":/Sprites/Sky/Sun.png")),
+	m_moon(ResourceManager::get<Texture2D>(":/Sprites/Sky/Moon.png"))
 {
-	//m_sun.setSize(m_sun.getTexture()->getSize());
-	//m_moon.setSize(m_moon.getTexture()->getSize());
+	m_sun.setSize(m_sun.getTexture()->getSize());
+	m_moon.setSize(m_moon.getTexture()->getSize());
+
+	m_sun.setOrigin(m_sun.getCenter());
+	m_moon.setOrigin(m_moon.getCenter());
+
+	m_sun.setDepth(-2.0f);
+	m_moon.setDepth(-2.0f);
 
 	Random rand;
 	for(uint i = 0; i < 10; ++i)
@@ -31,9 +37,6 @@ Background::Background(World *world) :
 	m_layers.push_back(new Layer(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Layer_0.png")), 0.5f, -1080.0f));
 	m_layers.push_back(new Layer(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Layer_1.png")), 0.25f));
 	m_layers.push_back(new Layer(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Layer_2.png")), 0.125f, -100.0f));
-
-	//m_sun.setOrigin(m_sun.getCenter());
-	//m_moon.setOrigin(m_moon.getCenter());
 }
 
 Background::~Background()
@@ -73,9 +76,9 @@ void Background::update(const float delta)
 		// Place sun
 		float ang = (1140-time)/720.0f;
 		Vector2 windowSize = Window::getSize();
-		/*Vector2 sunSize = m_sun.getSize();
+		Vector2 sunSize = m_sun.getSize();
 		m_sun.setPosition(windowSize.x/2.0f - sunSize.x/2.0f + cos(PI*ang) * (windowSize.x/2.0f + sunSize.x/4.0f), windowSize.y/2.0f - sin(PI*ang) * (windowSize.y/2.0f + 64));
-		m_sun.setRotation(180*(1.0f-ang));*/
+		m_sun.setRotation(180*(1.0f-ang));
 	}
 	else
 	{
@@ -97,9 +100,9 @@ void Background::update(const float delta)
 		// Place moon
 		float ang = (1860 - (time >= 1140 ? time : time + 1440))/720.0f;
 		Vector2 windowSize = Window::getSize();
-		/*Vector2 moonSize = m_moon.getSize();
+		Vector2 moonSize = m_moon.getSize();
 		m_moon.setPosition(windowSize.x / 2.0f - moonSize.x / 2.0f + cos(PI * ang) * (windowSize.x / 2.0f + moonSize.x / 2.0f), windowSize.y / 2.0f - sin(PI * ang) * windowSize.y / 2.0f);
-		m_moon.setRotation(180 * (1.0f - ang));*/
+		m_moon.setRotation(180 * (1.0f - ang));
 	}
 		
 	// Apply wind
@@ -130,8 +133,8 @@ void Background::draw(SpriteBatch *spriteBatch, const float alpha)
 	m_vertices[3].set4ub(VERTEX_COLOR, m_bottomColor.r, m_bottomColor.g, m_bottomColor.b, m_bottomColor.a);
 	gfxContext.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, m_vertices, 4);
 	
-	// Place sun/moon
-	/*int hour = m_timeOfDay->getHour();
+	// Draw sun/moon
+	int hour = m_timeOfDay->getHour();
 	if(hour >= 6 && hour < 18)
 	{
 		spriteBatch->drawSprite(m_sun);
@@ -139,7 +142,7 @@ void Background::draw(SpriteBatch *spriteBatch, const float alpha)
 	else
 	{
 		spriteBatch->drawSprite(m_moon);
-	}*/
+	}
 	
 	// Draw background layers
 	for(Layer *layer : m_layers)

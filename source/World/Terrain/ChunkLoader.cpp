@@ -294,10 +294,10 @@ struct VectorComparator
 
 void ChunkLoader::resizeEvent(uint width, uint height)
 {
-	int loadAreaWidth  = (int)(floor(width *0.5f/CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
-	int loadAreaHeight = (int)(floor(height*0.5f/CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
+	int loadAreaWidth  = (int)(floor(width  * 0.5f / CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
+	int loadAreaHeight = (int)(floor(height * 0.5f / CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
 
-	setOptimalChunkCount(loadAreaWidth * loadAreaHeight);
+	setOptimalChunkCount(loadAreaWidth * loadAreaHeight * 2);
 	
 	priority_queue<Vector2i, vector<Vector2i>, VectorComparator> minHeap;
 	for(int y = -floor(loadAreaHeight*0.5f) + 1; y < floor(loadAreaHeight*0.5f); ++y)
