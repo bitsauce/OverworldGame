@@ -71,6 +71,9 @@
     <Report>
       <Path>OverworldGame Debug150623.vsp</Path>
     </Report>
+    <Report>
+      <Path>OverworldGame Debug150623(1).vsp</Path>
+    </Report>
   </Reports>
   <Launches>
     <ProjBinary>

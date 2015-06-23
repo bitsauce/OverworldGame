@@ -45,16 +45,25 @@ void ChunkLoader::saveBlockData(const string &filePath, BlockID *blockData)
 	}
 
 	// Write blocks to stream
-	for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+	BlockID currentBlock = blockData[0];
+	int length = 1;
+	for(int i = 1; i < CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT; ++i)
 	{
-		for(int y = 0; y < CHUNK_BLOCKS; ++y)
+		BlockID block = blockData[i];
+		if(block == currentBlock)
 		{
-			for(int x = 0; x < CHUNK_BLOCKS; ++x)
-			{
-				file << blockData[BLOCK_INDEX(x, y, (TerrainLayer)z)] << endl;
-			}
+			length++;
+		}
+		else
+		{
+			file << currentBlock << endl;
+			file << length << endl;
+			length = 1;
+			currentBlock = block;
 		}
 	}
+	file << currentBlock << endl;
+	file << length << endl;
 }
 	
 void ChunkLoader::loadBlockData(const string &filePath, BlockID *blockData)
@@ -68,17 +77,17 @@ void ChunkLoader::loadBlockData(const string &filePath, BlockID *blockData)
 	}
 
 	// Read blocks from stream
-	for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+	int pos = 0;
+	while(pos < CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT)
 	{
-		for(int y = 0; y < CHUNK_BLOCKS; ++y)
+		int block, length;
+		file >> block;
+		file >> length;
+		for(int i = 0; i < length; ++i)
 		{
-			for(int x = 0; x < CHUNK_BLOCKS; ++x)
-			{
-				int block;
-				file >> block;
-				blockData[BLOCK_INDEX(x, y, z)] = (BlockID)block;
-			}
+			blockData[pos + i] = (BlockID)block;
 		}
+		pos += length;
 	}
 }
 
