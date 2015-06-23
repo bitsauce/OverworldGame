@@ -2,7 +2,7 @@
 #define ENTITY_H
 
 #include "Config.h"
-
+//>REMOVE ME<
 enum Priority;
 enum EntityID;
 class World;

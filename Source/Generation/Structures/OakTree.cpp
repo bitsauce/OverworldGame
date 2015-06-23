@@ -1,5 +1,5 @@
 #include "OakTree.h"
-
+//>REMOVE ME<
 struct LeafPoint
 {
     LeafPoint(int x, int y, int r) :

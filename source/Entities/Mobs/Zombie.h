@@ -1,6 +1,6 @@
 #ifndef ZOMBIE_H
 #define ZOMBIE_H
-
+//>REMOVE ME<
 #include "Entities/Humanoid.h"
 #include "Entities/Physics/DynamicEntity.h"
 

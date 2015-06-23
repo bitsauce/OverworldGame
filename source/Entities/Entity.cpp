@@ -2,7 +2,7 @@
 #include "Constants.h"
 #include "World/World.h"
 #include "World/Camera.h"
-
+//>REMOVE ME<
 Entity::Entity(World *world, const EntityID id) :
 	m_world(world),
 	m_id(id)

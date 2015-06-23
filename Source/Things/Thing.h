@@ -20,5 +20,5 @@ public:
 private:
 	const int m_x, m_y;
 };
-
+//>REMOVE ME<
 #endif // BLOCK_ENTITY_H

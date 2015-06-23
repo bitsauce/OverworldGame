@@ -9,7 +9,7 @@
 
 #include "Config.h"
 #include "Game/Game.h"
-
+//>REMOVE ME<
 #if defined(X2D_WINDOWS) && defined(X2D_DEBUG)
 //#include <vld.h> // Visual Leak Detector
 #endif

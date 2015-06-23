@@ -22,5 +22,5 @@ private:
 
 	static Thing *Factory(Game *game, const int x, const int y) { return new CraftingBench(game, x, y); }
 };
-
+//>REMOVE ME<
 #endif // CRAFTING_BENCH_H

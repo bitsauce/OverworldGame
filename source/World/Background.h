@@ -6,7 +6,7 @@
 class Camera;
 class TimeOfDay;
 class World;
-
+//>REMOVE ME<
 class Background
 {
 public:

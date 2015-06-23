@@ -6,7 +6,7 @@
 #include "NetworkIDObject.h"
 #include "NetworkIDManager.h"
 #include "PacketLogger.h"
-
+//>REMOVE ME<
 #include "Server.h"
 #include "NetworkObject.h"
 #include "Constants.h"

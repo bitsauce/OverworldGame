@@ -4,7 +4,7 @@
 #include "Game/Storage.h"
 #include "Items/ItemData.h"
 #include "Entities/Player.h"
-
+//>REMOVE ME<
 Hotbar::Hotbar(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(scene, gameOverlay),
 	m_gameOverlay(gameOverlay),

@@ -9,7 +9,7 @@ Color mixColors(Color c1, Color c2, const float a)
 {
 	return c1 * a + c2 * (1.0f - a);
 }
-
+//>REMOVE ME<
 Background::Background(World *world) :
 	m_camera(world->getCamera()),
 	m_timeOfDay(world->getTimeOfDay()),

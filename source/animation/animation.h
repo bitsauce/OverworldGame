@@ -1,6 +1,6 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
-
+//>REMOVE ME<
 #include "Config.h"
 #include <spine/spine.h>
 

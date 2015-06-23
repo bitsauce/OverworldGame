@@ -4,7 +4,7 @@
 #include "Items/ItemData.h"
 
 enum ThingID;
-
+//>REMOVE ME<
 class ThingItem : public ItemData
 {
 public:

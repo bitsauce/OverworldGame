@@ -6,7 +6,7 @@
 #include "Game/Game.h"
 
 class Game;
-
+//>REMOVE ME<
 class Torch : public Thing
 {
 	friend class ThingData;

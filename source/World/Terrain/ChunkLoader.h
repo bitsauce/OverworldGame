@@ -7,7 +7,7 @@
 class Camera;
 class World;
 class Thing;
-
+//>REMOVE ME<
 class ChunkLoader : public WindowListener
 {
 	friend class Debug;

@@ -1,6 +1,6 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
-
+//>REMOVE ME<
 #include "Config.h"
 #include "Constants.h"
 #include "Game/Scene.h"

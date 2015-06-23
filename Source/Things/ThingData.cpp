@@ -8,7 +8,7 @@
 
 vector<ThingData*> ThingData::s_blockEntityData(BLOCK_ENTITY_COUNT);
 Game *ThingData::s_game = nullptr;
-
+//>REMOVE ME<
 void ThingData::init(Game *game)
 {
 	s_game = game;

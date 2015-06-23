@@ -3,7 +3,7 @@
 #include "Items/ItemData.h"
 #include "Game/Storage.h"
 #include "Entities/Player.h"
-
+//>REMOVE ME<
 Inventory::Inventory(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(scene, gameOverlay),
 	m_gameOverlay(gameOverlay),

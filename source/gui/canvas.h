@@ -3,7 +3,7 @@
 
 #include "Config.h"
 #include "UiObject.h"
-
+//>REMOVE ME<
 class Canvas : public UiObject
 {
 public:

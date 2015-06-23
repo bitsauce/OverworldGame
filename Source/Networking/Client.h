@@ -8,7 +8,7 @@ namespace RakNet {
 	class RakPeerInterface;
 	class BitStream;
 }
-
+//>REMOVE ME<
 class Game;
 
 class Client : public Connection

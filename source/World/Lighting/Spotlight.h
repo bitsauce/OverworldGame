@@ -21,5 +21,5 @@ private:
 	// TODO: Maybe I should just have a global array of vct vertices that can be reused whenever
 	static xd::Vertex *s_vertices;
 };
-
+//>REMOVE ME<
 #endif // SPOTLIGHT_H

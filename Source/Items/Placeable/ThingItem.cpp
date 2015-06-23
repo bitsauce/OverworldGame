@@ -4,7 +4,7 @@
 #include "Entities/Player.h"
 #include "World/Camera.h"
 #include "Game/Game.h"
-
+//>REMOVE ME<
 ThingItem::ThingItem(Game *game, const ThingID id) :
 	m_game(game),
 	m_blockEntityID(id)

@@ -3,7 +3,7 @@
 
 #include "Config.h"
 #include "Gui/UiObject.h"
-
+//>REMOVE ME<
 class GameOverlay;
 class Canvas;
 

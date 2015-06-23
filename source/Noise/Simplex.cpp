@@ -11,7 +11,7 @@ int grad3[12][3] = {
 	{1,0,1}, {-1,0,1}, {1,0,-1}, {-1,0,-1},
 	{0,1,1}, {0,-1,1}, {0,1,-1}, {0,-1,-1}
 };
-
+//>REMOVE ME<
 // Permutation table. The same list is repeated twice.
 int perm[512] = {
 	151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,
@@ -61,7 +61,8 @@ float Simplex2D::valueAt(float x, float y)
 	for(int i = 0; i < m_octaves; ++i)
 	{
 		total += rawNoise(x * freq, y * freq) * amplitude;
-		freq *= 2;
+		freq *= 2;
+
 		amplitude *= m_gain;
 		maxAmplitude += amplitude;
 	}

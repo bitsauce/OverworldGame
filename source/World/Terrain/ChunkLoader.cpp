@@ -5,7 +5,7 @@
 #include "Generation/Generator.h"
 
 #define CHUNK_KEY(X, Y) ((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000)
-
+//>REMOVE ME<
 ChunkLoader::ChunkLoader(World *world) :
 	m_applyZoom(true),
 	m_camera(world->getCamera()),

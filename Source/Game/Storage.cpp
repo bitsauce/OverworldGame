@@ -1,7 +1,7 @@
 #include "Storage.h"
 #include "Items/ItemData.h"
 #include "Constants.h"
-
+//>REMOVE ME<
 Storage::Storage(const uint size) :
 	m_size(size),
 	m_next(nullptr)

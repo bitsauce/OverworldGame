@@ -10,7 +10,7 @@ namespace RakNet {
 
 class Game;
 class Player;
-
+//>REMOVE ME<
 class Server : public Connection
 {
 public:

@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "World/World.h"
 #include "Items/ItemData.h"
-
+//>REMOVE ME<
 ItemDrop::ItemDrop(World *world, const Vector2 position, const ItemID item, const int amount) :
 	DynamicEntity(world, ENTITY_ITEM_DROP),
 	m_itemID(item),

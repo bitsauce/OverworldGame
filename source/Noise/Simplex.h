@@ -2,7 +2,7 @@
 #define SIMPLEX_H
 
 #include "Config.h"
-
+//>REMOVE ME<
 class Simplex2D
 {
 public:

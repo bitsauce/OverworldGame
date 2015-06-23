@@ -4,7 +4,7 @@
 #include "Config.h"
 #include "Gui/UiObject.h"
 #include "Gui/Canvas.h"
-
+//>REMOVE ME<
 class Scene
 {
 	friend class UiObject;

@@ -6,7 +6,7 @@
 
 class Player;
 enum ItemID;
-
+//>REMOVE ME<
 class ItemData
 {
 	friend class Game;

@@ -5,7 +5,7 @@
 #include "World/Camera.h"
 #include "World/World.h"
 #include "Game/Game.h"
-
+//>REMOVE ME<
 Bow::Bow(Game *game) :
 	m_game(game),
 	m_bowSprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Weapons/WoodenBow.png"))

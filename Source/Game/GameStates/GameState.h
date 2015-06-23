@@ -4,7 +4,7 @@
 #include "Config.h"
 
 class Scene;
-
+//>REMOVE ME<
 enum GameStateID
 {
 	GAME_STATE_MULTIPLAYER,

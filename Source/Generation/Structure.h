@@ -1,6 +1,6 @@
 #ifndef STRUCTURE_H
 #define STRUCTURE_H
-
+//>REMOVE ME<
 #include "Constants.h"
 #include "Generator.h"
 

@@ -1,6 +1,6 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
-
+//>REMOVE ME<
 #include "Config.h"
 #include "NetworkIDManager.h"
 #include "MessageIdentifiers.h"

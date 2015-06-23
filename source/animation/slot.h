@@ -1,6 +1,6 @@
 #ifndef SLOT_H
 #define SLOT_H
-
+//>REMOVE ME<
 #include "Config.h"
 #include <spine/spine.h>
 

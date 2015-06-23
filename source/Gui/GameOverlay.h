@@ -9,7 +9,7 @@
 #include "GameOverlay/HealthManaStatus.h"
 #include "GameOverlay/Omnicon.h"
 #include "GameOverlay/Crafting.h"
-
+//>REMOVE ME<
 class Game;
 class Player;
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OverworldGame", "OverworldCpp.vcxproj", "{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OverworldGame", "OverworldGame.vcxproj", "{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A} = {F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}
 		{5D74934A-7512-45EE-8402-7B95D3642E85} = {5D74934A-7512-45EE-8402-7B95D3642E85}

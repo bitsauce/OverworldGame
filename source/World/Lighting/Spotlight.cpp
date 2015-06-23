@@ -3,7 +3,7 @@
 #include "World/Lighting/Lighting.h"
 
 Vertex *Spotlight::s_vertices;
-
+//>REMOVE ME<
 // TODO: This is NOT a spotlight. This is a pointlight.
 Spotlight::Spotlight(Lighting *lighting, const Vector2 &position, const float radius, const Color &color) :
 	LightSource(position, radius, color)

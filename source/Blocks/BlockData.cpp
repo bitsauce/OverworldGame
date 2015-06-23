@@ -1,7 +1,7 @@
 #include "BlockData.h"
 #include "World/World.h"
 #include "World/Terrain/Terrain.h"
-
+//>REMOVE ME<
 vector<BlockData*> BlockData::s_blockData(BLOCK_COUNT);
 TextureAtlas *BlockData::s_blockAtlas = nullptr;
 

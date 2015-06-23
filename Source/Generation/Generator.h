@@ -5,7 +5,7 @@
 #include "Constants.h"
 #include "Noise/Simplex.h"
 #include <unordered_set>
-
+//>REMOVE ME<
 extern float step(float edge, float x);
 
 class WorldGenerator

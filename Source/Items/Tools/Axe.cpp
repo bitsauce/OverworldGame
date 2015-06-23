@@ -9,7 +9,7 @@
 #include "World/Terrain/Terrain.h"
 #include "Game/Game.h"
 #include "Blocks/BlockData.h"
-
+//>REMOVE ME<
 Axe::Axe(Game *game) :
 	m_game(game),
 	m_cracksSprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Tools/Pickaxes/MiningCracks.png")),

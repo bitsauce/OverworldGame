@@ -1,6 +1,6 @@
 #include "Button.h"
 #include "Constants.h"
-
+//>REMOVE ME<
 Button::Button(Scene *scene, string text, function<void()> onClick, UiObject *parent) :
 	UiObject(scene, parent),
 	m_font(ResourceManager::get<Font>(UI_MENU_BUTTON_FONT)),

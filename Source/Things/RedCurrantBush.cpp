@@ -9,7 +9,7 @@ RedCurrantBush::RedCurrantBush(const int x, const int y) :
 {
 	m_sprite.setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
 }
-
+//>REMOVE ME<
 void RedCurrantBush::draw(SpriteBatch *spriteBatch)
 {
 	spriteBatch->drawSprite(m_sprite);

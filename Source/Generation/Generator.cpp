@@ -4,7 +4,7 @@
 
 #include "Structure.h"
 #include "Structures/OakTree.h"
-
+//>REMOVE ME<
 float step(float edge, float x)
 {
 	return x < edge ? 0.0f : 1.0f;

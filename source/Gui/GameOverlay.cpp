@@ -9,7 +9,7 @@
 #include "Game/Game.h"
 #include "Networking/Connection.h"
 #include "Entities/ItemDrop.h"
-
+//>REMOVE ME<
 GameOverlay::GameOverlay(Game *game, Scene *scene) :
 	UiObject(scene, scene->getCanvas()),
 	m_game(game),

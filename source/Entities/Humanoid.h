@@ -2,7 +2,7 @@
 #define HUMANOID_H
 
 #include "Config.h"
-
+//>REMOVE ME<
 class Skeleton;
 class AnimationStateData;
 class AnimationState;

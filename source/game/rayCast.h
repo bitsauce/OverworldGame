@@ -2,7 +2,7 @@
 #define RAY_CAST_H
 
 #include "Config.h"
-
+//>REMOVE ME<
 class RayCast
 {
 public:

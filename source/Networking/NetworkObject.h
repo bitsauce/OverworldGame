@@ -3,7 +3,7 @@
 
 #include "NetworkIDObject.h"
 #include "BitStream.h"
-
+//>REMOVE ME<
 class Connection;
 
 class NetworkObject : public RakNet::NetworkIDObject
