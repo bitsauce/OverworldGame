@@ -2,7 +2,7 @@
 #include "Gui/GameOverlay.h"
 #include "Game/Game.h"
 #include "Items/ItemData.h"
-//>REMOVE ME<
+
 Crafting::Crafting(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(scene, gameOverlay),
 	m_gameOverlay(gameOverlay),

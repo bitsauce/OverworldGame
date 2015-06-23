@@ -2,7 +2,7 @@
 #include "Constants.h"
 #include "Game/Game.h"
 #include "Entities/Player.h"
-//>REMOVE ME<
+
 HealthManaStatus::HealthManaStatus(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(scene, gameOverlay),
 	m_gameOverlay(gameOverlay),

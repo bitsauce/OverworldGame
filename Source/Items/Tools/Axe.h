@@ -2,7 +2,7 @@
 #define AXE_H
 
 #include "Items/ItemData.h"
-//>REMOVE ME<
+
 class Axe : public ItemData
 {
 public:

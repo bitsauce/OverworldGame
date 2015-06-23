@@ -3,7 +3,7 @@
 #include "slot.h"
 #include "bone.h"
 #include <spine/extension.h>
-//>REMOVE ME<
+
 #ifndef SPINE_MESH_VERTEX_COUNT_MAX
 #define SPINE_MESH_VERTEX_COUNT_MAX 1000
 #endif

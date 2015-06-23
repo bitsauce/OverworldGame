@@ -1,4 +1,4 @@
-//>REMOVE ME<
+
 
 #include <spine/spine.h>
 #include "Animation.h"

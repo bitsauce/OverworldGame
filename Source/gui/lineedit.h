@@ -6,7 +6,7 @@
 
 class UiObject;
 class Scene;
-//>REMOVE ME<
+
 class LineEdit : public UiObject, public KeyListener
 {
 public:

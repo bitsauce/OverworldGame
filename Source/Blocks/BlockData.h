@@ -2,7 +2,7 @@
 #define BLOCK_DATA_H
 
 #include "Config.h"
-//>REMOVE ME<
+
 enum BlockID;
 enum ItemID;
 

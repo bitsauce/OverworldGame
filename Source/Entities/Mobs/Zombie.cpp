@@ -2,7 +2,7 @@
 #include "World/World.h"
 #include "Entities/Player.h"
 #include "Constants.h"
-//>REMOVE ME<
+
 Zombie::Zombie(World *world) :
 	DynamicEntity(world, ENTITY_ZOMBIE)
 {

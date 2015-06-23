@@ -7,7 +7,7 @@ Canvas::Canvas(Scene *scene) :
 	m_useWindowSize(true)
 {
 }
-//>REMOVE ME<
+
 Canvas::Canvas(Scene *scene, const uint w, const uint h) :
 	UiObject(scene, nullptr),
 	m_canvasSize(w, h),

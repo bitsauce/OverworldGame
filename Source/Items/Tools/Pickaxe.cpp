@@ -7,7 +7,7 @@
 #include "Entities/ItemDrop.h"
 #include "World/Terrain/Terrain.h"
 #include "Game/Game.h"
-//>REMOVE ME<
+
 Pickaxe::Pickaxe(Game *game) :
 	m_game(game),
 	m_cracksSprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Tools/Pickaxes/MiningCracks.png")),

@@ -2,7 +2,7 @@
 #define LIGHT_SOURCE_H
 
 #include "Config.h"
-//>REMOVE ME<
+
 class LightSource
 {
 public:

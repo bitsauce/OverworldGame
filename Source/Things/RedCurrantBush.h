@@ -20,5 +20,5 @@ private:
 
 	static Thing *Factory(Game*, const int x, const int y) { return new RedCurrantBush(x, y); }
 };
-//>REMOVE ME<
+
 #endif // RED_CURRANT_BUSH_H

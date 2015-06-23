@@ -7,7 +7,7 @@
 
 class Terrain;
 class World;
-//>REMOVE ME<
+
 class Lighting : public WindowListener
 {
 	friend class Lighting;

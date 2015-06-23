@@ -4,7 +4,7 @@
 #include "Config.h"
 
 class Entity;
-//>REMOVE ME<
+
 class Camera : public MouseListener, public WindowListener
 {
 public:

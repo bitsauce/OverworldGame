@@ -67,7 +67,7 @@
     <_ProjectFileVersion>11.0.61030.0</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)Lib\</OutDir>
+    <OutDir>$(ProjectDir)..\..\Lib\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
@@ -98,13 +98,13 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <PrecompiledHeader />
-      <ProgramDataBaseFileName>$(OutDir)$(SolutionName)_$(ProjectName)_$(Configuration)_$(Platform).pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)RakNet_$(ProjectName)_$(Configuration)_$(Platform).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
       <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(SolutionName)_$(ProjectName)_$(Configuration)_$(Platform).dll</OutputFile>
+      <OutputFile>$(OutDir)RakNet_$(ProjectName)_$(Configuration)_$(Platform).dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>

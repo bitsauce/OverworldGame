@@ -9,7 +9,7 @@ Vector2 LightSource::getPosition() const
 {
 	return m_position;
 }
-//>REMOVE ME<
+
 void LightSource::setColor(const xd::Color &color)
 {
 	m_color = color;

@@ -6,7 +6,7 @@
 #include "Networking/NetworkObject.h"
 #include "Humanoid.h"
 #include "Entities/Physics/DynamicEntity.h"
-//>REMOVE ME<
+
 class Camera;
 class Terrain;
 class ItemData;

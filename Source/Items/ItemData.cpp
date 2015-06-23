@@ -8,7 +8,7 @@
 #include "Weapons/Ammo.h"
 
 vector<ItemData*> ItemData::s_itemData(ITEM_COUNT);
-//>REMOVE ME<
+
 ItemData::ItemData() :
 	m_id(ITEM_NONE),
 	m_name("NO ITEM"),

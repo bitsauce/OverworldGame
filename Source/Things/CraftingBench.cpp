@@ -3,7 +3,7 @@
 #include "Constants.h"
 #include "Entities/Player.h"
 #include "Game/Game.h"
-//>REMOVE ME<
+
 CraftingBench::CraftingBench(Game *game, const int x, const int y) :
 	Thing(x, y),
 	m_game(game),

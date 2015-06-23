@@ -2,7 +2,7 @@
 #define ITEM_CONTAINER_H
 
 #include "Config.h"
-//>REMOVE ME<
+
 class ItemData;
 enum ItemID;
 

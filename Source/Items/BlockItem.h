@@ -3,7 +3,7 @@
 
 #include "Config.h"
 #include "Items/ItemData.h"
-//>REMOVE ME<
+
 class Camera;
 class Terrain;
 enum BlockID;

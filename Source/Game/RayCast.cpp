@@ -1,7 +1,7 @@
 //  Algorithm from: http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
 
 #include "rayCast.h"
-//>REMOVE ME<
+
 // This function casts a ray from p0 to p1
 bool RayCast::test(const Vector2i p0, const Vector2i p1)
 {

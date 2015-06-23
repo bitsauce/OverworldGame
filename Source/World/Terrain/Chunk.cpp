@@ -17,7 +17,7 @@
 #define BLOCK_Y3 0.75f
 #define BLOCK_X4 1.00f
 #define BLOCK_Y4 1.00f
-//>REMOVE ME<
+
 #define BLOCK_U0 (0.0f / 6.0f)
 #define BLOCK_V0 (0.0f / 10.0f)
 #define BLOCK_U1 (1.0f / 6.0f)

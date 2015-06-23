@@ -3,7 +3,7 @@
 
 #include "Gui/UiObject.h"
 #include "Game/Storage.h"
-//>REMOVE ME<
+
 class Scene;
 class GameOverlay;
 

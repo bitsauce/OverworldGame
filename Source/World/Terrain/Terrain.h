@@ -6,7 +6,7 @@
 #include "World/Terrain/ChunkLoader.h"
 #include "World/Terrain/Chunk.h"
 #include "Generation/Generator.h"
-//>REMOVE ME<
+
 enum TerrainLayer;
 enum BlockID;
 

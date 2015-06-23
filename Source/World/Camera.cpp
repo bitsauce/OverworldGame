@@ -3,7 +3,7 @@
 #include "World/World.h"
 #include "Game/Debug.h"
 #include "Entities/Entity.h"
-//>REMOVE ME<
+
 Camera::Camera() :
 	m_position(0.0f, 0.0f)
 {

@@ -17,7 +17,7 @@
 #include "Game/Game.h"
 #include "Game/GameStates/GameState.h"
 #include "Game/Scene.h"
-//>REMOVE ME<
+
 #include "Gui/Canvas.h"
 
 Player::Player(Game *game, RakNet::RakNetGUID guid) :

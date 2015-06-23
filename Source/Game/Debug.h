@@ -1,6 +1,6 @@
 #ifndef DEBUG_H
 #define DEBUG_H
-//>REMOVE ME<
+
 #include "Config.h"
 
 class Terrain;

@@ -8,7 +8,7 @@
 #include "Background.h"
 #include "Camera.h"
 #include "TimeOfDay.h"
-//>REMOVE ME<
+
 class WorldGenerator;
 class Server;
 class Client;

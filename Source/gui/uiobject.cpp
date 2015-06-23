@@ -3,7 +3,7 @@
 #include "Game/Scene.h"
 
 #include "Constants.h"
-//>REMOVE ME<
+
 UiObject::UiObject(Scene *scene, UiObject *parent) :
 	m_scene(scene),
 	m_parent(parent),

@@ -1,6 +1,6 @@
 #ifndef PHYSICS_BODY_H
 #define PHYSICS_BODY_H
-//>REMOVE ME<
+
 #include "Config.h"
 #include "Entities/Entity.h"
 

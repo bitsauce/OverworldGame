@@ -5,7 +5,7 @@
 #include "World/Terrain/Terrain.h"
 #include "World/Terrain/ChunkLoader.h"
 #include "Entities/ItemDrop.h"
-//>REMOVE ME<
+
 Torch::Torch(World *world, const int x, const int y) :
 	Thing(x, y),
 	m_world(world),

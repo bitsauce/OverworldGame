@@ -4,7 +4,7 @@
 #include "World/Terrain/Terrain.h"
 #include "Blocks/BlockData.h"
 #include "Game/Game.h"
-//>REMOVE ME<
+
 BlockItem::BlockItem(Game *game, const TerrainLayer layer, const BlockID blockID) :
 	m_camera(game->getWorld()->getCamera()),
 	m_terrain(game->getWorld()->getTerrain()),

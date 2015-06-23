@@ -58,12 +58,12 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\..\3rdparty\vld\lib;..\..\3rdparty\spine\lib;..\..\..\x2D-Game-Engine\build\Win32\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>..\..\3rdparty\RakNet\Lib\RakNet_VS2008_DLL_Debug_Win32.lib;ws2_32.lib;x2dd.lib;spined.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\3rdparty\RakNet\Lib\RakNet_DLL_Debug_Win32.lib;ws2_32.lib;x2dd.lib;spined.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(SolutionDir)..\..\..\x2D-Game-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"
-copy "$(SolutionDir)..\..\3rdparty\RakNet\Lib\RakNet_VS2008_DLL_Debug_Win32.dll" "$(TargetDir)"
+copy "$(SolutionDir)..\..\3rdparty\RakNet\Lib\RakNet_DLL_Debug_Win32.dll" "$(TargetDir)"
 copy "$(SolutionDir)..\..\3rdparty\vld\bin\Win32\*" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

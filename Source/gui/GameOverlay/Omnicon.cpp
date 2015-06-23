@@ -1,6 +1,6 @@
 #include "Omnicon.h"
 #include "Game/Game.h"
-//>REMOVE ME<
+
 Omnicon::Omnicon(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(scene, gameOverlay),
 	m_visible(false),

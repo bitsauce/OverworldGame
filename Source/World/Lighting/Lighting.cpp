@@ -6,7 +6,7 @@
 #include "World/Camera.h"
 #include "World/Terrain/Terrain.h"
 #include "World/Terrain/ChunkLoader.h"
-//>REMOVE ME<
+
 Lighting::Lighting(World *world) :
 	m_terrain(world->getTerrain()),
 	m_world(world),

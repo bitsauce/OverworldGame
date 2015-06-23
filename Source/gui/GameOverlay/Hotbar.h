@@ -5,7 +5,7 @@
 #include "Gui/UiObject.h"
 
 class GameOverlay;
-//>REMOVE ME<
+
 class Hotbar : public UiObject, public MouseListener, public KeyListener
 {
 public:

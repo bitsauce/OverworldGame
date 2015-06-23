@@ -1,6 +1,6 @@
 #include "InGameState.h"
 #include "Game/Game.h"
-//>REMOVE ME<
+
 InGameState::InGameState(Game *game) :
 	GameState(GAME_STATE_IN_GAME, false, new Scene()),
 	m_world(game->getWorld())

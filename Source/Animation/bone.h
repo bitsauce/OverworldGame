@@ -1,6 +1,6 @@
 #ifndef BONE_H
 #define BONE_H
-//>REMOVE ME<
+
 #include "Config.h"
 #include <spine/spine.h>
 

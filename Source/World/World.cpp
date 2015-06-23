@@ -12,7 +12,7 @@
 #include "Entities/Player.h"
 #include "Lighting/Lighting.h"
 #include "Things/Thing.h"
-//>REMOVE ME<
+
 World::World() :
 	m_worldPath(""),
 	m_worldFile(nullptr)

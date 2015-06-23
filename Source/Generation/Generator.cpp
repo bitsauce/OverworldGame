@@ -4,7 +4,7 @@
 
 #include "Structure.h"
 #include "Structures/OakTree.h"
-//>REMOVE ME<
+
 float step(float edge, float x)
 {
 	return x < edge ? 0.0f : 1.0f;
@@ -15,13 +15,13 @@ float step(float edge, float x)
 void WorldGenerator::getChunkBlocks(const int chunkX, const int chunkY, BlockID *blocks)
 {
 	// Load super chunk if not loaded
-	int superChunkX = (int) floor(chunkX / SUPER_CHUNK_CHUNKSF), superChunkY = (int) floor(chunkY / SUPER_CHUNK_CHUNKSF);
+	/*int superChunkX = (int) floor(chunkX / SUPER_CHUNK_CHUNKSF), superChunkY = (int) floor(chunkY / SUPER_CHUNK_CHUNKSF);
 	uint key = CHUNK_KEY(superChunkX, superChunkY);
 	if(m_loadedSuperChunks.find(key) == m_loadedSuperChunks.end())
 	{
 		loadStructures(superChunkX, superChunkY);
 		m_loadedSuperChunks.insert(key);
-	}
+	}*/
 
 	// Load blocks
 	const int tileX = chunkX * CHUNK_BLOCKS;
@@ -32,12 +32,12 @@ void WorldGenerator::getChunkBlocks(const int chunkX, const int chunkY, BlockID 
 		{
 			for(uint z = 0; z < TERRAIN_LAYER_COUNT; ++z)
 			{
-				tuple<int, int, int> key = make_tuple(tileX + x, tileY + y, z);
+				/*tuple<int, int, int> key = make_tuple(tileX + x, tileY + y, z);
 				if(m_structureMap.find(key) != m_structureMap.end() && m_structureMap[key] > BLOCK_EMPTY)
 				{
 					blocks[BLOCK_INDEX(x, y, z)] = m_structureMap[key];
 				}
-				else
+				else*/
 				{
 					blocks[BLOCK_INDEX(x, y, z)] = getGroundAt(tileX + x, tileY + y, (TerrainLayer)z);
 				}

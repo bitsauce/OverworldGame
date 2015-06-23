@@ -6,7 +6,7 @@
 #pragma warning(disable : 4717)
 
 class Scene;
-//>REMOVE ME<
+
 class UiObject
 {
 public:

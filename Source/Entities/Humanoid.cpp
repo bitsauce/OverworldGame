@@ -4,7 +4,7 @@
 #include "Animation/Animation.h"
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
-//>REMOVE ME<
+
 #include "Entities/Physics/DynamicEntity.h"
 
 Humanoid::Humanoid() :

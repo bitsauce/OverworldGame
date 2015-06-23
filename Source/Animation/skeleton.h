@@ -1,6 +1,6 @@
 #ifndef SKELETON_H
 #define SKELETON_H
-//>REMOVE ME<
+
 #include "Config.h"
 #include <spine/spine.h>
 

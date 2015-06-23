@@ -4,7 +4,7 @@
 #include "Config.h"
 #include "Entities/Entity.h"
 #include "Entities/Physics/DynamicEntity.h"
-//>REMOVE ME<
+
 enum ItemID;
 
 class ItemDrop : public DynamicEntity

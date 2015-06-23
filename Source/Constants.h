@@ -2,7 +2,7 @@
 #define CONSTANTS_H
 
 #include "MessageIdentifiers.h"
-//>REMOVE ME<
+
 enum PacketID
 {
 	ID_SET_BLOCK = ID_USER_PACKET_ENUM,

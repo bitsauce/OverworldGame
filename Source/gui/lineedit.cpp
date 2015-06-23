@@ -9,7 +9,7 @@ LineEdit::LineEdit(Scene *scene, UiObject *parent) :
 	m_font(ResourceManager::get<Font>(UI_MENU_BUTTON_FONT))
 {
 }
-//>REMOVE ME<
+
 LineEdit::~LineEdit()
 {
 }

@@ -7,7 +7,7 @@ class Terrain;
 class Thing;
 class Game;
 enum ThingID;
-//>REMOVE ME<
+
 class ThingData
 {
 	enum PlacementRule

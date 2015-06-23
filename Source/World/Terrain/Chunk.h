@@ -6,7 +6,7 @@
 
 class WorldGenerator;
 class Thing;
-//>REMOVE ME<
+
 class Chunk
 {
 	friend class ChunkLoader;

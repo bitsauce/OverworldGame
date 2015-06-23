@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <VSPerformanceSession Version="1.00">
   <Options>
-    <Solution>OverworldCpp.sln</Solution>
+    <Solution>OverworldGame.sln</Solution>
     <CollectionMethod>Sampling</CollectionMethod>
     <AllocationMethod>None</AllocationMethod>
     <AddReport>true</AddReport>
@@ -62,8 +62,8 @@
       <PostinstrumentEvent>
         <InstrEventExclude>false</InstrEventExclude>
       </PostinstrumentEvent>
-      <ProjRef>{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}|OverworldCpp.vcxproj</ProjRef>
-      <ProjPath>OverworldCpp.vcxproj</ProjPath>
+      <ProjRef>{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}|OverworldGame.vcxproj</ProjRef>
+      <ProjPath>OverworldGame.vcxproj</ProjPath>
       <ProjName>OverworldGame</ProjName>
     </ProjBinary>
   </Binaries>
@@ -74,7 +74,7 @@
   </Reports>
   <Launches>
     <ProjBinary>
-      <Path>:PB:{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}|OverworldCpp.vcxproj</Path>
+      <Path>:PB:{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}|OverworldGame.vcxproj</Path>
     </ProjBinary>
   </Launches>
 </VSPerformanceSession>

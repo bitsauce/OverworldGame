@@ -1,5 +1,5 @@
 #include "bone.h"
-//>REMOVE ME<
+
 Bone::Bone(spBone *bone) :
 	m_self(bone)
 {
