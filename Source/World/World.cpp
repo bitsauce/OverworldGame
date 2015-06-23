@@ -12,7 +12,6 @@
 #include "Entities/Player.h"
 #include "Lighting/Lighting.h"
 #include "Things/Thing.h"
-#include "Scenes/GameScene.h"
 //>REMOVE ME<
 World::World() :
 	m_worldPath(""),

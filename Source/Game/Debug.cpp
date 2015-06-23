@@ -8,8 +8,6 @@
 #include "Blocks/BlockData.h"
 #include "Networking/Server.h"
 #include "Entities/Mobs/Zombie.h"
-#include "Scenes/Multiplayer.h"
-#include "Scenes/GameScene.h"
 #include "Game/GameStates/GameState.h"
 #include "Game/Game.h"
 

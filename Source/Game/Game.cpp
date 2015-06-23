@@ -3,7 +3,6 @@
 #include "Constants.h"
 #include "Gui/Canvas.h"
 #include "Gui/UiObject.h"
-#include "Scenes/GameScene.h"
 #include "Blocks/BlockData.h"
 #include "Items/ItemData.h"
 #include "Things/Thing.h"
