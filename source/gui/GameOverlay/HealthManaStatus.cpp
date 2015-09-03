@@ -44,23 +44,11 @@ void HealthManaStatus::draw(SpriteBatch *spriteBatch, const float alpha)
 		if(i == m_gameOverlay->getPlayer()->getMaxHealth()/4 - 1)
 		{
 			m_heartSprite.setScale(Vector2(sin(m_heartTime*5.0f) * 0.5f + 0.5f));
-			m_heartSprite.setRotation(32.0f * m_heartTime * 10.0f);
 		}
 		else
 		{
 			m_heartSprite.setScale(Vector2(1.0f));
-			m_heartSprite.setRotation(0.0f);
 		}
-		//m_heartSprite.setOrigin(m_heartSprite.getCenter());
 		spriteBatch->drawSprite(m_heartSprite);
 	}
-	
-	/*for(int y = 0; y < 2; ++y)
-	{
-		for(int x = 0; x < 10; ++x)
-		{
-			m_manaSprite.setPosition(position + Vector2(x * 34, 102 + y * 34));
-			spriteBatch->drawSprite(m_manaSprite);
-		}
-	}*/
 }
