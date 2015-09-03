@@ -45,7 +45,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 	config.endFunc = bind(&Game::exit, game);
 
 #ifdef X2D_DEBUG
-	config.workDir = "..\\..\\Game\\";
+	config.workDir = "..\\..\\Content\\";
+#else
+	config.workDir = "..\\..\\Content\\";
 #endif
 	config.flags = flags;
 
