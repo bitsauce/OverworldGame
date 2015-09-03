@@ -49,7 +49,7 @@ void LineEdit::draw(SpriteBatch *spriteBatch)
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 	if(m_active && m_cursorTime >= 0.5f)
 	{
-		gfxContext.drawRectangle(position.x + m_font->getStringWidth(m_text.substr(0, m_cursorPos)), position.y, 2, m_font->getStringHeight(""), Color(0, 0, 0, 255));
+		gfxContext.drawRectangle(position.x + m_font->getStringWidth(m_text.substr(0, m_cursorPos)), position.y, 2, m_font->getHeight(), Color(0, 0, 0, 255));
 	}
 }
 

@@ -106,7 +106,7 @@ void Button::draw(SpriteBatch *spriteBatch)
 		
 	// Draw text
 	m_font->setColor(Color(0, 0, 0, 255));
-	spriteBatch->drawText(position - (Vector2(m_font->getStringWidth(m_text), m_font->getStringHeight(m_text))-size)*0.5f, m_text, m_font);
+	spriteBatch->drawText(position - (Vector2(m_font->getStringWidth(m_text), m_font->getHeight())-size)*0.5f, m_text, m_font);
 }
 	
 void Button::clickEvent()
