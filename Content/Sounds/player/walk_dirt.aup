@@ -1,0 +1,55 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="walk_dirt_data" version="1.3.0" audacityversion="2.0.5" sel0="0.2108011817" sel1="0.2108011817" vpos="0" h="0.0000000000" zoom="825.4223179748" rate="48000.0">
+	<tags/>
+	<wavetrack name="walk_dirt" channel="2" linked="0" mute="1" solo="0" height="150" minimized="0" isSelected="0" rate="48000" gain="1.0" pan="0.0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="102115">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000a16.au" len="102115" min="-0.427307" max="0.304962" rms="0.0107"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="walk_dirt_1" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="48000" gain="1.0" pan="0.0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="27506">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000a8e.au" len="27506" min="-0.279968" max="0.203888" rms="0.00637"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="walk_dirt_2" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="48000" gain="1.0" pan="0.0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="24831">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000f62.au" len="24831" min="-0.427307" max="0.304962" rms="0.011375"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="walk_dirt_3" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="48000" gain="1.0" pan="0.0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="23668">
+				<waveblock start="0">
+					<simpleblockfile filename="e00007fc.au" len="23668" min="-0.392212" max="0.266937" rms="0.005276"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="walk_dirt_4" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="48000" gain="1.0" pan="0.0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="20528">
+				<waveblock start="0">
+					<simpleblockfile filename="e000087f.au" len="20528" min="-0.170471" max="0.119415" rms="0.005572"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>

@@ -8,28 +8,33 @@ class TimeOfDay
 public:
 	TimeOfDay();
 
-	float getTime()
+	void setTime(const float time)
+	{
+		this->time = time;
+	}
+
+	float getTime() const
 	{
 		return time;
 	}
 	
-	int getHour()
+	int getHour() const
 	{
 		return int(time/60.0f);
 	}
 	
-	int getMinute()
+	int getMinute() const
 	{
 		return int(time-getHour()*60.0f);
 	}
 	
-	bool isDay()
+	bool isDay() const
 	{
 		int hour = getHour();
 		return hour >= 6 && hour < 18;
 	}
 	
-	bool isNight()
+	bool isNight() const
 	{
 		return !isDay();
 	}
@@ -38,16 +43,6 @@ public:
 	{
 		// Apply time
 		time += delta;
-
-		/*// Debug: Time speedup (0 forwards, 9 backwards)
-		if(xd::Input::getKeyState(xd::XD_KEY_0))
-		{
-			time += 10.0f;
-		}
-		else if(xd::Input::getKeyState(xd::XD_KEY_9))
-		{
-			time -= 10.0f;
-		}*/
 
 		// Make sure time loops around to 00:00
 		if(time >= 1440.0f)
@@ -60,9 +55,6 @@ public:
 		{
 			time = 1440.0f;
 		}
-		
-		// Draw time
-		//World::getDebug()->setVariable("Time", formatInt(getHour(), "0", 2) + ":" + formatInt(getMinute(), "0", 2));
 	}
 
 private:

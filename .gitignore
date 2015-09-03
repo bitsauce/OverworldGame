@@ -84,3 +84,6 @@ $RECYCLE.BIN/
 *.exp
 *.lastbuildstate
 *.ilk
+
+# x2D
+/Binaries

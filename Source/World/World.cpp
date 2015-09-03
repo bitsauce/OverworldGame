@@ -20,8 +20,8 @@ World::World() :
 {
 	// Load world content
 	m_timeOfDay = new TimeOfDay();
-	m_background = new Background(m_timeOfDay);
 	m_camera = new Camera();
+	m_background = new Background(this);
 	m_generator = new WorldGenerator(9823);
 	m_terrain = new Terrain(this);
 	m_lighting = new Lighting(this);
@@ -122,9 +122,9 @@ void World::update(const float delta)
 void World::draw(SpriteBatch *spriteBatch, const float alpha)
 {
 	spriteBatch->begin();
-
-	m_background->draw(spriteBatch, alpha);
+	
 	m_camera->update(alpha);
+	m_background->draw(spriteBatch, alpha);
 	
 	spriteBatch->end();
 	spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_camera->getProjectionMatrix()));
