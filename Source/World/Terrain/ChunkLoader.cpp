@@ -232,11 +232,6 @@ set<Thing*> ChunkLoader::getActiveThings()
 	return things;
 }
 
-float round(float d)
-{
-	return floor(d + 0.5f);
-}
-
 void ChunkLoader::update()
 {
 	// Update active chunk area

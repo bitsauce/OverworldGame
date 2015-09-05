@@ -49,16 +49,6 @@ void HealthManaStatus::draw(SpriteBatch *spriteBatch, const float alpha)
 		{
 			m_heartSprite.setScale(Vector2(1.0f));
 		}
-		//m_heartSprite.setOrigin(m_heartSprite.getCenter());
 		spriteBatch->drawSprite(m_heartSprite);
 	}
-	
-	/*for(int y = 0; y < 2; ++y)
-	{
-		for(int x = 0; x < 10; ++x)
-		{
-			m_manaSprite.setPosition(position + Vector2(x * 34, 102 + y * 34));
-			spriteBatch->drawSprite(m_manaSprite);
-		}
-	}*/
 }

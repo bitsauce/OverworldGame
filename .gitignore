@@ -87,3 +87,6 @@ $RECYCLE.BIN/
 
 # x2D
 /Binaries
+*.vspx
+3rdparty/spine/project/Debug/spine.lastbuildstate
+3rdparty/spine/project/Debug/spine.lastbuildstate
