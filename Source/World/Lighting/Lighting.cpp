@@ -14,10 +14,10 @@ Lighting::Lighting(World *world) :
 	m_lightingPass1(nullptr),
 	m_lightingPass2(nullptr),
 	m_lightingRenderTarget(nullptr),
-	m_directionalLightingShader(ResourceManager::get<Shader>(":/shaders/directional_lighting")),
-	m_radialLightingShader(ResourceManager::get<Shader>(":/shaders/radial_lighting")),
-	m_blurHShader(ResourceManager::get<Shader>(":/shaders/blur_h")),
-	m_blurVShader(ResourceManager::get<Shader>(":/shaders/blur_v")),
+	m_directionalLightingShader(ResourceManager::get<Shader>(":/Shaders/DirectionalLighting")),
+	m_radialLightingShader(ResourceManager::get<Shader>(":/Shaders/RadialLighting")),
+	m_blurHShader(ResourceManager::get<Shader>(":/Shaders/BlurH")),
+	m_blurVShader(ResourceManager::get<Shader>(":/Shaders/BlurV")),
 	m_lightRadius(6),
 	m_enabled(true)
 {
@@ -59,20 +59,20 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 			for(int x = area.x0; x <= area.x1+2; ++x)
 			{
 				gfxContext.setTexture(m_terrain->getChunkLoader()->getChunkAt(x-1, y-1).getLightMap());
-				gfxContext.drawRectangle((x - area.x0) * CHUNK_BLOCKSF, (y - area.y0) * CHUNK_BLOCKSF, CHUNK_BLOCKSF, CHUNK_BLOCKSF);
+				//gfxContext.drawRectangle((x - area.x0) * CHUNK_BLOCKSF, (y - area.y0) * CHUNK_BLOCKSF, CHUNK_BLOCKSF, CHUNK_BLOCKSF);
 			}
 		}
 		
 		// Directional light
 		gfxContext.setRenderTarget(m_lightingPass0);
 		gfxContext.clear(GraphicsContext::COLOR_BUFFER);
-		m_directionalLightingShader->setSampler2D("u_texture", m_lightingRenderTarget->getTexture());
-		m_directionalLightingShader->setUniform1f("u_direction", 0.0174532925f * 180.0f * (m_world->getTimeOfDay()->isDay() ? (1140.0f - m_world->getTimeOfDay()->getTime()) : (1860.0f - (m_world->getTimeOfDay()->getTime() >= 1140.0f ? m_world->getTimeOfDay()->getTime() : m_world->getTimeOfDay()->getTime() + 1440.0f)))/720.0f);
-		m_directionalLightingShader->setUniform1f("u_offsetY", (area.y0 * CHUNK_BLOCKSF - 32.0f)/m_height);
-		m_directionalLightingShader->setUniform1f("u_width", m_width);
-		m_directionalLightingShader->setUniform1f("u_height", m_height);
+		m_directionalLightingShader->setSampler2D("u_Texture", m_lightingRenderTarget->getTexture());
+		m_directionalLightingShader->setUniform1f("u_Direction", 0.0174532925f * 180.0f * (m_world->getTimeOfDay()->isDay() ? (1140.0f - m_world->getTimeOfDay()->getTime()) : (1860.0f - (m_world->getTimeOfDay()->getTime() >= 1140.0f ? m_world->getTimeOfDay()->getTime() : m_world->getTimeOfDay()->getTime() + 1440.0f)))/720.0f);
+		m_directionalLightingShader->setUniform1f("u_OffsetY", (area.y0 * CHUNK_BLOCKSF - 32.0f)/m_height);
+		m_directionalLightingShader->setUniform1f("u_Width", m_width);
+		m_directionalLightingShader->setUniform1f("u_Height", m_height);
 		gfxContext.setShader(m_directionalLightingShader);
-		gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
+		//gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
 		
 		// Draw light sources
 		gfxContext.enable(GraphicsContext::BLEND);
@@ -81,31 +81,31 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 		for(LightSource *light : m_lightSources)
 		{
 			Vector2 pos = light->getPosition() - Vector2(area.x0 - 1, area.y0 - 1) * CHUNK_BLOCKSF + Vector2(0.5f, 0.5f);
-			m_radialLightingShader->setSampler2D("u_lightMap", m_lightingRenderTarget->getTexture());
-			m_radialLightingShader->setUniform2f("u_lightTexCoord", pos.x/m_width, 1.0f - (pos.y/m_height));
-			m_radialLightingShader->setUniform2f("u_radius", light->getRadius()/m_width, light->getRadius()/m_height);
-			m_radialLightingShader->setUniform1i("u_iterations", 100);
-			m_radialLightingShader->setUniform3f("u_color", light->getColor().r/255.0f, light->getColor().g/255.0f, light->getColor().b/255.0f);
-			gfxContext.drawCircle(pos, light->getRadius(), light->getRadius()*1.5f);
+			m_radialLightingShader->setSampler2D("u_LightMap", m_lightingRenderTarget->getTexture());
+			m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x/m_width, 1.0f - (pos.y/m_height));
+			m_radialLightingShader->setUniform2f("u_Radius", light->getRadius()/m_width, light->getRadius()/m_height);
+			m_radialLightingShader->setUniform1i("u_Iterations", 100);
+			m_radialLightingShader->setUniform3f("u_Color", light->getColor().r/255.0f, light->getColor().g/255.0f, light->getColor().b/255.0f);
+			//gfxContext.drawCircle(pos, light->getRadius(), light->getRadius()*1.5f);
 		}
 		gfxContext.disable(GraphicsContext::BLEND);
 
 		// Blur horizontally (pass 1)
 		gfxContext.setRenderTarget(m_lightingPass1);
 		gfxContext.clear(GraphicsContext::COLOR_BUFFER);
-		m_blurHShader->setSampler2D("u_texture", m_lightingPass0->getTexture());
-		m_blurHShader->setUniform1i("u_width", m_width);
+		m_blurHShader->setSampler2D("u_Texture", m_lightingPass0->getTexture());
+		m_blurHShader->setUniform1i("u_Width", m_width);
 		gfxContext.setShader(m_blurHShader);
-		gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
+		//gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
 
 		// Blur vertically (pass 2)
 		gfxContext.setRenderTarget(m_lightingPass2);
 		gfxContext.clear(GraphicsContext::COLOR_BUFFER);
-		m_blurVShader->setSampler2D("u_texture", m_lightingPass1->getTexture());
-		m_blurVShader->setUniform1i("u_height", m_height);
-		m_blurVShader->setUniform1f("u_exponent", 2.0);
+		m_blurVShader->setSampler2D("u_Texture", m_lightingPass1->getTexture());
+		m_blurVShader->setUniform1i("u_Height", m_height);
+		m_blurVShader->setUniform1f("u_Exponent", 2.0);
 		gfxContext.setShader(m_blurVShader);
-		gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
+		//gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
 		
 		// Re-enable alpha blending
 		gfxContext.setRenderTarget(nullptr);
@@ -134,7 +134,7 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 		vertices[1].set4f(VERTEX_TEX_COORD, textureRegion.uv1.x, textureRegion.uv1.y);
 		vertices[2].set4f(VERTEX_TEX_COORD, textureRegion.uv0.x, textureRegion.uv0.y);
 		vertices[3].set4f(VERTEX_TEX_COORD, textureRegion.uv1.x, textureRegion.uv0.y);
-		gfxContext.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
+		//gfxContext.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
 		delete[] vertices;
 		
 		gfxContext.setBlendState(BlendState::PRESET_ALPHA_BLEND);

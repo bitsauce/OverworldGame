@@ -1,11 +1,10 @@
-#version 120
+in vec2 u_TexCoord;
 
-varying vec2 texCoord;
-uniform sampler2D texture;
-uniform vec2 resolution;
-uniform vec3 color;
-uniform float radius;
-uniform float step;
+uniform sampler2D u_Texture;
+uniform vec2 u_Resolution;
+uniform vec3 u_Color;
+uniform float u_Radius;
+uniform float u_Step;
 
 float func(float x)
 {
@@ -15,24 +14,24 @@ float func(float x)
 void main()
 {
 	// Setup loop vars
-	vec2 dtvec = 1.0f/resolution;
+	vec2 dtvec = 1.0f/u_Resolution;
 	float acc = 0.0f;
 	float i = 0.0f;
 	
 	// Sample outline accumulator
-	for(float y = -radius; y <= radius; y += step)
+	for(float y = -u_Radius; y <= u_Radius; y += u_Step)
 	{
-		for(float x = -radius; x <= radius; x += step)
+		for(float x = -u_Radius; x <= u_Radius; x += u_Step)
 		{
 			vec2 pos = vec2(x, y);
-			if(length(pos) < radius)
+			if(length(pos) < u_Radius)
 			{
-				acc += texture2D(texture, texCoord + dtvec*pos).a;
+				acc += texture(u_Texture, u_TexCoord + dtvec*pos).a;
 				i += 1.0f;
 			}
 		}
 	}
 	
-	// Set frag color
-	gl_FragColor = mix(texture2D(texture, texCoord), vec4(color, 1.0f), func(acc/i));
+	// Set frag u_Color
+	gl_Fragu_Color = mix(texture(u_Texture, u_TexCoord), vec4(u_Color, 1.0f), func(acc/i));
 }

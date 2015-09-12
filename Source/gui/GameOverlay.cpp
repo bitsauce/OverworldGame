@@ -38,6 +38,7 @@ GameOverlay::~GameOverlay()
 
 void GameOverlay::update(const float delta)
 {
+	if (!m_player) return;
 	Storage::Slot *heldItem = m_player->getHeldItem();
 	if(!heldItem->isEmpty() && !isHovered() && Input::getKeyState(XD_RMB))
 	{
@@ -49,6 +50,7 @@ void GameOverlay::update(const float delta)
 
 void GameOverlay::draw(SpriteBatch *spriteBatch, const float delta)
 {
+	if (!m_player) return;
 	m_player->getHeldItem()->drawItem(Input::getPosition() + Vector2(5.0f, 0.0f), spriteBatch, m_font);
 }
 

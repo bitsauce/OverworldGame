@@ -97,27 +97,29 @@ float snoise(vec3 v)
 	return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
 }
 
-uniform float u_time;
-uniform float u_frequency;
-uniform float u_gain;
-uniform float u_lacunarity;
-uniform int u_octaves;
-uniform sampler2D u_gradient;
-varying vec2 v_texCoord;
+uniform float u_Time;
+uniform float u_Frequency;
+uniform float u_Gain;
+uniform float u_Lacunarity;
+uniform int u_Octaves;
+uniform sampler2D u_Gradient;
+
+in vec2 v_TexCoord;
+out vec4 out_FragColor;
 
 float simplex(vec3 p)
 {
 	// For each pixel, get the value
 	float total = 0.0;
-	float frequency = u_frequency;
+	float frequency = u_Frequency;
 	float amplitude = 1.0;
 	float total_amp = amplitude;
                 
-	for (int i = 0; i < u_octaves; i++)
+	for (int i = 0; i < u_Octaves; i++)
 	{
 		total += snoise(p * frequency) * amplitude;         
-		frequency *= u_lacunarity;
-		amplitude *= u_gain;
+		frequency *= u_Lacunarity;
+		amplitude *= u_Gain;
 		total_amp += amplitude;
 	}
 	return total / total_amp;
@@ -125,5 +127,5 @@ float simplex(vec3 p)
 
 void main(void)
 {
-	gl_FragColor = texture2D(u_gradient, vec2(0.5 + 0.5 * simplex(vec3(v_texCoord.x - u_time, v_texCoord.y, u_time)), 0.0));
+	out_FragColor = texture2D(u_Gradient, vec2(0.5 + 0.5 * simplex(vec3(v_TexCoord.x - u_Time, v_TexCoord.y, u_Time)), 0.0));
 }

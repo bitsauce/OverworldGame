@@ -11,17 +11,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OverworldCpp", "OverworldCp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "spine", "..\..\3rdparty\spine\project\spine.vcxproj", "{5D74934A-7512-45EE-8402-7B95D3642E85}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{791327B7-F642-442E-8CB3-5F37BFAF1751}"
-	ProjectSection(SolutionItems) = preProject
-		Performance1.psess = Performance1.psess
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "x2d", "..\..\..\x2D-Game-Engine\projects\msvc14\x2d.vcxproj", "{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Android = Debug|Android
 		Debug|Win32 = Debug|Win32

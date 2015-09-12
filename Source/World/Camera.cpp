@@ -3,9 +3,11 @@
 #include "World/World.h"
 #include "Game/Debug.h"
 #include "Entities/Entity.h"
+#include "Entities/Player.h"
 
 Camera::Camera() :
-	m_position(0.0f, 0.0f)
+	m_position(0.0f, 0.0f),
+	m_tagetEntity(0)
 {
 	Input::bind(XD_KEY_PLUS, function<void()>(bind(&Camera::zoomIn, this)));
 	Input::bind(XD_KEY_MINUS, function<void()>(bind(&Camera::zoomOut, this)));
@@ -59,8 +61,6 @@ float Camera::getZoomLevel() const
 {
 	return m_zoomLevel;
 }
-
-#include "Entities/Player.h"
 
 void Camera::update(const float alpha)
 {

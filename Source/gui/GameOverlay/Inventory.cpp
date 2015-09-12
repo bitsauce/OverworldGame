@@ -103,6 +103,7 @@ void Inventory::draw(SpriteBatch *spriteBatch, const float alpha)
 
 void Inventory::keyPressEvent(const VirtualKey key)
 {
+	if (!m_gameOverlay->getPlayer()) return;
 	if(key == XD_LMB || key == XD_RMB)
 	{
 		Vector2 position = getPosition();

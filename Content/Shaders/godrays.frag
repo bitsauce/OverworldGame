@@ -1,28 +1,29 @@
-varying vec2 vTexcoord;
+in vec2 v_TexCoord;
+out vec4 out_FragColor;
 
-uniform sampler2D texture;
+uniform sampler2D u_Texture;
 
-uniform float exposure;
-uniform float decay;
-uniform float density;
-uniform vec2 lightPos;
+uniform float u_Exposure;
+uniform float u_Decay;
+uniform float u_Density;
+uniform vec2 u_LightPos;
 
 #define NUM_SAMPLES 100
 
 void main()
 {
 	// Apply god rays
-	vec2 pos = vTexcoord;
-	vec2 delta = ((pos-lightPos)/float(NUM_SAMPLES))*density;
+	vec2 pos = v_TexCoord;
+	vec2 delta = ((pos - u_LightPos) / float(NUM_SAMPLES)) * u_Density;
 	
 	float falloff = 1.0;
-	gl_FragColor = vec4(0.0);
+	out_FragColor = vec4(0.0);
 	for(int i = 0; i < NUM_SAMPLES; i++)
 	{
 		pos -= delta;
-		gl_FragColor += texture2D(texture, pos)*falloff;
-		falloff *= decay;
+		out_FragColor += texture(u_Texture, pos) * falloff;
+		falloff *= u_Decay;
 	}
 	
-	gl_FragColor *= exposure;
+	out_FragColor *= u_Exposure;
 }
