@@ -105,6 +105,7 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 
 	// Load shadow map
 	Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS);
+	uchar pixel[4];
 	for(int y = 0; y < CHUNK_BLOCKS; ++y)
 	{
 		for(int x = 0; x < CHUNK_BLOCKS; ++x)
@@ -115,7 +116,11 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 			{
 				shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]).getOpacity();
 			}
-			pixmap.setColor(x, CHUNK_BLOCKS - y - 1, Color(255 * max(shadow, 0.0f), 255, 255, 255 * shadowCaster)); // rgb = light value, a = shadow casting value
+			pixel[0] = 255 * max(shadow, 0.0f);
+			pixel[1] = 255;
+			pixel[2] = 255;
+			pixel[3] = 255 * shadowCaster;
+			pixmap.setPixel(x, CHUNK_BLOCKS - y - 1, pixel); // rgb = light value, a = shadow casting value
 		}
 	}
 	m_shadowMap->updatePixmap(pixmap);
@@ -140,7 +145,7 @@ void Chunk::generateVertexBuffer(ChunkLoader *chunkLoader, TerrainLayer z)
 	m_adjacentChunks[7] = &chunkLoader->getChunkAt(m_x-1, m_y  );
 
 	// Load all vertex data
-	BlockID block;
+	/*BlockID block;
 	BlockID adjacentBlocks[8];
 
 	// Setup counters
@@ -422,7 +427,7 @@ void Chunk::generateVertexBuffer(ChunkLoader *chunkLoader, TerrainLayer z)
 		
 	// Set static vertex buffer data
 	m_vertexBuffers[z].setData(s_vertices, vertexCount);
-	m_indexBuffers[z].setData(s_indices, indexCount);
+	m_indexBuffers[z].setData(s_indices, indexCount);*/
 
 	// Not dirty
 	m_dirty[z] = false;
@@ -480,5 +485,5 @@ bool Chunk::setBlockAt(const int x, const int y, const BlockID block, TerrainLay
 void Chunk::draw(GraphicsContext &gfxContext, const TerrainLayer layer)
 {
 	// Draw vertex buffers
-	gfxContext.drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, &m_vertexBuffers[layer], &m_indexBuffers[layer]);
+	//gfxContext.drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, &m_vertexBuffers[layer], &m_indexBuffers[layer]);
 }

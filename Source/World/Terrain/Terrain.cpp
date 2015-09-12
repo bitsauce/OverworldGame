@@ -110,7 +110,7 @@ void Terrain::Drawer::draw(SpriteBatch *spriteBatch)
 	// Setup graphics context
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 	gfxContext.setTexture(BlockData::getBlockAtlas()->getTexture());
-	gfxContext.setProjectionMatrix(m_camera->getProjectionMatrix());
+	gfxContext.setModelViewMatrix(m_camera->getProjectionMatrix());
 
 	// Draw chunk area
 	ChunkLoader::ChunkArea area = m_chunkLoader->getActiveArea();

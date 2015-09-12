@@ -46,7 +46,7 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 	//if(m_prevX0 != x0 || m_prevY0 != y0)
 	{
 		// Reset projection matrix
-		gfxContext.setProjectionMatrix(Matrix4());
+		gfxContext.setModelViewMatrix(Matrix4());
 
 		// Disable alpha blend when drawing to render targets
 		gfxContext.disable(GraphicsContext::BLEND);
@@ -114,7 +114,7 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 		gfxContext.enable(GraphicsContext::BLEND);
 		gfxContext.setBlendState(BlendState::PRESET_MULTIPLY);
 
-		gfxContext.setProjectionMatrix(m_world->getCamera()->getProjectionMatrix());
+		gfxContext.setModelViewMatrix(m_world->getCamera()->getProjectionMatrix());
 		gfxContext.setTexture(m_lightingPass2->getTexture());
 
 		Vector2 position((area.x0) * CHUNK_PXF, (area.y0) * CHUNK_PXF);
