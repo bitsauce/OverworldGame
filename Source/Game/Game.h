@@ -50,6 +50,10 @@ private:
 
 	Server *m_server;
 	Client *m_client;
+
+	Pixmap m_pixmap;
+	Texture2DPtr m_texture;
+	ShaderPtr m_tileMapShader;
 };
 
 #endif // GAME_MANAGER_H

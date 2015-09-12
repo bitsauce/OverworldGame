@@ -206,7 +206,7 @@ void Debug::draw(SpriteBatch *spriteBatch)
 
 	// Draw block grid
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
-	gfxContext.setProjectionMatrix(m_world->getCamera()->getProjectionMatrix());
+	gfxContext.setModelViewMatrix(m_world->getCamera()->getProjectionMatrix());
 	gfxContext.setTexture(nullptr);
 	if(Input::getKeyState(XD_KEY_B))
 	{

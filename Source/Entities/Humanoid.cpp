@@ -178,9 +178,9 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 	// Draw skeleton
 	m_skeleton->setPosition(body->getDrawPosition(alpha) + Vector2(body->getSize().x*0.5f, 48.0f));
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
-	gfxContext.setProjectionMatrix(spriteBatch->getState().projectionMatix);
+	gfxContext.setModelViewMatrix(spriteBatch->getState().projectionMatix);
 	m_skeleton->draw(gfxContext);
-	gfxContext.setProjectionMatrix(Matrix4());
+	gfxContext.setModelViewMatrix(Matrix4());
 }
 
 void Humanoid::drawRightHandSprite(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch)

@@ -152,7 +152,7 @@ void Game::draw(GraphicsContext &context, const float alpha)
 		context.saveScreenshot("C:\\Users\\Marcus\\Desktop\\Screenshot_" + util::intToStr(i) + ".png");
 		m_takeScreenshot = false;
 	}
-	
+
 	// Draw game states
 	for(list<GameState*>::iterator itr = m_states.begin(); itr != m_states.end(); ++itr)
 	{
