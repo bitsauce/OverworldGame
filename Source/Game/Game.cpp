@@ -58,7 +58,7 @@ void Game::main(GraphicsContext &context)
 		for (int x = 0; x < CHUNK_BLOCKS; x++)
 		{
 			uint pixel[4];
-			pixel[0] = pixel[1] = pixel[2] = pixel[3] = (x + y * CHUNK_BLOCKS) % 3;
+			pixel[0] = pixel[1] = pixel[2] = pixel[3] = BLOCK_GRASS + (x + y * CHUNK_BLOCKS) % 3;
 			pixmap.setPixel(x, y, pixel);
 		}
 	}
@@ -75,7 +75,7 @@ void Game::main(GraphicsContext &context)
 	ItemData::init(this);
 	ThingData::init(this);
 
-	tileMap->setSampler2D("u_BlockAtalas", BlockData::getBlockAtlas()->getTexture());
+	tileMap->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
 
 	// Setup debug
 	m_debug = new Debug(this);
