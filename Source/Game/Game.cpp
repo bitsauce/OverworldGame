@@ -53,12 +53,13 @@ void Game::main(GraphicsContext &context)
 
 
 	Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
+	Random rand;
 	for (int y = 0; y < CHUNK_BLOCKS; y++)
 	{
 		for (int x = 0; x < CHUNK_BLOCKS; x++)
 		{
 			uint pixel[4];
-			pixel[0] = pixel[1] = pixel[2] = pixel[3] = BLOCK_GRASS + (x + y * CHUNK_BLOCKS) % 3;
+			pixel[0] = pixel[1] = pixel[2] = pixel[3] = rand.chance(1, 2) ? (rand.chance(1, 2) ? BLOCK_GRASS : BLOCK_STONE) : BLOCK_EMPTY;
 			pixmap.setPixel(x, y, pixel);
 		}
 	}
