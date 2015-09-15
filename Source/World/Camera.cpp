@@ -7,6 +7,8 @@
 
 Camera::Camera() :
 	m_position(0.0f, 0.0f),
+	m_prevPosition(0.0f, 0.0f),
+	m_velocity(0.0f, 0.0f),
 	m_tagetEntity(0)
 {
 	Input::bind(XD_KEY_PLUS, function<void()>(bind(&Camera::zoomIn, this)));
@@ -62,30 +64,49 @@ float Camera::getZoomLevel() const
 	return m_zoomLevel;
 }
 
-void Camera::update(const float alpha)
+void Camera::update(const float dt)
 {
-	if(m_tagetEntity)
+	if (!m_tagetEntity)
+	{
+		float acc = (Input::getKeyState(XD_KEY_LCONTROL) ? 32.0f : 256.0f) * dt;
+		
+		m_prevPosition = m_position;
+
+		if (Input::getKeyState(XD_KEY_LEFT)) {
+			m_velocity.x -= acc;
+		}
+	
+		if(Input::getKeyState(XD_KEY_RIGHT)) {
+			m_velocity.x += acc;
+		}
+	
+		if(Input::getKeyState(XD_KEY_UP)) {
+			m_velocity.y -= acc;
+		}
+	
+		if(Input::getKeyState(XD_KEY_DOWN)) {
+			m_velocity.y += acc;
+		}
+
+		m_velocity *= 0.75f;
+		if (m_velocity.magnitude() > 64.0f)
+		{
+			m_velocity = m_velocity.normalized() * 64.0f;
+		}
+
+		m_position += m_velocity;
+	}
+}
+
+void Camera::interpolate(const float alpha)
+{
+	if (m_tagetEntity)
 	{
 		lookAt(m_tagetEntity->getDrawPosition(alpha) + m_tagetEntity->getSize() * 0.5f);
 	}
 	else
 	{
-		float speed = Input::getKeyState(XD_KEY_LCONTROL) ? 1.0f : 16.0f;
-		if(Input::getKeyState(XD_KEY_LEFT)) {
-			m_position.x -= speed/m_zoomLevel;
-		}
-	
-		if(Input::getKeyState(XD_KEY_RIGHT)) {
-			m_position.x += speed/m_zoomLevel;
-		}
-	
-		if(Input::getKeyState(XD_KEY_UP)) {
-			m_position.y -= speed/m_zoomLevel;
-		}
-	
-		if(Input::getKeyState(XD_KEY_DOWN)) {
-			m_position.y += speed/m_zoomLevel;
-		}
+		math::lerp(m_prevPosition, m_position, alpha);
 	}
 }
 

@@ -59,7 +59,7 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 			for(int x = area.x0; x <= area.x1+2; ++x)
 			{
 				gfxContext.setTexture(m_terrain->getChunkLoader()->getChunkAt(x-1, y-1).getLightMap());
-				//gfxContext.drawRectangle((x - area.x0) * CHUNK_BLOCKSF, (y - area.y0) * CHUNK_BLOCKSF, CHUNK_BLOCKSF, CHUNK_BLOCKSF);
+				gfxContext.drawRectangle((x - area.x0) * CHUNK_BLOCKSF, (y - area.y0) * CHUNK_BLOCKSF, CHUNK_BLOCKSF, CHUNK_BLOCKSF);
 			}
 		}
 		
@@ -72,7 +72,7 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 		m_directionalLightingShader->setUniform1f("u_Width", m_width);
 		m_directionalLightingShader->setUniform1f("u_Height", m_height);
 		gfxContext.setShader(m_directionalLightingShader);
-		//gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
+		gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
 		
 		// Draw light sources
 		gfxContext.enable(GraphicsContext::BLEND);
@@ -86,7 +86,7 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 			m_radialLightingShader->setUniform2f("u_Radius", light->getRadius()/m_width, light->getRadius()/m_height);
 			m_radialLightingShader->setUniform1i("u_Iterations", 100);
 			m_radialLightingShader->setUniform3f("u_Color", light->getColor().r/255.0f, light->getColor().g/255.0f, light->getColor().b/255.0f);
-			//gfxContext.drawCircle(pos, light->getRadius(), light->getRadius()*1.5f);
+			gfxContext.drawCircle(pos, light->getRadius(), light->getRadius()*1.5f);
 		}
 		gfxContext.disable(GraphicsContext::BLEND);
 
@@ -96,7 +96,7 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 		m_blurHShader->setSampler2D("u_Texture", m_lightingPass0->getTexture());
 		m_blurHShader->setUniform1i("u_Width", m_width);
 		gfxContext.setShader(m_blurHShader);
-		//gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
+		gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
 
 		// Blur vertically (pass 2)
 		gfxContext.setRenderTarget(m_lightingPass2);
@@ -105,7 +105,7 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 		m_blurVShader->setUniform1i("u_Height", m_height);
 		m_blurVShader->setUniform1f("u_Exponent", 2.0);
 		gfxContext.setShader(m_blurVShader);
-		//gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
+		gfxContext.drawRectangle(0.0f, 0.0f, (float)m_width, (float)m_height);
 		
 		// Re-enable alpha blending
 		gfxContext.setRenderTarget(nullptr);
@@ -121,21 +121,30 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 		Vector2 size((m_width - 2 * CHUNK_BLOCKS) * BLOCK_PXF, (m_height - 2 * CHUNK_BLOCKS) * BLOCK_PXF);
 		TextureRegion textureRegion(CHUNK_BLOCKSF/m_width, CHUNK_BLOCKSF/m_height, 1.0f - CHUNK_BLOCKSF/m_width, 1.0f - CHUNK_BLOCKSF/m_height);
 		
-		VertexFormat format;
-		format.set(VertexAttribute::VERTEX_POSITION, 2);
-		format.set(VertexAttribute::VERTEX_TEX_COORD, 2);
+		//VertexFormat format;
+		//format.set(VertexAttribute::VERTEX_POSITION, 2);
+		//format.set(VertexAttribute::VERTEX_TEX_COORD, 2);
 
-		Vertex *vertices = format.createVertices(4);
+		//Vertex *vertices = format.createVertices(4);
+		Vertex vertices[4];
 		vertices[0].set4f(VERTEX_POSITION, position.x,				position.y);
 		vertices[1].set4f(VERTEX_POSITION, position.x + size.x,		position.y);
 		vertices[2].set4f(VERTEX_POSITION, position.x,				position.y + size.y);
 		vertices[3].set4f(VERTEX_POSITION, position.x + size.x,		position.y + size.y);
+
+		Color color(255);
+
+		vertices[0].set4ub(xd::VERTEX_COLOR, color.r, color.g, color.b, color.a);
+		vertices[1].set4ub(xd::VERTEX_COLOR, color.r, color.g, color.b, color.a);
+		vertices[2].set4ub(xd::VERTEX_COLOR, color.r, color.g, color.b, color.a);
+		vertices[3].set4ub(xd::VERTEX_COLOR, color.r, color.g, color.b, color.a);
+
 		vertices[0].set4f(VERTEX_TEX_COORD, textureRegion.uv0.x, textureRegion.uv1.y);
 		vertices[1].set4f(VERTEX_TEX_COORD, textureRegion.uv1.x, textureRegion.uv1.y);
 		vertices[2].set4f(VERTEX_TEX_COORD, textureRegion.uv0.x, textureRegion.uv0.y);
 		vertices[3].set4f(VERTEX_TEX_COORD, textureRegion.uv1.x, textureRegion.uv0.y);
-		//gfxContext.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
-		delete[] vertices;
+		gfxContext.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
+		//delete[] vertices;
 		
 		gfxContext.setBlendState(BlendState::PRESET_ALPHA_BLEND);
 	}

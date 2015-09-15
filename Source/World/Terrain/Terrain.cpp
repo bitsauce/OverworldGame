@@ -104,12 +104,11 @@ Terrain::Drawer::Drawer(Terrain *terrain, Camera *camera, const Priority drawOrd
 
 void Terrain::Drawer::draw(SpriteBatch *spriteBatch)
 {
-	// Flush to set the draw ordering straight
+	// Flush to set the draw order straight
 	spriteBatch->flush();
 
 	// Setup graphics context
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
-	gfxContext.setTexture(BlockData::getBlockAtlas()->getTexture());
 	gfxContext.setModelViewMatrix(m_camera->getProjectionMatrix());
 
 	// Draw chunk area
@@ -120,20 +119,20 @@ void Terrain::Drawer::draw(SpriteBatch *spriteBatch)
 		{
 			Chunk &chunk = m_chunkLoader->getChunkAt(x, y);
 
-			// Should we generate new vertex buffers?
+			// Should we generate a new tile map?
 			if(chunk.isDirty(m_layer)) {
-				chunk.generateVertexBuffer(m_chunkLoader, m_layer);
+				chunk.updateTileMap(m_chunkLoader, m_layer);
 			}
 
 			// Apply block-space matrix
-			Matrix4 mat;
-			mat.scale(BLOCK_PXF, BLOCK_PXF, 1.0f);
-			mat.translate(x * CHUNK_PXF, y * CHUNK_PXF, 0.0f);
+			//Matrix4 mat;
+			//mat.scale(BLOCK_PXF, BLOCK_PXF, 1.0f);
+			//mat.translate(x * CHUNK_PXF, y * CHUNK_PXF, 0.0f);
 
 			// Draw chunk
-			gfxContext.pushMatrix(mat);
+			//gfxContext.pushMatrix(mat);
 			chunk.draw(gfxContext, m_layer);
-			gfxContext.popMatrix();
+			//gfxContext.popMatrix();
 		}
 	}
 }

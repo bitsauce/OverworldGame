@@ -75,6 +75,7 @@ bool GameOverlay::isHovered() const
 
 void GameOverlay::performSlotAction(Storage::Slot *slot, const VirtualKey type)
 {
+	if (!m_player) return;
 	Storage::Slot *heldSlot = m_player->getHeldItem();
 	if(type == XD_LMB)
 	{

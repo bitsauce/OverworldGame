@@ -47,7 +47,10 @@ public:
 	Vector2 getInputPosition() const;
 
 	// Update
-	void update(const float alpha);
+	void update(const float dt);
+
+	// Interpolate
+	void interpolate(const float alpha);
 
 	// MouseListener event
 	void mouseWheelEvent(const int delta);
@@ -57,7 +60,7 @@ public:
 
 private:
 	// Position
-	Vector2 m_position;
+	Vector2 m_position, m_prevPosition, m_velocity;
 
 	// Size
 	Vector2i m_size;

@@ -19,7 +19,6 @@ ChunkLoader::ChunkLoader(World *world) :
 	VertexFormat vertexFormat;
 	vertexFormat.set(VERTEX_POSITION, 2);
 	vertexFormat.set(VERTEX_TEX_COORD, 2);
-	Chunk::s_vertices = vertexFormat.createVertices(4*12*16*16*3);
 
 	// Set max chunks to some value
 	setOptimalChunkCount(512);
@@ -148,9 +147,9 @@ void ChunkLoader::loadActiveArea()
 		{
 			if(chunk = &getChunkAt(x, y))
 			{
-				chunk->generateVertexBuffer(this, TERRAIN_LAYER_BACK);
-				chunk->generateVertexBuffer(this, TERRAIN_LAYER_MIDDLE);
-				chunk->generateVertexBuffer(this, TERRAIN_LAYER_FRONT);
+				chunk->updateTileMap(this, TERRAIN_LAYER_BACK);
+				chunk->updateTileMap(this, TERRAIN_LAYER_MIDDLE);
+				chunk->updateTileMap(this, TERRAIN_LAYER_FRONT);
 			}
 		}
 	}
@@ -281,9 +280,9 @@ void ChunkLoader::update()
 	{
 		Vector2i centerChunkPosition(floor(center.x/CHUNK_PXF), floor(center.y/CHUNK_PXF));
 		Chunk &chunk = getChunkAt(centerChunkPosition.x + m_circleLoadPattern[m_circleLoadIndex].x, centerChunkPosition.y + m_circleLoadPattern[m_circleLoadIndex].y);
-		if(chunk.isDirty(TERRAIN_LAYER_BACK)) chunk.generateVertexBuffer(this, TERRAIN_LAYER_BACK);
-		if(chunk.isDirty(TERRAIN_LAYER_MIDDLE)) chunk.generateVertexBuffer(this, TERRAIN_LAYER_MIDDLE);
-		if(chunk.isDirty(TERRAIN_LAYER_FRONT)) chunk.generateVertexBuffer(this, TERRAIN_LAYER_FRONT);
+		if(chunk.isDirty(TERRAIN_LAYER_BACK)) chunk.updateTileMap(this, TERRAIN_LAYER_BACK);
+		if(chunk.isDirty(TERRAIN_LAYER_MIDDLE)) chunk.updateTileMap(this, TERRAIN_LAYER_MIDDLE);
+		if(chunk.isDirty(TERRAIN_LAYER_FRONT)) chunk.updateTileMap(this, TERRAIN_LAYER_FRONT);
 		m_circleLoadIndex = (m_circleLoadIndex + 1) % m_circleLoadPattern.size();
 	}
 }

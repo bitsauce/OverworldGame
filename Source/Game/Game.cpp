@@ -30,15 +30,11 @@ Game::Game() :
 {
 }
 
-ShaderPtr tileMap;
-Texture2DPtr texture;
-
-Texture2DPtr makeBlockTexture();
-
 void Game::main(GraphicsContext &context)
 {
 	// Setup sprite batch
 	m_spriteBatch = new SpriteBatch(context);
+	Graphics::disableVsync();
 
 	// Set some key bindings
 	Input::bind(XD_KEY_ESCAPE, function<void()>(Engine::exit));
@@ -48,25 +44,6 @@ void Game::main(GraphicsContext &context)
 	//{
 	//	Window::enableFullscreen();
 	//}
-
-	tileMap = ResourceManager::get<Shader>(":/Shaders/TileMap");
-
-
-	Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
-	Random rand;
-	for (int y = 0; y < CHUNK_BLOCKS; y++)
-	{
-		for (int x = 0; x < CHUNK_BLOCKS; x++)
-		{
-			uint pixel[4];
-			pixel[0] = pixel[1] = pixel[2] = pixel[3] = rand.chance(1, 2) ? (rand.chance(1, 2) ? BLOCK_GRASS : BLOCK_STONE) : BLOCK_EMPTY;
-			pixmap.setPixel(x, y, pixel);
-		}
-	}
-
-	texture = Texture2DPtr(new Texture2D(pixmap));
-
-	tileMap->setSampler2D("u_TileMap", texture);
 	
 	// Init world
 	m_world = new World();
@@ -75,8 +52,6 @@ void Game::main(GraphicsContext &context)
 	BlockData::init();
 	ItemData::init(this);
 	ThingData::init(this);
-
-	tileMap->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
 
 	// Setup debug
 	m_debug = new Debug(this);
@@ -94,13 +69,13 @@ void Game::main(GraphicsContext &context)
 
 	// Create server object
 	m_server = new Server(this, 45556);
-	/*
+	
 	// Join server as client
 	RakNet::BitStream bitStream;
 	bitStream.Write((RakNet::MessageID)ID_PLAYER_JOIN);
 	bitStream.Write("Bitsauce");
 	m_server->getRakPeer()->SendLoopback((const char*)bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
-	*/
+	
 	// Push game state
 	pushState(new InGameState(this));
 }
@@ -189,11 +164,6 @@ void Game::draw(GraphicsContext &context, const float alpha)
 		}
 	}
 
-	context.setShader(tileMap);
-	context.drawRectangle(Rect(0, 0, BLOCK_PX * CHUNK_BLOCKS, BLOCK_PX * CHUNK_BLOCKS));
-	context.setShader(0);
-
-	
 	// Render debug stuff
 	m_debug->setVariable("FPS", util::intToStr((int)Graphics::getFPS()));
 	m_spriteBatch->begin();

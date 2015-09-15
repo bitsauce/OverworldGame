@@ -73,7 +73,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\vld\include;..\..\3rdparty\Box2D\Box2D;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\glew\include;..\..\..\x2D-Game-Engine\3rdparty\openal\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\vld\include;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\gl3w\include;..\..\..\x2D-Game-Engine\3rdparty\openal\include</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <PreprocessorDefinitions>X2D_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -81,7 +81,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>..\..\3rdparty\RakNet\Lib\RakNet_VS2008_DLL_Release_Win32.lib;x2d.lib;spine.lib;box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\3rdparty\RakNet\Lib\RakNet_VS2008_DLL_Release_Win32.lib;ws2_32.lib;x2d.lib;spine.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\3rdparty\vld\lib;..\..\3rdparty\Box2D\Box2D\Lib;..\..\3rdparty\spine\lib;..\..\..\x2D-Game-Engine\build\Win32\Release</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>

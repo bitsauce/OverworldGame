@@ -197,23 +197,23 @@ void Debug::draw(SpriteBatch *spriteBatch)
 	// Block painter
 	if(m_blockPainterEnabled)
 	{
-		m_font->setColor(Color(127, 127, 127, 255));
-		spriteBatch->drawText(Vector2(5.0f, Window::getSize().y - 48.0f), "Current block:    (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (Input::getKeyState(XD_KEY_LCONTROL) ? "BACK" : (Input::getKeyState(XD_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font);
-		Sprite blockSprite(BlockData::get(m_block).getTexture(), Rect(150.0f, Window::getSize().y - 58.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 0.0f, 1.0f, 0.6f));
+		spriteBatch->drawText(Vector2(5.0f, Window::getSize().y - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (Input::getKeyState(XD_KEY_LCONTROL) ? "BACK" : (Input::getKeyState(XD_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font);
+		Sprite blockSprite(BlockData::get(m_block).getTexture(), Rect(159.0f, Window::getSize().y - 50.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 0.0f, 1.0f, 2.0f / 3.0f));
 		spriteBatch->drawSprite(blockSprite);
-		m_font->setColor(Color(0, 0, 0, 255));
 	}
 
 	// Draw block grid
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 	gfxContext.setModelViewMatrix(m_world->getCamera()->getProjectionMatrix());
 	gfxContext.setTexture(nullptr);
-	if(Input::getKeyState(XD_KEY_B))
+	Vector2 position = m_world->getCamera()->getPosition();
+	Vector2 size = m_world->getCamera()->getSize();
+	if(Input::getKeyState(XD_KEY_K))
 	{
-		int x0 = (int)floor(m_world->getCamera()->getX()/BLOCK_PXF);
-		int y0 = (int)floor(m_world->getCamera()->getY()/BLOCK_PXF);
-		int x1 = (int)floor((m_world->getCamera()->getX() + m_world->getCamera()->getWidth())/BLOCK_PXF);
-		int y1 = (int)floor((m_world->getCamera()->getY() + m_world->getCamera()->getHeight())/BLOCK_PXF);
+		int x0 = (int)floor(position.x / BLOCK_PXF);
+		int y0 = (int)floor(position.y / BLOCK_PXF);
+		int x1 = (int)floor((position.x + size.x) / BLOCK_PXF);
+		int y1 = (int)floor((position.y + size.y) / BLOCK_PXF);
 
 		for(int y = y0; y <= y1; ++y)
 		{
@@ -227,8 +227,6 @@ void Debug::draw(SpriteBatch *spriteBatch)
 	}
 
 	// Draw chunk grid
-	Vector2 position = m_world->getCamera()->getPosition();
-	Vector2 size = m_world->getCamera()->getSize();
 	int x0 = (int)floor(position.x/CHUNK_PXF);
 	int y0 = (int)floor(position.y/CHUNK_PXF);
 	int x1 = (int)floor((position.x+size.x)/CHUNK_PXF);

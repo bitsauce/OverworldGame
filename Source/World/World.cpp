@@ -110,6 +110,7 @@ void World::update(const float delta)
 	m_timeOfDay->update(delta);
 	m_background->update(delta);
 	m_terrain->getChunkLoader()->update();
+	m_camera->update(delta);
 	
 	list<Entity*> entities = m_entities;
 	for(Entity *entity : entities)
@@ -122,7 +123,7 @@ void World::draw(SpriteBatch *spriteBatch, const float alpha)
 {
 	spriteBatch->begin();
 	
-	m_camera->update(alpha);
+	m_camera->interpolate(alpha);
 	m_background->draw(spriteBatch, alpha);
 	
 	spriteBatch->end();
@@ -130,11 +131,11 @@ void World::draw(SpriteBatch *spriteBatch, const float alpha)
 
 	//m_terrain->m_background.draw(spriteBatch);
 
-	set<Thing*> things = m_terrain->getChunkLoader()->getActiveThings();
+	/*set<Thing*> things = m_terrain->getChunkLoader()->getActiveThings();
 	for(Thing *thing : things)
 	{
 		thing->draw(spriteBatch, alpha);
-	}
+	}*/
 
 	list<Entity*> entities = m_entities;
 	for(Entity *entity : entities)
@@ -156,7 +157,7 @@ void World::draw(SpriteBatch *spriteBatch, const float alpha)
 	}
 	
 	//m_terrain->m_foreground.draw(spriteBatch);
-	//m_lighting->draw(spriteBatch);
+	m_lighting->draw(spriteBatch);
 	
 	spriteBatch->end();
 }

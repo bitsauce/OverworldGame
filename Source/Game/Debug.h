@@ -27,6 +27,7 @@ public:
 	void debugFunction(const int i);
 
 	bool isEnabled() { return m_enabled; }
+	FontPtr m_font;
 
 private:
 	// Enabled flag
@@ -45,7 +46,6 @@ private:
 	Sprite m_bulbSprite;
 
 	// Debug font
-	FontPtr m_font;
 
 	//Texture2DPtr m_loadedChunks;
 
