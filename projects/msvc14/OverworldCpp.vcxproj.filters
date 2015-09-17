@@ -259,6 +259,9 @@
     <Filter Include="Source\Game\GameStates">
       <UniqueIdentifier>{499e0ea9-ab1d-4a31-acaa-818d18bbf5ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{af129b37-b8d0-498e-98c3-cd3641a2a8b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\Noise\Simplex.h">
@@ -453,5 +456,67 @@
     <ClInclude Include="..\..\source\Game\Storage.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Content\Shaders\BlurH.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\BlurH.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\BlurV.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\BlurV.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\DirectionalLighting.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\DirectionalLighting.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\godrays.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\godrays.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\outline.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\outline.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\RadialLighting.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\RadialLighting.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\simplex3d.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\simplex3d.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\Simplex3DBlend.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\Simplex3DBlend.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\TileMap.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\TileMap.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\TileSort.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\TileSort.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

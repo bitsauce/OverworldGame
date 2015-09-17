@@ -4,34 +4,33 @@
 in vec2 v_TexCoord;
 out vec4 out_FragColor;
 
-uniform usampler2D u_TileMap;
+uniform usampler2D u_SortedBlockTexture;
+uniform usampler2D u_SortedQuadTexture;
 uniform sampler2D u_BlockAtlas;
 
-#define BLOCK_PX 16.0
 #define CHUNK_BLOCKS 34.0
+#define QUAD_0 0U
+#define QUAD_1 1U
+#define QUAD_2 2U
+#define QUAD_3 3U
+#define QUAD_4 4U
+#define QUAD_5 5U
+#define QUAD_6 6U
+#define QUAD_7 7U
+#define QUAD_8 8U
+#define QUAD_9 9U
+#define QUAD_10 10U
+#define QUAD_11 11U
+#define QUAD_12 12U
+#define QUAD_13 13U
+#define QUAD_14 14U
+#define QUAD_15 15U
+#define QUAD_16 16U
+#define QUAD_17 17U
+#define QUAD_18 18U
+#define QUAD_19 19U
 
-#define QUAD_0 0
-#define QUAD_1 1
-#define QUAD_2 2
-#define QUAD_3 3
-#define QUAD_4 4
-#define QUAD_5 5
-#define QUAD_6 6
-#define QUAD_7 7
-#define QUAD_8 8
-#define QUAD_9 9
-#define QUAD_10 10
-#define QUAD_11 11
-#define QUAD_12 12
-#define QUAD_13 13
-#define QUAD_14 14
-#define QUAD_15 15
-#define QUAD_16 16
-#define QUAD_17 17
-#define QUAD_18 18
-#define QUAD_19 19
-
-vec2 getBlockQuadPosition(int blockID, int i)
+vec2 getBlockQuadPosition(uint blockID, uint i)
 {
 	if(i == QUAD_0)  return vec2(1.0, 1.0) + vec2(0.0,  24.0) + vec2(34.0 * float(blockID), 0.0);
 	if(i == QUAD_1)  return vec2(1.0, 1.0) + vec2(8.0,  24.0) + vec2(34.0 * float(blockID), 0.0);
@@ -56,12 +55,6 @@ vec2 getBlockQuadPosition(int blockID, int i)
 	return vec2(0.0);
 }
 
-struct BlockColorID
-{
-	int blockID;
-	vec4 color;
-};
-
 void main()
 {
 	// Block atlas texel size
@@ -71,191 +64,20 @@ void main()
 	vec2 blockSubTexCoord = mod(v_TexCoord, 1.0 / CHUNK_BLOCKS) / (1.0 / CHUNK_BLOCKS);
 	vec2 quadSubTexCoord = mod(v_TexCoord, 0.5 / CHUNK_BLOCKS) / (0.5 / CHUNK_BLOCKS);
 	
-	// Get block ID
-	int blockID = int(texture(u_TileMap, v_TexCoord).r);
-	
-	// Get block quad color
-	BlockColorID blockColorIDs[5];
-	int idx = 0;
-	if (blockSubTexCoord.x < 0.5)
+	// Get quad index
+	int quadIndex = int(dot(vec2(greaterThanEqual(blockSubTexCoord, vec2(0.5))), vec2(1.0, 2.0)));
+
+	// Get block ids and quad ids
+    uint blocks = texture(u_SortedBlockTexture, v_TexCoord)[quadIndex];
+	uvec4 blockIDs = uvec4((blocks >> 24U) & 0xFFU, (blocks >> 16U) & 0xFFU, (blocks >> 8U) & 0xFFU, blocks & 0xFFU);
+    uint quads = texture(u_SortedQuadTexture, v_TexCoord)[quadIndex];
+	uvec4 quadIDs = uvec4((quads >> 24U) & 0xFFU, (quads >> 16U) & 0xFFU, (quads >> 8U) & 0xFFU, quads & 0xFFU);
+
+    // Blends together colors from tile edges, corners and fill
+    out_FragColor = texture(u_BlockAtlas, (getBlockQuadPosition(blockIDs[0], quadIDs[0]) + quadSubTexCoord * 8.0) * texelSize);
+    for (int i = 1; i < 4; ++i)
 	{
-		int leftBlockID = int(texture(u_TileMap, v_TexCoord - vec2(1.0 / CHUNK_BLOCKS, 0.0)).r);
-		
-		if (blockSubTexCoord.y < 0.5)
-		{
-			int bottomBlockID = int(texture(u_TileMap, v_TexCoord - vec2(0.0, 1.0 / CHUNK_BLOCKS)).r);
-			int bottomLeftBlockID = int(texture(u_TileMap, v_TexCoord + vec2(-1.0 / CHUNK_BLOCKS, -1.0 / CHUNK_BLOCKS)).r);
-			
-			if(blockID != leftBlockID)
-			{
-				blockColorIDs[idx].blockID = leftBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(leftBlockID, QUAD_11) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			if(blockID != bottomBlockID)
-			{
-				blockColorIDs[idx].blockID = bottomBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(bottomBlockID, QUAD_1) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			if(bottomLeftBlockID > blockID && bottomLeftBlockID > leftBlockID && bottomLeftBlockID > bottomBlockID)
-			{
-				blockColorIDs[idx].blockID = bottomLeftBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(bottomLeftBlockID, QUAD_3) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			if(bottomLeftBlockID >= blockID && leftBlockID == bottomBlockID && blockID != bottomBlockID)
-			{
-				blockColorIDs[idx].blockID = bottomBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(bottomBlockID, QUAD_18) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			blockColorIDs[idx].blockID = blockID;
-			blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(blockID, QUAD_9) + quadSubTexCoord * 8.0) * texelSize));
-			idx++;
-		}
-		else
-		{
-			int topBlockID = int(texture(u_TileMap, v_TexCoord + vec2(0.0, 1.0 / CHUNK_BLOCKS)).r);
-			int topLeftBlockID	= int(texture(u_TileMap, v_TexCoord + vec2(-1.0 / CHUNK_BLOCKS, 1.0 / CHUNK_BLOCKS)).r);
-			
-			if(blockID != leftBlockID)
-			{
-				blockColorIDs[idx].blockID = leftBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(leftBlockID, QUAD_7) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			if(blockID != topBlockID)
-			{
-				blockColorIDs[idx].blockID = topBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(topBlockID, QUAD_13) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			if(topLeftBlockID > blockID && topLeftBlockID > leftBlockID && topLeftBlockID > topBlockID)
-			{
-				blockColorIDs[idx].blockID = topLeftBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(topLeftBlockID, QUAD_15) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			if(topLeftBlockID >= blockID && leftBlockID == topBlockID && blockID != topBlockID)
-			{
-				blockColorIDs[idx].blockID = topBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(topBlockID, QUAD_16) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			blockColorIDs[idx].blockID = blockID;
-			blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(blockID, QUAD_5) + quadSubTexCoord * 8.0) * texelSize));
-			idx++;
-		}
-	}
-	else
-	{
-		int rightBlockID = int(texture(u_TileMap, v_TexCoord + vec2(1.0 / CHUNK_BLOCKS, 0.0)).r);
-		
-		if (blockSubTexCoord.y < 0.5)
-		{
-			int bottomBlockID = int(texture(u_TileMap, v_TexCoord - vec2(0.0, 1.0 / CHUNK_BLOCKS)).r);
-			int bottomRightBlockID	= int(texture(u_TileMap, v_TexCoord + vec2(1.0 / CHUNK_BLOCKS, -1.0 / CHUNK_BLOCKS)).r);
-			
-			if(blockID != rightBlockID)
-			{
-				blockColorIDs[idx].blockID = rightBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(rightBlockID, QUAD_8) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			if(blockID != bottomBlockID)
-			{
-				blockColorIDs[idx].blockID = bottomBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(bottomBlockID, QUAD_2) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			if(bottomRightBlockID > blockID && bottomRightBlockID > rightBlockID && bottomRightBlockID > bottomBlockID)
-			{
-				blockColorIDs[idx].blockID = bottomRightBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(bottomRightBlockID, QUAD_0) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			if(bottomRightBlockID >= blockID && rightBlockID == bottomBlockID && blockID != bottomBlockID)
-			{
-				blockColorIDs[idx].blockID = bottomBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(bottomBlockID, QUAD_19) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			blockColorIDs[idx].blockID = blockID;
-			blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(blockID, QUAD_10) + quadSubTexCoord * 8.0) * texelSize));
-			idx++;
-		}
-		else
-		{
-			int topBlockID = int(texture(u_TileMap, v_TexCoord + vec2(0.0, 1.0 / CHUNK_BLOCKS)).r);
-			int topRightBlockID	= int(texture(u_TileMap, v_TexCoord + vec2(1.0 / CHUNK_BLOCKS, 1.0 / CHUNK_BLOCKS)).r);
-			
-			if(blockID != rightBlockID)
-			{
-				blockColorIDs[idx].blockID = rightBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(rightBlockID, QUAD_4) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			if(blockID != topBlockID)
-			{
-				blockColorIDs[idx].blockID = topBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(topBlockID, QUAD_14) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			if(topRightBlockID > blockID && topRightBlockID > rightBlockID && topRightBlockID > topBlockID)
-			{
-				blockColorIDs[idx].blockID = topRightBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(topRightBlockID, QUAD_12) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			if(topRightBlockID >= blockID && rightBlockID == topBlockID && blockID != topBlockID)
-			{
-				blockColorIDs[idx].blockID = topBlockID;
-				blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(topBlockID, QUAD_17) + quadSubTexCoord * 8.0) * texelSize));
-				idx++;
-			}
-			
-			blockColorIDs[idx].blockID = blockID;
-			blockColorIDs[idx].color = vec4(texture(u_BlockAtlas, (getBlockQuadPosition(blockID, QUAD_6) + quadSubTexCoord * 8.0) * texelSize));
-			idx++;
-		}
-	}
-	
-	// Perform insertion sort on block depth
-	BlockColorID tmp;
-	for(int i = 0; i < idx; ++i)
-	{
-		tmp = blockColorIDs[i];
-		int j = i;
-		while(j > 0 && blockColorIDs[j - 1].blockID > tmp.blockID)
-		{
-			blockColorIDs[j] = blockColorIDs[j - 1];
-			--j;
-		}
-		blockColorIDs[j] = tmp;
-	}
-	
-	// Overlap all colors
-	vec4 outColor = blockColorIDs[0].color;
-	for(int i = 1; i < idx; ++i)
-	{
-		vec4 color = blockColorIDs[i].color;
-		outColor = mix(outColor, color, color.a);
-	}
-	out_FragColor = outColor;
+        vec4 src = float(blockIDs[i] != blockIDs[i - 1]) * texture(u_BlockAtlas, (getBlockQuadPosition(blockIDs[i], quadIDs[i]) + quadSubTexCoord * 8.0) * texelSize);
+        out_FragColor = mix(src, out_FragColor, 1.0 - src.a);
+    }
 }

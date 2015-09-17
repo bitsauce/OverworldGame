@@ -14,6 +14,7 @@ Hotbar::Hotbar(Scene *scene, GameOverlay *gameOverlay) :
 	m_font(ResourceManager::get<Font>(UI_INVENTORY_FONT)),
 	m_selectedSlot(0)
 {
+	m_font->setColor(Color(0, 0, 0, 255));
 	m_font->setDepth(1.f);
 	m_slotSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 	m_slotSprite.setDepth(-1.f);

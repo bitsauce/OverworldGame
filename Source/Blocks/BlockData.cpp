@@ -42,7 +42,6 @@ void BlockData::init()
 	}
 
 	s_blockAtlas = new TextureAtlas(textures);
-	s_blockAtlas->getTexture()->exportToFile(":/BlockAtlas.png");
 }
 
 BlockData::BlockData(BlockID id, const Texture2DPtr &texture, const ItemID item, const float opacity) :

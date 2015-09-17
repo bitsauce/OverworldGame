@@ -221,6 +221,28 @@
     <ClInclude Include="..\..\Source\World\World.h" />
     <ClInclude Include="InputHandler.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Content\Shaders\BlurH.frag" />
+    <None Include="..\..\Content\Shaders\BlurH.vert" />
+    <None Include="..\..\Content\Shaders\BlurV.frag" />
+    <None Include="..\..\Content\Shaders\BlurV.vert" />
+    <None Include="..\..\Content\Shaders\DirectionalLighting.frag" />
+    <None Include="..\..\Content\Shaders\DirectionalLighting.vert" />
+    <None Include="..\..\Content\Shaders\godrays.frag" />
+    <None Include="..\..\Content\Shaders\godrays.vert" />
+    <None Include="..\..\Content\Shaders\outline.frag" />
+    <None Include="..\..\Content\Shaders\outline.vert" />
+    <None Include="..\..\Content\Shaders\RadialLighting.frag" />
+    <None Include="..\..\Content\Shaders\RadialLighting.vert" />
+    <None Include="..\..\Content\Shaders\simplex3d.frag" />
+    <None Include="..\..\Content\Shaders\simplex3d.vert" />
+    <None Include="..\..\Content\Shaders\Simplex3DBlend.frag" />
+    <None Include="..\..\Content\Shaders\Simplex3DBlend.vert" />
+    <None Include="..\..\Content\Shaders\TileMap.frag" />
+    <None Include="..\..\Content\Shaders\TileMap.vert" />
+    <None Include="..\..\Content\Shaders\TileSort.frag" />
+    <None Include="..\..\Content\Shaders\TileSort.vert" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

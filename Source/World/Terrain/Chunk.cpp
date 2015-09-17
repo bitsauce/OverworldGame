@@ -7,19 +7,15 @@
 
 #include "Generation/Generator.h"
 
-bool exported = false;
-
 // CONSTRUCTOR
-Chunk::Chunk()
+Chunk::Chunk(ShaderPtr tileMapShader, ShaderPtr tileSortShader) :
+	m_tileMapShader(tileMapShader),
+	m_tileSortShader(tileSortShader)
 {
 	// Setup flags and such
-	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] = m_modified = false; // not modified
+	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] = m_sorted = m_modified = false; // not modified
 	m_shadowMap = Texture2DPtr(new Texture2D(Pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS)));
-	m_tileMapShader = ResourceManager::get<Shader>(":/Shaders/TileMap");
-	if (!exported) {
-		exported = true;
-	m_tileMapShader->exportAssembly(":/Shaders/TileMap.bin");
-}
+	m_sortRenderTarget = new RenderTarget2D(CHUNK_BLOCKS + 2, CHUNK_BLOCKS + 2, 2, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
 
 	// Initialize blocks
 	m_blocks = new BlockID[CHUNK_BLOCKS*CHUNK_BLOCKS*TERRAIN_LAYER_COUNT];
@@ -44,7 +40,7 @@ Chunk::Chunk()
 // BLOCK LOADING
 void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 {
-	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] = m_modified = false; // not modified
+	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] = m_modified = m_sorted = false; // not modified
 	m_x = chunkX;
 	m_y = chunkY;
 
@@ -81,6 +77,9 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 		}
 	}
 	m_shadowMap->updatePixmap(pixmap);
+
+	// Set block atlas
+	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
 		
 	// Mark as dirty
 	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] = true;
@@ -158,11 +157,11 @@ void Chunk::updateTileMap(ChunkLoader *chunkLoader, TerrainLayer z)
 		pixmap.setPixel(CHUNK_BLOCKS + 1, CHUNK_BLOCKS - i, pixel);
 	}
 
+	// Create tile map texture
 	m_tileMapTexture = Texture2DPtr(new Texture2D(pixmap));
-	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
 
 	// Not dirty
-	m_dirty[z] = false;
+	m_sorted = m_dirty[z] = false;
 }
 
 // BLOCKS
@@ -214,42 +213,64 @@ bool Chunk::setBlockAt(const int x, const int y, const BlockID block, TerrainLay
 }
 
 // DRAWING
-void Chunk::draw(GraphicsContext &gfxContext, const TerrainLayer layer)
+void Chunk::draw(GraphicsContext &context, const TerrainLayer layer)
 {
-	m_tileMapShader->setSampler2D("u_TileMap", m_tileMapTexture);
-
-	gfxContext.setShader(m_tileMapShader);
-
 	Vertex vertices[4];
 
-	int x = m_x * CHUNK_PXF,
-		y = m_y * CHUNK_PXF,
-		width = CHUNK_PXF,
-		height = CHUNK_PXF;
-
-	vertices[0].set4f(xd::VERTEX_POSITION, x, y);
-	vertices[1].set4f(xd::VERTEX_POSITION, x, y + height);
-	vertices[2].set4f(xd::VERTEX_POSITION, x + width, y);
-	vertices[3].set4f(xd::VERTEX_POSITION, x + width, y + height);
-
 	Color color(255);
-
 	vertices[0].set4ub(xd::VERTEX_COLOR, color.r, color.g, color.b, color.a);
 	vertices[1].set4ub(xd::VERTEX_COLOR, color.r, color.g, color.b, color.a);
 	vertices[2].set4ub(xd::VERTEX_COLOR, color.r, color.g, color.b, color.a);
 	vertices[3].set4ub(xd::VERTEX_COLOR, color.r, color.g, color.b, color.a);
 
+	if(!m_sorted)
+	{
+		vertices[0].set4f(xd::VERTEX_TEX_COORD, 0.0f, 1.0f);
+		vertices[1].set4f(xd::VERTEX_TEX_COORD, 0.0f, 0.0f);
+		vertices[2].set4f(xd::VERTEX_TEX_COORD, 1.0f, 1.0f);
+		vertices[3].set4f(xd::VERTEX_TEX_COORD, 1.0f, 0.0f);
+
+		vertices[0].set4f(xd::VERTEX_POSITION, 0,                0               );
+		vertices[1].set4f(xd::VERTEX_POSITION, 0,                CHUNK_BLOCKS + 2);
+		vertices[2].set4f(xd::VERTEX_POSITION, CHUNK_BLOCKS + 2, 0               );
+		vertices[3].set4f(xd::VERTEX_POSITION, CHUNK_BLOCKS + 2, CHUNK_BLOCKS + 2);
+
+		Matrix4 tmpMap = context.getModelViewMatrix();
+		context.setModelViewMatrix(Matrix4());
+
+		context.setRenderTarget(m_sortRenderTarget);
+			context.setShader(m_tileSortShader);
+				m_tileSortShader->setSampler2D("u_TileMap", m_tileMapTexture);
+				context.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
+			context.setShader(0);
+		context.setRenderTarget(0);
+
+		context.setModelViewMatrix(tmpMap);
+
+		m_sorted = true;
+	}
+
 	float u0 = 1.0f / (CHUNK_BLOCKSF + 2.0),
 		v0 = 1.0f - (1.0f / (CHUNK_BLOCKSF + 2.0)),
 		u1 = 1.0f - (1.0f / (CHUNK_BLOCKSF + 2.0)),
 		v1 = 1.0f / (CHUNK_BLOCKSF + 2.0);
-
 	vertices[0].set4f(xd::VERTEX_TEX_COORD, u0, v0);
 	vertices[1].set4f(xd::VERTEX_TEX_COORD, u0, v1);
 	vertices[2].set4f(xd::VERTEX_TEX_COORD, u1, v0);
 	vertices[3].set4f(xd::VERTEX_TEX_COORD, u1, v1);
 
-	gfxContext.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
+	float x = m_x * CHUNK_PXF,
+		y = m_y * CHUNK_PXF,
+		width = CHUNK_PXF,
+		height = CHUNK_PXF;
+	vertices[0].set4f(xd::VERTEX_POSITION, x, y);
+	vertices[1].set4f(xd::VERTEX_POSITION, x, y + height);
+	vertices[2].set4f(xd::VERTEX_POSITION, x + width, y);
+	vertices[3].set4f(xd::VERTEX_POSITION, x + width, y + height);
 
-	gfxContext.setShader(0);
+	context.setShader(m_tileMapShader);
+		m_tileMapShader->setSampler2D("u_SortedBlockTexture", m_sortRenderTarget->getTexture(0));
+		m_tileMapShader->setSampler2D("u_SortedQuadTexture", m_sortRenderTarget->getTexture(1));
+		context.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
+	context.setShader(0);
 }

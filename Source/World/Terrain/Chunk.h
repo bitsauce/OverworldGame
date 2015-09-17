@@ -11,7 +11,7 @@ class Chunk
 {
 	friend class ChunkLoader;
 public:
-	Chunk();
+	Chunk(ShaderPtr tileMapShader, ShaderPtr tileSortShader);
 
 	// BLOCK LOADING
 	void load(int chunkX, int chunkY, BlockID *blocks);
@@ -50,6 +50,9 @@ private:
 	// TILE MAP SHADER
 	ShaderPtr m_tileMapShader;
 	Texture2DPtr m_tileMapTexture;
+	ShaderPtr m_tileSortShader;
+	Texture2DPtr m_tileSortedTexture;
+	RenderTarget2D *m_sortRenderTarget;
 
 	// LIGHTING
 	Texture2DPtr m_shadowMap;
@@ -60,6 +63,7 @@ private:
 	// MISC
 	bool m_modified;
 	bool m_dirty[TERRAIN_LAYER_COUNT];
+	bool m_sorted;
 };
 
 #endif // TERRAIN_CHUNK_H

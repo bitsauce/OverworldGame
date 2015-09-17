@@ -53,7 +53,6 @@ private:
 	World *m_world;
 
 	unordered_map<uint, Chunk*> m_chunks;
-	Chunk m_dummyChunk;
 
 	// Active area
 	ChunkArea m_activeArea;
@@ -75,6 +74,10 @@ private:
 	// Load patterns
 	vector<Vector2i> m_circleLoadPattern;
 	uint m_circleLoadIndex;
+
+	// Shaders
+	ShaderPtr m_tileMapShader;
+	ShaderPtr m_tileSortShader;
 };
 
 #endif // CHUNK_LOADER_H

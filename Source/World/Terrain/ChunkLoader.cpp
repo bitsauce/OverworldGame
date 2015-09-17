@@ -20,6 +20,16 @@ ChunkLoader::ChunkLoader(World *world) :
 	vertexFormat.set(VERTEX_POSITION, 2);
 	vertexFormat.set(VERTEX_TEX_COORD, 2);
 
+	// Load tile map shaders
+	m_tileSortShader = ResourceManager::get<Shader>(":/Shaders/TileSort");
+	m_tileSortShader->bindFragLocation(0, "out_BlockData");
+	m_tileSortShader->bindFragLocation(1, "out_QuadData");
+	m_tileSortShader->link();
+
+	m_tileMapShader = ResourceManager::get<Shader>(":/Shaders/TileMap");
+	m_tileSortShader->exportAssembly(":/Shaders/TileSort.bin");
+	m_tileMapShader->exportAssembly(":/Shaders/TileMap.bin");
+
 	// Set max chunks to some value
 	setOptimalChunkCount(512);
 }
@@ -131,7 +141,7 @@ void ChunkLoader::setOptimalChunkCount(const uint optimalChunkCount)
 	m_chunkPool.resize(uint(optimalChunkCount * 1.1f));
 	for(uint i = 0; i < m_chunkPool.size(); ++i)
 	{
-		m_chunkPool[i] = new Chunk();
+		m_chunkPool[i] = new Chunk(m_tileMapShader, m_tileSortShader);
 	}
 
 	// Set optimal chunk count

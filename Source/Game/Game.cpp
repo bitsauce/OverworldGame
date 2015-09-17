@@ -71,10 +71,10 @@ void Game::main(GraphicsContext &context)
 	m_server = new Server(this, 45556);
 	
 	// Join server as client
-	RakNet::BitStream bitStream;
+	/*RakNet::BitStream bitStream;
 	bitStream.Write((RakNet::MessageID)ID_PLAYER_JOIN);
 	bitStream.Write("Bitsauce");
-	m_server->getRakPeer()->SendLoopback((const char*)bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
+	m_server->getRakPeer()->SendLoopback((const char*)bitStream.GetData(), bitStream.GetNumberOfBytesUsed());*/
 	
 	// Push game state
 	pushState(new InGameState(this));
