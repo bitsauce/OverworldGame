@@ -60,7 +60,7 @@ public:
 
 private:
 	// Position
-	Vector2 m_position, m_prevPosition, m_velocity;
+	Vector2 m_position, m_prevPosition, m_velocity, m_interpolatedPositon;
 
 	// Size
 	Vector2i m_size;

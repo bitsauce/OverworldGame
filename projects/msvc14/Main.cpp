@@ -17,21 +17,9 @@
 // Win32 entry point
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 {
-	// Process the command-line
+	// Set engine flags
 	int flags = 0;
-	string workDir;
-	for(int i = 0; i < __argc; i++)
-	{
-		if(__argv[i][0] == '-')
-		{
-			switch(__argv[i][1])
-			{
-			case 'v': flags |= xd::XD_EXPORT_LOG; break;
-			case 'w': workDir = string(__argv[i]+3); break;
-			}
-		}
-	}
-	flags |= XD_EXPORT_LOG; // For now we force this flag
+	flags |= XD_EXPORT_LOG;
 	flags |= XD_RUN_IN_BACKGROUND;
 	flags |= XD_BLOCK_BACKGROUND_INPUT;
 
@@ -43,10 +31,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 	config.updateFunc = bind(&Game::update, game, placeholders::_1);
 	config.drawFunc = bind(&Game::draw, game, placeholders::_1, placeholders::_2);
 	config.endFunc = bind(&Game::exit, game);
-
 #ifdef X2D_DEBUG
-	config.workDir = "..\\..\\Content\\";
-#else
 	config.workDir = "..\\..\\Content\\";
 #endif
 	config.flags = flags;

@@ -104,7 +104,7 @@ void Debug::debugFunction(const int i)
 		
 	case 7:
 		{
-			m_world->getTimeOfDay()->setTime(m_world->getTimeOfDay()->getTime() + (Input::getKeyState(XD_KEY_SHIFT) ? -100 : 100));
+			m_world->getTimeOfDay()->setTime(m_world->getTimeOfDay()->getTime() + (Input::getKeyState(XD_KEY_LEFT_SHIFT) ? -100 : 100));
 		}
 		break;
 		
@@ -151,15 +151,15 @@ void Debug::update()
 	{
 		// Block painting
 		TerrainLayer layer = TERRAIN_LAYER_MIDDLE;
-		if(Input::getKeyState(XD_KEY_LSHIFT)) layer = TERRAIN_LAYER_FRONT;
-		if(Input::getKeyState(XD_KEY_LCONTROL)) layer = TERRAIN_LAYER_BACK;
-		if(Input::getKeyState(XD_LMB))
+		if(Input::getKeyState(XD_KEY_LEFT_SHIFT)) layer = TERRAIN_LAYER_FRONT;
+		if(Input::getKeyState(XD_KEY_LEFT_CONTROL)) layer = TERRAIN_LAYER_BACK;
+		if(Input::getKeyState(XD_MOUSE_BUTTON_LEFT))
 		{
 			int x = floor(m_world->getCamera()->getInputPosition().x/BLOCK_PXF), y = floor(m_world->getCamera()->getInputPosition().y/BLOCK_PXF);
 
 			m_world->getTerrain()->setBlockAt(x, y, m_block, layer);
 		}
-		else if(Input::getKeyState(XD_RMB))
+		else if(Input::getKeyState(XD_MOUSE_BUTTON_RIGHT))
 		{
 			m_world->getTerrain()->setBlockAt(floor((m_world->getCamera()->getPosition().x + Input::getPosition().x)/BLOCK_PXF), floor((m_world->getCamera()->getPosition().y + Input::getPosition().y)/BLOCK_PXF), BLOCK_EMPTY, layer);
 		}
@@ -197,7 +197,7 @@ void Debug::draw(SpriteBatch *spriteBatch)
 	// Block painter
 	if(m_blockPainterEnabled)
 	{
-		spriteBatch->drawText(Vector2(5.0f, Window::getSize().y - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (Input::getKeyState(XD_KEY_LCONTROL) ? "BACK" : (Input::getKeyState(XD_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font);
+		spriteBatch->drawText(Vector2(5.0f, Window::getSize().y - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (Input::getKeyState(XD_KEY_LEFT_CONTROL) ? "BACK" : (Input::getKeyState(XD_KEY_LEFT_SHIFT) ? "FRONT" : "SCENE")), m_font);
 		Sprite blockSprite(BlockData::get(m_block).getTexture(), Rect(159.0f, Window::getSize().y - 50.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 0.0f, 1.0f, 2.0f / 3.0f));
 		spriteBatch->drawSprite(blockSprite);
 	}

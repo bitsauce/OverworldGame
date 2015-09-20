@@ -8,10 +8,11 @@
 Camera::Camera() :
 	m_position(0.0f, 0.0f),
 	m_prevPosition(0.0f, 0.0f),
+	m_interpolatedPositon(0.0f, 0.0f),
 	m_velocity(0.0f, 0.0f),
 	m_tagetEntity(0)
 {
-	Input::bind(XD_KEY_PLUS, function<void()>(bind(&Camera::zoomIn, this)));
+	Input::bind(XD_KEY_EQUAL, function<void()>(bind(&Camera::zoomIn, this)));
 	Input::bind(XD_KEY_MINUS, function<void()>(bind(&Camera::zoomOut, this)));
 
 	setZoomLevel(1.0f);
@@ -19,13 +20,13 @@ Camera::Camera() :
 
 Vector2 Camera::getCenter() const
 {
-	return m_position + m_size * 0.5f;
+	return m_interpolatedPositon + m_size * 0.5f;
 }
 
 Matrix4 Camera::getProjectionMatrix() const
 {
 	Matrix4 mat;
-	mat.translate(-m_position.x, -m_position.y, 0.0f);
+	mat.translate(-m_interpolatedPositon.x, -m_interpolatedPositon.y, 0.0f);
 	mat.scale(m_zoomLevel);
 	return mat;
 }
@@ -33,17 +34,17 @@ Matrix4 Camera::getProjectionMatrix() const
 void Camera::lookAt(Vector2 worldPoint)
 {
 	worldPoint -= m_size * 0.5f;
-	m_position = worldPoint;
+	m_interpolatedPositon = worldPoint;
 }
 
 Vector2i Camera::getPosition() const
 {
-	return m_position;
+	return m_interpolatedPositon;
 }
 
 Vector2 Camera::getInputPosition() const
 {
-	return m_position + Input::getPosition() / m_zoomLevel;
+	return m_interpolatedPositon + Input::getPosition() / m_zoomLevel;
 }
 
 Vector2i Camera::getSize() const
@@ -68,7 +69,7 @@ void Camera::update(const float dt)
 {
 	if (!m_tagetEntity)
 	{
-		float acc = (Input::getKeyState(XD_KEY_LCONTROL) ? 32.0f : 256.0f) * dt;
+		float acc = (Input::getKeyState(XD_KEY_LEFT_CONTROL) ? 32.0f : 256.0f) * dt;
 		
 		m_prevPosition = m_position;
 
@@ -106,7 +107,7 @@ void Camera::interpolate(const float alpha)
 	}
 	else
 	{
-		math::lerp(m_prevPosition, m_position, alpha);
+		m_interpolatedPositon = math::lerp(m_prevPosition, m_position, alpha);
 	}
 }
 

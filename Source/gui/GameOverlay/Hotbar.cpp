@@ -100,7 +100,7 @@ void Hotbar::mouseWheelEvent(const int delta)
 
 void Hotbar::keyPressEvent(const VirtualKey key)
 {
-	if(key == XD_LMB || key == XD_RMB)
+	if(key == XD_MOUSE_BUTTON_LEFT || key == XD_MOUSE_BUTTON_RIGHT)
 	{
 		Vector2 position = getPosition();
 		for(uint i = 0; i < 10; ++i)
@@ -108,7 +108,7 @@ void Hotbar::keyPressEvent(const VirtualKey key)
 			Rect rect(position.x + 8.f + i * 48.f, position.y + 7.f, 42.f, 42.f);
 			if(rect.contains(Input::getPosition()))
 			{
-				if(key == XD_LMB)
+				if(key == XD_MOUSE_BUTTON_LEFT)
 				{
 					if(m_gameOverlay->getPlayer()->getHeldItem()->isEmpty())
 					{

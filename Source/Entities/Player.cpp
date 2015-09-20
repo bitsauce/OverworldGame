@@ -45,7 +45,7 @@ Player::Player(Game *game, RakNet::RakNetGUID guid) :
 	{
 		game->getGameOverlay()->setPlayer(this);
 
-		Input::bind(XD_RMB, bind(&Player::activateThing, this));
+		Input::bind(XD_MOUSE_BUTTON_RIGHT, bind(&Player::activateThing, this));
 
 		m_camera->setTargetEntity(this);
 
@@ -132,7 +132,7 @@ void Player::update(const float delta)
 	}
 
 	// Walking
-	applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (Input::getKeyState(XD_KEY_SHIFT) ? 1.5f : 1.0f) * 10.0f, 0.0f));
+	applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (Input::getKeyState(XD_KEY_LEFT_SHIFT) ? 1.5f : 1.0f) * 10.0f, 0.0f));
 	if(getVelocity().x < -5.0f)
 	{
 		setVelocityX(-5.0f);
@@ -153,7 +153,7 @@ void Player::update(const float delta)
 	DynamicEntity::update(delta);
 
 	// Use current item
-	if(Input::getKeyState(XD_LMB) && !m_gameOverlay->isHovered())
+	if(Input::getKeyState(XD_MOUSE_BUTTON_LEFT) && !m_gameOverlay->isHovered())
 	{
 		Storage::Slot *slot = getCurrentItem();
 		ItemData *item = ItemData::get(slot->getItem());

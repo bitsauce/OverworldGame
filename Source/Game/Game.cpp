@@ -34,11 +34,10 @@ void Game::main(GraphicsContext &context)
 {
 	// Setup sprite batch
 	m_spriteBatch = new SpriteBatch(context);
-	Graphics::disableVsync();
 
 	// Set some key bindings
 	Input::bind(XD_KEY_ESCAPE, function<void()>(Engine::exit));
-	Input::bind(XD_KEY_SNAPSHOT, bind(&Game::takeScreenshot, this));
+	Input::bind(XD_KEY_PRINT_SCREEN, bind(&Game::takeScreenshot, this));
 
 	//if(Config::isFullscreenEnabled())
 	//{

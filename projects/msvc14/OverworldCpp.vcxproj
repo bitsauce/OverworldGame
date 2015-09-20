@@ -52,7 +52,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\vld\include;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\gl3w\include;..\..\..\x2D-Game-Engine\3rdparty\openal\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>X2D_DEBUG;X2D_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -73,7 +73,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\vld\include;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\gl3w\include;..\..\..\x2D-Game-Engine\3rdparty\openal\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <PreprocessorDefinitions>X2D_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>

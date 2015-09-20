@@ -48,7 +48,7 @@ void UiObject::update(const float)
 	}
 	
 	if(m_pressed) {
-		if(!Input::getKeyState(XD_LMB)) {
+		if(!Input::getKeyState(XD_MOUSE_BUTTON_LEFT)) {
 			if(m_hovered) {
 				m_active = true;
 				clickEvent();
@@ -59,7 +59,7 @@ void UiObject::update(const float)
 		}
 	}
 	else {
-		if(Input::getKeyState(XD_LMB)) {
+		if(Input::getKeyState(XD_MOUSE_BUTTON_LEFT)) {
 			if(m_active && !m_hovered) {
 				m_active = false;
 				deactivateEvent();

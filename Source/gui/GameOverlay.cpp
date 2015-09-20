@@ -40,7 +40,7 @@ void GameOverlay::update(const float delta)
 {
 	if (!m_player) return;
 	Storage::Slot *heldItem = m_player->getHeldItem();
-	if(!heldItem->isEmpty() && !isHovered() && Input::getKeyState(XD_RMB))
+	if(!heldItem->isEmpty() && !isHovered() && Input::getKeyState(XD_MOUSE_BUTTON_RIGHT))
 	{
 		ItemDrop *itemDrop = new ItemDrop(m_game->getWorld(), m_player->getCenter() - Vector2(0.0f, 20.0f), heldItem->getItem(), heldItem->getAmount());
 		itemDrop->applyImpulse(Vector2(m_game->getWorld()->getCamera()->getInputPosition() - m_player->getCenter()).normalized() * 4.0f);
@@ -77,7 +77,7 @@ void GameOverlay::performSlotAction(Storage::Slot *slot, const VirtualKey type)
 {
 	if (!m_player) return;
 	Storage::Slot *heldSlot = m_player->getHeldItem();
-	if(type == XD_LMB)
+	if(type == XD_MOUSE_BUTTON_LEFT)
 	{
 		if(!heldSlot->isEmpty())
 		{
@@ -104,12 +104,12 @@ void GameOverlay::performSlotAction(Storage::Slot *slot, const VirtualKey type)
 			}
 		}
 	}
-	else if(type == XD_RMB)
+	else if(type == XD_MOUSE_BUTTON_RIGHT)
 	{
 		if(heldSlot->isEmpty())
 		{
 			// Right click with no held item...
-			if(Input::getKeyState(XD_KEY_LCONTROL))
+			if(Input::getKeyState(XD_KEY_LEFT_CONTROL))
 			{
 				// ... and with CTRL -> Take half of the clicked slot
 				int halfAmount = ceil(slot->getAmount() / 2.f);
@@ -129,7 +129,7 @@ void GameOverlay::performSlotAction(Storage::Slot *slot, const VirtualKey type)
 			// Right click with a held item -> Place one of the held items into the clicked slot
 			if(heldSlot->getItem() == slot->getItem())
 			{
-				if(Input::getKeyState(XD_KEY_LCONTROL))
+				if(Input::getKeyState(XD_KEY_LEFT_CONTROL))
 				{
 					int halfAmount = ceil(heldSlot->getAmount() / 2.f);
 					heldSlot->dec(halfAmount - slot->inc(halfAmount));
@@ -144,7 +144,7 @@ void GameOverlay::performSlotAction(Storage::Slot *slot, const VirtualKey type)
 			}
 			else if(slot->isEmpty())
 			{
-				if(Input::getKeyState(XD_KEY_LCONTROL))
+				if(Input::getKeyState(XD_KEY_LEFT_CONTROL))
 				{
 					int halfAmount = ceil(heldSlot->getAmount() / 2.f);
 					slot->set(heldSlot->getItem(), halfAmount);

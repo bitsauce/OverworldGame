@@ -69,7 +69,7 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 			{
 				shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]).getOpacity();
 			}
-			pixel[0] = 255 * max(shadow, 0.0f);
+			pixel[0] = uchar(255 * max(shadow, 0.0f));
 			pixel[1] = 255;
 			pixel[2] = 255;
 			pixel[3] = 255 * shadowCaster;

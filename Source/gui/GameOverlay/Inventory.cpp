@@ -104,7 +104,7 @@ void Inventory::draw(SpriteBatch *spriteBatch, const float alpha)
 void Inventory::keyPressEvent(const VirtualKey key)
 {
 	if (!m_gameOverlay->getPlayer()) return;
-	if(key == XD_LMB || key == XD_RMB)
+	if(key == XD_MOUSE_BUTTON_LEFT || key == XD_MOUSE_BUTTON_RIGHT)
 	{
 		Vector2 position = getPosition();
 		Bag *bag = m_gameOverlay->getPlayer()->getBag();

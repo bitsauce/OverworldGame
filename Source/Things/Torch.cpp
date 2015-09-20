@@ -10,7 +10,7 @@ Torch::Torch(World *world, const int x, const int y) :
 	Thing(x, y),
 	m_world(world),
 	m_sprite(ThingData::get(BLOCK_ENTITY_TORCH).getSprite()),
-	m_spotlight(world->getLighting(), Vector2(x, y), 10, Color(255, 190, 90))
+	m_spotlight(world->getLighting(), Vector2(x, y), 10.0f, Color(255, 190, 90))
 {
 	m_sprite.setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
 }

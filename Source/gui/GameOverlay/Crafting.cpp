@@ -57,7 +57,7 @@ void Crafting::draw(SpriteBatch *spriteBatch, float alpha)
 
 void Crafting::keyPressEvent(const VirtualKey key)
 {
-	if(key == XD_LMB || key == XD_RMB)
+	if(key == XD_MOUSE_BUTTON_LEFT || key == XD_MOUSE_BUTTON_RIGHT)
 	{
 		Vector2 position = getPosition();
 		for(uint y = 0; y < 3; ++y)
