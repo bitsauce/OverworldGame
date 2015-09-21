@@ -20,14 +20,13 @@
 
 #include "Gui/Canvas.h"
 
-Player::Player(Game *game, RakNet::RakNetGUID guid) :
+Player::Player(Game *game) :
 	DynamicEntity(game->getWorld(), ENTITY_PLAYER),
 	m_camera(game->getWorld()->getCamera()),
 	m_terrain(game->getWorld()->getTerrain()),
 	m_gameOverlay(game->getGameOverlay()),
 	m_jumpTimer(1.0f),
 	m_canJump(false),
-	m_guid(guid),
 	m_maxHealth(12),
 	m_health(m_maxHealth),
 	m_lmbPressed(false),
@@ -37,32 +36,8 @@ Player::Player(Game *game, RakNet::RakNetGUID guid) :
 	// Set body size
 	Entity::setSize(24, 48);
 
-	// Set input states to false
-	for(uint i = 0; i < INPUT_COUNT; ++i)
-	{
-		m_clientInputState[i] = m_inputState[i] = false;
-	}
-
 	// Init inventory things
 	m_storage.setNext(m_bag->getStorage());
-	
-	// If player is local, do extra stuff
-	if(Connection::getInstance()->getGUID() == guid)
-	{
-		game->getGameOverlay()->setPlayer(this);
-
-		InputContext *inputContext = Input::getInputContext();
-		inputContext->bind("activate_thing", bind(&Player::activateThing, this, placeholders::_1), true);
-		inputContext->bind("move_left", bind(&Player::setClientInputState, this, placeholders::_1, INPUT_MOVE_LEFT), true);
-		inputContext->bind("move_right", bind(&Player::setClientInputState, this, placeholders::_1, INPUT_MOVE_RIGHT), true);
-		inputContext->bind("jump", bind(&Player::setClientInputState, this, placeholders::_1, INPUT_JUMP), true);
-		inputContext->bind("run", bind(&Player::setClientInputState, this, placeholders::_1, INPUT_RUN), true);
-		inputContext->bind("use_item", bind(&Player::setClientUseItemState, this, placeholders::_1), true);
-
-		m_camera->setTargetEntity(this);
-
-		m_world->m_localPlayer = this;
-	}
 
 	// Add to player list
 	m_world->m_players.push_back(this);
@@ -72,6 +47,12 @@ Player::~Player()
 {
 }
 
+void Player::setController(Controller * controller)
+{
+	m_controller = controller;
+	m_controller->setPlayer(this);
+}
+
 Storage::Slot *Player::getCurrentItem()
 {
 	if(!m_heldItem.isEmpty())
@@ -79,11 +60,6 @@ Storage::Slot *Player::getCurrentItem()
 		return &m_heldItem;
 	}
 	return m_storage.getSlotAt(m_gameOverlay->getHotbar()->getSelectedSlot());
-}
-
-void Player::setClientUseItemState(int action)
-{
-	m_clientInputState[INPUT_USE_ITEM] = action == GLFW_PRESS && !m_gameOverlay->isHovered();
 }
 
 void Player::activateThing(int action)
@@ -102,10 +78,12 @@ void Player::activateThing(int action)
 
 void Player::update(const float delta)
 {
+	m_controller->update();
+
 	// Jumping
 	if(isContact(SOUTH))
 	{
-		if(m_inputState[INPUT_JUMP])
+		if(m_controller->getInputState(Controller::INPUT_JUMP))
 		{
 			if(m_canJump)
 			{
@@ -123,7 +101,7 @@ void Player::update(const float delta)
 	{
 		if(m_jumpTimer < 0.1f)
 		{
-			if(m_inputState[INPUT_JUMP]) // High/low jumping
+			if(m_controller->getInputState(Controller::INPUT_JUMP)) // High/low jumping
 			{
 				applyImpulse(Vector2(0.0f, -2.5f));
 			}
@@ -132,7 +110,7 @@ void Player::update(const float delta)
 		else if(isContact(WEST) || isContact(EAST)) // Wall jumping
 		{
 			setVelocityY(getVelocity().y * 0.5f);
-			if(m_inputState[INPUT_JUMP])
+			if(m_controller->getInputState(Controller::INPUT_JUMP))
 			{
 				if(m_canJump)
 				{
@@ -150,7 +128,7 @@ void Player::update(const float delta)
 	}
 
 	// Walking
-	applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (m_inputState[INPUT_RUN] ? 1.5f : 1.0f) * 10.0f, 0.0f));
+	applyImpulse(Vector2((m_controller->getInputState(Controller::INPUT_MOVE_RIGHT) - m_controller->getInputState(Controller::INPUT_MOVE_LEFT)) * (m_controller->getInputState(Controller::INPUT_RUN) ? 1.5f : 1.0f) * 10.0f, 0.0f));
 	if(getVelocity().x < -5.0f)
 	{
 		setVelocityX(-5.0f);
@@ -171,7 +149,7 @@ void Player::update(const float delta)
 	DynamicEntity::update(delta);
 
 	// Use current item
-	if(m_inputState[INPUT_USE_ITEM])
+	if(m_controller->getInputState(Controller::INPUT_USE_ITEM))
 	{
 		Storage::Slot *slot = getCurrentItem();
 		ItemData *item = ItemData::get(slot->getItem());
@@ -257,25 +235,11 @@ void Player::pack(RakNet::BitStream *bitStream, const Connection *conn)
 		bitStream->Write(getVelocity().x);
 		bitStream->Write(getVelocity().y);
 	}
-	else if(conn->getGUID() == m_guid)
-	{
-		for(uint i = 0; i < INPUT_COUNT; ++i)
-		{
-			bitStream->Write(m_clientInputState[i]);
-		}
-	}
 }
 
 void Player::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 {
-	if(conn->isServer())
-	{
-		for(uint i = 0; i < INPUT_COUNT; ++i)
-		{
-			bitStream->Read(m_inputState[i]);
-		}
-	}
-	else
+	if(conn->isClient())
 	{
 		float x; bitStream->Read(x);
 		float y; bitStream->Read(y);
@@ -319,7 +283,7 @@ void Player::loadSaveData(FileReader &saveData)
 	int x, y;
 	saveData >> x;
 	saveData >> y;
-	setPosition(Vector2(x, y));
+	setPosition(Vector2((float) x, (float) y));
 
 	// Restore hotbar
 	for(uint i = 0; i < 10; ++i)
@@ -346,5 +310,14 @@ void Player::loadSaveData(FileReader &saveData)
 			saveData >> amount;
 			m_bag->getStorage()->getSlotAt(x + y * bagWidth)->set((ItemID)item, amount);
 		}
+	}
+}
+
+void Player::decHealth(int amt)
+{
+	m_health -= amt;
+	if(m_health <= 0)
+	{
+		LOG("Dead");
 	}
 }

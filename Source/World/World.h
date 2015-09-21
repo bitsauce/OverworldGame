@@ -18,6 +18,7 @@ class Background;
 // This class is concerned with the objects contained within the world
 class World
 {
+	friend class Server;
 	friend class Player;
 public:
 	World();

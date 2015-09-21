@@ -3,8 +3,8 @@
 #include "Entities/Player.h"
 #include "Constants.h"
 
-Zombie::Zombie(World *world) :
-	DynamicEntity(world, ENTITY_ZOMBIE)
+Zombie::Zombie(Game *game) :
+	Player(game)
 {
 	// Set body size
 	Entity::setSize(24, 48);
@@ -16,26 +16,10 @@ Zombie::Zombie(World *world) :
 
 void Zombie::update(const float delta)
 {
-	Player *closestPlayer = nullptr;
-	for(Player *player : m_world->getPlayers())
-	{
-		if(!closestPlayer || (player->getCenter() - getCenter()).magnitude() < (closestPlayer->getCenter() - getCenter()).magnitude())
-		{
-			closestPlayer = player;
-		}
-	}
-
-	if(closestPlayer)
-	{
-		Vector2 playerPosition = closestPlayer->getCenter(), position = getCenter();
-		setVelocityX(SGN(playerPosition.x - position.x) * 10.0f);
-	}
-
-	m_humanoid.update(delta);
-	DynamicEntity::update(delta);
+	Player::update(delta);
 }
 
 void Zombie::draw(SpriteBatch *spriteBatch, const float alpha)
 {
-	m_humanoid.draw(this, spriteBatch, 0.0f);
+	Player::draw(spriteBatch, alpha);
 }

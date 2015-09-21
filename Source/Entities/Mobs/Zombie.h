@@ -1,20 +1,22 @@
 #ifndef ZOMBIE_H
 #define ZOMBIE_H
 
+#include "Config.h"
+#include "Entities/Player.h"
 #include "Entities/Humanoid.h"
 #include "Entities/Physics/DynamicEntity.h"
 
-class Zombie : public DynamicEntity
+class Game;
+
+class Zombie : public Player
 {
 public:
-	Zombie(World *world);
+	Zombie(Game *game);
 
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 private:
-	// Human model
-	Humanoid m_humanoid;
 };
 
 #endif // ZOMBIE_H

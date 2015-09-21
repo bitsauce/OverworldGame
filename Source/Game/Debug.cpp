@@ -73,10 +73,14 @@ void Debug::debugFunction(int action, const int i)
 	case 5:
 		{
 			// Spawn light
-			new Spotlight(m_world->getLighting(), m_world->getCamera()->getInputPosition()/BLOCK_PXF, 20, Color((uchar)m_random.nextInt(255), (uchar)m_random.nextInt(255), (uchar)m_random.nextInt(255)));
+			//new Spotlight(m_world->getLighting(), m_world->getCamera()->getInputPosition()/BLOCK_PXF, 20, Color((uchar)m_random.nextInt(255), (uchar)m_random.nextInt(255), (uchar)m_random.nextInt(255)));
 			// Spawn zombie
-			//Zombie *zombie = new Zombie();
-			//zombie->getBody().setPosition(0, 0);
+
+			// Create zombie
+			RakNet::BitStream bitStream;
+			bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
+			bitStream.Write(ENTITY_ZOMBIE);
+			((Server*)Connection::getInstance())->getRakPeer()->SendLoopback((const char*) bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
 		}
 		break;
 		
@@ -88,7 +92,7 @@ void Debug::debugFunction(int action, const int i)
 		
 	case 7:
 		{
-			m_world->getTimeOfDay()->setTime(m_world->getTimeOfDay()->getTime() + (Input::isKeyPressed(XD_KEY_LEFT_SHIFT) ? -100 : 100));
+			m_world->getTimeOfDay()->setTime(m_world->getTimeOfDay()->getTime() + (Input::getKeyState(XD_KEY_LEFT_SHIFT) == GLFW_PRESS ? -100 : 100));
 		}
 		break;
 		
@@ -135,15 +139,15 @@ void Debug::update()
 	{
 		// Block painting
 		TerrainLayer layer = TERRAIN_LAYER_MIDDLE;
-		if(Input::isKeyPressed(XD_KEY_LEFT_SHIFT)) layer = TERRAIN_LAYER_FRONT;
-		if(Input::isKeyPressed(XD_KEY_LEFT_CONTROL)) layer = TERRAIN_LAYER_BACK;
-		if(Input::isKeyPressed(XD_MOUSE_BUTTON_LEFT))
+		if(Input::getKeyState(XD_KEY_LEFT_SHIFT) == GLFW_PRESS) layer = TERRAIN_LAYER_FRONT;
+		if(Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS) layer = TERRAIN_LAYER_BACK;
+		if(Input::getKeyState(XD_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 		{
 			int x = floor(m_world->getCamera()->getInputPosition().x/BLOCK_PXF), y = floor(m_world->getCamera()->getInputPosition().y/BLOCK_PXF);
 
 			m_world->getTerrain()->setBlockAt(x, y, m_block, layer);
 		}
-		else if(Input::isKeyPressed(XD_MOUSE_BUTTON_RIGHT))
+		else if(Input::getKeyState(XD_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 		{
 			m_world->getTerrain()->setBlockAt(floor((m_world->getCamera()->getPosition().x + Input::getPosition().x)/BLOCK_PXF), floor((m_world->getCamera()->getPosition().y + Input::getPosition().y)/BLOCK_PXF), BLOCK_EMPTY, layer);
 		}
@@ -181,7 +185,7 @@ void Debug::draw(SpriteBatch *spriteBatch)
 	// Block painter
 	if(m_blockPainterEnabled)
 	{
-		spriteBatch->drawText(Vector2(5.0f, Window::getSize().y - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (Input::isKeyPressed(XD_KEY_LEFT_CONTROL) ? "BACK" : (Input::isKeyPressed(XD_KEY_LEFT_SHIFT) ? "FRONT" : "SCENE")), m_font);
+		spriteBatch->drawText(Vector2(5.0f, Window::getSize().y - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS ? "BACK" : (Input::getKeyState(XD_KEY_LEFT_SHIFT) == GLFW_PRESS ? "FRONT" : "SCENE")), m_font);
 		Sprite blockSprite(BlockData::get(m_block).getTexture(), Rect(159.0f, Window::getSize().y - 50.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 0.0f, 1.0f, 2.0f / 3.0f));
 		spriteBatch->drawSprite(blockSprite);
 	}
@@ -192,7 +196,7 @@ void Debug::draw(SpriteBatch *spriteBatch)
 	gfxContext.setTexture(nullptr);
 	Vector2 position = m_world->getCamera()->getPosition();
 	Vector2 size = m_world->getCamera()->getSize();
-	if(Input::isKeyPressed(XD_KEY_K))
+	if(Input::getKeyState(XD_KEY_K) == GLFW_PRESS)
 	{
 		int x0 = (int)floor(position.x / BLOCK_PXF);
 		int y0 = (int)floor(position.y / BLOCK_PXF);
@@ -269,7 +273,7 @@ void Debug::draw(SpriteBatch *spriteBatch)
 	spriteBatch->end();
 	
 	// Show lighting passes
-	if(Input::isKeyPressed(XD_KEY_L))
+	if(Input::getKeyState(XD_KEY_L) == GLFW_PRESS)
 	{
 		gfxContext.disable(GraphicsContext::BLEND);
 		spriteBatch->begin();

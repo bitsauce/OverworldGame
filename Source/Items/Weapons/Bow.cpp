@@ -16,16 +16,17 @@ Bow::Bow(Game *game) :
 class Arrow : public DynamicEntity
 {
 public:
-	Arrow(World *world, const Vector2 &pos, const Vector2 &dir, const float speed) :
+	Arrow(Player *owner, World *world, const Vector2 &pos, const Vector2 &dir, const float speed) :
 		DynamicEntity(world, ENTITY_ARROW),
+		m_owner(owner),
 		m_sprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Weapons/Arrow.png")),
-		m_prevPosition(pos),
 		m_hasHit(false),
 		m_deleteTime(0.0f)
 	{
 		m_sprite.getTexture()->setFiltering(Texture2D::LINEAR);
 		m_sprite.setRegion(TextureRegion(), true);
-		setPosition(pos);
+		m_prevPosition = pos - m_sprite.getSize() * 0.5f,
+		setPosition(m_prevPosition);
 		setVelocity(dir.normalized() * speed);
 		setGravityScale(1.0f);
 		m_angle = m_prevAngle = atan2(dir.y, dir.x);
@@ -57,6 +58,17 @@ public:
 		{
 			m_hasHit = true;
 		}
+
+		for(Player *player : m_world->getPlayers())
+		{
+			if(player == m_owner) continue;
+			if(player->getRect().contains(Rect(m_sprite.getPosition(), m_sprite.getSize())))
+			{
+				m_hasHit = true;
+				player->decHealth(100);
+				m_deleteTime = 11.0f;
+			}
+		}
 		
 		m_prevAngle = m_angle;
 		m_angle = m_hasHit ? (m_sprite.getRotation()/180.0f * PI) : atan2(getVelocity().y, getVelocity().x);
@@ -65,6 +77,7 @@ public:
 	}
 
 private:
+	Player *m_owner;
 	Sprite m_sprite;
 	Vector2 m_prevPosition;
 	float m_angle;
@@ -77,7 +90,7 @@ void Bow::use(Player *player, const float delta)
 {
 	if(player->getStorage()->removeItem(ITEM_ARROW) == 0)
 	{
-		new Arrow(m_game->getWorld(), player->getCenter(), m_game->getWorld()->getCamera()->getInputPosition() - player->getCenter(), 50.0f);
+		new Arrow(player, m_game->getWorld(), player->getCenter(), m_game->getWorld()->getCamera()->getInputPosition() - player->getCenter(), 50.0f);
 	}
 }
 

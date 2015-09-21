@@ -60,7 +60,7 @@ void Client::update()
 
 		case ID_CREATE_ENTITY:
 			{
-				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				/*RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 				//bitStream.Read(entityID);
 				RakNet::NetworkID networkID; bitStream.Read(networkID);
@@ -75,7 +75,7 @@ void Client::update()
 
 				player->setPosition(Vector2(0, 0));
 				player->getStorage()->addItem(ITEM_PICKAXE_IRON);
-				player->getStorage()->addItem(ITEM_TORCH, 255);
+				player->getStorage()->addItem(ITEM_TORCH, 255);*/
 			}
 			break;
 			

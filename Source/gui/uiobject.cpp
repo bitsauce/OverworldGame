@@ -20,7 +20,7 @@ UiObject::~UiObject()
 {
 	m_scene->removeUiObject(this);
 }
-	
+
 bool UiObject::isPressed() const
 {
 	return m_pressed;
@@ -35,21 +35,26 @@ bool UiObject::isActive() const
 {
 	return m_active;
 }
-	
+
 void UiObject::update(const float)
 {
-	if(getRect().contains(Input::getPosition())) {
+	if(getRect().contains(Input::getPosition()))
+	{
 		m_hovered = true;
 		hover();
 	}
-	else {
+	else
+	{
 		m_hovered = false;
 		unhover();
 	}
-	
-	if(m_pressed) {
-		if(!Input::isKeyPressed(XD_MOUSE_BUTTON_LEFT)) {
-			if(m_hovered) {
+
+	if(m_pressed)
+	{
+		if(!Input::getKeyState(XD_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+		{
+			if(m_hovered)
+			{
 				m_active = true;
 				clickEvent();
 				activateEvent();
@@ -58,13 +63,17 @@ void UiObject::update(const float)
 			releaseEvent();
 		}
 	}
-	else {
-		if(Input::isKeyPressed(XD_MOUSE_BUTTON_LEFT)) {
-			if(m_active && !m_hovered) {
+	else
+	{
+		if(Input::getKeyState(XD_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+		{
+			if(m_active && !m_hovered)
+			{
 				m_active = false;
 				deactivateEvent();
 			}
-			if(m_hovered) {
+			if(m_hovered)
+			{
 				m_pressed = true;
 				pressEvent();
 			}
@@ -83,10 +92,10 @@ Vector2 UiObject::getPosition() const
 	Vector2 parentSize = m_parent ? m_parent->getSize() : Window::getSize();
 	Vector2 pos = m_rect.position;
 	Vector2 size = m_rect.size;
-			
+
 	parentPos += parentSize * m_anchor;
 	pos -= size * m_anchor;
-	
+
 	return parentPos + pos * parentSize;
 }
 
@@ -100,7 +109,7 @@ Vector2 UiObject::getSize() const
 	if(!m_parent) return Vector2(Window::getSize()) * m_rect.size;
 	return m_parent->getSize() * m_rect.size;
 }
-	
+
 Rect UiObject::getRect() const
 {
 	return Rect(getPosition(), getSize());

@@ -185,6 +185,15 @@
     <ClCompile Include="..\..\source\Game\Storage.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\PlayerController.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\Controller.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\AIController.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -455,6 +464,15 @@
     </ClInclude>
     <ClInclude Include="..\..\source\Game\Storage.h">
       <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\PlayerController.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\Controller.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\AIController.h">
+      <Filter>Source\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

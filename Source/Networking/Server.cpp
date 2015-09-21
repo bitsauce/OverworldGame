@@ -13,7 +13,10 @@
 #include "World/World.h"
 #include "World/Terrain/Terrain.h"
 #include "Entities/Player.h"
+#include "Entities/PlayerController.h"
+#include "Entities/AIController.h"
 #include "Entities/Physics/DynamicEntity.h"
+#include "Entities/Mobs/Zombie.h"
 #include "Game/Game.h"
 
 Server::Server(Game *game, const ushort port) :
@@ -41,7 +44,7 @@ void Server::update()
 			bitStream.Write((RakNet::MessageID)ID_NETWORK_OBJECT_UPDATE);
 			bitStream.Write(object->GetNetworkID());
 			object->pack(&bitStream, this);
-			m_rakPeer->SendLoopback((const char*)bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
+			m_rakPeer->SendLoopback((const char*) bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
 		}
 	}
 	m_isServer = true;
@@ -50,21 +53,21 @@ void Server::update()
 	{
 		switch(packet->data[0])
 		{
-		case ID_NEW_INCOMING_CONNECTION:
-			LOG("Client connected from %s with GUID %s", packet->systemAddress.ToString(true), packet->guid.ToString());
+			case ID_NEW_INCOMING_CONNECTION:
+				LOG("Client connected from %s with GUID %s", packet->systemAddress.ToString(true), packet->guid.ToString());
 
-			for(NetworkObject *object : m_networkObjects)
-			{
-				RakNet::BitStream bitStream;
-				bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
-				bitStream.Write(object->GetNetworkID());
-				bitStream.Write(m_rakPeer->GetMyGUID()/*object->GetGUID()*/);
-				sendPacket(&bitStream);
-			}
+				for(NetworkObject *object : m_networkObjects)
+				{
+					RakNet::BitStream bitStream;
+					bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
+					bitStream.Write(object->GetNetworkID());
+					bitStream.Write(m_rakPeer->GetMyGUID()/*object->GetGUID()*/);
+					sendPacket(&bitStream);
+				}
 
-			break;
+				break;
 
-		case ID_PLAYER_JOIN:
+			case ID_PLAYER_JOIN:
 			{
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -72,16 +75,27 @@ void Server::update()
 				char *playerName = new char[512];
 				bitStream.Read(playerName);
 
+				// Create player
+				Player *player = new Player(m_game);
+
+				m_game->getGameOverlay()->setPlayer(player);
+				m_game->getWorld()->getCamera()->setTargetEntity(player);
+				m_game->getWorld()->m_localPlayer = player;
+
+				player->SetNetworkIDManager(&m_networkIDManager);
+				
+				PlayerController *pc = new PlayerController(packet->guid);
+				pc->SetNetworkIDManager(&m_networkIDManager);
+				player->setController(pc);
+
+				m_networkObjects.push_back(pc);
+				m_networkObjects.push_back(player);
+				m_players[playerName] = player;
+
 				string playerFilePath = m_game->getWorld()->getWorldPath() + "/Players/" + playerName + ".obj";
 				if(util::fileExists(playerFilePath))
 				{
 					LOG("Loading player '%s'...", playerName);
-
-					// Create player
-					Player *player = new Player(m_game, packet->guid);
-					player->SetNetworkIDManager(&m_networkIDManager);
-					m_networkObjects.push_back(player);
-					m_players[playerName] = player;
 
 					// Load player data
 					FileReader playerSaveFile(playerFilePath);
@@ -92,12 +106,7 @@ void Server::update()
 				{
 					LOG("Creating new player '%s'...", playerName);
 
-					// Create player
-					Player *player = new Player(m_game, packet->guid);
-					player->SetNetworkIDManager(&m_networkIDManager);
-					m_networkObjects.push_back(player);
-					m_players[playerName] = player;
-
+					// Give default load out
 					player->setPosition(Vector2(0, 0));
 					player->getStorage()->addItem(ITEM_PICKAXE_IRON);
 					player->getStorage()->addItem(ITEM_TORCH, 255);
@@ -106,7 +115,9 @@ void Server::update()
 					player->getStorage()->addItem(ITEM_ARROW, 255);
 					player->getStorage()->addItem(ITEM_CRAFTING_BENCH);
 					player->getStorage()->addItem(ITEM_AXE_IRON);
-				
+				}
+
+				{
 					// Brodcast the packet to all clients with the network id of the object added
 					RakNet::BitStream bitStream(packet->data, packet->length, true);
 					bitStream.Write(player->GetNetworkID());
@@ -116,7 +127,7 @@ void Server::update()
 			}
 			break;
 
-		case ID_PLAYER_LEAVE:
+			case ID_PLAYER_LEAVE:
 			{
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -131,7 +142,7 @@ void Server::update()
 			}
 			break;
 
-		case ID_SET_BLOCK:
+			case ID_SET_BLOCK:
 			{
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -143,33 +154,46 @@ void Server::update()
 			}
 			break;
 
-		case ID_CREATE_ENTITY:
+			case ID_CREATE_ENTITY:
 			{
-				/*LOG("Creating player...");
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
-				// Create player
-				Player *player = new Player(m_game, packet->guid);
-				player->SetNetworkIDManager(&m_networkIDManager);
-				m_networkObjects.push_back(player);
+				// Get entity
+				EntityID entity;
+				bitStream.Read(entity);
 
-				player->setPosition(Vector2(0, 0));
-				player->getStorage()->addItem(ITEM_PICKAXE_IRON);
-				player->getStorage()->addItem(ITEM_TORCH, 255);
-				player->getStorage()->addItem(ITEM_BOW_WOODEN);
-				player->getStorage()->addItem(ITEM_ARROW, 255);
-				player->getStorage()->addItem(ITEM_ARROW, 255);
-				player->getStorage()->addItem(ITEM_CRAFTING_BENCH);
-				player->getStorage()->addItem(ITEM_AXE_IRON);
-				
-				// Brodcast the packet to all clients with the network id of the object added
-				RakNet::BitStream bitStream(packet->data, packet->length, true);
-				bitStream.Write(player->GetNetworkID());
-				bitStream.Write(packet->guid);
-				sendPacket(&bitStream);*/
+				NetworkObject *netObj;
+
+				switch(entity)
+				{
+					case ENTITY_ZOMBIE:
+					{
+						Player *zombie = new Player(m_game);
+
+						AIController *ac = new AIController(m_game->getWorld());
+						ac->SetNetworkIDManager(&m_networkIDManager);
+						m_networkObjects.push_back(ac);
+
+						zombie->setController(ac);
+						zombie->setPosition(m_players.begin()->second->getPosition());
+						netObj = zombie;
+					}
+				}
+
+				m_networkObjects.push_back(netObj);
+
+				{
+					// Brodcast the packet to all clients with the network id of the object added
+					RakNet::BitStream bitStream(packet->data, packet->length, true);
+					bitStream.Write(netObj->GetNetworkID());
+					bitStream.Write(packet->guid);
+					sendPacket(&bitStream);
+				}
 			}
 			break;
-			
-		case ID_NETWORK_OBJECT_UPDATE:
+
+			case ID_NETWORK_OBJECT_UPDATE:
 			{
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -189,9 +213,9 @@ void Server::update()
 			}
 			break;
 
-		default:
-			LOG("Received packet type %s", RakNet::PacketLogger::BaseIDTOString(packet->data[0]));
-			break;
+			default:
+				LOG("Received packet type %s", RakNet::PacketLogger::BaseIDTOString(packet->data[0]));
+				break;
 		}
 	}
 }
@@ -215,10 +239,10 @@ void Server::save()
 
 	/*for(Entity *e : m_entities)
 	{
-		FileWriter file(m_worldPath + "/Objects");
-		file << e->getID();
-		e->createSaveData(file);
-		file.close();
+	FileWriter file(m_worldPath + "/Objects");
+	file << e->getID();
+	e->createSaveData(file);
+	file.close();
 	}*/
 }
 

@@ -6,6 +6,7 @@
 #include "Networking/NetworkObject.h"
 #include "Humanoid.h"
 #include "Entities/Physics/DynamicEntity.h"
+#include "Controller.h"
 
 class Camera;
 class Terrain;
@@ -38,8 +39,10 @@ private:
 class Player : public DynamicEntity, public NetworkObject
 {
 public:
-	Player(Game *game, RakNet::RakNetGUID guid);
+	Player(Game *game);
 	~Player();
+
+	void setController(Controller *controller);
 
 	void activateThing(int action);
 
@@ -52,6 +55,7 @@ public:
 	void createSaveData(FileWriter &saveData);
 	void loadSaveData(FileReader &saveData);
 
+	void decHealth(int amt);
 	uint getMaxHealth() const { return m_maxHealth; }
 	uint getHealth() const { return m_health; }
 
@@ -68,44 +72,25 @@ private:
 	Terrain *m_terrain;
 	GameOverlay *m_gameOverlay;
 
+	Controller *m_controller;
+
 	// Inventory
 	Storage::Slot m_heldItem;
 	Bag *m_bag;
 	Storage m_storage;
 
 	// Player health
-	uint m_maxHealth;
-	uint m_health;
+	int m_maxHealth;
+	int m_health;
 
 	// Player-human model
 	Humanoid m_humanoid;
 
-	bool m_lmbPressed;
-
-	RakNet::RakNetGUID m_guid;
-	
-	enum
-	{
-		INPUT_MOVE_LEFT,
-		INPUT_MOVE_RIGHT,
-		INPUT_JUMP,
-		INPUT_RUN,
-		INPUT_USE_ITEM,
-		INPUT_COUNT
-	};
-	bool m_inputState[INPUT_COUNT];
-	bool m_clientInputState[INPUT_COUNT];
-
-	void setClientInputState(int action, int type)
-	{
-		m_clientInputState[type] = action == GLFW_PRESS;
-	}
-
-	void setClientUseItemState(int action);
-
 	// Physics
 	float m_jumpTimer;
 	bool m_canJump;
+
+	bool m_lmbPressed;
 };
 
 #endif // PLAYER_H

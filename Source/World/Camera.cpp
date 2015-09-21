@@ -66,23 +66,23 @@ void Camera::update(const float dt)
 {
 	if (!m_tagetEntity)
 	{
-		float acc = (Input::isKeyPressed(XD_KEY_LEFT_CONTROL) ? 32.0f : 256.0f) * dt;
+		float acc = (Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS ? 32.0f : 256.0f) * dt;
 		
 		m_prevPosition = m_position;
 
-		if (Input::isKeyPressed(XD_KEY_LEFT)) {
+		if (Input::getKeyState(XD_KEY_LEFT) == GLFW_PRESS) {
 			m_velocity.x -= acc;
 		}
 	
-		if(Input::isKeyPressed(XD_KEY_RIGHT)) {
+		if(Input::getKeyState(XD_KEY_RIGHT) == GLFW_PRESS) {
 			m_velocity.x += acc;
 		}
 	
-		if(Input::isKeyPressed(XD_KEY_UP)) {
+		if(Input::getKeyState(XD_KEY_UP) == GLFW_PRESS) {
 			m_velocity.y -= acc;
 		}
 	
-		if(Input::isKeyPressed(XD_KEY_DOWN)) {
+		if(Input::getKeyState(XD_KEY_DOWN) == GLFW_PRESS) {
 			m_velocity.y += acc;
 		}
 
