@@ -243,6 +243,9 @@
     <None Include="..\..\Content\Shaders\TileSort.frag" />
     <None Include="..\..\Content\Shaders\TileSort.vert" />
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\Content\KeyBinds.xml" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

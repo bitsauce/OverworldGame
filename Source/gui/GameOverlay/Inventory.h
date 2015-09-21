@@ -15,7 +15,7 @@ public:
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
-	void toggle();
+	void toggle(int action);
 	void show();
 	void hide();
 	

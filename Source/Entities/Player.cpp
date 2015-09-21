@@ -37,6 +37,12 @@ Player::Player(Game *game, RakNet::RakNetGUID guid) :
 	// Set body size
 	Entity::setSize(24, 48);
 
+	// Set input states to false
+	for(uint i = 0; i < INPUT_COUNT; ++i)
+	{
+		m_clientInputState[i] = m_inputState[i] = false;
+	}
+
 	// Init inventory things
 	m_storage.setNext(m_bag->getStorage());
 	
@@ -45,7 +51,13 @@ Player::Player(Game *game, RakNet::RakNetGUID guid) :
 	{
 		game->getGameOverlay()->setPlayer(this);
 
-		Input::bind(XD_MOUSE_BUTTON_RIGHT, bind(&Player::activateThing, this));
+		InputContext *inputContext = Input::getInputContext();
+		inputContext->bind("activate_thing", bind(&Player::activateThing, this, placeholders::_1), true);
+		inputContext->bind("move_left", bind(&Player::setClientInputState, this, placeholders::_1, INPUT_MOVE_LEFT), true);
+		inputContext->bind("move_right", bind(&Player::setClientInputState, this, placeholders::_1, INPUT_MOVE_RIGHT), true);
+		inputContext->bind("jump", bind(&Player::setClientInputState, this, placeholders::_1, INPUT_JUMP), true);
+		inputContext->bind("run", bind(&Player::setClientInputState, this, placeholders::_1, INPUT_RUN), true);
+		inputContext->bind("use_item", bind(&Player::setClientUseItemState, this, placeholders::_1), true);
 
 		m_camera->setTargetEntity(this);
 
@@ -69,8 +81,14 @@ Storage::Slot *Player::getCurrentItem()
 	return m_storage.getSlotAt(m_gameOverlay->getHotbar()->getSelectedSlot());
 }
 
-void Player::activateThing()
+void Player::setClientUseItemState(int action)
 {
+	m_clientInputState[INPUT_USE_ITEM] = action == GLFW_PRESS && !m_gameOverlay->isHovered();
+}
+
+void Player::activateThing(int action)
+{
+	if(action != GLFW_PRESS) return;
 	Vector2 inputPosition = m_camera->getInputPosition();
 	int blockX = (int)floor(inputPosition.x / BLOCK_PXF), blockY = (int)floor(inputPosition.y / BLOCK_PXF);
 	for(Thing *thing : m_terrain->getChunkLoader()->getChunkAt((int)floor(inputPosition.x / CHUNK_PXF), (int)floor(inputPosition.y / CHUNK_PXF)).getThings())
@@ -132,7 +150,7 @@ void Player::update(const float delta)
 	}
 
 	// Walking
-	applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (Input::getKeyState(XD_KEY_LEFT_SHIFT) ? 1.5f : 1.0f) * 10.0f, 0.0f));
+	applyImpulse(Vector2((m_inputState[INPUT_MOVE_RIGHT] - m_inputState[INPUT_MOVE_LEFT]) * (m_inputState[INPUT_RUN] ? 1.5f : 1.0f) * 10.0f, 0.0f));
 	if(getVelocity().x < -5.0f)
 	{
 		setVelocityX(-5.0f);
@@ -153,7 +171,7 @@ void Player::update(const float delta)
 	DynamicEntity::update(delta);
 
 	// Use current item
-	if(Input::getKeyState(XD_MOUSE_BUTTON_LEFT) && !m_gameOverlay->isHovered())
+	if(m_inputState[INPUT_USE_ITEM])
 	{
 		Storage::Slot *slot = getCurrentItem();
 		ItemData *item = ItemData::get(slot->getItem());
@@ -241,9 +259,10 @@ void Player::pack(RakNet::BitStream *bitStream, const Connection *conn)
 	}
 	else if(conn->getGUID() == m_guid)
 	{
-		bitStream->Write(Input::getKeyState(XD_KEY_A));
-		bitStream->Write(Input::getKeyState(XD_KEY_D));
-		bitStream->Write(Input::getKeyState(XD_KEY_SPACE));
+		for(uint i = 0; i < INPUT_COUNT; ++i)
+		{
+			bitStream->Write(m_clientInputState[i]);
+		}
 	}
 }
 
@@ -251,9 +270,10 @@ void Player::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 {
 	if(conn->isServer())
 	{
-		bitStream->Read(m_inputState[INPUT_MOVE_LEFT]);
-		bitStream->Read(m_inputState[INPUT_MOVE_RIGHT]);
-		bitStream->Read(m_inputState[INPUT_JUMP]);
+		for(uint i = 0; i < INPUT_COUNT; ++i)
+		{
+			bitStream->Read(m_inputState[i]);
+		}
 	}
 	else
 	{

@@ -9,12 +9,11 @@ Omnicon::Omnicon(Scene *scene, GameOverlay *gameOverlay) :
 {
 	m_bookSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 	m_bookSprite.setDepth(0.f);
-
-	Input::bind(XD_KEY_B, bind(&Omnicon::toggle, this));
 }
 
-void Omnicon::toggle()
+void Omnicon::toggle(int action)
 {
+	if(action != GLFW_PRESS) return;
 	m_visible = !m_visible;
 }
 

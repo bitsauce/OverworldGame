@@ -19,12 +19,12 @@ public:
 	void draw(SpriteBatch *spriteBatch);
 	void toggle();
 
-	void nextBlock();
-	void prevBlock();
+	void nextBlock(int action);
+	void prevBlock(int action);
 
 	void setVariable(const string &name, const string &value);
 
-	void debugFunction(const int i);
+	void debugFunction(int action, const int i);
 
 	bool isEnabled() { return m_enabled; }
 	FontPtr m_font;

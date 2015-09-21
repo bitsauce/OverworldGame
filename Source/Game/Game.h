@@ -37,7 +37,16 @@ public:
 	void popState();
 	GameState *peekState(int level = 0);
 
-	void takeScreenshot() { m_takeScreenshot = true; }
+	void takeScreenshot(int action)
+	{
+		if(action != GLFW_PRESS) return;
+		m_takeScreenshot = true;
+	}
+	void toggleFullscreen(int action)
+	{
+		if(action != GLFW_PRESS) return;
+		Window::setFullScreen(!Window::getFullScreen());
+	}
 
 private:
 	SpriteBatch *m_spriteBatch;

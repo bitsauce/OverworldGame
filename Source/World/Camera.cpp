@@ -12,9 +12,6 @@ Camera::Camera() :
 	m_velocity(0.0f, 0.0f),
 	m_tagetEntity(0)
 {
-	Input::bind(XD_KEY_EQUAL, function<void()>(bind(&Camera::zoomIn, this)));
-	Input::bind(XD_KEY_MINUS, function<void()>(bind(&Camera::zoomOut, this)));
-
 	setZoomLevel(1.0f);
 }
 
@@ -69,23 +66,23 @@ void Camera::update(const float dt)
 {
 	if (!m_tagetEntity)
 	{
-		float acc = (Input::getKeyState(XD_KEY_LEFT_CONTROL) ? 32.0f : 256.0f) * dt;
+		float acc = (Input::isKeyPressed(XD_KEY_LEFT_CONTROL) ? 32.0f : 256.0f) * dt;
 		
 		m_prevPosition = m_position;
 
-		if (Input::getKeyState(XD_KEY_LEFT)) {
+		if (Input::isKeyPressed(XD_KEY_LEFT)) {
 			m_velocity.x -= acc;
 		}
 	
-		if(Input::getKeyState(XD_KEY_RIGHT)) {
+		if(Input::isKeyPressed(XD_KEY_RIGHT)) {
 			m_velocity.x += acc;
 		}
 	
-		if(Input::getKeyState(XD_KEY_UP)) {
+		if(Input::isKeyPressed(XD_KEY_UP)) {
 			m_velocity.y -= acc;
 		}
 	
-		if(Input::getKeyState(XD_KEY_DOWN)) {
+		if(Input::isKeyPressed(XD_KEY_DOWN)) {
 			m_velocity.y += acc;
 		}
 

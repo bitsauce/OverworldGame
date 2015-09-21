@@ -11,7 +11,7 @@ class Omnicon : public UiObject
 public:
 	Omnicon(Scene *scene, GameOverlay *gameOverlay);
 
-	void toggle();
+	void toggle(int action);
 	void setVisible(const bool visible) { m_visible = visible; }
 	bool isVisible() const { return m_visible; }
 

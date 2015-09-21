@@ -519,4 +519,7 @@
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\Content\KeyBinds.xml" />
+  </ItemGroup>
 </Project>

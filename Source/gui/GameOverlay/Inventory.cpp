@@ -24,16 +24,15 @@ Inventory::Inventory(Scene *scene, GameOverlay *gameOverlay) :
 	m_itemSlotSprite.setDepth(-3.f);
 	m_backgroundSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 	m_backgroundSprite.setDepth(-4.f);
-	
-	Input::bind(XD_KEY_I, bind(&Inventory::toggle, this));
 
 	setAnchor(Vector2(0.5f, 0.85f));
 	setSize(Vector2(970.0f, 248.0f)/m_parent->getSize());
 	setPosition(Vector2(0.0f));
 }
 
-void Inventory::toggle()
+void Inventory::toggle(int action)
 {
+	if(action != GLFW_PRESS) return;
 	m_showing = !m_showing;
 }
 

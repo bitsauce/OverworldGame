@@ -14,9 +14,17 @@ public:
 
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
-	
-	void setSelectedSlot(const uint slot) { m_selectedSlot = slot; }
-	uint getSelectedSlot() const { return m_selectedSlot; }
+
+	void setSelectedSlot(int action, const uint slot)
+	{
+		if(action != GLFW_PRESS) return;
+		m_selectedSlot = slot;
+	}
+
+	uint getSelectedSlot() const
+	{
+		return m_selectedSlot;
+	}
 	
 	void keyPressEvent(const VirtualKey key);
 	void mouseWheelEvent(const int delta);

@@ -26,18 +26,6 @@ Hotbar::Hotbar(Scene *scene, GameOverlay *gameOverlay) :
 	setAnchor(Vector2(0.5f, 0.98f));
 	setSize(Vector2(490.f, 56.f)/m_parent->getSize());
 	setPosition(Vector2(.0f));
-
-	// Bind keys to item slots
-	Input::bind(XD_KEY_1, bind(&Hotbar::setSelectedSlot, this, 0));
-	Input::bind(XD_KEY_2, bind(&Hotbar::setSelectedSlot, this, 1));
-	Input::bind(XD_KEY_3, bind(&Hotbar::setSelectedSlot, this, 2));
-	Input::bind(XD_KEY_4, bind(&Hotbar::setSelectedSlot, this, 3));
-	Input::bind(XD_KEY_5, bind(&Hotbar::setSelectedSlot, this, 4));
-	Input::bind(XD_KEY_6, bind(&Hotbar::setSelectedSlot, this, 5));
-	Input::bind(XD_KEY_7, bind(&Hotbar::setSelectedSlot, this, 6));
-	Input::bind(XD_KEY_8, bind(&Hotbar::setSelectedSlot, this, 7));
-	Input::bind(XD_KEY_9, bind(&Hotbar::setSelectedSlot, this, 8));
-	Input::bind(XD_KEY_0, bind(&Hotbar::setSelectedSlot, this, 9));
 }
 
 Hotbar::~Hotbar()

@@ -41,7 +41,7 @@ public:
 	Player(Game *game, RakNet::RakNetGUID guid);
 	~Player();
 
-	void activateThing();
+	void activateThing(int action);
 
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
@@ -89,9 +89,19 @@ private:
 		INPUT_MOVE_LEFT,
 		INPUT_MOVE_RIGHT,
 		INPUT_JUMP,
+		INPUT_RUN,
+		INPUT_USE_ITEM,
 		INPUT_COUNT
 	};
 	bool m_inputState[INPUT_COUNT];
+	bool m_clientInputState[INPUT_COUNT];
+
+	void setClientInputState(int action, int type)
+	{
+		m_clientInputState[type] = action == GLFW_PRESS;
+	}
+
+	void setClientUseItemState(int action);
 
 	// Physics
 	float m_jumpTimer;
