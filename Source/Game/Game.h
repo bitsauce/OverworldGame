@@ -9,7 +9,7 @@
 #include "World/World.h"
 #include "Networking/Client.h"
 #include "Networking/Server.h"
-#include "Entities/Player.h"
+#include "Entities/Pawn.h"
 
 class Debug;
 class GameState;

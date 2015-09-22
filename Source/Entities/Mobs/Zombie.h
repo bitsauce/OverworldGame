@@ -2,13 +2,13 @@
 #define ZOMBIE_H
 
 #include "Config.h"
-#include "Entities/Player.h"
+#include "Entities/Pawn.h"
 #include "Entities/Humanoid.h"
 #include "Entities/Physics/DynamicEntity.h"
 
 class Game;
 
-class Zombie : public Player
+class Zombie : public Pawn
 {
 public:
 	Zombie(Game *game);

@@ -4,7 +4,7 @@
 #include "Networking/NetworkObject.h"
 #include "Entities/Physics/DynamicEntity.h"
 
-class Player;
+class Pawn;
 
 class Controller : public NetworkObject
 {
@@ -29,9 +29,9 @@ public:
 		return m_inputState[type];
 	}
 
-	void setPlayer(Player *player)
+	void setPawn(Pawn *pawn)
 	{
-		m_player = player;
+		m_pawn = pawn;
 	}
 
 	virtual void update() { }
@@ -42,7 +42,7 @@ private:
 
 protected:
 	RakNet::RakNetGUID m_guid;
-	Player *m_player;
+	Pawn *m_pawn;
 	void setClientInputState(int action, int type);
 	void setClientUseItemState(int action);
 };

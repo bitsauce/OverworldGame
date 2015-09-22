@@ -21,7 +21,7 @@ Pickaxe::Pickaxe(Game *game) :
 	m_sprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 }
 
-void Pickaxe::use(Player *player, const float delta)
+void Pickaxe::use(Pawn *pawn, const float delta)
 {
 	// Get block input position
 	Vector2i position = m_game->getWorld()->getCamera()->getInputPosition();
@@ -60,7 +60,7 @@ void Pickaxe::use(Player *player, const float delta)
 	}
 }
 
-void Pickaxe::draw(Player *player, SpriteBatch *spriteBatch, const float alpha)
+void Pickaxe::draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha)
 {
 	// Is there a block at this position?
 	if(m_game->getWorld()->getTerrain()->isBlockAt(m_prevBlockPosition.x, m_prevBlockPosition.y, TERRAIN_LAYER_MIDDLE))

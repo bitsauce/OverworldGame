@@ -14,7 +14,7 @@
 #include "Game/Game.h"
 #include "World/Terrain/Terrain.h"
 
-#include "Entities/Player.h"
+#include "Entities/Pawn.h"
 #include "Entities/Physics/DynamicEntity.h"
 
 Client::Client(Game *game, const string &ip, const ushort port) :
@@ -67,7 +67,7 @@ void Client::update()
 				RakNet::RakNetGUID guid; bitStream.Read(guid);
 
 				// Create player
-				Player *player = new Player(m_game, guid);
+				Pawn *player = new Pawn(m_game, guid);
 				player->SetNetworkIDManager(&m_networkIDManager);
 				player->SetNetworkID(networkID);
 

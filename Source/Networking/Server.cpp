@@ -12,6 +12,7 @@
 #include "Constants.h"
 #include "World/World.h"
 #include "World/Terrain/Terrain.h"
+#include "Entities/Pawn.h"
 #include "Entities/Player.h"
 #include "Entities/PlayerController.h"
 #include "Entities/AIController.h"
@@ -54,6 +55,7 @@ void Server::update()
 		switch(packet->data[0])
 		{
 			case ID_NEW_INCOMING_CONNECTION:
+			{
 				LOG("Client connected from %s with GUID %s", packet->systemAddress.ToString(true), packet->guid.ToString());
 
 				for(NetworkObject *object : m_networkObjects)
@@ -64,8 +66,8 @@ void Server::update()
 					bitStream.Write(m_rakPeer->GetMyGUID()/*object->GetGUID()*/);
 					sendPacket(&bitStream);
 				}
-
-				break;
+			}
+			break;
 
 			case ID_PLAYER_JOIN:
 			{
@@ -77,18 +79,23 @@ void Server::update()
 
 				// Create player
 				Player *player = new Player(m_game);
-
-				m_game->getGameOverlay()->setPlayer(player);
-				m_game->getWorld()->getCamera()->setTargetEntity(player);
-				m_game->getWorld()->m_localPlayer = player;
-
 				player->SetNetworkIDManager(&m_networkIDManager);
-				
-				PlayerController *pc = new PlayerController(packet->guid);
-				pc->SetNetworkIDManager(&m_networkIDManager);
-				player->setController(pc);
 
-				m_networkObjects.push_back(pc);
+				// If player is hosting locally
+				if(getGUID() == packet->guid)
+				{
+					m_game->getGameOverlay()->setPlayer(player);
+					m_game->getWorld()->getCamera()->setTargetEntity(player);
+					m_game->getWorld()->m_localPlayer = player;
+				}
+
+				// Create player controller (should probably not be here)
+				PlayerController *controller = new PlayerController(packet->guid);
+				controller->SetNetworkIDManager(&m_networkIDManager);
+				player->setController(controller);
+
+				// Add to network objects
+				m_networkObjects.push_back(controller);
 				m_networkObjects.push_back(player);
 				m_players[playerName] = player;
 
@@ -169,13 +176,13 @@ void Server::update()
 				{
 					case ENTITY_ZOMBIE:
 					{
-						Player *zombie = new Player(m_game);
+						Zombie *zombie = new Zombie(m_game);
 
-						AIController *ac = new AIController(m_game->getWorld());
-						ac->SetNetworkIDManager(&m_networkIDManager);
-						m_networkObjects.push_back(ac);
+						AIController *controller = new AIController(m_game->getWorld());
+						controller->SetNetworkIDManager(&m_networkIDManager);
+						m_networkObjects.push_back(controller);
 
-						zombie->setController(ac);
+						zombie->setController(controller);
 						zombie->setPosition(m_players.begin()->second->getPosition());
 						netObj = zombie;
 					}
@@ -232,7 +239,7 @@ void Server::save()
 	m_game->getWorld()->getTerrain()->getChunkLoader()->clear();
 
 	// Save all players
-	for(map<string, Player*>::iterator itr = m_players.begin(); itr != m_players.end(); ++itr)
+	for(map<string, Pawn*>::iterator itr = m_players.begin(); itr != m_players.end(); ++itr)
 	{
 		savePlayer(itr->first);
 	}
@@ -248,7 +255,7 @@ void Server::save()
 
 void Server::savePlayer(string playerName)
 {
-	Player *player = m_players[playerName];
+	Pawn *player = m_players[playerName];
 	string playerFilePath = m_game->getWorld()->getWorldPath() + "/Players/" + playerName + ".obj";
 	FileWriter file(playerFilePath);
 	player->createSaveData(file);

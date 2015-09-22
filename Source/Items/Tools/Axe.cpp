@@ -23,7 +23,7 @@ Axe::Axe(Game *game) :
 	m_sprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 }
 
-void Axe::use(Player *player, const float delta)
+void Axe::use(Pawn *pawn, const float delta)
 {
 	// Get block input position
 	Vector2i position = m_game->getWorld()->getCamera()->getInputPosition();
@@ -72,7 +72,7 @@ void Axe::use(Player *player, const float delta)
 	}
 }
 
-void Axe::draw(Player *player, SpriteBatch *spriteBatch, const float alpha)
+void Axe::draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha)
 {
 	// Is there a block at this position?
 	if(m_game->getWorld()->getTerrain()->isBlockAt(m_prevBlockPosition.x, m_prevBlockPosition.y, TERRAIN_LAYER_BACK))

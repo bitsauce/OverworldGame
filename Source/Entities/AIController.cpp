@@ -1,6 +1,6 @@
 #include "AIController.h"
 #include "Networking/Connection.h"
-#include "Player.h"
+#include "Pawn.h"
 #include "World/World.h"
 
 AIController::AIController(World *world) :
@@ -16,19 +16,19 @@ void AIController::update()
 		setClientInputState(GLFW_RELEASE, i);
 	}
 
-	Player *closestPlayer = nullptr;
-	for(Player *player : m_world->getPlayers())
+	Pawn* closestPawn = nullptr;
+	for(Pawn *pawn : m_world->getPawns())
 	{
-		if(player == m_player) continue;
-		if(!closestPlayer || (player->getCenter() - m_player->getCenter()).magnitude() < (closestPlayer->getCenter() - m_player->getCenter()).magnitude())
+		if(pawn == m_pawn) continue;
+		if(!closestPawn || (pawn->getCenter() - m_pawn->getCenter()).magnitude() < (closestPawn->getCenter() - m_pawn->getCenter()).magnitude())
 		{
-			closestPlayer = player;
+			closestPawn = pawn;
 		}
 	}
 
-	if(closestPlayer)
+	if(closestPawn)
 	{
-		Vector2 playerPosition = closestPlayer->getCenter(), position = m_player->getCenter();
+		Vector2 playerPosition = closestPawn->getCenter(), position = m_pawn->getCenter();
 		if(playerPosition.x < position.x)
 		{
 			setClientInputState(GLFW_PRESS, INPUT_MOVE_LEFT);
@@ -38,11 +38,11 @@ void AIController::update()
 			setClientInputState(GLFW_PRESS, INPUT_MOVE_RIGHT);
 		}
 
-		if(m_prevPos.x == m_player->getX())
+		if(m_prevPos.x == m_pawn->getX())
 		{
 			setClientInputState(GLFW_PRESS, INPUT_JUMP);
 		}
 	}
 
-	m_prevPos = m_player->getPosition();
+	m_prevPos = m_pawn->getPosition();
 }

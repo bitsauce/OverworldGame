@@ -1,7 +1,7 @@
 #include "World.h"
 #include "Constants.h"
 
-#include "Entities/Player.h"
+#include "Entities/Pawn.h"
 #include "World/Background.h"
 #include "World/Camera.h"
 #include "World/TimeOfDay.h"
@@ -9,7 +9,7 @@
 #include "Terrain/Terrain.h"
 #include "Generation/Generator.h"
 #include "Entities/Physics/DynamicEntity.h"
-#include "Entities/Player.h"
+#include "Entities/Pawn.h"
 #include "Lighting/Lighting.h"
 #include "Things/Thing.h"
 
@@ -101,7 +101,7 @@ void World::clear()
 		delete entity;
 	}
 	m_entities.clear();
-	m_players.clear();
+	m_pawns.clear();
 	m_localPlayer = nullptr;
 }
 

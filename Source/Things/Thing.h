@@ -3,14 +3,14 @@
 
 #include "Config.h"
 
-class Player;
+class Pawn;
 
 class Thing
 {
 public:
 	Thing(const int x, const int y);
 
-	virtual void activate(Player *player) {}
+	virtual void activate(Pawn *player) {}
 
 	virtual void draw(SpriteBatch *spriteBatch, const float alpha) {}
 

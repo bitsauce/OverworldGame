@@ -14,12 +14,14 @@ class Server;
 class Client;
 class Entity;
 class Background;
+class Player;
+class Pawn;
 
 // This class is concerned with the objects contained within the world
 class World
 {
 	friend class Server;
-	friend class Player;
+	friend class Pawn;
 public:
 	World();
 
@@ -47,7 +49,7 @@ public:
 	void addEntity(Entity *entity) { m_entities.push_back(entity); }
 	void removeEntity(Entity *entity) { m_entities.remove(entity); }
 	list<Entity*> getEntities() const { return m_entities; }
-	list<Player*> getPlayers() const { return m_players; }
+	list<Pawn*> getPawns() const { return m_pawns; }
 	Player *getLocalPlayer() const { return m_localPlayer; }
 
 private:
@@ -60,7 +62,7 @@ private:
 	IniFile *m_worldFile;
 	Camera *m_camera;
 	Lighting *m_lighting;
-	list<Player*> m_players;
+	list<Pawn*> m_pawns;
 	Player* m_localPlayer;
 	list<Entity*> m_entities;
 };

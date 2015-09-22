@@ -10,8 +10,8 @@ class Ammo : public ItemData
 public:
 	Ammo(Game *);
 	
-	void use(Player *player, const float delta) { }
-	void draw(Player *player, SpriteBatch *spriteBatch, const float alpha) { }
+	void use(Pawn *player, const float delta) { }
+	void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha) { }
 };
 
 #endif // AMMO_H

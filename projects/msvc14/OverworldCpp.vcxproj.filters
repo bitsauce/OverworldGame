@@ -104,9 +104,6 @@
     <ClCompile Include="..\..\source\Entities\ItemDrop.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\Entities\Player.cpp">
-      <Filter>Source\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\World\TimeOfDay.cpp">
       <Filter>Source\World</Filter>
     </ClCompile>
@@ -192,6 +189,12 @@
       <Filter>Source\Entities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Entities\AIController.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Entities\Pawn.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\Player.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
   </ItemGroup>
@@ -381,9 +384,6 @@
     <ClInclude Include="..\..\source\Entities\ItemDrop.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\Entities\Player.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\World\TimeOfDay.h">
       <Filter>Source\World</Filter>
     </ClInclude>
@@ -472,6 +472,12 @@
       <Filter>Source\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Entities\AIController.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Entities\Pawn.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\Player.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
   </ItemGroup>

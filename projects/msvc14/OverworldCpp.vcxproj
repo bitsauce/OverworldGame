@@ -104,7 +104,8 @@
     <ClCompile Include="..\..\source\Entities\ItemDrop.cpp" />
     <ClCompile Include="..\..\source\Entities\Mobs\Zombie.cpp" />
     <ClCompile Include="..\..\Source\Entities\Physics\DynamicEntity.cpp" />
-    <ClCompile Include="..\..\source\Entities\Player.cpp" />
+    <ClCompile Include="..\..\source\Entities\Pawn.cpp" />
+    <ClCompile Include="..\..\Source\Entities\Player.cpp" />
     <ClCompile Include="..\..\Source\Entities\PlayerController.cpp" />
     <ClCompile Include="..\..\Source\Game\Debug.cpp" />
     <ClCompile Include="..\..\Source\Game\Game.cpp" />
@@ -173,7 +174,8 @@
     <ClInclude Include="..\..\source\Entities\ItemDrop.h" />
     <ClInclude Include="..\..\source\Entities\Mobs\Zombie.h" />
     <ClInclude Include="..\..\Source\Entities\Physics\DynamicEntity.h" />
-    <ClInclude Include="..\..\source\Entities\Player.h" />
+    <ClInclude Include="..\..\source\Entities\Pawn.h" />
+    <ClInclude Include="..\..\Source\Entities\Player.h" />
     <ClInclude Include="..\..\Source\Entities\PlayerController.h" />
     <ClInclude Include="..\..\Source\Game\Debug.h" />
     <ClInclude Include="..\..\Source\Game\Game.h" />

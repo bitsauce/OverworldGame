@@ -10,8 +10,8 @@ class ThingItem : public ItemData
 public:
 	ThingItem(Game *game, const ThingID id);
 
-	void use(Player *player, const float delta);
-	void draw(Player *player, SpriteBatch *spriteBatch, const float alpha);
+	void use(Pawn *player, const float delta);
+	void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:
 	Game *m_game;

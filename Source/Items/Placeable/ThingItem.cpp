@@ -1,7 +1,7 @@
 #include "ThingItem.h"
 #include "Things/ThingData.h"
 #include "World/Terrain/Terrain.h"
-#include "Entities/Player.h"
+#include "Entities/Pawn.h"
 #include "World/Camera.h"
 #include "Game/Game.h"
 
@@ -11,7 +11,7 @@ ThingItem::ThingItem(Game *game, const ThingID id) :
 {
 }
 
-void ThingItem::use(Player *player, const float delta)
+void ThingItem::use(Pawn *player, const float delta)
 {
 	// Get block input position
 	Vector2i blockPos = m_game->getWorld()->getCamera()->getInputPosition();
@@ -26,7 +26,7 @@ void ThingItem::use(Player *player, const float delta)
 	}
 }
 
-void ThingItem::draw(Player *player, SpriteBatch *spriteBatch, const float alpha)
+void ThingItem::draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha)
 {
 	// Get block input position
 	Vector2i blockPos = m_game->getWorld()->getCamera()->getInputPosition();

@@ -1,25 +1,21 @@
 #include "Zombie.h"
 #include "World/World.h"
-#include "Entities/Player.h"
+#include "Entities/Pawn.h"
 #include "Constants.h"
 
 Zombie::Zombie(Game *game) :
-	Player(game)
+	Pawn(game, ENTITY_ZOMBIE)
 {
-	// Set body size
-	Entity::setSize(24, 48);
-
 	//setBodyPart(HEAD, ResourceManager::get<Texture2D>(":/Sprites/Mobs/Zombie/Head.png")->getPixmap());
+	m_moveSpeed = 2.5f;
 }
-
-#define SGN(x) ((x < 0) ? -1 : (x > 0))
 
 void Zombie::update(const float delta)
 {
-	Player::update(delta);
+	Pawn::update(delta);
 }
 
 void Zombie::draw(SpriteBatch *spriteBatch, const float alpha)
 {
-	Player::draw(spriteBatch, alpha);
+	Pawn::draw(spriteBatch, alpha);
 }

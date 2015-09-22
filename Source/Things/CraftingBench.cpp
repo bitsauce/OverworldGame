@@ -1,7 +1,7 @@
 #include "CraftingBench.h"
 #include "ThingData.h"
 #include "Constants.h"
-#include "Entities/Player.h"
+#include "Entities/Pawn.h"
 #include "Game/Game.h"
 
 CraftingBench::CraftingBench(Game *game, const int x, const int y) :
@@ -12,7 +12,7 @@ CraftingBench::CraftingBench(Game *game, const int x, const int y) :
 	m_sprite.setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
 }
 
-void CraftingBench::activate(Player *player)
+void CraftingBench::activate(Pawn *player)
 {
 	m_game->getGameOverlay()->toggleCrafting();
 }

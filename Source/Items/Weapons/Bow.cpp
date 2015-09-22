@@ -1,6 +1,6 @@
 #include "Bow.h"
 #include "Constants.h"
-#include "Entities/Player.h"
+#include "Entities/Pawn.h"
 #include "Entities/Physics/DynamicEntity.h"
 #include "World/Camera.h"
 #include "World/World.h"
@@ -16,7 +16,7 @@ Bow::Bow(Game *game) :
 class Arrow : public DynamicEntity
 {
 public:
-	Arrow(Player *owner, World *world, const Vector2 &pos, const Vector2 &dir, const float speed) :
+	Arrow(Pawn *owner, World *world, const Vector2 &pos, const Vector2 &dir, const float speed) :
 		DynamicEntity(world, ENTITY_ARROW),
 		m_owner(owner),
 		m_sprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Weapons/Arrow.png")),
@@ -59,13 +59,13 @@ public:
 			m_hasHit = true;
 		}
 
-		for(Player *player : m_world->getPlayers())
+		for(Pawn *pawn : m_world->getPawns())
 		{
-			if(player == m_owner) continue;
-			if(player->getRect().contains(Rect(m_sprite.getPosition(), m_sprite.getSize())))
+			if(pawn == m_owner) continue;
+			if(pawn->getRect().contains(Rect(m_sprite.getPosition(), m_sprite.getSize())))
 			{
 				m_hasHit = true;
-				player->decHealth(100);
+				pawn->decHealth(100);
 				m_deleteTime = 11.0f;
 			}
 		}
@@ -77,7 +77,7 @@ public:
 	}
 
 private:
-	Player *m_owner;
+	Pawn *m_owner;
 	Sprite m_sprite;
 	Vector2 m_prevPosition;
 	float m_angle;
@@ -86,7 +86,7 @@ private:
 	float m_deleteTime;
 };
 
-void Bow::use(Player *player, const float delta)
+void Bow::use(Pawn *player, const float delta)
 {
 	if(player->getStorage()->removeItem(ITEM_ARROW) == 0)
 	{
@@ -94,7 +94,7 @@ void Bow::use(Player *player, const float delta)
 	}
 }
 
-void Bow::draw(Player *player, SpriteBatch *spriteBatch, const float alpha)
+void Bow::draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha)
 {
 	player->getHumanoid().drawRightHandSprite(m_bowSprite, Vector2(10.0f, 24.0f), spriteBatch);
 }

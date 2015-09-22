@@ -4,7 +4,7 @@
 #include "Config.h"
 #include "Game/Storage.h"
 
-class Player;
+class Pawn;
 enum ItemID;
 
 class ItemData
@@ -12,8 +12,8 @@ class ItemData
 	friend class Game;
 public:
 	ItemData();
-	virtual void use(Player *player, const float delta) = 0;
-	virtual void draw(Player *player, SpriteBatch *spriteBatch, const float alpha) = 0;
+	virtual void use(Pawn *pawn, const float delta) = 0;
+	virtual void draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha) = 0;
 	static ItemData *get(const ItemID id) { return s_itemData[id]; }
 
 	ItemID getID() const { return m_id; }

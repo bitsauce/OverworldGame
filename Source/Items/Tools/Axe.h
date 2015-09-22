@@ -8,8 +8,8 @@ class Axe : public ItemData
 public:
 	Axe(Game *game);
 
-	void use(Player *player, const float delta);
-	void draw(Player *player, SpriteBatch *spriteBatch, const float alpha);
+	void use(Pawn *player, const float delta);
+	void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha);
 
 	void makeTreeFall(const int x, const int y);
 

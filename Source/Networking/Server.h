@@ -9,7 +9,7 @@ namespace RakNet {
 }
 
 class Game;
-class Player;
+class Pawn;
 
 class Server : public Connection
 {
@@ -27,7 +27,7 @@ private:
 	void savePlayer(string playerName);
 
 	Game *m_game;
-	map<string, Player*> m_players;
+	map<string, Pawn*> m_players;
 };
 
 #endif // SERVER_H

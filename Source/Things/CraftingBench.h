@@ -12,7 +12,7 @@ class CraftingBench : public Thing
 public:
 	CraftingBench(Game *game, const int x, const int y);
 
-	void activate(Player *player);
+	void activate(Pawn *player);
 	
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
