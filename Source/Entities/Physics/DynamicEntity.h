@@ -36,6 +36,7 @@ public:
 
 	Vector2 getDrawPosition(const float alpha) { return math::lerp(m_prevPosition, m_position, alpha); }
 
+	bool m_allowRotation;
 private:
 	Vector2 m_acceleration;
 	Vector2 m_velocity;
@@ -44,7 +45,6 @@ private:
 	Vector2 m_size;
 	float m_rotation;
 	float m_gravityScale;
-	bool m_allowRotation;
 	uint m_contact;
 
 	Terrain *m_terrain;

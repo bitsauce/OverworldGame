@@ -2,8 +2,13 @@
 
 #include "rayCast.h"
 
+RayCast::RayCast(function<bool(int, int)> plotTest) :
+	m_plotTest(plotTest)
+{
+}
+
 // This function casts a ray from p0 to p1
-bool RayCast::test(const Vector2i p0, const Vector2i p1)
+bool RayCast::trace(const Vector2i p0, const Vector2i p1)
 {
 	// Clear previous points
 	m_points.clear();
@@ -65,12 +70,7 @@ bool RayCast::test(const Vector2i p0, const Vector2i p1)
 	
 bool RayCast::plot(const int x, const int y)
 {
-	// Test plot
-	if(m_plotTest != nullptr && !m_plotTest(x, y)) {
-		return false;
-	}
-		
 	// Plot the point
 	m_points.push_back(Vector2i(x, y));
-	return true;
+	return m_plotTest == nullptr || m_plotTest(x, y);
 }

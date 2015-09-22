@@ -6,13 +6,16 @@
 class RayCast
 {
 public:
+	RayCast(function<bool(int, int)> plotTest);
 
-	bool test(const Vector2i p0, const Vector2i p1);
-	bool plot(const int x, const int y);
+	bool trace(const Vector2i p0, const Vector2i p1);
 
 	vector<Vector2i> getPoints() const { return m_points; }
 
 private:
+	// Plot
+	bool plot(const int x, const int y);
+
 	// The rasterized points
 	vector<Vector2i> m_points;
 	

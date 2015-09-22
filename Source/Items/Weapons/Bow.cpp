@@ -5,6 +5,7 @@
 #include "World/Camera.h"
 #include "World/World.h"
 #include "Game/Game.h"
+#include "Game/RayCast.h"
 
 Bow::Bow(Game *game) :
 	m_game(game),
@@ -25,6 +26,8 @@ public:
 	{
 		m_sprite.getTexture()->setFiltering(Texture2D::LINEAR);
 		m_sprite.setRegion(TextureRegion(), true);
+		m_sprite.setOrigin(m_sprite.getSize() * 0.5f);
+
 		m_prevPosition = pos - m_sprite.getSize() * 0.5f,
 		setPosition(m_prevPosition);
 		setVelocity(dir.normalized() * speed);
@@ -35,9 +38,32 @@ public:
 	void draw(SpriteBatch *spriteBatch, const float alpha)
 	{
 		float angle = math::lerp(m_prevAngle, m_angle, alpha);
-		m_sprite.setRotation(angle * (180.0f/PI));
-		m_sprite.setPosition(math::lerp(m_prevPosition, getPosition(), alpha) - Vector2(cos(angle), sin(angle)) * 16.0f + Vector2(0.0f, 3.0f));
+		m_sprite.setRotation(angle * (180.0f / PI));
+		m_sprite.setPosition(math::lerp(m_prevPosition, getPosition(), alpha));
+
+		/*Vector2 aabb[4];
+		m_sprite.getAABB(aabb);
+
+		Vector2 dt = getPosition() - m_prevPosition;
+		Vector2 pos = (aabb[1] + aabb[2]) / 2.0f;
+
+		GraphicsContext &context = spriteBatch->getGraphicsContext();
+		context.setModelViewMatrix(spriteBatch->getState().projectionMatix);
+		{
+			RayCast rayCast(bind(&Arrow::plotTest, this, placeholders::_1, placeholders::_2));
+			rayCast.trace(pos, pos + dt);
+			for(Vector2i p : rayCast.getPoints())
+			{
+				context.drawRectangle(p, Vector2(1.0f), Color(255, 0, 0, 127));
+			}
+		}*/
+
 		spriteBatch->drawSprite(m_sprite);
+	}
+
+	bool plotTest(int x, int y)
+	{
+		return !m_world->getTerrain()->isBlockAt(floor(x / BLOCK_PXF), floor(y / BLOCK_PXF), TERRAIN_LAYER_MIDDLE);
 	}
 
 	void update(const float delta)
@@ -45,8 +71,8 @@ public:
 		m_prevPosition = getPosition();
 		if(m_hasHit)
 		{
-			m_deleteTime += delta;
-			if(m_deleteTime > 10.0f)
+			//m_deleteTime += delta;
+			//if(m_deleteTime > 10.0f)
 			{
 				delete this;
 				return;
@@ -54,11 +80,28 @@ public:
 			return;
 		}
 
-		if(isContact(NESW))
+		m_allowRotation = true;
+		if(!m_hasHit)
 		{
-			m_hasHit = true;
+			DynamicEntity::update(delta);
 		}
 
+		// Ray cast
+		Vector2 aabb[4];
+		m_sprite.getAABB(aabb);
+
+		Vector2 dt = getPosition() - m_prevPosition;
+		Vector2 pos = (aabb[1] + aabb[2]) / 2.0f;
+
+		RayCast rayCast(bind(&Arrow::plotTest, this, placeholders::_1, placeholders::_2));
+		if(!m_hasHit && rayCast.trace(pos, pos + dt))
+		{
+			m_hasHit = true;
+			setPosition(m_prevPosition);
+		}
+
+		/*
+		// Add to testPlot
 		for(Pawn *pawn : m_world->getPawns())
 		{
 			if(pawn == m_owner) continue;
@@ -68,12 +111,10 @@ public:
 				pawn->decHealth(100);
 				m_deleteTime = 11.0f;
 			}
-		}
+		}*/
 		
 		m_prevAngle = m_angle;
-		m_angle = m_hasHit ? (m_sprite.getRotation()/180.0f * PI) : atan2(getVelocity().y, getVelocity().x);
-		
-		DynamicEntity::update(delta);
+		m_angle = m_hasHit ? (m_sprite.getRotation() / 180.0f * PI) : atan2(getVelocity().y, getVelocity().x);
 	}
 
 private:
