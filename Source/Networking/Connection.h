@@ -16,6 +16,7 @@ class NetworkObject;
 
 class Connection
 {
+	friend class NetworkObject;
 public:
 	Connection(const bool isServer) : m_isServer(isServer), m_rakPeer(nullptr) { s_instance = this; }
 
@@ -23,10 +24,7 @@ public:
 	bool isClient() const { return !m_isServer; }
 	RakNet::RakNetGUID getGUID() const { return m_rakPeer->GetMyGUID(); }
 
-	//void addNetworkObject(NetworkObject *object) { s_networkObjects.push_back(object); }
-	//void removeNetworkObject(NetworkObject *object) { s_networkObjects.remove(object); }
-
-	static const Connection *getInstance() { return s_instance; }
+	static Connection *getInstance() { return s_instance; }
 
 public://protected:
 	bool m_isServer;
@@ -34,6 +32,10 @@ public://protected:
 	RakNet::NetworkIDManager m_networkIDManager;
 	list<NetworkObject*> m_networkObjects;
 	static Connection *s_instance;
+
+protected:
+	void addNetworkObject(NetworkObject *object);
+	void removeNetworkObject(NetworkObject *object);
 };
 
 #endif // CONNECTION_H

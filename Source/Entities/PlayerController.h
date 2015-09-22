@@ -8,7 +8,7 @@
 class PlayerController : public Controller
 {
 public:
-	PlayerController(RakNet::RakNetGUID guid);
+	PlayerController(const bool local);
 
 private:
 	//RakNet::RakNetGUID m_guid;

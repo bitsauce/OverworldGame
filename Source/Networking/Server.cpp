@@ -77,26 +77,20 @@ void Server::update()
 				char *playerName = new char[512];
 				bitStream.Read(playerName);
 
+				bool local = getGUID() == packet->guid;
+
 				// Create player
-				Player *player = new Player(m_game);
-				player->SetNetworkIDManager(&m_networkIDManager);
+				Player *player = new Player(m_game, local);
 
 				// If player is hosting locally
-				if(getGUID() == packet->guid)
+				if(local)
 				{
 					m_game->getGameOverlay()->setPlayer(player);
 					m_game->getWorld()->getCamera()->setTargetEntity(player);
 					m_game->getWorld()->m_localPlayer = player;
 				}
 
-				// Create player controller (should probably not be here)
-				PlayerController *controller = new PlayerController(packet->guid);
-				controller->SetNetworkIDManager(&m_networkIDManager);
-				player->setController(controller);
-
 				// Add to network objects
-				m_networkObjects.push_back(controller);
-				m_networkObjects.push_back(player);
 				m_players[playerName] = player;
 
 				string playerFilePath = m_game->getWorld()->getWorldPath() + "/Players/" + playerName + ".obj";
@@ -177,18 +171,10 @@ void Server::update()
 					case ENTITY_ZOMBIE:
 					{
 						Zombie *zombie = new Zombie(m_game);
-
-						AIController *controller = new AIController(m_game->getWorld());
-						controller->SetNetworkIDManager(&m_networkIDManager);
-						m_networkObjects.push_back(controller);
-
-						zombie->setController(controller);
 						zombie->setPosition(m_players.begin()->second->getPosition());
 						netObj = zombie;
 					}
 				}
-
-				m_networkObjects.push_back(netObj);
 
 				{
 					// Brodcast the packet to all clients with the network id of the object added

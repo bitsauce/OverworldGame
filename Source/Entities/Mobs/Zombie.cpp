@@ -1,12 +1,14 @@
 #include "Zombie.h"
-#include "World/World.h"
+#include "Game/Game.h"
 #include "Entities/Pawn.h"
+#include "Entities/AIController.h"
 #include "Constants.h"
 
 Zombie::Zombie(Game *game) :
 	Pawn(game, ENTITY_ZOMBIE)
 {
 	//setBodyPart(HEAD, ResourceManager::get<Texture2D>(":/Sprites/Mobs/Zombie/Head.png")->getPixmap());
+	setController(new AIController(game->getWorld()));
 	m_moveSpeed = 2.5f;
 }
 

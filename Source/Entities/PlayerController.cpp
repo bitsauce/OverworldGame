@@ -1,11 +1,10 @@
 #include "PlayerController.h"
 #include "Networking/Connection.h"
 
-PlayerController::PlayerController(RakNet::RakNetGUID guid)
+PlayerController::PlayerController(const bool local)
 {
-	m_guid = guid;
 	// If player is local, do extra stuff
-	if(Connection::getInstance()->getGUID() == guid)
+	if(local)
 	{
 		InputContext *inputContext = Input::getInputContext();
 		//inputContext->bind("activate_thing", bind(&Player::activateThing, this, placeholders::_1), true);
