@@ -49,10 +49,9 @@ private:
 
 	// TILE MAP SHADER
 	ShaderPtr m_tileMapShader;
-	Texture2DPtr m_tileMapTexture;
+	Texture2DPtr m_tileMapTexture[TERRAIN_LAYER_COUNT];
 	ShaderPtr m_tileSortShader;
-	Texture2DPtr m_tileSortedTexture;
-	RenderTarget2D *m_sortRenderTarget;
+	RenderTarget2D *m_sortRenderTarget[TERRAIN_LAYER_COUNT];
 
 	// LIGHTING
 	Texture2DPtr m_shadowMap;
@@ -63,7 +62,7 @@ private:
 	// MISC
 	bool m_modified;
 	bool m_dirty[TERRAIN_LAYER_COUNT];
-	bool m_sorted;
+	bool m_sorted[TERRAIN_LAYER_COUNT];
 };
 
 #endif // TERRAIN_CHUNK_H

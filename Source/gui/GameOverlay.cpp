@@ -112,7 +112,7 @@ void GameOverlay::performSlotAction(Storage::Slot *slot, const VirtualKey type)
 			if(Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS)
 			{
 				// ... and with CTRL -> Take half of the clicked slot
-				int halfAmount = ceil(slot->getAmount() / 2.f);
+				int halfAmount = (int) ceil(slot->getAmount() / 2.f);
 				heldSlot->set(slot->getItem(), halfAmount);
 				slot->dec(halfAmount);
 			}
@@ -131,7 +131,7 @@ void GameOverlay::performSlotAction(Storage::Slot *slot, const VirtualKey type)
 			{
 				if(Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS)
 				{
-					int halfAmount = ceil(heldSlot->getAmount() / 2.f);
+					int halfAmount = (int) ceil(heldSlot->getAmount() / 2.f);
 					heldSlot->dec(halfAmount - slot->inc(halfAmount));
 				}
 				else
@@ -146,7 +146,7 @@ void GameOverlay::performSlotAction(Storage::Slot *slot, const VirtualKey type)
 			{
 				if(Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS)
 				{
-					int halfAmount = ceil(heldSlot->getAmount() / 2.f);
+					int halfAmount = (int) ceil(heldSlot->getAmount() / 2.f);
 					slot->set(heldSlot->getItem(), halfAmount);
 					heldSlot->dec(halfAmount);
 				}

@@ -129,7 +129,7 @@ void World::draw(SpriteBatch *spriteBatch, const float alpha)
 	spriteBatch->end();
 	spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_camera->getProjectionMatrix()));
 
-	//m_terrain->m_background.draw(spriteBatch);
+	m_terrain->m_background.draw(spriteBatch);
 
 	/*set<Thing*> things = m_terrain->getChunkLoader()->getActiveThings();
 	for(Thing *thing : things)

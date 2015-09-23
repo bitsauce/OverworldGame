@@ -52,12 +52,16 @@ BlockID WorldGenerator::getGroundAt(const int x, const int y, const TerrainLayer
 	{
 		case TERRAIN_LAYER_MIDDLE:
 		{
-			float h = m_noise.valueAt(x*0.1f, y + 710239) * 7;
+			float h = m_noise.valueAt(x * 0.1f, y + 710239) * 7;
 
 			// Ground
-			if((math::clamp((32 - y)/32.0f, 0.0f, 1.0f) + (m_noise.valueAt(x, y) * 0.5f + 0.5f)) * step(0, y + h) > 0.5f)
+			if((math::clamp((32 - y) / 32.0f, 0.0f, 1.0f) + (m_noise.valueAt(x, y) * 0.5f + 0.5f)) * step(0, y + h) > 0.5f)
 			{
-				return m_noise.valueAt(x + 2989, y + 7238) < 0.0 ? BLOCK_GRASS : BLOCK_STONE;//y <= 100 ? BLOCK_GRASS : BLOCK_STONE;
+				float f = m_noise.valueAt(x + 2989, y + 7238) * 0.5f + 0.5f;
+
+				f *= (math::clamp(y / 1000.0f, 0.0f, 1.0f));
+
+				return (f < 0.1f) ? BLOCK_GRASS : BLOCK_STONE;
 			}
 		}
 		break;

@@ -41,7 +41,7 @@ void HealthManaStatus::draw(SpriteBatch *spriteBatch, const float alpha)
 		uint x = i % 10, y = i / 10;
 		m_heartSprite.setPosition(position + Vector2(x * 34, y * 34));
 		m_heartSprite.setOrigin(Vector2(16));
-		if(i == m_gameOverlay->getPlayer()->getMaxHealth()/4 - 1)
+		if(i == m_gameOverlay->getPlayer()->getMaxHealth() / 4 - 1)
 		{
 			m_heartSprite.setScale(Vector2(sin(m_heartTime*5.0f) * 0.5f + 0.5f));
 		}

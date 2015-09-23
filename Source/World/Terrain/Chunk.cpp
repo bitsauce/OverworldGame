@@ -13,9 +13,14 @@ Chunk::Chunk(ShaderPtr tileMapShader, ShaderPtr tileSortShader) :
 	m_tileSortShader(tileSortShader)
 {
 	// Setup flags and such
-	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] = m_sorted = m_modified = false; // not modified
+	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] =
+		m_sorted[TERRAIN_LAYER_BACK] = m_sorted[TERRAIN_LAYER_MIDDLE] = m_sorted[TERRAIN_LAYER_FRONT] =
+		m_modified = false; // not modified
 	m_shadowMap = Texture2DPtr(new Texture2D(Pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS)));
-	m_sortRenderTarget = new RenderTarget2D(CHUNK_BLOCKS + 2, CHUNK_BLOCKS + 2, 2, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
+	for(uint i = 0; i < TERRAIN_LAYER_COUNT; ++i)
+	{
+		m_sortRenderTarget[i] = new RenderTarget2D(CHUNK_BLOCKS + 2, CHUNK_BLOCKS + 2, 2, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
+	}
 
 	// Initialize blocks
 	m_blocks = new BlockID[CHUNK_BLOCKS*CHUNK_BLOCKS*TERRAIN_LAYER_COUNT];
@@ -40,7 +45,9 @@ Chunk::Chunk(ShaderPtr tileMapShader, ShaderPtr tileSortShader) :
 // BLOCK LOADING
 void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 {
-	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] = m_modified = m_sorted = false; // not modified
+	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] =
+		m_sorted[TERRAIN_LAYER_BACK] = m_sorted[TERRAIN_LAYER_MIDDLE] = m_sorted[TERRAIN_LAYER_FRONT] =
+		m_modified = false; // not modified
 	m_x = chunkX;
 	m_y = chunkY;
 
@@ -91,14 +98,14 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 void Chunk::updateTileMap(ChunkLoader *chunkLoader, TerrainLayer z)
 {
 	// Get adjacent chunks
-	m_adjacentChunks[0] = &chunkLoader->getChunkAt(m_x-1, m_y-1);
-	m_adjacentChunks[1] = &chunkLoader->getChunkAt(m_x,   m_y-1);
-	m_adjacentChunks[2] = &chunkLoader->getChunkAt(m_x+1, m_y-1);
-	m_adjacentChunks[3] = &chunkLoader->getChunkAt(m_x+1, m_y  );
-	m_adjacentChunks[4] = &chunkLoader->getChunkAt(m_x+1, m_y+1);
-	m_adjacentChunks[5] = &chunkLoader->getChunkAt(m_x,   m_y+1);
-	m_adjacentChunks[6] = &chunkLoader->getChunkAt(m_x-1, m_y+1);
-	m_adjacentChunks[7] = &chunkLoader->getChunkAt(m_x-1, m_y  );
+	m_adjacentChunks[0] = &chunkLoader->getChunkAt(m_x - 1, m_y - 1);
+	m_adjacentChunks[1] = &chunkLoader->getChunkAt(m_x, m_y - 1);
+	m_adjacentChunks[2] = &chunkLoader->getChunkAt(m_x + 1, m_y - 1);
+	m_adjacentChunks[3] = &chunkLoader->getChunkAt(m_x + 1, m_y);
+	m_adjacentChunks[4] = &chunkLoader->getChunkAt(m_x + 1, m_y + 1);
+	m_adjacentChunks[5] = &chunkLoader->getChunkAt(m_x, m_y + 1);
+	m_adjacentChunks[6] = &chunkLoader->getChunkAt(m_x - 1, m_y + 1);
+	m_adjacentChunks[7] = &chunkLoader->getChunkAt(m_x - 1, m_y);
 
 	// Load tile map
 	Pixmap pixmap(CHUNK_BLOCKS + 2, CHUNK_BLOCKS + 2, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
@@ -108,60 +115,60 @@ void Chunk::updateTileMap(ChunkLoader *chunkLoader, TerrainLayer z)
 	{
 		for (int x = 0; x < CHUNK_BLOCKS; x++)
 		{
-			pixel[0] = m_blocks[BLOCK_INDEX(x, y, TERRAIN_LAYER_MIDDLE)];
+			pixel[0] = m_blocks[BLOCK_INDEX(x, y, z)];
 			pixmap.setPixel(x + 1, CHUNK_BLOCKS - y, pixel);
 		}
 	}
 
 	// Top-left
-	pixel[0] = m_adjacentChunks[0]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, CHUNK_BLOCKS - 1, TERRAIN_LAYER_MIDDLE)];
+	pixel[0] = m_adjacentChunks[0]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, CHUNK_BLOCKS - 1, z)];
 	pixmap.setPixel(0, CHUNK_BLOCKS + 1, pixel);
 
 	// Top-right
-	pixel[0] = m_adjacentChunks[2]->m_blocks[BLOCK_INDEX(0, CHUNK_BLOCKS - 1, TERRAIN_LAYER_MIDDLE)];
+	pixel[0] = m_adjacentChunks[2]->m_blocks[BLOCK_INDEX(0, CHUNK_BLOCKS - 1, z)];
 	pixmap.setPixel(CHUNK_BLOCKS + 1, CHUNK_BLOCKS + 1, pixel);
 
 	// Bottom-right
-	pixel[0] = m_adjacentChunks[4]->m_blocks[BLOCK_INDEX(0, 0, TERRAIN_LAYER_MIDDLE)];
+	pixel[0] = m_adjacentChunks[4]->m_blocks[BLOCK_INDEX(0, 0, z)];
 	pixmap.setPixel(CHUNK_BLOCKS + 1, 0, pixel);
 
 	// Bottom-left
-	pixel[0] = m_adjacentChunks[6]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, 0, TERRAIN_LAYER_MIDDLE)];
+	pixel[0] = m_adjacentChunks[6]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, 0, z)];
 	pixmap.setPixel(0, 0, pixel);
 
 	// Top
 	for (int i = 0; i < CHUNK_BLOCKS; ++i)
 	{
-		pixel[0] = m_adjacentChunks[1]->m_blocks[BLOCK_INDEX(i, CHUNK_BLOCKS - 1, TERRAIN_LAYER_MIDDLE)];
+		pixel[0] = m_adjacentChunks[1]->m_blocks[BLOCK_INDEX(i, CHUNK_BLOCKS - 1, z)];
 		pixmap.setPixel(i + 1, CHUNK_BLOCKS + 1, pixel);
 	}
 
 	// Bottom
 	for (int i = 0; i < CHUNK_BLOCKS; ++i)
 	{
-		pixel[0] = m_adjacentChunks[5]->m_blocks[BLOCK_INDEX(i, 0, TERRAIN_LAYER_MIDDLE)];
+		pixel[0] = m_adjacentChunks[5]->m_blocks[BLOCK_INDEX(i, 0, z)];
 		pixmap.setPixel(i + 1, 0, pixel);
 	}
 
 	// Left
 	for (int i = 0; i < CHUNK_BLOCKS; ++i)
 	{
-		pixel[0] = m_adjacentChunks[7]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, i, TERRAIN_LAYER_MIDDLE)];
+		pixel[0] = m_adjacentChunks[7]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, i, z)];
 		pixmap.setPixel(0, CHUNK_BLOCKS - i, pixel);
 	}
 
 	// Right
 	for (int i = 0; i < CHUNK_BLOCKS; ++i)
 	{
-		pixel[0] = m_adjacentChunks[3]->m_blocks[BLOCK_INDEX(0, i, TERRAIN_LAYER_MIDDLE)];
+		pixel[0] = m_adjacentChunks[3]->m_blocks[BLOCK_INDEX(0, i, z)];
 		pixmap.setPixel(CHUNK_BLOCKS + 1, CHUNK_BLOCKS - i, pixel);
 	}
 
 	// Create tile map texture
-	m_tileMapTexture = Texture2DPtr(new Texture2D(pixmap));
+	m_tileMapTexture[z] = Texture2DPtr(new Texture2D(pixmap));
 
 	// Not dirty
-	m_sorted = m_dirty[z] = false;
+	m_sorted[z] = m_dirty[z] = false;
 }
 
 // BLOCKS
@@ -223,7 +230,7 @@ void Chunk::draw(GraphicsContext &context, const TerrainLayer layer)
 	vertices[2].set4ub(xd::VERTEX_COLOR, color.r, color.g, color.b, color.a);
 	vertices[3].set4ub(xd::VERTEX_COLOR, color.r, color.g, color.b, color.a);
 
-	if(!m_sorted)
+	if(!m_sorted[layer])
 	{
 		vertices[0].set4f(xd::VERTEX_TEX_COORD, 0.0f, 1.0f);
 		vertices[1].set4f(xd::VERTEX_TEX_COORD, 0.0f, 0.0f);
@@ -238,16 +245,16 @@ void Chunk::draw(GraphicsContext &context, const TerrainLayer layer)
 		Matrix4 tmpMap = context.getModelViewMatrix();
 		context.setModelViewMatrix(Matrix4());
 
-		context.setRenderTarget(m_sortRenderTarget);
+		context.setRenderTarget(m_sortRenderTarget[layer]);
 			context.setShader(m_tileSortShader);
-				m_tileSortShader->setSampler2D("u_TileMap", m_tileMapTexture);
+				m_tileSortShader->setSampler2D("u_TileMap", m_tileMapTexture[layer]);
 				context.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
 			context.setShader(0);
 		context.setRenderTarget(0);
 
 		context.setModelViewMatrix(tmpMap);
 
-		m_sorted = true;
+		m_sorted[layer] = true;
 	}
 
 	float u0 = 1.0f / (CHUNK_BLOCKSF + 2.0),
@@ -269,8 +276,8 @@ void Chunk::draw(GraphicsContext &context, const TerrainLayer layer)
 	vertices[3].set4f(xd::VERTEX_POSITION, x + width, y + height);
 
 	context.setShader(m_tileMapShader);
-		m_tileMapShader->setSampler2D("u_SortedBlockTexture", m_sortRenderTarget->getTexture(0));
-		m_tileMapShader->setSampler2D("u_SortedQuadTexture", m_sortRenderTarget->getTexture(1));
+		m_tileMapShader->setSampler2D("u_SortedBlockTexture", m_sortRenderTarget[layer]->getTexture(0));
+		m_tileMapShader->setSampler2D("u_SortedQuadTexture", m_sortRenderTarget[layer]->getTexture(1));
 		context.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
 	context.setShader(0);
 }
