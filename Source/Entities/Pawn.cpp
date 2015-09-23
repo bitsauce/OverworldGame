@@ -32,7 +32,8 @@ Pawn::Pawn(Game *game, const EntityID id) :
 	m_lmbPressed(false),
 	m_storage(10),
 	m_bag(new Bag(20, 5)),
-	m_moveSpeed(5.0f)
+	m_moveSpeed(5.0f),
+	m_prevItem(ITEM_NONE)
 {
 	// Set body size
 	Entity::setSize(24, 48);
@@ -42,6 +43,9 @@ Pawn::Pawn(Game *game, const EntityID id) :
 
 	// Add to player list
 	m_world->m_pawns.push_back(this);
+
+	m_humanoid.setAttachmentTexture(Humanoid::ARM_LEFT, 0, ResourceManager::get<Texture2D>(":/Sprites/Characters/Images/larm.png"));
+	m_humanoid.setAttachmentTexture(Humanoid::ARM_RIGHT, 0, ResourceManager::get<Texture2D>(":/Sprites/Characters/Images/rarm.png"));
 }
 
 Pawn::~Pawn()
@@ -148,23 +152,6 @@ void Pawn::update(const float delta)
 
 	// Update physics
 	DynamicEntity::update(delta);
-
-	// Use current item
-	if(m_controller->getInputState(Controller::INPUT_USE_ITEM))
-	{
-		Storage::Slot *slot = getCurrentItem();
-		ItemData *item = ItemData::get(slot->getItem());
-		if(item != nullptr && (!item->isSingleShot() || !m_lmbPressed))
-		{
-			item->use(this, delta);
-		}
-		m_lmbPressed = true;
-	}
-	else
-	{
-		m_humanoid.setPostAnimation(Humanoid::ANIM_NULL);
-		m_lmbPressed = false;
-	}
 	
 	// Set animations
 	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(getVelocity().x) * 4.0f * delta);
@@ -212,6 +199,37 @@ void Pawn::update(const float delta)
 		}
 	}
 
+	// Item swaped?
+	ItemID currentItem = getCurrentItem()->getItem();
+	if(m_prevItem != currentItem)
+	{
+		ItemData *item = ItemData::get(m_prevItem);
+		if(item) item->unequip(this);
+		item = ItemData::get(currentItem);
+		if(item) item->equip(this);
+		m_prevItem = currentItem;
+	}
+
+	// Use current item
+	ItemData *item = ItemData::get(currentItem);
+	if(item)
+	{
+		if(m_controller->getInputState(Controller::INPUT_USE_ITEM))
+		{
+			if(!m_lmbPressed)
+			{
+				item->use(this, delta);
+			}
+			m_lmbPressed = true;
+		}
+		else
+		{
+			//m_humanoid.setPostAnimation(Humanoid::ANIM_NULL);
+			m_lmbPressed = false;
+		}
+		item->update(this, delta);
+	}
+
 	// Update animations
 	m_humanoid.update(delta);
 }
@@ -219,12 +237,12 @@ void Pawn::update(const float delta)
 void Pawn::draw(SpriteBatch *spriteBatch, const float alpha)
 {
 	m_humanoid.draw(this, spriteBatch, alpha);
-	
 	ItemData *item = ItemData::get(getCurrentItem()->getItem());
-	if(item != nullptr)
+	if(item)
 	{
 		item->draw(this, spriteBatch, alpha);
 	}
+
 }
 
 void Pawn::pack(RakNet::BitStream *bitStream, const Connection *conn)

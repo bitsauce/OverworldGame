@@ -79,7 +79,7 @@ void Axe::draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha)
 	{
 		spriteBatch->drawSprite(m_cracksSprite);
 	}
-	player->getHumanoid().drawRightHandSprite(m_sprite, Vector2(16.f, 32.f), spriteBatch);
+	//player->getHumanoid().drawRightHandSprite(m_sprite, Vector2(16.f, 32.f), spriteBatch);
 }
 
 void Axe::makeTreeFall(const int x, const int y)

@@ -14,6 +14,7 @@ class Animation
 public:
 	Animation(spSkeleton *skeleton, spAnimation *anim);
 	void setTime(const float time);
+	void setTimeAndMix(const float time, const float alpha);
 	float getTime() const;
 	void setLooping(const bool looping);
 	bool getLooping() const;

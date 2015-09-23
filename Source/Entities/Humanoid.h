@@ -13,6 +13,7 @@ class Humanoid
 {
 public:
 	Humanoid();
+	~Humanoid();
 
 	enum BodyPart
 	{
@@ -27,7 +28,8 @@ public:
 		NECK,
 		HIPS,
 		LEG_LEFT,
-		LEG_RIGHT
+		LEG_RIGHT,
+		BODY_PART_COUNT
 	};
 
 	enum Anim
@@ -38,7 +40,11 @@ public:
 		ANIM_JUMP,
 		ANIM_WALK,
 		ANIM_WALL_SLIDE,
-		ANIM_MINE
+		ANIM_MINE,
+		ANIM_ARROW_AIM_UP,
+		ANIM_ARROW_AIM_FW,
+		ANIM_ARROW_AIM_DW,
+		ANIM_COUNT
 	};
 	
 	void setPreAnimation(const Anim anim);
@@ -46,15 +52,15 @@ public:
 	void setMainAnimation(const Anim anim);
 	AnimationState *getMainAnimationState() const { return m_mainAnimationState; }
 	void setPostAnimation(const Anim anim);
+	void setPostBlendAnimations(const Anim anim1, const Anim anim2, const float alpha);
 	AnimationState *getPostAnimationState() const { return m_postAnimationState; }
-	void setBodyPart(const BodyPart part, const Pixmap &pixmap);
 
 	Skeleton *getSkeleton() { return m_skeleton; }
 
 	void update(const float delta);
 	void draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha);
-	void drawLeftHandSprite(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch);
-	void drawRightHandSprite(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch);
+
+	void setAttachmentTexture(const BodyPart part, const int layer, const Texture2DPtr texture);
 
 private:
 	string getBodyPartName(const BodyPart part);
@@ -67,8 +73,11 @@ private:
 	Animation *m_preAnimation;
 	AnimationState *m_mainAnimationState;
 	Animation *m_mainAnimation;
+
 	AnimationState *m_postAnimationState;
 	Animation *m_postAnimation;
+	Animation *m_postAnimationMix;
+	float m_postAnimMixAlpha;
 
 	float m_prevPreAnimationTime;
 	float m_preAnimationTime;
@@ -76,6 +85,10 @@ private:
 	float m_mainAnimationTime;
 	float m_prevPostAnimationTime;
 	float m_postAnimationTime;
+
+	RenderTarget2D *m_skeletonRenderTarget;
+	bool m_renderPart[BODY_PART_COUNT];
+	map<int, Texture2DPtr> m_attachments[BODY_PART_COUNT];
 };
 
 #endif // HUMANOID_H

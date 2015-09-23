@@ -19,6 +19,12 @@ void Animation::setTime(const float time)
 	m_lastTime = time;
 }
 
+void Animation::setTimeAndMix(const float time, const float alpha)
+{
+	spAnimation_mix(m_self, m_skeleton, m_lastTime, time, m_looping, 0, 0, alpha);
+	m_lastTime = time;
+}
+
 float Animation::getTime() const
 {
 	return m_lastTime;

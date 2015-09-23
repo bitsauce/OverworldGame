@@ -43,7 +43,7 @@ void ThingItem::draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha)
 	
 	sprite = data.getSprite();
 	sprite.setSize(16.0f, 16.0f);
-	player->getHumanoid().drawRightHandSprite(sprite, Vector2(8.0f, 16.0f), spriteBatch);
+	//player->getHumanoid().drawRightHandSprite(sprite, Vector2(8.0f, 16.0f), spriteBatch);
 
 	if(m_blockEntityID == BLOCK_ENTITY_TORCH)
 	{

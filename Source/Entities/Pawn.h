@@ -43,6 +43,10 @@ public:
 	virtual ~Pawn();
 
 	void setController(Controller *controller);
+	Controller *getController() const
+	{
+		return m_controller;
+	}
 
 	void activateThing(int action);
 
@@ -82,6 +86,9 @@ protected:
 	Storage::Slot m_heldItem;
 	Bag *m_bag;
 	Storage m_storage;
+
+	// Equiped item
+	ItemID m_prevItem;
 
 	// Pawn health
 	int m_maxHealth;

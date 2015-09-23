@@ -11,15 +11,17 @@ Humanoid::Humanoid() :
 	m_preAnimation(nullptr),
 	m_mainAnimation(nullptr),
 	m_postAnimation(nullptr),
+	m_postAnimationMix(nullptr),
 	m_prevPreAnimationTime(0.0f),
 	m_preAnimationTime(0.0f),
 	m_prevMainAnimationTime(0.0f),
 	m_mainAnimationTime(0.0f),
 	m_prevPostAnimationTime(0.0f),
-	m_postAnimationTime(0.0f)
+	m_postAnimationTime(0.0f),
+	m_postAnimMixAlpha(0.0f)
 {
 	// Load skeleton data
-	m_skeleton = new Skeleton(":/sprites/characters/anim/skeleton.json", ":/sprites/characters/anim/skeleton.atlas", 1.0f);
+	m_skeleton = new Skeleton(":/Sprites/Characters/Skeleton.json", ":/Sprites/Characters/Skeleton.atlas", 1.0f);
 	m_skeleton->getTexture()->setFiltering(Texture2D::LINEAR);
 	m_skeleton->setFlipY(true); // Not sure why this is needed, oh well
 
@@ -36,12 +38,26 @@ Humanoid::Humanoid() :
 	m_mainAnimationState = new AnimationState(m_animationStateData);
 	//m_mainAnimationState->setEventCallback(animationEvent);
 	m_mainAnimationState->setLooping(true);
-	
+
 	m_postAnimationState = new AnimationState(m_animationStateData);
 	m_postAnimationState->setLooping(true);
 	
 	m_preAnimationState = new AnimationState(m_animationStateData);
 	m_preAnimationState->setLooping(true);
+
+	// Create render target
+	m_skeletonRenderTarget = new RenderTarget2D(m_skeleton->getTexture());
+
+	// Set render array to false
+	for(uint i = 0; i < BODY_PART_COUNT; ++i)
+	{
+		m_renderPart[i] = false;
+	}
+}
+
+Humanoid::~Humanoid()
+{
+	delete m_skeletonRenderTarget;
 }
 
 string Humanoid::getBodyPartName(const BodyPart part)
@@ -76,6 +92,9 @@ Animation *Humanoid::getAnimation(const Anim anim)
 	case ANIM_WALK: animName = "walk"; break;
 	case ANIM_WALL_SLIDE: animName = "wall-slide"; break;
 	case ANIM_MINE: animName = "mine"; break;
+	case ANIM_ARROW_AIM_UP: animName = "arrow_aim_up"; break;
+	case ANIM_ARROW_AIM_FW: animName = "arrow_aim_fw"; break;
+	case ANIM_ARROW_AIM_DW: animName = "arrow_aim_dw"; break;
 	}
 	return m_skeleton->findAnimation(animName);
 }
@@ -83,7 +102,7 @@ Animation *Humanoid::getAnimation(const Anim anim)
 // ANIMATIONS
 void Humanoid::setPreAnimation(const Anim anim)
 {
-	// Set item animation
+	// Set pre animation
 	Animation *animations = getAnimation(anim);
 	if(m_preAnimation != animations)
 	{
@@ -113,26 +132,32 @@ void Humanoid::setMainAnimation(const Anim anim)
 
 void Humanoid::setPostAnimation(const Anim anim)
 {
-	// Set item animation
-	Animation *animations = getAnimation(anim);
-	if(m_postAnimation != animations)
+	// Set post animation
+	Animation *animation = getAnimation(anim);
+	if(m_postAnimation != animation)
 	{
-		if(animations != nullptr)
+		if(animation != nullptr)
 		{
-			m_postAnimationState->setAnimation(animations);
+			m_postAnimationState->setAnimation(animation);
 		}
-		m_postAnimation = animations;
+		m_postAnimation = animation;
+		m_prevPostAnimationTime = m_postAnimationTime = 0.0f;
+		m_postAnimationMix = nullptr;
 	}
 }
 
-void Humanoid::setBodyPart(const BodyPart part, const Pixmap &pixmap)
+void Humanoid::setPostBlendAnimations(const Anim anim1, const Anim anim2, const float alpha)
 {
-	// Replace body parts/clothing
-	TextureRegion region = m_skeleton->getTextureRegion(getBodyPartName(part));
-	Texture2DPtr texture = m_skeleton->getTexture();
-	uint x0 = region.uv0.x * texture->getWidth(), y0 = region.uv0.y * texture->getHeight(),
-		x1 = region.uv1.x * texture->getWidth(), y1 = region.uv1.y * texture->getHeight();
-	m_skeleton->getTexture()->updatePixmap(x0, y0, pixmap);
+	Animation *animation1 = getAnimation(anim1);
+	Animation *animation2 = getAnimation(anim2);
+	if(m_postAnimation != animation1 || m_postAnimationMix != animation2)
+	{
+		if(m_postAnimation != animation1 && m_postAnimationMix != animation2)
+			m_prevPostAnimationTime = m_postAnimationTime = 0.0f;
+		m_postAnimation = animation1;
+		m_postAnimationMix = animation2;
+	}
+	m_postAnimMixAlpha = alpha;
 }
 
 void Humanoid::update(const float delta)
@@ -152,8 +177,8 @@ void Humanoid::update(const float delta)
 
 	if(m_postAnimation)
 	{
-		m_prevPreAnimationTime = m_preAnimationTime;
-		m_preAnimationTime += delta;
+		m_prevPostAnimationTime = m_postAnimationTime;
+		m_postAnimationTime += delta;
 	}
 }
 
@@ -172,31 +197,80 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 
 	if(m_postAnimation)
 	{
-		m_postAnimationState->setTime(math::lerp(m_prevPostAnimationTime, m_postAnimationTime, alpha));
+		if(m_postAnimationMix)
+		{
+			m_postAnimation->setTime(math::lerp(m_prevPostAnimationTime, m_postAnimationTime, alpha));
+			m_postAnimationMix->setTimeAndMix(math::lerp(m_prevPostAnimationTime, m_postAnimationTime, alpha), m_postAnimMixAlpha);
+		}
+		else
+		{
+			m_postAnimationState->setTime(math::lerp(m_prevMainAnimationTime, m_mainAnimationTime, alpha));
+		}
+	}
+
+	for(uint i = 0; i < BODY_PART_COUNT; ++i)
+	{
+		// Do we need to re-render body part?
+		if(m_renderPart[i])
+		{
+			GraphicsContext &context = spriteBatch->getGraphicsContext();
+			Texture2DPtr skeletonAtlas = m_skeleton->getTexture();
+
+			context.setRenderTarget(m_skeletonRenderTarget);
+
+			// Get body part region
+			TextureRegion region = m_skeleton->getTextureRegion(getBodyPartName((BodyPart) i));
+			uint x0 = region.uv0.x * skeletonAtlas->getWidth(), y0 = region.uv0.y * skeletonAtlas->getHeight(),
+				x1 = region.uv1.x * skeletonAtlas->getWidth(), y1 = region.uv1.y * skeletonAtlas->getHeight();
+
+			// Clear region
+			context.setBlendState(BlendState(BlendState::BLEND_ZERO, BlendState::BLEND_ZERO));
+			context.drawRectangle(x0, skeletonAtlas->getHeight() - y1, x1 - x0, y1 - y0);
+
+			// For every attachment, draw it to the region
+			context.setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
+			for(pair<int, Texture2DPtr> at : m_attachments[i])
+			{
+				if(!at.second) continue;
+				context.setTexture(at.second);
+				context.drawRectangle(x0, skeletonAtlas->getHeight() - y1, x1 - x0, y1 - y0);
+			}
+
+			// Reset context
+			context.setTexture(0);
+			context.setRenderTarget(0);
+
+			// Don't need to render again
+			m_renderPart[i] = false;
+		}
 	}
 
 	// Draw skeleton
-	m_skeleton->setPosition(body->getDrawPosition(alpha) + Vector2(body->getSize().x*0.5f, 48.0f));
+	m_skeleton->setPosition(body->getDrawPosition(alpha) + Vector2(body->getSize().x * 0.5f, 48.0f));
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 	gfxContext.setModelViewMatrix(spriteBatch->getState().projectionMatix);
 	m_skeleton->draw(gfxContext);
 	gfxContext.setModelViewMatrix(Matrix4());
 }
 
-void Humanoid::drawRightHandSprite(Sprite &sprite, const Vector2 &origin, SpriteBatch *spriteBatch)
+void Humanoid::setAttachmentTexture(const BodyPart part, const int layer, const Texture2DPtr texture)
 {
-	float angle = m_skeleton->findBone("rhand")->getWorldRotation() + 180.0f;
-	if(m_skeleton->getFlipX())
+	// Set attachemnts
+	if(texture)
 	{
-		sprite.setScaleX(-1.0f);
+		TextureRegion region = m_skeleton->getTextureRegion(getBodyPartName(part));
+
+		Texture2DPtr skeletonAtlas = m_skeleton->getTexture();
+		uint x0 = region.uv0.x * skeletonAtlas->getWidth(), y0 = region.uv0.y * skeletonAtlas->getHeight(),
+			x1 = region.uv1.x * skeletonAtlas->getWidth(), y1 = region.uv1.y * skeletonAtlas->getHeight();
+
+		if((x1 - x0) != texture->getWidth() || (y1 - y0) != texture->getHeight())
+		{
+			LOG("Humanoid::setAttachmentTexture: Needs texture and the body part region size needs to be the same (for now).");
+			return;
+		}
 	}
-	else
-	{
-		sprite.setScaleX(1.0f);
-		angle *= -1;
-	}
-	sprite.setPosition(m_skeleton->getPosition() + m_skeleton->findBone("rhand")->getWorldPosition() - origin);
-	sprite.setOrigin(origin);
-	sprite.setRotation(angle);
-	spriteBatch->drawSprite(sprite);
+
+	m_attachments[part][layer] = texture;
+	m_renderPart[part] = true;
 }

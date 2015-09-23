@@ -5,77 +5,77 @@ filter: Nearest,Nearest
 repeat: none
 head
   rotate: false
-  xy: 21, 12
+  xy: 134, 108
   size: 15, 18
   orig: 15, 18
   offset: 0, 0
   index: -1
 hips
   rotate: false
-  xy: 88, 24
+  xy: 2, 2
   size: 11, 6
   orig: 11, 6
   offset: 0, 0
   index: -1
 larm
   rotate: false
-  xy: 74, 25
-  size: 12, 5
-  orig: 12, 5
+  xy: 2, 62
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 lleg
-  rotate: true
-  xy: 21, 2
+  rotate: false
+  xy: 21, 44
   size: 8, 16
   orig: 8, 16
   offset: 0, 0
   index: -1
 lshoulder
-  rotate: false
-  xy: 114, 25
-  size: 9, 5
+  rotate: true
+  xy: 134, 89
+  size: 17, 6
   orig: 17, 6
   offset: 0, 0
   index: -1
 lthigh
-  rotate: true
-  xy: 2, 2
-  size: 7, 11
+  rotate: false
+  xy: 2, 10
+  size: 8, 11
   orig: 8, 11
   offset: 0, 0
   index: -1
 rarm
   rotate: false
-  xy: 59, 25
-  size: 13, 5
-  orig: 13, 5
+  xy: 68, 62
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 rleg
   rotate: false
-  xy: 38, 14
+  xy: 2, 23
   size: 9, 16
   orig: 9, 16
   offset: 0, 0
   index: -1
 rshoulder
   rotate: false
-  xy: 101, 25
+  xy: 31, 55
   size: 11, 5
   orig: 11, 5
   offset: 0, 0
   index: -1
 rthigh
   rotate: false
-  xy: 49, 19
-  size: 8, 11
+  xy: 151, 115
+  size: 9, 11
   orig: 9, 11
   offset: 0, 0
   index: -1
 torso
   rotate: false
-  xy: 2, 11
+  xy: 2, 41
   size: 17, 19
   orig: 17, 19
   offset: 0, 0

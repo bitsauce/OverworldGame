@@ -13,12 +13,23 @@ Pickaxe::Pickaxe(Game *game) :
 	m_cracksSprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Tools/Pickaxes/MiningCracks.png")),
 	m_cracksAnimation(1, 4),
 	m_sprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Tools/Pickaxes/IronPickaxe.png")),
+	m_drawCracks(false),
 	m_prevBlockPosition(0.0f, 0.0f),
 	m_mineCounter(0.0f),
 	m_mineTime(0.1f)
 {
 	m_cracksSprite.setRegion(TextureRegion(0.0f, 0.0f, 0.25f, 1.0f), true);
 	m_sprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
+}
+
+void Pickaxe::equip(Pawn *player)
+{
+	player->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, m_sprite.getTexture());
+}
+
+void Pickaxe::unequip(Pawn *player)
+{
+	player->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, 0);
 }
 
 void Pickaxe::use(Pawn *pawn, const float delta)
@@ -58,14 +69,15 @@ void Pickaxe::use(Pawn *pawn, const float delta)
 	{
 		m_game->getWorld()->getLocalPlayer()->getHumanoid().setPostAnimation(Humanoid::ANIM_NULL);
 	}
+
+	m_drawCracks = true;
 }
 
 void Pickaxe::draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha)
 {
 	// Is there a block at this position?
-	if(m_game->getWorld()->getTerrain()->isBlockAt(m_prevBlockPosition.x, m_prevBlockPosition.y, TERRAIN_LAYER_MIDDLE))
+	if(m_drawCracks && m_game->getWorld()->getTerrain()->isBlockAt(m_prevBlockPosition.x, m_prevBlockPosition.y, TERRAIN_LAYER_MIDDLE))
 	{
 		spriteBatch->drawSprite(m_cracksSprite);
 	}
-	player->getHumanoid().drawRightHandSprite(m_sprite, Vector2(16.f, 32.f), spriteBatch);
 }
