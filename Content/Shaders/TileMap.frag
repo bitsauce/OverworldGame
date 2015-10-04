@@ -74,10 +74,17 @@ void main()
 	uvec4 quadIDs = uvec4((quads >> 24U) & 0xFFU, (quads >> 16U) & 0xFFU, (quads >> 8U) & 0xFFU, quads & 0xFFU);
 
     // Blends together colors from tile edges, corners and fill
-    out_FragColor = texture(u_BlockAtlas, (getBlockQuadPosition(blockIDs[0], quadIDs[0]) + quadSubTexCoord * 8.0) * texelSize);
+	vec4 col; // TODO: This method using alpha blend is highly inefficient. Figure out how to use premultiplied alpha instead.
+    vec4 dst = texture(u_BlockAtlas, (getBlockQuadPosition(blockIDs[0], quadIDs[0]) + quadSubTexCoord * 8.0) * texelSize);
     for (int i = 1; i < 4; ++i)
 	{
         vec4 src = float(blockIDs[i] != blockIDs[i - 1]) * texture(u_BlockAtlas, (getBlockQuadPosition(blockIDs[i], quadIDs[i]) + quadSubTexCoord * 8.0) * texelSize);
-        out_FragColor = mix(src, out_FragColor, 1.0 - src.a);
+		col.a = src.a + dst.a * (1.0 - src.a);
+		if(col.a != 0.0)
+			col.rgb = (src.rgb * src.a +  dst.rgb *  dst.a * (1 - src.a)) / col.a;
+		else
+			col.rgb = vec3(0.0);
+		dst = col;
     }
+	out_FragColor = col;
 }

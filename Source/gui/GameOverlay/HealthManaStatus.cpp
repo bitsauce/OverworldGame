@@ -31,7 +31,7 @@ void HealthManaStatus::update(const float delta)
 
 void HealthManaStatus::draw(SpriteBatch *spriteBatch, const float alpha)
 {
-	if(!m_gameOverlay->getPlayer()) return;
+	if(!m_gameOverlay->getPlayer() || m_gameOverlay->m_hidden) return;
 
 	Vector2 position = getPosition();
 	Vector2 size = getSize();
@@ -39,7 +39,7 @@ void HealthManaStatus::draw(SpriteBatch *spriteBatch, const float alpha)
 	for(uint i = 0; i < m_gameOverlay->getPlayer()->getMaxHealth()/4; ++i)
 	{
 		uint x = i % 10, y = i / 10;
-		m_heartSprite.setPosition(position + Vector2(x * 34, y * 34));
+		m_heartSprite.setPosition(position + Vector2(x * 34.0f, y * 34.0f));
 		m_heartSprite.setOrigin(Vector2(16));
 		if(i == m_gameOverlay->getPlayer()->getMaxHealth() / 4 - 1)
 		{

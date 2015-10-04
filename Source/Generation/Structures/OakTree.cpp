@@ -14,17 +14,19 @@ struct LeafPoint
 
 struct Branch
 {
-    Branch(int x, int y, int dir) :
+    Branch(int x, int y, int dir, float chance) :
 		x(x),
 		y(y),
-		dir(dir)
+		dir(dir),
+		chance(chance)
 	{
 	}
 
     int x, y, dir;
+	float chance;
 };
 
-void OakTree::place(WorldGenerator *worldGenerator, StructurePlacer *structPlacer)
+void OakTree::place(WorldGenerator *worldGenerator)
 {
 	Random rand = worldGenerator->getRandom();
 	rand.setSeed(rand.getSeed() + m_x);
@@ -34,18 +36,15 @@ void OakTree::place(WorldGenerator *worldGenerator, StructurePlacer *structPlace
     int stemDir = rand.nextInt() % 2 == 0 ? 1 : -1;
     int stemHeight = 20 + rand.nextInt() % 11;
     list<LeafPoint> leafPoints;
+
+	for(int i = -1; i <= 1; ++i)
+	{
+		worldGenerator->setBlockAt(m_x + i, m_y, TERRAIN_LAYER_BACK, BLOCK_OAK_WOOD);
+	}
+
     for(int y = 0; y < stemHeight; ++y)
     {
-		if(rand.nextDouble() < (y / (float) stemHeight) * 0.2f)
-        {
-            m_x += stemDir;
-        }
-
-		float w = 2 * (1.0f - pow(y / (float) stemHeight, 2.0f)) * 0.5f;
-		for(float f = -w; f <= w; f += 1.0f)
-		{
-			structPlacer->setBlockAt(m_x + floor(f), m_y - y, TERRAIN_LAYER_BACK, BLOCK_WOOD_OAK);
-		}
+		worldGenerator->setBlockAt(m_x, m_y - y, TERRAIN_LAYER_BACK, BLOCK_OAK_WOOD);
 
         if(y > 3 && y < stemHeight * 0.70f)
         {
@@ -54,7 +53,8 @@ void OakTree::place(WorldGenerator *worldGenerator, StructurePlacer *structPlace
             stack<Branch> branches;
 			if(branchChance < chance1)
 			{
-                branches.push(Branch(m_x, m_y - y, 1));
+                branches.push(Branch(m_x, m_y - y,  1, 0.25f));
+				branches.push(Branch(m_x, m_y - y, -1, 0.25f));
 				chance1 = 0.0f;
 			}
 			else
@@ -62,7 +62,7 @@ void OakTree::place(WorldGenerator *worldGenerator, StructurePlacer *structPlace
                 chance1 += 0.05f;
 			}
 				
-			if(branchChance < chance2)
+			/*if(branchChance < chance2)
             {
                 branches.push(Branch(m_x, m_y - y, -1));
 				chance2 = 0.0f;
@@ -70,9 +70,8 @@ void OakTree::place(WorldGenerator *worldGenerator, StructurePlacer *structPlace
 			else
 			{
                 chance2 += 0.05f;
-			}
+			}*/
 			
-            float chance = 0.5f;
 			while(!branches.empty())
             {
 				Branch branch = branches.top();
@@ -86,21 +85,19 @@ void OakTree::place(WorldGenerator *worldGenerator, StructurePlacer *structPlace
                     int dy = (int) (i * inclination);
                     for (int y1 = 0; y1 <= dy; y1++)
 					{
-						structPlacer->setBlockAt(branchX, branchY - y1, TERRAIN_LAYER_BACK, BLOCK_WOOD_OAK);
+						worldGenerator->setBlockAt(branchX, branchY - y1, TERRAIN_LAYER_BACK, BLOCK_OAK_WOOD);
 					}
 
 					branchX += branch.dir;
                     branchY -= dy;
 
-                    if(rand.nextDouble() < chance)
+                    if(rand.nextDouble() < branch.chance)
                     {
-						branches.push(Branch(branchX, branchY, branch.dir));
-                        chance *= 0.25f;
+						branches.push(Branch(branchX, branchY, branch.dir, branch.chance * 0.25f));
                     }
                 }
 				leafPoints.push_back(LeafPoint(branchX, branchY, branchLength));
             }
-            chance = 0.0f;
         }
     }
 	leafPoints.push_back(LeafPoint(m_x, m_y - stemHeight, (int) (stemHeight * 0.2)));
@@ -112,7 +109,7 @@ void OakTree::place(WorldGenerator *worldGenerator, StructurePlacer *structPlace
             for (int x1 = -p.r; x1 <= p.r; x1++)
             {
                 if (sqrt(x1 * x1 + y1 * y1) > p.r) continue;
-				structPlacer->setBlockAt(p.x + x1, p.y + y1, TERRAIN_LAYER_FRONT, BLOCK_LEAF);
+				worldGenerator->setBlockAt(p.x + x1, p.y + y1, TERRAIN_LAYER_FRONT, BLOCK_OAK_LEAVES);
             }
         }
     }

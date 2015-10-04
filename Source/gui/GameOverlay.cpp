@@ -15,7 +15,8 @@ GameOverlay::GameOverlay(Game *game, Scene *scene) :
 	m_game(game),
 	m_player(nullptr),
 	m_craftingEnabled(false),
-	m_font(ResourceManager::get<Font>(UI_INVENTORY_FONT))
+	m_font(ResourceManager::get<Font>(UI_INVENTORY_FONT)),
+	m_hidden(false)
 {
 	setPosition(Vector2(0.0f, 0.0f));
 	setSize(Vector2(1.0f, 1.0f));

@@ -12,16 +12,21 @@ float step(float edge, float x)
 
 #define CHUNK_KEY(X, Y) (((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000))
 
+WorldGenerator::WorldGenerator(const uint seed) :
+	m_seed(seed)
+{
+	m_random.setSeed(seed);
+}
+
 void WorldGenerator::getChunkBlocks(const int chunkX, const int chunkY, BlockID *blocks)
 {
-	// Load super chunk if not loaded
-	/*int superChunkX = (int) floor(chunkX / SUPER_CHUNK_CHUNKSF), superChunkY = (int) floor(chunkY / SUPER_CHUNK_CHUNKSF);
-	uint key = CHUNK_KEY(superChunkX, superChunkY);
-	if(m_loadedSuperChunks.find(key) == m_loadedSuperChunks.end())
-	{
-		loadStructures(superChunkX, superChunkY);
-		m_loadedSuperChunks.insert(key);
-	}*/
+	// Load structures
+	loadStructures(chunkX, chunkY);
+
+	// Load structures?
+	// TODO: Not sure this should be here, but it cant be in WorldGenerator::getChunkBlocks either because
+	// the chunk has to be loaded when we know that all the structures that will affect this chunk are generated.
+	BlockID *structureBlocks = m_chunkStructures[CHUNK_KEY(chunkX, chunkY)];
 
 	// Load blocks
 	const int tileX = chunkX * CHUNK_BLOCKS;
@@ -32,14 +37,14 @@ void WorldGenerator::getChunkBlocks(const int chunkX, const int chunkY, BlockID 
 		{
 			for(uint z = 0; z < TERRAIN_LAYER_COUNT; ++z)
 			{
-				/*tuple<int, int, int> key = make_tuple(tileX + x, tileY + y, z);
-				if(m_structureMap.find(key) != m_structureMap.end() && m_structureMap[key] > BLOCK_EMPTY)
+				BlockID structureBlock;
+				if((structureBlock = structureBlocks[BLOCK_INDEX(x, y, z)]) == BLOCK_EMPTY)
 				{
-					blocks[BLOCK_INDEX(x, y, z)] = m_structureMap[key];
+					blocks[BLOCK_INDEX(x, y, z)] = getGroundAt(tileX + x, tileY + y, (TerrainLayer) z);
 				}
-				else*/
+				else
 				{
-					blocks[BLOCK_INDEX(x, y, z)] = getGroundAt(tileX + x, tileY + y, (TerrainLayer)z);
+					blocks[BLOCK_INDEX(x, y, z)] = structureBlock;
 				}
 			}
 		}
@@ -78,36 +83,52 @@ BlockID WorldGenerator::getGroundAt(const int x, const int y, const TerrainLayer
 	return BLOCK_EMPTY;
 }
 
-void WorldGenerator::loadStructures(const int superChunkX, const int superChunkY)
+void WorldGenerator::loadStructures(const int chunkX, const int chunkY)
 {
-	LOG("Placing structures in super chunk [%i, %i]", superChunkX, superChunkY);
-	
-	Random s_random;
-	uint s_seed = 0;
+	// Create list
 	list<Structure*> structures;
+	if(m_chunkStructures.find(CHUNK_KEY(chunkX, chunkY)) == m_chunkStructures.end())
+	{
+		BlockID *blocks = new BlockID[CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT];
+		for(int i = 0; i < CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT; ++i)
+		{
+			blocks[i] = BLOCK_EMPTY;
+		}
+		m_chunkStructures[CHUNK_KEY(chunkX, chunkY)] = blocks;
+	}
 
 	// Load structures
-	for(int x = 0; x < SUPER_CHUNK_BLOCKS; ++x)
+	for(int x = 0; x < CHUNK_BLOCKS; ++x)
 	{
-		int tileX = SUPER_CHUNK_BLOCKS * superChunkX + x;
-		if(s_random.getDouble(tileX + s_seed) < 0.005/*TREE_CHANCE*/)
+		int tileX = CHUNK_BLOCKS * chunkX + x;
+		if(m_random.getDouble(tileX + m_seed) < 0.025/*TREE_CHANCE*/)
 		{
 			structures.push_back(new OakTree(tileX, getGroundHeight(tileX)));
 		}
 	}
 
 	// Place structures
-	StructurePlacer structPlacer(&m_structureMap);
 	for(Structure *structure : structures)
 	{
-		structure->place(this, &structPlacer);
+		structure->place(this);
 		delete structure;
 	}
 }
 
-void StructurePlacer::setBlockAt(const int x, const int y, const TerrainLayer z, const BlockID block)
+void WorldGenerator::setBlockAt(const int x, const int y, const TerrainLayer z, const BlockID block)
 {
-	(*m_structureMap)[make_tuple(x, y, z)] = block;
+	int chunkX = (int) floor(x / CHUNK_BLOCKSF),
+		chunkY = (int) floor(y / CHUNK_BLOCKSF);
+	if(m_chunkStructures.find(CHUNK_KEY(chunkX, chunkY)) == m_chunkStructures.end())
+	{
+		BlockID *blocks = new BlockID[CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT];
+		for(int i = 0; i < CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT; ++i)
+		{
+			blocks[i] = BLOCK_EMPTY;
+		}
+		m_chunkStructures[CHUNK_KEY(chunkX, chunkY)] = blocks;
+	}
+	m_chunkStructures[CHUNK_KEY(chunkX, chunkY)][BLOCK_INDEX(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), z)] = block;
 }
 
 int WorldGenerator::getGroundHeight(const int x)

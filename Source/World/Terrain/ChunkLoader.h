@@ -49,8 +49,8 @@ private:
 
 	bool m_applyZoom;
 	Camera *m_camera;
-	WorldGenerator *m_generator;
 	World *m_world;
+	WorldGenerator *m_generator;
 
 	unordered_map<uint, Chunk*> m_chunks;
 

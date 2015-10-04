@@ -156,7 +156,7 @@ void World::draw(SpriteBatch *spriteBatch, const float alpha)
 		}
 	}
 	
-	//m_terrain->m_foreground.draw(spriteBatch);
+	m_terrain->m_foreground.draw(spriteBatch);
 	m_lighting->draw(spriteBatch);
 	
 	spriteBatch->end();

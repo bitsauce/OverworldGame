@@ -146,9 +146,6 @@
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Omnicon.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClCompile>
-    <ClCompile Include="InputHandler.cpp">
-      <Filter>Source\Game</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Game\Game.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
@@ -425,9 +422,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Omnicon.h">
       <Filter>Source\Gui\GameOverlay</Filter>
-    </ClInclude>
-    <ClInclude Include="InputHandler.h">
-      <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\World\World.h">
       <Filter>Source\World</Filter>

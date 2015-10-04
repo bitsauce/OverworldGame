@@ -23,16 +23,10 @@ Chunk::Chunk(ShaderPtr tileMapShader, ShaderPtr tileSortShader) :
 	}
 
 	// Initialize blocks
-	m_blocks = new BlockID[CHUNK_BLOCKS*CHUNK_BLOCKS*TERRAIN_LAYER_COUNT];
-	for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+	m_blocks = new BlockID[CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT];
+	for(int i = 0; i < CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT; ++i)
 	{
-		for(int y = 0; y < CHUNK_BLOCKS; ++y)
-		{
-			for(int x = 0; x < CHUNK_BLOCKS; ++x)
-			{
-				m_blocks[BLOCK_INDEX(x, y, z)] = BLOCK_EMPTY;
-			}
-		}
+		m_blocks[i] = BLOCK_EMPTY;
 	}
 
 	// Initialize adjacency list
@@ -94,6 +88,8 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 	// Mark chunk as initialized
 	LOG("Chunk [%i, %i] generated", m_x, m_y);
 }
+
+#define CHUNK_KEY(X, Y) (((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000))
 
 void Chunk::updateTileMap(ChunkLoader *chunkLoader, TerrainLayer z)
 {
@@ -211,7 +207,7 @@ bool Chunk::setBlockAt(const int x, const int y, const BlockID block, TerrainLay
 		{
 			shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, y, i)]).getOpacity();
 		}
-		const uchar pixel[4] = { 255 * max(shadow, 0.0f), 255, 255, 255 * shadowCaster };
+		const uchar pixel[4] = { (uchar) (255 * max(shadow, 0.0f)), 255, 255, (uchar) (255 * shadowCaster) };
 		m_shadowMap->updatePixmap(x, CHUNK_BLOCKS - y - 1, Pixmap(1, 1, pixel));
 
 		return true; // Return true as something was changed
@@ -257,10 +253,10 @@ void Chunk::draw(GraphicsContext &context, const TerrainLayer layer)
 		m_sorted[layer] = true;
 	}
 
-	float u0 = 1.0f / (CHUNK_BLOCKSF + 2.0),
-		v0 = 1.0f - (1.0f / (CHUNK_BLOCKSF + 2.0)),
-		u1 = 1.0f - (1.0f / (CHUNK_BLOCKSF + 2.0)),
-		v1 = 1.0f / (CHUNK_BLOCKSF + 2.0);
+	float u0 = 1.0f / (CHUNK_BLOCKSF + 2.0f),
+		v0 = 1.0f - (1.0f / (CHUNK_BLOCKSF + 2.0f)),
+		u1 = 1.0f - (1.0f / (CHUNK_BLOCKSF + 2.0f)),
+		v1 = 1.0f / (CHUNK_BLOCKSF + 2.0f);
 	vertices[0].set4f(xd::VERTEX_TEX_COORD, u0, v0);
 	vertices[1].set4f(xd::VERTEX_TEX_COORD, u0, v1);
 	vertices[2].set4f(xd::VERTEX_TEX_COORD, u1, v0);

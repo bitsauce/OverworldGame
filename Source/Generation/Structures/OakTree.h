@@ -11,7 +11,7 @@ public:
 	{
 	}
 
-	void place(WorldGenerator *worldGenerator, StructurePlacer *structPlacer);
+	void place(WorldGenerator *worldGenerator);
 };
 
 #endif // OAK_TREE_H

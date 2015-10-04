@@ -110,12 +110,11 @@ void Server::update()
 					// Give default load out
 					player->setPosition(Vector2(0, 0));
 					player->getStorage()->addItem(ITEM_PICKAXE_IRON);
-					player->getStorage()->addItem(ITEM_TORCH, 255);
-					player->getStorage()->addItem(ITEM_BOW_WOODEN);
-					player->getStorage()->addItem(ITEM_ARROW, 255);
-					player->getStorage()->addItem(ITEM_ARROW, 255);
-					player->getStorage()->addItem(ITEM_CRAFTING_BENCH);
 					player->getStorage()->addItem(ITEM_AXE_IRON);
+					player->getStorage()->addItem(ITEM_BOW_WOODEN);
+					player->getStorage()->addItem(ITEM_CRAFTING_BENCH);
+					player->getStorage()->addItem(ITEM_TORCH, 255);
+					player->getStorage()->addItem(ITEM_ARROW, 255);
 				}
 
 				{

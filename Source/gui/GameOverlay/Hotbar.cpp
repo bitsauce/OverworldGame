@@ -41,7 +41,7 @@ void Hotbar::update(const float delta)
 
 void Hotbar::draw(SpriteBatch *spriteBatch, const float alpha)
 {
-	if(!m_gameOverlay->getPlayer()) return;
+	if(!m_gameOverlay->getPlayer() || m_gameOverlay->m_hidden) return;
 
 	// Get size and position
 	Vector2 position = getPosition();

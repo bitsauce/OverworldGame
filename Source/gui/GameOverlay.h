@@ -39,6 +39,8 @@ public:
 	// Ui
 	bool isHovered() const;
 
+	bool m_hidden;
+
 private:
 	Game *m_game;
 	Player *m_player;

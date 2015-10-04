@@ -108,6 +108,7 @@ void Debug::debugFunction(int action, const int i)
 		
 	case 10:
 		{
+			m_game->getGameOverlay()->m_hidden = !m_game->getGameOverlay()->m_hidden;
 		}
 		break;
 		

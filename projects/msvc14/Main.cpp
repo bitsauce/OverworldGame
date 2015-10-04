@@ -31,11 +31,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 	config.updateFunc = bind(&Game::update, game, placeholders::_1);
 	config.drawFunc = bind(&Game::draw, game, placeholders::_1, placeholders::_2);
 	config.endFunc = bind(&Game::exit, game);
-#ifdef X2D_DEBUG
-	config.workDir = "..\\..\\Content\\";
-#else
 	config.workDir = "..\\..\\..\\Content\\";
-#endif
 	config.flags = flags;
 
 	if(engine->init(config) != X2D_OK)

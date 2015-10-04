@@ -150,17 +150,14 @@ void ChunkLoader::setOptimalChunkCount(const uint optimalChunkCount)
 
 void ChunkLoader::loadActiveArea()
 {
-	Chunk *chunk;
 	for(int y = m_activeArea.y0-1; y <= m_activeArea.y1+1; y++)
 	{
 		for(int x = m_activeArea.x0-1; x <= m_activeArea.x1+1; x++)
 		{
-			if(chunk = &getChunkAt(x, y))
-			{
-				chunk->updateTileMap(this, TERRAIN_LAYER_BACK);
-				chunk->updateTileMap(this, TERRAIN_LAYER_MIDDLE);
-				chunk->updateTileMap(this, TERRAIN_LAYER_FRONT);
-			}
+			Chunk &chunk = getChunkAt(x, y);
+			chunk.updateTileMap(this, TERRAIN_LAYER_BACK);
+			chunk.updateTileMap(this, TERRAIN_LAYER_MIDDLE);
+			chunk.updateTileMap(this, TERRAIN_LAYER_FRONT);
 		}
 	}
 }
@@ -313,9 +310,9 @@ void ChunkLoader::resizeEvent(uint width, uint height)
 	setOptimalChunkCount(loadAreaWidth * loadAreaHeight * 2);
 	
 	priority_queue<Vector2i, vector<Vector2i>, VectorComparator> minHeap;
-	for(int y = -floor(loadAreaHeight*0.5f) + 1; y < floor(loadAreaHeight*0.5f); ++y)
+	for(int y = (int) -floor(loadAreaHeight*0.5f) + 1; y < (int) floor(loadAreaHeight*0.5f); ++y)
 	{
-		for(int x = -floor(loadAreaWidth*0.5f) + 1; x < floor(loadAreaWidth*0.5f); ++x)
+		for(int x = (int) -floor(loadAreaWidth*0.5f) + 1; x < (int) floor(loadAreaWidth*0.5f); ++x)
 		{
 			minHeap.push(Vector2i(x, y));
 		}

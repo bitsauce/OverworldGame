@@ -31,7 +31,7 @@ Background::Background(World *world) :
 	Random rand;
 	for(uint i = 0; i < 10; ++i)
 	{
-		m_clouds.push_back(new Cloud(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Clouds/Cloud_01.png")), 0.2f + rand.nextDouble() * 0.8f, rand.nextInt(0, Window::getHeight() / 2), rand.nextInt(0, Window::getWidth())));
+		m_clouds.push_back(new Cloud(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Clouds/Cloud_01.png")), 0.2f + rand.nextDouble() * 0.8f, (float) rand.nextInt(0, Window::getHeight() / 2), (float) rand.nextInt(0, Window::getWidth())));
 	}
 	
 	m_layers.push_back(new Layer(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Layer_0.png")), 0.5f, -1080.0f));
@@ -123,10 +123,10 @@ void Background::draw(SpriteBatch *spriteBatch, const float alpha)
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 
 	// Draw sky gradient
-	m_vertices[0].set4f(VERTEX_POSITION, 0.0f,						0.0f);
-	m_vertices[1].set4f(VERTEX_POSITION, 0.0f,						gfxContext.getHeight());
-	m_vertices[2].set4f(VERTEX_POSITION, gfxContext.getWidth(),		0.0f);
-	m_vertices[3].set4f(VERTEX_POSITION, gfxContext.getWidth(),		gfxContext.getHeight());
+	m_vertices[0].set4f(VERTEX_POSITION, 0.0f,							0.0f);
+	m_vertices[1].set4f(VERTEX_POSITION, 0.0f,							(float) gfxContext.getHeight());
+	m_vertices[2].set4f(VERTEX_POSITION, (float) gfxContext.getWidth(),	0.0f);
+	m_vertices[3].set4f(VERTEX_POSITION, (float) gfxContext.getWidth(), (float) gfxContext.getHeight());
 	m_vertices[0].set4ub(VERTEX_COLOR, m_topColor.r, m_topColor.g, m_topColor.b, m_topColor.a);
 	m_vertices[1].set4ub(VERTEX_COLOR, m_bottomColor.r, m_bottomColor.g, m_bottomColor.b, m_bottomColor.a);
 	m_vertices[2].set4ub(VERTEX_COLOR, m_topColor.r, m_topColor.g, m_topColor.b, m_topColor.a);

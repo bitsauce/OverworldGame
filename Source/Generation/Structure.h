@@ -9,7 +9,7 @@ class Structure
 public:
 	Structure(const int x, const int y);
 
-	virtual void place(WorldGenerator *worldGenerator, StructurePlacer *structPlacer) { }
+	virtual void place(WorldGenerator *worldGenerator) { }
 
 	int m_x, m_y;
 };
