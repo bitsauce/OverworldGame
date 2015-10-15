@@ -24,9 +24,6 @@ public:
 
 	// Removes the block at xy, creating an ItemDrop for the block type in the process
 	bool removeBlockAt(const int x, const int y, TerrainLayer layer);
-	
-	// BLOCK ENTITIES
-	bool setThingAt(const int x, const int y, ThingID blockEntity);
 
 	// CHUNK LOADER
 	ChunkLoader *getChunkLoader() { return &m_chunkLoader; }

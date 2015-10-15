@@ -13,7 +13,7 @@ Entity::Entity(World *world, const EntityID id) :
 Entity::~Entity()
 {
 	Camera *camera = m_world->getCamera();
-	if(camera->getTargetEntity() == this)
+	if((Entity*)camera->getTargetEntity() == this)
 	{
 		camera->setTargetEntity(nullptr);
 	}

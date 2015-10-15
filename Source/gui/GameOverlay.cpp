@@ -1,6 +1,6 @@
 #include "GameOverlay.h"
 #include "Game/Storage.h"
-#include "Entities/Player.h"
+#include "Entities/Dynamic/Player.h"
 #include "GameOverlay/Hotbar.h"
 #include "GameOverlay/HealthManaStatus.h"
 #include "GameOverlay/Omnicon.h"
@@ -8,7 +8,7 @@
 #include "Items/ItemData.h"
 #include "Game/Game.h"
 #include "Networking/Connection.h"
-#include "Entities/ItemDrop.h"
+#include "Entities/Dynamic/ItemDrop.h"
 
 GameOverlay::GameOverlay(Game *game, Scene *scene) :
 	UiObject(scene, scene->getCanvas()),
@@ -43,7 +43,8 @@ void GameOverlay::update(const float delta)
 	Storage::Slot *heldItem = m_player->getHeldItem();
 	if(!heldItem->isEmpty() && !isHovered() && Input::getKeyState(XD_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 	{
-		ItemDrop *itemDrop = new ItemDrop(m_game->getWorld(), m_player->getCenter() - Vector2(0.0f, 20.0f), heldItem->getItem(), heldItem->getAmount());
+		ItemDrop *itemDrop = new ItemDrop(m_game->getWorld(), heldItem->getItem(), heldItem->getAmount());
+		itemDrop->setPosition(m_player->getCenter() - Vector2(0.0f, 20.0f));
 		itemDrop->applyImpulse(Vector2(m_game->getWorld()->getCamera()->getInputPosition() - m_player->getCenter()).normalized() * 4.0f);
 		heldItem->set(ITEM_NONE, 0);
 	}

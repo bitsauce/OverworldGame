@@ -4,10 +4,10 @@
 #include "Constants.h"
 #include "World/World.h"
 #include "World/Camera.h"
-#include "Entities/Player.h"
+#include "Entities/Dynamic/Player.h"
 #include "Blocks/BlockData.h"
 #include "Networking/Server.h"
-#include "Entities/Mobs/Zombie.h"
+#include "Entities/Dynamic/Mobs/Zombie.h"
 #include "Game/GameStates/GameState.h"
 #include "Game/Game.h"
 
@@ -73,14 +73,14 @@ void Debug::debugFunction(int action, const int i)
 	case 5:
 		{
 			// Spawn light
-			//new Spotlight(m_world->getLighting(), m_world->getCamera()->getInputPosition()/BLOCK_PXF, 20, Color((uchar)m_random.nextInt(255), (uchar)m_random.nextInt(255), (uchar)m_random.nextInt(255)));
+			new Pointlight(m_world->getLighting(), m_world->getCamera()->getInputPosition() / BLOCK_PXF, 20, Color((uchar)m_random.nextInt(255), (uchar)m_random.nextInt(255), (uchar)m_random.nextInt(255)));
 			// Spawn zombie
 
 			// Create zombie
-			RakNet::BitStream bitStream;
+			/*RakNet::BitStream bitStream;
 			bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
 			bitStream.Write(ENTITY_ZOMBIE);
-			((Server*)Connection::getInstance())->getRakPeer()->SendLoopback((const char*) bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
+			((Server*)Connection::getInstance())->getRakPeer()->SendLoopback((const char*) bitStream.GetData(), bitStream.GetNumberOfBytesUsed());*/
 		}
 		break;
 		

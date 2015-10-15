@@ -1,17 +1,16 @@
 #include "World.h"
 #include "Constants.h"
 
-#include "Entities/Pawn.h"
+#include "Entities/Dynamic/Pawn.h"
 #include "World/Background.h"
 #include "World/Camera.h"
 #include "World/TimeOfDay.h"
 #include "Game/Debug.h"
 #include "Terrain/Terrain.h"
 #include "Generation/Generator.h"
-#include "Entities/Physics/DynamicEntity.h"
-#include "Entities/Pawn.h"
+#include "Entities/Dynamic/DynamicEntity.h"
+#include "Entities/Dynamic/Pawn.h"
 #include "Lighting/Lighting.h"
-#include "Things/Thing.h"
 
 World::World() :
 	m_worldPath(""),

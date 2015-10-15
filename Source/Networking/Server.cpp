@@ -12,12 +12,11 @@
 #include "Constants.h"
 #include "World/World.h"
 #include "World/Terrain/Terrain.h"
-#include "Entities/Pawn.h"
-#include "Entities/Player.h"
-#include "Entities/PlayerController.h"
-#include "Entities/AIController.h"
-#include "Entities/Physics/DynamicEntity.h"
-#include "Entities/Mobs/Zombie.h"
+#include "Entities/Dynamic/Pawn.h"
+#include "Entities/Dynamic/Player.h"
+#include "Entities/Dynamic/PlayerController.h"
+#include "Entities/Dynamic/AIController.h"
+#include "Entities/Dynamic/Mobs/Zombie.h"
 #include "Game/Game.h"
 
 Server::Server(Game *game, const ushort port) :

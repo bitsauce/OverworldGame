@@ -5,19 +5,18 @@
 #include "Gui/UiObject.h"
 #include "Blocks/BlockData.h"
 #include "Items/ItemData.h"
-#include "Things/Thing.h"
-#include "Things/ThingData.h"
 #include "World/World.h"
 #include "Game/Debug.h"
 #include "World/Camera.h"
 #include "World/Background.h"
 #include "World/TimeOfDay.h"
 #include "World/Lighting/Lighting.h"
-#include "World/Lighting/Spotlight.h"
+#include "World/Lighting/Pointlight.h"
 #include "World/Terrain/Terrain.h"
 #include "Networking/Server.h"
 #include "Networking/Client.h"
 #include "Entities/Entity.h"
+#include "Entities/EntityData.h"
 #include "GameStates/InGameState.h"
 
 Game::Game() :
@@ -46,7 +45,7 @@ void Game::main(GraphicsContext &context)
 	// Initialize block and item data
 	BlockData::init();
 	ItemData::init(this);
-	ThingData::init(this);
+	EntityData::init(this);
 
 	// Setup debug
 	m_debug = new Debug(this);

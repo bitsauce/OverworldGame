@@ -7,26 +7,26 @@ class LightSource
 {
 public:
 	// Virtual draw
-	virtual void draw(xd::SpriteBatch *spriteBatch) = 0;
+	virtual void draw(SpriteBatch *spriteBatch) = 0;
 
 	// Source position
 	void setPosition(const Vector2 &position);
 	Vector2 getPosition() const;
 
 	// Source color
-	void setColor(const xd::Color &color);
-	xd::Color getColor() const;
+	void setColor(const Color &color);
+	Color getColor() const;
 
-	// Spotlight radius
+	// Pointlight radius
 	void setRadius(const float radius);
 	float getRadius() const;
 
 protected:
-	LightSource(Vector2 position, float radius, xd::Color color) : m_position(position), m_radius(radius), m_color(color) {}
+	LightSource(Vector2 position, float radius, Color color) : m_position(position), m_radius(radius), m_color(color) {}
 
 	Vector2i m_position;
 	float m_radius;
-	xd::Color m_color;
+	Color m_color;
 };
 
 #endif // LIGHT_SOURCE_H

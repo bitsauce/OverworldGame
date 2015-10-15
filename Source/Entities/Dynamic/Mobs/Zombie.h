@@ -2,9 +2,9 @@
 #define ZOMBIE_H
 
 #include "Config.h"
-#include "Entities/Pawn.h"
-#include "Entities/Humanoid.h"
-#include "Entities/Physics/DynamicEntity.h"
+#include "../Pawn.h"
+#include "../Humanoid.h"
+#include "../DynamicEntity.h"
 
 class Game;
 
@@ -16,6 +16,10 @@ public:
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
+	static Entity *Factory(Game *game)
+	{
+		return new Zombie(game);
+	}
 private:
 };
 

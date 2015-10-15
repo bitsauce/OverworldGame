@@ -2,7 +2,7 @@
 #include "Game/Game.h"
 #include "Items/ItemData.h"
 #include "Game/Storage.h"
-#include "Entities/Player.h"
+#include "Entities/Dynamic/Player.h"
 
 Inventory::Inventory(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(scene, gameOverlay),

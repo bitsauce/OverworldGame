@@ -3,7 +3,7 @@
 
 #include "Config.h"
 
-class Entity;
+class DynamicEntity;
 
 class Camera : public MouseListener, public WindowListener
 {
@@ -15,8 +15,8 @@ public:
 	void lookAt(Vector2 worldPoint);
 
 	// Entity to follow
-	void setTargetEntity(Entity *target) { m_tagetEntity = target; }
-	Entity *getTargetEntity() const { return m_tagetEntity; }
+	void setTargetEntity(DynamicEntity *target) { m_tagetEntity = target; }
+	DynamicEntity *getTargetEntity() const { return m_tagetEntity; }
 	
 	// Get current projection matrix
 	Matrix4 getProjectionMatrix() const;
@@ -77,7 +77,7 @@ private:
 	float m_zoomLevel;
 
 	// Target entity
-	Entity *m_tagetEntity;
+	DynamicEntity *m_tagetEntity;
 };
 
 #endif // CAMERA_H

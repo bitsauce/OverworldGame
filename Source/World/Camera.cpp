@@ -3,7 +3,7 @@
 #include "World/World.h"
 #include "Game/Debug.h"
 #include "Entities/Entity.h"
-#include "Entities/Pawn.h"
+#include "Entities/Dynamic/Pawn.h"
 
 Camera::Camera() :
 	m_position(0.0f, 0.0f),

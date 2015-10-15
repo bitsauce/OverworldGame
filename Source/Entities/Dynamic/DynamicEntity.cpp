@@ -9,7 +9,7 @@ DynamicEntity::DynamicEntity(World *world, const EntityID id) :
 	m_acceleration(0.0f, 0.0f),
 	m_velocity(0.0f, 0.0f),
 	m_position(0.0f, 0.0f),
-	m_prevPosition(0.0f, 0.0f),
+	m_lastPosition(0.0f, 0.0f),
 	m_size(1.0f, 1.0f),
 	m_rotation(45.0f),
 	m_gravityScale(1.0f),
@@ -21,7 +21,7 @@ DynamicEntity::DynamicEntity(World *world, const EntityID id) :
 
 void DynamicEntity::update(const float delta)
 {
-	m_prevPosition = m_position;
+	m_lastPosition = m_position;
 	m_contact = 0; 
 	m_acceleration.y += 2.0f * m_gravityScale;
 	m_velocity += m_acceleration;

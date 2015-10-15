@@ -3,7 +3,7 @@
 #include "BlockItem.h"
 #include "Tools/Pickaxe.h"
 #include "Tools/Axe.h"
-#include "Placeable/ThingItem.h"
+#include "Placeable/EntitySpawnerItem.h"
 #include "Weapons/Bow.h"
 #include "Weapons/Ammo.h"
 
@@ -39,9 +39,9 @@ void ItemData::init(Game *game)
 	(s_itemData[ITEM_PICKAXE_IRON] = new Pickaxe(game))->set(ITEM_PICKAXE_IRON, "Iron Pickaxe", "An iron pickaxe", ":/Sprites/ItemIcons/IronPickaxe.png", 1);
 	(s_itemData[ITEM_AXE_IRON] = new Axe(game))->set(ITEM_AXE_IRON, "Iron Axe", "An iron axe", ":/Sprites/ItemIcons/IronAxe.png", 1);
 
-	(s_itemData[ITEM_TORCH] = new ThingItem(game, BLOCK_ENTITY_TORCH))->set(ITEM_TORCH, "Torch", "Useful light source", ":/Sprites/ItemIcons/Torch.png", 255);
-	(s_itemData[ITEM_CRAFTING_BENCH] = new ThingItem(game, BLOCK_ENTITY_CRAFTING_BENCH))->set(ITEM_CRAFTING_BENCH, "Crafting Bench", "For crafting the items of your dreams", ":/Sprites/ItemIcons/CraftingBench.png", 1);
-	(s_itemData[ITEM_RED_CURRANT_BUSH] = new ThingItem(game, BLOCK_ENTITY_RED_CURRANT_BUSH))->set(ITEM_RED_CURRANT_BUSH, "Red Currant Bush", "Grows red currants", ":/Sprites/ItemIcons/Torch.png", 255);
+	(s_itemData[ITEM_TORCH] = new EntitySpwanerItem(game, ENTITY_TORCH))->set(ITEM_TORCH, "Torch", "Useful light source", ":/Sprites/ItemIcons/Torch.png", 255);
+	(s_itemData[ITEM_CRAFTING_BENCH] = new EntitySpwanerItem(game, /*ENTITY_CRAFTING_BENCH*/ENTITY_ARROW))->set(ITEM_CRAFTING_BENCH, "Crafting Bench", "For crafting the items of your dreams", ":/Sprites/ItemIcons/CraftingBench.png", 1);
+	(s_itemData[ITEM_RED_CURRANT_BUSH] = new EntitySpwanerItem(game, /*ENTITY_RED_CURRANT_BUSH*/ENTITY_ARROW))->set(ITEM_RED_CURRANT_BUSH, "Red Currant Bush", "Grows red currants", ":/Sprites/ItemIcons/Torch.png", 255);
 	
 	(s_itemData[ITEM_BOW_WOODEN] = new Bow(game))->set(ITEM_BOW_WOODEN, "Bow", "", ":/Sprites/ItemIcons/WoodenBow.png", 1);
 	(s_itemData[ITEM_ARROW] = new Ammo(game))->set(ITEM_ARROW, "Arrow", "Needs a bow to fire", ":/Sprites/ItemIcons/Arrow.png", 255);

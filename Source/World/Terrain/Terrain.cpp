@@ -6,14 +6,11 @@
 #include "Constants.h"
 #include "Blocks/BlockData.h"
 
-#include "Things/Thing.h"
-#include "Things/ThingData.h"
-
 #include "World/World.h"
-#include "World/Lighting/Spotlight.h"
+#include "World/Lighting/Pointlight.h"
 #include "World/Camera.h"
 
-#include "Entities/ItemDrop.h"
+#include "Entities/Dynamic/ItemDrop.h"
 
 Terrain::Terrain(World *world) :
 	m_world(world),
@@ -27,7 +24,7 @@ Terrain::Terrain(World *world) :
 	// Window
 	resizeEvent(Window::getSize().x, Window::getSize().y);
 
-	Spotlight::s_vertices = new Vertex[SPOTLIGHT_SEGMENTS+2];
+	Pointlight::s_vertices = new Vertex[POINTLIGHT_SEGMENTS+2];
 }
 
 Terrain::~Terrain()
@@ -76,19 +73,8 @@ bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRA
 	BlockID blockID = getBlockAt(x, y, layer);
 	if(setBlockAt(x, y, BLOCK_EMPTY, layer))
 	{
-		new ItemDrop(m_world, Vector2(x * BLOCK_PXF, y * BLOCK_PXF), BlockData::get(blockID).getItem());
-		return true;
-	}
-	return false;
-}
-
-// BLOCK ENTITIES
-bool Terrain::setThingAt(const int x, const int y, ThingID blockEntity)
-{
-	Thing *thing = ThingData::get(blockEntity).tryPlace(x, y);
-	if(thing != nullptr)
-	{
-		m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).addThing(thing);
+		ItemDrop *itemDrop = new ItemDrop(m_world, BlockData::get(blockID).getItem());
+		itemDrop->setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
 		return true;
 	}
 	return false;

@@ -1,5 +1,5 @@
 #include "BlockItem.h"
-#include "Entities/Pawn.h"
+#include "Entities/Dynamic/Pawn.h"
 #include "World/Camera.h"
 #include "World/Terrain/Terrain.h"
 #include "Blocks/BlockData.h"

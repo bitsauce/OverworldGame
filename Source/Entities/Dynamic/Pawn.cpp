@@ -5,7 +5,6 @@
 #include "World/Camera.h"
 #include "World/Terrain/Terrain.h"
 #include "Constants.h"
-#include "Entities/Physics/DynamicEntity.h"
 #include "Items/ItemData.h"
 #include "Networking/Connection.h"
 #include "Networking/Server.h"
@@ -13,7 +12,6 @@
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
 #include "Gui/GameOverlay.h"
-#include "Things/Thing.h"
 #include "Game/Game.h"
 #include "Game/GameStates/GameState.h"
 #include "Game/Scene.h"
@@ -36,7 +34,7 @@ Pawn::Pawn(Game *game, const EntityID id) :
 	m_prevItem(ITEM_NONE)
 {
 	// Set body size
-	Entity::setSize(24, 48);
+	setSize(24, 48);
 
 	// Init inventory things
 	m_storage.setNext(m_bag->getStorage());
@@ -69,7 +67,7 @@ Storage::Slot *Pawn::getCurrentItem()
 
 void Pawn::activateThing(int action)
 {
-	if(action != GLFW_PRESS) return;
+	/*if(action != GLFW_PRESS) return;
 	Vector2 inputPosition = m_camera->getInputPosition();
 	int blockX = (int)floor(inputPosition.x / BLOCK_PXF), blockY = (int)floor(inputPosition.y / BLOCK_PXF);
 	for(Thing *thing : m_terrain->getChunkLoader()->getChunkAt((int)floor(inputPosition.x / CHUNK_PXF), (int)floor(inputPosition.y / CHUNK_PXF)).getThings())
@@ -78,7 +76,7 @@ void Pawn::activateThing(int action)
 		{
 			thing->activate(this);
 		}
-	}
+	}*/
 }
 
 void Pawn::update(const float delta)
@@ -262,7 +260,7 @@ void Pawn::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 	{
 		float x; bitStream->Read(x);
 		float y; bitStream->Read(y);
-		Entity::setPosition(x, y);
+		setPosition(x, y);
 		bitStream->Read(x);
 		bitStream->Read(y);
 		setVelocityX(x);

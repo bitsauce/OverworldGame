@@ -94,7 +94,7 @@ void Button::draw(SpriteBatch *spriteBatch)
 	// Draw hovered sprite
 	if(m_animTime > 0.0f)
 	{
-		m_buttonSprite->setColor(Color(255, 255, 255, m_animTime));
+		m_buttonSprite->setColor(Color(255, 255, 255, (uchar)m_animTime));
 		m_buttonSprite->setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 0.5f));
 		spriteBatch->drawSprite(*m_buttonSprite);
 	}

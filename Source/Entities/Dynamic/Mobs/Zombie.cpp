@@ -1,7 +1,7 @@
 #include "Zombie.h"
 #include "Game/Game.h"
-#include "Entities/Pawn.h"
-#include "Entities/AIController.h"
+#include "Entities/Dynamic/Pawn.h"
+#include "Entities/Dynamic/AIController.h"
 #include "Constants.h"
 
 Zombie::Zombie(Game *game) :

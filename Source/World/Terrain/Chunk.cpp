@@ -276,4 +276,5 @@ void Chunk::draw(GraphicsContext &context, const TerrainLayer layer)
 		m_tileMapShader->setSampler2D("u_SortedQuadTexture", m_sortRenderTarget[layer]->getTexture(1));
 		context.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
 	context.setShader(0);
+
 }

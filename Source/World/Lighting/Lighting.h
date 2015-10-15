@@ -3,7 +3,7 @@
 
 #include "Config.h"
 #include "LightSource.h"
-#include "Spotlight.h"
+#include "Pointlight.h"
 
 class Terrain;
 class World;

@@ -1,7 +1,7 @@
 #include "HealthManaStatus.h"
 #include "Constants.h"
 #include "Game/Game.h"
-#include "Entities/Player.h"
+#include "Entities/Dynamic/Player.h"
 
 HealthManaStatus::HealthManaStatus(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(scene, gameOverlay),

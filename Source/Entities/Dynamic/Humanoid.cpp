@@ -5,7 +5,7 @@
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
 
-#include "Entities/Physics/DynamicEntity.h"
+#include "DynamicEntity.h"
 
 Humanoid::Humanoid() :
 	m_preAnimation(nullptr),

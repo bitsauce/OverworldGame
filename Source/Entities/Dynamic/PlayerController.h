@@ -3,7 +3,7 @@
 #include "Config.h"
 #include "Controller.h"
 #include "Networking/NetworkObject.h"
-#include "Entities/Physics/DynamicEntity.h"
+#include "Entities/Dynamic/DynamicEntity.h"
 
 class PlayerController : public Controller
 {

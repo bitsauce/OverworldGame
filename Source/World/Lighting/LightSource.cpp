@@ -15,7 +15,7 @@ void LightSource::setColor(const xd::Color &color)
 	m_color = color;
 }
 
-xd::Color LightSource::getColor() const
+Color LightSource::getColor() const
 {
 	return m_color;
 }

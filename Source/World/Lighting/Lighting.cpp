@@ -1,6 +1,6 @@
 #include "Lighting.h"
 #include "Constants.h"
-#include "Spotlight.h"
+#include "Pointlight.h"
 #include "World/World.h"
 #include "World/TimeOfDay.h"
 #include "World/Camera.h"
@@ -45,7 +45,7 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 	// Draw shadows
 	//if(m_prevX0 != x0 || m_prevY0 != y0)
 	{
-		// Reset projection matrix
+		// Reset model-view matrix
 		gfxContext.setModelViewMatrix(Matrix4());
 
 		// Disable alpha blend when drawing to render targets
@@ -54,9 +54,9 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 		// Render lightmaps to texture (pass 0)
 		gfxContext.setRenderTarget(m_lightingRenderTarget);
 		gfxContext.clear(GraphicsContext::COLOR_BUFFER);
-		for(int y = area.y0; y <= area.y1+2; ++y)
+		for(int y = area.y0; y <= area.y1 + 2; ++y)
 		{
-			for(int x = area.x0; x <= area.x1+2; ++x)
+			for(int x = area.x0; x <= area.x1 + 2; ++x)
 			{
 				gfxContext.setTexture(m_terrain->getChunkLoader()->getChunkAt(x-1, y-1).getLightMap());
 				gfxContext.drawRectangle((x - area.x0) * CHUNK_BLOCKSF, (y - area.y0) * CHUNK_BLOCKSF, CHUNK_BLOCKSF, CHUNK_BLOCKSF);
@@ -86,7 +86,7 @@ void Lighting::draw(SpriteBatch *spriteBatch)
 			m_radialLightingShader->setUniform2f("u_Radius", light->getRadius()/m_width, light->getRadius()/m_height);
 			m_radialLightingShader->setUniform1i("u_Iterations", 100);
 			m_radialLightingShader->setUniform3f("u_Color", light->getColor().r/255.0f, light->getColor().g/255.0f, light->getColor().b/255.0f);
-			gfxContext.drawCircle(pos, light->getRadius(), light->getRadius()*1.5f);
+			gfxContext.drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 		}
 		gfxContext.disable(GraphicsContext::BLEND);
 

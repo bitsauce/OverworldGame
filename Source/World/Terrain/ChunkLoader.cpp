@@ -222,7 +222,7 @@ ChunkLoader::ChunkArea ChunkLoader::getLoadArea() const
 	return m_loadArea;
 }
 
-set<Thing*> ChunkLoader::getActiveThings()
+/*set<Thing*> ChunkLoader::getActiveThings()
 {
 	set<Thing*> things;
 	for(int y = m_activeArea.y0-1; y <= m_activeArea.y1+1; y++)
@@ -236,7 +236,7 @@ set<Thing*> ChunkLoader::getActiveThings()
 		}
 	}
 	return things;
-}
+}*/
 
 void ChunkLoader::update()
 {
@@ -285,7 +285,7 @@ void ChunkLoader::update()
 	// Load offscren chunks
 	if(m_circleLoadPattern.size() > 0)
 	{
-		Vector2i centerChunkPosition(floor(center.x/CHUNK_PXF), floor(center.y/CHUNK_PXF));
+		Vector2i centerChunkPosition((int) floor(center.x / CHUNK_PXF), (int) floor(center.y / CHUNK_PXF));
 		Chunk &chunk = getChunkAt(centerChunkPosition.x + m_circleLoadPattern[m_circleLoadIndex].x, centerChunkPosition.y + m_circleLoadPattern[m_circleLoadIndex].y);
 		if(chunk.isDirty(TERRAIN_LAYER_BACK)) chunk.updateTileMap(this, TERRAIN_LAYER_BACK);
 		if(chunk.isDirty(TERRAIN_LAYER_MIDDLE)) chunk.updateTileMap(this, TERRAIN_LAYER_MIDDLE);

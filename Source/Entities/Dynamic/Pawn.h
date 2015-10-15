@@ -5,7 +5,7 @@
 #include "Game/Storage.h"
 #include "Networking/NetworkObject.h"
 #include "Humanoid.h"
-#include "Entities/Physics/DynamicEntity.h"
+#include "DynamicEntity.h"
 #include "Controller.h"
 
 class Camera;

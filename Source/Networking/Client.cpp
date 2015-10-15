@@ -14,8 +14,7 @@
 #include "Game/Game.h"
 #include "World/Terrain/Terrain.h"
 
-#include "Entities/Pawn.h"
-#include "Entities/Physics/DynamicEntity.h"
+#include "Entities/Dynamic/Pawn.h"
 
 Client::Client(Game *game, const string &ip, const ushort port) :
 	Connection(false),
