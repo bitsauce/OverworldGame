@@ -5,6 +5,7 @@
 #include "Constants.h"
 
 class WorldGenerator;
+class StaticEntity;
 
 class Chunk
 {
@@ -28,6 +29,8 @@ public:
 	bool isBlockAt(const int x, const int y, TerrainLayer layer) const;
 	bool isBlockOccupied(const int x, const int y, TerrainLayer layer) const;
 	bool setBlockAt(const int x, const int y, const BlockID block, TerrainLayer layer);
+
+	void addStaticEntity(StaticEntity *entity);
 	
 	// DRAWING
 	void draw(GraphicsContext &gfxContext, const TerrainLayer layer);
@@ -38,6 +41,9 @@ private:
 	// CHUNK
 	int m_x, m_y;
 	BlockID *m_blocks;
+
+	// STATIC ENTITIES
+	set<StaticEntity*> m_staticEntitites;
 
 	// ADJACENCY LIST
 	Chunk *m_adjacentChunks[8];

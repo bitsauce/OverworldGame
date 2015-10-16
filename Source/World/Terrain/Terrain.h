@@ -10,6 +10,8 @@
 enum TerrainLayer;
 enum BlockID;
 
+class StaticEntity;
+
 class Terrain : public WindowListener
 {
 	friend class World;
@@ -22,8 +24,11 @@ public:
 	BlockID getBlockAt(const int x, const int y, const TerrainLayer layer);
 	bool isBlockAt(const int x, const int y, TerrainLayer layer);
 
-	// Removes the block at xy, creating an ItemDrop for the block type in the process
+	// Removes the block at [x, y], creating an ItemDrop for the block type in the process
 	bool removeBlockAt(const int x, const int y, TerrainLayer layer);
+
+	// Static entities
+	void placeStaticEntity(StaticEntity *entity);
 
 	// CHUNK LOADER
 	ChunkLoader *getChunkLoader() { return &m_chunkLoader; }

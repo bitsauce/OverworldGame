@@ -144,7 +144,7 @@ void Debug::update()
 		if(Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS) layer = TERRAIN_LAYER_BACK;
 		if(Input::getKeyState(XD_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 		{
-			int x = floor(m_world->getCamera()->getInputPosition().x/BLOCK_PXF), y = floor(m_world->getCamera()->getInputPosition().y/BLOCK_PXF);
+			int x = (int) floor(m_world->getCamera()->getInputPosition().x/BLOCK_PXF), y = (int) floor(m_world->getCamera()->getInputPosition().y/BLOCK_PXF);
 
 			m_world->getTerrain()->setBlockAt(x, y, m_block, layer);
 		}

@@ -9,60 +9,26 @@ class World;
 class StaticEntity : public Entity
 {
 public:
-	StaticEntity(World *world, const EntityID id);
+	StaticEntity(World *world, int x, int y, int w, int h, const EntityID id);
 
-	void setPosition(const Vector2i &pos)
-	{
-		m_position = pos;
-	}
-
-	Vector2 getPosition() const
+	Vector2i getPosition() const
 	{
 		return m_position;
 	}
 
-	void setPosition(const int x, const int y)
+	int getX() const
 	{
-		setPosition(Vector2i(x, y));
+		return m_position.x;
 	}
 
-	void setSize(const Vector2 &size)
+	int getY() const
 	{
-		m_size = size;
-	}
-
-	Vector2 getSize() const
-	{
-		return m_size;
-	}
-
-	void setVelocity(const Vector2 &velocity)
-	{
-
-	}
-
-	Vector2 getVelocity() const
-	{
-		return Vector2();
-	}
-
-	void setAcceleration(const Vector2 &acc)
-	{
-
-	}
-
-	Vector2 getAcceleration() const
-	{
-		return Vector2();
-	}
-
-	Vector2 getDrawPosition(const float alpha) const
-	{
-		return Vector2();
+		return m_position.y;
 	}
 
 private:
-	Vector2i m_position, m_size;
+	Vector2i m_position;
+	int m_refCount;
 };
 
 #endif // STATIC_ENTITY_H

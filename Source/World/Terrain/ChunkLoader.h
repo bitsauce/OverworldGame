@@ -37,8 +37,12 @@ public:
 private:
 	Chunk *loadChunkAt(const int chunkX, const int chunkY);
 	
-	void saveBlockData(const string &filePath, BlockID *blockData);
-	void loadBlockData(const string &filePath, BlockID *blockData);
+	void saveBlockData(FileWriter &file, BlockID *blockData);
+	void loadBlockData(FileReader &file, BlockID *blockData);
+
+	void saveEntities(FileWriter &file, set<StaticEntity*> entities);
+	void loadEntities(FileReader &file);
+
 	bool freeInactiveChunk();
 	void freeChunk(unordered_map<uint, Chunk*>::iterator itr);
 	

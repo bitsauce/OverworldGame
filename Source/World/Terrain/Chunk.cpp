@@ -89,8 +89,6 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 	LOG("Chunk [%i, %i] generated", m_x, m_y);
 }
 
-#define CHUNK_KEY(X, Y) (((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000))
-
 void Chunk::updateTileMap(ChunkLoader *chunkLoader, TerrainLayer z)
 {
 	// Get adjacent chunks
@@ -213,6 +211,13 @@ bool Chunk::setBlockAt(const int x, const int y, const BlockID block, TerrainLay
 		return true; // Return true as something was changed
 	}
 	return false; // Nothing changed
+}
+
+#include "Entities/Static/StaticEntity.h"
+
+void Chunk::addStaticEntity(StaticEntity * entity)
+{
+	m_staticEntitites.insert(entity);
 }
 
 // DRAWING

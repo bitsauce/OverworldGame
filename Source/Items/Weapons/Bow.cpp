@@ -88,7 +88,7 @@ void Bow::draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha)
 {
 	if(m_charging)
 	{
-		TextureRegion region = m_chargeAnim.getKeyFrame(min(m_chargeTime + 0.15f, 1.0f) * 3);
+		TextureRegion region = m_chargeAnim.getKeyFrame((int) min(m_chargeTime + 0.15f, 1.0f) * 3);
 		m_sprite.setRegion(region);
 
 		Skeleton *skeleton = pawn->getHumanoid().getSkeleton();

@@ -6,14 +6,14 @@
 class Torch : public StaticEntity
 {
 public:
-	Torch(World * world);
+	Torch(World * world, int x, int y);
 
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
-	static Entity* Factory(Game* game)
+	static StaticEntity* Factory(World * world, const int x, const int y)
 	{
-		return new Torch(game->getWorld());
+		return new Torch(world, x, y);
 	}
 
 private:

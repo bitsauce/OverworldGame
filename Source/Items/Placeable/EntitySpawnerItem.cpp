@@ -24,8 +24,11 @@ void EntitySpwanerItem::use(Pawn *player, const float delta)
 		player->getCurrentItem()->dec();
 	}*/
 
-	StaticEntity *entity = (StaticEntity*)EntityData::Create(m_game, m_entityID);
-	entity->setPosition(blockPos.x, blockPos.y);
+	EntityData *data = EntityData::Get(m_entityID);
+	if(data && data->getType() == STATIC_ENTITY)
+	{
+		((StaticEntityData*) EntityData::Get(m_entityID))->Create(m_game->getWorld(), blockPos.x, blockPos.y);
+	}
 }
 
 void EntitySpwanerItem::draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha)

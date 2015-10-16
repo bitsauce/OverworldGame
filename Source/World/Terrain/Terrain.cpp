@@ -80,6 +80,23 @@ bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRA
 	return false;
 }
 
+#include "Entities/EntityData.h"
+#include "Entities/Static/StaticEntity.h"
+
+void Terrain::placeStaticEntity(StaticEntity * entity)
+{
+	Vector2i pos = entity->getPosition();
+	Vector2i size = ((StaticEntityData*)EntityData::Get(entity->getID()))->getSize();
+	m_chunkLoader.getChunkAt((int) floor(pos.x / CHUNK_BLOCKSF), (int) floor(pos.y / CHUNK_BLOCKSF)).addStaticEntity(entity);
+	for(int y = pos.y; y < pos.y + size.y; ++y)
+	{
+		for(int x = pos.x; x < pos.x + size.x; ++x)
+		{
+			m_chunkLoader.getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), BLOCK_ENTITY, TERRAIN_LAYER_MIDDLE);
+		}
+	}
+}
+
 // DRAWING
 Terrain::Drawer::Drawer(Terrain *terrain, Camera *camera, const Priority drawOrder, const TerrainLayer layer) :
 	m_chunkLoader(terrain->getChunkLoader()),
@@ -106,19 +123,13 @@ void Terrain::Drawer::draw(SpriteBatch *spriteBatch)
 			Chunk &chunk = m_chunkLoader->getChunkAt(x, y);
 
 			// Should we generate a new tile map?
-			if(chunk.isDirty(m_layer)) {
+			if(chunk.isDirty(m_layer))
+			{
 				chunk.updateTileMap(m_chunkLoader, m_layer);
 			}
 
-			// Apply block-space matrix
-			//Matrix4 mat;
-			//mat.scale(BLOCK_PXF, BLOCK_PXF, 1.0f);
-			//mat.translate(x * CHUNK_PXF, y * CHUNK_PXF, 0.0f);
-
 			// Draw chunk
-			//gfxContext.pushMatrix(mat);
 			chunk.draw(gfxContext, m_layer);
-			//gfxContext.popMatrix();
 		}
 	}
 }

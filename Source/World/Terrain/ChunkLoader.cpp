@@ -3,6 +3,8 @@
 #include "World/Camera.h"
 #include "World/World.h"
 #include "Generation/Generator.h"
+#include "Entities/Static/StaticEntity.h"
+#include "Entities/EntityData.h"
 
 #define CHUNK_KEY(X, Y) ((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000)
 
@@ -27,8 +29,8 @@ ChunkLoader::ChunkLoader(World *world) :
 	m_tileSortShader->link();
 
 	m_tileMapShader = ResourceManager::get<Shader>(":/Shaders/TileMap");
-	m_tileSortShader->exportAssembly(":/Shaders/TileSort.bin");
-	m_tileMapShader->exportAssembly(":/Shaders/TileMap.bin");
+	//m_tileSortShader->exportAssembly(":/Shaders/TileSort.bin");
+	//m_tileMapShader->exportAssembly(":/Shaders/TileMap.bin");
 
 	// Set max chunks to some value
 	setOptimalChunkCount(512);
@@ -43,16 +45,8 @@ void ChunkLoader::clear()
 }
 
 // SERIALIZATION
-void ChunkLoader::saveBlockData(const string &filePath, BlockID *blockData)
+void ChunkLoader::saveBlockData(FileWriter &file, BlockID * blockData)
 {
-	// Open file writer
-	FileWriter file(filePath);
-	if(!file.isOpen())
-	{
-		LOG("Unable to save block data to '%s'", filePath);
-		return;
-	}
-
 	// Write blocks to stream
 	BlockID currentBlock = blockData[0];
 	int length = 1;
@@ -74,17 +68,9 @@ void ChunkLoader::saveBlockData(const string &filePath, BlockID *blockData)
 	file << currentBlock << endl;
 	file << length << endl;
 }
-	
-void ChunkLoader::loadBlockData(const string &filePath, BlockID *blockData)
-{
-	// Open file reader
-	FileReader file(filePath);
-	if(!file.isOpen())
-	{
-		LOG("Unable to load block data from '%s'", filePath);
-		return;
-	}
 
+void ChunkLoader::loadBlockData(FileReader &file, BlockID *blockData)
+{
 	// Read blocks from stream
 	int pos = 0;
 	while(pos < CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT)
@@ -97,6 +83,34 @@ void ChunkLoader::loadBlockData(const string &filePath, BlockID *blockData)
 			blockData[pos + i] = (BlockID)block;
 		}
 		pos += length;
+	}
+}
+
+void ChunkLoader::saveEntities(FileWriter &file, set<StaticEntity*> entities)
+{
+	// Write entity data
+	file << (int) entities.size() << endl;
+	for(StaticEntity * entity : entities)
+	{
+		file << entity->getID() << endl;
+		file << entity->getX() << endl;
+		file << entity->getY() << endl;
+		entity->createSaveData(file);
+	}
+}
+
+void ChunkLoader::loadEntities(FileReader &file)
+{
+	// Read entity data
+	int numEntities;
+	file >> numEntities;
+	for(int i = 0; i < numEntities; ++i)
+	{
+		int id, x, y;
+		file >> id;
+		file >> x;
+		file >> y;
+		((StaticEntityData*) EntityData::Get((EntityID) id))->Create(m_world, x, y)->loadSaveData(file);
 	}
 }
 
@@ -121,10 +135,28 @@ void ChunkLoader::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 {
 	// Free it
 	Chunk *chunk = itr->second;
-	//if(chunk->isModified())
+
+	// Open file writer
+	string filePath = util::getAbsoluteFilePath(m_world->getWorldPath() + "/Chunks/" + util::intToStr(itr->first) + ".obj");
+	FileWriter file(filePath);
+	if(!file.isOpen())
 	{
-		saveBlockData(util::getAbsoluteFilePath(m_world->getWorldPath() + "/Chunks/" + util::intToStr(itr->first) + ".obj"), chunk->m_blocks);
+		LOG("Unable to load block data from '%s'", filePath);
+		return;
 	}
+
+	// Save chunk data
+	saveBlockData(file, chunk->m_blocks);
+	saveEntities(file, chunk->m_staticEntitites);
+	
+	// Delete static entities
+	for(StaticEntity *entity : chunk->m_staticEntitites)
+	{
+		delete entity;
+	}
+	chunk->m_staticEntitites.clear(); // Empty static entity list
+
+	// Add chunk to chunk pool and remove from active chunks
 	m_chunkPool.push_back(chunk);
 	m_chunks.erase(itr->first);
 }
@@ -185,16 +217,29 @@ Chunk *ChunkLoader::loadChunkAt(const int chunkX, const int chunkY)
 
 	// Get chunk file path
 	uint key = CHUNK_KEY(chunkX, chunkY);
-	string chunkFilePath = m_world->getWorldPath() + "/Chunks/" + util::intToStr(key) + ".obj";
+	string chunkFilePath = util::getAbsoluteFilePath(m_world->getWorldPath() + "/Chunks/" + util::intToStr(key) + ".obj");
+
+	// Open file writer
+	FileReader *file = 0;
+	if(util::fileExists(chunkFilePath))
+	{
+		file = new FileReader(chunkFilePath);
+		if(!file->isOpen())
+		{
+			LOG("Unable to save block data to '%s'", chunkFilePath);
+			//return;
+			file = 0;
+		}
+	}
 
 	// Get block data
-	BlockID blocks[CHUNK_BLOCKS*CHUNK_BLOCKS*TERRAIN_LAYER_COUNT];
-	if(util::fileExists(chunkFilePath))
+	BlockID blocks[CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT];
+	if(file)
 	{
 		LOG("Loading chunk [%i, %i]...", chunkX, chunkY);
 
 		// Load chunk from file
-		loadBlockData(util::getAbsoluteFilePath(chunkFilePath), blocks);
+		loadBlockData(*file, blocks);
 	}
 	else
 	{
@@ -204,6 +249,13 @@ Chunk *ChunkLoader::loadChunkAt(const int chunkX, const int chunkY)
 
 	// Initialize chunk
 	(m_chunks[key] = chunk)->load(chunkX, chunkY, blocks);
+
+	// Load entities if any
+	if(file)
+	{
+		loadEntities(*file);
+	}
+
 	return chunk;
 }
 
@@ -274,7 +326,6 @@ void ChunkLoader::update()
 	}
 
 	Vector2 dir = Vector2(chunkPosition) - m_averagePosition;
-	//World::getDebug()->setVariable("Chunk load direction", "[" + util::floatToStr(dir.x) + ", " + util::floatToStr(dir.y) + "]");
 
 	if(m_chunks.size() >= m_optimalChunkCount)
 	{
