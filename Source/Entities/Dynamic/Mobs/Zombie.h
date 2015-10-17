@@ -16,9 +16,9 @@ public:
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
-	static Entity *Factory(Game *game)
+	static DynamicEntity *Factory(World * world)
 	{
-		return new Zombie(game);
+		return new Zombie(0);
 	}
 private:
 };

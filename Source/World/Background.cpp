@@ -149,7 +149,7 @@ void Background::draw(SpriteBatch *spriteBatch, const float alpha)
 	{
 		float ratio = Window::getWidth() / 1920.0f;
 		Vector2i cameraPos = m_camera->getCenter();
-		Vector2i layerSize = Vector2i(Window::getWidth(), layer->sprite.getTexture()->getHeight() * ratio);
+		Vector2i layerSize = Vector2i(Window::getWidth(), (int)(layer->sprite.getTexture()->getHeight() * ratio));
 		layer->sprite.setSize(layerSize);
 		if(cameraPos.y > 0.0f)
 		{

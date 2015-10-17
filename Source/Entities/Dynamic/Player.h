@@ -8,9 +8,9 @@ public:
 	Player(Game *game, const bool local);
 	~Player();
 
-	static Entity *Factory(Game *game)
+	static DynamicEntity *Factory(World *world)
 	{
-		return new Player(game, false);
+		return new Player(0, false);
 	}
 protected:
 };

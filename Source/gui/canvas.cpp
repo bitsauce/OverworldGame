@@ -3,7 +3,7 @@
 
 Canvas::Canvas(Scene *scene) :
 	UiObject(scene, nullptr),
-	m_canvasSize(1.0f),
+	m_canvasSize(1, 1),
 	m_useWindowSize(true)
 {
 }

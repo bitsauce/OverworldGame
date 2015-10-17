@@ -13,9 +13,9 @@ public:
 	bool plotTest(int x, int y);
 	void update(const float delta);
 
-	static Entity *Factory(Game *game)
+	static DynamicEntity *Factory(World * world)
 	{
-		return new Arrow(0, game->getWorld(), Vector2(), Vector2(), 20.0f);
+		return new Arrow(0, world, Vector2(), Vector2(), 20.0f);
 	}
 
 private:
