@@ -33,6 +33,7 @@ private:
 	// Enabled flag
 	bool m_enabled;
 	bool m_debugChunkLoader;
+	bool m_debugLighting;
 	bool m_blockPainterEnabled;
 
 	// Debug variables
