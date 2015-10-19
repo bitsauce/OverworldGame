@@ -130,12 +130,6 @@ void World::draw(SpriteBatch *spriteBatch, const float alpha)
 
 	m_terrain->m_background.draw(spriteBatch);
 
-	/*set<Thing*> things = m_terrain->getChunkLoader()->getActiveThings();
-	for(Thing *thing : things)
-	{
-		thing->draw(spriteBatch, alpha);
-	}*/
-
 	list<Entity*> entities = m_entities;
 	for(Entity *entity : entities)
 	{

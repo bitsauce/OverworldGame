@@ -131,7 +131,7 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 
 	// Set block atlas
 	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
-	m_tileMapShader->setUniform2fv("u_QuadUVs", QUAD_UVS);
+	m_tileMapShader->setUniform2f("u_QuadUVs", QUAD_UVS);
 		
 	// Mark as dirty
 	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] = true;
@@ -327,10 +327,11 @@ void Chunk::draw(GraphicsContext &context, const TerrainLayer layer)
 	vertices[2].set4f(xd::VERTEX_POSITION, x + width, y);
 	vertices[3].set4f(xd::VERTEX_POSITION, x + width, y + height);
 
+	context.setBlendState(BlendState(BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA));
 	context.setShader(m_tileMapShader);
 		m_tileMapShader->setSampler2D("u_SortedBlockTexture", m_sortRenderTarget[layer]->getTexture(0));
 		m_tileMapShader->setSampler2D("u_SortedQuadTexture", m_sortRenderTarget[layer]->getTexture(1));
 		context.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
 	context.setShader(0);
-
+	context.setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
 }

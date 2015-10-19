@@ -14,17 +14,17 @@ struct BlockDescriptor
 };
 
 static BlockDescriptor g_blockData[] = {
-	{ BLOCK_EMPTY, ":/Sprites/Blocks/Empty.png", ITEM_NONE, 0.0f },
-	{ BLOCK_ENTITY, ":/Sprites/Blocks/Empty.png", ITEM_NONE, 0.0f },
+	{ BLOCK_EMPTY, ":/Sprites/Blocks/Empty.png?PremultiplyAlpha", ITEM_NONE, 0.0f },
+	{ BLOCK_ENTITY, ":/Sprites/Blocks/Empty.png?PremultiplyAlpha", ITEM_NONE, 0.0f },
 
-	{ BLOCK_GRASS, ":/Sprites/Blocks/Grass.png", ITEM_BLOCK_DIRT, 1.0f },
-	{ BLOCK_DIRT, ":/Sprites/Blocks/Dirt.png", ITEM_BLOCK_DIRT, 1.0f },
-	{ BLOCK_DIRT_BACK, ":/Sprites/Blocks/DirtBack.png", ITEM_BLOCK_DIRT_BACK, 0.95f },
+	{ BLOCK_GRASS, ":/Sprites/Blocks/Grass.png?PremultiplyAlpha", ITEM_BLOCK_DIRT, 1.0f },
+	{ BLOCK_DIRT, ":/Sprites/Blocks/Dirt.png?PremultiplyAlpha", ITEM_BLOCK_DIRT, 1.0f },
+	{ BLOCK_DIRT_BACK, ":/Sprites/Blocks/DirtBack.png?PremultiplyAlpha", ITEM_BLOCK_DIRT_BACK, 0.95f },
 
-	{ BLOCK_OAK_WOOD, ":/Sprites/Blocks/OakWood.png", ITEM_BLOCK_OAK_WOOD, 0.75f },
-	{ BLOCK_OAK_LEAVES, ":/Sprites/Blocks/OakLeaves.png", ITEM_BLOCK_OAK_LEAVES, 0.0f },
+	{ BLOCK_OAK_WOOD, ":/Sprites/Blocks/OakWood.png?PremultiplyAlpha", ITEM_BLOCK_OAK_WOOD, 0.75f },
+	{ BLOCK_OAK_LEAVES, ":/Sprites/Blocks/OakLeaves.png?PremultiplyAlpha", ITEM_BLOCK_OAK_LEAVES, 0.0f },
 
-	{ BLOCK_STONE, ":/Sprites/Blocks/Stone.png", ITEM_BLOCK_STONE, 1.0f },
+	{ BLOCK_STONE, ":/Sprites/Blocks/Stone.png?PremultiplyAlpha", ITEM_BLOCK_STONE, 1.0f },
 
 	{ BLOCK_COUNT, "", ITEM_NONE, 0.0f }
 };
