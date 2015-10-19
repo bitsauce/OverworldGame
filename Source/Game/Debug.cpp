@@ -289,8 +289,6 @@ void Debug::draw(SpriteBatch *spriteBatch)
 		}
 	}
 
-	spriteBatch->end();
-
 	// Debug lighting
 	if(m_debugLighting)
 	{

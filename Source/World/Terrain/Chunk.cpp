@@ -36,6 +36,56 @@ Chunk::Chunk(ShaderPtr tileMapShader, ShaderPtr tileSortShader) :
 	}
 }
 
+/*if(i == QUAD_0)  return vec2(1.0, 1.0) + vec2(0.0, 24.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_1)  return vec2(1.0, 1.0) + vec2(8.0, 24.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_2)  return vec2(1.0, 1.0) + vec2(16.0, 24.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_3)  return vec2(1.0, 1.0) + vec2(24.0, 24.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_4)  return vec2(1.0, 1.0) + vec2(0.0, 16.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_5)  return vec2(1.0, 1.0) + vec2(8.0, 16.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_6)  return vec2(1.0, 1.0) + vec2(16.0, 16.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_7)  return vec2(1.0, 1.0) + vec2(24.0, 16.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_8)  return vec2(1.0, 1.0) + vec2(0.0, 8.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_9)  return vec2(1.0, 1.0) + vec2(8.0, 8.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_10) return vec2(1.0, 1.0) + vec2(16.0, 8.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_11) return vec2(1.0, 1.0) + vec2(24.0, 8.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_12) return vec2(1.0, 1.0) + vec2(0.0, 0.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_13) return vec2(1.0, 1.0) + vec2(8.0, 0.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_14) return vec2(1.0, 1.0) + vec2(16.0, 0.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_15) return vec2(1.0, 1.0) + vec2(24.0, 0.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_16) return vec2(1.0, 1.0) + vec2(0.0, 40.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_17) return vec2(1.0, 1.0) + vec2(8.0, 40.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_18) return vec2(1.0, 1.0) + vec2(0.0, 32.0) + vec2(34.0 * float(blockID), 0.0);
+if(i == QUAD_19) return vec2(1.0, 1.0) + vec2(8.0, 32.0) + vec2(34.0 * float(blockID), 0.0);
+return vec2(0.0);*/
+
+const float QUAD_UVS[40] =
+{
+	1, 25,
+	9, 25,
+	17, 25,
+	25, 25,
+
+	1, 17,
+	9, 17,
+	17, 17,
+	25, 17,
+
+	1, 9,
+	9, 9,
+	17, 9,
+	25, 9,
+
+	1, 1,
+	9, 1,
+	17, 1,
+	25, 1,
+
+	1, 41,
+	9, 41,
+	1, 33,
+	9, 33
+};
+
 // BLOCK LOADING
 void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 {
@@ -81,6 +131,7 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 
 	// Set block atlas
 	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
+	m_tileMapShader->setUniform2fv("u_QuadUVs", QUAD_UVS);
 		
 	// Mark as dirty
 	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] = true;
