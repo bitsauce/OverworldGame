@@ -25,14 +25,31 @@ public:
 	struct ChunkArea
 	{
 		ChunkArea() : x0(0), y0(0), x1(0), y1(0) {}
+		bool operator==(const ChunkArea &other)
+		{
+			return x0 == other.x0 && y0 == other.y0 && x1 == other.x1 && y1 == other.y1;
+		}
+		bool operator!=(const ChunkArea &other)
+		{
+			return !(*this == other);
+		}
 		int x0, y0;
 		int x1, y1;
 	};
 
 	ChunkArea getActiveArea() const;
-	ChunkArea getLoadArea(/*const uint areaIndex*/) const;
+	ChunkArea getLoadArea() const;
 
 	void update();
+	void draw(GraphicsContext &context);
+
+	// Global render target
+	RenderTarget2D *m_blocksRenderTarget[TERRAIN_LAYER_COUNT];
+	RenderTarget2D *m_sortedBlocksRenderTarget[TERRAIN_LAYER_COUNT];
+
+
+
+	ShaderPtr m_tileMapShader;
 
 private:
 	Chunk *loadChunkAt(const int chunkX, const int chunkY);
@@ -57,6 +74,7 @@ private:
 
 	// Active area
 	ChunkArea m_activeArea;
+	ChunkArea m_prevActiveArea;
 
 	// Load area
 	ChunkArea m_loadArea;
@@ -66,18 +84,17 @@ private:
 	vector<Chunk*> m_chunkPool;
 	uint m_optimalChunkCount;
 
-	// Prev chunk pos
+	// Chunk positions
 	Vector2i m_chunkPositions[4];
 	Vector2  m_averagePosition;
 	Vector2i m_prevChunkPosition;
 	uint m_chunkPositionIndex;
 
-	// Load patterns
+	// Cirlce load patterns
 	vector<Vector2i> m_circleLoadPattern;
 	uint m_circleLoadIndex;
 
-	// Shaders
-	ShaderPtr m_tileMapShader;
+	// Block rendering shaders
 	ShaderPtr m_tileSortShader;
 };
 

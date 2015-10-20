@@ -123,6 +123,9 @@ void World::draw(SpriteBatch *spriteBatch, const float alpha)
 	spriteBatch->begin();
 	
 	m_camera->interpolate(alpha);
+
+	m_terrain->getChunkLoader()->draw(spriteBatch->getGraphicsContext());
+
 	m_background->draw(spriteBatch, alpha);
 	
 	spriteBatch->end();

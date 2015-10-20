@@ -111,25 +111,17 @@ void Terrain::Drawer::draw(SpriteBatch *spriteBatch)
 	spriteBatch->flush();
 
 	// Setup graphics context
-	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
-	gfxContext.setModelViewMatrix(m_camera->getProjectionMatrix());
+	GraphicsContext &context = spriteBatch->getGraphicsContext();
+	context.setModelViewMatrix(m_camera->getProjectionMatrix());
 
 	// Draw chunk area
 	ChunkLoader::ChunkArea area = m_chunkLoader->getActiveArea();
-	for(int y = area.y0; y <= area.y1; ++y)
-	{
-		for(int x = area.x0; x <= area.x1; ++x)
-		{
-			Chunk &chunk = m_chunkLoader->getChunkAt(x, y);
 
-			// Should we generate a new tile map?
-			if(chunk.isDirty(m_layer))
-			{
-				chunk.updateTileMap(m_chunkLoader, m_layer);
-			}
-
-			// Draw chunk
-			chunk.draw(gfxContext, m_layer);
-		}
-	}
+	context.setBlendState(BlendState(BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA));
+	context.setShader(m_chunkLoader->m_tileMapShader);
+	m_chunkLoader->m_tileMapShader->setSampler2D("u_SortedBlockTexture", m_chunkLoader->m_sortedBlocksRenderTarget[m_layer]->getTexture(0));
+	m_chunkLoader->m_tileMapShader->setSampler2D("u_SortedQuadTexture", m_chunkLoader->m_sortedBlocksRenderTarget[m_layer]->getTexture(1));
+	context.drawRectangle(area.x0 * CHUNK_PXF, area.y0 * CHUNK_PXF, (area.x1 - area.x0) * CHUNK_PXF, (area.y1 - area.y0) * CHUNK_PXF);
+	context.setShader(0);
+	context.setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
 }

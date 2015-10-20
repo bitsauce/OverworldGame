@@ -4,7 +4,6 @@ out uvec4 out_QuadData;
 
 uniform usampler2D u_TileMap;
 
-#define CHUNK_BLOCKS 34.0
 #define QUAD_0 0U
 #define QUAD_1 1U
 #define QUAD_2 2U
@@ -32,15 +31,16 @@ uvec3 tmp;
 void main()
 {
 	// Get block IDs/depths
+	ivec2 tileMapSize = textureSize(u_TileMap, 0);
 	uint centerBlockID		= (texture(u_TileMap, v_TexCoord).r);
-	uint leftBlockID		= (texture(u_TileMap, v_TexCoord + vec2(-1.0 / CHUNK_BLOCKS, 0.0)).r);
-	uint rightBlockID		= (texture(u_TileMap, v_TexCoord + vec2( 1.0 / CHUNK_BLOCKS, 0.0)).r);
-	uint topBlockID			= (texture(u_TileMap, v_TexCoord + vec2(0.0,  1.0 / CHUNK_BLOCKS)).r);
-	uint bottomBlockID		= (texture(u_TileMap, v_TexCoord + vec2(0.0, -1.0 / CHUNK_BLOCKS)).r);
-	uint topLeftBlockID		= (texture(u_TileMap, v_TexCoord + vec2(-1.0 / CHUNK_BLOCKS,  1.0 / CHUNK_BLOCKS)).r);
-	uint topRightBlockID	= (texture(u_TileMap, v_TexCoord + vec2( 1.0 / CHUNK_BLOCKS,  1.0 / CHUNK_BLOCKS)).r);
-	uint bottomLeftBlockID	= (texture(u_TileMap, v_TexCoord + vec2(-1.0 / CHUNK_BLOCKS, -1.0 / CHUNK_BLOCKS)).r);
-	uint bottomRightBlockID	= (texture(u_TileMap, v_TexCoord + vec2( 1.0 / CHUNK_BLOCKS, -1.0 / CHUNK_BLOCKS)).r);
+	uint leftBlockID		= (texture(u_TileMap, v_TexCoord + vec2(-1.0 / tileMapSize.x, 0.0)).r);
+	uint rightBlockID		= (texture(u_TileMap, v_TexCoord + vec2( 1.0 / tileMapSize.x, 0.0)).r);
+	uint topBlockID			= (texture(u_TileMap, v_TexCoord + vec2(0.0,  1.0 / tileMapSize.y)).r);
+	uint bottomBlockID		= (texture(u_TileMap, v_TexCoord + vec2(0.0, -1.0 / tileMapSize.y)).r);
+	uint topLeftBlockID		= (texture(u_TileMap, v_TexCoord + vec2(-1.0 / tileMapSize.x,  1.0 / tileMapSize.y)).r);
+	uint topRightBlockID	= (texture(u_TileMap, v_TexCoord + vec2( 1.0 / tileMapSize.x,  1.0 / tileMapSize.y)).r);
+	uint bottomLeftBlockID	= (texture(u_TileMap, v_TexCoord + vec2(-1.0 / tileMapSize.x, -1.0 / tileMapSize.y)).r);
+	uint bottomRightBlockID	= (texture(u_TileMap, v_TexCoord + vec2( 1.0 / tileMapSize.x, -1.0 / tileMapSize.y)).r);
 
 	// Compare diagonal blocks to check for inner corners
 	bvec4 innerCorner = equal(uvec4(bottomBlockID, bottomBlockID, topBlockID, topBlockID), uvec4(leftBlockID, rightBlockID, leftBlockID, rightBlockID));

@@ -230,6 +230,8 @@
     <None Include="..\..\Content\Shaders\BlurV.vert" />
     <None Include="..\..\Content\Shaders\DirectionalLighting.frag" />
     <None Include="..\..\Content\Shaders\DirectionalLighting.vert" />
+    <None Include="..\..\Content\Shaders\DrawChunk.frag" />
+    <None Include="..\..\Content\Shaders\DrawChunk.vert" />
     <None Include="..\..\Content\Shaders\godrays.frag" />
     <None Include="..\..\Content\Shaders\godrays.vert" />
     <None Include="..\..\Content\Shaders\outline.frag" />

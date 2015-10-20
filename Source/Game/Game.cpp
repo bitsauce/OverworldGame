@@ -40,10 +40,10 @@ void Game::main(GraphicsContext &context)
 	//}
 	
 	// Init world
+	BlockData::init();
 	m_world = new World();
 
 	// Initialize block and item data
-	BlockData::init();
 	ItemData::init(this);
 	EntityData::init(this);
 

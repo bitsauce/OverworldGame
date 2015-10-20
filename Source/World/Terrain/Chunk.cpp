@@ -8,9 +8,9 @@
 #include "Generation/Generator.h"
 
 // CONSTRUCTOR
-Chunk::Chunk(ShaderPtr tileMapShader, ShaderPtr tileSortShader) :
+Chunk::Chunk(ShaderPtr tileMapShader, ShaderPtr tileSortShader)/* :
 	m_tileMapShader(tileMapShader),
-	m_tileSortShader(tileSortShader)
+	m_tileSortShader(tileSortShader)*/
 {
 	// Setup flags and such
 	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] =
@@ -19,8 +19,10 @@ Chunk::Chunk(ShaderPtr tileMapShader, ShaderPtr tileSortShader) :
 	m_shadowMap = Texture2DPtr(new Texture2D(Pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS)));
 	for(uint i = 0; i < TERRAIN_LAYER_COUNT; ++i)
 	{
-		m_sortRenderTarget[i] = new RenderTarget2D(CHUNK_BLOCKS + 2, CHUNK_BLOCKS + 2, 2, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
+		//m_sortRenderTarget[i] = new RenderTarget2D(CHUNK_BLOCKS + 2, CHUNK_BLOCKS + 2, 2, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
 	}
+
+	m_drawChunkShader = ResourceManager::get<Shader>(":/Shaders/DrawChunk");
 
 	// Initialize blocks
 	m_blocks = new BlockID[CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT];
@@ -35,56 +37,6 @@ Chunk::Chunk(ShaderPtr tileMapShader, ShaderPtr tileSortShader) :
 		m_adjacentChunks[i] = nullptr;
 	}
 }
-
-/*if(i == QUAD_0)  return vec2(1.0, 1.0) + vec2(0.0, 24.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_1)  return vec2(1.0, 1.0) + vec2(8.0, 24.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_2)  return vec2(1.0, 1.0) + vec2(16.0, 24.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_3)  return vec2(1.0, 1.0) + vec2(24.0, 24.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_4)  return vec2(1.0, 1.0) + vec2(0.0, 16.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_5)  return vec2(1.0, 1.0) + vec2(8.0, 16.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_6)  return vec2(1.0, 1.0) + vec2(16.0, 16.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_7)  return vec2(1.0, 1.0) + vec2(24.0, 16.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_8)  return vec2(1.0, 1.0) + vec2(0.0, 8.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_9)  return vec2(1.0, 1.0) + vec2(8.0, 8.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_10) return vec2(1.0, 1.0) + vec2(16.0, 8.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_11) return vec2(1.0, 1.0) + vec2(24.0, 8.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_12) return vec2(1.0, 1.0) + vec2(0.0, 0.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_13) return vec2(1.0, 1.0) + vec2(8.0, 0.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_14) return vec2(1.0, 1.0) + vec2(16.0, 0.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_15) return vec2(1.0, 1.0) + vec2(24.0, 0.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_16) return vec2(1.0, 1.0) + vec2(0.0, 40.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_17) return vec2(1.0, 1.0) + vec2(8.0, 40.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_18) return vec2(1.0, 1.0) + vec2(0.0, 32.0) + vec2(34.0 * float(blockID), 0.0);
-if(i == QUAD_19) return vec2(1.0, 1.0) + vec2(8.0, 32.0) + vec2(34.0 * float(blockID), 0.0);
-return vec2(0.0);*/
-
-const float QUAD_UVS[40] =
-{
-	1, 25,
-	9, 25,
-	17, 25,
-	25, 25,
-
-	1, 17,
-	9, 17,
-	17, 17,
-	25, 17,
-
-	1, 9,
-	9, 9,
-	17, 9,
-	25, 9,
-
-	1, 1,
-	9, 1,
-	17, 1,
-	25, 1,
-
-	1, 41,
-	9, 41,
-	1, 33,
-	9, 33
-};
 
 // BLOCK LOADING
 void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
@@ -128,10 +80,6 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 		}
 	}
 	m_shadowMap->updatePixmap(pixmap);
-
-	// Set block atlas
-	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
-	m_tileMapShader->setUniform2f("u_QuadUVs", QUAD_UVS);
 		
 	// Mark as dirty
 	m_dirty[TERRAIN_LAYER_BACK] = m_dirty[TERRAIN_LAYER_MIDDLE] = m_dirty[TERRAIN_LAYER_FRONT] = true;
@@ -153,7 +101,7 @@ void Chunk::updateTileMap(ChunkLoader *chunkLoader, TerrainLayer z)
 	m_adjacentChunks[7] = &chunkLoader->getChunkAt(m_x - 1, m_y);
 
 	// Load tile map
-	Pixmap pixmap(CHUNK_BLOCKS + 2, CHUNK_BLOCKS + 2, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
+	Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
 	uint pixel[4];
 	pixel[1] = pixel[2] = pixel[3] = 0;
 	for (int y = 0; y < CHUNK_BLOCKS; y++)
@@ -161,12 +109,12 @@ void Chunk::updateTileMap(ChunkLoader *chunkLoader, TerrainLayer z)
 		for (int x = 0; x < CHUNK_BLOCKS; x++)
 		{
 			pixel[0] = m_blocks[BLOCK_INDEX(x, y, z)];
-			pixmap.setPixel(x + 1, CHUNK_BLOCKS - y, pixel);
+			pixmap.setPixel(x, CHUNK_BLOCKS - y - 1, pixel);
 		}
 	}
 
 	// Top-left
-	pixel[0] = m_adjacentChunks[0]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, CHUNK_BLOCKS - 1, z)];
+	/*pixel[0] = m_adjacentChunks[0]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, CHUNK_BLOCKS - 1, z)];
 	pixmap.setPixel(0, CHUNK_BLOCKS + 1, pixel);
 
 	// Top-right
@@ -207,7 +155,7 @@ void Chunk::updateTileMap(ChunkLoader *chunkLoader, TerrainLayer z)
 	{
 		pixel[0] = m_adjacentChunks[3]->m_blocks[BLOCK_INDEX(0, i, z)];
 		pixmap.setPixel(CHUNK_BLOCKS + 1, CHUNK_BLOCKS - i, pixel);
-	}
+	}*/
 
 	// Create tile map texture
 	m_tileMapTexture[z] = Texture2DPtr(new Texture2D(pixmap));
@@ -272,66 +220,11 @@ void Chunk::addStaticEntity(StaticEntity * entity)
 }
 
 // DRAWING
-void Chunk::draw(GraphicsContext &context, const TerrainLayer layer)
+void Chunk::drawBlocks(GraphicsContext &context, const TerrainLayer layer)
 {
-	Vertex vertices[4];
-
-	Color color(255);
-	vertices[0].set4ub(xd::VERTEX_COLOR, color.r, color.g, color.b, color.a);
-	vertices[1].set4ub(xd::VERTEX_COLOR, color.r, color.g, color.b, color.a);
-	vertices[2].set4ub(xd::VERTEX_COLOR, color.r, color.g, color.b, color.a);
-	vertices[3].set4ub(xd::VERTEX_COLOR, color.r, color.g, color.b, color.a);
-
-	if(!m_sorted[layer])
-	{
-		vertices[0].set4f(xd::VERTEX_TEX_COORD, 0.0f, 1.0f);
-		vertices[1].set4f(xd::VERTEX_TEX_COORD, 0.0f, 0.0f);
-		vertices[2].set4f(xd::VERTEX_TEX_COORD, 1.0f, 1.0f);
-		vertices[3].set4f(xd::VERTEX_TEX_COORD, 1.0f, 0.0f);
-
-		vertices[0].set4f(xd::VERTEX_POSITION, 0,                0               );
-		vertices[1].set4f(xd::VERTEX_POSITION, 0,                CHUNK_BLOCKS + 2);
-		vertices[2].set4f(xd::VERTEX_POSITION, CHUNK_BLOCKS + 2, 0               );
-		vertices[3].set4f(xd::VERTEX_POSITION, CHUNK_BLOCKS + 2, CHUNK_BLOCKS + 2);
-
-		Matrix4 tmpMap = context.getModelViewMatrix();
-		context.setModelViewMatrix(Matrix4());
-
-		context.setRenderTarget(m_sortRenderTarget[layer]);
-			context.setShader(m_tileSortShader);
-				m_tileSortShader->setSampler2D("u_TileMap", m_tileMapTexture[layer]);
-				context.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
-			context.setShader(0);
-		context.setRenderTarget(0);
-
-		context.setModelViewMatrix(tmpMap);
-
-		m_sorted[layer] = true;
-	}
-
-	float u0 = 1.0f / (CHUNK_BLOCKSF + 2.0f),
-		v0 = 1.0f - (1.0f / (CHUNK_BLOCKSF + 2.0f)),
-		u1 = 1.0f - (1.0f / (CHUNK_BLOCKSF + 2.0f)),
-		v1 = 1.0f / (CHUNK_BLOCKSF + 2.0f);
-	vertices[0].set4f(xd::VERTEX_TEX_COORD, u0, v0);
-	vertices[1].set4f(xd::VERTEX_TEX_COORD, u0, v1);
-	vertices[2].set4f(xd::VERTEX_TEX_COORD, u1, v0);
-	vertices[3].set4f(xd::VERTEX_TEX_COORD, u1, v1);
-
-	float x = m_x * CHUNK_PXF,
-		y = m_y * CHUNK_PXF,
-		width = CHUNK_PXF,
-		height = CHUNK_PXF;
-	vertices[0].set4f(xd::VERTEX_POSITION, x, y);
-	vertices[1].set4f(xd::VERTEX_POSITION, x, y + height);
-	vertices[2].set4f(xd::VERTEX_POSITION, x + width, y);
-	vertices[3].set4f(xd::VERTEX_POSITION, x + width, y + height);
-
-	context.setBlendState(BlendState(BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA));
-	context.setShader(m_tileMapShader);
-		m_tileMapShader->setSampler2D("u_SortedBlockTexture", m_sortRenderTarget[layer]->getTexture(0));
-		m_tileMapShader->setSampler2D("u_SortedQuadTexture", m_sortRenderTarget[layer]->getTexture(1));
-		context.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
+	// Draw blocks
+	m_drawChunkShader->setSampler2D("u_BlockTexture", m_tileMapTexture[layer]);
+	context.setShader(m_drawChunkShader);
+	context.drawRectangle(0, 0, CHUNK_BLOCKS, CHUNK_BLOCKS);
 	context.setShader(0);
-	context.setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
 }

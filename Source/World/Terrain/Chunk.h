@@ -33,7 +33,7 @@ public:
 	void addStaticEntity(StaticEntity *entity);
 	
 	// DRAWING
-	void draw(GraphicsContext &gfxContext, const TerrainLayer layer);
+	void drawBlocks(GraphicsContext &gfxContext, const TerrainLayer layer);
 
 private:
 	Chunk(const Chunk &) { }
@@ -49,10 +49,10 @@ private:
 	Chunk *m_adjacentChunks[8];
 
 	// TILE MAP SHADER
-	ShaderPtr m_tileMapShader;
+	ShaderPtr m_drawChunkShader;
 	Texture2DPtr m_tileMapTexture[TERRAIN_LAYER_COUNT];
-	ShaderPtr m_tileSortShader;
-	RenderTarget2D *m_sortRenderTarget[TERRAIN_LAYER_COUNT];
+	//ShaderPtr m_tileSortShader;
+	//RenderTarget2D *m_sortRenderTarget[TERRAIN_LAYER_COUNT];
 
 	// LIGHTING
 	Texture2DPtr m_shadowMap;

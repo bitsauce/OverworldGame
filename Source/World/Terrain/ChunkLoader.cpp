@@ -5,14 +5,40 @@
 #include "Generation/Generator.h"
 #include "Entities/Static/StaticEntity.h"
 #include "Entities/EntityData.h"
+#include "Blocks/BlockData.h"
 
 #define CHUNK_KEY(X, Y) ((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000)
+
+const float QUAD_UVS[40] =
+{
+	1, 25,
+	9, 25,
+	17, 25,
+	25, 25,
+	1, 17,
+	9, 17,
+	17, 17,
+	25, 17,
+	1, 9,
+	9, 9,
+	17, 9,
+	25, 9,
+	1, 1,
+	9, 1,
+	17, 1,
+	25, 1,
+	1, 41,
+	9, 41,
+	1, 33,
+	9, 33
+};
 
 ChunkLoader::ChunkLoader(World *world) :
 	m_applyZoom(true),
 	m_camera(world->getCamera()),
 	m_generator(world->getGenerator()),
 	m_world(world),
+	m_prevChunkPosition(0, 0),
 	m_chunkPositionIndex(0),
 	m_loadAreaRadius(5),
 	m_circleLoadIndex(0)
@@ -32,8 +58,19 @@ ChunkLoader::ChunkLoader(World *world) :
 	//m_tileSortShader->exportAssembly(":/Shaders/TileSort.bin");
 	//m_tileMapShader->exportAssembly(":/Shaders/TileMap.bin");
 
+	// Set block atlas
+	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
+	m_tileMapShader->setUniform2f("u_QuadUVs", QUAD_UVS);
+
 	// Set max chunks to some value
-	setOptimalChunkCount(512);
+	setOptimalChunkCount(0);
+
+	// Set chunk render caches to null (will be updated later)
+	for(int i = 0; i < TERRAIN_LAYER_COUNT; ++i)
+	{
+		m_sortedBlocksRenderTarget[i] = 0;
+		m_blocksRenderTarget[i] = 0;
+	}
 }
 
 void ChunkLoader::clear()
@@ -274,22 +311,6 @@ ChunkLoader::ChunkArea ChunkLoader::getLoadArea() const
 	return m_loadArea;
 }
 
-/*set<Thing*> ChunkLoader::getActiveThings()
-{
-	set<Thing*> things;
-	for(int y = m_activeArea.y0-1; y <= m_activeArea.y1+1; y++)
-	{
-		for(int x = m_activeArea.x0-1; x <= m_activeArea.x1+1; x++)
-		{
-			for(Thing *thing : getChunkAt(x, y).getThings())
-			{
-				things.insert(thing);
-			}
-		}
-	}
-	return things;
-}*/
-
 void ChunkLoader::update()
 {
 	// Update active chunk area
@@ -297,10 +318,10 @@ void ChunkLoader::update()
 	Vector2 size = m_applyZoom ? m_camera->getSize() : Window::getSize();
 
 	// Active area should have the same center as the view
-	m_activeArea.x0 = (int)floor(center.x/CHUNK_PXF) - (int)floor(size.x*0.5f/CHUNK_PXF) - 1;
-	m_activeArea.y0 = (int)floor(center.y/CHUNK_PXF) - (int)floor(size.y*0.5f/CHUNK_PXF) - 1;
-	m_activeArea.x1 = (int)floor(center.x/CHUNK_PXF) + (int)floor(size.x*0.5f/CHUNK_PXF) + 1;
-	m_activeArea.y1 = (int)floor(center.y/CHUNK_PXF) + (int)floor(size.y*0.5f/CHUNK_PXF) + 1;
+	m_activeArea.x0 = (int) floor(center.x / CHUNK_PXF) - (int) floor(size.x * 0.5f / CHUNK_PXF) - 1;
+	m_activeArea.y0 = (int) floor(center.y / CHUNK_PXF) - (int) floor(size.y * 0.5f / CHUNK_PXF) - 1;
+	m_activeArea.x1 = (int) floor(center.x / CHUNK_PXF) + (int) floor(size.x * 0.5f / CHUNK_PXF) + 1;
+	m_activeArea.y1 = (int) floor(center.y / CHUNK_PXF) + (int) floor(size.y * 0.5f / CHUNK_PXF) + 1;
 
 	// Update load area
 	m_loadArea.x0 = m_activeArea.x0 - m_loadAreaRadius;
@@ -308,11 +329,15 @@ void ChunkLoader::update()
 	m_loadArea.x1 = m_activeArea.x1 + m_loadAreaRadius;
 	m_loadArea.y1 = m_activeArea.y1 + m_loadAreaRadius;
 	
-	// Calculate where the view is heading
+	// Check if new chunks were entered
 	Vector2i chunkPosition(m_activeArea.x0, m_activeArea.y0);
-	if(!(chunkPosition == m_prevChunkPosition))
+	if(chunkPosition != m_prevChunkPosition)
 	{
-		// Calculate averate position
+		// Update new chunks
+		Vector2i dt = m_prevChunkPosition - chunkPosition;
+		LOG("New chunks entered (dt=[%i, %i])", dt.x, dt.y);
+
+		// Calculate average position
 		m_averagePosition.set(0.0f, 0.0f);
 		for(int i = 0; i < 4; ++i)
 		{
@@ -345,6 +370,52 @@ void ChunkLoader::update()
 	}
 }
 
+void ChunkLoader::draw(GraphicsContext &context)
+{
+	if(m_activeArea != m_prevActiveArea)
+	{
+		// Render all caches
+		for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+		{
+			context.setRenderTarget(m_blocksRenderTarget[z]);
+			for(int y = m_activeArea.y0; y <= m_activeArea.y1; ++y)
+			{
+				for(int x = m_activeArea.x0; x <= m_activeArea.x1; ++x)
+				{
+					Matrix4 mat;
+					mat.translate((x - m_activeArea.x0) * CHUNK_PXF, (y - m_activeArea.y0) * CHUNK_PXF, 0.0f);
+					context.setModelViewMatrix(mat);
+
+					Chunk &chunk = getChunkAt(x, y);
+
+					// Should we generate a new tile map?
+					if(chunk.isDirty((TerrainLayer) z))
+					{
+						chunk.updateTileMap(this, (TerrainLayer) z);
+					}
+
+					// Draw chunk
+					chunk.drawBlocks(context, (TerrainLayer) z);
+				}
+			}
+		}
+		context.setRenderTarget(0);
+
+		context.setShader(m_tileSortShader);
+		context.setModelViewMatrix(Matrix4());
+		for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+		{
+			m_tileSortShader->setSampler2D("u_TileMap", m_blocksRenderTarget[z]->getTexture());
+			context.setRenderTarget(m_sortedBlocksRenderTarget[z]);
+			context.drawRectangle(0, 0, (m_activeArea.x1 - m_activeArea.x0) * CHUNK_BLOCKS, (m_activeArea.y1 - m_activeArea.y0) * CHUNK_BLOCKS);
+		}
+		context.setRenderTarget(0);
+		context.setShader(0);
+
+		m_prevActiveArea = m_activeArea;
+	}
+}
+
 struct VectorComparator
 {
 	bool operator() (const Vector2i &v0, const Vector2i &v1)
@@ -355,8 +426,10 @@ struct VectorComparator
 
 void ChunkLoader::resizeEvent(uint width, uint height)
 {
-	int loadAreaWidth  = (int)(floor(width  * 0.5f / CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
-	int loadAreaHeight = (int)(floor(height * 0.5f / CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
+	int activeAreaWidth = (int) (floor(width  * 0.5f / CHUNK_PXF) * 2 + 3);
+	int activeAreaHeight = (int) (floor(height * 0.5f / CHUNK_PXF) * 2 + 3);
+	int loadAreaWidth  = activeAreaWidth + m_loadAreaRadius * 2;
+	int loadAreaHeight = activeAreaHeight + m_loadAreaRadius * 2;
 
 	setOptimalChunkCount(loadAreaWidth * loadAreaHeight * 2);
 	
@@ -373,5 +446,14 @@ void ChunkLoader::resizeEvent(uint width, uint height)
 	{
 		m_circleLoadPattern.push_back(minHeap.top());
 		minHeap.pop();
+	}
+
+	for(int i = 0; i < TERRAIN_LAYER_COUNT; ++i)
+	{
+		delete m_sortedBlocksRenderTarget[i];
+		m_sortedBlocksRenderTarget[i] = new RenderTarget2D(activeAreaWidth * CHUNK_BLOCKS, activeAreaHeight * CHUNK_BLOCKS, 2, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
+
+		delete m_blocksRenderTarget[i];
+		m_blocksRenderTarget[i] = new RenderTarget2D(activeAreaWidth * CHUNK_BLOCKS, activeAreaHeight * CHUNK_BLOCKS, 1, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
 	}
 }
