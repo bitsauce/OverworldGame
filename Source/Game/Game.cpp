@@ -200,6 +200,6 @@ void Game::draw(GraphicsContext &context, const float alpha)
 	// Render debug stuff
 	m_debug->setVariable("FPS", util::intToStr((int)Graphics::getFPS()));
 	m_spriteBatch->begin();
-	m_debug->draw(m_spriteBatch);
+	m_debug->draw(m_spriteBatch, alpha);
 	m_spriteBatch->end();
 }

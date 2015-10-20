@@ -15,14 +15,14 @@ public:
 	void lookAt(Vector2 worldPoint);
 
 	// Entity to follow
-	void setTargetEntity(DynamicEntity *target) { m_tagetEntity = target; }
+	void setTargetEntity(DynamicEntity *target);
 	DynamicEntity *getTargetEntity() const { return m_tagetEntity; }
 	
-	// Get current projection matrix
-	Matrix4 getProjectionMatrix() const;
+	// Get current model-view matrix
+	Matrix4 getModelViewMatrix(const float alpha) const;
 
 	// Get camera center
-	Vector2 getCenter() const;
+	Vector2 getCenter(const float alpha) const;
 
 	// Get zoom level
 	void setZoomLevel(const float zoomLevel);
@@ -41,6 +41,10 @@ public:
 
 	// Position
 	Vector2i getPosition() const;
+	void setPosition(const Vector2 &positon)
+	{
+		m_position = m_prevPosition = positon; 
+	}
 	uint getX() const { return getPosition().x; }
 	uint getY() const { return getPosition().y; }
 

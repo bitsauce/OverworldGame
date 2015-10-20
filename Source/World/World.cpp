@@ -124,14 +124,14 @@ void World::draw(SpriteBatch *spriteBatch, const float alpha)
 	
 	m_camera->interpolate(alpha);
 
-	m_terrain->getChunkLoader()->draw(spriteBatch->getGraphicsContext());
+	m_terrain->getChunkLoader()->draw(spriteBatch->getGraphicsContext(), alpha);
 
 	m_background->draw(spriteBatch, alpha);
 	
 	spriteBatch->end();
-	spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_camera->getProjectionMatrix()));
+	spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_camera->getModelViewMatrix(alpha)));
 
-	m_terrain->m_background.draw(spriteBatch);
+	m_terrain->m_background.draw(spriteBatch, alpha);
 
 	list<Entity*> entities = m_entities;
 	for(Entity *entity : entities)
@@ -142,7 +142,7 @@ void World::draw(SpriteBatch *spriteBatch, const float alpha)
 		}
 	}
 
-	m_terrain->m_middleground.draw(spriteBatch);
+	m_terrain->m_middleground.draw(spriteBatch, alpha);
 
 	for(Entity *entity : entities)
 	{
@@ -152,8 +152,8 @@ void World::draw(SpriteBatch *spriteBatch, const float alpha)
 		}
 	}
 	
-	m_terrain->m_foreground.draw(spriteBatch);
-	m_lighting->draw(spriteBatch);
+	m_terrain->m_foreground.draw(spriteBatch, alpha);
+	m_lighting->draw(spriteBatch, alpha);
 	
 	spriteBatch->end();
 }

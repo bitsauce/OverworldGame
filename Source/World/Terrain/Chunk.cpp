@@ -113,50 +113,6 @@ void Chunk::updateTileMap(ChunkLoader *chunkLoader, TerrainLayer z)
 		}
 	}
 
-	// Top-left
-	/*pixel[0] = m_adjacentChunks[0]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, CHUNK_BLOCKS - 1, z)];
-	pixmap.setPixel(0, CHUNK_BLOCKS + 1, pixel);
-
-	// Top-right
-	pixel[0] = m_adjacentChunks[2]->m_blocks[BLOCK_INDEX(0, CHUNK_BLOCKS - 1, z)];
-	pixmap.setPixel(CHUNK_BLOCKS + 1, CHUNK_BLOCKS + 1, pixel);
-
-	// Bottom-right
-	pixel[0] = m_adjacentChunks[4]->m_blocks[BLOCK_INDEX(0, 0, z)];
-	pixmap.setPixel(CHUNK_BLOCKS + 1, 0, pixel);
-
-	// Bottom-left
-	pixel[0] = m_adjacentChunks[6]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, 0, z)];
-	pixmap.setPixel(0, 0, pixel);
-
-	// Top
-	for (int i = 0; i < CHUNK_BLOCKS; ++i)
-	{
-		pixel[0] = m_adjacentChunks[1]->m_blocks[BLOCK_INDEX(i, CHUNK_BLOCKS - 1, z)];
-		pixmap.setPixel(i + 1, CHUNK_BLOCKS + 1, pixel);
-	}
-
-	// Bottom
-	for (int i = 0; i < CHUNK_BLOCKS; ++i)
-	{
-		pixel[0] = m_adjacentChunks[5]->m_blocks[BLOCK_INDEX(i, 0, z)];
-		pixmap.setPixel(i + 1, 0, pixel);
-	}
-
-	// Left
-	for (int i = 0; i < CHUNK_BLOCKS; ++i)
-	{
-		pixel[0] = m_adjacentChunks[7]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, i, z)];
-		pixmap.setPixel(0, CHUNK_BLOCKS - i, pixel);
-	}
-
-	// Right
-	for (int i = 0; i < CHUNK_BLOCKS; ++i)
-	{
-		pixel[0] = m_adjacentChunks[3]->m_blocks[BLOCK_INDEX(0, i, z)];
-		pixmap.setPixel(CHUNK_BLOCKS + 1, CHUNK_BLOCKS - i, pixel);
-	}*/
-
 	// Create tile map texture
 	m_tileMapTexture[z] = Texture2DPtr(new Texture2D(pixmap));
 
@@ -220,8 +176,14 @@ void Chunk::addStaticEntity(StaticEntity * entity)
 }
 
 // DRAWING
-void Chunk::drawBlocks(GraphicsContext &context, const TerrainLayer layer)
+void Chunk::drawBlocks(GraphicsContext &context, ChunkLoader *chunkLoader, const TerrainLayer layer)
 {
+	// Should we generate a new tile map?
+	if(isDirty(layer))
+	{
+		updateTileMap(chunkLoader, layer);
+	}
+
 	// Draw blocks
 	m_drawChunkShader->setSampler2D("u_BlockTexture", m_tileMapTexture[layer]);
 	context.setShader(m_drawChunkShader);

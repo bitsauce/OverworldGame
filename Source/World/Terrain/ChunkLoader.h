@@ -25,14 +25,27 @@ public:
 	struct ChunkArea
 	{
 		ChunkArea() : x0(0), y0(0), x1(0), y1(0) {}
+
+		int getWidth() const
+		{
+			return x1 - x0 + 1;
+		}
+
+		int getHeight() const
+		{
+			return y1 - y0 + 1;
+		}
+
 		bool operator==(const ChunkArea &other)
 		{
 			return x0 == other.x0 && y0 == other.y0 && x1 == other.x1 && y1 == other.y1;
 		}
+
 		bool operator!=(const ChunkArea &other)
 		{
 			return !(*this == other);
 		}
+
 		int x0, y0;
 		int x1, y1;
 	};
@@ -41,15 +54,15 @@ public:
 	ChunkArea getLoadArea() const;
 
 	void update();
-	void draw(GraphicsContext &context);
+	void draw(GraphicsContext &context, const float alpha);
 
 	// Global render target
 	RenderTarget2D *m_blocksRenderTarget[TERRAIN_LAYER_COUNT];
 	RenderTarget2D *m_sortedBlocksRenderTarget[TERRAIN_LAYER_COUNT];
 
-
-
 	ShaderPtr m_tileMapShader;
+
+	Vector2i m_globalChunkPosition;
 
 private:
 	Chunk *loadChunkAt(const int chunkX, const int chunkY);
@@ -75,6 +88,7 @@ private:
 	// Active area
 	ChunkArea m_activeArea;
 	ChunkArea m_prevActiveArea;
+	bool m_redrawGlobalBlocks;
 
 	// Load area
 	ChunkArea m_loadArea;

@@ -33,7 +33,7 @@ Background::Background(World *world) :
 	{
 		m_clouds.push_back(new Cloud(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Clouds/Cloud_01.png")), 0.2f + rand.nextDouble() * 0.8f, (float) rand.nextInt(0, Window::getHeight() / 2), (float) rand.nextInt(0, Window::getWidth())));
 	}
-	
+
 	m_layers.push_back(new Layer(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Layer_0.png")), 0.5f, -1080.0f));
 	m_layers.push_back(new Layer(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Layer_1.png")), 0.25f));
 	m_layers.push_back(new Layer(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Layer_2.png")), 0.125f, -100.0f));
@@ -54,7 +54,7 @@ void Background::update(const float delta)
 	int hour = m_timeOfDay->getHour();
 	//int minute = m_timeOfDay->getMinute();
 	float time = m_timeOfDay->getTime();
-		
+
 	// Change background depending on time
 	if(m_timeOfDay->isDay())
 	{
@@ -62,7 +62,7 @@ void Background::update(const float delta)
 		if(hour >= 6 && hour < 9)
 		{
 			// Percentage of sunrise
-			float minscale = 1.0f - (540-time)/180.0f; // Aka. (9*60-time)/(6*60-9*60)
+			float minscale = 1.0f - (540 - time) / 180.0f; // Aka. (9*60-time)/(6*60-9*60)
 			m_topColor = mixColors(Color(255, 255, 255), Color(0, 0, 0), minscale);
 			m_bottomColor = mixColors(Color(90, 170, 255), Color(10, 60, 110), minscale);
 		}
@@ -72,13 +72,13 @@ void Background::update(const float delta)
 			m_topColor = Color(255, 255, 255);
 			m_bottomColor = Color(90, 170, 255);
 		}
-			
+
 		// Place sun
-		float ang = (1140-time)/720.0f;
+		float ang = (1140 - time) / 720.0f;
 		Vector2 windowSize = Window::getSize();
 		Vector2 sunSize = m_sun.getSize();
-		m_sun.setPosition(windowSize.x/2.0f - sunSize.x/2.0f + cos(PI*ang) * (windowSize.x/2.0f + sunSize.x/4.0f), windowSize.y/2.0f - sin(PI*ang) * (windowSize.y/2.0f + 64));
-		m_sun.setRotation(180*(1.0f-ang));
+		m_sun.setPosition(windowSize.x / 2.0f - sunSize.x / 2.0f + cos(PI*ang) * (windowSize.x / 2.0f + sunSize.x / 4.0f), windowSize.y / 2.0f - sin(PI*ang) * (windowSize.y / 2.0f + 64));
+		m_sun.setRotation(180 * (1.0f - ang));
 	}
 	else
 	{
@@ -86,7 +86,7 @@ void Background::update(const float delta)
 		if(hour >= 18 && hour < 21)
 		{
 			// Percentage of sunset
-			float minscale = 1.0f - (1260-time)/180.0f; // Aka. (21*60-time)/(18*60-21*60)
+			float minscale = 1.0f - (1260 - time) / 180.0f; // Aka. (21*60-time)/(18*60-21*60)
 			m_topColor = mixColors(Color(0, 0, 0, 255), Color(255, 255, 255), minscale);
 			m_bottomColor = mixColors(Color(10, 60, 110, 255), Color(90, 170, 255), minscale);
 		}
@@ -96,15 +96,15 @@ void Background::update(const float delta)
 			m_topColor = Color(0, 0, 0);
 			m_bottomColor = Color(10, 60, 110);
 		}
-				
+
 		// Place moon
-		float ang = (1860 - (time >= 1140 ? time : time + 1440))/720.0f;
+		float ang = (1860 - (time >= 1140 ? time : time + 1440)) / 720.0f;
 		Vector2 windowSize = Window::getSize();
 		Vector2 moonSize = m_moon.getSize();
 		m_moon.setPosition(windowSize.x / 2.0f - moonSize.x / 2.0f + cos(PI * ang) * (windowSize.x / 2.0f + moonSize.x / 2.0f), windowSize.y / 2.0f - sin(PI * ang) * windowSize.y / 2.0f);
 		m_moon.setRotation(180 * (1.0f - ang));
 	}
-		
+
 	// Apply wind
 	for(Cloud *cloud : m_clouds)
 	{
@@ -123,16 +123,16 @@ void Background::draw(SpriteBatch *spriteBatch, const float alpha)
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 
 	// Draw sky gradient
-	m_vertices[0].set4f(VERTEX_POSITION, 0.0f,							0.0f);
-	m_vertices[1].set4f(VERTEX_POSITION, 0.0f,							(float) gfxContext.getHeight());
-	m_vertices[2].set4f(VERTEX_POSITION, (float) gfxContext.getWidth(),	0.0f);
+	m_vertices[0].set4f(VERTEX_POSITION, 0.0f, 0.0f);
+	m_vertices[1].set4f(VERTEX_POSITION, 0.0f, (float) gfxContext.getHeight());
+	m_vertices[2].set4f(VERTEX_POSITION, (float) gfxContext.getWidth(), 0.0f);
 	m_vertices[3].set4f(VERTEX_POSITION, (float) gfxContext.getWidth(), (float) gfxContext.getHeight());
 	m_vertices[0].set4ub(VERTEX_COLOR, m_topColor.r, m_topColor.g, m_topColor.b, m_topColor.a);
 	m_vertices[1].set4ub(VERTEX_COLOR, m_bottomColor.r, m_bottomColor.g, m_bottomColor.b, m_bottomColor.a);
 	m_vertices[2].set4ub(VERTEX_COLOR, m_topColor.r, m_topColor.g, m_topColor.b, m_topColor.a);
 	m_vertices[3].set4ub(VERTEX_COLOR, m_bottomColor.r, m_bottomColor.g, m_bottomColor.b, m_bottomColor.a);
 	gfxContext.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, m_vertices, 4);
-	
+
 	// Draw sun/moon
 	int hour = m_timeOfDay->getHour();
 	if(hour >= 6 && hour < 18)
@@ -143,13 +143,13 @@ void Background::draw(SpriteBatch *spriteBatch, const float alpha)
 	{
 		spriteBatch->drawSprite(m_moon);
 	}
-	
+
 	// Draw background layers
 	for(Layer *layer : m_layers)
 	{
 		float ratio = Window::getWidth() / 1920.0f;
-		Vector2i cameraPos = m_camera->getCenter();
-		Vector2i layerSize = Vector2i(Window::getWidth(), (int)(layer->sprite.getTexture()->getHeight() * ratio));
+		Vector2i cameraPos = m_camera->getCenter(alpha);
+		Vector2i layerSize = Vector2i(Window::getWidth(), (int) (layer->sprite.getTexture()->getHeight() * ratio));
 		layer->sprite.setSize(layerSize);
 		if(cameraPos.y > 0.0f)
 		{

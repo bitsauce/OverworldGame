@@ -53,7 +53,7 @@
       <SDLCheck>
       </SDLCheck>
       <AdditionalIncludeDirectories>..\..\source\;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>X2D_DEBUG;X2D_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>X2D_DEBUG;X2D_IMPORT;_ITERATOR_DEBUG_LEVEL=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

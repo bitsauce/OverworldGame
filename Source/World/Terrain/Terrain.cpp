@@ -105,14 +105,14 @@ Terrain::Drawer::Drawer(Terrain *terrain, Camera *camera, const Priority drawOrd
 {
 }
 
-void Terrain::Drawer::draw(SpriteBatch *spriteBatch)
+void Terrain::Drawer::draw(SpriteBatch *spriteBatch, const float alpha)
 {
 	// Flush to set the draw order straight
 	spriteBatch->flush();
 
 	// Setup graphics context
 	GraphicsContext &context = spriteBatch->getGraphicsContext();
-	context.setModelViewMatrix(m_camera->getProjectionMatrix());
+	context.setModelViewMatrix(m_camera->getModelViewMatrix(alpha));
 
 	// Draw chunk area
 	ChunkLoader::ChunkArea area = m_chunkLoader->getActiveArea();
@@ -121,7 +121,13 @@ void Terrain::Drawer::draw(SpriteBatch *spriteBatch)
 	context.setShader(m_chunkLoader->m_tileMapShader);
 	m_chunkLoader->m_tileMapShader->setSampler2D("u_SortedBlockTexture", m_chunkLoader->m_sortedBlocksRenderTarget[m_layer]->getTexture(0));
 	m_chunkLoader->m_tileMapShader->setSampler2D("u_SortedQuadTexture", m_chunkLoader->m_sortedBlocksRenderTarget[m_layer]->getTexture(1));
-	context.drawRectangle(area.x0 * CHUNK_PXF, area.y0 * CHUNK_PXF, (area.x1 - area.x0) * CHUNK_PXF, (area.y1 - area.y0) * CHUNK_PXF);
+
+	float u0 = m_chunkLoader->m_globalChunkPosition.x / (float) area.getWidth(),
+		v0 = -m_chunkLoader->m_globalChunkPosition.y / (float) area.getHeight(),
+		u1 = u0 + 1.0f,
+		v1 = v0 + 1.0f;
+
+	context.drawRectangle(area.x0 * CHUNK_PXF, area.y0 * CHUNK_PXF, (area.x1 - area.x0 + 1) * CHUNK_PXF, (area.y1 - area.y0 + 1) * CHUNK_PXF, Color(255), TextureRegion(u0, v0, u1, v1));
 	context.setShader(0);
 	context.setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
 }

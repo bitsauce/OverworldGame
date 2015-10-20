@@ -48,7 +48,7 @@ private:
 		Drawer(Terrain *terrain, Camera *camera, const Priority drawOrder, const TerrainLayer layer);
 
 		// DRAWING
-		void draw(SpriteBatch *spriteBatch);
+		void draw(SpriteBatch *spriteBatch, const float alpha);
 
 	private:
 		// CHUNK LOADER

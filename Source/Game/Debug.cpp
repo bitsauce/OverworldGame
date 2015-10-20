@@ -135,6 +135,7 @@ void Debug::debugFunction(int action, const int i)
 
 		case 11:
 		{
+			m_world->getCamera()->setPosition(m_world->getCamera()->getPosition() + Vector2(0, CHUNK_PXF * 2));
 		}
 		break;
 
@@ -168,13 +169,13 @@ void Debug::update()
 	}
 }
 
-void Debug::draw(SpriteBatch *spriteBatch)
+void Debug::draw(SpriteBatch *spriteBatch, const float alpha)
 {
 	if(!m_enabled) return;
 
 	// Set debug variables
 	setVariable("Chunks", util::intToStr(m_world->getTerrain()->getChunkLoader()->m_chunks.size()) + " / " + util::intToStr(m_world->getTerrain()->getChunkLoader()->m_optimalChunkCount));
-	Vector2 center = m_world->getCamera()->getCenter();
+	Vector2 center = m_world->getCamera()->getCenter(alpha);
 	Vector2 inputPosition = m_world->getCamera()->getInputPosition();
 	setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
 	setVariable("Zoom", util::intToStr(m_world->getCamera()->getZoomLevel() * 100) + "%");
@@ -183,7 +184,7 @@ void Debug::draw(SpriteBatch *spriteBatch)
 	{
 		int hour = m_world->getTimeOfDay()->getHour();
 		hourStr = hour < 10 ? ("0" + util::intToStr(hour)) : util::intToStr(hour);
-		int min = m_world->getTimeOfDay()->getHour();
+		int min = m_world->getTimeOfDay()->getMinute();
 		minStr = min < 10 ? ("0" + util::intToStr(min)) : util::intToStr(min);
 	}
 	setVariable("Time", hourStr + ":" + minStr);
@@ -209,7 +210,7 @@ void Debug::draw(SpriteBatch *spriteBatch)
 
 	// Draw block grid
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
-	gfxContext.setModelViewMatrix(m_world->getCamera()->getProjectionMatrix());
+	gfxContext.setModelViewMatrix(m_world->getCamera()->getModelViewMatrix(alpha));
 	gfxContext.setTexture(nullptr);
 	Vector2 position = m_world->getCamera()->getPosition();
 	Vector2 size = m_world->getCamera()->getSize();
@@ -251,7 +252,7 @@ void Debug::draw(SpriteBatch *spriteBatch)
 	if(m_debugChunkLoader)
 	{
 		// Draw current view
-		Vector2 position = m_world->getCamera()->getCenter() - Window::getSize()*0.5f;
+		Vector2 position = m_world->getCamera()->getCenter(alpha) - Window::getSize()*0.5f;
 		Vector2 size = Window::getSize();
 		gfxContext.drawRectangle(position.x, position.y, 1.0f / m_world->getCamera()->getZoomLevel(), size.y, Color(127, 127, 255, 255));
 		gfxContext.drawRectangle((position.x + size.x), position.y, 1.0f / m_world->getCamera()->getZoomLevel(), size.y, Color(127, 127, 255, 255));
@@ -303,7 +304,7 @@ void Debug::draw(SpriteBatch *spriteBatch)
 		gfxContext.enable(GraphicsContext::BLEND);
 
 		// Show light sources as light bulbs
-		spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_world->getCamera()->getProjectionMatrix()));
+		spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_world->getCamera()->getModelViewMatrix(alpha)));
 		for(list<LightSource*>::iterator itr = m_world->getLighting()->m_lightSources.begin(); itr != m_world->getLighting()->m_lightSources.end(); ++itr)
 		{
 			m_bulbSprite.setPosition((*itr)->getPosition() * BLOCK_PXF + Vector2(0.5f, 0.5f));

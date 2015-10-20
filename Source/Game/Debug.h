@@ -16,7 +16,7 @@ public:
 	Debug(Game *game);
 
 	void update();
-	void draw(SpriteBatch *spriteBatch);
+	void draw(SpriteBatch *spriteBatch, const float alpha);
 	void toggle();
 
 	void nextBlock(int action);

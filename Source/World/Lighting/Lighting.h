@@ -26,7 +26,7 @@ public:
 	
 	void addLightSource(LightSource *lightSource);
 
-	void draw(xd::SpriteBatch *spriteBatch);
+	void draw(xd::SpriteBatch *spriteBatch, const float alpha);
 
 private:
 	Terrain *m_terrain;

@@ -8,22 +8,23 @@
 Camera::Camera() :
 	m_position(0.0f, 0.0f),
 	m_prevPosition(0.0f, 0.0f),
-	m_interpolatedPositon(0.0f, 0.0f),
 	m_velocity(0.0f, 0.0f),
 	m_tagetEntity(0)
 {
 	setZoomLevel(1.0f);
 }
 
-Vector2 Camera::getCenter() const
+Vector2 Camera::getCenter(const float alpha) const
 {
-	return m_interpolatedPositon + m_size * 0.5f;
+	return math::lerp(m_prevPosition, m_position, alpha) + m_size * 0.5f;
 }
 
-Matrix4 Camera::getProjectionMatrix() const
+Matrix4 Camera::getModelViewMatrix(const float alpha) const
 {
+	Vector2 pos = math::lerp(m_prevPosition, m_position, alpha);
+
 	Matrix4 mat;
-	mat.translate(-m_interpolatedPositon.x, -m_interpolatedPositon.y, 0.0f);
+	mat.translate(-pos.x, -pos.y, 0.0f);
 	mat.scale(m_zoomLevel);
 	return mat;
 }
@@ -31,17 +32,22 @@ Matrix4 Camera::getProjectionMatrix() const
 void Camera::lookAt(Vector2 worldPoint)
 {
 	worldPoint -= m_size * 0.5f;
-	m_interpolatedPositon = worldPoint;
+	m_position = worldPoint;
+}
+
+void Camera::setTargetEntity(DynamicEntity * target)
+{
+	m_tagetEntity = target;
 }
 
 Vector2i Camera::getPosition() const
 {
-	return m_interpolatedPositon;
+	return m_position;
 }
 
 Vector2 Camera::getInputPosition() const
 {
-	return m_interpolatedPositon + Input::getPosition() / m_zoomLevel;
+	return m_position + Input::getPosition() / m_zoomLevel;
 }
 
 Vector2i Camera::getSize() const
@@ -51,7 +57,7 @@ Vector2i Camera::getSize() const
 
 void Camera::setZoomLevel(const float zoomLevel)
 {
-	Vector2 center = getCenter();
+	Vector2 center = getCenter(0.0f);
 	m_zoomLevel = zoomLevel;
 	m_size = Window::getSize() / m_zoomLevel;
 	lookAt(center);
@@ -64,10 +70,11 @@ float Camera::getZoomLevel() const
 
 void Camera::update(const float dt)
 {
+
 	if (!m_tagetEntity)
 	{
 		float acc = (Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS ? 32.0f : 256.0f) * dt;
-		
+
 		m_prevPosition = m_position;
 
 		if (Input::getKeyState(XD_KEY_LEFT) == GLFW_PRESS) {
@@ -101,10 +108,7 @@ void Camera::interpolate(const float alpha)
 	if (m_tagetEntity)
 	{
 		lookAt(m_tagetEntity->getDrawPosition(alpha) + m_tagetEntity->getSize() * 0.5f);
-	}
-	else
-	{
-		m_interpolatedPositon = math::lerp(m_prevPosition, m_position, alpha);
+		m_prevPosition = m_position;
 	}
 }
 

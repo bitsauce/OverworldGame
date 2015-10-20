@@ -50,7 +50,7 @@ private:
 		
 			this->sprite.setPosition(initX, initY);
 			this->sprite.setSize(this->sprite.getTexture()->getSize() * depth);
-			this->sprite.setDepth(-1.0f + depth);
+			//this->sprite.setDepth(-1.0f + depth);
 		}
 
 		Sprite sprite;

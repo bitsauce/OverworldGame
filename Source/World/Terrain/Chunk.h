@@ -33,7 +33,7 @@ public:
 	void addStaticEntity(StaticEntity *entity);
 	
 	// DRAWING
-	void drawBlocks(GraphicsContext &gfxContext, const TerrainLayer layer);
+	void drawBlocks(GraphicsContext &gfxContext, ChunkLoader *chunkLoader, const TerrainLayer layer);
 
 private:
 	Chunk(const Chunk &) { }
