@@ -17,5 +17,6 @@ void main()
 	blur += texture(u_Texture, vec2(v_TexCoord.x, v_TexCoord.y + 2.0*(1.0/float(u_Height)))).rgb * 0.1216216216;
 	blur += texture(u_Texture, vec2(v_TexCoord.x, v_TexCoord.y + 3.0*(1.0/float(u_Height)))).rgb * 0.0540540541;
 	blur += texture(u_Texture, vec2(v_TexCoord.x, v_TexCoord.y + 4.0*(1.0/float(u_Height)))).rgb * 0.0162162162;
-	out_FragColor = vec4(vec3(1.0) - pow(vec3(1.0) - blur, vec3(u_Exponent)), 1.0);
+	blur *= 2.0;
+	out_FragColor = vec4(blur, 1.0);
 }
