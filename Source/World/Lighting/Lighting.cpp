@@ -102,7 +102,6 @@ void Lighting::draw(SpriteBatch *spriteBatch, const float alpha)
 		gfxContext.clear(GraphicsContext::COLOR_BUFFER);
 		m_blurVShader->setSampler2D("u_Texture", m_lightingPass1->getTexture());
 		m_blurVShader->setUniform1i("u_Height", m_height);
-		m_blurVShader->setUniform1f("u_Exponent", 2.0);
 		gfxContext.setShader(m_blurVShader);
 		gfxContext.drawRectangle(0.0f, 0.0f, (float) m_width, (float) m_height);
 
