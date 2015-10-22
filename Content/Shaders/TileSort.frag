@@ -2,7 +2,8 @@ in vec2 v_TexCoord;
 out uvec4 out_BlockData;
 out uvec4 out_QuadData;
 
-uniform usampler2D u_TileMap;
+uniform sampler2D u_BlockGrid;
+uniform uint u_Layer;
 
 #define QUAD_0 0U
 #define QUAD_1 1U
@@ -31,16 +32,16 @@ uvec3 tmp;
 void main()
 {
 	// Get block IDs/depths
-	ivec2 tileMapSize = textureSize(u_TileMap, 0);
-	uint centerBlockID		= (texture(u_TileMap, v_TexCoord).r);
-	uint leftBlockID		= (texture(u_TileMap, v_TexCoord + vec2(-1.0 / tileMapSize.x, 0.0)).r);
-	uint rightBlockID		= (texture(u_TileMap, v_TexCoord + vec2( 1.0 / tileMapSize.x, 0.0)).r);
-	uint topBlockID			= (texture(u_TileMap, v_TexCoord + vec2(0.0,  1.0 / tileMapSize.y)).r);
-	uint bottomBlockID		= (texture(u_TileMap, v_TexCoord + vec2(0.0, -1.0 / tileMapSize.y)).r);
-	uint topLeftBlockID		= (texture(u_TileMap, v_TexCoord + vec2(-1.0 / tileMapSize.x,  1.0 / tileMapSize.y)).r);
-	uint topRightBlockID	= (texture(u_TileMap, v_TexCoord + vec2( 1.0 / tileMapSize.x,  1.0 / tileMapSize.y)).r);
-	uint bottomLeftBlockID	= (texture(u_TileMap, v_TexCoord + vec2(-1.0 / tileMapSize.x, -1.0 / tileMapSize.y)).r);
-	uint bottomRightBlockID	= (texture(u_TileMap, v_TexCoord + vec2( 1.0 / tileMapSize.x, -1.0 / tileMapSize.y)).r);
+	ivec2 tileMapSize = textureSize(u_BlockGrid, 0);
+	uint centerBlockID		= uint(texture(u_BlockGrid, v_TexCoord)[u_Layer] * 255.0);
+	uint leftBlockID		= uint(texture(u_BlockGrid, v_TexCoord + vec2(-1.0 / tileMapSize.x, 0.0))[u_Layer] * 255.0);
+	uint rightBlockID		= uint(texture(u_BlockGrid, v_TexCoord + vec2( 1.0 / tileMapSize.x, 0.0))[u_Layer] * 255.0);
+	uint topBlockID			= uint(texture(u_BlockGrid, v_TexCoord + vec2(0.0,  1.0 / tileMapSize.y))[u_Layer] * 255.0);
+	uint bottomBlockID		= uint(texture(u_BlockGrid, v_TexCoord + vec2(0.0, -1.0 / tileMapSize.y))[u_Layer] * 255.0);
+	uint topLeftBlockID		= uint(texture(u_BlockGrid, v_TexCoord + vec2(-1.0 / tileMapSize.x,  1.0 / tileMapSize.y))[u_Layer] * 255.0);
+	uint topRightBlockID	= uint(texture(u_BlockGrid, v_TexCoord + vec2( 1.0 / tileMapSize.x,  1.0 / tileMapSize.y))[u_Layer] * 255.0);
+	uint bottomLeftBlockID	= uint(texture(u_BlockGrid, v_TexCoord + vec2(-1.0 / tileMapSize.x, -1.0 / tileMapSize.y))[u_Layer] * 255.0);
+	uint bottomRightBlockID	= uint(texture(u_BlockGrid, v_TexCoord + vec2( 1.0 / tileMapSize.x, -1.0 / tileMapSize.y))[u_Layer] * 255.0);
 
 	// Compare diagonal blocks to check for inner corners
 	bvec4 innerCorner = equal(uvec4(bottomBlockID, bottomBlockID, topBlockID, topBlockID), uvec4(leftBlockID, rightBlockID, leftBlockID, rightBlockID));

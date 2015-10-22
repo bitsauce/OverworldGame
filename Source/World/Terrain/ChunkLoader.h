@@ -57,7 +57,7 @@ public:
 	void draw(GraphicsContext &context, const float alpha);
 
 	// Global render target
-	RenderTarget2D *m_blocksRenderTarget[TERRAIN_LAYER_COUNT];
+	RenderTarget2D *m_blocksRenderTarget;
 	RenderTarget2D *m_sortedBlocksRenderTarget[TERRAIN_LAYER_COUNT];
 
 	ShaderPtr m_tileMapShader;

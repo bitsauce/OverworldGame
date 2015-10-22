@@ -135,7 +135,7 @@ void Debug::debugFunction(int action, const int i)
 
 		case 11:
 		{
-			m_world->getCamera()->setPosition(m_world->getCamera()->getPosition() + Vector2(0, CHUNK_PXF * 2));
+			m_world->getCamera()->lookAt(m_world->getCamera()->getInputPosition());
 		}
 		break;
 
@@ -282,7 +282,7 @@ void Debug::draw(SpriteBatch *spriteBatch, const float alpha)
 				{
 					gfxContext.drawRectangle(x * CHUNK_PX, y * CHUNK_PX, CHUNK_PX, CHUNK_PX, Color(0, 100, 170, 127));
 				}
-				else if(m_world->getTerrain()->getChunkLoader()->getChunkAt(x, y).isDirty(TERRAIN_LAYER_MIDDLE))
+				else if(m_world->getTerrain()->getChunkLoader()->getChunkAt(x, y).isDirty())
 				{
 					gfxContext.drawRectangle(x * CHUNK_PX, y * CHUNK_PX, CHUNK_PX, CHUNK_PX, Color(0, 160, 230, 127));
 				}

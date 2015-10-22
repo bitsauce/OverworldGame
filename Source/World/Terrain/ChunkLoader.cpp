@@ -70,8 +70,8 @@ ChunkLoader::ChunkLoader(World *world) :
 	for(int i = 0; i < TERRAIN_LAYER_COUNT; ++i)
 	{
 		m_sortedBlocksRenderTarget[i] = 0;
-		m_blocksRenderTarget[i] = 0;
 	}
+	m_blocksRenderTarget = 0;
 }
 
 void ChunkLoader::clear()
@@ -225,9 +225,7 @@ void ChunkLoader::loadActiveArea()
 		for(int x = m_activeArea.x0-1; x <= m_activeArea.x1+1; x++)
 		{
 			Chunk &chunk = getChunkAt(x, y);
-			chunk.updateTileMap(this, TERRAIN_LAYER_BACK);
-			chunk.updateTileMap(this, TERRAIN_LAYER_MIDDLE);
-			chunk.updateTileMap(this, TERRAIN_LAYER_FRONT);
+			chunk.updateTileMap(this);
 		}
 	}
 }
@@ -362,40 +360,40 @@ void ChunkLoader::draw(GraphicsContext &context, const float alpha)
 	{
 		Vector2i centerChunkPosition((int) floor(center.x / CHUNK_PXF), (int) floor(center.y / CHUNK_PXF));
 		Chunk &chunk = getChunkAt(centerChunkPosition.x + m_circleLoadPattern[m_circleLoadIndex].x, centerChunkPosition.y + m_circleLoadPattern[m_circleLoadIndex].y);
-		if(chunk.isDirty(TERRAIN_LAYER_BACK)) chunk.updateTileMap(this, TERRAIN_LAYER_BACK);
-		if(chunk.isDirty(TERRAIN_LAYER_MIDDLE)) chunk.updateTileMap(this, TERRAIN_LAYER_MIDDLE);
-		if(chunk.isDirty(TERRAIN_LAYER_FRONT)) chunk.updateTileMap(this, TERRAIN_LAYER_FRONT);
+		if(chunk.isDirty()) chunk.updateTileMap(this);
 		m_circleLoadIndex = (m_circleLoadIndex + 1) % m_circleLoadPattern.size();
 	}
 
 	if(m_redrawGlobalBlocks || Input::getKeyState(XD_KEY_0))
 	{
 		// Render all caches
-		for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+		context.disable(GraphicsContext::BLEND);
+		context.setRenderTarget(m_blocksRenderTarget);
+		for(int y = m_activeArea.y0; y <= m_activeArea.y1; ++y)
 		{
-			context.setRenderTarget(m_blocksRenderTarget[z]);
-			for(int y = m_activeArea.y0; y <= m_activeArea.y1; ++y)
+			for(int x = m_activeArea.x0; x <= m_activeArea.x1; ++x)
 			{
-				for(int x = m_activeArea.x0; x <= m_activeArea.x1; ++x)
-				{
-					Matrix4 mat;
-					mat.translate((x - m_activeArea.x0) * CHUNK_BLOCKS, (y - m_activeArea.y0) * CHUNK_BLOCKS, 0.0f);
-					context.setModelViewMatrix(mat);
-					getChunkAt(x, y).drawBlocks(context, this, (TerrainLayer) z);
-				}
+				Matrix4 mat;
+				mat.translate((x - m_activeArea.x0) * CHUNK_BLOCKS, (y - m_activeArea.y0) * CHUNK_BLOCKS, 0.0f);
+				context.setModelViewMatrix(mat);
+				getChunkAt(x, y).drawBlocks(context, this);
 			}
 		}
+
+		Pixmap pixmap = m_blocksRenderTarget->getTexture()->getPixmap();
 
 		context.setShader(m_tileSortShader);
 		context.setModelViewMatrix(Matrix4());
 		for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
 		{
-			m_tileSortShader->setSampler2D("u_TileMap", m_blocksRenderTarget[z]->getTexture());
+			m_tileSortShader->setUniform1ui("u_Layer", z);
 			context.setRenderTarget(m_sortedBlocksRenderTarget[z]);
 			context.drawRectangle(0, 0, (m_activeArea.x1 - m_activeArea.x0 + 1) * CHUNK_BLOCKS, (m_activeArea.y1 - m_activeArea.y0 + 1) * CHUNK_BLOCKS);
 		}
 		context.setRenderTarget(0);
 		context.setShader(0);
+
+		context.enable(GraphicsContext::BLEND);
 
 		m_prevActiveArea = m_activeArea;
 		m_redrawGlobalBlocks = false;
@@ -403,27 +401,24 @@ void ChunkLoader::draw(GraphicsContext &context, const float alpha)
 	}
 	else if(m_activeArea != m_prevActiveArea)
 	{
+		// TODO: There appears to still be a bug when moving in both x and y direction at the same time.
 		// Update new chunks
-		int dx = m_activeArea.x0 - m_prevActiveArea.x0,
-			dy = m_activeArea.y0 - m_prevActiveArea.y0;
+		int dx = m_activeArea.x0 - m_prevActiveArea.x0;
+		int dy = m_activeArea.y0 - m_prevActiveArea.y0;
 
-		LOG("New chunks entered (dt=[%i, %i])", dx, dy);
-
+		// Draw new chunks into global block render target
+		context.disable(GraphicsContext::BLEND);
+		context.setRenderTarget(m_blocksRenderTarget);
 		if(dx > 0)
 		{
 			for(int x = 0; x < dx; ++x)
 			{
-				int chunkX = (math::mod(m_globalChunkPosition.x + x, m_activeArea.getWidth()));
-				for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+				for(int y = 0; y < m_activeArea.getHeight(); ++y)
 				{
-					context.setRenderTarget(m_blocksRenderTarget[z]);
-					for(int y = 0; y < m_activeArea.getHeight(); ++y)
-					{
-						Matrix4 mat;
-						mat.translate((chunkX) * CHUNK_BLOCKS, math::mod(m_globalChunkPosition.y + y, m_activeArea.getHeight()) * CHUNK_BLOCKS, 0.0f);
-						context.setModelViewMatrix(mat);
-						getChunkAt(m_prevActiveArea.x1 + x + 1, m_activeArea.y0 + y).drawBlocks(context, this, (TerrainLayer) z);
-					}
+					Matrix4 mat;
+					mat.translate(math::mod(m_globalChunkPosition.x + x, m_activeArea.getWidth()) * CHUNK_BLOCKS, math::mod(m_globalChunkPosition.y + y, m_activeArea.getHeight()) * CHUNK_BLOCKS, 0.0f);
+					context.setModelViewMatrix(mat);
+					getChunkAt(m_prevActiveArea.x1 + x + 1, m_activeArea.y0 + y).drawBlocks(context, this);
 				}
 			}
 		}
@@ -431,36 +426,27 @@ void ChunkLoader::draw(GraphicsContext &context, const float alpha)
 		{
 			for(int x = 0; x < -dx; ++x)
 			{
-				int chunkX = (math::mod(m_globalChunkPosition.x - x - 1, m_activeArea.getWidth()));
-				for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+				for(int y = 0; y < m_activeArea.getHeight(); ++y)
 				{
-					context.setRenderTarget(m_blocksRenderTarget[z]);
-					for(int y = 0; y < m_activeArea.getHeight(); ++y)
-					{
-						Matrix4 mat;
-						mat.translate((chunkX) * CHUNK_BLOCKS, math::mod(m_globalChunkPosition.y + y, m_activeArea.getHeight()) * CHUNK_BLOCKS, 0.0f);
-						context.setModelViewMatrix(mat);
-						getChunkAt(m_prevActiveArea.x0 - x - 1, m_activeArea.y0 + y).drawBlocks(context, this, (TerrainLayer) z);
-					}
+					Matrix4 mat;
+					mat.translate(math::mod(m_globalChunkPosition.x - x - 1, m_activeArea.getWidth()) * CHUNK_BLOCKS, math::mod(m_globalChunkPosition.y + y, m_activeArea.getHeight()) * CHUNK_BLOCKS, 0.0f);
+					context.setModelViewMatrix(mat);
+					getChunkAt(m_prevActiveArea.x0 - x - 1, m_activeArea.y0 + y).drawBlocks(context, this);
 				}
 			}
 		}
+		m_globalChunkPosition.x += dx;
 		
 		if(dy > 0)
 		{
 			for(int y = 0; y < dy; ++y)
 			{
-				int chunkY = (math::mod(m_globalChunkPosition.y + y, m_activeArea.getHeight()));
-				for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+				for(int x = 0; x < m_activeArea.getWidth(); ++x)
 				{
-					context.setRenderTarget(m_blocksRenderTarget[z]);
-					for(int x = 0; x < m_activeArea.getWidth(); ++x)
-					{
-						Matrix4 mat;
-						mat.translate(math::mod(m_globalChunkPosition.x + x, m_activeArea.getWidth()) * CHUNK_BLOCKS, (chunkY) * CHUNK_BLOCKS, 0.0f);
-						context.setModelViewMatrix(mat);
-						getChunkAt(m_activeArea.x0 + x, m_prevActiveArea.y1 + y + 1).drawBlocks(context, this, (TerrainLayer) z);
-					}
+					Matrix4 mat;
+					mat.translate(math::mod(m_globalChunkPosition.x + x, m_activeArea.getWidth()) * CHUNK_BLOCKS, math::mod(m_globalChunkPosition.y + y, m_activeArea.getHeight()) * CHUNK_BLOCKS, 0.0f);
+					context.setModelViewMatrix(mat);
+					getChunkAt(m_activeArea.x0 + x, m_prevActiveArea.y1 + y + 1).drawBlocks(context, this);
 				}
 			}
 		}
@@ -468,34 +454,33 @@ void ChunkLoader::draw(GraphicsContext &context, const float alpha)
 		{
 			for(int y = 0; y < -dy; ++y)
 			{
-				int chunkY = (math::mod(m_globalChunkPosition.y - y - 1, m_activeArea.getHeight()));
-				for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+				for(int x = 0; x < m_activeArea.getWidth(); ++x)
 				{
-					context.setRenderTarget(m_blocksRenderTarget[z]);
-					for(int x = 0; x < m_activeArea.getWidth(); ++x)
-					{
-						Matrix4 mat;
-						mat.translate(math::mod(m_globalChunkPosition.x + x, m_activeArea.getWidth()) * CHUNK_BLOCKS, (chunkY) * CHUNK_BLOCKS, 0.0f);
-						context.setModelViewMatrix(mat);
-						getChunkAt(m_activeArea.x0 + x, m_prevActiveArea.y0 - y - 1).drawBlocks(context, this, (TerrainLayer) z);
-					}
+					Matrix4 mat;
+					mat.translate(math::mod(m_globalChunkPosition.x + x, m_activeArea.getWidth()) * CHUNK_BLOCKS, math::mod(m_globalChunkPosition.y - y - 1, m_activeArea.getHeight()) * CHUNK_BLOCKS, 0.0f);
+					context.setModelViewMatrix(mat);
+					getChunkAt(m_activeArea.x0 + x, m_prevActiveArea.y0 - y - 1).drawBlocks(context, this);
 				}
 			}
 		}
+		m_globalChunkPosition.y += dy;
 
+		// Sort global block render target
 		context.setShader(m_tileSortShader);
 		context.setModelViewMatrix(Matrix4());
 		for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
 		{
-			m_tileSortShader->setSampler2D("u_TileMap", m_blocksRenderTarget[z]->getTexture());
+			m_tileSortShader->setUniform1ui("u_Layer", z);
 			context.setRenderTarget(m_sortedBlocksRenderTarget[z]);
 			context.drawRectangle(0, 0, (m_activeArea.x1 - m_activeArea.x0 + 1) * CHUNK_BLOCKS, (m_activeArea.y1 - m_activeArea.y0 + 1) * CHUNK_BLOCKS);
 		}
+
+		// Reset graphics context
 		context.setRenderTarget(0);
 		context.setShader(0);
+		context.enable(GraphicsContext::BLEND);
 
-		m_globalChunkPosition.x += dx;
-		m_globalChunkPosition.y += dy;
+		// Store previous position
 		m_prevActiveArea = m_activeArea;
 	}
 }
@@ -538,8 +523,10 @@ void ChunkLoader::resizeEvent(uint width, uint height)
 		m_sortedBlocksRenderTarget[i] = new RenderTarget2D(activeAreaWidth * CHUNK_BLOCKS, activeAreaHeight * CHUNK_BLOCKS, 2, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
 		m_sortedBlocksRenderTarget[i]->getTexture(0)->setWrapping(Texture2D::REPEAT);
 		m_sortedBlocksRenderTarget[i]->getTexture(1)->setWrapping(Texture2D::REPEAT);
-
-		delete m_blocksRenderTarget[i];
-		m_blocksRenderTarget[i] = new RenderTarget2D(activeAreaWidth * CHUNK_BLOCKS, activeAreaHeight * CHUNK_BLOCKS, 1, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
 	}
+
+	delete m_blocksRenderTarget;
+	m_blocksRenderTarget = new RenderTarget2D(activeAreaWidth * CHUNK_BLOCKS, activeAreaHeight * CHUNK_BLOCKS);
+
+	m_tileSortShader->setSampler2D("u_BlockGrid", m_blocksRenderTarget->getTexture());
 }

@@ -17,8 +17,8 @@ public:
 	void load(int chunkX, int chunkY, BlockID *blocks);
 	
 	// VBO LOADING
-	void updateTileMap(ChunkLoader *chunkLoader, const TerrainLayer layer);
-	bool isDirty(const TerrainLayer layer) const { return m_dirty[layer]; }
+	void updateTileMap(ChunkLoader *chunkLoader);
+	bool isDirty() const { return m_dirty; }
 	bool isModified() const { return m_modified; }
 	
 	int getX() const { return m_x; }
@@ -33,7 +33,7 @@ public:
 	void addStaticEntity(StaticEntity *entity);
 	
 	// DRAWING
-	void drawBlocks(GraphicsContext &gfxContext, ChunkLoader *chunkLoader, const TerrainLayer layer);
+	void drawBlocks(GraphicsContext &gfxContext, ChunkLoader *chunkLoader);
 
 private:
 	Chunk(const Chunk &) { }
@@ -48,19 +48,15 @@ private:
 	// ADJACENCY LIST
 	Chunk *m_adjacentChunks[8];
 
-	// TILE MAP SHADER
-	ShaderPtr m_drawChunkShader;
-	Texture2DPtr m_tileMapTexture[TERRAIN_LAYER_COUNT];
-	//ShaderPtr m_tileSortShader;
-	//RenderTarget2D *m_sortRenderTarget[TERRAIN_LAYER_COUNT];
+	// BLOCK GRID TEXTURE
+	Texture2DPtr m_blockGridTexture;
 
 	// LIGHTING
 	Texture2DPtr m_shadowMap;
 
 	// MISC
 	bool m_modified;
-	bool m_dirty[TERRAIN_LAYER_COUNT];
-	bool m_sorted[TERRAIN_LAYER_COUNT];
+	bool m_dirty;
 };
 
 #endif // TERRAIN_CHUNK_H
