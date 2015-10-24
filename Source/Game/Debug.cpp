@@ -290,9 +290,9 @@ void Debug::draw(SpriteBatch *spriteBatch, const float alpha)
 		spriteBatch->flush();
 		gfxContext.disable(GraphicsContext::BLEND);
 		//spriteBatch->drawSprite(Sprite(m_world->getLighting()->m_lightingRenderTarget->getTexture(), Rect(0.0f, 128.0f, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getLighting()->m_lightingPass0->getTexture(), Rect(0.0f, 128.0f * 2, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getLighting()->m_lightingPass1->getTexture(), Rect(0.0f, 128.0f * 3, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getLighting()->m_lightingPass2->getTexture(), Rect(0.0f, 128.0f * 4, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkLoader()->m_lightingPass0->getTexture(), Rect(0.0f, 128.0f * 2, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkLoader()->m_lightingPass1->getTexture(), Rect(0.0f, 128.0f * 3, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkLoader()->m_lightingPass2->getTexture(), Rect(0.0f, 128.0f * 4, 256.0f, 128.0f)));
 		spriteBatch->flush();
 		gfxContext.enable(GraphicsContext::BLEND);
 

@@ -139,7 +139,7 @@ void Chunk::addStaticEntity(StaticEntity * entity)
 }
 
 // DRAWING
-void Chunk::attachBlocks(GraphicsContext &context, const int x, const int y)
+void Chunk::attach(GraphicsContext &context, const int x, const int y)
 {
 	// Draw blocks
 	context.setTexture(m_blockTexture);
@@ -149,7 +149,7 @@ void Chunk::attachBlocks(GraphicsContext &context, const int x, const int y)
 	m_attached = true;
 }
 
-void Chunk::detachBlocks()
+void Chunk::detach()
 {
 	m_attached = false;
 }

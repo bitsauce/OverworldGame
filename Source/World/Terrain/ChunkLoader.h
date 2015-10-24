@@ -69,6 +69,8 @@ private:
 	
 	void resizeEvent(uint width, uint height);
 
+	void redrawAttachedChunks(GraphicsContext &context);
+
 	bool m_applyZoom;
 	Camera *m_camera;
 	World *m_world;
@@ -91,7 +93,6 @@ private:
 	// Chunk positions
 	Vector2i m_chunkPositions[4];
 	Vector2  m_averagePosition;
-	Vector2i m_prevChunkPosition;
 	uint m_chunkPositionIndex;
 
 	// Cirlce load patterns
@@ -106,6 +107,18 @@ private:
 	RenderTarget2D *m_sortedBlocksRenderTarget[TERRAIN_LAYER_COUNT];
 
 	ShaderPtr m_tileMapShader;
+
+	// Lighting
+	RenderTarget2D *m_lightingPass0;
+	RenderTarget2D *m_lightingPass1;
+	RenderTarget2D *m_lightingPass2;
+	ShaderPtr m_directionalLightingShader;
+	ShaderPtr m_radialLightingShader;
+	ShaderPtr m_blurHShader;
+	ShaderPtr m_blurVShader;
+	int m_lightRadius;
+	bool m_enabled;
+	bool m_redrawLighting;
 };
 
 #endif // CHUNK_LOADER_H

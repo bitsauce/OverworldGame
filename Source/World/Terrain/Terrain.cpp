@@ -12,6 +12,9 @@
 
 #include "Entities/Dynamic/ItemDrop.h"
 
+#include "Entities/EntityData.h"
+#include "Entities/Static/StaticEntity.h"
+
 Terrain::Terrain(World *world) :
 	m_world(world),
 	m_chunkLoader(world),
@@ -79,9 +82,6 @@ bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRA
 	}
 	return false;
 }
-
-#include "Entities/EntityData.h"
-#include "Entities/Static/StaticEntity.h"
 
 void Terrain::placeStaticEntity(StaticEntity * entity)
 {

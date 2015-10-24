@@ -38,6 +38,8 @@ void Game::main(GraphicsContext &context)
 	//{
 	//	Window::enableFullscreen();
 	//}
+
+	Graphics::setVsync(0);
 	
 	// Init world
 	BlockData::init();

@@ -31,8 +31,8 @@ public:
 	void addStaticEntity(StaticEntity *entity);
 	
 	// DRAWING
-	void attachBlocks(GraphicsContext &context, const int x, const int y);
-	void detachBlocks();
+	void attach(GraphicsContext &context, const int x, const int y);
+	void detach();
 
 private:
 	Chunk(const Chunk &) { }

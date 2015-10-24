@@ -15,6 +15,8 @@ void Torch::update(const float delta)
 
 void Torch::draw(SpriteBatch *spriteBatch, const float alpha)
 {
+	// TODO: Fix lighting bug where moving a lightsource should detach the lighting
+	// on all the chunks affected by this light.
 	m_pointlight.setPosition(getPosition());
 	m_sprite.setPosition(getPosition() * BLOCK_PXF);
 	spriteBatch->drawSprite(m_sprite);
