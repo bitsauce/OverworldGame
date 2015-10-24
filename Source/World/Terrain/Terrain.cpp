@@ -115,19 +115,19 @@ void Terrain::Drawer::draw(SpriteBatch *spriteBatch, const float alpha)
 	context.setModelViewMatrix(m_camera->getModelViewMatrix(alpha));
 
 	// Draw chunk area
-	ChunkLoader::ChunkArea area = m_chunkLoader->getActiveArea();
+	ChunkLoader::ChunkArea area = m_chunkLoader->getLoadingArea();
 
 	context.setBlendState(BlendState(BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA));
 	context.setShader(m_chunkLoader->m_tileMapShader);
 	m_chunkLoader->m_tileMapShader->setSampler2D("u_SortedBlockTexture", m_chunkLoader->m_sortedBlocksRenderTarget[m_layer]->getTexture(0));
 	m_chunkLoader->m_tileMapShader->setSampler2D("u_SortedQuadTexture", m_chunkLoader->m_sortedBlocksRenderTarget[m_layer]->getTexture(1));
 
-	float u0 = m_chunkLoader->m_globalChunkPosition.x / (float) area.getWidth(),
-		v0 = -m_chunkLoader->m_globalChunkPosition.y / (float) area.getHeight(),
+	float u0 = area.x0 / (float) area.getWidth(),
+		v0 = -area.y0 / (float) area.getHeight(),
 		u1 = u0 + 1.0f,
 		v1 = v0 + 1.0f;
 
-	context.drawRectangle(area.x0 * CHUNK_PXF, area.y0 * CHUNK_PXF, (area.x1 - area.x0 + 1) * CHUNK_PXF, (area.y1 - area.y0 + 1) * CHUNK_PXF, Color(255), TextureRegion(u0, v0, u1, v1));
+	context.drawRectangle(area.x0 * CHUNK_PXF, area.y0 * CHUNK_PXF, area.getWidth() * CHUNK_PXF, area.getHeight() * CHUNK_PXF, Color(255), TextureRegion(u0, v0, u1, v1));
 	context.setShader(0);
 	context.setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
 }

@@ -17,8 +17,7 @@ public:
 	void load(int chunkX, int chunkY, BlockID *blocks);
 	
 	// VBO LOADING
-	void updateTileMap(ChunkLoader *chunkLoader);
-	bool isDirty() const { return m_dirty; }
+	bool isAttached() const { return m_attached; }
 	bool isModified() const { return m_modified; }
 	
 	int getX() const { return m_x; }
@@ -33,10 +32,12 @@ public:
 	void addStaticEntity(StaticEntity *entity);
 	
 	// DRAWING
-	void drawBlocks(GraphicsContext &gfxContext, ChunkLoader *chunkLoader);
+	void attachBlocks(GraphicsContext &gfxContext, ChunkLoader *chunkLoader);
+	void detachBlocks();
 
 private:
 	Chunk(const Chunk &) { }
+	void updateBlockGridTexture(ChunkLoader *chunkLoader);
 
 	// CHUNK
 	int m_x, m_y;
@@ -56,7 +57,7 @@ private:
 
 	// MISC
 	bool m_modified;
-	bool m_dirty;
+	bool m_attached;
 };
 
 #endif // TERRAIN_CHUNK_H

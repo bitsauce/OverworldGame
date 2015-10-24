@@ -20,7 +20,7 @@ public:
 
 	void setOptimalChunkCount(const uint maxChunkCount);
 
-	void loadActiveArea();
+	void initLoadingArea(GraphicsContext &context);
 	
 	struct ChunkArea
 	{
@@ -50,8 +50,7 @@ public:
 		int x1, y1;
 	};
 
-	ChunkArea getActiveArea() const;
-	ChunkArea getLoadArea() const;
+	ChunkArea getLoadingArea() const;
 
 	void update();
 	void draw(GraphicsContext &context, const float alpha);
@@ -61,8 +60,6 @@ public:
 	RenderTarget2D *m_sortedBlocksRenderTarget[TERRAIN_LAYER_COUNT];
 
 	ShaderPtr m_tileMapShader;
-
-	Vector2i m_globalChunkPosition;
 
 private:
 	Chunk *loadChunkAt(const int chunkX, const int chunkY);
@@ -86,12 +83,11 @@ private:
 	unordered_map<uint, Chunk*> m_chunks;
 
 	// Active area
-	ChunkArea m_activeArea;
-	ChunkArea m_prevActiveArea;
+	ChunkArea m_loadingArea;
+	ChunkArea m_prevLoadingArea;
 	bool m_redrawGlobalBlocks;
 
-	// Load area
-	ChunkArea m_loadArea;
+	// Loading area radius
 	uint m_loadAreaRadius;
 
 	// Chunk pool

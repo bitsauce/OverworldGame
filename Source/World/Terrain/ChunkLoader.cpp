@@ -158,7 +158,7 @@ bool ChunkLoader::freeInactiveChunk()
 	for(unordered_map<uint, Chunk*>::iterator itr = m_chunks.begin(); itr != m_chunks.end(); ++itr)
 	{
 		int x = itr->second->getX(), y = itr->second->getY();
-		if(x < m_loadArea.x0 || x > m_loadArea.x1 || y < m_loadArea.y0 || y > m_loadArea.y1)
+		if(x < m_loadingArea.x0 || x > m_loadingArea.x1 || y < m_loadingArea.y0 || y > m_loadingArea.y1)
 		{
 			freeChunk(itr);
 			return true;
@@ -218,14 +218,14 @@ void ChunkLoader::setOptimalChunkCount(const uint optimalChunkCount)
 	m_optimalChunkCount = optimalChunkCount;
 }
 
-void ChunkLoader::loadActiveArea()
+void ChunkLoader::initLoadingArea(GraphicsContext &context)
 {
-	for(int y = m_activeArea.y0-1; y <= m_activeArea.y1+1; y++)
+	for(int y = m_loadingArea.y0; y <= m_loadingArea.y1; y++)
 	{
-		for(int x = m_activeArea.x0-1; x <= m_activeArea.x1+1; x++)
+		for(int x = m_loadingArea.x0; x <= m_loadingArea.x1; x++)
 		{
 			Chunk &chunk = getChunkAt(x, y);
-			chunk.updateTileMap(this);
+			chunk.attachBlocks(context, this);
 		}
 	}
 }
@@ -300,14 +300,9 @@ bool ChunkLoader::isChunkLoadedAt(const int chunkX, const int chunkY) const
 	return m_chunks.find(CHUNK_KEY(chunkX, chunkY)) != m_chunks.end();
 }
 
-ChunkLoader::ChunkArea ChunkLoader::getActiveArea() const
+ChunkLoader::ChunkArea ChunkLoader::getLoadingArea() const
 {
-	return m_activeArea;
-}
-
-ChunkLoader::ChunkArea ChunkLoader::getLoadArea() const
-{
-	return m_loadArea;
+	return m_loadingArea;
 }
 
 void ChunkLoader::update()
@@ -320,20 +315,14 @@ void ChunkLoader::draw(GraphicsContext &context, const float alpha)
 	Vector2 center = m_camera->getCenter(alpha);
 	Vector2 size = m_applyZoom ? m_camera->getSize() : Window::getSize();
 
-	// Active area should have the same center as the view
-	m_activeArea.x0 = (int) floor(center.x / CHUNK_PXF) - (int) floor(size.x * 0.5f / CHUNK_PXF) - 1;
-	m_activeArea.y0 = (int) floor(center.y / CHUNK_PXF) - (int) floor(size.y * 0.5f / CHUNK_PXF) - 1;
-	m_activeArea.x1 = (int) floor(center.x / CHUNK_PXF) + (int) floor(size.x * 0.5f / CHUNK_PXF) + 1;
-	m_activeArea.y1 = (int) floor(center.y / CHUNK_PXF) + (int) floor(size.y * 0.5f / CHUNK_PXF) + 1;
-
-	// Update load area
-	m_loadArea.x0 = m_activeArea.x0 - m_loadAreaRadius;
-	m_loadArea.y0 = m_activeArea.y0 - m_loadAreaRadius;
-	m_loadArea.x1 = m_activeArea.x1 + m_loadAreaRadius;
-	m_loadArea.y1 = m_activeArea.y1 + m_loadAreaRadius;
+	// Loading area should have the same center as the view
+	m_loadingArea.x0 = (int) floor(center.x / CHUNK_PXF) - (int) floor(size.x * 0.5f / CHUNK_PXF) - m_loadAreaRadius - 1;
+	m_loadingArea.y0 = (int) floor(center.y / CHUNK_PXF) - (int) floor(size.y * 0.5f / CHUNK_PXF) - m_loadAreaRadius - 1;
+	m_loadingArea.x1 = (int) floor(center.x / CHUNK_PXF) + (int) floor(size.x * 0.5f / CHUNK_PXF) + m_loadAreaRadius + 1;
+	m_loadingArea.y1 = (int) floor(center.y / CHUNK_PXF) + (int) floor(size.y * 0.5f / CHUNK_PXF) + m_loadAreaRadius + 1;
 
 	// Check if new chunks were entered
-	Vector2i chunkPosition(m_activeArea.x0, m_activeArea.y0);
+	Vector2i chunkPosition(m_loadingArea.x0, m_loadingArea.y0);
 	if(chunkPosition != m_prevChunkPosition)
 	{
 		// Calculate average position
@@ -360,7 +349,7 @@ void ChunkLoader::draw(GraphicsContext &context, const float alpha)
 	{
 		Vector2i centerChunkPosition((int) floor(center.x / CHUNK_PXF), (int) floor(center.y / CHUNK_PXF));
 		Chunk &chunk = getChunkAt(centerChunkPosition.x + m_circleLoadPattern[m_circleLoadIndex].x, centerChunkPosition.y + m_circleLoadPattern[m_circleLoadIndex].y);
-		if(chunk.isDirty()) chunk.updateTileMap(this);
+		if(chunk.isAttached()) chunk.attachBlocks(context, this);
 		m_circleLoadIndex = (m_circleLoadIndex + 1) % m_circleLoadPattern.size();
 	}
 
@@ -369,18 +358,16 @@ void ChunkLoader::draw(GraphicsContext &context, const float alpha)
 		// Render all caches
 		context.disable(GraphicsContext::BLEND);
 		context.setRenderTarget(m_blocksRenderTarget);
-		for(int y = m_activeArea.y0; y <= m_activeArea.y1; ++y)
+		for(int y = m_loadingArea.y0; y <= m_loadingArea.y1; ++y)
 		{
-			for(int x = m_activeArea.x0; x <= m_activeArea.x1; ++x)
+			for(int x = m_loadingArea.x0; x <= m_loadingArea.x1; ++x)
 			{
 				Matrix4 mat;
-				mat.translate((x - m_activeArea.x0) * CHUNK_BLOCKS, (y - m_activeArea.y0) * CHUNK_BLOCKS, 0.0f);
+				mat.translate(math::mod(x, m_loadingArea.getWidth()) * CHUNK_BLOCKS, math::mod(y, m_loadingArea.getHeight()) * CHUNK_BLOCKS, 0.0f);
 				context.setModelViewMatrix(mat);
-				getChunkAt(x, y).drawBlocks(context, this);
+				getChunkAt(x, y).attachBlocks(context, this);
 			}
 		}
-
-		Pixmap pixmap = m_blocksRenderTarget->getTexture()->getPixmap();
 
 		context.setShader(m_tileSortShader);
 		context.setModelViewMatrix(Matrix4());
@@ -388,82 +375,74 @@ void ChunkLoader::draw(GraphicsContext &context, const float alpha)
 		{
 			m_tileSortShader->setUniform1ui("u_Layer", z);
 			context.setRenderTarget(m_sortedBlocksRenderTarget[z]);
-			context.drawRectangle(0, 0, (m_activeArea.x1 - m_activeArea.x0 + 1) * CHUNK_BLOCKS, (m_activeArea.y1 - m_activeArea.y0 + 1) * CHUNK_BLOCKS);
+			context.drawRectangle(0, 0, m_loadingArea.getWidth() * CHUNK_BLOCKS, m_loadingArea.getHeight() * CHUNK_BLOCKS);
 		}
 		context.setRenderTarget(0);
 		context.setShader(0);
 
 		context.enable(GraphicsContext::BLEND);
 
-		m_prevActiveArea = m_activeArea;
+		m_prevLoadingArea = m_loadingArea;
 		m_redrawGlobalBlocks = false;
-		m_globalChunkPosition = Vector2i(0, 0);
 	}
-	else if(m_activeArea != m_prevActiveArea)
+	else if(m_loadingArea != m_prevLoadingArea)
 	{
-		// TODO: There appears to still be a bug when moving in both x and y direction at the same time.
 		// Update new chunks
-		int dx = m_activeArea.x0 - m_prevActiveArea.x0;
-		int dy = m_activeArea.y0 - m_prevActiveArea.y0;
-
-		// Draw new chunks into global block render target
 		context.disable(GraphicsContext::BLEND);
 		context.setRenderTarget(m_blocksRenderTarget);
-		if(dx > 0)
+
+		// Get chunks leaved
+		int x0 = 0, x1 = 0, y0 = 0, y1 = 0;
+		if(m_loadingArea.x0 > m_prevLoadingArea.x0) // Moved to the right
 		{
-			for(int x = 0; x < dx; ++x)
-			{
-				for(int y = 0; y < m_activeArea.getHeight(); ++y)
-				{
-					Matrix4 mat;
-					mat.translate(math::mod(m_globalChunkPosition.x + x, m_activeArea.getWidth()) * CHUNK_BLOCKS, math::mod(m_globalChunkPosition.y + y, m_activeArea.getHeight()) * CHUNK_BLOCKS, 0.0f);
-					context.setModelViewMatrix(mat);
-					getChunkAt(m_prevActiveArea.x1 + x + 1, m_activeArea.y0 + y).drawBlocks(context, this);
-				}
-			}
+			x0 = m_prevLoadingArea.x0;
+			x1 = min(m_prevLoadingArea.x1, m_loadingArea.x0);
 		}
-		else if(dx < 0)
+		else
 		{
-			for(int x = 0; x < -dx; ++x)
-			{
-				for(int y = 0; y < m_activeArea.getHeight(); ++y)
-				{
-					Matrix4 mat;
-					mat.translate(math::mod(m_globalChunkPosition.x - x - 1, m_activeArea.getWidth()) * CHUNK_BLOCKS, math::mod(m_globalChunkPosition.y + y, m_activeArea.getHeight()) * CHUNK_BLOCKS, 0.0f);
-					context.setModelViewMatrix(mat);
-					getChunkAt(m_prevActiveArea.x0 - x - 1, m_activeArea.y0 + y).drawBlocks(context, this);
-				}
-			}
+			x0 = max(m_prevLoadingArea.x0, m_loadingArea.x1);
+			x1 = m_prevLoadingArea.x1;
 		}
-		m_globalChunkPosition.x += dx;
 		
-		if(dy > 0)
+		if(m_loadingArea.y0 > m_prevLoadingArea.y0) // Moved to the down
 		{
-			for(int y = 0; y < dy; ++y)
+			y0 = m_prevLoadingArea.y0;
+			y1 = min(m_prevLoadingArea.y1, m_loadingArea.y0);
+		}
+		else
+		{
+			y0 = max(m_prevLoadingArea.y0, m_loadingArea.y1);
+			y1 = m_prevLoadingArea.y1;
+		}
+
+		for(int x = x0; x <= x1; ++x)
+		{
+			for(int y = y0; y <= y1; ++y)
 			{
-				for(int x = 0; x < m_activeArea.getWidth(); ++x)
+				Chunk &chunk = getChunkAt(x, y);
+				chunk.detachBlocks();
+			}
+		}
+
+		// Get chunks entered
+
+		/*int count = 0;
+		for(int y = m_loadingArea.y0; y <= m_loadingArea.y1; ++y)
+		{
+			for(int x = m_loadingArea.x0; x <= m_loadingArea.x1; ++x)
+			{
+				Chunk& chunk = getChunkAt(x, y);
+				if(!chunk.isAttached())
 				{
 					Matrix4 mat;
-					mat.translate(math::mod(m_globalChunkPosition.x + x, m_activeArea.getWidth()) * CHUNK_BLOCKS, math::mod(m_globalChunkPosition.y + y, m_activeArea.getHeight()) * CHUNK_BLOCKS, 0.0f);
+					mat.translate(math::mod(x, m_loadingArea.getWidth()) * CHUNK_BLOCKS, math::mod(y, m_loadingArea.getHeight()) * CHUNK_BLOCKS, 0.0f);
 					context.setModelViewMatrix(mat);
-					getChunkAt(m_activeArea.x0 + x, m_prevActiveArea.y1 + y + 1).drawBlocks(context, this);
+					chunk.drawBlocks(context, this);
+					count++;
 				}
 			}
 		}
-		else if(dy < 0)
-		{
-			for(int y = 0; y < -dy; ++y)
-			{
-				for(int x = 0; x < m_activeArea.getWidth(); ++x)
-				{
-					Matrix4 mat;
-					mat.translate(math::mod(m_globalChunkPosition.x + x, m_activeArea.getWidth()) * CHUNK_BLOCKS, math::mod(m_globalChunkPosition.y - y - 1, m_activeArea.getHeight()) * CHUNK_BLOCKS, 0.0f);
-					context.setModelViewMatrix(mat);
-					getChunkAt(m_activeArea.x0 + x, m_prevActiveArea.y0 - y - 1).drawBlocks(context, this);
-				}
-			}
-		}
-		m_globalChunkPosition.y += dy;
+		LOG("%i new chunks drawn", count);*/
 
 		// Sort global block render target
 		context.setShader(m_tileSortShader);
@@ -472,7 +451,7 @@ void ChunkLoader::draw(GraphicsContext &context, const float alpha)
 		{
 			m_tileSortShader->setUniform1ui("u_Layer", z);
 			context.setRenderTarget(m_sortedBlocksRenderTarget[z]);
-			context.drawRectangle(0, 0, (m_activeArea.x1 - m_activeArea.x0 + 1) * CHUNK_BLOCKS, (m_activeArea.y1 - m_activeArea.y0 + 1) * CHUNK_BLOCKS);
+			context.drawRectangle(0, 0, (m_loadingArea.x1 - m_loadingArea.x0 + 1) * CHUNK_BLOCKS, (m_loadingArea.y1 - m_loadingArea.y0 + 1) * CHUNK_BLOCKS);
 		}
 
 		// Reset graphics context
@@ -481,7 +460,7 @@ void ChunkLoader::draw(GraphicsContext &context, const float alpha)
 		context.enable(GraphicsContext::BLEND);
 
 		// Store previous position
-		m_prevActiveArea = m_activeArea;
+		m_prevLoadingArea = m_loadingArea;
 	}
 }
 
@@ -495,10 +474,8 @@ struct VectorComparator
 
 void ChunkLoader::resizeEvent(uint width, uint height)
 {
-	int activeAreaWidth = (int) (floor(width  * 0.5f / CHUNK_PXF) * 2 + 3);
-	int activeAreaHeight = (int) (floor(height * 0.5f / CHUNK_PXF) * 2 + 3);
-	int loadAreaWidth  = activeAreaWidth + m_loadAreaRadius * 2;
-	int loadAreaHeight = activeAreaHeight + m_loadAreaRadius * 2;
+	int loadAreaWidth  = (int) (floor(width  * 0.5f / CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
+	int loadAreaHeight = (int) (floor(height * 0.5f / CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
 
 	setOptimalChunkCount(loadAreaWidth * loadAreaHeight * 2);
 	
@@ -520,13 +497,13 @@ void ChunkLoader::resizeEvent(uint width, uint height)
 	for(int i = 0; i < TERRAIN_LAYER_COUNT; ++i)
 	{
 		delete m_sortedBlocksRenderTarget[i];
-		m_sortedBlocksRenderTarget[i] = new RenderTarget2D(activeAreaWidth * CHUNK_BLOCKS, activeAreaHeight * CHUNK_BLOCKS, 2, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
+		m_sortedBlocksRenderTarget[i] = new RenderTarget2D(loadAreaWidth * CHUNK_BLOCKS, loadAreaHeight * CHUNK_BLOCKS, 2, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
 		m_sortedBlocksRenderTarget[i]->getTexture(0)->setWrapping(Texture2D::REPEAT);
 		m_sortedBlocksRenderTarget[i]->getTexture(1)->setWrapping(Texture2D::REPEAT);
 	}
 
 	delete m_blocksRenderTarget;
-	m_blocksRenderTarget = new RenderTarget2D(activeAreaWidth * CHUNK_BLOCKS, activeAreaHeight * CHUNK_BLOCKS);
+	m_blocksRenderTarget = new RenderTarget2D(loadAreaWidth * CHUNK_BLOCKS, loadAreaHeight * CHUNK_BLOCKS);
 
 	m_tileSortShader->setSampler2D("u_BlockGrid", m_blocksRenderTarget->getTexture());
 }

@@ -39,7 +39,7 @@ void Lighting::draw(SpriteBatch *spriteBatch, const float alpha)
 
 	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 
-	ChunkLoader::ChunkArea area = m_terrain->getChunkLoader()->getActiveArea();
+	ChunkLoader::ChunkArea area = m_terrain->getChunkLoader()->getLoadingArea();
 
 	// Draw shadows
 	//if(m_prevX0 != x0 || m_prevY0 != y0)

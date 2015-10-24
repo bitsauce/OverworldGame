@@ -13,7 +13,7 @@
 Chunk::Chunk(ShaderPtr tileMapShader, ShaderPtr tileSortShader)
 {
 	// Setup flags and such
-	m_dirty = m_modified = false; // Not modified
+	m_attached = m_modified = false; // Not modified
 	m_shadowMap = Texture2DPtr(new Texture2D(Pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS)));
 
 	// Initialize blocks
@@ -71,18 +71,15 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 		}
 	}
 	m_shadowMap->updatePixmap(pixmap);
-		
-	// Mark as dirty
-	m_dirty = true;
 
 	// Mark as not modified
-	m_modified = false;
+	m_attached = m_modified = false;
 
 	// Mark chunk as initialized
 	LOG("Chunk [%i, %i] generated", m_x, m_y);
 }
 
-void Chunk::updateTileMap(ChunkLoader *chunkLoader)
+void Chunk::updateBlockGridTexture(ChunkLoader *chunkLoader)
 {
 	// Get adjacent chunks
 	m_adjacentChunks[0] = &chunkLoader->getChunkAt(m_x - 1, m_y - 1);
@@ -104,7 +101,7 @@ void Chunk::updateTileMap(ChunkLoader *chunkLoader)
 		{
 			for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
 			{
-				pixel[z] = m_blocks[BLOCK_INDEX(x, y, z)];
+				pixel[z] = (uchar)m_blocks[BLOCK_INDEX(x, y, z)];
 			}
 			pixmap.setPixel(x, CHUNK_BLOCKS - y - 1, pixel);
 		}
@@ -112,9 +109,6 @@ void Chunk::updateTileMap(ChunkLoader *chunkLoader)
 
 	// Create tile map texture
 	m_blockGridTexture = Texture2DPtr(new Texture2D(pixmap));
-
-	// Not dirty
-	m_dirty = false;
 }
 
 // BLOCKS
@@ -140,15 +134,15 @@ bool Chunk::setBlockAt(const int x, const int y, const BlockID block, TerrainLay
 	{
 		// Set the block value
 		m_blocks[BLOCK_INDEX(x, y, layer)] = block; // TODO: It might be more efficient to also change the m_blockGridTexture directly instead of marking the chunk as dirty
-		m_dirty = m_modified = true; // Mark chunk as modified
-		if(m_adjacentChunks[0] && x == 0 && y == 0)								m_adjacentChunks[0]->m_dirty = true;
-		if(m_adjacentChunks[1] && y == 0)										m_adjacentChunks[1]->m_dirty = true;
-		if(m_adjacentChunks[2] && x == CHUNK_BLOCKS-1 && y == 0)				m_adjacentChunks[2]->m_dirty = true;
-		if(m_adjacentChunks[3] && x == CHUNK_BLOCKS-1)							m_adjacentChunks[3]->m_dirty = true;
-		if(m_adjacentChunks[4] && x == CHUNK_BLOCKS-1 && y == CHUNK_BLOCKS-1)	m_adjacentChunks[4]->m_dirty = true;
-		if(m_adjacentChunks[5] && y == CHUNK_BLOCKS-1)							m_adjacentChunks[5]->m_dirty = true;
-		if(m_adjacentChunks[6] && x == 0 && y == CHUNK_BLOCKS-1)				m_adjacentChunks[6]->m_dirty = true;
-		if(m_adjacentChunks[7] && x == 0)										m_adjacentChunks[7]->m_dirty = true;
+		m_attached = m_modified = true; // Mark chunk as modified
+		if(m_adjacentChunks[0] && x == 0 && y == 0)								m_adjacentChunks[0]->m_attached = true;
+		if(m_adjacentChunks[1] && y == 0)										m_adjacentChunks[1]->m_attached = true;
+		if(m_adjacentChunks[2] && x == CHUNK_BLOCKS-1 && y == 0)				m_adjacentChunks[2]->m_attached = true;
+		if(m_adjacentChunks[3] && x == CHUNK_BLOCKS-1)							m_adjacentChunks[3]->m_attached = true;
+		if(m_adjacentChunks[4] && x == CHUNK_BLOCKS-1 && y == CHUNK_BLOCKS-1)	m_adjacentChunks[4]->m_attached = true;
+		if(m_adjacentChunks[5] && y == CHUNK_BLOCKS-1)							m_adjacentChunks[5]->m_attached = true;
+		if(m_adjacentChunks[6] && x == 0 && y == CHUNK_BLOCKS-1)				m_adjacentChunks[6]->m_attached = true;
+		if(m_adjacentChunks[7] && x == 0)										m_adjacentChunks[7]->m_attached = true;
 		
 		// Update shadow map
 		float shadow = 1.0f;
@@ -171,16 +165,19 @@ void Chunk::addStaticEntity(StaticEntity * entity)
 }
 
 // DRAWING
-void Chunk::drawBlocks(GraphicsContext &context, ChunkLoader *chunkLoader)
+void Chunk::attachBlocks(GraphicsContext &context, ChunkLoader *chunkLoader)
 {
-	// Should we generate a new tile map?
-	if(m_dirty)
-	{
-		updateTileMap(chunkLoader);
-	}
+	updateBlockGridTexture(chunkLoader);
 
 	// Draw blocks
 	context.setTexture(m_blockGridTexture);
 	context.drawRectangle(0, 0, CHUNK_BLOCKS, CHUNK_BLOCKS);
 	context.setTexture(0);
+
+	m_attached = true;
+}
+
+void Chunk::detachBlocks()
+{
+	m_attached = false;
 }

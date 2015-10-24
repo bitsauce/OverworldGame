@@ -259,15 +259,8 @@ void Debug::draw(SpriteBatch *spriteBatch, const float alpha)
 		gfxContext.drawRectangle(position.x, position.y, size.x, 1.0f / m_world->getCamera()->getZoomLevel(), Color(127, 127, 255, 255));
 		gfxContext.drawRectangle(position.x, (position.y + size.y), size.x, 1.0f / m_world->getCamera()->getZoomLevel(), Color(127, 127, 255, 255));
 
-		// Draw active area
-		ChunkLoader::ChunkArea activeArea = m_world->getTerrain()->getChunkLoader()->getActiveArea();
-		gfxContext.drawRectangle(activeArea.x0 * CHUNK_PX, activeArea.y0 * CHUNK_PX, 1.0f / m_world->getCamera()->getZoomLevel(), (activeArea.y1 - activeArea.y0 + 1) * CHUNK_PX, Color(255, 255, 255, 255));
-		gfxContext.drawRectangle((activeArea.x1 + 1) * CHUNK_PX, activeArea.y0 * CHUNK_PX, 1.0f / m_world->getCamera()->getZoomLevel(), (activeArea.y1 - activeArea.y0 + 1) * CHUNK_PX, Color(255, 255, 255, 255));
-		gfxContext.drawRectangle(activeArea.x0 * CHUNK_PX, activeArea.y0 * CHUNK_PX, (activeArea.x1 - activeArea.x0 + 1) * CHUNK_PX, 1.0f / m_world->getCamera()->getZoomLevel(), Color(255, 255, 255, 255));
-		gfxContext.drawRectangle(activeArea.x0 * CHUNK_PX, (activeArea.y1 + 1) * CHUNK_PX, (activeArea.x1 - activeArea.x0 + 1) * CHUNK_PX, 1.0f / m_world->getCamera()->getZoomLevel(), Color(255, 255, 255, 255));
-
 		// Draw load area
-		ChunkLoader::ChunkArea loadArea = m_world->getTerrain()->getChunkLoader()->getLoadArea();
+		ChunkLoader::ChunkArea loadArea = m_world->getTerrain()->getChunkLoader()->getLoadingArea();
 		gfxContext.drawRectangle(loadArea.x0 * CHUNK_PX, loadArea.y0 * CHUNK_PX, 1.0f / m_world->getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PX, Color(255, 255, 255, 255));
 		gfxContext.drawRectangle((loadArea.x1 + 1) * CHUNK_PX, loadArea.y0 * CHUNK_PX, 1.0f / m_world->getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PX, Color(255, 255, 255, 255));
 		gfxContext.drawRectangle(loadArea.x0 * CHUNK_PX, loadArea.y0 * CHUNK_PX, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PX, 1.0f / m_world->getCamera()->getZoomLevel(), Color(255, 255, 255, 255));
@@ -282,7 +275,7 @@ void Debug::draw(SpriteBatch *spriteBatch, const float alpha)
 				{
 					gfxContext.drawRectangle(x * CHUNK_PX, y * CHUNK_PX, CHUNK_PX, CHUNK_PX, Color(0, 100, 170, 127));
 				}
-				else if(m_world->getTerrain()->getChunkLoader()->getChunkAt(x, y).isDirty())
+				else if(m_world->getTerrain()->getChunkLoader()->getChunkAt(x, y).isAttached())
 				{
 					gfxContext.drawRectangle(x * CHUNK_PX, y * CHUNK_PX, CHUNK_PX, CHUNK_PX, Color(0, 160, 230, 127));
 				}
