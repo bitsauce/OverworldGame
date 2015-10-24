@@ -33,7 +33,6 @@ private:
 	World *m_world;
 
 	uint m_width, m_height;
-	RenderTarget2D *m_lightingRenderTarget;
 	RenderTarget2D *m_lightingPass0;
 	RenderTarget2D *m_lightingPass1;
 	RenderTarget2D *m_lightingPass2;
@@ -43,6 +42,7 @@ private:
 	ShaderPtr m_blurVShader;
 	int m_lightRadius;
 	bool m_enabled;
+	bool m_redrawLighting;
 
 	list<LightSource*> m_lightSources;
 };

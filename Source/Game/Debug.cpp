@@ -275,7 +275,7 @@ void Debug::draw(SpriteBatch *spriteBatch, const float alpha)
 				{
 					gfxContext.drawRectangle(x * CHUNK_PX, y * CHUNK_PX, CHUNK_PX, CHUNK_PX, Color(0, 100, 170, 127));
 				}
-				else if(m_world->getTerrain()->getChunkLoader()->getChunkAt(x, y).isAttached())
+				else if(!m_world->getTerrain()->getChunkLoader()->getChunkAt(x, y).isAttached())
 				{
 					gfxContext.drawRectangle(x * CHUNK_PX, y * CHUNK_PX, CHUNK_PX, CHUNK_PX, Color(0, 160, 230, 127));
 				}
@@ -287,16 +287,16 @@ void Debug::draw(SpriteBatch *spriteBatch, const float alpha)
 	if(m_debugLighting)
 	{
 		// Show lighting passes
+		spriteBatch->flush();
 		gfxContext.disable(GraphicsContext::BLEND);
-		spriteBatch->begin();
-		spriteBatch->drawSprite(Sprite(m_world->getLighting()->m_lightingRenderTarget->getTexture(), Rect(0.0f, 128.0f, 256.0f, 128.0f)));
+		//spriteBatch->drawSprite(Sprite(m_world->getLighting()->m_lightingRenderTarget->getTexture(), Rect(0.0f, 128.0f, 256.0f, 128.0f)));
 		spriteBatch->drawSprite(Sprite(m_world->getLighting()->m_lightingPass0->getTexture(), Rect(0.0f, 128.0f * 2, 256.0f, 128.0f)));
 		spriteBatch->drawSprite(Sprite(m_world->getLighting()->m_lightingPass1->getTexture(), Rect(0.0f, 128.0f * 3, 256.0f, 128.0f)));
 		spriteBatch->drawSprite(Sprite(m_world->getLighting()->m_lightingPass2->getTexture(), Rect(0.0f, 128.0f * 4, 256.0f, 128.0f)));
-		spriteBatch->end();
+		spriteBatch->flush();
 		gfxContext.enable(GraphicsContext::BLEND);
 
-		// Show light sources as light bulbs
+		// Show light sources as light bulbs // TODO: Replace with cricles
 		spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_world->getCamera()->getModelViewMatrix(alpha)));
 		for(list<LightSource*>::iterator itr = m_world->getLighting()->m_lightSources.begin(); itr != m_world->getLighting()->m_lightSources.end(); ++itr)
 		{

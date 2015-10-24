@@ -10,6 +10,8 @@ class World;
 class ChunkLoader : public WindowListener
 {
 	friend class Debug;
+	friend class Lighting;
+	friend class Terrain;
 public:
 	ChunkLoader(World *world);
 
@@ -19,8 +21,6 @@ public:
 	bool isChunkLoadedAt(const int chunkX, const int chunkY) const;
 
 	void setOptimalChunkCount(const uint maxChunkCount);
-
-	void initLoadingArea(GraphicsContext &context);
 	
 	struct ChunkArea
 	{
@@ -54,12 +54,6 @@ public:
 
 	void update();
 	void draw(GraphicsContext &context, const float alpha);
-
-	// Global render target
-	RenderTarget2D *m_blocksRenderTarget;
-	RenderTarget2D *m_sortedBlocksRenderTarget[TERRAIN_LAYER_COUNT];
-
-	ShaderPtr m_tileMapShader;
 
 private:
 	Chunk *loadChunkAt(const int chunkX, const int chunkY);
@@ -106,6 +100,12 @@ private:
 
 	// Block rendering shaders
 	ShaderPtr m_tileSortShader;
+
+	// Global render target
+	RenderTarget2D *m_blocksRenderTarget;
+	RenderTarget2D *m_sortedBlocksRenderTarget[TERRAIN_LAYER_COUNT];
+
+	ShaderPtr m_tileMapShader;
 };
 
 #endif // CHUNK_LOADER_H

@@ -15,7 +15,7 @@ void main()
 	float sum = 0.0;
 	for(int i = -5; i <= 5; i++)
 	{
-		sum += texture(u_Texture, v_TexCoord + vec2(float(i) / u_Width, float(i) / u_Height) * vec2(cos(u_Direction), sin(u_Direction)) * factor).r;
+		sum += texture(u_Texture, v_TexCoord + vec2(float(i) / u_Width, float(i) / u_Height) * vec2(cos(u_Direction), sin(u_Direction)) * factor).a;
 	}
 	sum /= 10.0;
 	
