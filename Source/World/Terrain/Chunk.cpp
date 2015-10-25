@@ -22,7 +22,7 @@ Chunk::Chunk(ChunkLoader *chunkLoader) :
 	{
 		m_blocks[i] = BLOCK_EMPTY;
 	}
-	m_blockTexture = nullptr;
+	m_blockTexture = Texture2DPtr(new Texture2D(CHUNK_BLOCKS, CHUNK_BLOCKS));
 }
 
 // BLOCK LOADING
@@ -64,7 +64,7 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 	}
 
 	// Create tile map texture
-	m_blockTexture = Texture2DPtr(new Texture2D(pixmap));
+	m_blockTexture->updatePixmap(pixmap);
 
 	// Mark as not modified
 	m_attached = m_modified = false;
