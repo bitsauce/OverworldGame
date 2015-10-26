@@ -18,7 +18,7 @@
 
 #include "Gui/Canvas.h"
 
-Pawn::Pawn(Game *game, const EntityID id) :
+Pawn::Pawn(OverworldGame *game, const EntityID id) :
 	DynamicEntity(game->getWorld(), id),
 	m_camera(game->getWorld()->getCamera()),
 	m_terrain(game->getWorld()->getTerrain()),

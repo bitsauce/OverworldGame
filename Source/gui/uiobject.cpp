@@ -51,7 +51,7 @@ void UiObject::update(const float)
 
 	if(m_pressed)
 	{
-		if(!Input::getKeyState(XD_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+		if(Input::getKeyState(XD_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
 		{
 			if(m_hovered)
 			{

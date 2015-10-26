@@ -6,12 +6,12 @@
 #include "../Humanoid.h"
 #include "../DynamicEntity.h"
 
-class Game;
+class OverworldGame;
 
 class Zombie : public Pawn
 {
 public:
-	Zombie(Game *game);
+	Zombie(OverworldGame *game);
 
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);

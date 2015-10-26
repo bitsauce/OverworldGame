@@ -7,7 +7,7 @@
 #include "Game/Game.h"
 #include "Animation/Skeleton.h"
 
-Bow::Bow(Game *game) :
+Bow::Bow(OverworldGame * game) :
 	m_game(game),
 	m_attachTexture(ResourceManager::get<Texture2D>(":/Sprites/Items/Weapons/WoodenBow.png")),
 	m_sprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Weapons/WoodenBowAnim.png")),

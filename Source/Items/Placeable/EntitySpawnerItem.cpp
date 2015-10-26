@@ -6,7 +6,7 @@
 #include "Entities/EntityData.h"
 #include "Entities/Static/StaticEntity.h"
 
-EntitySpwanerItem::EntitySpwanerItem(Game *game, const EntityID id) :
+EntitySpwanerItem::EntitySpwanerItem(OverworldGame * game, const EntityID id) :
 	m_game(game),
 	m_entityID(id)
 {

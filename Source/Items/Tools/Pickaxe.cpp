@@ -8,7 +8,7 @@
 #include "World/Terrain/Terrain.h"
 #include "Game/Game.h"
 
-Pickaxe::Pickaxe(Game *game) :
+Pickaxe::Pickaxe(OverworldGame * game) :
 	m_game(game),
 	m_cracksSprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Tools/Pickaxes/MiningCracks.png")),
 	m_cracksAnimation(1, 4),

@@ -17,7 +17,7 @@ enum EntityType
 
 class EntityData
 {
-	friend class Game;
+	friend class OverworldGame;
 public:
 	EntityData(const EntityID id, const EntityType type) :
 		m_id(id),

@@ -188,6 +188,10 @@
     <ClCompile Include="..\..\Source\Entities\Static\StaticEntity.cpp">
       <Filter>Source\Entities\Static</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\x2D-Game-Engine\include\x2d\engine.cpp" />
+    <ClCompile Include="..\..\Source\gui\GameOverlay\Chat.cpp">
+      <Filter>Source\Gui\GameOverlay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -219,9 +223,6 @@
     </Filter>
     <Filter Include="Source\Items\Placeable">
       <UniqueIdentifier>{3c316f0b-f928-40a7-b202-9482ba4935f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Gui\GameOverlay">
-      <UniqueIdentifier>{0fd551cc-bb89-4e7f-b942-9ddd7dd4cb8c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\World">
       <UniqueIdentifier>{706e8d91-9eee-467b-abcd-e94748a397ff}</UniqueIdentifier>
@@ -267,6 +268,9 @@
     </Filter>
     <Filter Include="Source\Entities\Controllers">
       <UniqueIdentifier>{b06cd9f4-829b-4ca2-a898-29a761eec5df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Gui\GameOverlay">
+      <UniqueIdentifier>{0fd551cc-bb89-4e7f-b942-9ddd7dd4cb8c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -464,6 +468,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Entities\Static\StaticEntity.h">
       <Filter>Source\Entities\Static</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\gui\GameOverlay\Chat.h">
+      <Filter>Source\Gui\GameOverlay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

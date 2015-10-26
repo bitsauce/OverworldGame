@@ -19,7 +19,7 @@
 #include "Entities/Dynamic/Mobs/Zombie.h"
 #include "Game/Game.h"
 
-Server::Server(Game *game, const ushort port) :
+Server::Server(OverworldGame * game, const ushort port) :
 	Connection(true),
 	m_game(game)
 {

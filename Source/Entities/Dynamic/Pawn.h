@@ -12,7 +12,7 @@ class Camera;
 class Terrain;
 class ItemData;
 class Connection;
-class Game;
+class OverworldGame;
 class GameOverlay;
 
 class Bag
@@ -39,7 +39,7 @@ private:
 class Pawn : public DynamicEntity, public NetworkObject
 {
 public:
-	Pawn(Game *game, const EntityID id);
+	Pawn(OverworldGame * game, const EntityID id);
 	virtual ~Pawn();
 
 	void setController(Controller *controller);

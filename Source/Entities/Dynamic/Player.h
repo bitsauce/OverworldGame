@@ -5,7 +5,7 @@
 class Player : public Pawn
 {
 public:
-	Player(Game *game, const bool local);
+	Player(OverworldGame *game, const bool local);
 	~Player();
 
 	static DynamicEntity *Factory(World *world)

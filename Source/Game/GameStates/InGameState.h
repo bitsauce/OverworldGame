@@ -12,7 +12,7 @@ class Scene;
 class InGameState : public GameState
 {
 public:
-	InGameState(Game *game);
+	InGameState(OverworldGame *game);
 
 	void enter();
 	void update(const float delta);

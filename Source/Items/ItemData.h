@@ -9,7 +9,7 @@ enum ItemID;
 
 class ItemData
 {
-	friend class Game;
+	friend class OverworldGame;
 public:
 	ItemData();
 	virtual void equip(Pawn *pawn) { }
@@ -33,7 +33,7 @@ private:
 	uint m_maxStack;
 	Texture2DPtr m_iconTexture;
 
-	static void init(Game *game);
+	static void init(OverworldGame *game);
 	static vector<ItemData*> s_itemData;
 };
 

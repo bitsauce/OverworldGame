@@ -11,9 +11,30 @@
 #include "Game/GameStates/GameState.h"
 #include "Game/Game.h"
 
+#include "Gui/LineEdit.h"
+
+class CommandLine : public LineEdit
+{
+public:
+	CommandLine::CommandLine(Scene *scene, UiObject *parent) :
+		LineEdit(scene, parent)
+	{
+	}
+
+protected:
+	void keyPressEvent(const VirtualKey key)
+	{
+		if(m_cursorPos == 2 && (key == XD_KEY_BACKSPACE || key == XD_KEY_LEFT))
+		{
+			return;
+		}
+		LineEdit::keyPressEvent(key);
+	}
+};
+
 #define DEBUG_FUNCTIONS_STRING "F1: Toggle debug\nF2: Toggle lighting\nF3: Toggle overlays\nF4: Toggle block painter\nF5: Show chunk loader info\nF6: Show lighting info\nF7: Set time\nF8: Spawn menu\nF9: Multiplayer menu\nF10: Detach/attach camera\nF11: [No func]\nF12: [No func]"
 
-Debug::Debug(Game *game) :
+Debug::Debug(OverworldGame *game) :
 	m_game(game),
 	m_world(game->getWorld()),
 	m_block(BLOCK_GRASS),
@@ -146,7 +167,7 @@ void Debug::debugFunction(int action, const int i)
 	}
 }
 
-void Debug::update()
+void Debug::update(const float delta)
 {
 	if(!m_enabled) return;
 

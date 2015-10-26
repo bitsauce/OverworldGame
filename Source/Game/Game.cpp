@@ -19,7 +19,7 @@
 #include "Entities/EntityData.h"
 #include "GameStates/InGameState.h"
 
-Game::Game() :
+OverworldGame::OverworldGame() :
 	m_spriteBatch(nullptr),
 	m_world(nullptr),
 	m_takeScreenshot(false),
@@ -29,7 +29,7 @@ Game::Game() :
 {
 }
 
-void Game::main(GraphicsContext &context)
+void OverworldGame::start(GraphicsContext &context)
 {
 	// Setup sprite batch
 	m_spriteBatch = new SpriteBatch(context);
@@ -72,19 +72,25 @@ void Game::main(GraphicsContext &context)
 	bitStream.Write("Bitsauce");
 	m_server->getRakPeer()->SendLoopback((const char*)bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
 	
+	// Create game state
+	InGameState * state = new InGameState(this);
+	m_gameOverlay = new GameOverlay(this, state->getScene());
+
 	// Push game state
-	pushState(new InGameState(this));
+	pushState(state);
 
 	// Set key bindings
-	InputContext *inputContext = Input::loadInputConfig(":/KeyBinds.xml")[0];
-	inputContext->bind("toggle_full_screen", bind(&Game::toggleFullscreen, this, placeholders::_1), true);
-	inputContext->bind("take_screen_shot", bind(&Game::takeScreenshot, this, placeholders::_1), true);
+	InputContext *inputContext = Input::getContext("game");
+
+	inputContext->bind("toggle_full_screen", bind(&OverworldGame::toggleFullscreen, this, placeholders::_1), true);
+	inputContext->bind("take_screen_shot", bind(&OverworldGame::takeScreenshot, this, placeholders::_1), true);
 
 	inputContext->bind("camera_zoom_in", bind(&Camera::zoomIn, m_world->getCamera(), placeholders::_1), true);
 	inputContext->bind("camera_zoom_out", bind(&Camera::zoomOut, m_world->getCamera(), placeholders::_1), true);
 
 	inputContext->bind("show_omnicon", bind(&Omnicon::toggle, m_gameOverlay->getOmnicon(), placeholders::_1), true);
 	inputContext->bind("show_inventory", bind(&Inventory::toggle, m_gameOverlay->getInventory(), placeholders::_1), true);
+	inputContext->bind("show_chat", bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1), true);
 
 	inputContext->bind("hotbar_select_0", bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 0), true);
 	inputContext->bind("hotbar_select_1", bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 1), true);
@@ -112,17 +118,29 @@ void Game::main(GraphicsContext &context)
 	inputContext->bind("debug_func_11", bind(&Debug::debugFunction, m_debug, placeholders::_1, 11), true);
 	inputContext->bind("debug_func_12", bind(&Debug::debugFunction, m_debug, placeholders::_1, 12), true);
 
-	Input::setInputContext(inputContext);
+	Input::setContext(inputContext);
+
+	inputContext = Input::getContext("chat");
+	inputContext->bind("send_message", bind(&Chat::sendMessage, m_gameOverlay->getChat(), placeholders::_1), true);
+	inputContext->bind("escape_chat", bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1), true);
 }
 
-void Game::pushState(GameState *state)
+void OverworldGame::end()
+{
+	// Save the world as we're exiting
+	m_world->save();
+	m_server->save();
+	delete m_world;
+}
+
+void OverworldGame::pushState(GameState *state)
 {
 	assert(state);
 	m_states.push_front(state);
 	state->enter();
 }
 
-void Game::popState()
+void OverworldGame::popState()
 {
 	if(!m_states.empty())
 	{
@@ -133,26 +151,19 @@ void Game::popState()
 	}
 	else
 	{
-		exit();
+		Engine::exit();
 	}
 }
 
-GameState *Game::peekState(int level)
+GameState *OverworldGame::peekState(int level)
 {
+	if(m_states.size() == 0) return 0;
 	list<GameState*>::iterator itr = m_states.begin();
 	advance(itr, level);
 	return *itr;
 }
 
-void Game::exit()
-{
-	// Save the world as we're exiting
-	m_world->save();
-	m_server->save();
-	delete m_world;
-}
-
-void Game::update(const float delta)
+void OverworldGame::update(const float delta)
 {
 	// Update game connections
 	if(Connection::getInstance()->isServer())
@@ -175,10 +186,10 @@ void Game::update(const float delta)
 	}
 
 	// Update debug
-	m_debug->update();
+	m_debug->update(delta);
 }
 
-void Game::draw(GraphicsContext &context, const float alpha)
+void OverworldGame::draw(GraphicsContext &context, const float alpha)
 {
 	// Take screen shot
 	if(m_takeScreenshot)

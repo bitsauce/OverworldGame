@@ -13,16 +13,14 @@
 
 class Debug;
 class GameState;
-class GameOverlay;
 
-class Game
+class OverworldGame : public Game
 {
-	friend class InGameState;
 public:
-	Game();
+	OverworldGame();
 
-	void main(GraphicsContext &context);
-	void exit();
+	void start(GraphicsContext &context);
+	void end();
 	void update(const float delta);
 	void draw(GraphicsContext &context, const float alpha);
 
@@ -42,6 +40,7 @@ public:
 		if(action != GLFW_PRESS) return;
 		m_takeScreenshot = true;
 	}
+
 	void toggleFullscreen(int action)
 	{
 		if(action != GLFW_PRESS) return;

@@ -6,8 +6,9 @@ LineEdit::LineEdit(Scene *scene, UiObject *parent) :
 	UiObject(scene, parent),
 	m_cursorPos(0),
 	m_cursorTime(0.0f),
-	m_font(ResourceManager::get<Font>(UI_MENU_BUTTON_FONT))
+	m_font(ResourceManager::get<Font>(UI_CHAT_FONT))
 {
+	m_font->setColor(Color(255, 255, 255, 255));
 }
 
 LineEdit::~LineEdit()
@@ -39,17 +40,21 @@ void LineEdit::draw(SpriteBatch *spriteBatch)
 {
 	Vector2 position = getPosition();
 	Vector2 size = getSize();
+
+	GraphicsContext &context = spriteBatch->getGraphicsContext();
+	context.setModelViewMatrix(Matrix4());
+	context.drawRectangle(position, size, Color(0, 0, 0, 127));
 		
 	// Apply center alignment
-	position.x += (size.x - m_font->getStringWidth(m_text))*0.5f;
-		
-	m_font->setColor(Color(255, 255, 255, 255));
+	//position.x += (size.x - m_font->getStringWidth(m_text)) * 0.5f;
+	
+	position += Vector2(5.0f);
+
 	m_font->draw(spriteBatch, position, m_text);
 	
-	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
 	if(m_active && m_cursorTime >= 0.5f)
 	{
-		gfxContext.drawRectangle(position.x + m_font->getStringWidth(m_text.substr(0, m_cursorPos)), position.y, 2, m_font->getHeight(), Color(0, 0, 0, 255));
+		context.drawRectangle(position.x + m_font->getStringWidth(m_text.substr(0, m_cursorPos)), position.y + 2, 2, m_font->getHeight() - 4, m_font->getColor());
 	}
 }
 
@@ -77,27 +82,13 @@ void LineEdit::removeAt(const uint at)
 	m_text += endStr;
 }
 	
-void LineEdit::charEvent(const wchar_t c)
+void LineEdit::charEvent(const uint c)
 {
 	// Only add text if active
 	if(!m_active) return;
 		
 	switch(c)
 	{
-	case XD_KEY_BACKSPACE:
-		// Remove char behind
-		if(m_cursorPos != 0) {
-			removeAt(m_cursorPos);
-			m_cursorPos--;
-		}
-		break;
-			
-	case XD_KEY_ENTER:
-		// Call accept function
-		if(m_acceptFunc) {
-			m_acceptFunc();
-		}
-		break;
 			
 	default:
 		// Add text
@@ -114,6 +105,29 @@ void LineEdit::keyPressEvent(const VirtualKey key)
 
 	switch(key)
 	{
+		// Enter
+		case XD_KEY_ENTER:
+		{
+			// Call accept function
+			if(m_acceptFunc)
+			{
+				m_acceptFunc();
+			}
+			break;
+		}
+
+		// Backspace
+		case XD_KEY_BACKSPACE:
+		{
+			// Remove char behind
+			if(m_cursorPos != 0)
+			{
+				removeAt(m_cursorPos);
+				m_cursorPos--;
+			}
+			break;
+		}
+
 		// Delete
 		case XD_KEY_DELETE:
 		{

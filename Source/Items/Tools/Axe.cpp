@@ -10,7 +10,7 @@
 #include "Game/Game.h"
 #include "Blocks/BlockData.h"
 
-Axe::Axe(Game *game) :
+Axe::Axe(OverworldGame * game) :
 	m_game(game),
 	m_cracksSprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Tools/Pickaxes/MiningCracks.png")),
 	m_cracksAnimation(1, 4),

@@ -1,6 +1,6 @@
 #include "Ammo.h"
 
-Ammo::Ammo(Game *):
+Ammo::Ammo(OverworldGame*):
 	ItemData()
 {
 }

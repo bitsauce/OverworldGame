@@ -18,17 +18,23 @@ public:
 	void setText(const string &text);
 	string getText() const;
 
+	void setColor(const Color &color)
+	{
+		m_font->setColor(color);
+	}
+
 	void update(const float delta);
 	void draw(SpriteBatch *SpriteBatch);
 
-private:
+protected:
 	void insertAt(const uint at, const string &str);
 	void removeAt(const uint at);
-	void charEvent(const wchar_t code);
-	void keyPressEvent(const VirtualKey key);
+	void charEvent(const uint code);
+	virtual void keyPressEvent(const VirtualKey key);
 	void keyReleaseEvent(const VirtualKey key);
 
 	FontPtr m_font;
+	Color m_color;
 	string m_text;
 	int m_cursorPos;
 	float m_cursorTime;

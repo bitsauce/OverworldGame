@@ -10,7 +10,7 @@
 #include "Networking/Connection.h"
 #include "Entities/Dynamic/ItemDrop.h"
 
-GameOverlay::GameOverlay(Game *game, Scene *scene) :
+GameOverlay::GameOverlay(OverworldGame *game, Scene *scene) :
 	UiObject(scene, scene->getCanvas()),
 	m_game(game),
 	m_player(nullptr),
@@ -26,6 +26,7 @@ GameOverlay::GameOverlay(Game *game, Scene *scene) :
 	m_omnicon = new Omnicon(scene, this);
 	m_inventory = new Inventory(scene, this);
 	m_crafting = new Crafting(scene, this);
+	m_chat = new Chat(scene, this);
 }
 
 GameOverlay::~GameOverlay()
@@ -35,6 +36,7 @@ GameOverlay::~GameOverlay()
 	delete m_omnicon;
 	delete m_inventory;
 	delete m_crafting;
+	delete m_chat;
 }
 
 void GameOverlay::update(const float delta)

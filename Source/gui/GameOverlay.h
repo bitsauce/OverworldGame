@@ -9,14 +9,15 @@
 #include "GameOverlay/HealthManaStatus.h"
 #include "GameOverlay/Omnicon.h"
 #include "GameOverlay/Crafting.h"
+#include "GameOverlay/Chat.h"
 
-class Game;
+class OverworldGame;
 class Player;
 
 class GameOverlay : public UiObject
 {
 public:
-	GameOverlay(Game *game, Scene *scene);
+	GameOverlay(OverworldGame *game, Scene *scene);
 	~GameOverlay();
 
 	void update(const float delta);
@@ -29,6 +30,7 @@ public:
 	HealthManaStatus *getHealthManaStatus() const { return m_healthManaStatus; }
 	Omnicon *getOmnicon() const { return m_omnicon; }
 	Inventory *getInventory() const { return m_inventory; }
+	Chat * getChat() const { return m_chat; }
 
 	// Crafting overlay
 	void toggleCrafting();
@@ -42,13 +44,14 @@ public:
 	bool m_hidden;
 
 private:
-	Game *m_game;
+	OverworldGame *m_game;
 	Player *m_player;
 	Hotbar *m_hotbar;
 	HealthManaStatus *m_healthManaStatus;
 	Omnicon *m_omnicon;
 	Inventory *m_inventory;
 	Crafting *m_crafting;
+	Chat * m_chat;
 
 	bool m_craftingEnabled;
 

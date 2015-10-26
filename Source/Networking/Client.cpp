@@ -16,7 +16,7 @@
 
 #include "Entities/Dynamic/Pawn.h"
 
-Client::Client(Game *game, const string &ip, const ushort port) :
+Client::Client(OverworldGame * game, const string &ip, const ushort port) :
 	Connection(false),
 	m_game(game)
 {

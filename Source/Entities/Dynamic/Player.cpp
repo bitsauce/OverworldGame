@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "PlayerController.h"
 
-Player::Player(Game *game, const bool local) :
+Player::Player(OverworldGame *game, const bool local) :
 	Pawn(game, ENTITY_PLAYER)
 {
 	// Create player controller

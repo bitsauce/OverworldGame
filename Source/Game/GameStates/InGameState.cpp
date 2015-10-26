@@ -1,12 +1,10 @@
 #include "InGameState.h"
 #include "Game/Game.h"
 
-InGameState::InGameState(Game *game) :
-	GameState(GAME_STATE_IN_GAME, false, new Scene()),
+InGameState::InGameState(OverworldGame *game) :
+	GameState(GAME_STATE_IN_GAME, false),
 	m_world(game->getWorld())
 {
-	m_scene->getCanvas()->updateSize();
-	game->m_gameOverlay = new GameOverlay(game, m_scene);
 }
 
 void InGameState::enter()
@@ -22,16 +20,18 @@ void InGameState::enter()
 	{
 		((Client*)Connection::getInstance())->sendPacket(&bitStream);
 	}*/
+
+	Input::setContext(Input::getContext("game"));
 }
 
 void InGameState::update(const float delta)
 {
 	m_world->update(delta);
-	m_scene->update(delta);
+	m_scene.update(delta);
 }
 
 void InGameState::draw(SpriteBatch *spriteBatch, const float alpha)
 {
 	m_world->draw(spriteBatch, alpha);
-	m_scene->draw(spriteBatch, alpha);
+	m_scene.draw(spriteBatch, alpha);
 }

@@ -8,13 +8,13 @@ enum EntityID;
 class EntitySpwanerItem : public ItemData
 {
 public:
-	EntitySpwanerItem(Game *game, const EntityID id);
+	EntitySpwanerItem(OverworldGame * game, const EntityID id);
 
 	void use(Pawn *player, const float delta);
 	void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:
-	Game *m_game;
+	OverworldGame * m_game;
 	const EntityID m_entityID;
 };
 

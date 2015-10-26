@@ -17,29 +17,22 @@
 // Win32 entry point
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 {
-	// Set engine flags
-	int flags = 0;
-	flags |= XD_EXPORT_LOG;
-	flags |= XD_RUN_IN_BACKGROUND;
-	flags |= XD_BLOCK_BACKGROUND_INPUT;
+	// Create game object
+	OverworldGame game;
+	game.setFlags(XD_EXPORT_LOG | XD_RUN_IN_BACKGROUND | XD_BLOCK_BACKGROUND_INPUT);
+	game.setWorkDir("../../../Content/");
+	game.setInputConfig(":/KeyBinds.xml");
 
+	// Create and init engine
 	Engine *engine = CreateEngine();
-
-	Config config;
-	Game *game = new Game();
-	config.mainFunc = bind(&Game::main, game, placeholders::_1);
-	config.updateFunc = bind(&Game::update, game, placeholders::_1);
-	config.drawFunc = bind(&Game::draw, game, placeholders::_1, placeholders::_2);
-	config.endFunc = bind(&Game::exit, game);
-	config.workDir = "..\\..\\..\\Content\\";
-	config.flags = flags;
-
-	if(engine->init(config) != X2D_OK)
+	if(engine->init(&game) != X2D_OK)
 	{
+		// Engine init failed
 		delete engine;
 		return -1;
 	}
 
+	// Run game
 	int r = engine->run();
 	delete engine;
 	return r;

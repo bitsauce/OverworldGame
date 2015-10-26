@@ -7,14 +7,14 @@
 class Bow : public ItemData
 {
 public:
-	Bow(Game *game);
+	Bow(OverworldGame * game);
 	void equip(Pawn *player);
 	void unequip(Pawn *player);
 	void update(Pawn *player, const float delta);
 	void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:
-	Game *m_game;
+	OverworldGame * m_game;
 	Sprite m_sprite;
 	SpriteAnimation m_chargeAnim;
 	Texture2DPtr m_attachTexture;

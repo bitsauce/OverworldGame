@@ -3,12 +3,12 @@
 
 #include "Items/ItemData.h"
 
-class Game;
+class OverworldGame;
 
 class Ammo : public ItemData
 {
 public:
-	Ammo(Game *);
+	Ammo(OverworldGame*);
 	
 	void use(Pawn *player, const float delta) { }
 	void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha) { }

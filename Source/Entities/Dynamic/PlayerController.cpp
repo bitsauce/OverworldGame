@@ -6,7 +6,7 @@ PlayerController::PlayerController(const bool local)
 	// If player is local, do extra stuff
 	if(local)
 	{
-		InputContext *inputContext = Input::getInputContext();
+		InputContext *inputContext = Input::getContext("game");
 		//inputContext->bind("activate_thing", bind(&Player::activateThing, this, placeholders::_1), true);
 		inputContext->bind("move_left", bind(&PlayerController::setClientInputState, this, placeholders::_1, INPUT_MOVE_LEFT), true);
 		inputContext->bind("move_right", bind(&PlayerController::setClientInputState, this, placeholders::_1, INPUT_MOVE_RIGHT), true);

@@ -4,7 +4,7 @@
 #include "Entities/Dynamic/AIController.h"
 #include "Constants.h"
 
-Zombie::Zombie(Game *game) :
+Zombie::Zombie(OverworldGame *game) :
 	Pawn(game, ENTITY_ZOMBIE)
 {
 	setController(new AIController(game->getWorld()));

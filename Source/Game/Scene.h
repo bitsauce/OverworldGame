@@ -9,13 +9,37 @@ class Scene
 {
 	friend class UiObject;
 public:
-	Scene() { m_canvas = new Canvas(this); }
-	Scene(const uint w, const uint h) { m_canvas = new Canvas(this, w, h); }
-	~Scene() { for(UiObject *object : m_uiObjects) delete object; }
+	Scene()
+	{
+		m_canvas = new Canvas(this);
+	}
 
-	Canvas *getCanvas() const { return m_canvas; }
+	Scene(const uint w, const uint h)
+	{
+		m_canvas = new Canvas(this, w, h);
+	}
 
-	void update(const float delta) { for(UiObject *object : m_uiObjects) object->update(delta); }
+	~Scene()
+	{
+		for(UiObject *object : m_uiObjects)
+		{
+			delete object;
+		}
+	}
+
+	Canvas *getCanvas() const
+	{
+		return m_canvas;
+	}
+
+	void update(const float delta)
+	{
+		for(UiObject *object : m_uiObjects)
+		{
+			object->update(delta);
+		}
+	}
+
 	void draw(SpriteBatch *spriteBatch, const float alpha)
 	{ 
 		spriteBatch->begin();
@@ -26,11 +50,21 @@ public:
 		spriteBatch->end();
 	}
 
-	list<UiObject*> getUiObjects() { return m_uiObjects; }
+	list<UiObject*> getUiObjects()
+	{
+		return m_uiObjects;
+	}
 
 protected:
-	void addUiObject(UiObject *object) { m_uiObjects.push_back(object); }
-	void removeUiObject(UiObject *object) { m_uiObjects.remove(object); }
+	void addUiObject(UiObject *object)
+	{
+		m_uiObjects.push_back(object);
+	}
+
+	void removeUiObject(UiObject *object)
+	{
+		m_uiObjects.remove(object);
+	}
 
 private:
 	Canvas *m_canvas;

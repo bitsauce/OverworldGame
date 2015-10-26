@@ -6,16 +6,17 @@
 class Terrain;
 class Lighting;
 class ChunkLoader;
-class Game;
+class OverworldGame;
 class World;
+class CommandLine;
 enum BlockID;
 
 class Debug
 {
 public:
-	Debug(Game *game);
+	Debug(OverworldGame *game);
 
-	void update();
+	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 	void toggle();
 
@@ -40,19 +41,16 @@ private:
 	map<string, string> m_variables;
 
 	// Game pointer
-	Game *m_game;
+	OverworldGame *m_game;
 	World *m_world;
 
 	// Debug sprites
 	Sprite m_bulbSprite;
 
-	// Debug font
-
-	//Texture2DPtr m_loadedChunks;
-
 	// Paint block
 	BlockID m_block;
 
+	// Random
 	Random m_random;
 };
 

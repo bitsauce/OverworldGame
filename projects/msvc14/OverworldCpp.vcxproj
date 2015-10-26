@@ -92,6 +92,7 @@
     <ResourceCompile Include="resources.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\x2D-Game-Engine\include\x2d\engine.cpp" />
     <ClCompile Include="..\..\source\animation\Animation.cpp" />
     <ClCompile Include="..\..\source\animation\Bone.cpp" />
     <ClCompile Include="..\..\source\animation\Skeleton.cpp" />
@@ -125,6 +126,7 @@
     <ClCompile Include="..\..\source\gui\Button.cpp" />
     <ClCompile Include="..\..\source\gui\Canvas.cpp" />
     <ClCompile Include="..\..\source\gui\GameOverlay.cpp" />
+    <ClCompile Include="..\..\Source\gui\GameOverlay\Chat.cpp" />
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Crafting.cpp" />
     <ClCompile Include="..\..\source\gui\GameOverlay\HealthManaStatus.cpp" />
     <ClCompile Include="..\..\source\gui\GameOverlay\Hotbar.cpp" />
@@ -192,6 +194,7 @@
     <ClInclude Include="..\..\source\gui\Button.h" />
     <ClInclude Include="..\..\source\gui\Canvas.h" />
     <ClInclude Include="..\..\source\gui\GameOverlay.h" />
+    <ClInclude Include="..\..\Source\gui\GameOverlay\Chat.h" />
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Crafting.h" />
     <ClInclude Include="..\..\source\gui\GameOverlay\HealthManaStatus.h" />
     <ClInclude Include="..\..\source\gui\GameOverlay\Hotbar.h" />

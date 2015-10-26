@@ -44,6 +44,12 @@ public:
 
 	// Set anchor
 	void setAnchor(const Vector2 &anchor);
+
+	// Make active
+	void setActive(const bool active)
+	{
+		m_active = active;
+	}
 	
 	// Update & draw
 	virtual void update(const float delta);

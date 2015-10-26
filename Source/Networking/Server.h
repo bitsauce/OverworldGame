@@ -8,13 +8,13 @@ namespace RakNet {
 	class BitStream;
 }
 
-class Game;
+class OverworldGame;
 class Pawn;
 
 class Server : public Connection
 {
 public:
-	Server(Game *game, const ushort port);
+	Server(OverworldGame * game, const ushort port);
 
 	void update();
 	void sendPacket(RakNet::BitStream *bitStream);
@@ -26,7 +26,7 @@ public:
 private:
 	void savePlayer(string playerName);
 
-	Game *m_game;
+	OverworldGame * m_game;
 	map<string, Pawn*> m_players;
 };
 
