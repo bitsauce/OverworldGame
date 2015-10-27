@@ -36,15 +36,9 @@ enum PacketID
 #define BLOCK_PX 16
 #define BLOCK_PXF float(BLOCK_PX)
 
-#define BORDER_PX 4
-#define BORDER_PXF float(BORDER_PX)
-
-#define FULL_BLOCK_PX (BLOCK_PX + BORDER_PX*2)
-#define FULL_BLOCK_PXF float(FULL_BLOCK_PX)
-
 #define CHUNK_BLOCKS 32
 #define CHUNK_BLOCKSF float(CHUNK_BLOCKS)
-#define CHUNK_PX (CHUNK_BLOCKS*BLOCK_PX)
+#define CHUNK_PX (CHUNK_BLOCKS * BLOCK_PX)
 #define CHUNK_PXF float(CHUNK_PX)
 
 #define SUPER_CHUNK_CHUNKS 64
@@ -55,6 +49,8 @@ enum PacketID
 #define SUPER_CHUNK_PXF float(SUPER_CHUNK_PX)
 
 #define BLOCK_INDEX(x, y, z) (x) + (CHUNK_BLOCKS) * ((y) + (CHUNK_BLOCKS) * (z))
+
+#define CHUNK_KEY(X, Y) (((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000))
 
 // Update & draw priority
 enum Priority
@@ -125,7 +121,7 @@ enum ItemID
 {
 	ITEM_NONE,
 	
-	ITEM_BLOCK_GRASS = BLOCK_GRASS,
+	ITEM_BLOCK_GRASS,
 	ITEM_BLOCK_DIRT,
 	ITEM_BLOCK_DIRT_BACK,
 	ITEM_BLOCK_STONE,

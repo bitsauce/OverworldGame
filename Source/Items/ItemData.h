@@ -2,6 +2,7 @@
 #define ITEM_DATA_H
 
 #include "Config.h"
+#include "Constants.h"
 #include "Game/Storage.h"
 
 class Pawn;
@@ -17,7 +18,20 @@ public:
 	virtual void use(Pawn *pawn, const float delta) { }
 	virtual void update(Pawn *pawn, const float delta) { }
 	virtual void draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha) { }
-	static ItemData *get(const ItemID id) { return s_itemData[id]; }
+	static ItemData *get(const ItemID id) { return s_data[id]; }
+
+
+	static ItemData *getByName(const string &name)
+	{
+		for(int i = 0; i < ITEM_COUNT; ++i)
+		{
+			if(s_data[i] && s_data[i]->m_name == name)
+			{
+				return s_data[i];
+			}
+		}
+		return 0;
+	}
 
 	ItemID getID() const { return m_id; }
 	Texture2DPtr getIconTexture() const { return m_iconTexture; }
@@ -34,7 +48,7 @@ private:
 	Texture2DPtr m_iconTexture;
 
 	static void init(OverworldGame *game);
-	static vector<ItemData*> s_itemData;
+	static vector<ItemData*> s_data;
 };
 
 #endif // ITEM_DATA_H

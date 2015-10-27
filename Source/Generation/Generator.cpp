@@ -1,3 +1,4 @@
+#include "Constants.h"
 #include "Generator.h"
 #include "Grassland.h"
 #include "Game/RayCast.h"
@@ -9,8 +10,6 @@ float step(float edge, float x)
 {
 	return x < edge ? 0.0f : 1.0f;
 }
-
-#define CHUNK_KEY(X, Y) (((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000))
 
 WorldGenerator::WorldGenerator(const uint seed) :
 	m_seed(seed)

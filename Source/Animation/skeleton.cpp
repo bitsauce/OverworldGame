@@ -163,19 +163,21 @@ TextureRegion Skeleton::getTextureRegion(const string &name) const
 	return TextureRegion();
 }
 
-void Skeleton::draw(GraphicsContext &gfxContext)
+void Skeleton::draw(GraphicsContext &context)
 {
 	// Update world transform
 	spSkeleton_updateWorldTransform(m_self);
 
 	// Draw vertices
-	Vertex vertices[4];
+	Vertex *vertices = new Vertex[4 * m_self->slotCount];
+	uint *indices = new uint[6 * m_self->slotCount];
+	Texture2DPtr texture = 0;
 	for(int i = 0; i < m_self->slotCount; i++)
 	{
 		spSlot *slot = m_self->drawOrder[i];
 		spAttachment *attachment = slot->attachment;
-		if(!attachment) continue;
-		Texture2DPtr texture;
+		if(!attachment)
+			continue;
 		if(attachment->type == SP_ATTACHMENT_REGION)
 		{
 			spRegionAttachment* regionAttachment = SUB_CAST(spRegionAttachment, attachment);
@@ -187,24 +189,28 @@ void Skeleton::draw(GraphicsContext &gfxContext)
 			uchar b = uchar(m_self->b * slot->b * 255);
 			uchar a = uchar(m_self->a * slot->a * 255);
 
-			vertices[0].set4ub(VERTEX_COLOR, r, g, b, a);
-			vertices[0].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X1], m_worldVertices[SP_VERTEX_Y1]);
-			vertices[0].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X1], 1.0f - regionAttachment->uvs[SP_VERTEX_Y1]);
+			vertices[i * 4].set4ub(VERTEX_COLOR, r, g, b, a);
+			vertices[i * 4].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X1], m_worldVertices[SP_VERTEX_Y1]);
+			vertices[i * 4].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X1], 1.0f - regionAttachment->uvs[SP_VERTEX_Y1]);
 
-			vertices[1].set4ub(VERTEX_COLOR, r, g, b, a);
-			vertices[1].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X2], m_worldVertices[SP_VERTEX_Y2]);
-			vertices[1].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X2], 1.0f - regionAttachment->uvs[SP_VERTEX_Y2]);
+			vertices[i * 4 + 1].set4ub(VERTEX_COLOR, r, g, b, a);
+			vertices[i * 4 + 1].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X2], m_worldVertices[SP_VERTEX_Y2]);
+			vertices[i * 4 + 1].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X2], 1.0f - regionAttachment->uvs[SP_VERTEX_Y2]);
 
-			vertices[2].set4ub(VERTEX_COLOR, r, g, b, a);
-			vertices[2].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X4], m_worldVertices[SP_VERTEX_Y4]);
-			vertices[2].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X4], 1.0f - regionAttachment->uvs[SP_VERTEX_Y4]);
+			vertices[i * 4 + 2].set4ub(VERTEX_COLOR, r, g, b, a);
+			vertices[i * 4 + 2].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X4], m_worldVertices[SP_VERTEX_Y4]);
+			vertices[i * 4 + 2].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X4], 1.0f - regionAttachment->uvs[SP_VERTEX_Y4]);
 			
-			vertices[3].set4ub(VERTEX_COLOR, r, g, b, a);
-			vertices[3].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X3], m_worldVertices[SP_VERTEX_Y3]);
-			vertices[3].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X3], 1.0f - regionAttachment->uvs[SP_VERTEX_Y3]);
+			vertices[i * 4 + 3].set4ub(VERTEX_COLOR, r, g, b, a);
+			vertices[i * 4 + 3].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X3], m_worldVertices[SP_VERTEX_Y3]);
+			vertices[i * 4 + 3].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X3], 1.0f - regionAttachment->uvs[SP_VERTEX_Y3]);
 
-			gfxContext.setTexture(texture);
-			gfxContext.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, vertices, 4);
+			indices[i * 6 + 0] = i * 4 + 0;
+			indices[i * 6 + 1] = i * 4 + 1;
+			indices[i * 6 + 2] = i * 4 + 2;
+			indices[i * 6 + 3] = i * 4 + 2;
+			indices[i * 6 + 4] = i * 4 + 1;
+			indices[i * 6 + 5] = i * 4 + 3;
 		}
 		/*else if (attachment->type == ATTACHMENT_MESH)
 		{
@@ -258,4 +264,10 @@ void Skeleton::draw(GraphicsContext &gfxContext)
 			}
 		}*/
 	}
+
+	context.setTexture(texture);
+	context.drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, vertices, 4 * m_self->slotCount, indices, 6 * m_self->slotCount);
+	context.setTexture(0);
+
+	delete[] vertices;
 }

@@ -13,13 +13,11 @@ vector<EntityData*> EntityData::s_data(ENTITY_COUNT);
 
 void EntityData::init(Game *)
 {
-	// TODO: Add a specific descriptor for each type of entity.
-	//
-	// This means to add something like
-	// DynamicDesc, StaticDesc and ControllerDesc
-	// which contain specific information like
-	// the width and height in the case of StaticDesc
-	// (which is usefull for placing static entities in chunk grids)
+	// TODO:
+	// 1) Separate StaticEntities and DynamicEntities
+	// 2) Rename StaticEntitiy -> BlockEntity
+	// 3) Rename DyanicEntity -> Entity (maybe)
+	// 4) Static Entities should be contained in a vertex buffer handled by the chunk loader
 
 	// Dynamic entities
 	s_data[ENTITY_ARROW] = new DynamicEntityData(ENTITY_ARROW, "Arrow", Arrow::Factory);

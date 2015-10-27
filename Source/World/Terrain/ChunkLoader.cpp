@@ -7,8 +7,6 @@
 #include "Entities/EntityData.h"
 #include "Blocks/BlockData.h"
 
-#define CHUNK_KEY(X, Y) ((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000)
-
 const float QUAD_UVS[40] =
 {
 	1, 25,
