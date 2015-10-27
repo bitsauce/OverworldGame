@@ -23,6 +23,8 @@
 *.out
 *.app
 
+!Redist/*.exe
+
 # =========================
 # Operating System Files
 # =========================
