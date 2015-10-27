@@ -2,14 +2,14 @@
 #define GAME_OVERLAY_H
 
 #include "Config.h"
-#include "UiObject.h"
+#include "Gui/UiObject.h"
 #include "Game/Storage.h"
-#include "GameOverlay/Hotbar.h"
-#include "GameOverlay/Inventory.h"
-#include "GameOverlay/HealthManaStatus.h"
-#include "GameOverlay/Omnicon.h"
-#include "GameOverlay/Crafting.h"
-#include "GameOverlay/Chat.h"
+#include "Hotbar.h"
+#include "Inventory.h"
+#include "HealthManaStatus.h"
+#include "Omnicon.h"
+#include "Crafting.h"
+#include "Chat.h"
 
 class OverworldGame;
 class Player;
@@ -17,7 +17,7 @@ class Player;
 class GameOverlay : public UiObject
 {
 public:
-	GameOverlay(OverworldGame *game, Scene *scene);
+	GameOverlay(OverworldGame *game, Scene *scene, GraphicsContext & context);
 	~GameOverlay();
 
 	void update(const float delta);

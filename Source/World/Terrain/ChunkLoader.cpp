@@ -152,7 +152,7 @@ void ChunkLoader::loadEntities(FileReader &file)
 		file >> id;
 		file >> x;
 		file >> y;
-		((StaticEntityData*) EntityData::Get((EntityID) id))->Create(m_world, x, y)->loadSaveData(file);
+		((StaticEntityData*) EntityData::get((EntityID) id))->create(m_world, x, y)->loadSaveData(file);
 	}
 }
 

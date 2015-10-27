@@ -112,6 +112,7 @@
     <ClCompile Include="..\..\Source\Entities\EntityData.cpp" />
     <ClCompile Include="..\..\Source\Entities\Static\StaticEntity.cpp" />
     <ClCompile Include="..\..\Source\Entities\Static\Torch.cpp" />
+    <ClCompile Include="..\..\Source\Game\Commander.cpp" />
     <ClCompile Include="..\..\Source\Game\Debug.cpp" />
     <ClCompile Include="..\..\Source\Game\Game.cpp" />
     <ClCompile Include="..\..\Source\Game\GameStates\GameState.cpp" />
@@ -125,9 +126,9 @@
     <ClCompile Include="..\..\Source\Generation\Structures\OakTree.cpp" />
     <ClCompile Include="..\..\source\gui\Button.cpp" />
     <ClCompile Include="..\..\source\gui\Canvas.cpp" />
-    <ClCompile Include="..\..\source\gui\GameOverlay.cpp" />
     <ClCompile Include="..\..\Source\gui\GameOverlay\Chat.cpp" />
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Crafting.cpp" />
+    <ClCompile Include="..\..\Source\gui\GameOverlay\GameOverlay.cpp" />
     <ClCompile Include="..\..\source\gui\GameOverlay\HealthManaStatus.cpp" />
     <ClCompile Include="..\..\source\gui\GameOverlay\Hotbar.cpp" />
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Inventory.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="..\..\Source\Entities\EntityData.h" />
     <ClInclude Include="..\..\Source\Entities\Static\StaticEntity.h" />
     <ClInclude Include="..\..\Source\Entities\Static\Torch.h" />
+    <ClInclude Include="..\..\Source\Game\Commander.h" />
     <ClInclude Include="..\..\Source\Game\Debug.h" />
     <ClInclude Include="..\..\Source\Game\Game.h" />
     <ClInclude Include="..\..\Source\Game\GameStates\GameState.h" />
@@ -193,9 +195,9 @@
     <ClInclude Include="..\..\Source\Generation\Structures\OakTree.h" />
     <ClInclude Include="..\..\source\gui\Button.h" />
     <ClInclude Include="..\..\source\gui\Canvas.h" />
-    <ClInclude Include="..\..\source\gui\GameOverlay.h" />
     <ClInclude Include="..\..\Source\gui\GameOverlay\Chat.h" />
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Crafting.h" />
+    <ClInclude Include="..\..\Source\gui\GameOverlay\GameOverlay.h" />
     <ClInclude Include="..\..\source\gui\GameOverlay\HealthManaStatus.h" />
     <ClInclude Include="..\..\source\gui\GameOverlay\Hotbar.h" />
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Inventory.h" />

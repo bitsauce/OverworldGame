@@ -19,7 +19,7 @@ public:
 	void show();
 	void hide();
 	
-	void keyPressEvent(const VirtualKey key);
+	void keyEvent(const KeyEvent & event);
 
 private:
 	GameOverlay *m_gameOverlay;

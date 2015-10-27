@@ -30,8 +30,7 @@ protected:
 	void insertAt(const uint at, const string &str);
 	void removeAt(const uint at);
 	void charEvent(const uint code);
-	virtual void keyPressEvent(const VirtualKey key);
-	void keyReleaseEvent(const VirtualKey key);
+	void keyEvent(const KeyEvent & event);
 
 	FontPtr m_font;
 	Color m_color;

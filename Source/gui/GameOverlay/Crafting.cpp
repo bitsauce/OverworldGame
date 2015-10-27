@@ -1,5 +1,5 @@
 #include "Crafting.h"
-#include "Gui/GameOverlay.h"
+#include "Gui/GameOverlay/GameOverlay.h"
 #include "Game/Game.h"
 #include "Items/ItemData.h"
 
@@ -55,8 +55,11 @@ void Crafting::draw(SpriteBatch *spriteBatch, float alpha)
 	//spriteBatch->getGraphicsContext().drawRectangle(500, 50, 300, 300);
 }
 
-void Crafting::keyPressEvent(const VirtualKey key)
+void Crafting::keyEvent(const KeyEvent & event)
 {
+	if(!event.isAction(KeyEvent::PRESS)) return;
+
+	const VirtualKey key = event.getKey();
 	if(key == XD_MOUSE_BUTTON_LEFT || key == XD_MOUSE_BUTTON_RIGHT)
 	{
 		Vector2 position = getPosition();

@@ -25,6 +25,12 @@ enum PacketID
 #define UI_MENU_BUTTON_TEXTURE ":/sprites/gui/menu_button.png"
 
 #define CHAT_FADE_TIME 10.0f
+#define CHAT_WIDTH 400
+#define CHAT_HEIGHT 250
+#define CHAT_TEXT_INPUT_HEIGHT 27
+#define CHAT_WIDTHF float(CHAT_WIDTH)
+#define CHAT_HEIGHTF float(CHAT_HEIGHT)
+#define CHAT_TEXT_INPUT_HEIGHTF float(CHAT_TEXT_INPUT_HEIGHT)
 
 // TERRAIN CONSTANTS
 #define BLOCK_PX 16

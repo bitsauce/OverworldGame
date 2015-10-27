@@ -1,5 +1,6 @@
 #include "Omnicon.h"
 #include "Game/Game.h"
+#include "GameOverlay.h"
 
 Omnicon::Omnicon(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(scene, gameOverlay),

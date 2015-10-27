@@ -11,14 +11,14 @@ class OverworldGame;
 class Zombie : public Pawn
 {
 public:
-	Zombie(OverworldGame *game);
+	Zombie(World *world);
 
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
-	static DynamicEntity *Factory(World * world)
+	static DynamicEntity *Factory(World *world)
 	{
-		return new Zombie(0);
+		return new Zombie(world);
 	}
 private:
 };

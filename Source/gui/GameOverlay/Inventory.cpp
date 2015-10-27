@@ -1,5 +1,6 @@
 #include "Inventory.h"
 #include "Game/Game.h"
+#include "GameOverlay.h"
 #include "Items/ItemData.h"
 #include "Game/Storage.h"
 #include "Entities/Dynamic/Player.h"
@@ -100,8 +101,11 @@ void Inventory::draw(SpriteBatch *spriteBatch, const float alpha)
 	}
 }
 
-void Inventory::keyPressEvent(const VirtualKey key)
+void Inventory::keyEvent(const KeyEvent & event)
 {
+	if(!event.isAction(KeyEvent::PRESS)) return;
+
+	const VirtualKey key = event.getKey();
 	if (!m_gameOverlay->getPlayer()) return;
 	if(key == XD_MOUSE_BUTTON_LEFT || key == XD_MOUSE_BUTTON_RIGHT)
 	{

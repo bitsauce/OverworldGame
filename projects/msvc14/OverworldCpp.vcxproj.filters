@@ -38,9 +38,6 @@
     <ClCompile Include="..\..\source\items\ItemData.cpp">
       <Filter>Source\Items</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\gui\GameOverlay.cpp">
-      <Filter>Source\Gui</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\Items\BlockItem.cpp">
       <Filter>Source\Items\Placeable</Filter>
     </ClCompile>
@@ -192,6 +189,12 @@
     <ClCompile Include="..\..\Source\gui\GameOverlay\Chat.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\gui\GameOverlay\GameOverlay.cpp">
+      <Filter>Source\Gui\GameOverlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game\Commander.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -315,9 +318,6 @@
     </ClInclude>
     <ClInclude Include="..\..\source\items\ItemData.h">
       <Filter>Source\Items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\gui\GameOverlay.h">
-      <Filter>Source\Gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\Items\BlockItem.h">
       <Filter>Source\Items\Placeable</Filter>
@@ -471,6 +471,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\gui\GameOverlay\Chat.h">
       <Filter>Source\Gui\GameOverlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\gui\GameOverlay\GameOverlay.h">
+      <Filter>Source\Gui\GameOverlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\Commander.h">
+      <Filter>Source\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

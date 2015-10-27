@@ -15,7 +15,7 @@ public:
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 	
-	void keyPressEvent(const VirtualKey key);
+	void keyEvent(const KeyEvent & event);
 
 private:
 	GameOverlay *m_gameOverlay;

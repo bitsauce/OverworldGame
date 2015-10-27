@@ -18,6 +18,7 @@
 #include "Entities/Dynamic/AIController.h"
 #include "Entities/Dynamic/Mobs/Zombie.h"
 #include "Game/Game.h"
+#include "Gui/GameOverlay/GameOverlay.h"
 
 Server::Server(OverworldGame * game, const ushort port) :
 	Connection(true),
@@ -79,7 +80,7 @@ void Server::update()
 				bool local = getGUID() == packet->guid;
 
 				// Create player
-				Player *player = new Player(m_game, local);
+				Player *player = new Player(m_game->getWorld(), local);
 
 				// If player is hosting locally
 				if(local)
@@ -168,7 +169,7 @@ void Server::update()
 				{
 					case ENTITY_ZOMBIE:
 					{
-						Zombie *zombie = new Zombie(m_game);
+						Zombie *zombie = new Zombie(m_game->getWorld());
 						zombie->setPosition(m_players.begin()->second->getPosition());
 						netObj = zombie;
 					}

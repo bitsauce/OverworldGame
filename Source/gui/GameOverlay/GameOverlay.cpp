@@ -1,16 +1,12 @@
 #include "GameOverlay.h"
 #include "Game/Storage.h"
 #include "Entities/Dynamic/Player.h"
-#include "GameOverlay/Hotbar.h"
-#include "GameOverlay/HealthManaStatus.h"
-#include "GameOverlay/Omnicon.h"
-#include "GameOverlay/Inventory.h"
 #include "Items/ItemData.h"
 #include "Game/Game.h"
 #include "Networking/Connection.h"
 #include "Entities/Dynamic/ItemDrop.h"
 
-GameOverlay::GameOverlay(OverworldGame *game, Scene *scene) :
+GameOverlay::GameOverlay(OverworldGame *game, Scene *scene, GraphicsContext & context) :
 	UiObject(scene, scene->getCanvas()),
 	m_game(game),
 	m_player(nullptr),
@@ -26,7 +22,7 @@ GameOverlay::GameOverlay(OverworldGame *game, Scene *scene) :
 	m_omnicon = new Omnicon(scene, this);
 	m_inventory = new Inventory(scene, this);
 	m_crafting = new Crafting(scene, this);
-	m_chat = new Chat(scene, this);
+	m_chat = new Chat(game, context, scene, this);
 }
 
 GameOverlay::~GameOverlay()

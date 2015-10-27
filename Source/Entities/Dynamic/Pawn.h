@@ -39,13 +39,23 @@ private:
 class Pawn : public DynamicEntity, public NetworkObject
 {
 public:
-	Pawn(OverworldGame * game, const EntityID id);
+	Pawn(World *world, const EntityID id);
 	virtual ~Pawn();
 
 	void setController(Controller *controller);
 	Controller *getController() const
 	{
 		return m_controller;
+	}
+
+	void setSelectedSlot(const int slot)
+	{
+		m_selectedSlot = slot;
+	}
+
+	int getSelectedSlot() const
+	{
+		return m_selectedSlot;
 	}
 
 	void activateThing(int action);
@@ -74,7 +84,6 @@ protected:
 	// Managers
 	Camera *m_camera;
 	Terrain *m_terrain;
-	GameOverlay *m_gameOverlay;
 
 	// Pawn controller
 	Controller *m_controller;
@@ -86,6 +95,7 @@ protected:
 	Storage::Slot m_heldItem;
 	Bag *m_bag;
 	Storage m_storage;
+	int m_selectedSlot;
 
 	// Equiped item
 	ItemID m_prevItem;

@@ -24,10 +24,10 @@ void EntitySpwanerItem::use(Pawn *player, const float delta)
 		player->getCurrentItem()->dec();
 	}*/
 
-	EntityData *data = EntityData::Get(m_entityID);
+	EntityData *data = EntityData::get(m_entityID);
 	if(data && data->getType() == STATIC_ENTITY)
 	{
-		((StaticEntityData*) EntityData::Get(m_entityID))->Create(m_game->getWorld(), blockPos.x, blockPos.y);
+		((StaticEntityData*) EntityData::get(m_entityID))->create(m_game->getWorld(), blockPos.x, blockPos.y);
 	}
 }
 

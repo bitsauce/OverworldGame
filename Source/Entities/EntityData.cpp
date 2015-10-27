@@ -22,11 +22,11 @@ void EntityData::init(Game *)
 	// (which is usefull for placing static entities in chunk grids)
 
 	// Dynamic entities
-	s_data[ENTITY_ARROW] = new DynamicEntityData(ENTITY_ARROW, Arrow::Factory);
-	s_data[ENTITY_PLAYER] = new DynamicEntityData(ENTITY_PLAYER, Player::Factory);
-	s_data[ENTITY_ZOMBIE] = new DynamicEntityData(ENTITY_ZOMBIE, Zombie::Factory);
-	s_data[ENTITY_ITEM_DROP] = new DynamicEntityData(ENTITY_ITEM_DROP, ItemDrop::Factory);
+	s_data[ENTITY_ARROW] = new DynamicEntityData(ENTITY_ARROW, "Arrow", Arrow::Factory);
+	s_data[ENTITY_PLAYER] = new DynamicEntityData(ENTITY_PLAYER, "Player", Player::Factory);
+	s_data[ENTITY_ZOMBIE] = new DynamicEntityData(ENTITY_ZOMBIE, "Zombie", Zombie::Factory);
+	s_data[ENTITY_ITEM_DROP] = new DynamicEntityData(ENTITY_ITEM_DROP, "ItemDrop", ItemDrop::Factory);
 
 	// Static entitites
-	s_data[ENTITY_TORCH] = new StaticEntityData(ENTITY_TORCH, 1, 1, Torch::Factory);
+	s_data[ENTITY_TORCH] = new StaticEntityData(ENTITY_TORCH, "torch", 1, 1, Torch::Factory);
 }

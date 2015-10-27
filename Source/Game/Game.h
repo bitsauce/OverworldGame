@@ -3,15 +3,18 @@
 
 #include "Config.h"
 #include "Constants.h"
-#include "Game/Scene.h"
-#include "Gui/GameOverlay.h"
+
+#include "Scene.h"
+#include "Debug.h"
+#include "Commander.h"
+
 #include "Gui/Canvas.h"
 #include "World/World.h"
 #include "Networking/Client.h"
 #include "Networking/Server.h"
 #include "Entities/Dynamic/Pawn.h"
 
-class Debug;
+class GameOverlay;
 class GameState;
 
 class OverworldGame : public Game
@@ -30,6 +33,7 @@ public:
 	Client *getClient() const { return m_client; }
 	Server *getServer() const { return m_server; }
 	GameOverlay *getGameOverlay() const { return m_gameOverlay; }
+	Commander *getCommander() const { return m_commander; }
 
 	void pushState(GameState *state);
 	void popState();
@@ -51,9 +55,12 @@ private:
 	SpriteBatch *m_spriteBatch;
 	bool m_takeScreenshot;
 	
+	// Game modules
+	Commander *m_commander;
 	Debug *m_debug;
 	World *m_world;
 	GameOverlay *m_gameOverlay;
+
 	list<GameState*> m_states;
 
 	Server *m_server;

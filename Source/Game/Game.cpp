@@ -18,6 +18,7 @@
 #include "Entities/Entity.h"
 #include "Entities/EntityData.h"
 #include "GameStates/InGameState.h"
+#include "Gui/GameOverlay/GameOverlay.h"
 
 OverworldGame::OverworldGame() :
 	m_spriteBatch(nullptr),
@@ -52,6 +53,9 @@ void OverworldGame::start(GraphicsContext &context)
 	// Setup debug
 	m_debug = new Debug(this);
 
+	// Setup commander
+	m_commander = new Commander(this);
+
 	// Resize the window
 	Window::setSize(Vector2i(1280, 720));
 
@@ -74,7 +78,7 @@ void OverworldGame::start(GraphicsContext &context)
 	
 	// Create game state
 	InGameState * state = new InGameState(this);
-	m_gameOverlay = new GameOverlay(this, state->getScene());
+	m_gameOverlay = new GameOverlay(this, state->getScene(), context);
 
 	// Push game state
 	pushState(state);
@@ -131,6 +135,8 @@ void OverworldGame::end()
 	m_world->save();
 	m_server->save();
 	delete m_world;
+	delete m_debug;
+	delete m_commander;
 }
 
 void OverworldGame::pushState(GameState *state)

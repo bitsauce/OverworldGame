@@ -15,18 +15,9 @@ public:
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
-	void setSelectedSlot(int action, const uint slot)
-	{
-		if(action != GLFW_PRESS) return;
-		m_selectedSlot = slot;
-	}
-
-	uint getSelectedSlot() const
-	{
-		return m_selectedSlot;
-	}
+	void setSelectedSlot(int action, const uint slot);
 	
-	void keyPressEvent(const VirtualKey key);
+	void keyEvent(const KeyEvent & event);
 	void mouseWheelEvent(const int delta);
 
 private:
@@ -35,7 +26,6 @@ private:
 	Sprite m_slotSprite;
 	Sprite m_slotSelectedSprite;
 	FontPtr m_font;
-	uint m_selectedSlot;
 };
 
 #endif // HOTBAR_SLOT_H

@@ -5,12 +5,12 @@
 class Player : public Pawn
 {
 public:
-	Player(OverworldGame *game, const bool local);
+	Player(World *world, const bool local);
 	~Player();
 
 	static DynamicEntity *Factory(World *world)
 	{
-		return new Player(0, false);
+		return new Player(world, false);
 	}
 protected:
 };

@@ -4,10 +4,10 @@
 #include "Entities/Dynamic/AIController.h"
 #include "Constants.h"
 
-Zombie::Zombie(OverworldGame *game) :
-	Pawn(game, ENTITY_ZOMBIE)
+Zombie::Zombie(World *world) :
+	Pawn(world, ENTITY_ZOMBIE)
 {
-	setController(new AIController(game->getWorld()));
+	setController(new AIController(world));
 	m_moveSpeed = 2.5f;
 }
 

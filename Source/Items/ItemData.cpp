@@ -29,6 +29,8 @@ void ItemData::set(const ItemID id, const string &name, const string &desc, cons
 
 void ItemData::init(OverworldGame *game)
 {
+	s_itemData[ITEM_NONE] = new ItemData();
+
 	(s_itemData[ITEM_BLOCK_GRASS] = new BlockItem(game, TERRAIN_LAYER_MIDDLE, BLOCK_GRASS))->set(ITEM_BLOCK_GRASS, "Grass", "A block of grass", ":/Sprites/ItemIcons/BlockGrass.png", 255);
 	(s_itemData[ITEM_BLOCK_DIRT] = new BlockItem(game, TERRAIN_LAYER_MIDDLE, BLOCK_DIRT))->set(ITEM_BLOCK_DIRT, "Dirt", "A block of dirt", ":/Sprites/ItemIcons/BlockDirt.png", 255);
 	(s_itemData[ITEM_BLOCK_DIRT_BACK] = new BlockItem(game, TERRAIN_LAYER_BACK, BLOCK_DIRT_BACK))->set(ITEM_BLOCK_DIRT_BACK, "Dirt backdrop", "", ":/Sprites/ItemIcons/BlockDirtBack.png", 255);

@@ -11,18 +11,17 @@
 #include "Animation/Animation.h"
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
-#include "Gui/GameOverlay.h"
+#include "Gui/GameOverlay/GameOverlay.h"
 #include "Game/Game.h"
 #include "Game/GameStates/GameState.h"
 #include "Game/Scene.h"
 
 #include "Gui/Canvas.h"
 
-Pawn::Pawn(OverworldGame *game, const EntityID id) :
-	DynamicEntity(game->getWorld(), id),
-	m_camera(game->getWorld()->getCamera()),
-	m_terrain(game->getWorld()->getTerrain()),
-	m_gameOverlay(game->getGameOverlay()),
+Pawn::Pawn(World *world, const EntityID id) :
+	DynamicEntity(world, id),
+	m_camera(world->getCamera()),
+	m_terrain(world->getTerrain()),
 	m_jumpTimer(1.0f),
 	m_canJump(false),
 	m_maxHealth(12),
@@ -31,7 +30,8 @@ Pawn::Pawn(OverworldGame *game, const EntityID id) :
 	m_storage(10),
 	m_bag(new Bag(20, 5)),
 	m_moveSpeed(5.0f),
-	m_prevItem(ITEM_NONE)
+	m_prevItem(ITEM_NONE),
+	m_selectedSlot(0)
 {
 	// Set body size
 	setSize(24, 48);
@@ -62,7 +62,7 @@ Storage::Slot *Pawn::getCurrentItem()
 	{
 		return &m_heldItem;
 	}
-	return m_storage.getSlotAt(m_gameOverlay->getHotbar()->getSelectedSlot());
+	return m_storage.getSlotAt(m_selectedSlot);
 }
 
 void Pawn::activateThing(int action)
