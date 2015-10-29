@@ -10,7 +10,7 @@
 enum TerrainLayer;
 enum BlockID;
 
-class StaticEntity;
+class BlockEntity;
 
 class Terrain : public WindowListener
 {
@@ -28,7 +28,7 @@ public:
 	bool removeBlockAt(const int x, const int y, TerrainLayer layer);
 
 	// Static entities
-	void placeStaticEntity(StaticEntity *entity);
+	void placeStaticEntity(BlockEntity *entity);
 
 	// CHUNK LOADER
 	ChunkLoader *getChunkLoader() { return &m_chunkLoader; }

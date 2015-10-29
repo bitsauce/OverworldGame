@@ -143,9 +143,6 @@
     <ClCompile Include="..\..\source\World\Lighting\Pointlight.cpp">
       <Filter>Source\World\Lighting</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Entities\Static\Torch.cpp">
-      <Filter>Source\Entities\Static</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Entities\Dynamic\Arrow.cpp">
       <Filter>Source\Entities\Dynamic</Filter>
     </ClCompile>
@@ -182,9 +179,6 @@
     <ClCompile Include="..\..\Source\Entities\Entity.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Entities\Static\StaticEntity.cpp">
-      <Filter>Source\Entities\Static</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\x2D-Game-Engine\include\x2d\engine.cpp" />
     <ClCompile Include="..\..\Source\gui\GameOverlay\Chat.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
@@ -194,6 +188,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\Game\Commander.cpp">
       <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BlockEntities\BlockEntityData.cpp">
+      <Filter>Source\BlockEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BlockEntities\BlockEntity.cpp">
+      <Filter>Source\BlockEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BlockEntities\Torch.cpp">
+      <Filter>Source\BlockEntities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -263,9 +266,6 @@
     <Filter Include="Source\Entities\Dynamic">
       <UniqueIdentifier>{d3a56dc7-e376-4b91-bd45-9f8741a71034}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Entities\Static">
-      <UniqueIdentifier>{836fcfaf-ac1f-46e1-bb20-952df1774951}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Entities\Dynamic\Mobs">
       <UniqueIdentifier>{6f0a2029-a2f5-4ae8-ad3a-e33be4f122a5}</UniqueIdentifier>
     </Filter>
@@ -274,6 +274,9 @@
     </Filter>
     <Filter Include="Source\Gui\GameOverlay">
       <UniqueIdentifier>{0fd551cc-bb89-4e7f-b942-9ddd7dd4cb8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\BlockEntities">
+      <UniqueIdentifier>{e8966416-033d-4c70-b825-914f9e10f341}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -427,9 +430,6 @@
     <ClInclude Include="..\..\source\World\Lighting\Pointlight.h">
       <Filter>Source\World\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Static\Torch.h">
-      <Filter>Source\Entities\Static</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Entities\Dynamic\Arrow.h">
       <Filter>Source\Entities\Dynamic</Filter>
     </ClInclude>
@@ -466,9 +466,6 @@
     <ClInclude Include="..\..\Source\Entities\Entity.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Static\StaticEntity.h">
-      <Filter>Source\Entities\Static</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\gui\GameOverlay\Chat.h">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClInclude>
@@ -477,6 +474,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Game\Commander.h">
       <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BlockEntities\BlockEntityData.h">
+      <Filter>Source\BlockEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BlockEntities\BlockEntity.h">
+      <Filter>Source\BlockEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BlockEntities\Torch.h">
+      <Filter>Source\BlockEntities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

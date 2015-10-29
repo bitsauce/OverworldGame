@@ -70,11 +70,9 @@ void Commander::spawn(Chat *chat, vector<string> args)
 		return;
 	}
 
-	if(data->getType() == DYNAMIC_ENTITY)
-	{
-		DynamicEntity *entity = ((DynamicEntityData*) data)->create(m_game->getWorld());
-		entity->setPosition(m_game->getWorld()->getLocalPlayer()->getPosition() + Vector2(0.0f, 10.0f));
-	}
+	DynamicEntity *entity = (DynamicEntity*)data->create(m_game->getWorld());
+	entity->setPosition(m_game->getWorld()->getLocalPlayer()->getPosition() + Vector2(0.0f, 10.0f));
+	
 	chat->insertMessage(args[0] + " spawned");
 }
 

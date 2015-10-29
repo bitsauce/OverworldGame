@@ -17,6 +17,7 @@
 #include "Networking/Client.h"
 #include "Entities/Entity.h"
 #include "Entities/EntityData.h"
+#include "BlockEntities/BlockEntityData.h"
 #include "GameStates/InGameState.h"
 #include "Gui/GameOverlay/GameOverlay.h"
 
@@ -44,6 +45,7 @@ void OverworldGame::start(GraphicsContext &context)
 	
 	// Init world
 	BlockData::init();
+	BlockEntityData::init();
 	m_world = new World();
 
 	// Initialize block and item data

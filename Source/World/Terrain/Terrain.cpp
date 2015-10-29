@@ -13,7 +13,7 @@
 #include "Entities/Dynamic/ItemDrop.h"
 
 #include "Entities/EntityData.h"
-#include "Entities/Static/StaticEntity.h"
+#include "BlockEntities/BlockEntity.h"
 
 Terrain::Terrain(World *world) :
 	m_world(world),
@@ -83,10 +83,10 @@ bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRA
 	return false;
 }
 
-void Terrain::placeStaticEntity(StaticEntity * entity)
+void Terrain::placeStaticEntity(BlockEntity * entity)
 {
 	Vector2i pos = entity->getPosition();
-	Vector2i size = ((StaticEntityData*)EntityData::get(entity->getID()))->getSize();
+	Vector2i size = Vector2i(0);// ((StaticEntityData*) EntityData::get(entity->getID()))->getSize();
 	m_chunkLoader.getChunkAt((int) floor(pos.x / CHUNK_BLOCKSF), (int) floor(pos.y / CHUNK_BLOCKSF)).addStaticEntity(entity);
 	for(int y = pos.y; y < pos.y + size.y; ++y)
 	{

@@ -41,9 +41,9 @@ void ItemData::init(OverworldGame *game)
 	(s_data[ITEM_PICKAXE_IRON] = new Pickaxe(game))->set(ITEM_PICKAXE_IRON, "Iron Pickaxe", "An iron pickaxe", ":/Sprites/ItemIcons/IronPickaxe.png", 1);
 	(s_data[ITEM_AXE_IRON] = new Axe(game))->set(ITEM_AXE_IRON, "Iron Axe", "An iron axe", ":/Sprites/ItemIcons/IronAxe.png", 1);
 
-	(s_data[ITEM_TORCH] = new EntitySpwanerItem(game, ENTITY_TORCH))->set(ITEM_TORCH, "Torch", "Useful light source", ":/Sprites/ItemIcons/Torch.png", 255);
-	(s_data[ITEM_CRAFTING_BENCH] = new EntitySpwanerItem(game, /*ENTITY_CRAFTING_BENCH*/ENTITY_ARROW))->set(ITEM_CRAFTING_BENCH, "Crafting Bench", "For crafting the items of your dreams", ":/Sprites/ItemIcons/CraftingBench.png", 1);
-	(s_data[ITEM_RED_CURRANT_BUSH] = new EntitySpwanerItem(game, /*ENTITY_RED_CURRANT_BUSH*/ENTITY_ARROW))->set(ITEM_RED_CURRANT_BUSH, "Red Currant Bush", "Grows red currants", ":/Sprites/ItemIcons/Torch.png", 255);
+	(s_data[ITEM_TORCH] = new EntitySpwanerItem(game, BLOCK_ENTITY_TORCH))->set(ITEM_TORCH, "Torch", "Useful light source", ":/Sprites/ItemIcons/Torch.png", 255);
+	(s_data[ITEM_CRAFTING_BENCH] = new EntitySpwanerItem(game, /*ENTITY_CRAFTING_BENCH*/BLOCK_ENTITY_TORCH))->set(ITEM_CRAFTING_BENCH, "Crafting Bench", "For crafting the items of your dreams", ":/Sprites/ItemIcons/CraftingBench.png", 1);
+	(s_data[ITEM_RED_CURRANT_BUSH] = new EntitySpwanerItem(game, /*ENTITY_RED_CURRANT_BUSH*/BLOCK_ENTITY_TORCH))->set(ITEM_RED_CURRANT_BUSH, "Red Currant Bush", "Grows red currants", ":/Sprites/ItemIcons/Torch.png", 255);
 	
 	(s_data[ITEM_BOW_WOODEN] = new Bow(game))->set(ITEM_BOW_WOODEN, "Bow", "", ":/Sprites/ItemIcons/WoodenBow.png", 1);
 	(s_data[ITEM_ARROW] = new Ammo(game))->set(ITEM_ARROW, "Arrow", "Needs a bow to fire", ":/Sprites/ItemIcons/Arrow.png", 255);

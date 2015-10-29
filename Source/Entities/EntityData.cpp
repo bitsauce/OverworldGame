@@ -4,8 +4,6 @@
 #include "Dynamic/ItemDrop.h"
 #include "Dynamic/Mobs/Zombie.h"
 
-#include "Static/Torch.h"
-
 //#include "RedCurrantBush.h"
 //#include "CraftingBench.h"
 
@@ -20,11 +18,11 @@ void EntityData::init(Game *)
 	// 4) Static Entities should be contained in a vertex buffer handled by the chunk loader
 
 	// Dynamic entities
-	s_data[ENTITY_ARROW] = new DynamicEntityData(ENTITY_ARROW, "Arrow", Arrow::Factory);
-	s_data[ENTITY_PLAYER] = new DynamicEntityData(ENTITY_PLAYER, "Player", Player::Factory);
-	s_data[ENTITY_ZOMBIE] = new DynamicEntityData(ENTITY_ZOMBIE, "Zombie", Zombie::Factory);
-	s_data[ENTITY_ITEM_DROP] = new DynamicEntityData(ENTITY_ITEM_DROP, "ItemDrop", ItemDrop::Factory);
+	s_data[ENTITY_ARROW] = new EntityData(ENTITY_ARROW, "Arrow", Arrow::Factory);
+	s_data[ENTITY_PLAYER] = new EntityData(ENTITY_PLAYER, "Player", Player::Factory);
+	s_data[ENTITY_ZOMBIE] = new EntityData(ENTITY_ZOMBIE, "Zombie", Zombie::Factory);
+	s_data[ENTITY_ITEM_DROP] = new EntityData(ENTITY_ITEM_DROP, "ItemDrop", ItemDrop::Factory);
 
 	// Static entitites
-	s_data[ENTITY_TORCH] = new StaticEntityData(ENTITY_TORCH, "torch", 1, 1, Torch::Factory);
+	//s_data[ENTITY_TORCH] = new StaticEntityData(ENTITY_TORCH, "torch", 1, 1, Torch::Factory);
 }

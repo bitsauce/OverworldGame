@@ -2,14 +2,15 @@
 #define STATIC_ENTITY_H
 
 #include "Config.h"
-#include "../Entity.h"
+#include "Constants.h"
 
 class World;
+class BlockEntityData;
 
-class StaticEntity : public Entity
+class BlockEntity
 {
 public:
-	StaticEntity(World *world, int x, int y, int w, int h, const EntityID id);
+	BlockEntity(World *world, const int x, const int y, const BlockEntityData *data);
 
 	Vector2i getPosition() const
 	{
@@ -27,7 +28,8 @@ public:
 	}
 
 private:
-	Vector2i m_position;
+	const Vector2i m_position;
+	const BlockEntityData *m_data;
 	int m_refCount;
 };
 

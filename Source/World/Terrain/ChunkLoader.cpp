@@ -3,7 +3,7 @@
 #include "World/Camera.h"
 #include "World/World.h"
 #include "Generation/Generator.h"
-#include "Entities/Static/StaticEntity.h"
+#include "BlockEntities/BlockEntity.h"
 #include "Entities/EntityData.h"
 #include "Blocks/BlockData.h"
 
@@ -126,16 +126,16 @@ void ChunkLoader::loadBlockData(FileReader &file, BlockID *blockData)
 	}
 }
 
-void ChunkLoader::saveEntities(FileWriter &file, set<StaticEntity*> entities)
+void ChunkLoader::saveEntities(FileWriter &file, set<BlockEntity*> entities)
 {
 	// Write entity data
 	file << (int) entities.size() << endl;
-	for(StaticEntity * entity : entities)
+	for(BlockEntity * entity : entities)
 	{
-		file << entity->getID() << endl;
+		file << /*entity->getID()*/0 << endl;
 		file << entity->getX() << endl;
 		file << entity->getY() << endl;
-		entity->createSaveData(file);
+		//entity->createSaveData(file);
 	}
 }
 
@@ -150,7 +150,7 @@ void ChunkLoader::loadEntities(FileReader &file)
 		file >> id;
 		file >> x;
 		file >> y;
-		((StaticEntityData*) EntityData::get((EntityID) id))->create(m_world, x, y)->loadSaveData(file);
+		//((StaticEntityData*) EntityData::get((EntityID) id))->create(m_world, x, y)->loadSaveData(file);
 	}
 }
 
@@ -190,7 +190,7 @@ void ChunkLoader::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 	saveEntities(file, chunk->m_staticEntitites);
 
 	// Delete static entities
-	for(StaticEntity *entity : chunk->m_staticEntitites)
+	for(BlockEntity *entity : chunk->m_staticEntitites)
 	{
 		delete entity;
 	}

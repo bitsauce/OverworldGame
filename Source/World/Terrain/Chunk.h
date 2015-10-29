@@ -5,7 +5,7 @@
 #include "Constants.h"
 
 class WorldGenerator;
-class StaticEntity;
+class BlockEntity;
 
 class Chunk
 {
@@ -28,7 +28,7 @@ public:
 	bool isBlockOccupied(const int x, const int y, TerrainLayer layer) const;
 	bool setBlockAt(const int x, const int y, const BlockID block, TerrainLayer layer);
 
-	void addStaticEntity(StaticEntity *entity);
+	void addStaticEntity(BlockEntity *entity);
 	
 	// DRAWING
 	void attach(GraphicsContext &context, const int x, const int y);
@@ -45,7 +45,7 @@ private:
 	ChunkLoader *m_chunkLoader;
 
 	// STATIC ENTITIES
-	set<StaticEntity*> m_staticEntitites;
+	set<BlockEntity*> m_staticEntitites;
 
 	// BLOCK GRID TEXTURE
 	Texture2DPtr m_blockTexture;

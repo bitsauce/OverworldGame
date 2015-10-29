@@ -3,10 +3,9 @@
 #include "Entities/Dynamic/Pawn.h"
 #include "World/Camera.h"
 #include "Game/Game.h"
-#include "Entities/EntityData.h"
-#include "Entities/Static/StaticEntity.h"
+#include "BlockEntities/BlockEntityData.h"
 
-EntitySpwanerItem::EntitySpwanerItem(OverworldGame * game, const EntityID id) :
+EntitySpwanerItem::EntitySpwanerItem(OverworldGame * game, const BlockEntityID id) :
 	m_game(game),
 	m_entityID(id)
 {
@@ -24,10 +23,10 @@ void EntitySpwanerItem::use(Pawn *player, const float delta)
 		player->getCurrentItem()->dec();
 	}*/
 
-	EntityData *data = EntityData::get(m_entityID);
-	if(data && data->getType() == STATIC_ENTITY)
+	BlockEntityData *data = BlockEntityData::get(m_entityID);
+	if(data)
 	{
-		((StaticEntityData*) EntityData::get(m_entityID))->create(m_game->getWorld(), blockPos.x, blockPos.y);
+		data->create(m_game->getWorld(), blockPos.x, blockPos.y);
 	}
 }
 

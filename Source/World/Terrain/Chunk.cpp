@@ -7,7 +7,7 @@
 
 #include "Generation/Generator.h"
 
-#include "Entities/Static/StaticEntity.h"
+#include "BlockEntities/BlockEntity.h"
 
 // CONSTRUCTOR
 Chunk::Chunk(ChunkLoader *chunkLoader) :
@@ -133,7 +133,7 @@ bool Chunk::setBlockAt(const int x, const int y, const BlockID block, TerrainLay
 	return false; // Nothing changed
 }
 
-void Chunk::addStaticEntity(StaticEntity * entity)
+void Chunk::addStaticEntity(BlockEntity * entity)
 {
 	m_staticEntitites.insert(entity);
 }

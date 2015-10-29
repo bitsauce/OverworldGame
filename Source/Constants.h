@@ -116,6 +116,14 @@ enum BlockID
 	BLOCK_COUNT
 };
 
+// BLOCK ENTITY IDS
+enum BlockEntityID
+{
+	BLOCK_ENTITY_NULL,
+	BLOCK_ENTITY_TORCH,
+	BLOCK_ENTITY_COUNT
+};
+
 // ITEM IDS
 enum ItemID
 {
