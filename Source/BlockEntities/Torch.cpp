@@ -2,18 +2,21 @@
 
 Torch::Torch(World * world, int x, int y, const BlockEntityData *data) :
 	BlockEntity(world, x, y, data),
-	m_sprite(ResourceManager::get<Texture2D>(":/Sprites/BlockEntities/LightSources/Torch.png")),
+	m_time(0.0f),
 	m_pointlight(world->getLighting(), Vector2(x, y), 10.0f, Color(255, 190, 90))
 {
-	m_sprite.setSize(16, 16);
 }
 
 void Torch::update(const float delta)
 {
+	// TODO: ChunkLoader::setFrameIndex() will set the frame index of the furniture
+	// at the given position by updating a value in a texture object containing all
+	// frame indexes
+	//m_chunkLoader->setFrameIndex(m_position.x, m_position.y, m_time);
+	m_time += delta;
 }
 
 void Torch::draw(SpriteBatch *spriteBatch, const float alpha)
 {
-	m_sprite.setPosition(getPosition() * BLOCK_PXF);
-	spriteBatch->drawSprite(m_sprite);
+	//spriteBatch->drawSprite(m_sprite);
 }

@@ -23,7 +23,7 @@ Chat::Chat(OverworldGame *game, GraphicsContext & context, Scene *scene, GameOve
 	m_chatInput.setSize(Vector2(CHAT_WIDTHF, CHAT_TEXT_INPUT_HEIGHTF) / getSize());
 	m_chatInput.setPosition(Vector2(0.0f, 0.0f));
 
-	m_chatRenderTarget = new RenderTarget2D(CHAT_WIDTHF, CHAT_HEIGHTF);
+	m_chatRenderTarget = new RenderTarget2D(CHAT_WIDTH, CHAT_HEIGHT);
 	m_font->setColor(Color(255, 255, 255, 255));
 }
 
@@ -103,7 +103,7 @@ void Chat::draw(SpriteBatch *spriteBatch, float alpha)
 
 		// Create chat string
 		string chatStr;
-		int lineCount = ceil(CHAT_HEIGHTF / m_font->getStringHeight(" "));
+		int lineCount = (int) ceil(CHAT_HEIGHTF / m_font->getStringHeight(" "));
 		for(int i = 0; i < lineCount; ++i)
 		{
 			chatStr += m_messages[i] + "\n";
@@ -129,9 +129,9 @@ void Chat::draw(SpriteBatch *spriteBatch, float alpha)
 	}
 
 	// Draw chat rectangle and text
-	context.drawRectangle(position, size - Vector2(0.0f, 30.0f), Color(0, 0, 0, 127 * opacity));
+	context.drawRectangle(position, size - Vector2(0.0f, 30.0f), Color(0, 0, 0, uchar(127 * opacity)));
 	context.setTexture(m_chatRenderTarget->getTexture());
-	context.drawRectangle(position, size, Color(255, 255, 255, 255 * opacity));
+	context.drawRectangle(position, size, Color(255, 255, 255, uchar(255 * opacity)));
 	context.setTexture(0);
 
 	// If fade time == 0.0f we draw the chat text input

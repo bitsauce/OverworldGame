@@ -24,7 +24,8 @@ Debug::Debug(OverworldGame *game) :
 	m_blockPainterEnabled(false),
 	m_font(ResourceManager::get<Font>(UI_DEBUG_FONT)),
 	m_variables(),
-	m_bulbSprite(ResourceManager::get<Texture2D>(":/Sprites/Debug/Icon_Bulb.png"))
+	m_bulbSprite(ResourceManager::get<Texture2D>(":/Sprites/Debug/Icon_Bulb.png")),
+	m_blockPainterTexture(new Texture2D())
 {
 	// Set font color
 	m_font->setColor(Color(255, 255, 255, 255));
@@ -165,7 +166,7 @@ void Debug::update(const float delta)
 		}
 		else if(Input::getKeyState(XD_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 		{
-			m_world->getTerrain()->setBlockAt(floor((m_world->getCamera()->getPosition().x + Input::getPosition().x) / BLOCK_PXF), floor((m_world->getCamera()->getPosition().y + Input::getPosition().y) / BLOCK_PXF), BLOCK_EMPTY, layer);
+			m_world->getTerrain()->setBlockAt((int) floor((m_world->getCamera()->getPosition().x + Input::getPosition().x) / BLOCK_PXF), (int) floor((m_world->getCamera()->getPosition().y + Input::getPosition().y) / BLOCK_PXF), BLOCK_EMPTY, layer);
 		}
 	}
 }
@@ -179,7 +180,7 @@ void Debug::draw(SpriteBatch *spriteBatch, const float alpha)
 	Vector2 center = m_world->getCamera()->getCenter(alpha);
 	Vector2 inputPosition = m_world->getCamera()->getInputPosition();
 	setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
-	setVariable("Zoom", util::intToStr(m_world->getCamera()->getZoomLevel() * 100) + "%");
+	setVariable("Zoom", util::intToStr(int(m_world->getCamera()->getZoomLevel() * 100)) + "%");
 	setVariable("Block Under Cursor", util::intToStr(m_world->getTerrain()->getBlockAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), TERRAIN_LAYER_MIDDLE)) + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
 	string hourStr, minStr;
 	{
@@ -198,14 +199,15 @@ void Debug::draw(SpriteBatch *spriteBatch, const float alpha)
 	}
 	m_font->draw(spriteBatch, Vector2(0.0f), drawString);
 
-	m_font->draw(spriteBatch, Vector2(Window::getWidth(), 0.0f), DEBUG_FUNCTIONS_STRING, FONT_ALIGN_RIGHT);
+	m_font->draw(spriteBatch, Vector2((float) Window::getWidth(), 0.0f), DEBUG_FUNCTIONS_STRING, FONT_ALIGN_RIGHT);
 
 
 	// Block painter
 	if(m_blockPainterEnabled)
 	{
+		m_blockPainterTexture->updatePixmap(BlockData::get(m_block).getPixmap());
 		spriteBatch->drawText(Vector2(5.0f, Window::getSize().y - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS ? "BACK" : (Input::getKeyState(XD_KEY_LEFT_SHIFT) == GLFW_PRESS ? "FRONT" : "SCENE")), m_font);
-		Sprite blockSprite(BlockData::get(m_block).getTexture(), Rect(159.0f, Window::getSize().y - 50.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 0.0f, 1.0f, 2.0f / 3.0f));
+		Sprite blockSprite(m_blockPainterTexture, Rect(159.0f, Window::getSize().y - 50.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 0.0f, 1.0f, 2.0f / 3.0f));
 		spriteBatch->drawSprite(blockSprite);
 	}
 
@@ -262,10 +264,10 @@ void Debug::draw(SpriteBatch *spriteBatch, const float alpha)
 
 		// Draw load area
 		ChunkLoader::ChunkArea loadArea = m_world->getTerrain()->getChunkLoader()->getLoadingArea();
-		gfxContext.drawRectangle(loadArea.x0 * CHUNK_PX, loadArea.y0 * CHUNK_PX, 1.0f / m_world->getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PX, Color(255, 255, 255, 255));
-		gfxContext.drawRectangle((loadArea.x1 + 1) * CHUNK_PX, loadArea.y0 * CHUNK_PX, 1.0f / m_world->getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PX, Color(255, 255, 255, 255));
-		gfxContext.drawRectangle(loadArea.x0 * CHUNK_PX, loadArea.y0 * CHUNK_PX, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PX, 1.0f / m_world->getCamera()->getZoomLevel(), Color(255, 255, 255, 255));
-		gfxContext.drawRectangle(loadArea.x0 * CHUNK_PX, (loadArea.y1 + 1) * CHUNK_PX, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PX, 1.0f / m_world->getCamera()->getZoomLevel(), Color(255, 255, 255, 255));
+		gfxContext.drawRectangle(loadArea.x0 * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PXF, Color(255, 255, 255, 255));
+		gfxContext.drawRectangle((loadArea.x1 + 1) * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PXF, Color(255, 255, 255, 255));
+		gfxContext.drawRectangle(loadArea.x0 * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(255, 255, 255, 255));
+		gfxContext.drawRectangle(loadArea.x0 * CHUNK_PXF, (loadArea.y1 + 1) * CHUNK_PXF, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(255, 255, 255, 255));
 
 		// Draw chunk status
 		for(int y = y0; y <= y1; ++y)
@@ -274,11 +276,11 @@ void Debug::draw(SpriteBatch *spriteBatch, const float alpha)
 			{
 				if(!m_world->getTerrain()->getChunkLoader()->isChunkLoadedAt(x, y))
 				{
-					gfxContext.drawRectangle(x * CHUNK_PX, y * CHUNK_PX, CHUNK_PX, CHUNK_PX, Color(0, 100, 170, 127));
+					gfxContext.drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(0, 100, 170, 127));
 				}
 				else if(!m_world->getTerrain()->getChunkLoader()->getChunkAt(x, y).isAttached())
 				{
-					gfxContext.drawRectangle(x * CHUNK_PX, y * CHUNK_PX, CHUNK_PX, CHUNK_PX, Color(0, 160, 230, 127));
+					gfxContext.drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(0, 160, 230, 127));
 				}
 			}
 		}

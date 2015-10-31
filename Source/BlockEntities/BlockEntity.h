@@ -30,7 +30,6 @@ public:
 private:
 	const Vector2i m_position;
 	const BlockEntityData *m_data;
-	int m_refCount;
 };
 
 #endif // STATIC_ENTITY_H

@@ -8,23 +8,23 @@ TextureAtlas *BlockData::s_blockAtlas = nullptr;
 struct BlockDescriptor
 {
 	const BlockID id;
-	const string texturePath;
+	const string imagePath;
 	const ItemID itemID;
 	const float opacity;
 };
 
 static BlockDescriptor g_blockData[] = {
-	{ BLOCK_EMPTY, ":/Sprites/Blocks/Empty.png?PremultiplyAlpha", ITEM_NONE, 0.0f },
-	{ BLOCK_ENTITY, ":/Sprites/Blocks/Empty.png?PremultiplyAlpha", ITEM_NONE, 0.0f },
+	{ BLOCK_EMPTY, ":/Sprites/Blocks/Empty.png", ITEM_NONE, 0.0f },
+	{ BLOCK_ENTITY, ":/Sprites/Blocks/Empty.png", ITEM_NONE, 0.0f },
 
-	{ BLOCK_GRASS, ":/Sprites/Blocks/Grass.png?PremultiplyAlpha", ITEM_BLOCK_DIRT, 1.0f },
-	{ BLOCK_DIRT, ":/Sprites/Blocks/Dirt.png?PremultiplyAlpha", ITEM_BLOCK_DIRT, 1.0f },
-	{ BLOCK_DIRT_BACK, ":/Sprites/Blocks/DirtBack.png?PremultiplyAlpha", ITEM_BLOCK_DIRT_BACK, 0.95f },
+	{ BLOCK_GRASS, ":/Sprites/Blocks/Grass.png", ITEM_BLOCK_DIRT, 1.0f },
+	{ BLOCK_DIRT, ":/Sprites/Blocks/Dirt.png", ITEM_BLOCK_DIRT, 1.0f },
+	{ BLOCK_DIRT_BACK, ":/Sprites/Blocks/DirtBack.png", ITEM_BLOCK_DIRT_BACK, 0.95f },
 
-	{ BLOCK_OAK_WOOD, ":/Sprites/Blocks/OakWood.png?PremultiplyAlpha", ITEM_BLOCK_OAK_WOOD, 0.75f },
-	{ BLOCK_OAK_LEAVES, ":/Sprites/Blocks/OakLeaves.png?PremultiplyAlpha", ITEM_BLOCK_OAK_LEAVES, 0.0f },
+	{ BLOCK_OAK_WOOD, ":/Sprites/Blocks/OakWood.png", ITEM_BLOCK_OAK_WOOD, 0.75f },
+	{ BLOCK_OAK_LEAVES, ":/Sprites/Blocks/OakLeaves.png", ITEM_BLOCK_OAK_LEAVES, 0.0f },
 
-	{ BLOCK_STONE, ":/Sprites/Blocks/Stone.png?PremultiplyAlpha", ITEM_BLOCK_STONE, 1.0f },
+	{ BLOCK_STONE, ":/Sprites/Blocks/Stone.png", ITEM_BLOCK_STONE, 1.0f },
 
 	{ BLOCK_COUNT, "", ITEM_NONE, 0.0f }
 };
@@ -35,23 +35,22 @@ void BlockData::init()
 	BlockDescriptor *blockData = &g_blockData[0];
 	while(blockData->id != BLOCK_COUNT)
 	{
-		// TODO: We should maybe not load the block textures, as they occupy unnecessary space on the GPU
-		s_blockData[blockData->id] = new BlockData(blockData->id, ResourceManager::get<Texture2D>(blockData->texturePath), blockData->itemID, blockData->opacity);
+		s_blockData[blockData->id] = new BlockData(blockData->id, Pixmap(blockData->imagePath, true), blockData->itemID, blockData->opacity);
 		blockData++;
 	}
 
 	// Create block texture atlas
-	vector<Texture2DPtr> textures;
+	vector<Pixmap> pixmaps;
 	for(uint i = 0; i < BLOCK_COUNT; ++i)
 	{
-		textures.push_back(s_blockData[i]->m_texture);
+		pixmaps.push_back(s_blockData[i]->m_pixmap);
 	}
-	s_blockAtlas = new TextureAtlas(textures);
+	s_blockAtlas = new TextureAtlas(pixmaps);
 }
 
-BlockData::BlockData(BlockID id, const Texture2DPtr &texture, const ItemID item, const float opacity) :
+BlockData::BlockData(BlockID id, const Pixmap &pixmap, const ItemID item, const float opacity) :
 	m_id(id),
-	m_texture(texture),
+	m_pixmap(pixmap),
 	m_item(item),
 	m_opacity(opacity)
 {

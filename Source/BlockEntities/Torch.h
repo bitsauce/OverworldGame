@@ -19,6 +19,6 @@ public:
 	}
 
 private:
-	Sprite m_sprite;
 	Pointlight m_pointlight;
+	float m_time;
 };

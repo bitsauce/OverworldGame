@@ -52,7 +52,6 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 		for(int x = 0; x < CHUNK_BLOCKS; x++)
 		{
 			float shadow = 1.0f;
-			bool shadowCaster = m_blocks[BLOCK_INDEX(x, y, TERRAIN_LAYER_MIDDLE)] <= BLOCK_ENTITY;
 			for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
 			{
 				pixel[z] = (uchar) m_blocks[BLOCK_INDEX(x, y, z)];

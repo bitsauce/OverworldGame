@@ -156,8 +156,8 @@ void LineEdit::keyEvent(const KeyEvent & event)
 			if(event.isModifier(KeyEvent::CONTROL))
 			{
 				// Move cursor to the left of the next word
-				while(m_cursorPos <= m_text.size() && m_text[m_cursorPos++] != ' ');
-				while(m_cursorPos <= m_text.size() && m_text[m_cursorPos++] == ' ');
+				while((uint) m_cursorPos <= m_text.size() && m_text[m_cursorPos++] != ' ');
+				while((uint) m_cursorPos <= m_text.size() && m_text[m_cursorPos++] == ' ');
 				m_cursorPos--;
 			}
 			else

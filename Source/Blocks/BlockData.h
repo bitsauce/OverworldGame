@@ -10,12 +10,12 @@ class BlockData
 {
 public:
 	// Constructors
-	BlockData(BlockID id, const Texture2DPtr &texture, const ItemID item, const float opacity);
+	BlockData(BlockID id, const Pixmap &pixmap, const ItemID item, const float opacity);
 	
 	// Data getters
 	BlockID getID() const { return m_id; }
 	ItemID getItem() const { return m_item; }
-	Texture2DPtr getTexture() const { return m_texture; }
+	Pixmap getPixmap() const { return m_pixmap; }
 	float getOpacity() const { return m_opacity; }
 
 	// Static functions
@@ -24,10 +24,10 @@ public:
 	static TextureAtlas *getBlockAtlas() { return s_blockAtlas; }
 	
 private:
-	BlockID m_id;
-	ItemID m_item;
-	Texture2DPtr m_texture;
-	float m_opacity;
+	const BlockID m_id;
+	const ItemID m_item;
+	const Pixmap m_pixmap;
+	const float m_opacity;
 
 	// Static variables
 	static vector<BlockData*> s_blockData;

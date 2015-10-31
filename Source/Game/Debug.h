@@ -37,6 +37,8 @@ private:
 	bool m_debugLighting;
 	bool m_blockPainterEnabled;
 
+	Texture2DPtr m_blockPainterTexture;
+
 	// Debug variables
 	map<string, string> m_variables;
 
