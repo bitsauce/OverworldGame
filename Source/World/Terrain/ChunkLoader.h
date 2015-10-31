@@ -1,3 +1,4 @@
+
 #ifndef CHUNK_LOADER_H
 #define CHUNK_LOADER_H
 
@@ -69,7 +70,7 @@ private:
 	
 	void resizeEvent(uint width, uint height);
 
-	void redrawAttachedChunks(GraphicsContext &context);
+	void reattachChunks(GraphicsContext &context);
 
 	bool m_applyZoom;
 	Camera *m_camera;
@@ -106,6 +107,7 @@ private:
 	RenderTarget2D *m_blocksRenderTarget;
 	RenderTarget2D *m_sortedBlocksRenderTarget[TERRAIN_LAYER_COUNT];
 
+	// Block rendering shader
 	ShaderPtr m_tileMapShader;
 
 	// Lighting

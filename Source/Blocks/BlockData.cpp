@@ -35,6 +35,7 @@ void BlockData::init()
 	BlockDescriptor *blockData = &g_blockData[0];
 	while(blockData->id != BLOCK_COUNT)
 	{
+		// TODO: We should maybe not load the block textures, as they occupy unnecessary space on the GPU
 		s_blockData[blockData->id] = new BlockData(blockData->id, ResourceManager::get<Texture2D>(blockData->texturePath), blockData->itemID, blockData->opacity);
 		blockData++;
 	}

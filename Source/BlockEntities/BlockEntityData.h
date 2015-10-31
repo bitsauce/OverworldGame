@@ -10,9 +10,10 @@ class BlockEntityData
 {
 	friend class OverworldGame;
 public:
-	BlockEntityData(const BlockEntityID id, const string &name, const uint width, const uint height, const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> factory) :
+	BlockEntityData(const BlockEntityID id, const string &name, const string &texturePath, const uint width, const uint height, const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> factory) :
 		m_id(id),
 		m_name(name),
+		m_texture(ResourceManager::get<Texture2D>(texturePath)),
 		m_width(width),
 		m_height(height),
 		m_factory(factory)
@@ -60,7 +61,9 @@ private:
 	const string &m_name;
 	const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> m_factory;
 	const uint m_width, m_height;
+	const Texture2DPtr m_texture;
 
 	static void init();
 	static vector<BlockEntityData*> s_data;
+	static TextureAtlas *s_atlas;
 };

@@ -135,7 +135,7 @@ bool Chunk::setBlockAt(const int x, const int y, const BlockID block, TerrainLay
 
 void Chunk::addStaticEntity(BlockEntity * entity)
 {
-	m_staticEntitites.insert(entity);
+	m_blockEntities.insert(entity);
 }
 
 // DRAWING

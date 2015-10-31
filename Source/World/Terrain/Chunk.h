@@ -44,8 +44,8 @@ private:
 	// CHUNK LOADER
 	ChunkLoader *m_chunkLoader;
 
-	// STATIC ENTITIES
-	set<BlockEntity*> m_staticEntitites;
+	// BLOCK ENTITIES
+	set<BlockEntity*> m_blockEntities;
 
 	// BLOCK GRID TEXTURE
 	Texture2DPtr m_blockTexture;

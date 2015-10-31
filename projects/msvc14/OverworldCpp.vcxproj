@@ -92,7 +92,6 @@
     <ResourceCompile Include="resources.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\x2D-Game-Engine\include\x2d\engine.cpp" />
     <ClCompile Include="..\..\source\animation\Animation.cpp" />
     <ClCompile Include="..\..\source\animation\Bone.cpp" />
     <ClCompile Include="..\..\source\animation\Skeleton.cpp" />

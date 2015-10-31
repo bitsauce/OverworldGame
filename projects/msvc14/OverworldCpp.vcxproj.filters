@@ -179,7 +179,6 @@
     <ClCompile Include="..\..\Source\Entities\Entity.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\x2D-Game-Engine\include\x2d\engine.cpp" />
     <ClCompile Include="..\..\Source\gui\GameOverlay\Chat.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClCompile>

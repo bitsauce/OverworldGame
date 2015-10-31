@@ -11,12 +11,6 @@ vector<EntityData*> EntityData::s_data(ENTITY_COUNT);
 
 void EntityData::init(Game *)
 {
-	// TODO:
-	// 1) Separate StaticEntities and DynamicEntities
-	// 2) Rename StaticEntitiy -> BlockEntity
-	// 3) Rename DyanicEntity -> Entity (maybe)
-	// 4) Static Entities should be contained in a vertex buffer handled by the chunk loader
-
 	// Dynamic entities
 	s_data[ENTITY_ARROW] = new EntityData(ENTITY_ARROW, "Arrow", Arrow::Factory);
 	s_data[ENTITY_PLAYER] = new EntityData(ENTITY_PLAYER, "Player", Player::Factory);

@@ -187,14 +187,14 @@ void ChunkLoader::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 
 	// Save chunk data
 	saveBlockData(file, chunk->m_blocks);
-	saveEntities(file, chunk->m_staticEntitites);
+	saveEntities(file, chunk->m_blockEntities);
 
 	// Delete static entities
-	for(BlockEntity *entity : chunk->m_staticEntitites)
+	for(BlockEntity *entity : chunk->m_blockEntities)
 	{
 		delete entity;
 	}
-	chunk->m_staticEntitites.clear(); // Empty static entity list
+	chunk->m_blockEntities.clear(); // Empty static entity list
 
 									  // Add chunk to chunk pool and remove from active chunks
 	m_chunkPool.push_back(chunk);
@@ -483,7 +483,7 @@ void ChunkLoader::draw(GraphicsContext &context, const float alpha)
 	// Redraw attached chunks
 	if(redrawChunks)
 	{
-		redrawAttachedChunks(context);
+		reattachChunks(context);
 	}
 
 	context.setRenderTarget(0);
@@ -573,7 +573,7 @@ void ChunkLoader::resizeEvent(uint width, uint height)
 	m_redrawGlobalBlocks = true;
 }
 
-void ChunkLoader::redrawAttachedChunks(GraphicsContext &context)
+void ChunkLoader::reattachChunks(GraphicsContext &context)
 {
 	float width = m_loadingArea.getWidth() * CHUNK_BLOCKSF;
 	float height = m_loadingArea.getHeight() * CHUNK_BLOCKSF;
