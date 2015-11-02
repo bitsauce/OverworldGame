@@ -1,17 +1,32 @@
-#include "EntitySpawnerItem.h"
+#include "BlockEntityItem.h"
 #include "World/Terrain/Terrain.h"
 #include "Entities/Dynamic/Pawn.h"
 #include "World/Camera.h"
 #include "Game/Game.h"
 #include "BlockEntities/BlockEntityData.h"
 
-EntitySpwanerItem::EntitySpwanerItem(OverworldGame * game, const BlockEntityID id) :
+BlockEntityItem::BlockEntityItem(OverworldGame *game, const BlockEntityID id) :
 	m_game(game),
-	m_entityID(id)
+	m_blockEntityID(id)
 {
 }
 
-void EntitySpwanerItem::use(Pawn *player, const float delta)
+void BlockEntityItem::equip(Pawn *pawn)
+{
+	/*BlockEntityData *data = BlockEntityData::get(m_blockEntityID);
+	if(data)
+	{
+		data->getPixmap();
+	}
+	player->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, m_sprite.getTexture());*/
+}
+
+void BlockEntityItem::unequip(Pawn *pawn)
+{
+	//player->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, 0);
+}
+
+void BlockEntityItem::use(Pawn *pawn, const float delta)
 {
 	// Get block input position
 	Vector2i blockPos = math::floor(m_game->getWorld()->getCamera()->getInputPosition() / BLOCK_PXF);
@@ -23,14 +38,15 @@ void EntitySpwanerItem::use(Pawn *player, const float delta)
 		player->getCurrentItem()->dec();
 	}*/
 
-	BlockEntityData *data = BlockEntityData::get(m_entityID);
+	BlockEntityData *data = BlockEntityData::get(m_blockEntityID);
 	if(data)
 	{
 		data->create(m_game->getWorld(), blockPos.x, blockPos.y);
+		pawn->getCurrentItem()->dec();
 	}
 }
 
-void EntitySpwanerItem::draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha)
+void BlockEntityItem::draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha)
 {
 	// Get block input position
 	/*Vector2i blockPos = m_game->getWorld()->getCamera()->getInputPosition();

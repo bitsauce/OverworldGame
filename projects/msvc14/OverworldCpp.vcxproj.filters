@@ -137,9 +137,6 @@
     <ClCompile Include="..\..\Source\Items\Weapons\Ammo.cpp">
       <Filter>Source\Items\Weapons</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Items\Placeable\EntitySpawnerItem.cpp">
-      <Filter>Source\Items\Placeable</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\World\Lighting\Pointlight.cpp">
       <Filter>Source\World\Lighting</Filter>
     </ClCompile>
@@ -196,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\BlockEntities\Torch.cpp">
       <Filter>Source\BlockEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Items\Placeable\BlockEntityItem.cpp">
+      <Filter>Source\Items\Placeable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -423,9 +423,6 @@
     <ClInclude Include="..\..\source\Game\Storage.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Items\Placeable\EntitySpawnerItem.h">
-      <Filter>Source\Items\Placeable</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\World\Lighting\Pointlight.h">
       <Filter>Source\World\Lighting</Filter>
     </ClInclude>
@@ -482,6 +479,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\BlockEntities\Torch.h">
       <Filter>Source\BlockEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Items\Placeable\BlockEntityItem.h">
+      <Filter>Source\Items\Placeable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

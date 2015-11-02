@@ -14,6 +14,7 @@
 
 #include "Entities/EntityData.h"
 #include "BlockEntities/BlockEntity.h"
+#include "BlockEntities/BlockEntityData.h"
 
 Terrain::Terrain(World *world) :
 	m_world(world),
@@ -83,14 +84,13 @@ bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRA
 	return false;
 }
 
-void Terrain::placeStaticEntity(BlockEntity * entity)
+void Terrain::placeStaticEntity(BlockEntity *entity)
 {
 	Vector2i pos = entity->getPosition();
-	Vector2i size = Vector2i(0);// ((StaticEntityData*) EntityData::get(entity->getID()))->getSize();
 	m_chunkLoader.getChunkAt((int) floor(pos.x / CHUNK_BLOCKSF), (int) floor(pos.y / CHUNK_BLOCKSF)).addStaticEntity(entity);
-	for(int y = pos.y; y < pos.y + size.y; ++y)
+	for(int y = pos.y; y < pos.y + entity->getData()->getHeight(); ++y)
 	{
-		for(int x = pos.x; x < pos.x + size.x; ++x)
+		for(int x = pos.x; x < pos.x + entity->getData()->getWidth(); ++x)
 		{
 			m_chunkLoader.getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), BLOCK_ENTITY, TERRAIN_LAYER_MIDDLE);
 		}

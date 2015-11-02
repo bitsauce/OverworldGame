@@ -68,7 +68,7 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 	// Mark as not modified
 	m_attached = m_modified = false;
 
-	// Mark chunk as initialized
+	// Chunk generated
 	LOG("Chunk [%i, %i] generated", m_x, m_y);
 }
 

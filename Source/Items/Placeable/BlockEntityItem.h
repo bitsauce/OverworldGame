@@ -5,17 +5,19 @@
 
 enum EntityID;
 
-class EntitySpwanerItem : public ItemData
+class BlockEntityItem : public ItemData
 {
 public:
-	EntitySpwanerItem(OverworldGame * game, const BlockEntityID id);
+	BlockEntityItem(OverworldGame * game, const BlockEntityID id);
 
+	void equip(Pawn *player);
+	void unequip(Pawn *player);
 	void use(Pawn *player, const float delta);
 	void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:
 	OverworldGame * m_game;
-	const BlockEntityID m_entityID;
+	const BlockEntityID m_blockEntityID;
 };
 
 #endif // BLOCK_ENTITY_ITEM_H

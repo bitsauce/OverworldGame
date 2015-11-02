@@ -137,7 +137,7 @@
     <ClCompile Include="..\..\source\gui\UiObject.cpp" />
     <ClCompile Include="..\..\source\Items\BlockItem.cpp" />
     <ClCompile Include="..\..\source\items\ItemData.cpp" />
-    <ClCompile Include="..\..\Source\Items\Placeable\EntitySpawnerItem.cpp" />
+    <ClCompile Include="..\..\Source\Items\Placeable\BlockEntityItem.cpp" />
     <ClCompile Include="..\..\Source\Items\Tools\Axe.cpp" />
     <ClCompile Include="..\..\source\Items\Tools\Pickaxe.cpp" />
     <ClCompile Include="..\..\Source\Items\Weapons\Ammo.cpp" />
@@ -207,7 +207,7 @@
     <ClInclude Include="..\..\source\gui\UiObject.h" />
     <ClInclude Include="..\..\source\Items\BlockItem.h" />
     <ClInclude Include="..\..\source\items\ItemData.h" />
-    <ClInclude Include="..\..\Source\Items\Placeable\EntitySpawnerItem.h" />
+    <ClInclude Include="..\..\Source\Items\Placeable\BlockEntityItem.h" />
     <ClInclude Include="..\..\Source\Items\Tools\Axe.h" />
     <ClInclude Include="..\..\source\Items\Tools\Pickaxe.h" />
     <ClInclude Include="..\..\Source\Items\Weapons\Ammo.h" />

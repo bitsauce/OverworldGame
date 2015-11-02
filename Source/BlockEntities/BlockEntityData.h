@@ -56,6 +56,21 @@ public:
 		return m_id;
 	}
 
+	Pixmap getPixmap() const
+	{
+		return m_pixmap;
+	}
+
+	uint getWidth() const
+	{
+		return m_width;
+	}
+
+	uint getHeight() const
+	{
+		return m_height;
+	}
+
 private:
 	const BlockEntityID m_id;
 	const string &m_name;

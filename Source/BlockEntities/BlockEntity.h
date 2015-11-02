@@ -27,6 +27,11 @@ public:
 		return m_position.y;
 	}
 
+	const BlockEntityData *getData()
+	{
+		return m_data;
+	}
+
 private:
 	const Vector2i m_position;
 	const BlockEntityData *m_data;
