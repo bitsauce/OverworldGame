@@ -53,7 +53,7 @@ public:
 
 	ChunkArea getLoadingArea() const;
 
-	void update();
+	void update(const float dt);
 	void draw(GraphicsContext &context, const float alpha);
 
 private:
@@ -109,6 +109,7 @@ private:
 
 	// Block rendering shader
 	ShaderPtr m_tileMapShader;
+	float m_time;
 
 	// Lighting
 	RenderTarget2D *m_lightingPass0;

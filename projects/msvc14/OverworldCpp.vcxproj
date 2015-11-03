@@ -230,6 +230,9 @@
     <ClInclude Include="..\..\Source\World\World.h" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\..\Content\KeyBinds.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\..\Content\Shaders\BlurH.frag" />
     <None Include="..\..\Content\Shaders\BlurH.vert" />
     <None Include="..\..\Content\Shaders\BlurV.frag" />
@@ -238,23 +241,20 @@
     <None Include="..\..\Content\Shaders\DirectionalLighting.vert" />
     <None Include="..\..\Content\Shaders\DrawChunk.frag" />
     <None Include="..\..\Content\Shaders\DrawChunk.vert" />
-    <None Include="..\..\Content\Shaders\godrays.frag" />
-    <None Include="..\..\Content\Shaders\godrays.vert" />
-    <None Include="..\..\Content\Shaders\outline.frag" />
-    <None Include="..\..\Content\Shaders\outline.vert" />
+    <None Include="..\..\Content\Shaders\GodRays.frag" />
+    <None Include="..\..\Content\Shaders\GodRays.vert" />
+    <None Include="..\..\Content\Shaders\Outline.frag" />
+    <None Include="..\..\Content\Shaders\Outline.vert" />
     <None Include="..\..\Content\Shaders\RadialLighting.frag" />
     <None Include="..\..\Content\Shaders\RadialLighting.vert" />
-    <None Include="..\..\Content\Shaders\simplex3d.frag" />
-    <None Include="..\..\Content\Shaders\simplex3d.vert" />
+    <None Include="..\..\Content\Shaders\Simplex3d.frag" />
+    <None Include="..\..\Content\Shaders\Simplex3d.vert" />
     <None Include="..\..\Content\Shaders\Simplex3DBlend.frag" />
     <None Include="..\..\Content\Shaders\Simplex3DBlend.vert" />
     <None Include="..\..\Content\Shaders\TileMap.frag" />
     <None Include="..\..\Content\Shaders\TileMap.vert" />
     <None Include="..\..\Content\Shaders\TileSort.frag" />
     <None Include="..\..\Content\Shaders\TileSort.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="..\..\Content\KeyBinds.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

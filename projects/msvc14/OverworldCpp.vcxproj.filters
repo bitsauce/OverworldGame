@@ -485,6 +485,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\..\Content\KeyBinds.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\..\Content\Shaders\BlurH.frag">
       <Filter>Shaders</Filter>
     </None>
@@ -503,16 +506,22 @@
     <None Include="..\..\Content\Shaders\DirectionalLighting.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\..\Content\Shaders\godrays.frag">
+    <None Include="..\..\Content\Shaders\DrawChunk.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\..\Content\Shaders\godrays.vert">
+    <None Include="..\..\Content\Shaders\DrawChunk.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\..\Content\Shaders\outline.frag">
+    <None Include="..\..\Content\Shaders\GodRays.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\..\Content\Shaders\outline.vert">
+    <None Include="..\..\Content\Shaders\GodRays.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\Outline.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\..\Content\Shaders\Outline.vert">
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\RadialLighting.frag">
@@ -521,10 +530,10 @@
     <None Include="..\..\Content\Shaders\RadialLighting.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\..\Content\Shaders\simplex3d.frag">
+    <None Include="..\..\Content\Shaders\Simplex3d.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\..\Content\Shaders\simplex3d.vert">
+    <None Include="..\..\Content\Shaders\Simplex3d.vert">
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\Simplex3DBlend.frag">
@@ -539,20 +548,11 @@
     <None Include="..\..\Content\Shaders\TileMap.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\..\Content\Shaders\TileSort.vert">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="..\..\Content\Shaders\TileSort.frag">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\..\Content\Shaders\DrawChunk.vert">
+    <None Include="..\..\Content\Shaders\TileSort.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="..\..\Content\Shaders\DrawChunk.frag">
-      <Filter>Shaders</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="..\..\Content\KeyBinds.xml" />
   </ItemGroup>
 </Project>

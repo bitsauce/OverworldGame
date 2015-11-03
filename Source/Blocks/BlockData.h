@@ -21,7 +21,16 @@ public:
 	// Static functions
 	static void init();
 	static BlockData &get(const BlockID id);
-	static TextureAtlas *getBlockAtlas() { return s_blockAtlas; }
+
+	static TextureAtlas *getBlockAtlas()
+	{
+		return s_blockAtlas;
+	}
+
+	static Texture2DPtr getBlockDataTexture()
+	{
+		return s_blockDataTexture;
+	}
 	
 private:
 	const BlockID m_id;
@@ -32,6 +41,7 @@ private:
 	// Static variables
 	static vector<BlockData*> s_blockData;
 	static TextureAtlas *s_blockAtlas;
+	static Texture2DPtr s_blockDataTexture;
 };
 
 #endif // BLOCK_DATA_H

@@ -9,26 +9,26 @@
 
 const float QUAD_UVS[40] =
 {
-	1, 25,
-	9, 25,
-	17, 25,
-	25, 25,
-	1, 17,
-	9, 17,
-	17, 17,
-	25, 17,
-	1, 9,
-	9, 9,
-	17, 9,
-	25, 9,
-	1, 1,
-	9, 1,
-	17, 1,
-	25, 1,
-	1, 41,
-	9, 41,
-	1, 33,
-	9, 33
+	0, 24,
+	8, 24,
+	16, 24,
+	24, 24,
+	0, 16,
+	8, 16,
+	16, 16,
+	24, 16,
+	0, 8,
+	8, 8,
+	16, 8,
+	24, 8,
+	0, 0,
+	8, 0,
+	16, 0,
+	24, 0,
+	0, 40,
+	8, 40,
+	0, 32,
+	8, 32
 };
 
 ChunkLoader::ChunkLoader(World *world) :
@@ -46,7 +46,8 @@ ChunkLoader::ChunkLoader(World *world) :
 	m_directionalLightingShader(ResourceManager::get<Shader>(":/Shaders/DirectionalLighting")),
 	m_radialLightingShader(ResourceManager::get<Shader>(":/Shaders/RadialLighting")),
 	m_blurHShader(ResourceManager::get<Shader>(":/Shaders/BlurH")),
-	m_blurVShader(ResourceManager::get<Shader>(":/Shaders/BlurV"))
+	m_blurVShader(ResourceManager::get<Shader>(":/Shaders/BlurV")),
+	m_time(0.0f)
 {
 	// Setup vertex format
 	VertexFormat vertexFormat;
@@ -63,6 +64,7 @@ ChunkLoader::ChunkLoader(World *world) :
 
 	// Set block atlas
 	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
+	m_tileMapShader->setSampler2D("u_BlockData", BlockData::getBlockDataTexture());
 	m_tileMapShader->setUniform2f("u_QuadUVs", QUAD_UVS);
 
 	// Set max chunks to some value
@@ -300,8 +302,10 @@ ChunkLoader::ChunkArea ChunkLoader::getLoadingArea() const
 	return m_loadingArea;
 }
 
-void ChunkLoader::update()
+void ChunkLoader::update(const float dt)
 {
+	m_tileMapShader->setUniform1f("u_Time", m_time);
+	m_time += dt;
 }
 
 void ChunkLoader::draw(GraphicsContext &context, const float alpha)

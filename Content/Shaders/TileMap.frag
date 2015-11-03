@@ -1,18 +1,18 @@
-// Current assembly line count: 463 lines
-// Current assembly file size: 19497 bytes
-
 in vec2 v_TexCoord;
 out vec4 out_FragColor;
 
 uniform usampler2D u_SortedBlockTexture;
 uniform usampler2D u_SortedQuadTexture;
 uniform sampler2D u_BlockAtlas;
+uniform sampler2D u_BlockData;
 uniform vec2 u_QuadUVs[20];
+uniform float u_Time;
 
 void main()
 {
 	// Block atlas texel size
-	const vec2 texelSize = vec2(1.0 / 2048.0);
+	vec2 texelSize = 1.0 / textureSize(u_BlockAtlas, 0);
+	vec2 blockDataTextureSize = 1.0 / textureSize(u_BlockData, 0);
 	vec2 sortedTexureSize = textureSize(u_SortedBlockTexture, 0);
 
 	// Sub-block texture coordinate
@@ -29,10 +29,20 @@ void main()
 	uvec4 quadIDs = uvec4((quads >> 24U) & 0xFFU, (quads >> 16U) & 0xFFU, (quads >> 8U) & 0xFFU, quads & 0xFFU);
 
     // Blends together colors from edges, corners and fill
-	out_FragColor = texture(u_BlockAtlas, ((u_QuadUVs[quadIDs[0]] + vec2(34.0 * float(blockIDs[0]), 0.0)) + quadSubTexCoord * 8.0) * texelSize);
+	vec4 blockUVs = texture(u_BlockData, (vec2(blockIDs[0], 0.0) + 0.5) * blockDataTextureSize);
+	vec4 blockData = texture(u_BlockData, (vec2(blockIDs[0], 1.0) + 0.5) * blockDataTextureSize);
+	vec2 blockAltasPosition = vec2(float(uint(blockUVs[0] * 255.5) | (uint(blockUVs[1] * 255.5) << 8U)), float(uint(blockUVs[2] * 255.5) | (uint(blockUVs[3] * 255.5) << 8U)))
+								+ vec2(32.0 * float(uint(mod(u_Time, float(uint(blockData[0] * 255.5))))), 0.0);
+	
+	out_FragColor = texture(u_BlockAtlas, (blockAltasPosition + u_QuadUVs[quadIDs[0]] + quadSubTexCoord * 8.0) * texelSize);
     for (int i = 1; i < 4; ++i)
 	{
-        vec4 src = float(blockIDs[i] != blockIDs[i - 1]) * texture(u_BlockAtlas, ((u_QuadUVs[quadIDs[i]] + vec2(34.0 * float(blockIDs[i]), 0.0)) + quadSubTexCoord * 8.0) * texelSize);
+		blockUVs = texture(u_BlockData, (vec2(blockIDs[i], 0.0) + 0.5) * blockDataTextureSize);
+		blockData = texture(u_BlockData, (vec2(blockIDs[i], 1.0) + 0.5) * blockDataTextureSize);
+		blockAltasPosition = vec2(float(uint(blockUVs[0] * 255.5) | (uint(blockUVs[1] * 255.5) << 8U)), float(uint(blockUVs[2] * 255.5) | (uint(blockUVs[3] * 255.5) << 8U)))
+								+ vec2(32.0 * float(uint(mod(u_Time, float(uint(blockData[0] * 255.5))))), 0.0);
+
+        vec4 src = float(blockIDs[i] != blockIDs[i - 1]) * texture(u_BlockAtlas, (blockAltasPosition + u_QuadUVs[quadIDs[i]] + quadSubTexCoord * 8.0) * texelSize);
 		out_FragColor += src - src.a * out_FragColor;
     }
 }

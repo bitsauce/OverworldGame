@@ -108,7 +108,7 @@ void World::update(const float delta)
 {
 	m_timeOfDay->update(delta);
 	m_background->update(delta);
-	m_terrain->getChunkLoader()->update();
+	m_terrain->getChunkLoader()->update(delta);
 	m_camera->update(delta);
 	
 	list<Entity*> entities = m_entities;
