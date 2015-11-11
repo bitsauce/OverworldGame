@@ -52,6 +52,7 @@ public:
 	};
 
 	ChunkArea getLoadingArea() const;
+	ChunkArea getActiveArea() const;
 
 	void update(const float dt);
 	void draw(GraphicsContext &context, const float alpha);
@@ -80,6 +81,7 @@ private:
 	unordered_map<uint, Chunk*> m_chunks;
 
 	// Active area
+	ChunkArea m_activeArea;
 	ChunkArea m_loadingArea;
 	ChunkArea m_prevLoadingArea;
 	bool m_redrawGlobalBlocks;
@@ -105,7 +107,7 @@ private:
 
 	// Global render target
 	RenderTarget2D *m_blocksRenderTarget;
-	RenderTarget2D *m_sortedBlocksRenderTarget[TERRAIN_LAYER_COUNT];
+	RenderTarget2D *m_sortedBlocksRenderTarget[WORLD_LAYER_COUNT];
 
 	// Block rendering shader
 	ShaderPtr m_tileMapShader;

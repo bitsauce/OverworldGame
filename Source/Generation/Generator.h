@@ -20,12 +20,12 @@ public:
 	void getChunkBlocks(const int chunkX, const int chunkY, BlockID *blocks);
 	int getGroundHeight(const int x);
 
-	void setBlockAt(const int x, const int y, const TerrainLayer z, const BlockID block);
+	void setBlockAt(const int x, const int y, const WorldLayer z, const BlockID block);
 
 private:
 	void loadStructures(const int superChunkX, const int superChunkY);
 
-	BlockID getGroundAt(const int x, const int y, const TerrainLayer layer);
+	BlockID getGroundAt(const int x, const int y, const WorldLayer layer);
 
 	uint m_seed;
 	Simplex2D m_noise;

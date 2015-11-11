@@ -39,12 +39,12 @@ void OakTree::place(WorldGenerator *worldGenerator)
 
 	for(int i = -1; i <= 1; ++i)
 	{
-		worldGenerator->setBlockAt(m_x + i, m_y, TERRAIN_LAYER_BACK, BLOCK_OAK_WOOD);
+		worldGenerator->setBlockAt(m_x + i, m_y, WORLD_LAYER_BACK, BLOCK_OAK_WOOD);
 	}
 
     for(int y = 0; y < stemHeight; ++y)
     {
-		worldGenerator->setBlockAt(m_x, m_y - y, TERRAIN_LAYER_BACK, BLOCK_OAK_WOOD);
+		worldGenerator->setBlockAt(m_x, m_y - y, WORLD_LAYER_BACK, BLOCK_OAK_WOOD);
 
         if(y > 3 && y < stemHeight * 0.70f)
         {
@@ -85,7 +85,7 @@ void OakTree::place(WorldGenerator *worldGenerator)
                     int dy = (int) (i * inclination);
                     for (int y1 = 0; y1 <= dy; y1++)
 					{
-						worldGenerator->setBlockAt(branchX, branchY - y1, TERRAIN_LAYER_BACK, BLOCK_OAK_WOOD);
+						worldGenerator->setBlockAt(branchX, branchY - y1, WORLD_LAYER_BACK, BLOCK_OAK_WOOD);
 					}
 
 					branchX += branch.dir;
@@ -109,7 +109,7 @@ void OakTree::place(WorldGenerator *worldGenerator)
             for (int x1 = -p.r; x1 <= p.r; x1++)
             {
                 if (sqrt(x1 * x1 + y1 * y1) > p.r) continue;
-				worldGenerator->setBlockAt(p.x + x1, p.y + y1, TERRAIN_LAYER_FRONT, BLOCK_OAK_LEAVES);
+				worldGenerator->setBlockAt(p.x + x1, p.y + y1, WORLD_LAYER_FRONT, BLOCK_OAK_LEAVES);
             }
         }
     }

@@ -19,9 +19,9 @@
 Terrain::Terrain(World *world) :
 	m_world(world),
 	m_chunkLoader(world),
-	m_background(this, world->getCamera(), PRIORITY_TERRAIN_BACKGROUND, TERRAIN_LAYER_BACK),
-	m_middleground(this, world->getCamera(), PRIORITY_TERRAIN_MIDDLEGROUND, TERRAIN_LAYER_MIDDLE),
-	m_foreground(this, world->getCamera(), PRIORITY_TERRAIN_FOREGROUND, TERRAIN_LAYER_FRONT)
+	m_background(this, world->getCamera(), PRIORITY_TERRAIN_BACKGROUND, WORLD_LAYER_BACK),
+	m_middleground(this, world->getCamera(), PRIORITY_TERRAIN_MIDDLEGROUND, WORLD_LAYER_MIDDLE),
+	m_foreground(this, world->getCamera(), PRIORITY_TERRAIN_FOREGROUND, WORLD_LAYER_FRONT)
 {
 	LOG("Initializing terrain");
 
@@ -36,7 +36,7 @@ Terrain::~Terrain()
 }
 	
 // BLOCKS
-bool Terrain::setBlockAt(const int x, const int y, BlockID block, const TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
+bool Terrain::setBlockAt(const int x, const int y, BlockID block, const WorldLayer layer = WORLD_LAYER_MIDDLE)
 {
 	if(Connection::getInstance()->isServer())
 	{
@@ -62,17 +62,17 @@ bool Terrain::setBlockAt(const int x, const int y, BlockID block, const TerrainL
 	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), block, layer);
 }
 
-BlockID Terrain::getBlockAt(const int x, const int y, const TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
+BlockID Terrain::getBlockAt(const int x, const int y, const WorldLayer layer = WORLD_LAYER_MIDDLE)
 {
 	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
 }
 
-bool Terrain::isBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
+bool Terrain::isBlockAt(const int x, const int y, WorldLayer layer = WORLD_LAYER_MIDDLE)
 {
 	return getBlockAt(x, y, layer) != BLOCK_EMPTY;
 }
 
-bool Terrain::removeBlockAt(const int x, const int y, TerrainLayer layer = TERRAIN_LAYER_MIDDLE)
+bool Terrain::removeBlockAt(const int x, const int y, WorldLayer layer = WORLD_LAYER_MIDDLE)
 {
 	BlockID blockID = getBlockAt(x, y, layer);
 	if(setBlockAt(x, y, BLOCK_EMPTY, layer))
@@ -88,17 +88,17 @@ void Terrain::placeStaticEntity(BlockEntity *entity)
 {
 	Vector2i pos = entity->getPosition();
 	m_chunkLoader.getChunkAt((int) floor(pos.x / CHUNK_BLOCKSF), (int) floor(pos.y / CHUNK_BLOCKSF)).addStaticEntity(entity);
-	for(int y = pos.y; y < pos.y + entity->getData()->getHeight(); ++y)
+	for(int y = pos.y; y < pos.y + (int) entity->getData()->getHeight(); ++y)
 	{
-		for(int x = pos.x; x < pos.x + entity->getData()->getWidth(); ++x)
+		for(int x = pos.x; x < pos.x + (int) entity->getData()->getWidth(); ++x)
 		{
-			m_chunkLoader.getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), BLOCK_ENTITY, TERRAIN_LAYER_MIDDLE);
+			m_chunkLoader.getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), BLOCK_ENTITY, WORLD_LAYER_MIDDLE);
 		}
 	}
 }
 
 // DRAWING
-Terrain::Drawer::Drawer(Terrain *terrain, Camera *camera, const Priority drawOrder, const TerrainLayer layer) :
+Terrain::Drawer::Drawer(Terrain *terrain, Camera *camera, const Priority drawOrder, const WorldLayer layer) :
 	m_chunkLoader(terrain->getChunkLoader()),
 	m_camera(camera),
 	m_layer(layer)

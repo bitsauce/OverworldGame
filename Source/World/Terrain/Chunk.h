@@ -23,10 +23,13 @@ public:
 	int getX() const { return m_x; }
 	int getY() const { return m_y; }
 	
-	BlockID getBlockAt(const int x, const int y, TerrainLayer layer) const;
-	bool isBlockAt(const int x, const int y, TerrainLayer layer) const;
-	bool isBlockOccupied(const int x, const int y, TerrainLayer layer) const;
-	bool setBlockAt(const int x, const int y, const BlockID block, TerrainLayer layer);
+	BlockID getBlockAt(const int x, const int y, WorldLayer layer) const;
+	bool isBlockAt(const int x, const int y, WorldLayer layer) const;
+	bool isBlockOccupied(const int x, const int y, WorldLayer layer) const;
+	bool setBlockAt(const int x, const int y, const BlockID block, WorldLayer layer);
+
+	void update(const float dt);
+	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 	void addStaticEntity(BlockEntity *entity);
 	

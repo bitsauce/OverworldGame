@@ -6,6 +6,7 @@
 enum Priority;
 enum EntityID;
 class World;
+class EntityData;
 
 class Entity
 {
@@ -13,7 +14,7 @@ public:
 	Entity(World *world, const EntityID id);
 	virtual ~Entity();
 
-	const EntityID getID() const { return m_id; }
+	const EntityData *getData() const { return m_data; }
 
 	virtual void createSaveData(FileWriter &saveData) {}
 	virtual void loadSaveData(FileReader &saveData) {}
@@ -22,10 +23,8 @@ public:
 	virtual void draw(SpriteBatch *spriteBatch, const float alpha) {}
 
 protected:
-	World *m_world;
-
-private:
-	const EntityID m_id;
+	const EntityData * const m_data;
+	World * const m_world;
 };
 
 #endif // ENTITY_H

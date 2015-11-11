@@ -5,16 +5,15 @@
 
 class World;
 class Entity;
-class DynamicEntity;
-class StaticEntity;
 
 class EntityData
 {
 	friend class OverworldGame;
 public:
-	EntityData(const EntityID id, const string &name, const function<Entity*(World*)> factory) :
+	EntityData(const EntityID id, const string &name, const WorldLayer layer, const function<Entity*(World*)> factory) :
 		m_id(id),
 		m_name(name),
+		m_layer(layer),
 		m_factory(factory)
 	{
 	}
@@ -40,9 +39,19 @@ public:
 		return 0;
 	}
 
-	const EntityID getID() const
+	EntityID getID() const
 	{
 		return m_id;
+	}
+
+	string getName() const
+	{
+		return m_name;
+	}
+
+	WorldLayer getLayer() const
+	{
+		return m_layer;
 	}
 
 	Entity *create(World *world)
@@ -57,6 +66,7 @@ public:
 private:
 	const EntityID m_id;
 	const string m_name;
+	const WorldLayer m_layer;
 	const function<Entity*(World*)> m_factory;
 
 	static void init(Game *game);

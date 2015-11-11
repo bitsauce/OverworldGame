@@ -9,7 +9,7 @@
 public:
 	Tree();
 	
-	BlockID getBlockAt(const int x, const int y, const TerrainLayer layer);
+	BlockID getBlockAt(const int x, const int y, const WorldLayer layer);
 };*/
 
 #endif // GRASSLAND_H

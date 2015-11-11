@@ -6,6 +6,7 @@
 #include "World/Camera.h"
 #include "Entities/Dynamic/Player.h"
 #include "Blocks/BlockData.h"
+#include "BlockEntities/BlockEntityData.h"
 #include "Networking/Server.h"
 #include "Entities/Dynamic/Mobs/Zombie.h"
 #include "Game/GameStates/GameState.h"
@@ -137,7 +138,14 @@ void Debug::debugFunction(int action, const int i)
 
 		case 11:
 		{
-			m_world->getCamera()->lookAt(m_world->getCamera()->getInputPosition());
+			ChunkLoader::ChunkArea area = m_world->getTerrain()->getChunkLoader()->getActiveArea();
+			for(int y = area.y0 * CHUNK_BLOCKS; y <= area.y1 * CHUNK_BLOCKS; ++y)
+			{
+				for(int x = area.x0 * CHUNK_BLOCKS; x <= area.x1 * CHUNK_BLOCKS; ++x)
+				{
+					BlockEntityData::get(BLOCK_ENTITY_TORCH)->create(m_world, x, y);
+				}
+			}
 		}
 		break;
 
@@ -155,9 +163,9 @@ void Debug::update(const float delta)
 	if(m_blockPainterEnabled)
 	{
 		// Block painting
-		TerrainLayer layer = TERRAIN_LAYER_MIDDLE;
-		if(Input::getKeyState(XD_KEY_LEFT_SHIFT) == GLFW_PRESS) layer = TERRAIN_LAYER_FRONT;
-		if(Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS) layer = TERRAIN_LAYER_BACK;
+		WorldLayer layer = WORLD_LAYER_MIDDLE;
+		if(Input::getKeyState(XD_KEY_LEFT_SHIFT) == GLFW_PRESS) layer = WORLD_LAYER_FRONT;
+		if(Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS) layer = WORLD_LAYER_BACK;
 		if(Input::getKeyState(XD_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 		{
 			int x = (int) floor(m_world->getCamera()->getInputPosition().x / BLOCK_PXF), y = (int) floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF);
@@ -181,7 +189,7 @@ void Debug::draw(SpriteBatch *spriteBatch, const float alpha)
 	Vector2 inputPosition = m_world->getCamera()->getInputPosition();
 	setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
 	setVariable("Zoom", util::intToStr(int(m_world->getCamera()->getZoomLevel() * 100)) + "%");
-	setVariable("Block Under Cursor", util::intToStr(m_world->getTerrain()->getBlockAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), TERRAIN_LAYER_MIDDLE)) + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
+	setVariable("Block Under Cursor", util::intToStr(m_world->getTerrain()->getBlockAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), WORLD_LAYER_MIDDLE)) + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
 	string hourStr, minStr;
 	{
 		int hour = m_world->getTimeOfDay()->getHour();

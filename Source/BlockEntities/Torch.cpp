@@ -3,8 +3,11 @@
 Torch::Torch(World * world, int x, int y, const BlockEntityData *data) :
 	BlockEntity(world, x, y, data),
 	m_time(0.0f),
-	m_pointlight(world->getLighting(), Vector2(x, y), 10.0f, Color(255, 190, 90))
+	m_sprite(ResourceManager::get<Texture2D>(":/Sprites/BlockEntities/LightSources/Torch.png"))//,
+	//m_pointlight(world->getLighting(), Vector2((float) x, (float) y), 10.0f, Color(255, 190, 90))
 {
+	//m_terrain->setBlockTimeAt(torchPos.x, torchPos.y, torchPos.z, WORLD_LAYER_BACK);
+	m_sprite.setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
 }
 
 void Torch::update(const float delta)
@@ -18,5 +21,6 @@ void Torch::update(const float delta)
 
 void Torch::draw(SpriteBatch *spriteBatch, const float alpha)
 {
-	//spriteBatch->drawSprite(m_sprite);
+	m_sprite.setRegion(TextureRegion(0, 0, 1.0/3.0, 1.0), true);
+	spriteBatch->drawSprite(m_sprite);
 }

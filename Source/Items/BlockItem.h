@@ -12,7 +12,7 @@ enum TerrainLayer;
 class BlockItem : public ItemData
 {
 public:
-	BlockItem(OverworldGame * game, const TerrainLayer layer, const BlockID blockID);
+	BlockItem(OverworldGame * game, const WorldLayer layer, const BlockID blockID);
 
 	void use(Pawn *pawn, const float delta);
 	void draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha);
@@ -20,7 +20,7 @@ public:
 private:
 	Camera *m_camera;
 	Terrain *m_terrain;
-	const TerrainLayer m_layer;
+	const WorldLayer m_layer;
 	const BlockID m_blockID;
 };
 

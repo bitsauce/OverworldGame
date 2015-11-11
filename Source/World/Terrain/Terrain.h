@@ -7,7 +7,7 @@
 #include "World/Terrain/Chunk.h"
 #include "Generation/Generator.h"
 
-enum TerrainLayer;
+enum WorldLayer;
 enum BlockID;
 
 class BlockEntity;
@@ -20,12 +20,12 @@ public:
 	~Terrain();
 	
 	// BLOCKS
-	bool setBlockAt(const int x, const int y, BlockID block, const TerrainLayer layer);
-	BlockID getBlockAt(const int x, const int y, const TerrainLayer layer);
-	bool isBlockAt(const int x, const int y, TerrainLayer layer);
+	bool setBlockAt(const int x, const int y, BlockID block, const WorldLayer layer);
+	BlockID getBlockAt(const int x, const int y, const WorldLayer layer);
+	bool isBlockAt(const int x, const int y, WorldLayer layer);
 
 	// Removes the block at [x, y], creating an ItemDrop for the block type in the process
-	bool removeBlockAt(const int x, const int y, TerrainLayer layer);
+	bool removeBlockAt(const int x, const int y, WorldLayer layer);
 
 	// Static entities
 	void placeStaticEntity(BlockEntity *entity);
@@ -45,7 +45,7 @@ private:
 	{
 	public:
 		// CONSTRUCTOR
-		Drawer(Terrain *terrain, Camera *camera, const Priority drawOrder, const TerrainLayer layer);
+		Drawer(Terrain *terrain, Camera *camera, const Priority drawOrder, const WorldLayer layer);
 
 		// DRAWING
 		void draw(SpriteBatch *spriteBatch, const float alpha);
@@ -58,7 +58,7 @@ private:
 		Camera *m_camera;
 
 		// LAYER
-		TerrainLayer m_layer;
+		WorldLayer m_layer;
 	};
 
 	Drawer m_background;

@@ -11,6 +11,15 @@ class BlockEntity
 {
 public:
 	BlockEntity(World *world, const int x, const int y, const BlockEntityData *data);
+	~BlockEntity();
+
+	virtual void update(const float dt)
+	{
+	}
+
+	virtual void draw(SpriteBatch *spriteBatch, const float alpha)
+	{
+	}
 
 	Vector2i getPosition() const
 	{
@@ -35,6 +44,9 @@ public:
 private:
 	const Vector2i m_position;
 	const BlockEntityData *m_data;
+	
+protected:
+	World * const m_world;
 };
 
 #endif // STATIC_ENTITY_H

@@ -30,7 +30,7 @@ void Arrow::draw(SpriteBatch *spriteBatch, const float alpha)
 
 bool Arrow::plotTest(int x, int y)
 {
-	return !m_world->getTerrain()->isBlockAt(floor(x / BLOCK_PXF), floor(y / BLOCK_PXF), TERRAIN_LAYER_MIDDLE);
+	return !m_world->getTerrain()->isBlockAt(floor(x / BLOCK_PXF), floor(y / BLOCK_PXF), WORLD_LAYER_MIDDLE);
 }
 
 void Arrow::update(const float delta)

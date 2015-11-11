@@ -43,7 +43,7 @@ void Axe::update(Pawn *pawn, const float delta)
 
 	Terrain *terrain = m_game->getWorld()->getTerrain();
 	if(pawn->getController()->getInputState(Controller::INPUT_USE_ITEM) && // Do we have user input and...
-		terrain->getBlockAt(position.x, position.y, TERRAIN_LAYER_BACK) > BLOCK_ENTITY) // ... is there a block at this position?
+		terrain->getBlockAt(position.x, position.y, WORLD_LAYER_BACK) > BLOCK_ENTITY) // ... is there a block at this position?
 	{
 		// Reset timer if block position have changed
 		if(position != m_prevBlockPosition)
@@ -58,8 +58,8 @@ void Axe::update(Pawn *pawn, const float delta)
 		m_mineCounter -= delta;
 		if(m_mineCounter <= 0.0f)
 		{
-			BlockID blockID = terrain->getBlockAt(position.x, position.y, TERRAIN_LAYER_BACK);
-			terrain->removeBlockAt(position.x, position.y, TERRAIN_LAYER_BACK);
+			BlockID blockID = terrain->getBlockAt(position.x, position.y, WORLD_LAYER_BACK);
+			terrain->removeBlockAt(position.x, position.y, WORLD_LAYER_BACK);
 
 			// If the block removed was a wood type block
 			if(blockID == BLOCK_OAK_WOOD)
@@ -105,7 +105,7 @@ void Axe::draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha)
 void Axe::makeTreeFall(const int x, const int y)
 {
 	Terrain *terrain = m_game->getWorld()->getTerrain();
-	if(terrain->getBlockAt(x, y, TERRAIN_LAYER_BACK) != BLOCK_OAK_WOOD) return;
+	if(terrain->getBlockAt(x, y, WORLD_LAYER_BACK) != BLOCK_OAK_WOOD) return;
 
 	list<pair<int, int>> nodes;
 
@@ -120,7 +120,7 @@ void Axe::makeTreeFall(const int x, const int y)
 
 		if(processed.find(node) != processed.end()) continue;
 
-		if(terrain->getBlockAt(node.first, node.second, TERRAIN_LAYER_BACK) == BLOCK_OAK_WOOD)
+		if(terrain->getBlockAt(node.first, node.second, WORLD_LAYER_BACK) == BLOCK_OAK_WOOD)
 		{
 			processed.insert(node);
 			nodes.push_back(node);
@@ -131,7 +131,7 @@ void Axe::makeTreeFall(const int x, const int y)
 		}
 
 		// If this cluster is connected to the ground, we don't remove any blocks
-		if(terrain->getBlockAt(node.first, node.second, TERRAIN_LAYER_MIDDLE) != BLOCK_EMPTY)
+		if(terrain->getBlockAt(node.first, node.second, WORLD_LAYER_MIDDLE) != BLOCK_EMPTY)
 		{
 			return;
 		}
@@ -140,7 +140,7 @@ void Axe::makeTreeFall(const int x, const int y)
 	// Remove blocks
 	for(pair<int, int> n : nodes)
 	{
-		terrain->removeBlockAt(n.first, n.second, TERRAIN_LAYER_BACK);
+		terrain->removeBlockAt(n.first, n.second, WORLD_LAYER_BACK);
 		makeLeavesFall(n.first, n.second);
 	}
 }
@@ -148,7 +148,7 @@ void Axe::makeLeavesFall(const int x, const int y)
 {
 	Terrain *terrain = m_game->getWorld()->getTerrain();
 
-	if(terrain->getBlockAt(x, y, TERRAIN_LAYER_FRONT) != BLOCK_OAK_LEAVES) return;
+	if(terrain->getBlockAt(x, y, WORLD_LAYER_FRONT) != BLOCK_OAK_LEAVES) return;
 
 	list<pair<int, int>> nodes;
 
@@ -163,7 +163,7 @@ void Axe::makeLeavesFall(const int x, const int y)
 
 		if(processed.find(node) != processed.end()) continue;
 
-		if(terrain->getBlockAt(node.first, node.second, TERRAIN_LAYER_FRONT) == BLOCK_OAK_LEAVES)
+		if(terrain->getBlockAt(node.first, node.second, WORLD_LAYER_FRONT) == BLOCK_OAK_LEAVES)
 		{
 			processed.insert(node);
 			nodes.push_back(node);
@@ -177,6 +177,6 @@ void Axe::makeLeavesFall(const int x, const int y)
 	// Remove blocks
 	for(pair<int, int> n : nodes)
 	{
-		terrain->removeBlockAt(n.first, n.second, TERRAIN_LAYER_FRONT);
+		terrain->removeBlockAt(n.first, n.second, WORLD_LAYER_FRONT);
 	}
 }

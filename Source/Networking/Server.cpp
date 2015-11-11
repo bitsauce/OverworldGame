@@ -149,7 +149,7 @@ void Server::update()
 				int x; bitStream.Read(x);
 				int y; bitStream.Read(y);
 				BlockID block; bitStream.Read(block);
-				TerrainLayer layer; bitStream.Read(layer);
+				WorldLayer layer; bitStream.Read(layer);
 				m_game->getWorld()->getTerrain()->setBlockAt(x, y, block, layer);
 			}
 			break;

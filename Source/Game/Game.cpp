@@ -27,14 +27,16 @@ OverworldGame::OverworldGame() :
 	m_takeScreenshot(false),
 	m_client(nullptr),
 	m_server(nullptr),
-	m_gameOverlay(nullptr)
+	m_gameOverlay(nullptr),
+	m_debug(nullptr),
+	m_commander(nullptr)
 {
 }
 
 void OverworldGame::start(GraphicsContext &context)
 {
 	// Setup sprite batch
-	m_spriteBatch = new SpriteBatch(context);
+	m_spriteBatch = new SpriteBatch(context, 20000);
 
 	//if(Config::isFullscreenEnabled())
 	//{
@@ -134,8 +136,8 @@ void OverworldGame::start(GraphicsContext &context)
 void OverworldGame::end()
 {
 	// Save the world as we're exiting
-	m_world->save();
-	m_server->save();
+	if(m_world) m_world->save();
+	if(m_server) m_server->save();
 	delete m_world;
 	delete m_debug;
 	delete m_commander;

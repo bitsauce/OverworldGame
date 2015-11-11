@@ -5,11 +5,11 @@
 {
 }
 
-BlockID Tree::getBlockAt(const int x, const int y, const TerrainLayer layer)
+BlockID Tree::getBlockAt(const int x, const int y, const WorldLayer layer)
 {
 	switch(layer)
 	{
-		case TERRAIN_LAYER_BACK:
+		case WORLD_LAYER_BACK:
 		{
 			if(x == 5 && y >= 5)
 			{
@@ -17,7 +17,7 @@ BlockID Tree::getBlockAt(const int x, const int y, const TerrainLayer layer)
 			}
 		}
 			
-		case TERRAIN_LAYER_FRONT:
+		case WORLD_LAYER_FRONT:
 		{
 			if(sqrt(pow(y-5, 2)+pow(x-5, 2)) < 5.0f || sqrt(pow(y-10, 2)+pow(x-5, 2)) < 15.0f)
 			{

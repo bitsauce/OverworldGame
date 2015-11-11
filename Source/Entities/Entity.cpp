@@ -1,11 +1,12 @@
 #include "Entity.h"
+#include "EntityData.h"
 #include "Constants.h"
 #include "World/World.h"
 #include "World/Camera.h"
 
 Entity::Entity(World *world, const EntityID id) :
 	m_world(world),
-	m_id(id)
+	m_data(EntityData::get(id))
 {
 	m_world->addEntity(this);
 }

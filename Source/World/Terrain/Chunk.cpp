@@ -17,8 +17,8 @@ Chunk::Chunk(ChunkLoader *chunkLoader) :
 	m_attached = m_modified = false; // Not modified
 
 	// Initialize blocks
-	m_blocks = new BlockID[CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT];
-	for(int i = 0; i < CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT; ++i)
+	m_blocks = new BlockID[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
+	for(int i = 0; i < CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT; ++i)
 	{
 		m_blocks[i] = BLOCK_EMPTY;
 	}
@@ -33,7 +33,7 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 	m_y = chunkY;
 
 	// Set all blocks
-	for (int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+	for (int z = 0; z < WORLD_LAYER_COUNT; ++z)
 	{
 		for (int y = 0; y < CHUNK_BLOCKS; ++y)
 		{
@@ -52,7 +52,7 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 		for(int x = 0; x < CHUNK_BLOCKS; x++)
 		{
 			float shadow = 1.0f;
-			for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+			for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 			{
 				pixel[z] = (uchar) m_blocks[BLOCK_INDEX(x, y, z)];
 				shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, y, z)]).getOpacity();
@@ -73,22 +73,22 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 }
 
 // BLOCKS
-BlockID Chunk::getBlockAt(const int x, const int y, TerrainLayer layer) const
+BlockID Chunk::getBlockAt(const int x, const int y, WorldLayer layer) const
 {
 	return m_blocks[BLOCK_INDEX(x, y, layer)];
 }
 	
-bool Chunk::isBlockAt(const int x, const int y, TerrainLayer layer) const
+bool Chunk::isBlockAt(const int x, const int y, WorldLayer layer) const
 {
 	return m_blocks[BLOCK_INDEX(x, y, layer)] != BLOCK_EMPTY;
 }
 	
-bool Chunk::isBlockOccupied(const int x, const int y, TerrainLayer layer) const
+bool Chunk::isBlockOccupied(const int x, const int y, WorldLayer layer) const
 {
 	return m_blocks[BLOCK_INDEX(x, y, layer)] >= BLOCK_ENTITY;
 }
 	
-bool Chunk::setBlockAt(const int x, const int y, const BlockID block, TerrainLayer layer)
+bool Chunk::setBlockAt(const int x, const int y, const BlockID block, WorldLayer layer)
 {
 	// Make sure we can add a block here
 	if(m_blocks[BLOCK_INDEX(x, y, layer)] != block)
@@ -119,7 +119,7 @@ bool Chunk::setBlockAt(const int x, const int y, const BlockID block, TerrainLay
 		// Update block map
 		uchar pixel[4];
 		float shadow = 1.0f;
-		for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+		for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 		{
 			pixel[z] = (uchar) m_blocks[BLOCK_INDEX(x, y, z)];
 			shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, y, z)]).getOpacity();
@@ -130,6 +130,22 @@ bool Chunk::setBlockAt(const int x, const int y, const BlockID block, TerrainLay
 		return true; // Return true as something was changed
 	}
 	return false; // Nothing changed
+}
+
+void Chunk::update(const float dt)
+{
+	for(BlockEntity *blockEntity : m_blockEntities)
+	{
+		blockEntity->update(dt);
+	}
+}
+
+void Chunk::draw(SpriteBatch *spriteBatch, const float alpha)
+{
+	for(BlockEntity *blockEntity : m_blockEntities)
+	{
+		blockEntity->draw(spriteBatch, alpha);
+	}
 }
 
 void Chunk::addStaticEntity(BlockEntity * entity)

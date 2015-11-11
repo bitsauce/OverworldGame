@@ -71,7 +71,7 @@ ChunkLoader::ChunkLoader(World *world) :
 	setOptimalChunkCount(0);
 
 	// Set chunk render caches to null (will be updated later)
-	for(int i = 0; i < TERRAIN_LAYER_COUNT; ++i)
+	for(int i = 0; i < WORLD_LAYER_COUNT; ++i)
 	{
 		m_sortedBlocksRenderTarget[i] = 0;
 	}
@@ -92,7 +92,7 @@ void ChunkLoader::saveBlockData(FileWriter &file, BlockID * blockData)
 	// Write blocks to stream
 	BlockID currentBlock = blockData[0];
 	int length = 1;
-	for(int i = 1; i < CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT; ++i)
+	for(int i = 1; i < CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT; ++i)
 	{
 		BlockID block = blockData[i];
 		if(block == currentBlock)
@@ -115,7 +115,7 @@ void ChunkLoader::loadBlockData(FileReader &file, BlockID *blockData)
 {
 	// Read blocks from stream
 	int pos = 0;
-	while(pos < CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT)
+	while(pos < CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT)
 	{
 		int block, length;
 		file >> block;
@@ -265,7 +265,7 @@ Chunk *ChunkLoader::loadChunkAt(const int chunkX, const int chunkY)
 	}
 
 	// Get block data
-	BlockID blocks[CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT];
+	BlockID blocks[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
 	if(file)
 	{
 		LOG("Loading chunk [%i, %i]...", chunkX, chunkY);
@@ -302,8 +302,14 @@ ChunkLoader::ChunkArea ChunkLoader::getLoadingArea() const
 	return m_loadingArea;
 }
 
+ChunkLoader::ChunkArea ChunkLoader::getActiveArea() const
+{
+	return m_activeArea;
+}
+
 void ChunkLoader::update(const float dt)
 {
+	// Update block animation
 	m_tileMapShader->setUniform1f("u_Time", m_time);
 	m_time += dt;
 }
@@ -314,17 +320,17 @@ void ChunkLoader::draw(GraphicsContext &context, const float alpha)
 	Vector2 center = m_camera->getCenter(alpha);
 	Vector2 size = m_applyZoom ? m_camera->getSize() : Window::getSize();
 
-	ChunkArea activeArea;
-	activeArea.x0 = (int) floor(center.x / CHUNK_PXF) - (int) floor(size.x * 0.5f / CHUNK_PXF) - 1;
-	activeArea.y0 = (int) floor(center.y / CHUNK_PXF) - (int) floor(size.y * 0.5f / CHUNK_PXF) - 1;
-	activeArea.x1 = (int) floor(center.x / CHUNK_PXF) + (int) floor(size.x * 0.5f / CHUNK_PXF) + 1;
-	activeArea.y1 = (int) floor(center.y / CHUNK_PXF) + (int) floor(size.y * 0.5f / CHUNK_PXF) + 1;
+	// Get active area
+	m_activeArea.x0 = (int) floor(center.x / CHUNK_PXF) - (int) floor(size.x * 0.5f / CHUNK_PXF) - 1;
+	m_activeArea.y0 = (int) floor(center.y / CHUNK_PXF) - (int) floor(size.y * 0.5f / CHUNK_PXF) - 1;
+	m_activeArea.x1 = (int) floor(center.x / CHUNK_PXF) + (int) floor(size.x * 0.5f / CHUNK_PXF) + 1;
+	m_activeArea.y1 = (int) floor(center.y / CHUNK_PXF) + (int) floor(size.y * 0.5f / CHUNK_PXF) + 1;
 
-	// Loading area should have the same center as the view
-	m_loadingArea.x0 = activeArea.x0 - m_loadAreaRadius;
-	m_loadingArea.y0 = activeArea.y0 - m_loadAreaRadius;
-	m_loadingArea.x1 = activeArea.x1 + m_loadAreaRadius;
-	m_loadingArea.y1 = activeArea.y1 + m_loadAreaRadius;
+	// Get loading area
+	m_loadingArea.x0 = m_activeArea.x0 - m_loadAreaRadius;
+	m_loadingArea.y0 = m_activeArea.y0 - m_loadAreaRadius;
+	m_loadingArea.x1 = m_activeArea.x1 + m_loadAreaRadius;
+	m_loadingArea.y1 = m_activeArea.y1 + m_loadAreaRadius;
 
 	// Free inactive chunks
 	if(m_chunks.size() >= m_optimalChunkCount)
@@ -439,9 +445,9 @@ void ChunkLoader::draw(GraphicsContext &context, const float alpha)
 	}
 
 	// Make sure all chunks in the active area are attached
-	for(int y = activeArea.y0; y <= activeArea.y1; ++y)
+	for(int y = m_activeArea.y0; y <= m_activeArea.y1; ++y)
 	{
-		for(int x = activeArea.x0; x <= activeArea.x1; ++x)
+		for(int x = m_activeArea.x0; x <= m_activeArea.x1; ++x)
 		{
 			// Is this chunk not attached?
 			Chunk &chunk = getChunkAt(x, y);
@@ -460,6 +466,7 @@ void ChunkLoader::draw(GraphicsContext &context, const float alpha)
 	if(!redrawChunks && m_circleLoadPattern.size() > 0)
 	{
 		// Loop through 10 chunks to find one which is not attached
+		Vector2 center = m_camera->getCenter(alpha);
 		for(int i = 0; i < 10; ++i)
 		{
 			// Get next chunk in the circular load pattern
@@ -528,7 +535,7 @@ void ChunkLoader::resizeEvent(uint width, uint height)
 	}
 
 	// Create new render targets
-	for(int i = 0; i < TERRAIN_LAYER_COUNT; ++i)
+	for(int i = 0; i < WORLD_LAYER_COUNT; ++i)
 	{
 		delete m_sortedBlocksRenderTarget[i];
 		m_sortedBlocksRenderTarget[i] = new RenderTarget2D(loadAreaWidth * CHUNK_BLOCKS, loadAreaHeight * CHUNK_BLOCKS, 2, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
@@ -539,7 +546,7 @@ void ChunkLoader::resizeEvent(uint width, uint height)
 	delete m_blocksRenderTarget;
 	m_blocksRenderTarget = new RenderTarget2D(loadAreaWidth * CHUNK_BLOCKS, loadAreaHeight * CHUNK_BLOCKS);
 	m_blocksRenderTarget->getTexture()->setWrapping(Texture2D::REPEAT);
-	m_blocksRenderTarget->getTexture()->setFiltering(Texture2D::LINEAR);
+	m_blocksRenderTarget->getTexture()->setFiltering(Texture2D::NEAREST);
 
 	// Clear old render targets
 	delete m_lightingPass0;
@@ -584,7 +591,7 @@ void ChunkLoader::reattachChunks(GraphicsContext &context)
 
 	// Sort blocks
 	context.setShader(m_tileSortShader);
-	for(int z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+	for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 	{
 		m_tileSortShader->setUniform1ui("u_Layer", z);
 		context.setRenderTarget(m_sortedBlocksRenderTarget[z]);

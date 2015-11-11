@@ -34,12 +34,12 @@ void WorldGenerator::getChunkBlocks(const int chunkX, const int chunkY, BlockID 
 	{
 		for(uint x = 0; x < CHUNK_BLOCKS; ++x)
 		{
-			for(uint z = 0; z < TERRAIN_LAYER_COUNT; ++z)
+			for(uint z = 0; z < WORLD_LAYER_COUNT; ++z)
 			{
 				BlockID structureBlock;
 				if((structureBlock = structureBlocks[BLOCK_INDEX(x, y, z)]) == BLOCK_EMPTY)
 				{
-					blocks[BLOCK_INDEX(x, y, z)] = getGroundAt(tileX + x, tileY + y, (TerrainLayer) z);
+					blocks[BLOCK_INDEX(x, y, z)] = getGroundAt(tileX + x, tileY + y, (WorldLayer) z);
 				}
 				else
 				{
@@ -50,11 +50,11 @@ void WorldGenerator::getChunkBlocks(const int chunkX, const int chunkY, BlockID 
 	}
 }
 	
-BlockID WorldGenerator::getGroundAt(const int x, const int y, const TerrainLayer layer)
+BlockID WorldGenerator::getGroundAt(const int x, const int y, const WorldLayer layer)
 {
 	switch(layer)
 	{
-		case TERRAIN_LAYER_MIDDLE:
+		case WORLD_LAYER_MIDDLE:
 		{
 			float h = m_noise.valueAt(x * 0.1f, y + 710239) * 7;
 
@@ -70,7 +70,7 @@ BlockID WorldGenerator::getGroundAt(const int x, const int y, const TerrainLayer
 		}
 		break;
 			
-		case TERRAIN_LAYER_BACK:
+		case WORLD_LAYER_BACK:
 		{
 			if(y > 20)
 			{
@@ -88,8 +88,8 @@ void WorldGenerator::loadStructures(const int chunkX, const int chunkY)
 	list<Structure*> structures;
 	if(m_chunkStructures.find(CHUNK_KEY(chunkX, chunkY)) == m_chunkStructures.end())
 	{
-		BlockID *blocks = new BlockID[CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT];
-		for(int i = 0; i < CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT; ++i)
+		BlockID *blocks = new BlockID[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
+		for(int i = 0; i < CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT; ++i)
 		{
 			blocks[i] = BLOCK_EMPTY;
 		}
@@ -114,14 +114,14 @@ void WorldGenerator::loadStructures(const int chunkX, const int chunkY)
 	}
 }
 
-void WorldGenerator::setBlockAt(const int x, const int y, const TerrainLayer z, const BlockID block)
+void WorldGenerator::setBlockAt(const int x, const int y, const WorldLayer z, const BlockID block)
 {
 	int chunkX = (int) floor(x / CHUNK_BLOCKSF),
 		chunkY = (int) floor(y / CHUNK_BLOCKSF);
 	if(m_chunkStructures.find(CHUNK_KEY(chunkX, chunkY)) == m_chunkStructures.end())
 	{
-		BlockID *blocks = new BlockID[CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT];
-		for(int i = 0; i < CHUNK_BLOCKS * CHUNK_BLOCKS * TERRAIN_LAYER_COUNT; ++i)
+		BlockID *blocks = new BlockID[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
+		for(int i = 0; i < CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT; ++i)
 		{
 			blocks[i] = BLOCK_EMPTY;
 		}
@@ -133,13 +133,13 @@ void WorldGenerator::setBlockAt(const int x, const int y, const TerrainLayer z, 
 int WorldGenerator::getGroundHeight(const int x)
 {
 	int y = 0;
-	if(getGroundAt(x, y, TERRAIN_LAYER_MIDDLE) == BLOCK_EMPTY)
+	if(getGroundAt(x, y, WORLD_LAYER_MIDDLE) == BLOCK_EMPTY)
 	{
-		while(getGroundAt(x, ++y, TERRAIN_LAYER_MIDDLE) == BLOCK_EMPTY); y--;
+		while(getGroundAt(x, ++y, WORLD_LAYER_MIDDLE) == BLOCK_EMPTY); y--;
 	}
 	else
 	{
-		while(getGroundAt(x, --y, TERRAIN_LAYER_MIDDLE) != BLOCK_EMPTY);
+		while(getGroundAt(x, --y, WORLD_LAYER_MIDDLE) != BLOCK_EMPTY);
 	}
 	return y;
 }

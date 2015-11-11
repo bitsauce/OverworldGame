@@ -1,10 +1,15 @@
 #include "World.h"
 #include "Constants.h"
 
-#include "Entities/Dynamic/Pawn.h"
 #include "World/Background.h"
 #include "World/Camera.h"
 #include "World/TimeOfDay.h"
+
+#include "Entities/EntityData.h"
+#include "Entities/Dynamic/Pawn.h"
+
+#include "BlockEntities/BlockEntity.h"
+
 #include "Game/Debug.h"
 #include "Terrain/Terrain.h"
 #include "Generation/Generator.h"
@@ -14,7 +19,8 @@
 
 World::World() :
 	m_worldPath(""),
-	m_worldFile(nullptr)
+	m_worldFile(nullptr),
+	m_entitiesByLayer(WORLD_LAYER_COUNT)
 {
 	// Load world content
 	m_timeOfDay = new TimeOfDay();
@@ -100,6 +106,12 @@ void World::clear()
 		delete entity;
 	}
 	m_entities.clear();
+
+	for(uint i = 0; i < WORLD_LAYER_COUNT; ++i)
+	{
+		m_entitiesByLayer[i].clear();
+	}
+
 	m_pawns.clear();
 	m_localPlayer = nullptr;
 }
@@ -111,10 +123,16 @@ void World::update(const float delta)
 	m_terrain->getChunkLoader()->update(delta);
 	m_camera->update(delta);
 	
-	list<Entity*> entities = m_entities;
+	list<Entity*> entities = m_entities; // We make a copy of the list so objects which are removed don't crash the iteration
 	for(Entity *entity : entities)
 	{
 		entity->update(delta);
+	}
+
+	//list<BlockEntity*> staticEntities = ; // We make a copy of the list so objects which are removed don't crash the iteration
+	for(BlockEntity *staticEntity : m_staticEntities)
+	{
+		staticEntity->update(delta);
 	}
 }
 
@@ -131,29 +149,66 @@ void World::draw(SpriteBatch *spriteBatch, const float alpha)
 	spriteBatch->end();
 	spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_camera->getModelViewMatrix(alpha)));
 
+	// Draw background
 	m_terrain->m_background.draw(spriteBatch, alpha);
-
-	list<Entity*> entities = m_entities;
-	for(Entity *entity : entities)
+	for(Entity *entity : m_entitiesByLayer[WORLD_LAYER_BACK])
 	{
-		if(entity->getID() < ENTITY_BACKGROUND_END)
-		{
-			entity->draw(spriteBatch, alpha);
-		}
+		entity->draw(spriteBatch, alpha);
 	}
 
+	// Draw middleground
 	m_terrain->m_middleground.draw(spriteBatch, alpha);
-
-	for(Entity *entity : entities)
+	for(Entity *entity : m_entitiesByLayer[WORLD_LAYER_MIDDLE])
 	{
-		if(entity->getID() > ENTITY_BACKGROUND_END)
-		{
-			entity->draw(spriteBatch, alpha);
-		}
+		entity->draw(spriteBatch, alpha);
+	}
+
+	for(BlockEntity *staticEntity : m_staticEntities)
+	{
+		staticEntity->draw(spriteBatch, alpha);
 	}
 	
+	// Draw foreground
 	m_terrain->m_foreground.draw(spriteBatch, alpha);
+	for(Entity *entity : m_entitiesByLayer[WORLD_LAYER_FRONT])
+	{
+		entity->draw(spriteBatch, alpha);
+	}
+
+	// Draw lighting
 	m_lighting->draw(spriteBatch, alpha);
-	
+
 	spriteBatch->end();
+}
+
+void World::addEntity(Entity *entity)
+{
+	m_entitiesByLayer[entity->getData()->getLayer()].push_back(entity);
+	m_entities.push_back(entity);
+}
+
+void World::removeEntity(Entity *entity)
+{
+	m_entitiesByLayer[entity->getData()->getLayer()].remove(entity);
+	m_entities.remove(entity);
+}
+
+list<Entity*> World::getEntities() const
+{
+	return m_entities;
+}
+
+list<Entity*> World::getEntitiesByLayer(const WorldLayer layer) const
+{
+	return m_entitiesByLayer[layer];
+}
+
+void World::addStaticEntity(BlockEntity *entity)
+{
+	m_staticEntities.push_back(entity);
+}
+
+void World::removeStaticEntity(BlockEntity *entity)
+{
+	m_staticEntities.remove(entity);
 }

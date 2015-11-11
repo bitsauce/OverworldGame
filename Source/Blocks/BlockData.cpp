@@ -51,11 +51,9 @@ void BlockData::init()
 
 		// Store meta data
 		pixelData[0] = blockData->frameCount;
-		// TODO: We can store both the size of the block (for block entities which are bigger than 1x1)
-		//       We can also store the animation frame index, so, in the case of torches, we can
-		//       use Torch::update() to select the right frame for the torch depending on its
-		//       surroundings.
-		pixelData[1] = pixelData[2] = pixelData[3] = 0;
+		pixelData[1] = 0;
+		pixelData[2] = 0;
+		pixelData[3] = 0;
 		blockDataPixmap.setPixel(blockData->id, 1, pixelData);
 
 		// Next block desc

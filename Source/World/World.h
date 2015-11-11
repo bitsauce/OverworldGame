@@ -13,6 +13,7 @@ class WorldGenerator;
 class Server;
 class Client;
 class Entity;
+class BlockEntity;
 class Background;
 class Player;
 class Pawn;
@@ -46,10 +47,19 @@ public:
 	WorldGenerator *getGenerator() const { return m_generator; }
 
 	// Entities
-	void addEntity(Entity *entity) { m_entities.push_back(entity); }
-	void removeEntity(Entity *entity) { m_entities.remove(entity); }
-	list<Entity*> getEntities() const { return m_entities; }
+	void addEntity(Entity *entity);
+	void removeEntity(Entity *entity);
+	list<Entity*> getEntities() const;
+	list<Entity*> getEntitiesByLayer(const WorldLayer layer) const;
+
+	// Static entities
+	void addStaticEntity(BlockEntity *entity);
+	void removeStaticEntity(BlockEntity *entity);
+
+	// Pawns
 	list<Pawn*> getPawns() const { return m_pawns; }
+
+	// Local player
 	Player *getLocalPlayer() const { return m_localPlayer; }
 
 private:
@@ -64,7 +74,13 @@ private:
 	Lighting *m_lighting;
 	list<Pawn*> m_pawns;
 	Player* m_localPlayer;
+
+	// Entities
+	vector<list<Entity*>> m_entitiesByLayer;
 	list<Entity*> m_entities;
+
+	// Static entitites
+	list<BlockEntity*> m_staticEntities;
 };
 
 #endif // WORLD_H
