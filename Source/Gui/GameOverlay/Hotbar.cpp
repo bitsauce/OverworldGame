@@ -32,14 +32,14 @@ Hotbar::~Hotbar()
 {
 }
 
-void Hotbar::update(const float delta)
+void Hotbar::onTick(TickEvent *e)
 {
 	setSize(Vector2(490.f, 56.f)/m_parent->getSize());
 
 	UiObject::update(delta);
 }
 
-void Hotbar::draw(SpriteBatch *spriteBatch, const float alpha)
+void Hotbar::onDraw(DrawEvent *e)
 {
 	Player *player = m_gameOverlay->getPlayer();
 	if(!player || m_gameOverlay->m_hidden) return;

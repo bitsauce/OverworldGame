@@ -60,8 +60,8 @@ public:
 
 	void activateThing(int action);
 
-	virtual void update(const float delta);
-	virtual void draw(SpriteBatch *spriteBatch, const float alpha);
+	virtual void onTick(TickEvent *e);
+	virtual void onDraw(DrawEvent *e);
 
 	void pack(RakNet::BitStream *bitStream, const Connection *conn);
 	void unpack(RakNet::BitStream *bitStream, const Connection *conn);

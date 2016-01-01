@@ -25,7 +25,7 @@ string LineEdit::getText() const
 	return m_text;
 }
 
-void LineEdit::update(const float delta)
+void LineEdit::onTick(TickEvent *e)
 {
 	m_cursorTime -= delta;
 	if(m_cursorTime <= 0.0f)

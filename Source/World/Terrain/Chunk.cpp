@@ -140,7 +140,7 @@ void Chunk::update(const float dt)
 	}
 }
 
-void Chunk::draw(SpriteBatch *spriteBatch, const float alpha)
+void Chunk::onDraw(DrawEvent *e)
 {
 	for(BlockEntity *blockEntity : m_blockEntities)
 	{

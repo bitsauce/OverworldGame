@@ -66,7 +66,7 @@ void *Button::getUserData() const
 	return m_userData;
 }
 
-void Button::update(const float delta)
+void Button::onTick(TickEvent *e)
 {
 	if(isHovered())
 	{

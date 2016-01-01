@@ -2,14 +2,15 @@
 #define CAMERA_H
 
 #include "Config.h"
+#include "Entities/Entity.h"
 
 class DynamicEntity;
 
-class Camera : public MouseListener, public WindowListener
+class Camera : public Entity
 {
 public:
 	// Constructor
-	Camera();
+	Camera(World *world, InputManager *input, Window *window);
 
 	// Look at point
 	void lookAt(Vector2 worldPoint);
@@ -28,11 +29,12 @@ public:
 	void setZoomLevel(const float zoomLevel);
 	float getZoomLevel() const;
 
-	void zoomIn(int action)
+	/*void zoomIn(int action)
 	{
 		if(action != GLFW_PRESS) return;
 		setZoomLevel(m_zoomLevel*2.0f);
 	}
+
 	void zoomOut(int action)
 	{
 		if(action != GLFW_PRESS) return;
@@ -40,11 +42,12 @@ public:
 	}
 
 	// Position
-	Vector2i getPosition() const;
 	void setPosition(const Vector2 &positon)
 	{
 		m_position = m_prevPosition = positon; 
-	}
+	}*/
+
+	Vector2i getPosition() const;
 	uint getX() const { return getPosition().x; }
 	uint getY() const { return getPosition().y; }
 
@@ -59,18 +62,21 @@ public:
 	Vector2 getInputPosition() const;
 
 	// Update
-	void update(const float dt);
+	void onTick(TickEvent *e);
 
 	// Interpolate
 	void interpolate(const float alpha);
 
 	// MouseListener event
-	void mouseWheelEvent(const int delta);
+	void onMouseWheel(MouseEvent *e);
 
 	// WindowListener event
-	void resizeEvent(uint width, uint height);
+	void onWindowSizeChanged(WindowEvent *e);
 
 private:
+	InputManager *m_input;
+	Window *m_window;
+
 	// Position
 	Vector2 m_position, m_prevPosition, m_velocity, m_interpolatedPositon;
 

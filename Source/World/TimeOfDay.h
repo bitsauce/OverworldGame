@@ -2,11 +2,14 @@
 #define TIME_OF_DAY_H
 
 #include "Config.h"
+#include "Entities/Entity.h"
 
-class TimeOfDay
+class World;
+
+class TimeOfDay : public Entity
 {
 public:
-	TimeOfDay();
+	TimeOfDay(World *world);
 
 	void setTime(const float time)
 	{
@@ -39,10 +42,10 @@ public:
 		return !isDay();
 	}
 
-	void update(const float delta)
+	void onTick(TickEvent *e)
 	{
 		// Apply time
-		time += delta;
+		time += e->getDelta();
 
 		// Make sure time loops around to 00:00
 		if(time >= 1440.0f)

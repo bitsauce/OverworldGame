@@ -4,16 +4,15 @@
 #include "Gui/UiObject.h"
 #include "Game/Storage.h"
 
-class Scene;
 class GameOverlay;
 
-class Inventory : public UiObject, public KeyListener
+class Inventory : public UiObject
 {
 public:
 	Inventory(Scene *scene, GameOverlay *gameOverlay);
 
-	void update(const float delta);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 
 	void toggle(int action);
 	void show();

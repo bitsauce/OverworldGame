@@ -23,14 +23,14 @@ HealthManaStatus::HealthManaStatus(Scene *scene, GameOverlay *gameOverlay) :
 	setPosition(Vector2(-48.0f, 48.0f)/m_parent->getSize());
 }
 
-void HealthManaStatus::update(const float delta)
+void HealthManaStatus::onTick(TickEvent *e)
 {
 	setSize(Vector2(338.0f, 168.0f)/m_parent->getSize());
 	m_heartTime += delta;
 	UiObject::update(delta);
 }
 
-void HealthManaStatus::draw(SpriteBatch *spriteBatch, const float alpha)
+void HealthManaStatus::onDraw(DrawEvent *e)
 {
 	if(!m_gameOverlay->getPlayer() || m_gameOverlay->m_hidden) return;
 

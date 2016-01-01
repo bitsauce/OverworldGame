@@ -12,7 +12,7 @@ class DynamicEntity : public Entity
 public:
 	DynamicEntity(World *world, const EntityID id);
 
-	virtual void update(const float delta);
+	virtual void onTick(TickEvent *e);
 
 	/* Position functions */
 	void setPosition(const Vector2 &pos)

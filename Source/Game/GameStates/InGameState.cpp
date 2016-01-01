@@ -24,13 +24,13 @@ void InGameState::enter()
 	Input::setContext(Input::getContext("game"));
 }
 
-void InGameState::update(const float delta)
+void InGameState::onTick(TickEvent *e)
 {
 	m_world->update(delta);
 	m_scene.update(delta);
 }
 
-void InGameState::draw(SpriteBatch *spriteBatch, const float alpha)
+void InGameState::onDraw(DrawEvent *e)
 {
 	m_world->draw(spriteBatch, alpha);
 	m_scene.draw(spriteBatch, alpha);

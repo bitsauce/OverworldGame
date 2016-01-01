@@ -13,8 +13,8 @@ class Zombie : public Pawn
 public:
 	Zombie(World *world);
 
-	void update(const float delta);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 
 	static DynamicEntity *Factory(World *world)
 	{

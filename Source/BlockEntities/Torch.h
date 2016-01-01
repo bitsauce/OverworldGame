@@ -10,8 +10,8 @@ class Torch : public BlockEntity
 public:
 	Torch(World * world, int x, int y, const BlockEntityData *data);
 
-	void update(const float delta);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 
 	static BlockEntity *Factory(World * world, const int x, const int y, const BlockEntityData *data)
 	{

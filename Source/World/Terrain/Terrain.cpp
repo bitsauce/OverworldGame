@@ -105,7 +105,7 @@ Terrain::Drawer::Drawer(Terrain *terrain, Camera *camera, const Priority drawOrd
 {
 }
 
-void Terrain::Drawer::draw(SpriteBatch *spriteBatch, const float alpha)
+void Terrain::Drawer::onDraw(DrawEvent *e)
 {
 	// Flush to set the draw order straight
 	spriteBatch->flush();

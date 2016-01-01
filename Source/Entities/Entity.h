@@ -8,7 +8,7 @@ enum EntityID;
 class World;
 class EntityData;
 
-class Entity
+class Entity : public GameObject
 {
 public:
 	Entity(World *world, const EntityID id);
@@ -19,8 +19,8 @@ public:
 	virtual void createSaveData(FileWriter &saveData) {}
 	virtual void loadSaveData(FileReader &saveData) {}
 
-	virtual void update(const float delta) {}
-	virtual void draw(SpriteBatch *spriteBatch, const float alpha) {}
+	virtual void onTick(TickEvent *e) {}
+	virtual void onDraw(DrawEvent *e) {}
 
 protected:
 	const EntityData * const m_data;

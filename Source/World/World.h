@@ -3,6 +3,8 @@
 
 #include "Config.h"
 
+#include "Entities/Entity.h"
+
 #include "Terrain/Terrain.h"
 #include "Lighting/Lighting.h"
 #include "Background.h"
@@ -12,27 +14,28 @@
 class WorldGenerator;
 class Server;
 class Client;
-class Entity;
 class BlockEntity;
 class Background;
 class Player;
 class Pawn;
 
-// This class is concerned with the objects contained within the world
-class World
+/**
+ * This class is concerned with the objects contained within the game world
+ */
+class World : public GameObject
 {
 	friend class Server;
 	friend class Pawn;
 public:
-	World();
+	World(Game *game);
 
 	void create(const string &name);
 	bool load(const string &name);
 	void save();
 	void clear();
 
-	void update(const float delta);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 
 	// World path
 	string getWorldPath() const { return m_worldPath; }
@@ -65,7 +68,6 @@ public:
 private:
 	Terrain *m_terrain;
 	Background *m_background;
-
 	WorldGenerator *m_generator;
 	TimeOfDay *m_timeOfDay;
 	string m_worldPath;

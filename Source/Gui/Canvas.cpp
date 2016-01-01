@@ -42,7 +42,7 @@ void Canvas::updateSize()
 	//Debug::setVaraible("Canvas", "("+util::floatToStr(size.x)+", "+util::floatToStr(size.y)+")");
 }
 
-void Canvas::update(const float delta)
+void Canvas::onTick(TickEvent *e)
 {
 	updateSize();
 	UiObject::update(delta);

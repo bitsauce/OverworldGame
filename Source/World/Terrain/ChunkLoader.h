@@ -3,12 +3,14 @@
 #define CHUNK_LOADER_H
 
 #include "Config.h"
+#include "Entities/Entity.h"
 #include "World/Terrain/Chunk.h"
+#include "Entities/Entity.h"
 
 class Camera;
 class World;
 
-class ChunkLoader : public WindowListener
+class ChunkLoader : public Entity
 {
 	friend class Debug;
 	friend class Lighting;
@@ -55,7 +57,7 @@ public:
 	ChunkArea getActiveArea() const;
 
 	void update(const float dt);
-	void draw(GraphicsContext &context, const float alpha);
+	void onDraw(DrawEvent *e);
 
 private:
 	Chunk *loadChunkAt(const int chunkX, const int chunkY);

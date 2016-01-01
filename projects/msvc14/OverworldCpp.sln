@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "spine", "..\..\3rdparty\spine\project\spine.vcxproj", "{5D74934A-7512-45EE-8402-7B95D3642E85}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CrossGame", "..\..\..\x2D-Game-Engine\projects\msvc14\CrossGame.vcxproj", "{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OverworldCpp", "OverworldCpp.vcxproj", "{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A} = {F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}
 		{5D74934A-7512-45EE-8402-7B95D3642E85} = {5D74934A-7512-45EE-8402-7B95D3642E85}
 	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "spine", "..\..\3rdparty\spine\project\spine.vcxproj", "{5D74934A-7512-45EE-8402-7B95D3642E85}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "x2d", "..\..\..\x2D-Game-Engine\projects\msvc14\x2d.vcxproj", "{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,14 +23,6 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Debug|Android.ActiveCfg = Debug|Win32
-		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Debug|Win32.ActiveCfg = Debug|Win32
-		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Debug|Win32.Build.0 = Debug|Win32
-		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Debug|x64.ActiveCfg = Debug|Win32
-		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Release|Android.ActiveCfg = Release|Win32
-		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Release|Win32.ActiveCfg = Release|Win32
-		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Release|Win32.Build.0 = Release|Win32
-		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Release|x64.ActiveCfg = Release|Win32
 		{5D74934A-7512-45EE-8402-7B95D3642E85}.Debug|Android.ActiveCfg = Debug|Win32
 		{5D74934A-7512-45EE-8402-7B95D3642E85}.Debug|Win32.ActiveCfg = Debug|Win32
 		{5D74934A-7512-45EE-8402-7B95D3642E85}.Debug|Win32.Build.0 = Debug|Win32
@@ -39,16 +31,22 @@ Global
 		{5D74934A-7512-45EE-8402-7B95D3642E85}.Release|Win32.ActiveCfg = Release|Win32
 		{5D74934A-7512-45EE-8402-7B95D3642E85}.Release|Win32.Build.0 = Release|Win32
 		{5D74934A-7512-45EE-8402-7B95D3642E85}.Release|x64.ActiveCfg = Release|Win32
-		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}.Debug|Android.ActiveCfg = Debug|Android
-		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}.Debug|Android.Build.0 = Debug|Android
+		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}.Debug|Android.ActiveCfg = Debug|Win32
 		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}.Debug|Win32.ActiveCfg = Debug|Win32
 		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}.Debug|Win32.Build.0 = Debug|Win32
 		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}.Debug|x64.ActiveCfg = Debug|Win32
-		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}.Release|Android.ActiveCfg = Release|Android
-		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}.Release|Android.Build.0 = Release|Android
+		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}.Release|Android.ActiveCfg = Release|Win32
 		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}.Release|Win32.ActiveCfg = Release|Win32
 		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}.Release|Win32.Build.0 = Release|Win32
 		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}.Release|x64.ActiveCfg = Release|Win32
+		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Debug|Android.ActiveCfg = Debug|Win32
+		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Debug|Win32.Build.0 = Debug|Win32
+		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Debug|x64.ActiveCfg = Debug|Win32
+		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Release|Android.ActiveCfg = Release|Win32
+		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Release|Win32.ActiveCfg = Release|Win32
+		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Release|Win32.Build.0 = Release|Win32
+		{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

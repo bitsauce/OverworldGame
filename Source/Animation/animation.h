@@ -67,7 +67,7 @@ public:
 	void setTime(const float time);
 	float getTime() const;
 
-	void update(const float delta);
+	void onTick(TickEvent *e);
 
 private:
 	AnimationStateData *m_data;

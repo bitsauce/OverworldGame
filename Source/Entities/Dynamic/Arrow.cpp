@@ -20,7 +20,7 @@ Arrow::Arrow(Pawn *owner, World *world, const Vector2 &pos, const Vector2 &dir, 
 	m_angle = m_prevAngle = atan2(dir.y, dir.x);
 }
 
-void Arrow::draw(SpriteBatch *spriteBatch, const float alpha)
+void Arrow::onDraw(DrawEvent *e)
 {
 	float angle = math::lerp(m_prevAngle, m_angle, alpha);
 	m_sprite.setRotation(angle * (180.0f / PI));
@@ -33,7 +33,7 @@ bool Arrow::plotTest(int x, int y)
 	return !m_world->getTerrain()->isBlockAt(floor(x / BLOCK_PXF), floor(y / BLOCK_PXF), WORLD_LAYER_MIDDLE);
 }
 
-void Arrow::update(const float delta)
+void Arrow::onTick(TickEvent *e)
 {
 	if(m_hasHit)
 	{

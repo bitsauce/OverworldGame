@@ -314,7 +314,7 @@ void ChunkLoader::update(const float dt)
 	m_time += dt;
 }
 
-void ChunkLoader::draw(GraphicsContext &context, const float alpha)
+void ChunkLoader::onDraw(DrawEvent *e)
 {
 	// Update active chunk area
 	Vector2 center = m_camera->getCenter(alpha);

@@ -3,11 +3,7 @@
 
 #include "Config.h"
 
-#pragma warning(disable : 4717)
-
-class Scene;
-
-class UiObject
+class UiObject : public GameObject
 {
 public:
 	UiObject(Scene *scene, UiObject *parent);
@@ -52,8 +48,8 @@ public:
 	}
 	
 	// Update & draw
-	virtual void update(const float delta);
-	virtual void draw(SpriteBatch *SpriteBatch, const float alpha) { }
+	virtual void onTick(TickEvent *e);
+	virtual void onDraw(DrawEvent *e) { }
 
 protected:
 	// Scene object

@@ -6,19 +6,19 @@
 
 class GameOverlay;
 
-class Hotbar : public UiObject, public MouseListener, public KeyListener
+class Hotbar : public UiObject
 {
 public:
 	Hotbar(Scene *scene, GameOverlay *gameOverlay);
 	~Hotbar();
 
-	void update(const float delta);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 
 	void setSelectedSlot(int action, const uint slot);
 	
-	void keyEvent(const KeyEvent & event);
-	void mouseWheelEvent(const int delta);
+	void onKeyEvent(const KeyEvent & event);
+	void onMouseWheelEvent(const int delta);
 
 private:
 	GameOverlay *m_gameOverlay;

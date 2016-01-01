@@ -18,7 +18,7 @@ ItemDrop::ItemDrop(World *world, const ItemID item, const int amount) :
 	setSize(Vector2(16.0f));
 }
 
-void ItemDrop::update(const float delta)
+void ItemDrop::onTick(TickEvent *e)
 {
 	if(m_noPickupTime <= 0.0f)
 	{
@@ -49,7 +49,7 @@ void ItemDrop::update(const float delta)
 	DynamicEntity::update(delta);
 }
 
-void ItemDrop::draw(SpriteBatch *spriteBatch, const float alpha)
+void ItemDrop::onDraw(DrawEvent *e)
 {
 	spriteBatch->drawSprite(Sprite(ItemData::get(m_itemID)->getIconTexture(), Rect(
 		getDrawPosition(alpha) - Vector2(0.0f, ((sin(math::lerp(m_prevHoverTime, m_hoverTime, alpha)) * 0.5f + 0.5f) * 8.0f)),

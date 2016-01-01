@@ -19,7 +19,7 @@ DynamicEntity::DynamicEntity(World *world, const EntityID id) :
 {
 }
 
-void DynamicEntity::update(const float delta)
+void DynamicEntity::onTick(TickEvent *e)
 {
 	m_lastPosition = m_position;
 	m_contact = 0; 

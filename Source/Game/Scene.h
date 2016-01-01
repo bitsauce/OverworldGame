@@ -4,7 +4,7 @@
 #include "Config.h"
 #include "Gui/UiObject.h"
 #include "Gui/Canvas.h"
-
+/*
 class Scene
 {
 	friend class UiObject;
@@ -32,7 +32,7 @@ public:
 		return m_canvas;
 	}
 
-	void update(const float delta)
+	void onTick(TickEvent *e)
 	{
 		for(UiObject *object : m_uiObjects)
 		{
@@ -40,7 +40,7 @@ public:
 		}
 	}
 
-	void draw(SpriteBatch *spriteBatch, const float alpha)
+	void onDraw(DrawEvent *e)
 	{ 
 		spriteBatch->begin();
 		for(UiObject *object : m_uiObjects)
@@ -70,5 +70,5 @@ private:
 	Canvas *m_canvas;
 	list<UiObject*> m_uiObjects;
 };
-
+*/
 #endif // SCENE_H

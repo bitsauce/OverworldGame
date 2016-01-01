@@ -16,8 +16,8 @@ class Debug
 public:
 	Debug(OverworldGame *game);
 
-	void update(const float delta);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 	void toggle();
 
 	void nextBlock(int action);

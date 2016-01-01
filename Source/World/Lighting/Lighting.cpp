@@ -25,7 +25,7 @@ void Lighting::addLightSource(LightSource *source)
 	m_lightSources.push_back(source);
 }
 
-void Lighting::draw(SpriteBatch *spriteBatch, const float alpha)
+void Lighting::onDraw(DrawEvent *e)
 {
 	if(!m_enabled) return;
 

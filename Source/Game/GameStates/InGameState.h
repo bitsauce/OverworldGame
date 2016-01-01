@@ -7,7 +7,6 @@
 #include "Gui/Canvas.h"
 
 class World;
-class Scene;
 
 class InGameState : public GameState
 {
@@ -15,8 +14,8 @@ public:
 	InGameState(OverworldGame *game);
 
 	void enter();
-	void update(const float delta);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 
 private:
 	World *m_world;

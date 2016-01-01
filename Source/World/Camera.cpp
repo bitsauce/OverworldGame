@@ -2,14 +2,16 @@
 #include "Constants.h"
 #include "World/World.h"
 #include "Game/Debug.h"
-#include "Entities/Entity.h"
 #include "Entities/Dynamic/Pawn.h"
 
-Camera::Camera() :
+Camera::Camera(World *world, InputManager *input, Window *window) :
+	Entity(world, ENTITY_CAMERA),
 	m_position(0.0f, 0.0f),
 	m_prevPosition(0.0f, 0.0f),
 	m_velocity(0.0f, 0.0f),
-	m_tagetEntity(0)
+	m_tagetEntity(0),
+	m_input(input),
+	m_window(window)
 {
 	setZoomLevel(1.0f);
 }
@@ -47,7 +49,7 @@ Vector2i Camera::getPosition() const
 
 Vector2 Camera::getInputPosition() const
 {
-	return m_position + Input::getPosition() / m_zoomLevel;
+	return m_position + m_input->getPosition() / m_zoomLevel;
 }
 
 Vector2i Camera::getSize() const
@@ -59,7 +61,7 @@ void Camera::setZoomLevel(const float zoomLevel)
 {
 	Vector2 center = getCenter(0.0f);
 	m_zoomLevel = zoomLevel;
-	m_size = Window::getSize() / m_zoomLevel;
+	m_size = m_window->getSize() / m_zoomLevel;
 	lookAt(center);
 }
 
@@ -68,33 +70,36 @@ float Camera::getZoomLevel() const
 	return m_zoomLevel;
 }
 
-void Camera::update(const float dt)
+void Camera::onTick(TickEvent *e)
 {
-
-	if (!m_tagetEntity)
+	if(!m_tagetEntity)
 	{
-		float acc = (Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS ? 32.0f : 256.0f) * dt;
+		float acc = (m_input->getKeyState(CGF_KEY_LCTRL) ? 32.0f : 256.0f) * e->getDelta();
 
 		m_prevPosition = m_position;
 
-		if (Input::getKeyState(XD_KEY_LEFT) == GLFW_PRESS) {
+		if(m_input->getKeyState(CGF_KEY_LEFT))
+		{
 			m_velocity.x -= acc;
 		}
-	
-		if(Input::getKeyState(XD_KEY_RIGHT) == GLFW_PRESS) {
+
+		if(m_input->getKeyState(CGF_KEY_RIGHT))
+		{
 			m_velocity.x += acc;
 		}
-	
-		if(Input::getKeyState(XD_KEY_UP) == GLFW_PRESS) {
+
+		if(m_input->getKeyState(CGF_KEY_UP))
+		{
 			m_velocity.y -= acc;
 		}
-	
-		if(Input::getKeyState(XD_KEY_DOWN) == GLFW_PRESS) {
+
+		if(m_input->getKeyState(CGF_KEY_DOWN))
+		{
 			m_velocity.y += acc;
 		}
 
 		m_velocity *= 0.75f;
-		if (m_velocity.magnitude() > 64.0f)
+		if(m_velocity.magnitude() > 64.0f)
 		{
 			m_velocity = m_velocity.normalized() * 64.0f;
 		}
@@ -105,14 +110,14 @@ void Camera::update(const float dt)
 
 void Camera::interpolate(const float alpha)
 {
-	if (m_tagetEntity)
+	if(m_tagetEntity)
 	{
 		lookAt(m_tagetEntity->getDrawPosition(alpha) + m_tagetEntity->getSize() * 0.5f);
 		m_prevPosition = m_position;
 	}
 }
 
-void Camera::mouseWheelEvent(const int delta)
+void Camera::onMouseWheel(MouseEvent *e)
 {
 	/*Vector2 center = getCenter();
 	if(delta > 0) zoomIn();
@@ -120,7 +125,7 @@ void Camera::mouseWheelEvent(const int delta)
 	lookAt(center);*/
 }
 
-void Camera::resizeEvent(uint width, uint height)
+void Camera::onWindowSizeChanged(WindowEvent *e)
 {
 	setZoomLevel(m_zoomLevel);
 }

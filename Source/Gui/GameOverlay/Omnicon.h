@@ -15,8 +15,8 @@ public:
 	void setVisible(const bool visible) { m_visible = visible; }
 	bool isVisible() const { return m_visible; }
 
-	void update(const float delta);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 
 private:
 	GameOverlay *m_gameOverlay;

@@ -13,7 +13,7 @@ public:
 	Vector2i getCanvasSize() const { return m_canvasSize; }
 
 	void updateSize();
-	void update(const float delta);
+	void onTick(TickEvent *e);
 
 private:
 	Vector2i m_canvasSize;

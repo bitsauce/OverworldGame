@@ -18,12 +18,12 @@ void Omnicon::toggle(int action)
 	m_visible = !m_visible;
 }
 
-void Omnicon::update(const float delta)
+void Omnicon::onTick(TickEvent *e)
 {
 	if(!m_visible && !m_gameOverlay->isCrafting()) return;
 }
 
-void Omnicon::draw(SpriteBatch *spriteBatch, const float alpha)
+void Omnicon::onDraw(DrawEvent *e)
 {
 	if(!m_visible && !m_gameOverlay->isCrafting()) return;
 

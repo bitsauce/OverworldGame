@@ -29,7 +29,7 @@ public:
 	bool setBlockAt(const int x, const int y, const BlockID block, WorldLayer layer);
 
 	void update(const float dt);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onDraw(DrawEvent *e);
 
 	void addStaticEntity(BlockEntity *entity);
 	

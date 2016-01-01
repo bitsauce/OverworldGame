@@ -17,11 +17,11 @@ class Player;
 class GameOverlay : public UiObject
 {
 public:
-	GameOverlay(OverworldGame *game, Scene *scene, GraphicsContext & context);
+	GameOverlay(OverworldGame *game, Scene *scene, GraphicsContext *graphicsContext);
 	~GameOverlay();
 
-	void update(const float delta);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 	
 	// Getters/setters
 	void setPlayer(Player *player) { m_player = player; }
@@ -36,7 +36,7 @@ public:
 	void toggleCrafting();
 	bool isCrafting() const { return m_craftingEnabled; }
 
-	void performSlotAction(Storage::Slot *slot, const VirtualKey type);
+	void performSlotAction(Storage::Slot *slot, const Keycode type);
 
 	// Ui
 	bool isHovered() const;

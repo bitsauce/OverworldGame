@@ -11,12 +11,12 @@ Zombie::Zombie(World *world) :
 	m_moveSpeed = 2.5f;
 }
 
-void Zombie::update(const float delta)
+void Zombie::onTick(TickEvent *e)
 {
 	Pawn::update(delta);
 }
 
-void Zombie::draw(SpriteBatch *spriteBatch, const float alpha)
+void Zombie::onDraw(DrawEvent *e)
 {
 	Pawn::draw(spriteBatch, alpha);
 }

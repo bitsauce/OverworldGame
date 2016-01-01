@@ -2,24 +2,26 @@
 #define BACKGROUND_H
 
 #include "Config.h"
+#include "Entities/Entity.h"
 
 class Camera;
 class TimeOfDay;
 class World;
 
-class Background
+class Background : public Entity
 {
 public:
-	Background(World *world);
+	Background(World *world, Window *window);
 	~Background();
 
-	void update(const float delta);
-	void draw(SpriteBatch *SpriteBatch, const float alpha);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 
 private:
 	// Manager objects
 	Camera *m_camera;
 	TimeOfDay *m_timeOfDay;
+	Window *m_window;
 
 	struct Layer
 	{

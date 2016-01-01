@@ -160,7 +160,7 @@ void Humanoid::setPostBlendAnimations(const Anim anim1, const Anim anim2, const 
 	m_postAnimMixAlpha = alpha;
 }
 
-void Humanoid::update(const float delta)
+void Humanoid::onTick(TickEvent *e)
 {
 	// Update all animations
 	if(m_preAnimation)

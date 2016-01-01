@@ -47,7 +47,7 @@ void Inventory::hide()
 	m_showing = false;
 }
 
-void Inventory::update(const float delta)
+void Inventory::onTick(TickEvent *e)
 {
 	setSize(Vector2(970.0f, 248.0f)/m_parent->getSize());
 
@@ -69,7 +69,7 @@ void Inventory::update(const float delta)
 	UiObject::update(delta);
 }
 
-void Inventory::draw(SpriteBatch *spriteBatch, const float alpha)
+void Inventory::onDraw(DrawEvent *e)
 {
 	m_rect.position.y = math::lerp(m_interpolateStartY, m_interpolateEndY, alpha);
 	m_fadeInAlpha = math::lerp(m_interpolateStartAlpha, m_interpolateEndAlpha, alpha);

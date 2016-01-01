@@ -5,9 +5,8 @@
 #include "UiObject.h"
 
 class UiObject;
-class Scene;
 
-class LineEdit : public UiObject, public KeyListener
+class LineEdit : public UiObject
 {
 public:
 	LineEdit(Scene *scene, UiObject *parent = nullptr);
@@ -23,7 +22,7 @@ public:
 		m_font->setColor(color);
 	}
 
-	void update(const float delta);
+	void onTick(TickEvent *e);
 	void draw(SpriteBatch *SpriteBatch);
 
 protected:

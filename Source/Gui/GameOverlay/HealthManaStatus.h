@@ -12,8 +12,8 @@ class HealthManaStatus : public UiObject
 public:
 	HealthManaStatus(Scene *scene, GameOverlay *gameOverlay);
 
-	void update(const float delta);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 
 private:
 	GameOverlay *m_gameOverlay;

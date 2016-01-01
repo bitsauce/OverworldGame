@@ -10,8 +10,10 @@ Color mixColors(Color c1, Color c2, const float a)
 	return c1 * a + c2 * (1.0f - a);
 }
 
-Background::Background(World *world) :
+Background::Background(World *world, Window *window) :
+	Entity(world, ENTITY_BACKGROUND),
 	m_camera(world->getCamera()),
+	m_window(window),
 	m_timeOfDay(world->getTimeOfDay()),
 	m_topColor(255, 255, 255, 255),
 	m_bottomColor(90, 170, 255, 255),
@@ -31,7 +33,7 @@ Background::Background(World *world) :
 	Random rand;
 	for(uint i = 0; i < 10; ++i)
 	{
-		m_clouds.push_back(new Cloud(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Clouds/Cloud_01.png")), 0.2f + rand.nextDouble() * 0.8f, (float) rand.nextInt(0, Window::getHeight() / 2), (float) rand.nextInt(0, Window::getWidth())));
+		m_clouds.push_back(new Cloud(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Clouds/Cloud_01.png")), 0.2f + rand.nextDouble() * 0.8f, (float) rand.nextInt(0, m_window->getHeight() / 2), (float) rand.nextInt(0, m_window->getWidth())));
 	}
 
 	m_layers.push_back(new Layer(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Layer_0.png")), 0.5f, -1080.0f));
@@ -48,7 +50,7 @@ Background::~Background()
 	m_layers.clear();
 }
 
-void Background::update(const float delta)
+void Background::onTick(TickEvent *e)
 {
 	// Get hour and mintue
 	int hour = m_timeOfDay->getHour();
@@ -75,7 +77,7 @@ void Background::update(const float delta)
 
 		// Place sun
 		float ang = (1140 - time) / 720.0f;
-		Vector2 windowSize = Window::getSize();
+		Vector2 windowSize = m_window->getSize();
 		Vector2 sunSize = m_sun.getSize();
 		m_sun.setPosition(windowSize.x / 2.0f - sunSize.x / 2.0f + cos(PI*ang) * (windowSize.x / 2.0f + sunSize.x / 4.0f), windowSize.y / 2.0f - sin(PI*ang) * (windowSize.y / 2.0f + 64));
 		m_sun.setRotation(180 * (1.0f - ang));
@@ -99,7 +101,7 @@ void Background::update(const float delta)
 
 		// Place moon
 		float ang = (1860 - (time >= 1140 ? time : time + 1440)) / 720.0f;
-		Vector2 windowSize = Window::getSize();
+		Vector2 windowSize = m_window->getSize();
 		Vector2 moonSize = m_moon.getSize();
 		m_moon.setPosition(windowSize.x / 2.0f - moonSize.x / 2.0f + cos(PI * ang) * (windowSize.x / 2.0f + moonSize.x / 2.0f), windowSize.y / 2.0f - sin(PI * ang) * windowSize.y / 2.0f);
 		m_moon.setRotation(180 * (1.0f - ang));
@@ -108,30 +110,31 @@ void Background::update(const float delta)
 	// Apply wind
 	for(Cloud *cloud : m_clouds)
 	{
-		float x = cloud->sprite.getX() + m_wind * cloud->depth * delta;
-		if(x > Window::getWidth())
+		float x = cloud->sprite.getX() + m_wind * cloud->depth * e->getDelta();
+		if(x > m_window->getWidth())
 		{
 			x = -cloud->sprite.getWidth();
-			cloud->sprite.setY(Random().nextInt(0, Window::getHeight() / 2));
+			cloud->sprite.setY(Random().nextInt(0, m_window->getHeight() / 2));
 		}
 		cloud->sprite.setX(x);
 	}
 }
 
-void Background::draw(SpriteBatch *spriteBatch, const float alpha)
+void Background::onDraw(DrawEvent *e)
 {
-	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
+	GraphicsContext *graphicsContext = e->getGraphicsContext();
+	SpriteBatch *spriteBatch = e->getSpriteBatch();
 
 	// Draw sky gradient
 	m_vertices[0].set4f(VERTEX_POSITION, 0.0f, 0.0f);
-	m_vertices[1].set4f(VERTEX_POSITION, 0.0f, (float) gfxContext.getHeight());
-	m_vertices[2].set4f(VERTEX_POSITION, (float) gfxContext.getWidth(), 0.0f);
-	m_vertices[3].set4f(VERTEX_POSITION, (float) gfxContext.getWidth(), (float) gfxContext.getHeight());
+	m_vertices[1].set4f(VERTEX_POSITION, 0.0f, (float) graphicsContext->getHeight());
+	m_vertices[2].set4f(VERTEX_POSITION, (float) graphicsContext->getWidth(), 0.0f);
+	m_vertices[3].set4f(VERTEX_POSITION, (float) graphicsContext->getWidth(), (float) graphicsContext->getHeight());
 	m_vertices[0].set4ub(VERTEX_COLOR, m_topColor.r, m_topColor.g, m_topColor.b, m_topColor.a);
 	m_vertices[1].set4ub(VERTEX_COLOR, m_bottomColor.r, m_bottomColor.g, m_bottomColor.b, m_bottomColor.a);
 	m_vertices[2].set4ub(VERTEX_COLOR, m_topColor.r, m_topColor.g, m_topColor.b, m_topColor.a);
 	m_vertices[3].set4ub(VERTEX_COLOR, m_bottomColor.r, m_bottomColor.g, m_bottomColor.b, m_bottomColor.a);
-	gfxContext.drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, m_vertices, 4);
+	graphicsContext->drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, m_vertices, 4);
 
 	// Draw sun/moon
 	int hour = m_timeOfDay->getHour();
@@ -147,17 +150,17 @@ void Background::draw(SpriteBatch *spriteBatch, const float alpha)
 	// Draw background layers
 	for(Layer *layer : m_layers)
 	{
-		float ratio = Window::getWidth() / 1920.0f;
-		Vector2i cameraPos = m_camera->getCenter(alpha);
-		Vector2i layerSize = Vector2i(Window::getWidth(), (int) (layer->sprite.getTexture()->getHeight() * ratio));
+		float ratio = m_window->getWidth() / 1920.0f;
+		Vector2i cameraPos = m_camera->getCenter(e->getAlpha());
+		Vector2i layerSize = Vector2i(m_window->getWidth(), (int) (layer->sprite.getTexture()->getHeight() * ratio));
 		layer->sprite.setSize(layerSize);
 		if(cameraPos.y > 0.0f)
 		{
-			layer->sprite.setPosition(0.0f, -cameraPos.y + Window::getHeight() * 0.5f - layerSize.y - layer->yOffset * ratio);
+			layer->sprite.setPosition(0.0f, -cameraPos.y + m_window->getHeight() * 0.5f - layerSize.y - layer->yOffset * ratio);
 		}
 		else
 		{
-			layer->sprite.setPosition(0.0f, -cameraPos.y * layer->depth * 0.1f + Window::getHeight() * 0.5f - layerSize.y - layer->yOffset * ratio);
+			layer->sprite.setPosition(0.0f, -cameraPos.y * layer->depth * 0.1f + m_window->getHeight() * 0.5f - layerSize.y - layer->yOffset * ratio);
 		}
 		layer->sprite.setRegion(TextureRegion((float) (cameraPos.x * layer->depth) / (float) layerSize.x, 0.0f, (float) (cameraPos.x * layer->depth + layerSize.x) / (float) layerSize.x, 1.0f));
 		spriteBatch->drawSprite(layer->sprite);

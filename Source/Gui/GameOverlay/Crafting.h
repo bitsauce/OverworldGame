@@ -4,16 +4,15 @@
 #include "Gui/UiObject.h"
 #include "Game/Storage.h"
 
-class Scene;
 class GameOverlay;
 
-class Crafting : public UiObject, public KeyListener
+class Crafting : public UiObject
 {
 public:
 	Crafting(Scene *scene, GameOverlay *gameOverlay);
 
-	void update(const float delta);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 	
 	void keyEvent(const KeyEvent & event);
 

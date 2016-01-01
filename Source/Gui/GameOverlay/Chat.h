@@ -11,8 +11,8 @@ class Chat : public UiObject
 public:
 	Chat(OverworldGame *game, GraphicsContext & context, Scene *scene, GameOverlay *gameOverlay);
 
-	void update(const float delta);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 
 	void toggle(int action);
 

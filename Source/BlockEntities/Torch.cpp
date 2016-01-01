@@ -10,7 +10,7 @@ Torch::Torch(World * world, int x, int y, const BlockEntityData *data) :
 	m_sprite.setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
 }
 
-void Torch::update(const float delta)
+void Torch::onTick(TickEvent *e)
 {
 	// TODO: ChunkLoader::setFrameIndex() will set the frame index of the furniture
 	// at the given position by updating a value in a texture object containing all
@@ -19,7 +19,7 @@ void Torch::update(const float delta)
 	m_time += delta;
 }
 
-void Torch::draw(SpriteBatch *spriteBatch, const float alpha)
+void Torch::onDraw(DrawEvent *e)
 {
 	m_sprite.setRegion(TextureRegion(0, 0, 1.0/3.0, 1.0), true);
 	spriteBatch->drawSprite(m_sprite);

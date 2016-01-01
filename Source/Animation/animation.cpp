@@ -149,7 +149,7 @@ void AnimationState::setAnimation(Animation *anim)
 	spAnimationState_setAnimation(m_self, 0, anim->m_self, m_looping);
 }
 
-void AnimationState::update(const float delta)
+void AnimationState::onTick(TickEvent *e)
 {
 	m_prevTime += delta;
 	spAnimationState_update(m_self, delta);

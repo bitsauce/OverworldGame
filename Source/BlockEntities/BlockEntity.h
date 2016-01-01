@@ -17,7 +17,7 @@ public:
 	{
 	}
 
-	virtual void draw(SpriteBatch *spriteBatch, const float alpha)
+	virtual void onDraw(DrawEvent *e)
 	{
 	}
 

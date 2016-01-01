@@ -35,7 +35,7 @@ GameOverlay::~GameOverlay()
 	delete m_chat;
 }
 
-void GameOverlay::update(const float delta)
+void GameOverlay::onTick(TickEvent *e)
 {
 	if (!m_player) return;
 	Storage::Slot *heldItem = m_player->getHeldItem();

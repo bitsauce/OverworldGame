@@ -6,13 +6,14 @@
 #include "World/Terrain/ChunkLoader.h"
 #include "World/Terrain/Chunk.h"
 #include "Generation/Generator.h"
+#include "Entities/Entity.h"
 
 enum WorldLayer;
 enum BlockID;
 
 class BlockEntity;
 
-class Terrain : public WindowListener
+class Terrain : public Entity
 {
 	friend class World;
 public:
@@ -48,7 +49,7 @@ private:
 		Drawer(Terrain *terrain, Camera *camera, const Priority drawOrder, const WorldLayer layer);
 
 		// DRAWING
-		void draw(SpriteBatch *spriteBatch, const float alpha);
+		void onDraw(DrawEvent *e);
 
 	private:
 		// CHUNK LOADER

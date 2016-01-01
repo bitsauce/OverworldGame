@@ -9,9 +9,9 @@ class Arrow : public DynamicEntity
 public:
 
 	Arrow(Pawn *owner, World *world, const Vector2 &pos, const Vector2 &dir, const float speed);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onDraw(DrawEvent *e);
 	bool plotTest(int x, int y);
-	void update(const float delta);
+	void onTick(TickEvent *e);
 
 	static DynamicEntity *Factory(World * world)
 	{

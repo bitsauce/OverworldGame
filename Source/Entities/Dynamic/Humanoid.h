@@ -57,7 +57,7 @@ public:
 
 	Skeleton *getSkeleton() { return m_skeleton; }
 
-	void update(const float delta);
+	void onTick(TickEvent *e);
 	void draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha);
 
 	void setAttachmentTexture(const BodyPart part, const int layer, const Texture2DPtr texture);

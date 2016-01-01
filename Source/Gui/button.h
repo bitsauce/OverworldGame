@@ -17,7 +17,7 @@ public:
 	void setUserData(void *userData);
 	void *getUserData() const;
 
-	void update(const float delta);
+	void onTick(TickEvent *e);
 	void draw(SpriteBatch *SpriteBatch);
 	void clickEvent();
 

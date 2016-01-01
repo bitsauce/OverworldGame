@@ -156,7 +156,7 @@ void Debug::debugFunction(int action, const int i)
 	}
 }
 
-void Debug::update(const float delta)
+void Debug::onTick(TickEvent *e)
 {
 	if(!m_enabled) return;
 
@@ -179,7 +179,7 @@ void Debug::update(const float delta)
 	}
 }
 
-void Debug::draw(SpriteBatch *spriteBatch, const float alpha)
+void Debug::onDraw(DrawEvent *e)
 {
 	if(!m_enabled) return;
 

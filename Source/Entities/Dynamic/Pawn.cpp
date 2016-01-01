@@ -79,7 +79,7 @@ void Pawn::activateThing(int action)
 	}*/
 }
 
-void Pawn::update(const float delta)
+void Pawn::onTick(TickEvent *e)
 {
 	m_controller->update();
 
@@ -232,7 +232,7 @@ void Pawn::update(const float delta)
 	m_humanoid.update(delta);
 }
 
-void Pawn::draw(SpriteBatch *spriteBatch, const float alpha)
+void Pawn::onDraw(DrawEvent *e)
 {
 	m_humanoid.draw(this, spriteBatch, alpha);
 	ItemData *item = ItemData::get(getCurrentItem()->getItem());

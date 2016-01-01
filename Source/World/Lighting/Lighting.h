@@ -4,11 +4,12 @@
 #include "Config.h"
 #include "LightSource.h"
 #include "Pointlight.h"
+#include "Entities/Entity.h"
 
 class Terrain;
 class World;
 
-class Lighting : public WindowListener
+class Lighting : public Entity
 {
 	friend class ChunkLoader;
 	friend class Debug;
@@ -18,14 +19,12 @@ public:
 	~Lighting();
 
 	// DRAWING
-	void draw(xd::GraphicsContext &gfxContext);
+	void onDraw(DrawEvent *e);
 
 	// WINDOW
 	void resizeEvent(uint width, uint height);
 	
 	void addLightSource(LightSource *lightSource);
-
-	void draw(xd::SpriteBatch *spriteBatch, const float alpha);
 
 private:
 	Terrain *m_terrain;

@@ -22,12 +22,11 @@ class OverworldGame : public Game
 public:
 	OverworldGame();
 
-	void start(GraphicsContext &context);
-	void end();
-	void update(const float delta);
-	void draw(GraphicsContext &context, const float alpha);
+	void onStart(GameEvent *e);
+	void onEnd(GameEvent *e);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 
-	SpriteBatch *getSpriteBatch() const { return m_spriteBatch; }
 	Debug *getDebug() const { return m_debug; }
 	World *getWorld() const { return m_world; }
 	Client *getClient() const { return m_client; }
@@ -39,7 +38,7 @@ public:
 	void popState();
 	GameState *peekState(int level = 0);
 
-	void takeScreenshot(int action)
+	/*void takeScreenshot(int action)
 	{
 		if(action != GLFW_PRESS) return;
 		m_takeScreenshot = true;
@@ -49,10 +48,9 @@ public:
 	{
 		if(action != GLFW_PRESS) return;
 		Window::setFullScreen(!Window::getFullScreen());
-	}
+	}*/
 
 private:
-	SpriteBatch *m_spriteBatch;
 	bool m_takeScreenshot;
 	
 	// Game modules

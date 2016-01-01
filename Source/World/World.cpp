@@ -17,24 +17,36 @@
 #include "Entities/Dynamic/Pawn.h"
 #include "Lighting/Lighting.h"
 
-World::World() :
+World::World(Game *game) :
 	m_worldPath(""),
 	m_worldFile(nullptr),
 	m_entitiesByLayer(WORLD_LAYER_COUNT)
 {
 	// Load world content
-	m_timeOfDay = new TimeOfDay();
-	m_camera = new Camera();
-	m_background = new Background(this);
-	m_generator = new WorldGenerator(9823);
+	m_timeOfDay = new TimeOfDay(this);
+	addChildLast(m_timeOfDay);
+
+	m_camera = new Camera(this, game->getInputManager(), game->getWindow());
+	addChildLast(m_camera);
+
+	m_background = new Background(this, game->getWindow());
+	addChildLast(m_background);
+
+	/*m_generator = new WorldGenerator(9823);
+	addChildFirst(m_generator);
+
 	m_terrain = new Terrain(this);
+	addChildFirst(m_terrain);
+
 	m_lighting = new Lighting(this);
+	addChildFirst(m_lighting);
+	*/
 }
 
 void World::create(const string &name)
 {
 	LOG("Creating world '%s'...", name.c_str());
-	
+
 	// Set the world path
 	m_worldPath = "saves:/Overworld/" + name;
 	m_worldFile = new IniFile(m_worldPath + "/World.ini");
@@ -43,7 +55,7 @@ void World::create(const string &name)
 	FileSystem::MakeDir(m_worldPath + "/Chunks");
 	FileSystem::MakeDir(m_worldPath + "/Players");
 	FileSystem::MakeDir(m_worldPath + "/Entities");
-		
+
 	// Create world file
 	uint seed = Random().nextInt();
 	m_worldFile->setValue("world", "name", name);
@@ -54,8 +66,7 @@ void World::create(const string &name)
 }
 
 void World::save()
-{
-}
+{ }
 
 bool World::load(const string &name)
 {
@@ -63,7 +74,7 @@ bool World::load(const string &name)
 	if(util::fileExists(worldFile))
 	{
 		LOG("Loading world '%s'...", name.c_str());
-	
+
 		// Set the world path
 		m_worldPath = "saves:/Overworld/" + name;
 		m_worldFile = new IniFile(worldFile);
@@ -71,15 +82,15 @@ bool World::load(const string &name)
 		/*FileSystemIterator itr(m_worldPath + "/Objects", "*.obj", FileSystemIterator::FILES);
 		while(itr.hasNext())
 		{
-			FileReader file(itr.next());
+		FileReader file(itr.next());
 
-			int id;
-			file >> id;
+		int id;
+		file >> id;
 
-			switch(id)
-			{
-			case ENTITY_ITEM_DROP: new ItemDrop(this, file); break;
-			}
+		switch(id)
+		{
+		case ENTITY_ITEM_DROP: new ItemDrop(this, file); break;
+		}
 		}*/
 	}
 	else
@@ -116,36 +127,19 @@ void World::clear()
 	m_localPlayer = nullptr;
 }
 
-void World::update(const float delta)
-{
-	m_timeOfDay->update(delta);
-	m_background->update(delta);
-	m_terrain->getChunkLoader()->update(delta);
-	m_camera->update(delta);
-	
-	list<Entity*> entities = m_entities; // We make a copy of the list so objects which are removed don't crash the iteration
-	for(Entity *entity : entities)
-	{
-		entity->update(delta);
-	}
+void World::onTick(TickEvent *e)
+{ }
 
-	//list<BlockEntity*> staticEntities = ; // We make a copy of the list so objects which are removed don't crash the iteration
-	for(BlockEntity *staticEntity : m_staticEntities)
-	{
-		staticEntity->update(delta);
-	}
-}
-
-void World::draw(SpriteBatch *spriteBatch, const float alpha)
+void World::onDraw(DrawEvent *e)
 {
-	spriteBatch->begin();
-	
+	/*spriteBatch->begin();
+
 	m_camera->interpolate(alpha);
 
 	m_terrain->getChunkLoader()->draw(spriteBatch->getGraphicsContext(), alpha);
 
 	m_background->draw(spriteBatch, alpha);
-	
+
 	spriteBatch->end();
 	spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_camera->getModelViewMatrix(alpha)));
 
@@ -153,32 +147,32 @@ void World::draw(SpriteBatch *spriteBatch, const float alpha)
 	m_terrain->m_background.draw(spriteBatch, alpha);
 	for(Entity *entity : m_entitiesByLayer[WORLD_LAYER_BACK])
 	{
-		entity->draw(spriteBatch, alpha);
+	entity->draw(spriteBatch, alpha);
 	}
 
 	// Draw middleground
 	m_terrain->m_middleground.draw(spriteBatch, alpha);
 	for(Entity *entity : m_entitiesByLayer[WORLD_LAYER_MIDDLE])
 	{
-		entity->draw(spriteBatch, alpha);
+	entity->draw(spriteBatch, alpha);
 	}
 
 	for(BlockEntity *staticEntity : m_staticEntities)
 	{
-		staticEntity->draw(spriteBatch, alpha);
+	staticEntity->draw(spriteBatch, alpha);
 	}
-	
+
 	// Draw foreground
 	m_terrain->m_foreground.draw(spriteBatch, alpha);
 	for(Entity *entity : m_entitiesByLayer[WORLD_LAYER_FRONT])
 	{
-		entity->draw(spriteBatch, alpha);
+	entity->draw(spriteBatch, alpha);
 	}
 
 	// Draw lighting
 	m_lighting->draw(spriteBatch, alpha);
 
-	spriteBatch->end();
+	spriteBatch->end();*/
 }
 
 void World::addEntity(Entity *entity)

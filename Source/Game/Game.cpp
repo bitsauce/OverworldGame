@@ -22,7 +22,7 @@
 #include "Gui/GameOverlay/GameOverlay.h"
 
 OverworldGame::OverworldGame() :
-	m_spriteBatch(nullptr),
+	Game("Overworld"),
 	m_world(nullptr),
 	m_takeScreenshot(false),
 	m_client(nullptr),
@@ -33,26 +33,31 @@ OverworldGame::OverworldGame() :
 {
 }
 
-void OverworldGame::start(GraphicsContext &context)
+void OverworldGame::onStart(GameEvent *e)
 {
+	GraphicsContext *graphicsContext = getWindow()->getGraphicsContext();
+
 	// Setup sprite batch
-	m_spriteBatch = new SpriteBatch(context, 20000);
+	setSpriteBatch(new SpriteBatch(graphicsContext));
 
 	//if(Config::isFullscreenEnabled())
 	//{
 	//	Window::enableFullscreen();
 	//}
 
-	Graphics::setVsync(0);
+	getWindow()->setVSync(0);
 	
 	// Init world
-	BlockData::init();
-	BlockEntityData::init();
-	m_world = new World();
+	//BlockData::init();
+	//BlockEntityData::init();
+
+	EntityData::init(this);
+
+	m_world = new World(this);
+	addChildLast(m_world);
 
 	// Initialize block and item data
-	ItemData::init(this);
-	EntityData::init(this);
+	/*ItemData::init(this);
 
 	// Setup debug
 	m_debug = new Debug(this);
@@ -61,7 +66,7 @@ void OverworldGame::start(GraphicsContext &context)
 	m_commander = new Commander(this);
 
 	// Resize the window
-	Window::setSize(Vector2i(1280, 720));
+	getWindow()->setSize(1280, 720);
 
 	// Load world "Debug", or create it if it doesn't exists
 	if(!m_world->load("Debug"))
@@ -82,13 +87,13 @@ void OverworldGame::start(GraphicsContext &context)
 	
 	// Create game state
 	InGameState * state = new InGameState(this);
-	m_gameOverlay = new GameOverlay(this, state->getScene(), context);
+	//m_gameOverlay = new GameOverlay(this, state->getScene(), graphicsContext);
 
 	// Push game state
 	pushState(state);
 
 	// Set key bindings
-	InputContext *inputContext = Input::getContext("game");
+	/*InputContext *inputContext = Input::getContext("game");
 
 	inputContext->bind("toggle_full_screen", bind(&OverworldGame::toggleFullscreen, this, placeholders::_1), true);
 	inputContext->bind("take_screen_shot", bind(&OverworldGame::takeScreenshot, this, placeholders::_1), true);
@@ -130,28 +135,28 @@ void OverworldGame::start(GraphicsContext &context)
 
 	inputContext = Input::getContext("chat");
 	inputContext->bind("send_message", bind(&Chat::sendMessage, m_gameOverlay->getChat(), placeholders::_1), true);
-	inputContext->bind("escape_chat", bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1), true);
+	inputContext->bind("escape_chat", bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1), true);*/
 }
 
-void OverworldGame::end()
+void OverworldGame::onEnd(GameEvent *e)
 {
 	// Save the world as we're exiting
-	if(m_world) m_world->save();
+	/*if(m_world) m_world->save();
 	if(m_server) m_server->save();
 	delete m_world;
 	delete m_debug;
-	delete m_commander;
+	delete m_commander;*/
 }
 
 void OverworldGame::pushState(GameState *state)
-{
+{/*
 	assert(state);
 	m_states.push_front(state);
-	state->enter();
+	state->enter();*/
 }
 
 void OverworldGame::popState()
-{
+{/*
 	if(!m_states.empty())
 	{
 		GameState *front = m_states.front();
@@ -161,22 +166,23 @@ void OverworldGame::popState()
 	}
 	else
 	{
-		Engine::exit();
-	}
+		end();
+	}*/
 }
 
 GameState *OverworldGame::peekState(int level)
-{
+{/*
 	if(m_states.size() == 0) return 0;
 	list<GameState*>::iterator itr = m_states.begin();
 	advance(itr, level);
 	return *itr;
+*/return 0;
 }
 
-void OverworldGame::update(const float delta)
+void OverworldGame::onTick(TickEvent *e)
 {
 	// Update game connections
-	if(Connection::getInstance()->isServer())
+	/*if(Connection::getInstance()->isServer())
 	{
 		((Server*)Connection::getInstance())->update();
 	}
@@ -196,33 +202,35 @@ void OverworldGame::update(const float delta)
 	}
 
 	// Update debug
-	m_debug->update(delta);
+	m_debug->update(delta);*/
 }
 
-void OverworldGame::draw(GraphicsContext &context, const float alpha)
+void OverworldGame::onDraw(DrawEvent *e)
 {
+	GraphicsContext *graphicsContext = e->getGraphicsContext();
+
 	// Take screen shot
 	if(m_takeScreenshot)
 	{
 		int i = 0;
 		while(util::fileExists("C:\\Users\\Marcus\\Desktop\\Screenshot_" + util::intToStr(i) + ".png")) i++;
-		context.saveScreenshot("C:\\Users\\Marcus\\Desktop\\Screenshot_" + util::intToStr(i) + ".png");
+		graphicsContext->saveScreenshot("C:\\Users\\Marcus\\Desktop\\Screenshot_" + util::intToStr(i) + ".png");
 		m_takeScreenshot = false;
 	}
 
 	// Draw game states
-	for(list<GameState*>::iterator itr = m_states.begin(); itr != m_states.end(); ++itr)
+	/*for(list<GameState*>::iterator itr = m_states.begin(); itr != m_states.end(); ++itr)
 	{
 		(*itr)->draw(m_spriteBatch, alpha);
 		if(!(*itr)->isTransparent())
 		{
 			break;
 		}
-	}
+	}*/
 
 	// Render debug stuff
-	m_debug->setVariable("FPS", util::intToStr((int)Graphics::getFPS()));
-	m_spriteBatch->begin();
-	m_debug->draw(m_spriteBatch, alpha);
-	m_spriteBatch->end();
+	//m_debug->setVariable("FPS", util::intToStr((int) getFPS()));
+	//m_spriteBatch->begin();
+	//m_debug->draw(m_spriteBatch, alpha);
+	//m_spriteBatch->end();
 }

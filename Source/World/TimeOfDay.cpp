@@ -2,7 +2,8 @@
 
 #include "constants.h"
 
-TimeOfDay::TimeOfDay() :
+TimeOfDay::TimeOfDay(World *world) :
+	Entity(world, ENTITY_TIME_OF_DAY),
 	time(60*10)
 {
 }

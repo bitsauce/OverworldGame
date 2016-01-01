@@ -12,8 +12,8 @@ class ItemDrop : public DynamicEntity
 public:
 	ItemDrop(World *world, const ItemID item, const int amount = 1);
 
-	void update(const float delta);
-	void draw(SpriteBatch *spriteBatch, const float alpha);
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
 
 	static DynamicEntity *Factory(World * world)
 	{
