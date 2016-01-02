@@ -123,7 +123,7 @@ void Background::onTick(TickEvent *e)
 void Background::onDraw(DrawEvent *e)
 {
 	GraphicsContext *graphicsContext = e->getGraphicsContext();
-	SpriteBatch *spriteBatch = e->getSpriteBatch();
+	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
 
 	// Draw sky gradient
 	m_vertices[0].set4f(VERTEX_POSITION, 0.0f, 0.0f);
@@ -148,7 +148,7 @@ void Background::onDraw(DrawEvent *e)
 	}
 
 	// Draw background layers
-	for(Layer *layer : m_layers)
+	/*for(Layer *layer : m_layers)
 	{
 		float ratio = m_window->getWidth() / 1920.0f;
 		Vector2i cameraPos = m_camera->getCenter(e->getAlpha());
@@ -164,7 +164,7 @@ void Background::onDraw(DrawEvent *e)
 		}
 		layer->sprite.setRegion(TextureRegion((float) (cameraPos.x * layer->depth) / (float) layerSize.x, 0.0f, (float) (cameraPos.x * layer->depth + layerSize.x) / (float) layerSize.x, 1.0f));
 		spriteBatch->drawSprite(layer->sprite);
-	}
+	}*/
 
 	// Draw clouds
 	for(Cloud *cloud : m_clouds)

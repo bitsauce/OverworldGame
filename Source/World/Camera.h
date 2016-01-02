@@ -78,7 +78,7 @@ private:
 	Window *m_window;
 
 	// Position
-	Vector2 m_position, m_prevPosition, m_velocity, m_interpolatedPositon;
+	Vector2 m_position, m_prevPosition, m_velocity;
 
 	// Size
 	Vector2i m_size;

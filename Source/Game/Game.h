@@ -58,6 +58,7 @@ private:
 	Debug *m_debug;
 	World *m_world;
 	GameOverlay *m_gameOverlay;
+	SpriteBatch *m_spriteBatch;
 
 	list<GameState*> m_states;
 

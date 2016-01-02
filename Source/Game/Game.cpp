@@ -38,7 +38,7 @@ void OverworldGame::onStart(GameEvent *e)
 	GraphicsContext *graphicsContext = getWindow()->getGraphicsContext();
 
 	// Setup sprite batch
-	setSpriteBatch(new SpriteBatch(graphicsContext));
+	m_spriteBatch = new SpriteBatch(graphicsContext);
 
 	//if(Config::isFullscreenEnabled())
 	//{
@@ -203,11 +203,13 @@ void OverworldGame::onTick(TickEvent *e)
 
 	// Update debug
 	m_debug->update(delta);*/
+	GameObject::onTick(e);
 }
 
 void OverworldGame::onDraw(DrawEvent *e)
 {
 	GraphicsContext *graphicsContext = e->getGraphicsContext();
+	e->setUserData(m_spriteBatch);
 
 	// Take screen shot
 	if(m_takeScreenshot)
@@ -217,6 +219,8 @@ void OverworldGame::onDraw(DrawEvent *e)
 		graphicsContext->saveScreenshot("C:\\Users\\Marcus\\Desktop\\Screenshot_" + util::intToStr(i) + ".png");
 		m_takeScreenshot = false;
 	}
+
+	GameObject::onDraw(e);
 
 	// Draw game states
 	/*for(list<GameState*>::iterator itr = m_states.begin(); itr != m_states.end(); ++itr)

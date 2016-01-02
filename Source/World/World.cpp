@@ -66,7 +66,8 @@ void World::create(const string &name)
 }
 
 void World::save()
-{ }
+{
+}
 
 bool World::load(const string &name)
 {
@@ -128,10 +129,17 @@ void World::clear()
 }
 
 void World::onTick(TickEvent *e)
-{ }
+{
+	GameObject::onTick(e);
+}
 
 void World::onDraw(DrawEvent *e)
 {
+	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
+	spriteBatch->begin();
+	GameObject::onDraw(e);
+	spriteBatch->end();
+
 	/*spriteBatch->begin();
 
 	m_camera->interpolate(alpha);

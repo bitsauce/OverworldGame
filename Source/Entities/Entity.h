@@ -19,8 +19,8 @@ public:
 	virtual void createSaveData(FileWriter &saveData) {}
 	virtual void loadSaveData(FileReader &saveData) {}
 
-	virtual void onTick(TickEvent *e) {}
-	virtual void onDraw(DrawEvent *e) {}
+	//virtual void onTick(TickEvent *e) {}
+	//virtual void onDraw(DrawEvent *e) {}
 
 protected:
 	const EntityData * const m_data;
