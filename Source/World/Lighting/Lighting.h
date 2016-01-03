@@ -24,7 +24,6 @@ public:
 	void addLightSource(LightSource *lightSource);
 
 private:
-	Terrain *m_terrain;
 	World *m_world;
 
 	bool m_enabled;

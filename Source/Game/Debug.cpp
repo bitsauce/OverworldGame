@@ -25,7 +25,7 @@ Debug::Debug(OverworldGame *game) :
 	m_blockPainterEnabled(false),
 	m_font(ResourceManager::get<Font>(UI_DEBUG_FONT)),
 	m_variables(),
-	m_bulbSprite(ResourceManager::get<Texture2D>(":/Sprites/Debug/Icon_Bulb.png")),
+	m_bulbSprite(ResourceManager::get<Texture2D>("Sprites/Debug/Icon_Bulb.png")), // TODO: Replace these with colored cricles as they feel out of place
 	m_blockPainterTexture(new Texture2D())
 {
 	// Set font color
@@ -34,64 +34,64 @@ Debug::Debug(OverworldGame *game) :
 	m_bulbSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 }
 
-void Debug::debugFunction(int action, const int i)
+void Debug::debugFunction(KeyEvent *e)
 {
 	// Debug functions only called when debug enabled
-	if(action != GLFW_PRESS || (!m_enabled && i != 1))
+	if(e->getType() != KeyEvent::DOWN || (!m_enabled && e->getKeycode() != CGF_KEY_F1))
 	{
 		return;
 	}
 
-	switch(i)
+	switch(e->getKeycode())
 	{
 		// Toggle debug
-		case 1: toggle(); break;
+		case CGF_KEY_F1: toggle(); break;
 
 		// Toggle lighting
-		case 2:
+		case CGF_KEY_F2:
 		{
 			m_world->getLighting()->m_enabled = !m_world->getLighting()->m_enabled;
 		}
 		break;
 
 		// Toggle overlay
-		case 3:
+		case CGF_KEY_F3:
 		{
 			m_game->getGameOverlay()->m_hidden = !m_game->getGameOverlay()->m_hidden;
 		}
 		break;
 
 		// Toggle block painter
-		case 4:
+		case CGF_KEY_F4:
 		{
 			m_blockPainterEnabled = !m_blockPainterEnabled;
 		}
 		break;
 
 		// Toggle chunk loader info
-		case 5:
+		case CGF_KEY_F5:
 		{
 			m_debugChunkLoader = !m_debugChunkLoader;
-			m_world->getTerrain()->getChunkLoader()->m_applyZoom = !m_world->getTerrain()->getChunkLoader()->m_applyZoom;
+			m_world->getChunkManager()->m_applyZoom = !m_world->getChunkManager()->m_applyZoom;
 		}
 		break;
 
 		// Toggle lighting info
-		case 6:
+		case CGF_KEY_F6:
 		{
 			m_debugLighting = !m_debugLighting;
 		}
 		break;
 
 		// Set time
-		case 7:
+		case CGF_KEY_F7:
 		{
-			m_world->getTimeOfDay()->setTime(m_world->getTimeOfDay()->getTime() + (Input::getKeyState(XD_KEY_LEFT_SHIFT) == GLFW_PRESS ? -100 : 100));
+			m_world->getTimeOfDay()->setTime(m_world->getTimeOfDay()->getTime() + (m_game->getInputManager()->getKeyState(CGF_KEY_LSHIFT) ? -100 : 100));
 		}
 		break;
 
 		// Show spawn menu
-		case 8:
+		case CGF_KEY_F8:
 		{
 			// Spawn light
 			new Pointlight(m_world->getLighting(), m_world->getCamera()->getInputPosition() / BLOCK_PXF, 20, Color((uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255)));
@@ -106,7 +106,7 @@ void Debug::debugFunction(int action, const int i)
 		break;
 
 		// Multiplayer menu
-		case 9:
+		case CGF_KEY_F9:
 		{
 			if(m_game->peekState()->getID() == GAME_STATE_MULTIPLAYER)
 			{
@@ -120,7 +120,7 @@ void Debug::debugFunction(int action, const int i)
 		break;
 
 		// Attach/detach camera
-		case 10:
+		case CGF_KEY_F10:
 		{
 			Camera *camera = m_world->getCamera();
 			if(camera->getTargetEntity())
@@ -131,14 +131,14 @@ void Debug::debugFunction(int action, const int i)
 			else
 			{
 				// Attach camera to local player
-				camera->setTargetEntity(m_world->getLocalPlayer());
+				//camera->setTargetEntity(m_world->getLocalPlayer());
 			}
 		}
 		break;
 
-		case 11:
+		case CGF_KEY_F11:
 		{
-			ChunkLoader::ChunkArea area = m_world->getTerrain()->getChunkLoader()->getActiveArea();
+			ChunkManager::ChunkArea area = m_world->getChunkManager()->getActiveArea();
 			for(int y = area.y0 * CHUNK_BLOCKS; y <= area.y1 * CHUNK_BLOCKS; ++y)
 			{
 				for(int x = area.x0 * CHUNK_BLOCKS; x <= area.x1 * CHUNK_BLOCKS; ++x)
@@ -149,7 +149,7 @@ void Debug::debugFunction(int action, const int i)
 		}
 		break;
 
-		case 12:
+		case CGF_KEY_F12:
 		{
 		}
 		break;
@@ -159,14 +159,14 @@ void Debug::debugFunction(int action, const int i)
 void Debug::onTick(TickEvent *e)
 {
 	if(!m_enabled) return;
-
+	/*
 	if(m_blockPainterEnabled)
 	{
 		// Block painting
 		WorldLayer layer = WORLD_LAYER_MIDDLE;
-		if(Input::getKeyState(XD_KEY_LEFT_SHIFT) == GLFW_PRESS) layer = WORLD_LAYER_FRONT;
-		if(Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS) layer = WORLD_LAYER_BACK;
-		if(Input::getKeyState(XD_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+		if(m_game->getInputManager()->getKeyState(CGF_KEY_LSHIFT)) layer = WORLD_LAYER_FRONT;
+		if(m_game->getInputManager()->getKeyState(CGF_KEY_LCTRL)) layer = WORLD_LAYER_BACK;
+		if(m_game->getInputManager()->getKeyState(CGF_MOUSE_BUTTON_LEFT))
 		{
 			int x = (int) floor(m_world->getCamera()->getInputPosition().x / BLOCK_PXF), y = (int) floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF);
 
@@ -176,20 +176,23 @@ void Debug::onTick(TickEvent *e)
 		{
 			m_world->getTerrain()->setBlockAt((int) floor((m_world->getCamera()->getPosition().x + Input::getPosition().x) / BLOCK_PXF), (int) floor((m_world->getCamera()->getPosition().y + Input::getPosition().y) / BLOCK_PXF), BLOCK_EMPTY, layer);
 		}
-	}
+	}*/
 }
 
 void Debug::onDraw(DrawEvent *e)
 {
 	if(!m_enabled) return;
 
+	GraphicsContext *context = e->getGraphicsContext();
+	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
+
 	// Set debug variables
-	setVariable("Chunks", util::intToStr(m_world->getTerrain()->getChunkLoader()->m_chunks.size()) + " / " + util::intToStr(m_world->getTerrain()->getChunkLoader()->m_optimalChunkCount));
-	Vector2 center = m_world->getCamera()->getCenter(alpha);
+	setVariable("Chunks", util::intToStr(m_world->getChunkManager()->m_chunks.size()) + " / " + util::intToStr(m_world->getChunkManager()->m_optimalChunkCount));
+	Vector2 center = m_world->getCamera()->getCenter(e->getAlpha());
 	Vector2 inputPosition = m_world->getCamera()->getInputPosition();
 	setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
 	setVariable("Zoom", util::intToStr(int(m_world->getCamera()->getZoomLevel() * 100)) + "%");
-	setVariable("Block Under Cursor", util::intToStr(m_world->getTerrain()->getBlockAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), WORLD_LAYER_MIDDLE)) + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
+	//setVariable("Block Under Cursor", util::intToStr(m_world->getTerrain()->getBlockAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), WORLD_LAYER_MIDDLE)) + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
 	string hourStr, minStr;
 	{
 		int hour = m_world->getTimeOfDay()->getHour();
@@ -207,25 +210,24 @@ void Debug::onDraw(DrawEvent *e)
 	}
 	m_font->draw(spriteBatch, Vector2(0.0f), drawString);
 
-	m_font->draw(spriteBatch, Vector2((float) Window::getWidth(), 0.0f), DEBUG_FUNCTIONS_STRING, FONT_ALIGN_RIGHT);
+	m_font->draw(spriteBatch, Vector2((float) context->getWidth(), 0.0f), DEBUG_FUNCTIONS_STRING, FONT_ALIGN_RIGHT);
 
 
 	// Block painter
 	if(m_blockPainterEnabled)
 	{
 		m_blockPainterTexture->updatePixmap(BlockData::get(m_block).getPixmap());
-		spriteBatch->drawText(Vector2(5.0f, Window::getSize().y - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS ? "BACK" : (Input::getKeyState(XD_KEY_LEFT_SHIFT) == GLFW_PRESS ? "FRONT" : "SCENE")), m_font);
-		Sprite blockSprite(m_blockPainterTexture, Rect(159.0f, Window::getSize().y - 50.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 0.0f, 1.0f, 2.0f / 3.0f));
+		spriteBatch->drawText(Vector2(5.0f, context->getHeight() - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (m_game->getInputManager()->getKeyState(CGF_KEY_LCTRL) ? "BACK" : (m_game->getInputManager()->getKeyState(CGF_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font);
+		Sprite blockSprite(m_blockPainterTexture, Rect(159.0f, context->getHeight() - 50.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 0.0f, 1.0f, 2.0f / 3.0f));
 		spriteBatch->drawSprite(blockSprite);
 	}
 
 	// Draw block grid
-	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
-	gfxContext.setModelViewMatrix(m_world->getCamera()->getModelViewMatrix(alpha));
-	gfxContext.setTexture(nullptr);
+	context->setTransformationMatrix(m_world->getCamera()->getTransformationMatrix(e->getAlpha()));
+	context->setTexture(nullptr);
 	Vector2 position = m_world->getCamera()->getPosition();
 	Vector2 size = m_world->getCamera()->getSize();
-	if(Input::getKeyState(XD_KEY_K) == GLFW_PRESS)
+	if(m_game->getInputManager()->getKeyState(CGF_KEY_K))
 	{
 		int x0 = (int) floor(position.x / BLOCK_PXF);
 		int y0 = (int) floor(position.y / BLOCK_PXF);
@@ -234,12 +236,12 @@ void Debug::onDraw(DrawEvent *e)
 
 		for(int y = y0; y <= y1; ++y)
 		{
-			gfxContext.drawRectangle(x0 * BLOCK_PXF, y * BLOCK_PXF, (x1 - x0 + 1) * BLOCK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(80, 80, 80, 80));
+			context->drawRectangle(x0 * BLOCK_PXF, y * BLOCK_PXF, (x1 - x0 + 1) * BLOCK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(80, 80, 80, 80));
 		}
 
 		for(int x = x0; x <= x1; ++x)
 		{
-			gfxContext.drawRectangle(x * BLOCK_PXF, y0 * BLOCK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (y1 - y0 + 1) * BLOCK_PXF, Color(80, 80, 80, 80));
+			context->drawRectangle(x * BLOCK_PXF, y0 * BLOCK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (y1 - y0 + 1) * BLOCK_PXF, Color(80, 80, 80, 80));
 		}
 	}
 
@@ -251,44 +253,44 @@ void Debug::onDraw(DrawEvent *e)
 
 	for(int y = y0; y <= y1; ++y)
 	{
-		gfxContext.drawRectangle(x0 * CHUNK_PXF, y * CHUNK_PXF, (x1 - x0 + 1) * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(0, 0, 0, 80));
+		context->drawRectangle(x0 * CHUNK_PXF, y * CHUNK_PXF, (x1 - x0 + 1) * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(0, 0, 0, 80));
 	}
 
 	for(int x = x0; x <= x1; ++x)
 	{
-		gfxContext.drawRectangle(x * CHUNK_PXF, y0 * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (y1 - y0 + 1) * CHUNK_PXF, Color(0, 0, 0, 80));
+		context->drawRectangle(x * CHUNK_PXF, y0 * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (y1 - y0 + 1) * CHUNK_PXF, Color(0, 0, 0, 80));
 	}
 
 	// Draw debug chunks
 	if(m_debugChunkLoader)
 	{
 		// Draw current view
-		Vector2 position = m_world->getCamera()->getCenter(alpha) - Window::getSize()*0.5f;
-		Vector2 size = Window::getSize();
-		gfxContext.drawRectangle(position.x, position.y, 1.0f / m_world->getCamera()->getZoomLevel(), size.y, Color(127, 127, 255, 255));
-		gfxContext.drawRectangle((position.x + size.x), position.y, 1.0f / m_world->getCamera()->getZoomLevel(), size.y, Color(127, 127, 255, 255));
-		gfxContext.drawRectangle(position.x, position.y, size.x, 1.0f / m_world->getCamera()->getZoomLevel(), Color(127, 127, 255, 255));
-		gfxContext.drawRectangle(position.x, (position.y + size.y), size.x, 1.0f / m_world->getCamera()->getZoomLevel(), Color(127, 127, 255, 255));
+		Vector2 position = m_world->getCamera()->getCenter(e->getAlpha()) - context->getSize() * 0.5f;
+		Vector2 size = context->getSize();
+		context->drawRectangle(position.x, position.y, 1.0f / m_world->getCamera()->getZoomLevel(), size.y, Color(127, 127, 255, 255));
+		context->drawRectangle((position.x + size.x), position.y, 1.0f / m_world->getCamera()->getZoomLevel(), size.y, Color(127, 127, 255, 255));
+		context->drawRectangle(position.x, position.y, size.x, 1.0f / m_world->getCamera()->getZoomLevel(), Color(127, 127, 255, 255));
+		context->drawRectangle(position.x, (position.y + size.y), size.x, 1.0f / m_world->getCamera()->getZoomLevel(), Color(127, 127, 255, 255));
 
 		// Draw load area
-		ChunkLoader::ChunkArea loadArea = m_world->getTerrain()->getChunkLoader()->getLoadingArea();
-		gfxContext.drawRectangle(loadArea.x0 * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PXF, Color(255, 255, 255, 255));
-		gfxContext.drawRectangle((loadArea.x1 + 1) * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PXF, Color(255, 255, 255, 255));
-		gfxContext.drawRectangle(loadArea.x0 * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(255, 255, 255, 255));
-		gfxContext.drawRectangle(loadArea.x0 * CHUNK_PXF, (loadArea.y1 + 1) * CHUNK_PXF, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(255, 255, 255, 255));
+		ChunkManager::ChunkArea loadArea = m_world->getChunkManager()->getLoadingArea();
+		context->drawRectangle(loadArea.x0 * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PXF, Color(255, 255, 255, 255));
+		context->drawRectangle((loadArea.x1 + 1) * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PXF, Color(255, 255, 255, 255));
+		context->drawRectangle(loadArea.x0 * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(255, 255, 255, 255));
+		context->drawRectangle(loadArea.x0 * CHUNK_PXF, (loadArea.y1 + 1) * CHUNK_PXF, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(255, 255, 255, 255));
 
 		// Draw chunk status
 		for(int y = y0; y <= y1; ++y)
 		{
 			for(int x = x0; x <= x1; ++x)
 			{
-				if(!m_world->getTerrain()->getChunkLoader()->isChunkLoadedAt(x, y))
+				if(!m_world->getChunkManager()->isChunkLoadedAt(x, y))
 				{
-					gfxContext.drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(0, 100, 170, 127));
+					context->drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(0, 100, 170, 127));
 				}
-				else if(!m_world->getTerrain()->getChunkLoader()->getChunkAt(x, y).isAttached())
+				else if(!m_world->getChunkManager()->getChunkAt(x, y).isAttached())
 				{
-					gfxContext.drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(0, 160, 230, 127));
+					context->drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(0, 160, 230, 127));
 				}
 			}
 		}
@@ -299,16 +301,16 @@ void Debug::onDraw(DrawEvent *e)
 	{
 		// Show lighting passes
 		spriteBatch->flush();
-		gfxContext.disable(GraphicsContext::BLEND);
+		context->disable(GraphicsContext::BLEND);
 		//spriteBatch->drawSprite(Sprite(m_world->getLighting()->m_lightingRenderTarget->getTexture(), Rect(0.0f, 128.0f, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkLoader()->m_lightingPass0->getTexture(), Rect(0.0f, 128.0f * 2, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkLoader()->m_lightingPass1->getTexture(), Rect(0.0f, 128.0f * 3, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkLoader()->m_lightingPass2->getTexture(), Rect(0.0f, 128.0f * 4, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(Sprite(m_world->getChunkManager()->m_lightingPass0->getTexture(), Rect(0.0f, 128.0f * 2, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(Sprite(m_world->getChunkManager()->m_lightingPass1->getTexture(), Rect(0.0f, 128.0f * 3, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(Sprite(m_world->getChunkManager()->m_lightingPass2->getTexture(), Rect(0.0f, 128.0f * 4, 256.0f, 128.0f)));
 		spriteBatch->flush();
-		gfxContext.enable(GraphicsContext::BLEND);
+		context->enable(GraphicsContext::BLEND);
 
 		// Show light sources as light bulbs // TODO: Replace with cricles
-		spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_world->getCamera()->getModelViewMatrix(alpha)));
+		spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_world->getCamera()->getTransformationMatrix(e->getAlpha())));
 		for(list<LightSource*>::iterator itr = m_world->getLighting()->m_lightSources.begin(); itr != m_world->getLighting()->m_lightSources.end(); ++itr)
 		{
 			m_bulbSprite.setPosition((*itr)->getPosition() * BLOCK_PXF + Vector2(0.5f, 0.5f));
@@ -324,22 +326,22 @@ void Debug::toggle()
 
 void Debug::nextBlock(int action)
 {
-	if(action != GLFW_PRESS) return;
+	/*if(action != GLFW_PRESS) return;
 	if(!m_enabled) return;
 	if((m_block = BlockID(m_block + 1)) >= BLOCK_COUNT)
 	{
 		m_block = BlockID(BLOCK_ENTITY + 1);
-	}
+	}*/
 }
 
 void Debug::prevBlock(int action)
 {
-	if(action != GLFW_PRESS) return;
+	/*if(action != GLFW_PRESS) return;
 	if(!m_enabled) return;
 	if((m_block = BlockID(m_block - 1)) <= BLOCK_ENTITY)
 	{
 		m_block = BlockID(BLOCK_COUNT - 1);
-	}
+	}*/
 }
 
 void Debug::setVariable(const string &name, const string &value)

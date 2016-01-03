@@ -94,9 +94,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\BlockEntities\BlockEntity.cpp" />
+    <ClCompile Include="..\..\Source\BlockEntities\BlockEntityData.cpp" />
     <ClCompile Include="..\..\Source\Blocks\BlockData.cpp" />
     <ClCompile Include="..\..\Source\Entities\Entity.cpp" />
     <ClCompile Include="..\..\Source\Entities\EntityData.cpp" />
+    <ClCompile Include="..\..\Source\Game\Debug.cpp" />
     <ClCompile Include="..\..\Source\Game\Game.cpp" />
     <ClCompile Include="..\..\Source\Noise\Simplex.cpp" />
     <ClCompile Include="..\..\Source\World\Background.cpp" />

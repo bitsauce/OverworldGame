@@ -9,7 +9,6 @@
 
 Lighting::Lighting(World *world) :
 	Entity(world, ENTITY_LIGHTING),
-	m_terrain(world->getTerrain()),
 	m_world(world),
 	m_enabled(true)
 {

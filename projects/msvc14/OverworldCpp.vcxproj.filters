@@ -53,6 +53,12 @@
     <ClCompile Include="..\..\Source\World\Terrain.cpp">
       <Filter>Source\World</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Game\Debug.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BlockEntities\BlockEntityData.cpp">
+      <Filter>Source\BlockEntities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />

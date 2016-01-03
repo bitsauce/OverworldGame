@@ -57,13 +57,16 @@ void OverworldGame::onStart(GameEvent *e)
 	addChildLast(m_world);
 
 	// Initialize block and item data
-	/*ItemData::init(this);
+	//ItemData::init(this);
 
 	// Setup debug
 	m_debug = new Debug(this);
+	addChildLast(m_debug);
+
+	getInputManager()->addKeybind(KeybindPtr(new Keybind(CGF_KEY_F1, bind(&Debug::debugFunction, m_debug, placeholders::_1))));
 
 	// Setup commander
-	m_commander = new Commander(this);
+	/*m_commander = new Commander(this);
 
 	// Resize the window
 	getWindow()->setSize(1280, 720);
@@ -220,7 +223,13 @@ void OverworldGame::onDraw(DrawEvent *e)
 		m_takeScreenshot = false;
 	}
 
+	m_debug->setVariable("FPS", util::intToStr((int) getFPS()));
+
+	m_spriteBatch->begin();
+
 	GameObject::onDraw(e);
+
+	m_spriteBatch->end();
 
 	// Draw game states
 	/*for(list<GameState*>::iterator itr = m_states.begin(); itr != m_states.end(); ++itr)
@@ -231,10 +240,4 @@ void OverworldGame::onDraw(DrawEvent *e)
 			break;
 		}
 	}*/
-
-	// Render debug stuff
-	//m_debug->setVariable("FPS", util::intToStr((int) getFPS()));
-	//m_spriteBatch->begin();
-	//m_debug->draw(m_spriteBatch, alpha);
-	//m_spriteBatch->end();
 }

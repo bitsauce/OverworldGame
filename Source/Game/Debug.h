@@ -3,14 +3,13 @@
 
 #include "Config.h"
 
-class Terrain;
 class Lighting;
 class OverworldGame;
 class World;
 class CommandLine;
 enum BlockID;
 
-class Debug
+class Debug : public GameObject
 {
 public:
 	Debug(OverworldGame *game);
@@ -24,7 +23,7 @@ public:
 
 	void setVariable(const string &name, const string &value);
 
-	void debugFunction(int action, const int i);
+	void debugFunction(KeyEvent *e);
 
 	bool isEnabled() { return m_enabled; }
 	FontPtr m_font;

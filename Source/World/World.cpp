@@ -143,9 +143,8 @@ void World::onTick(TickEvent *e)
 void World::onDraw(DrawEvent *e)
 {
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
-	spriteBatch->begin();
+	spriteBatch->flush();
 	GameObject::onDraw(e);
-	spriteBatch->end();
 
 	/*spriteBatch->begin();
 

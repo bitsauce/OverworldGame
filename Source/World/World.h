@@ -46,10 +46,6 @@ public:
 	//IniFile *getWorldFile() const { return m_worldFile; }
 
 	// Controller entities
-	Terrain *getTerrain() const
-	{
-		return m_terrain;
-	}
 
 	Background *getBackground() const
 	{
