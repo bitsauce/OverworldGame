@@ -1,22 +1,21 @@
-
 #ifndef CHUNK_LOADER_H
 #define CHUNK_LOADER_H
 
 #include "Config.h"
-#include "Entities/Entity.h"
-#include "World/Terrain/Chunk.h"
+#include "Chunk.h"
 #include "Entities/Entity.h"
 
 class Camera;
 class World;
+class ChunkGenerator;
 
-class ChunkLoader : public Entity
+class ChunkManager : public Entity
 {
 	friend class Debug;
 	friend class Lighting;
-	friend class Terrain;
+	friend class BlockDrawer;
 public:
-	ChunkLoader(World *world);
+	ChunkManager(World *world, Window *window);
 
 	void clear();
 
@@ -56,8 +55,9 @@ public:
 	ChunkArea getLoadingArea() const;
 	ChunkArea getActiveArea() const;
 
-	void update(const float dt);
+	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
+	void onWindowSizeChanged(WindowEvent *e);
 
 private:
 	Chunk *loadChunkAt(const int chunkX, const int chunkY);
@@ -70,15 +70,16 @@ private:
 
 	bool freeInactiveChunk();
 	void freeChunk(unordered_map<uint, Chunk*>::iterator itr);
-	
-	void resizeEvent(uint width, uint height);
 
-	void reattachChunks(GraphicsContext &context);
+	void updateViewSize(int width, int height);
+
+	void reattachChunks(GraphicsContext *context);
 
 	bool m_applyZoom;
+	Window *m_window;
 	Camera *m_camera;
 	World *m_world;
-	WorldGenerator *m_generator;
+	ChunkGenerator *m_generator;
 
 	unordered_map<uint, Chunk*> m_chunks;
 
@@ -126,6 +127,19 @@ private:
 	int m_lightRadius;
 	bool m_enabled;
 	bool m_redrawLighting;
+};
+
+class BlockDrawer : public Entity
+{
+public:
+	BlockDrawer(World *world, const WorldLayer layer);
+
+	void onDraw(DrawEvent *e);
+
+private:
+	ChunkManager *m_chunkManager;
+	Camera *m_camera;
+	WorldLayer m_layer;
 };
 
 #endif // CHUNK_LOADER_H

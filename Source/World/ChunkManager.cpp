@@ -1,4 +1,4 @@
-#include "ChunkLoader.h"
+#include "ChunkManager.h"
 #include "Game/Debug.h"
 #include "World/Camera.h"
 #include "World/World.h"
@@ -31,10 +31,12 @@ const float QUAD_UVS[40] =
 	8, 32
 };
 
-ChunkLoader::ChunkLoader(World *world) :
+ChunkManager::ChunkManager(World *world, Window *window) :
+	Entity(world, ENTITY_CHUNK_MANAGER),
 	m_applyZoom(true),
+	m_window(window),
 	m_camera(world->getCamera()),
-	m_generator(world->getGenerator()),
+	m_generator(new ChunkGenerator(9823)),
 	m_world(world),
 	m_chunkPositionIndex(0),
 	m_loadAreaRadius(5),
@@ -67,18 +69,18 @@ ChunkLoader::ChunkLoader(World *world) :
 	m_tileMapShader->setSampler2D("u_BlockData", BlockData::getBlockDataTexture());
 	m_tileMapShader->setUniform2f("u_QuadUVs", QUAD_UVS);
 
-	// Set max chunks to some value
-	setOptimalChunkCount(0);
-
-	// Set chunk render caches to null (will be updated later)
+	// Set chunk render caches to null (will be updated by updateViewSize)
 	for(int i = 0; i < WORLD_LAYER_COUNT; ++i)
 	{
 		m_sortedBlocksRenderTarget[i] = 0;
 	}
 	m_blocksRenderTarget = 0;
+
+	// Update size of textures and such
+	updateViewSize(window->getWidth(), window->getHeight());
 }
 
-void ChunkLoader::clear()
+void ChunkManager::clear()
 {
 	while(!m_chunks.empty())
 	{
@@ -87,7 +89,7 @@ void ChunkLoader::clear()
 }
 
 // SERIALIZATION
-void ChunkLoader::saveBlockData(FileWriter &file, BlockID * blockData)
+void ChunkManager::saveBlockData(FileWriter &file, BlockID * blockData)
 {
 	// Write blocks to stream
 	BlockID currentBlock = blockData[0];
@@ -111,7 +113,7 @@ void ChunkLoader::saveBlockData(FileWriter &file, BlockID * blockData)
 	file << length << endl;
 }
 
-void ChunkLoader::loadBlockData(FileReader &file, BlockID *blockData)
+void ChunkManager::loadBlockData(FileReader &file, BlockID *blockData)
 {
 	// Read blocks from stream
 	int pos = 0;
@@ -128,7 +130,7 @@ void ChunkLoader::loadBlockData(FileReader &file, BlockID *blockData)
 	}
 }
 
-void ChunkLoader::saveEntities(FileWriter &file, set<BlockEntity*> entities)
+void ChunkManager::saveEntities(FileWriter &file, set<BlockEntity*> entities)
 {
 	// Write entity data
 	file << (int) entities.size() << endl;
@@ -141,7 +143,7 @@ void ChunkLoader::saveEntities(FileWriter &file, set<BlockEntity*> entities)
 	}
 }
 
-void ChunkLoader::loadEntities(FileReader &file)
+void ChunkManager::loadEntities(FileReader &file)
 {
 	// Read entity data
 	int numEntities;
@@ -156,7 +158,7 @@ void ChunkLoader::loadEntities(FileReader &file)
 	}
 }
 
-bool ChunkLoader::freeInactiveChunk()
+bool ChunkManager::freeInactiveChunk()
 {
 	// Find a chunk offscreen and add it to the pool
 	for(unordered_map<uint, Chunk*>::iterator itr = m_chunks.begin(); itr != m_chunks.end(); ++itr)
@@ -173,7 +175,7 @@ bool ChunkLoader::freeInactiveChunk()
 	return false;
 }
 
-void ChunkLoader::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
+void ChunkManager::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 {
 	// Free it
 	Chunk *chunk = itr->second;
@@ -203,7 +205,7 @@ void ChunkLoader::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 	m_chunks.erase(itr->first);
 }
 
-void ChunkLoader::setOptimalChunkCount(const uint optimalChunkCount)
+void ChunkManager::setOptimalChunkCount(const uint optimalChunkCount)
 {
 	// Clear old chunks
 	for(uint i = 0; i < m_chunkPool.size(); ++i)
@@ -222,7 +224,7 @@ void ChunkLoader::setOptimalChunkCount(const uint optimalChunkCount)
 	m_optimalChunkCount = optimalChunkCount;
 }
 
-Chunk &ChunkLoader::getChunkAt(const int chunkX, const int chunkY)
+Chunk &ChunkManager::getChunkAt(const int chunkX, const int chunkY)
 {
 	uint key = CHUNK_KEY(chunkX, chunkY);
 	if(m_chunks.find(key) == m_chunks.end())
@@ -233,7 +235,7 @@ Chunk &ChunkLoader::getChunkAt(const int chunkX, const int chunkY)
 	return *m_chunks[key];
 }
 
-Chunk *ChunkLoader::loadChunkAt(const int chunkX, const int chunkY)
+Chunk *ChunkManager::loadChunkAt(const int chunkX, const int chunkY)
 {
 	if(m_chunkPool.empty())
 	{
@@ -292,33 +294,33 @@ Chunk *ChunkLoader::loadChunkAt(const int chunkX, const int chunkY)
 	return chunk;
 }
 
-bool ChunkLoader::isChunkLoadedAt(const int chunkX, const int chunkY) const
+bool ChunkManager::isChunkLoadedAt(const int chunkX, const int chunkY) const
 {
 	return m_chunks.find(CHUNK_KEY(chunkX, chunkY)) != m_chunks.end();
 }
 
-ChunkLoader::ChunkArea ChunkLoader::getLoadingArea() const
+ChunkManager::ChunkArea ChunkManager::getLoadingArea() const
 {
 	return m_loadingArea;
 }
 
-ChunkLoader::ChunkArea ChunkLoader::getActiveArea() const
+ChunkManager::ChunkArea ChunkManager::getActiveArea() const
 {
 	return m_activeArea;
 }
 
-void ChunkLoader::update(const float dt)
+void ChunkManager::onTick(TickEvent *e)
 {
 	// Update block animation
 	m_tileMapShader->setUniform1f("u_Time", m_time);
-	m_time += dt;
+	m_time += e->getDelta();
 }
 
-void ChunkLoader::onDraw(DrawEvent *e)
+void ChunkManager::onDraw(DrawEvent *e)
 {
 	// Update active chunk area
-	Vector2 center = m_camera->getCenter(alpha);
-	Vector2 size = m_applyZoom ? m_camera->getSize() : Window::getSize();
+	Vector2 center = m_camera->getCenter(e->getAlpha());
+	Vector2 size = m_applyZoom ? m_camera->getSize() : m_window->getSize();
 
 	// Get active area
 	m_activeArea.x0 = (int) floor(center.x / CHUNK_PXF) - (int) floor(size.x * 0.5f / CHUNK_PXF) - 1;
@@ -341,9 +343,10 @@ void ChunkLoader::onDraw(DrawEvent *e)
 	bool redrawChunks = false;
 
 	// Setup context
-	context.disable(GraphicsContext::BLEND);
-	context.setModelViewMatrix(Matrix4());
-	context.setRenderTarget(m_blocksRenderTarget);
+	GraphicsContext *context = e->getGraphicsContext();
+	context->disable(GraphicsContext::BLEND);
+	context->setTransformationMatrix(Matrix4());
+	context->setRenderTarget(m_blocksRenderTarget);
 
 	// This should be called when a new area is entered
 	if(m_redrawGlobalBlocks)
@@ -462,11 +465,16 @@ void ChunkLoader::onDraw(DrawEvent *e)
 		}
 	}
 
-	// Load chunks in the loading area using a circle load pattern
-	if(!redrawChunks && m_circleLoadPattern.size() > 0)
+	if(redrawChunks)
 	{
+		// Redraw attached chunks
+		reattachChunks(context);
+	}
+	else if(m_circleLoadPattern.size() > 0)
+	{
+		// Load chunks in the loading area using a circle load pattern
 		// Loop through 10 chunks to find one which is not attached
-		Vector2 center = m_camera->getCenter(alpha);
+		Vector2 center = m_camera->getCenter(e->getAlpha());
 		for(int i = 0; i < 10; ++i)
 		{
 			// Get next chunk in the circular load pattern
@@ -491,14 +499,8 @@ void ChunkLoader::onDraw(DrawEvent *e)
 		}
 	}
 
-	// Redraw attached chunks
-	if(redrawChunks)
-	{
-		reattachChunks(context);
-	}
-
-	context.setRenderTarget(0);
-	context.enable(GraphicsContext::BLEND);
+	context->setRenderTarget(0);
+	context->enable(GraphicsContext::BLEND);
 }
 
 struct VectorComparator
@@ -509,7 +511,12 @@ struct VectorComparator
 	}
 };
 
-void ChunkLoader::resizeEvent(uint width, uint height)
+void ChunkManager::onWindowSizeChanged(WindowEvent *e)
+{
+	updateViewSize(e->getWidth(), e->getHeight());
+}
+
+void ChunkManager::updateViewSize(int width, int height)
 {
 	// Calculate load area size
 	int loadAreaWidth = (int) (floor(width * 0.5f / CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
@@ -584,31 +591,31 @@ void ChunkLoader::resizeEvent(uint width, uint height)
 	m_redrawGlobalBlocks = true;
 }
 
-void ChunkLoader::reattachChunks(GraphicsContext &context)
+void ChunkManager::reattachChunks(GraphicsContext *context)
 {
 	float width = m_loadingArea.getWidth() * CHUNK_BLOCKSF;
 	float height = m_loadingArea.getHeight() * CHUNK_BLOCKSF;
 
 	// Sort blocks
-	context.setShader(m_tileSortShader);
+	context->setShader(m_tileSortShader);
 	for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 	{
 		m_tileSortShader->setUniform1ui("u_Layer", z);
-		context.setRenderTarget(m_sortedBlocksRenderTarget[z]);
-		context.drawRectangle(0, 0, width, height);
+		context->setRenderTarget(m_sortedBlocksRenderTarget[z]);
+		context->drawRectangle(0, 0, width, height);
 	}
 
 	// Directional light
-	m_directionalLightingShader->setUniform1f("u_OffsetY", (m_loadingArea.y0 * CHUNK_BLOCKSF - 32.0f) / (m_loadingArea.getHeight() * CHUNK_BLOCKS));
+	/*m_directionalLightingShader->setUniform1f("u_OffsetY", (m_loadingArea.y0 * CHUNK_BLOCKSF - 32.0f) / (m_loadingArea.getHeight() * CHUNK_BLOCKS));
 	m_directionalLightingShader->setUniform1f("u_Direction", 0.0174532925f * 180.0f * (m_world->getTimeOfDay()->isDay() ? (1140.0f - m_world->getTimeOfDay()->getTime()) : (1860.0f - (m_world->getTimeOfDay()->getTime() >= 1140.0f ? m_world->getTimeOfDay()->getTime() : m_world->getTimeOfDay()->getTime() + 1440.0f))) / 720.0f);
-	context.setRenderTarget(m_lightingPass0);
-	context.setShader(m_directionalLightingShader);
-	context.drawRectangle(0.0f, 0.0f, width, height);
+	context->setRenderTarget(m_lightingPass0);
+	context->setShader(m_directionalLightingShader);
+	context->drawRectangle(0.0f, 0.0f, width, height);
 
 	// Draw light sources
-	context.enable(GraphicsContext::BLEND);
-	context.setShader(m_radialLightingShader);
-	context.setBlendState(BlendState::PRESET_ADDITIVE);
+	context->enable(GraphicsContext::BLEND);
+	context->setShader(m_radialLightingShader);
+	context->setBlendState(BlendState::PRESET_ADDITIVE);
 	for(LightSource *light : m_world->getLighting()->m_lightSources)
 	{
 		m_radialLightingShader->setUniform2f("u_Radius", light->getRadius() / width, light->getRadius() / height);
@@ -619,59 +626,98 @@ void ChunkLoader::reattachChunks(GraphicsContext &context)
 		// Center
 		const Vector2 basePos = Vector2(math::mod(light->getPosition().x, width), math::mod(light->getPosition().y, height)) + Vector2(0.5f, 0.5f);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", basePos.x / width, 1.0f - (basePos.y / height));
-		context.drawCircle(basePos, light->getRadius(), light->getRadius() * 1.5f);
+		context->drawCircle(basePos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Right
 		Vector2 pos = basePos + Vector2(width, 0.0f);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context.drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Left
 		pos = basePos + Vector2(-width, 0.0f);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context.drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Bottom
 		pos = basePos + Vector2(0.0f, height);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context.drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Up
 		pos = basePos + Vector2(0.0f, -height);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context.drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Top-left
 		pos = basePos + Vector2(-width, -height);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context.drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Top-right
 		pos = basePos + Vector2(width, -height);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context.drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Bottom-left
 		pos = basePos + Vector2(-width, height);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context.drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Bottom-right
 		pos = basePos + Vector2(width, height);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context.drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 	}
-	context.disable(GraphicsContext::BLEND);
+	context->disable(GraphicsContext::BLEND);
 
 	// Blur horizontally (pass 1)
-	context.setRenderTarget(m_lightingPass1);
-	context.setShader(m_blurHShader);
-	context.drawRectangle(0.0f, 0.0f, width, height);
+	context->setRenderTarget(m_lightingPass1);
+	context->setShader(m_blurHShader);
+	context->drawRectangle(0.0f, 0.0f, width, height);
 
 	// Blur vertically (pass 2)
-	context.setRenderTarget(m_lightingPass2);
-	context.setShader(m_blurVShader);
-	context.drawRectangle(0.0f, 0.0f, width, height);
+	context->setRenderTarget(m_lightingPass2);
+	context->setShader(m_blurVShader);
+	context->drawRectangle(0.0f, 0.0f, width, height);*/
 	
-	context.setShader(0);
+	context->setShader(0);
+	context->setRenderTarget(0);
+}
+
+BlockDrawer::BlockDrawer(World *world, const WorldLayer layer) :
+	Entity(world, ENTITY_BACKGROUND),
+	m_chunkManager(world->getChunkManager()),
+	m_camera(world->getCamera()),
+	m_layer(layer)
+{
+}
+
+void BlockDrawer::onDraw(DrawEvent *e)
+{
+	GraphicsContext *graphicsContext = e->getGraphicsContext();
+	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
+
+	// Flush to set the draw order straight
+	spriteBatch->flush();
+
+	// Setup graphics context
+	graphicsContext->setTransformationMatrix(m_camera->getTransformationMatrix(e->getAlpha()));
+
+	// Draw chunk area
+	ChunkManager::ChunkArea area = m_chunkManager->getLoadingArea();
+
+	//graphicsContext->setBlendState(BlendState(BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA));
+	graphicsContext->setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
+	graphicsContext->setShader(m_chunkManager->m_tileMapShader);
+	m_chunkManager->m_tileMapShader->setSampler2D("u_SortedBlockTexture", m_chunkManager->m_sortedBlocksRenderTarget[m_layer]->getTexture(0));
+	m_chunkManager->m_tileMapShader->setSampler2D("u_SortedQuadTexture", m_chunkManager->m_sortedBlocksRenderTarget[m_layer]->getTexture(1));
+
+	float u0 = area.x0 / (float) area.getWidth(),
+		v0 = -area.y0 / (float) area.getHeight(),
+		u1 = u0 + 1.0f,
+		v1 = v0 + 1.0f;
+
+	graphicsContext->drawRectangle(area.x0 * CHUNK_PXF, area.y0 * CHUNK_PXF, area.getWidth() * CHUNK_PXF, area.getHeight() * CHUNK_PXF, Color(255), TextureRegion(u0, v0, u1, v1));
+	graphicsContext->setShader(0);
+	graphicsContext->setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
 }

@@ -17,24 +17,18 @@
 #include "BlockEntities/BlockEntityData.h"
 
 Terrain::Terrain(World *world) :
-	m_world(world),
-	m_chunkLoader(world),
-	m_background(this, world->getCamera(), PRIORITY_TERRAIN_BACKGROUND, WORLD_LAYER_BACK),
-	m_middleground(this, world->getCamera(), PRIORITY_TERRAIN_MIDDLEGROUND, WORLD_LAYER_MIDDLE),
-	m_foreground(this, world->getCamera(), PRIORITY_TERRAIN_FOREGROUND, WORLD_LAYER_FRONT)
+	Entity(world, ENTITY_BACKGROUND),
+	m_world(world)/*,
+	m_background(world->getChunkManager(), world->getCamera(), PRIORITY_TERRAIN_BACKGROUND, WORLD_LAYER_BACK),
+	m_middleground(world->getChunkManager(), world->getCamera(), PRIORITY_TERRAIN_MIDDLEGROUND, WORLD_LAYER_MIDDLE),
+	m_foreground(world->getChunkManager(), world->getCamera(), PRIORITY_TERRAIN_FOREGROUND, WORLD_LAYER_FRONT)*/
 {
-	LOG("Initializing terrain");
-
-	// Window
-	resizeEvent(Window::getSize().x, Window::getSize().y);
-
-	Pointlight::s_vertices = new Vertex[POINTLIGHT_SEGMENTS+2];
 }
 
 Terrain::~Terrain()
 {
 }
-	
+/*
 // BLOCKS
 bool Terrain::setBlockAt(const int x, const int y, BlockID block, const WorldLayer layer = WORLD_LAYER_MIDDLE)
 {
@@ -95,39 +89,4 @@ void Terrain::placeStaticEntity(BlockEntity *entity)
 			m_chunkLoader.getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), BLOCK_ENTITY, WORLD_LAYER_MIDDLE);
 		}
 	}
-}
-
-// DRAWING
-Terrain::Drawer::Drawer(Terrain *terrain, Camera *camera, const Priority drawOrder, const WorldLayer layer) :
-	m_chunkLoader(terrain->getChunkLoader()),
-	m_camera(camera),
-	m_layer(layer)
-{
-}
-
-void Terrain::Drawer::onDraw(DrawEvent *e)
-{
-	// Flush to set the draw order straight
-	spriteBatch->flush();
-
-	// Setup graphics context
-	GraphicsContext &context = spriteBatch->getGraphicsContext();
-	context.setModelViewMatrix(m_camera->getModelViewMatrix(alpha));
-
-	// Draw chunk area
-	ChunkLoader::ChunkArea area = m_chunkLoader->getLoadingArea();
-
-	context.setBlendState(BlendState(BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA));
-	context.setShader(m_chunkLoader->m_tileMapShader);
-	m_chunkLoader->m_tileMapShader->setSampler2D("u_SortedBlockTexture", m_chunkLoader->m_sortedBlocksRenderTarget[m_layer]->getTexture(0));
-	m_chunkLoader->m_tileMapShader->setSampler2D("u_SortedQuadTexture", m_chunkLoader->m_sortedBlocksRenderTarget[m_layer]->getTexture(1));
-
-	float u0 = area.x0 / (float) area.getWidth(),
-		v0 = -area.y0 / (float) area.getHeight(),
-		u1 = u0 + 1.0f,
-		v1 = v0 + 1.0f;
-
-	context.drawRectangle(area.x0 * CHUNK_PXF, area.y0 * CHUNK_PXF, area.getWidth() * CHUNK_PXF, area.getHeight() * CHUNK_PXF, Color(255), TextureRegion(u0, v0, u1, v1));
-	context.setShader(0);
-	context.setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
-}
+}*/

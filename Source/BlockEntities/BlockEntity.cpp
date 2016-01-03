@@ -6,11 +6,11 @@ BlockEntity::BlockEntity(World *world, const int x, const int y, const BlockEnti
 	m_data(data),
 	m_world(world)
 {
-	world->getTerrain()->placeStaticEntity(this);
-	world->addStaticEntity(this);
+	//world->getTerrain()->placeStaticEntity(this);
+	//world->addStaticEntity(this);
 }
 
 BlockEntity::~BlockEntity()
 {
-	m_world->removeStaticEntity(this);
+	//m_world->removeStaticEntity(this);
 }

@@ -1,17 +1,15 @@
-#ifndef TERRAIN_GEN_H
-#define TERRAIN_GEN_H
+#ifndef WORLD_GENERATOR_H
+#define WORLD_GENERATOR_H
 
 #include "Config.h"
 #include "Constants.h"
 #include "Noise/Simplex.h"
 #include <unordered_set>
 
-extern float step(float edge, float x);
-
-class WorldGenerator
+class ChunkGenerator
 {
 public:
-	WorldGenerator(const uint seed);
+	ChunkGenerator(const uint seed);
 
 	uint getSeed() const { return m_seed; }
 	Simplex2D &getSimplexNoise() { return m_noise; }
@@ -34,4 +32,4 @@ private:
 	map<int, BlockID*> m_chunkStructures;
 };
 
-#endif // TERRAIN_GEN_H
+#endif // WORLD_GENERATOR_H

@@ -10,7 +10,7 @@ class Lighting;
 
 class Pointlight : public LightSource
 {
-	friend class Terrain;
+	friend class World;
 public:
 	Pointlight(Lighting *lighting, const Vector2 &position, const float radius, const Color &color);
 

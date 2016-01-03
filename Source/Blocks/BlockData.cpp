@@ -1,6 +1,6 @@
 #include "BlockData.h"
 #include "World/World.h"
-#include "World/Terrain/Terrain.h"
+#include "World/Terrain.h"
 
 vector<BlockData*> BlockData::s_blockData(BLOCK_COUNT);
 TextureAtlas *BlockData::s_blockAtlas = nullptr;
@@ -16,19 +16,19 @@ struct BlockDescriptor
 };
 
 static BlockDescriptor g_blockData[] = {
-	{ BLOCK_EMPTY, ":/Sprites/Blocks/Empty.png", ITEM_NONE, 0.0f, 1 },
-	{ BLOCK_ENTITY, ":/Sprites/Blocks/Empty.png", ITEM_NONE, 0.0f, 1 },
+	{ BLOCK_EMPTY, "Sprites/Blocks/Empty.png", ITEM_NONE, 0.0f, 1 },
+	{ BLOCK_ENTITY, "Sprites/Blocks/Empty.png", ITEM_NONE, 0.0f, 1 },
 
-	{ BLOCK_GRASS, ":/Sprites/Blocks/Grass.png", ITEM_BLOCK_DIRT, 1.0f, 1 },
-	{ BLOCK_DIRT, ":/Sprites/Blocks/Dirt.png", ITEM_BLOCK_DIRT, 1.0f, 1 },
-	{ BLOCK_DIRT_BACK, ":/Sprites/Blocks/DirtBack.png", ITEM_BLOCK_DIRT_BACK, 0.95f, 1 },
+	{ BLOCK_GRASS, "Sprites/Blocks/Grass.png", ITEM_BLOCK_DIRT, 1.0f, 1 },
+	{ BLOCK_DIRT, "Sprites/Blocks/Dirt.png", ITEM_BLOCK_DIRT, 1.0f, 1 },
+	{ BLOCK_DIRT_BACK, "Sprites/Blocks/DirtBack.png", ITEM_BLOCK_DIRT_BACK, 0.95f, 1 },
 
-	{ BLOCK_OAK_WOOD, ":/Sprites/Blocks/OakWood.png", ITEM_BLOCK_OAK_WOOD, 0.75f, 1 },
-	{ BLOCK_OAK_LEAVES, ":/Sprites/Blocks/OakLeaves.png", ITEM_BLOCK_OAK_LEAVES, 0.0f, 1 },
+	{ BLOCK_OAK_WOOD, "Sprites/Blocks/OakWood.png", ITEM_BLOCK_OAK_WOOD, 0.75f, 1 },
+	{ BLOCK_OAK_LEAVES, "Sprites/Blocks/OakLeaves.png", ITEM_BLOCK_OAK_LEAVES, 0.0f, 1 },
 
-	{ BLOCK_STONE, ":/Sprites/Blocks/Stone.png", ITEM_BLOCK_STONE, 1.0f, 1 },
-	{ BLOCK_ANIM_TEST, ":/Sprites/Blocks/AnimTest.png", ITEM_NONE, 1.0f, 2 },
-	{ BLOCK_TORCH_TEST, ":/Sprites/Blocks/TorchTest.png", ITEM_NONE, 1.0f, 3 },
+	{ BLOCK_STONE, "Sprites/Blocks/Stone.png", ITEM_BLOCK_STONE, 1.0f, 1 },
+	{ BLOCK_ANIM_TEST, "Sprites/Blocks/AnimTest.png", ITEM_NONE, 1.0f, 2 },
+	{ BLOCK_TORCH_TEST, "Sprites/Blocks/TorchTest.png", ITEM_NONE, 1.0f, 3 },
 
 	{ BLOCK_COUNT, "", ITEM_NONE, 0.0f, 0 }
 };
@@ -45,7 +45,7 @@ void BlockData::init()
 	while(blockData->id != BLOCK_COUNT)
 	{
 		// Create block data object
-		Pixmap pixmap(blockData->imagePath, true);
+		Pixmap pixmap(blockData->imagePath, false);
 		s_blockData[blockData->id] = new BlockData(blockData->id, pixmap, blockData->itemID, blockData->opacity);
 		pixmaps[blockData->id] = pixmap;
 

@@ -4,6 +4,8 @@
 #include "World/Background.h"
 #include "World/Camera.h"
 #include "World/TimeOfDay.h"
+#include "World/Terrain.h"
+#include "World/ChunkManager.h"
 
 #include "Entities/EntityData.h"
 #include "Entities/Dynamic/Pawn.h"
@@ -11,7 +13,6 @@
 #include "BlockEntities/BlockEntity.h"
 
 #include "Game/Debug.h"
-#include "Terrain/Terrain.h"
 #include "Generation/Generator.h"
 #include "Entities/Dynamic/DynamicEntity.h"
 #include "Entities/Dynamic/Pawn.h"
@@ -22,6 +23,8 @@ World::World(Game *game) :
 	m_worldFile(nullptr),
 	m_entitiesByLayer(WORLD_LAYER_COUNT)
 {
+	Pointlight::s_vertices = new Vertex[POINTLIGHT_SEGMENTS + 2];
+
 	// Load world content
 	m_timeOfDay = new TimeOfDay(this);
 	addChildLast(m_timeOfDay);
@@ -30,17 +33,21 @@ World::World(Game *game) :
 	addChildLast(m_camera);
 
 	m_background = new Background(this, game->getWindow());
-	addChildLast(m_background);
+	//addChildLast(m_background);
 
-	/*m_generator = new WorldGenerator(9823);
-	addChildFirst(m_generator);
+	m_chunkManager = new ChunkManager(this, game->getWindow());
+	addChildLast(m_chunkManager);
 
-	m_terrain = new Terrain(this);
-	addChildFirst(m_terrain);
+	addChildLast(new BlockDrawer(this, WORLD_LAYER_MIDDLE));
 
-	m_lighting = new Lighting(this);
-	addChildFirst(m_lighting);
-	*/
+	//insertChildBefore(m_chunkB);
+
+	// TODO:
+	//m_terrain = new Terrain(this);
+	//addChildFirst(m_terrain);
+	
+	//m_lighting = new Lighting(this);
+	//addChildFirst(m_lighting);
 }
 
 void World::create(const string &name)
@@ -203,14 +210,4 @@ list<Entity*> World::getEntities() const
 list<Entity*> World::getEntitiesByLayer(const WorldLayer layer) const
 {
 	return m_entitiesByLayer[layer];
-}
-
-void World::addStaticEntity(BlockEntity *entity)
-{
-	m_staticEntities.push_back(entity);
-}
-
-void World::removeStaticEntity(BlockEntity *entity)
-{
-	m_staticEntities.remove(entity);
 }

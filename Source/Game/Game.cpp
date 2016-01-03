@@ -12,7 +12,7 @@
 #include "World/TimeOfDay.h"
 #include "World/Lighting/Lighting.h"
 #include "World/Lighting/Pointlight.h"
-#include "World/Terrain/Terrain.h"
+#include "World/Terrain.h"
 #include "Networking/Server.h"
 #include "Networking/Client.h"
 #include "Entities/Entity.h"
@@ -48,7 +48,7 @@ void OverworldGame::onStart(GameEvent *e)
 	getWindow()->setVSync(0);
 	
 	// Init world
-	//BlockData::init();
+	BlockData::init();
 	//BlockEntityData::init();
 
 	EntityData::init(this);

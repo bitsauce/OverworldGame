@@ -5,7 +5,6 @@
 
 class Terrain;
 class Lighting;
-class ChunkLoader;
 class OverworldGame;
 class World;
 class CommandLine;

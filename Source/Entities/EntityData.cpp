@@ -15,6 +15,8 @@ void EntityData::init(Game *)
 	s_data[ENTITY_BACKGROUND] = new EntityData(ENTITY_BACKGROUND, "Background", WORLD_LAYER_BACK, function<Entity*(World*)>());
 	s_data[ENTITY_TIME_OF_DAY] = new EntityData(ENTITY_TIME_OF_DAY, "TimeOfDay", WORLD_LAYER_BACK, function<Entity*(World*)>());
 	s_data[ENTITY_CAMERA] = new EntityData(ENTITY_CAMERA, "Camera", WORLD_LAYER_BACK, function<Entity*(World*)>());
+	s_data[ENTITY_CHUNK_MANAGER] = new EntityData(ENTITY_CHUNK_MANAGER, "ChunkManager", WORLD_LAYER_BACK, function<Entity*(World*)>());
+	s_data[ENTITY_LIGHTING] = new EntityData(ENTITY_LIGHTING, "Lighting", WORLD_LAYER_BACK, function<Entity*(World*)>());
 
 	/*
 	s_data[ENTITY_ARROW] = new EntityData(ENTITY_ARROW, "Arrow", WORLD_LAYER_BACK, Arrow::Factory);

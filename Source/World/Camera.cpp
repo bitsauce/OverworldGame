@@ -21,7 +21,7 @@ Vector2 Camera::getCenter(const float alpha) const
 	return math::lerp(m_prevPosition, m_position, alpha) + m_size * 0.5f;
 }
 
-Matrix4 Camera::getModelViewMatrix(const float alpha) const
+Matrix4 Camera::getTransformationMatrix(const float alpha) const
 {
 	Vector2 pos = math::lerp(m_prevPosition, m_position, alpha);
 
@@ -108,11 +108,11 @@ void Camera::onTick(TickEvent *e)
 	}
 }
 
-void Camera::interpolate(const float alpha)
+void Camera::onDraw(DrawEvent *e)
 {
 	if(m_tagetEntity)
 	{
-		lookAt(m_tagetEntity->getDrawPosition(alpha) + m_tagetEntity->getSize() * 0.5f);
+		lookAt(m_tagetEntity->getDrawPosition(e->getAlpha()) + m_tagetEntity->getSize() * 0.5f);
 		m_prevPosition = m_position;
 	}
 }

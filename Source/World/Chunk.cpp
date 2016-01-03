@@ -1,4 +1,5 @@
 #include "Chunk.h"
+#include "ChunkManager.h"
 #include "Terrain.h"
 #include "Constants.h"
 
@@ -10,8 +11,8 @@
 #include "BlockEntities/BlockEntity.h"
 
 // CONSTRUCTOR
-Chunk::Chunk(ChunkLoader *chunkLoader) :
-	m_chunkLoader(chunkLoader)
+Chunk::Chunk(ChunkManager *chunkManager) :
+	m_chunkManager(chunkManager)
 {
 	// Setup flags and such
 	m_attached = m_modified = false; // Not modified
@@ -95,14 +96,14 @@ bool Chunk::setBlockAt(const int x, const int y, const BlockID block, WorldLayer
 	{
 		// Get adjacent chunks
 		Chunk *neighborChunks[8];
-		neighborChunks[0] = &m_chunkLoader->getChunkAt(m_x - 1, m_y - 1);
-		neighborChunks[1] = &m_chunkLoader->getChunkAt(m_x, m_y - 1);
-		neighborChunks[2] = &m_chunkLoader->getChunkAt(m_x + 1, m_y - 1);
-		neighborChunks[3] = &m_chunkLoader->getChunkAt(m_x + 1, m_y);
-		neighborChunks[4] = &m_chunkLoader->getChunkAt(m_x + 1, m_y + 1);
-		neighborChunks[5] = &m_chunkLoader->getChunkAt(m_x, m_y + 1);
-		neighborChunks[6] = &m_chunkLoader->getChunkAt(m_x - 1, m_y + 1);
-		neighborChunks[7] = &m_chunkLoader->getChunkAt(m_x - 1, m_y);
+		neighborChunks[0] = &m_chunkManager->getChunkAt(m_x - 1, m_y - 1);
+		neighborChunks[1] = &m_chunkManager->getChunkAt(m_x, m_y - 1);
+		neighborChunks[2] = &m_chunkManager->getChunkAt(m_x + 1, m_y - 1);
+		neighborChunks[3] = &m_chunkManager->getChunkAt(m_x + 1, m_y);
+		neighborChunks[4] = &m_chunkManager->getChunkAt(m_x + 1, m_y + 1);
+		neighborChunks[5] = &m_chunkManager->getChunkAt(m_x, m_y + 1);
+		neighborChunks[6] = &m_chunkManager->getChunkAt(m_x - 1, m_y + 1);
+		neighborChunks[7] = &m_chunkManager->getChunkAt(m_x - 1, m_y);
 
 		// Set the block value
 		m_blocks[BLOCK_INDEX(x, y, layer)] = block; // TODO: It might be more efficient to also change the m_blockTexture directly instead of marking the chunk as dirty
@@ -142,10 +143,10 @@ void Chunk::update(const float dt)
 
 void Chunk::onDraw(DrawEvent *e)
 {
-	for(BlockEntity *blockEntity : m_blockEntities)
+	/*for(BlockEntity *blockEntity : m_blockEntities)
 	{
 		blockEntity->draw(spriteBatch, alpha);
-	}
+	}*/
 }
 
 void Chunk::addStaticEntity(BlockEntity * entity)
@@ -154,12 +155,12 @@ void Chunk::addStaticEntity(BlockEntity * entity)
 }
 
 // DRAWING
-void Chunk::attach(GraphicsContext &context, const int x, const int y)
+void Chunk::attach(GraphicsContext *context, const int x, const int y)
 {
 	// Draw blocks
-	context.setTexture(m_blockTexture);
-	context.drawRectangle(x * CHUNK_BLOCKS, y * CHUNK_BLOCKS, CHUNK_BLOCKS, CHUNK_BLOCKS);
-	context.setTexture(0);
+	context->setTexture(m_blockTexture);
+	context->drawRectangle(x * CHUNK_BLOCKS, y * CHUNK_BLOCKS, CHUNK_BLOCKS, CHUNK_BLOCKS);
+	context->setTexture(0);
 
 	m_attached = true;
 }

@@ -3,7 +3,6 @@
 
 #include "Config.h"
 
-enum Priority;
 enum EntityID;
 class World;
 class EntityData;

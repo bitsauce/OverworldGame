@@ -11,7 +11,7 @@ class World;
 
 class Lighting : public Entity
 {
-	friend class ChunkLoader;
+	friend class ChunkManager;
 	friend class Debug;
 public:
 	// CONSTRUCTOR
@@ -20,9 +20,6 @@ public:
 
 	// DRAWING
 	void onDraw(DrawEvent *e);
-
-	// WINDOW
-	void resizeEvent(uint width, uint height);
 	
 	void addLightSource(LightSource *lightSource);
 

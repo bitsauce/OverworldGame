@@ -93,11 +93,21 @@
     <ResourceCompile Include="resources.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\BlockEntities\BlockEntity.cpp" />
+    <ClCompile Include="..\..\Source\Blocks\BlockData.cpp" />
     <ClCompile Include="..\..\Source\Entities\Entity.cpp" />
     <ClCompile Include="..\..\Source\Entities\EntityData.cpp" />
     <ClCompile Include="..\..\Source\Game\Game.cpp" />
+    <ClCompile Include="..\..\Source\Noise\Simplex.cpp" />
     <ClCompile Include="..\..\Source\World\Background.cpp" />
     <ClCompile Include="..\..\Source\World\Camera.cpp" />
+    <ClCompile Include="..\..\Source\World\Chunk.cpp" />
+    <ClCompile Include="..\..\Source\World\ChunkManager.cpp" />
+    <ClCompile Include="..\..\Source\World\Generation\Generator.cpp" />
+    <ClCompile Include="..\..\Source\World\Lighting\Lighting.cpp" />
+    <ClCompile Include="..\..\Source\World\Lighting\LightSource.cpp" />
+    <ClCompile Include="..\..\Source\World\Lighting\Pointlight.cpp" />
+    <ClCompile Include="..\..\Source\World\Terrain.cpp" />
     <ClCompile Include="..\..\Source\World\TimeOfDay.cpp" />
     <ClCompile Include="..\..\Source\World\World.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -133,10 +143,6 @@
     <ClInclude Include="..\..\source\Game\Storage.h" />
     <ClInclude Include="..\..\source\Game\RayCast.h" />
     <ClInclude Include="..\..\Source\Game\Scene.h" />
-    <ClInclude Include="..\..\Source\Generation\Grassland.h" />
-    <ClInclude Include="..\..\Source\Generation\Structure.h" />
-    <ClInclude Include="..\..\Source\Generation\Generator.h" />
-    <ClInclude Include="..\..\Source\Generation\Structures\OakTree.h" />
     <ClInclude Include="..\..\source\gui\Button.h" />
     <ClInclude Include="..\..\source\gui\Canvas.h" />
     <ClInclude Include="..\..\Source\gui\GameOverlay\Chat.h" />
@@ -163,12 +169,13 @@
     <ClInclude Include="..\..\Source\Strings.h" />
     <ClInclude Include="..\..\source\World\Background.h" />
     <ClInclude Include="..\..\source\World\Camera.h" />
+    <ClInclude Include="..\..\Source\World\Chunk.h" />
+    <ClInclude Include="..\..\Source\World\ChunkManager.h" />
+    <ClInclude Include="..\..\Source\World\Generation\Generator.h" />
     <ClInclude Include="..\..\source\World\Lighting\Lighting.h" />
     <ClInclude Include="..\..\source\World\Lighting\LightSource.h" />
     <ClInclude Include="..\..\source\World\Lighting\Pointlight.h" />
-    <ClInclude Include="..\..\source\World\Terrain\Chunk.h" />
-    <ClInclude Include="..\..\source\World\Terrain\ChunkLoader.h" />
-    <ClInclude Include="..\..\source\World\Terrain\Terrain.h" />
+    <ClInclude Include="..\..\Source\World\Terrain.h" />
     <ClInclude Include="..\..\source\World\TimeOfDay.h" />
     <ClInclude Include="..\..\Source\World\World.h" />
   </ItemGroup>

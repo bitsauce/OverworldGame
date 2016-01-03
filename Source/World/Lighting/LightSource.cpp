@@ -12,7 +12,7 @@ Vector2 LightSource::getPosition() const
 	return m_position;
 }
 
-void LightSource::setColor(const xd::Color &color)
+void LightSource::setColor(const Color &color)
 {
 	m_color = color;
 }

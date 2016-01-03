@@ -4,14 +4,13 @@
 #include "Config.h"
 #include "Constants.h"
 
-class WorldGenerator;
 class BlockEntity;
 
 class Chunk
 {
-	friend class ChunkLoader;
+	friend class ChunkManager;
 public:
-	Chunk(ChunkLoader *chunkLoader);
+	Chunk(ChunkManager *chunkManager);
 
 	// BLOCK LOADING
 	void load(int chunkX, int chunkY, BlockID *blocks);
@@ -34,7 +33,7 @@ public:
 	void addStaticEntity(BlockEntity *entity);
 	
 	// DRAWING
-	void attach(GraphicsContext &context, const int x, const int y);
+	void attach(GraphicsContext *context, const int x, const int y);
 	void detach();
 
 private:
@@ -44,8 +43,8 @@ private:
 	int m_x, m_y;
 	BlockID *m_blocks;
 
-	// CHUNK LOADER
-	ChunkLoader *m_chunkLoader;
+	// Chunk manager
+	ChunkManager *m_chunkManager;
 
 	// BLOCK ENTITIES
 	set<BlockEntity*> m_blockEntities;

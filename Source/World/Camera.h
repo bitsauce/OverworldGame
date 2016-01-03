@@ -20,7 +20,7 @@ public:
 	DynamicEntity *getTargetEntity() const { return m_tagetEntity; }
 	
 	// Get current model-view matrix
-	Matrix4 getModelViewMatrix(const float alpha) const;
+	Matrix4 getTransformationMatrix(const float alpha) const;
 
 	// Get camera center
 	Vector2 getCenter(const float alpha) const;
@@ -39,13 +39,13 @@ public:
 	{
 		if(action != GLFW_PRESS) return;
 		setZoomLevel(m_zoomLevel*0.5f);
-	}
+	}*/
 
 	// Position
 	void setPosition(const Vector2 &positon)
 	{
 		m_position = m_prevPosition = positon; 
-	}*/
+	}
 
 	Vector2i getPosition() const;
 	uint getX() const { return getPosition().x; }
@@ -65,7 +65,7 @@ public:
 	void onTick(TickEvent *e);
 
 	// Interpolate
-	void interpolate(const float alpha);
+	void onDraw(DrawEvent *e);
 
 	// MouseListener event
 	void onMouseWheel(MouseEvent *e);

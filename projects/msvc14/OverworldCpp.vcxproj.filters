@@ -23,6 +23,36 @@
     <ClCompile Include="..\..\Source\Entities\EntityData.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\World\Generation\Generator.cpp">
+      <Filter>Source\World\Generation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Chunk.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\ChunkManager.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Lighting\Lighting.cpp">
+      <Filter>Source\World\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Lighting\LightSource.cpp">
+      <Filter>Source\World\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Lighting\Pointlight.cpp">
+      <Filter>Source\World\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Blocks\BlockData.cpp">
+      <Filter>Source\Blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\BlockEntities\BlockEntity.cpp">
+      <Filter>Source\BlockEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Noise\Simplex.cpp">
+      <Filter>Source\Noise</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Terrain.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -58,15 +88,6 @@
     <Filter Include="Source\World">
       <UniqueIdentifier>{706e8d91-9eee-467b-abcd-e94748a397ff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Generation">
-      <UniqueIdentifier>{0ff5a936-9fef-4717-8bd5-d0f819a0c11c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Generation\Biomes">
-      <UniqueIdentifier>{ecfd21b3-ff40-495b-adf9-1964df633df3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Generation\Structures">
-      <UniqueIdentifier>{a2b439fd-88b0-4404-bd8a-b887a73116df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Entities">
       <UniqueIdentifier>{c8a444ed-dfdc-4bf8-b372-18c5f3168179}</UniqueIdentifier>
     </Filter>
@@ -78,9 +99,6 @@
     </Filter>
     <Filter Include="Source\World\Lighting">
       <UniqueIdentifier>{345a8e8c-8251-427b-9965-f9f9666a426a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\World\Terrain">
-      <UniqueIdentifier>{36e472f3-e1ff-4bf6-8120-0dbec018c0fc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Game\GameStates">
       <UniqueIdentifier>{499e0ea9-ab1d-4a31-acaa-818d18bbf5ee}</UniqueIdentifier>
@@ -102,6 +120,9 @@
     </Filter>
     <Filter Include="Source\BlockEntities">
       <UniqueIdentifier>{e8966416-033d-4c70-b825-914f9e10f341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\World\Generation">
+      <UniqueIdentifier>{dbedc055-d2e4-431c-88d5-40a55b741a40}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -153,15 +174,6 @@
     <ClInclude Include="..\..\source\gui\GameOverlay\Hotbar.h">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Generation\Grassland.h">
-      <Filter>Source\Generation\Biomes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Generation\Structure.h">
-      <Filter>Source\Generation\Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Generation\Generator.h">
-      <Filter>Source\Generation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Strings.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -195,20 +207,11 @@
     <ClInclude Include="..\..\source\Game\RayCast.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\World\Terrain\ChunkLoader.h">
-      <Filter>Source\World\Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\World\Terrain\Chunk.h">
-      <Filter>Source\World\Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\World\Lighting\LightSource.h">
       <Filter>Source\World\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\World\Lighting\Lighting.h">
       <Filter>Source\World\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\World\Terrain\Terrain.h">
-      <Filter>Source\World\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Omnicon.h">
       <Filter>Source\Gui\GameOverlay</Filter>
@@ -239,9 +242,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Crafting.h">
       <Filter>Source\Gui\GameOverlay</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Generation\Structures\OakTree.h">
-      <Filter>Source\Generation\Structures</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Items\Tools\Axe.h">
       <Filter>Source\Items\Tools</Filter>
@@ -308,6 +308,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Items\Placeable\BlockEntityItem.h">
       <Filter>Source\Items\Placeable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Generation\Generator.h">
+      <Filter>Source\World\Generation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Chunk.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\ChunkManager.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Terrain.h">
+      <Filter>Source\World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
