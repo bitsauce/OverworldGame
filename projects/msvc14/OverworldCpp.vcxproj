@@ -100,17 +100,18 @@
     <ClCompile Include="..\..\Source\Entities\EntityData.cpp" />
     <ClCompile Include="..\..\Source\Game\Debug.cpp" />
     <ClCompile Include="..\..\Source\Game\Game.cpp" />
+    <ClCompile Include="..\..\Source\Generation\Generator.cpp" />
     <ClCompile Include="..\..\Source\Noise\Simplex.cpp" />
-    <ClCompile Include="..\..\Source\World\Background.cpp" />
-    <ClCompile Include="..\..\Source\World\Camera.cpp" />
-    <ClCompile Include="..\..\Source\World\Chunk.cpp" />
-    <ClCompile Include="..\..\Source\World\ChunkManager.cpp" />
-    <ClCompile Include="..\..\Source\World\Generation\Generator.cpp" />
-    <ClCompile Include="..\..\Source\World\Lighting\Lighting.cpp" />
-    <ClCompile Include="..\..\Source\World\Lighting\LightSource.cpp" />
-    <ClCompile Include="..\..\Source\World\Lighting\Pointlight.cpp" />
-    <ClCompile Include="..\..\Source\World\Terrain.cpp" />
-    <ClCompile Include="..\..\Source\World\TimeOfDay.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Background.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Camera.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Lighting.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Lighting\LightSource.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Lighting\Pointlight.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Terrain.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Terrain\BlockDrawer.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Terrain\Chunk.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Terrain\ChunkManager.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\TimeOfDay.cpp" />
     <ClCompile Include="..\..\Source\World\World.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
@@ -145,6 +146,7 @@
     <ClInclude Include="..\..\source\Game\Storage.h" />
     <ClInclude Include="..\..\source\Game\RayCast.h" />
     <ClInclude Include="..\..\Source\Game\Scene.h" />
+    <ClInclude Include="..\..\Source\Generation\Generator.h" />
     <ClInclude Include="..\..\source\gui\Button.h" />
     <ClInclude Include="..\..\source\gui\Canvas.h" />
     <ClInclude Include="..\..\Source\gui\GameOverlay\Chat.h" />
@@ -169,16 +171,16 @@
     <ClInclude Include="..\..\Source\Networking\Server.h" />
     <ClInclude Include="..\..\source\Noise\Simplex.h" />
     <ClInclude Include="..\..\Source\Strings.h" />
-    <ClInclude Include="..\..\source\World\Background.h" />
-    <ClInclude Include="..\..\source\World\Camera.h" />
-    <ClInclude Include="..\..\Source\World\Chunk.h" />
-    <ClInclude Include="..\..\Source\World\ChunkManager.h" />
-    <ClInclude Include="..\..\Source\World\Generation\Generator.h" />
-    <ClInclude Include="..\..\source\World\Lighting\Lighting.h" />
-    <ClInclude Include="..\..\source\World\Lighting\LightSource.h" />
-    <ClInclude Include="..\..\source\World\Lighting\Pointlight.h" />
-    <ClInclude Include="..\..\Source\World\Terrain.h" />
-    <ClInclude Include="..\..\source\World\TimeOfDay.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Background.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Camera.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting\LightSource.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting\Pointlight.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain\BlockDrawer.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain\Chunk.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain\ChunkManager.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\TimeOfDay.h" />
     <ClInclude Include="..\..\Source\World\World.h" />
   </ItemGroup>
   <ItemGroup>

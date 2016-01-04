@@ -2,9 +2,11 @@
 #define LIGHTING_H
 
 #include "Config.h"
-#include "LightSource.h"
-#include "Pointlight.h"
+
 #include "Entities/Entity.h"
+
+#include "Lighting/LightSource.h"
+#include "Lighting/Pointlight.h"
 
 class Terrain;
 class World;

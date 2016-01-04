@@ -5,17 +5,15 @@
 
 #include "Entities/Entity.h"
 
-#include "World/Terrain.h"
-#include "Lighting/Lighting.h"
-#include "Background.h"
-#include "Camera.h"
-#include "TimeOfDay.h"
+#include "Controllers/Terrain.h"
+#include "Controllers/Lighting.h"
+#include "Controllers/Background.h"
+#include "Controllers/Camera.h"
+#include "Controllers/TimeOfDay.h"
 
-class WorldGenerator;
 class Server;
 class Client;
 class BlockEntity;
-class Background;
 class Player;
 class Pawn;
 
@@ -67,9 +65,9 @@ public:
 		return m_lighting;
 	}
 
-	ChunkManager *getChunkManager() const
+	Terrain *getTerrain() const
 	{
-		return m_chunkManager;
+		return m_terrain;
 	}
 
 	// Entities
@@ -103,12 +101,11 @@ private:
 	list<Pawn*> m_pawns;
 	Player* m_localPlayer;
 
+	BlockDrawer *m_blockDrawers[WORLD_LAYER_COUNT];
+
 	// Entities
 	vector<list<Entity*>> m_entitiesByLayer;
 	list<Entity*> m_entities;
-
-	// Chunk manager
-	ChunkManager *m_chunkManager; // ChunkGenerator is owned by ChunkManager
 };
 
 #endif // WORLD_H

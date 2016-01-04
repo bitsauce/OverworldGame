@@ -3,7 +3,6 @@
 #include "Debug.h"
 #include "Constants.h"
 #include "World/World.h"
-#include "World/Camera.h"
 #include "Entities/Dynamic/Player.h"
 #include "Blocks/BlockData.h"
 #include "BlockEntities/BlockEntityData.h"
@@ -13,7 +12,19 @@
 #include "Game/Game.h"
 #include "Gui/GameOverlay/GameOverlay.h"
 
-#define DEBUG_FUNCTIONS_STRING "F1: Toggle debug\nF2: Toggle lighting\nF3: Toggle overlays\nF4: Toggle block painter\nF5: Show chunk loader info\nF6: Show lighting info\nF7: Set time\nF8: Spawn menu\nF9: Multiplayer menu\nF10: Detach/attach camera\nF11: [No func]\nF12: [No func]"
+#define DEBUG_FUNCTIONS_STRING \
+	"F1: Toggle debug\n" \
+	"F2: Toggle lighting\n" \
+	"F3: Toggle overlays\n" \
+	"F4: Toggle block painter\n" \
+	"F5: Show chunk loader info\n" \
+	"F6: Show lighting info\n" \
+	"F7: Set time\n" \
+	"F8: Spawn menu\n" \
+	"F9: Multiplayer menu\n" \
+	"F10: Detach/attach camera\n" \
+	"F11: [No func]\n" \
+	"F12: [No func]"
 
 Debug::Debug(OverworldGame *game) :
 	m_game(game),
@@ -72,7 +83,7 @@ void Debug::debugFunction(KeyEvent *e)
 		case CGF_KEY_F5:
 		{
 			m_debugChunkLoader = !m_debugChunkLoader;
-			m_world->getChunkManager()->m_applyZoom = !m_world->getChunkManager()->m_applyZoom;
+			m_world->getTerrain()->getChunkManager()->m_applyZoom = !m_world->getTerrain()->getChunkManager()->m_applyZoom;
 		}
 		break;
 
@@ -138,7 +149,7 @@ void Debug::debugFunction(KeyEvent *e)
 
 		case CGF_KEY_F11:
 		{
-			ChunkManager::ChunkArea area = m_world->getChunkManager()->getActiveArea();
+			ChunkManager::ChunkArea area = m_world->getTerrain()->getChunkManager()->getActiveArea();
 			for(int y = area.y0 * CHUNK_BLOCKS; y <= area.y1 * CHUNK_BLOCKS; ++y)
 			{
 				for(int x = area.x0 * CHUNK_BLOCKS; x <= area.x1 * CHUNK_BLOCKS; ++x)
@@ -187,12 +198,12 @@ void Debug::onDraw(DrawEvent *e)
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
 
 	// Set debug variables
-	setVariable("Chunks", util::intToStr(m_world->getChunkManager()->m_chunks.size()) + " / " + util::intToStr(m_world->getChunkManager()->m_optimalChunkCount));
-	Vector2 center = m_world->getCamera()->getCenter(e->getAlpha());
+	setVariable("Chunks", util::intToStr(m_world->getTerrain()->getChunkManager()->m_chunks.size()) + " / " + util::intToStr(m_world->getTerrain()->getChunkManager()->m_optimalChunkCount));
+	Vector2i center = m_world->getCamera()->getCenter(e->getAlpha());
 	Vector2 inputPosition = m_world->getCamera()->getInputPosition();
 	setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
 	setVariable("Zoom", util::intToStr(int(m_world->getCamera()->getZoomLevel() * 100)) + "%");
-	//setVariable("Block Under Cursor", util::intToStr(m_world->getTerrain()->getBlockAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), WORLD_LAYER_MIDDLE)) + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
+	setVariable("Block Under Cursor", util::intToStr(m_world->getTerrain()->getBlockAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), WORLD_LAYER_MIDDLE)) + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
 	string hourStr, minStr;
 	{
 		int hour = m_world->getTimeOfDay()->getHour();
@@ -273,7 +284,7 @@ void Debug::onDraw(DrawEvent *e)
 		context->drawRectangle(position.x, (position.y + size.y), size.x, 1.0f / m_world->getCamera()->getZoomLevel(), Color(127, 127, 255, 255));
 
 		// Draw load area
-		ChunkManager::ChunkArea loadArea = m_world->getChunkManager()->getLoadingArea();
+		ChunkManager::ChunkArea loadArea = m_world->getTerrain()->getChunkManager()->getLoadingArea();
 		context->drawRectangle(loadArea.x0 * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PXF, Color(255, 255, 255, 255));
 		context->drawRectangle((loadArea.x1 + 1) * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PXF, Color(255, 255, 255, 255));
 		context->drawRectangle(loadArea.x0 * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(255, 255, 255, 255));
@@ -284,11 +295,11 @@ void Debug::onDraw(DrawEvent *e)
 		{
 			for(int x = x0; x <= x1; ++x)
 			{
-				if(!m_world->getChunkManager()->isChunkLoadedAt(x, y))
+				if(!m_world->getTerrain()->getChunkManager()->isChunkLoadedAt(x, y))
 				{
 					context->drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(0, 100, 170, 127));
 				}
-				else if(!m_world->getChunkManager()->getChunkAt(x, y).isAttached())
+				else if(!m_world->getTerrain()->getChunkManager()->getChunkAt(x, y).isAttached())
 				{
 					context->drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(0, 160, 230, 127));
 				}
@@ -303,9 +314,9 @@ void Debug::onDraw(DrawEvent *e)
 		spriteBatch->flush();
 		context->disable(GraphicsContext::BLEND);
 		//spriteBatch->drawSprite(Sprite(m_world->getLighting()->m_lightingRenderTarget->getTexture(), Rect(0.0f, 128.0f, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getChunkManager()->m_lightingPass0->getTexture(), Rect(0.0f, 128.0f * 2, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getChunkManager()->m_lightingPass1->getTexture(), Rect(0.0f, 128.0f * 3, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getChunkManager()->m_lightingPass2->getTexture(), Rect(0.0f, 128.0f * 4, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkManager()->m_lightingPass0->getTexture(), Rect(0.0f, 128.0f * 2, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkManager()->m_lightingPass1->getTexture(), Rect(0.0f, 128.0f * 3, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkManager()->m_lightingPass2->getTexture(), Rect(0.0f, 128.0f * 4, 256.0f, 128.0f)));
 		spriteBatch->flush();
 		context->enable(GraphicsContext::BLEND);
 

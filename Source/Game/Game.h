@@ -17,6 +17,8 @@
 class GameOverlay;
 class GameState;
 
+extern void savePixmapAsText(string fileName, Pixmap &pixmap);
+
 class OverworldGame : public Game
 {
 public:

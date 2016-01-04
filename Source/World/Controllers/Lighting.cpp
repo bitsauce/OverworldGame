@@ -1,11 +1,6 @@
 #include "Lighting.h"
 #include "Constants.h"
-#include "Pointlight.h"
 #include "World/World.h"
-#include "World/TimeOfDay.h"
-#include "World/Camera.h"
-#include "World/Terrain.h"
-#include "World/ChunkManager.h"
 
 Lighting::Lighting(World *world) :
 	Entity(world, ENTITY_LIGHTING),

@@ -1,6 +1,5 @@
 #include "BlockData.h"
 #include "World/World.h"
-#include "World/Terrain.h"
 
 vector<BlockData*> BlockData::s_blockData(BLOCK_COUNT);
 TextureAtlas *BlockData::s_blockAtlas = nullptr;
@@ -45,7 +44,7 @@ void BlockData::init()
 	while(blockData->id != BLOCK_COUNT)
 	{
 		// Create block data object
-		Pixmap pixmap(blockData->imagePath, false);
+		Pixmap pixmap(blockData->imagePath, true);
 		s_blockData[blockData->id] = new BlockData(blockData->id, pixmap, blockData->itemID, blockData->opacity);
 		pixmaps[blockData->id] = pixmap;
 

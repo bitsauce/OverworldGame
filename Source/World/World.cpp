@@ -1,22 +1,14 @@
 #include "World.h"
 #include "Constants.h"
 
-#include "World/Background.h"
-#include "World/Camera.h"
-#include "World/TimeOfDay.h"
-#include "World/Terrain.h"
-#include "World/ChunkManager.h"
-
 #include "Entities/EntityData.h"
+#include "Entities/Dynamic/DynamicEntity.h"
 #include "Entities/Dynamic/Pawn.h"
 
 #include "BlockEntities/BlockEntity.h"
 
 #include "Game/Debug.h"
 #include "Generation/Generator.h"
-#include "Entities/Dynamic/DynamicEntity.h"
-#include "Entities/Dynamic/Pawn.h"
-#include "Lighting/Lighting.h"
 
 World::World(Game *game) :
 	m_worldPath(""),
@@ -33,18 +25,18 @@ World::World(Game *game) :
 	addChildLast(m_camera);
 
 	m_background = new Background(this, game->getWindow());
-	//addChildLast(m_background);
+	addChildLast(m_background);
 
-	m_chunkManager = new ChunkManager(this, game->getWindow());
-	addChildLast(m_chunkManager);
+	m_terrain = new Terrain(this, game->getWindow());
+	addChildLast(m_terrain);
 
-	addChildLast(new BlockDrawer(this, WORLD_LAYER_MIDDLE));
+	for(uint i = 0; i < WORLD_LAYER_COUNT; ++i)
+	{
+		m_blockDrawers[i] = new BlockDrawer(this, (WorldLayer) i);
+		addChildLast(m_blockDrawers[i]);
+	}
 
 	//insertChildBefore(m_chunkB);
-
-	// TODO:
-	//m_terrain = new Terrain(this);
-	//addChildFirst(m_terrain);
 	
 	//m_lighting = new Lighting(this);
 	//addChildFirst(m_lighting);

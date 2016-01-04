@@ -23,7 +23,7 @@ public:
 	Matrix4 getTransformationMatrix(const float alpha) const;
 
 	// Get camera center
-	Vector2 getCenter(const float alpha) const;
+	Vector2i getCenter(const float alpha) const;
 
 	// Get zoom level
 	void setZoomLevel(const float zoomLevel);
@@ -59,7 +59,7 @@ public:
 	uint getHeight() const { return getSize().y; }
 
 	// Get input position
-	Vector2 getInputPosition() const;
+	Vector2i getInputPosition() const;
 
 	// Update
 	void onTick(TickEvent *e);

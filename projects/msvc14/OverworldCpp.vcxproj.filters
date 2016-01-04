@@ -5,41 +5,11 @@
     <ClCompile Include="..\..\Source\Game\Game.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\World\World.cpp">
-      <Filter>Source\World</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\World\Background.cpp">
-      <Filter>Source\World</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\World\Camera.cpp">
-      <Filter>Source\World</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\World\TimeOfDay.cpp">
-      <Filter>Source\World</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Entities\Entity.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Entities\EntityData.cpp">
       <Filter>Source\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\World\Generation\Generator.cpp">
-      <Filter>Source\World\Generation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\World\Chunk.cpp">
-      <Filter>Source\World</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\World\ChunkManager.cpp">
-      <Filter>Source\World</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\World\Lighting\Lighting.cpp">
-      <Filter>Source\World\Lighting</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\World\Lighting\LightSource.cpp">
-      <Filter>Source\World\Lighting</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\World\Lighting\Pointlight.cpp">
-      <Filter>Source\World\Lighting</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Blocks\BlockData.cpp">
       <Filter>Source\Blocks</Filter>
@@ -50,14 +20,47 @@
     <ClCompile Include="..\..\Source\Noise\Simplex.cpp">
       <Filter>Source\Noise</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\World\Terrain.cpp">
-      <Filter>Source\World</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Game\Debug.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\BlockEntities\BlockEntityData.cpp">
       <Filter>Source\BlockEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Controllers\Background.cpp">
+      <Filter>Source\World\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Controllers\Camera.cpp">
+      <Filter>Source\World\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Controllers\Terrain.cpp">
+      <Filter>Source\World\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Controllers\TimeOfDay.cpp">
+      <Filter>Source\World\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\World.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Controllers\Terrain\Chunk.cpp">
+      <Filter>Source\World\Controllers\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Controllers\Terrain\ChunkManager.cpp">
+      <Filter>Source\World\Controllers\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Controllers\Lighting\LightSource.cpp">
+      <Filter>Source\World\Controllers\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Controllers\Lighting\Pointlight.cpp">
+      <Filter>Source\World\Controllers\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Generation\Generator.cpp">
+      <Filter>Source\Generation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Controllers\Lighting.cpp">
+      <Filter>Source\World\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Controllers\Terrain\BlockDrawer.cpp">
+      <Filter>Source\World\Controllers\Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -103,9 +106,6 @@
     <Filter Include="Source\Items\Weapons">
       <UniqueIdentifier>{db3e34cc-807e-4345-8f45-54ab11c8212c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\World\Lighting">
-      <UniqueIdentifier>{345a8e8c-8251-427b-9965-f9f9666a426a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Game\GameStates">
       <UniqueIdentifier>{499e0ea9-ab1d-4a31-acaa-818d18bbf5ee}</UniqueIdentifier>
     </Filter>
@@ -118,17 +118,23 @@
     <Filter Include="Source\Entities\Dynamic\Mobs">
       <UniqueIdentifier>{6f0a2029-a2f5-4ae8-ad3a-e33be4f122a5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Entities\Controllers">
-      <UniqueIdentifier>{b06cd9f4-829b-4ca2-a898-29a761eec5df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Gui\GameOverlay">
       <UniqueIdentifier>{0fd551cc-bb89-4e7f-b942-9ddd7dd4cb8c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\BlockEntities">
       <UniqueIdentifier>{e8966416-033d-4c70-b825-914f9e10f341}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\World\Generation">
-      <UniqueIdentifier>{dbedc055-d2e4-431c-88d5-40a55b741a40}</UniqueIdentifier>
+    <Filter Include="Source\World\Controllers">
+      <UniqueIdentifier>{b06cd9f4-829b-4ca2-a898-29a761eec5df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\World\Controllers\Terrain">
+      <UniqueIdentifier>{08f858c7-f768-44fe-bd3c-7c17703e74ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\World\Controllers\Lighting">
+      <UniqueIdentifier>{901daa22-67c8-4f55-9cae-790145b49b25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Generation">
+      <UniqueIdentifier>{5a692e72-0161-4742-a9cc-758450e332dd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -201,29 +207,11 @@
     <ClInclude Include="..\..\source\Items\Weapons\Bow.h">
       <Filter>Source\Items\Weapons</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\World\TimeOfDay.h">
-      <Filter>Source\World</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\World\Background.h">
-      <Filter>Source\World</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\World\Camera.h">
-      <Filter>Source\World</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Game\RayCast.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\World\Lighting\LightSource.h">
-      <Filter>Source\World\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\World\Lighting\Lighting.h">
-      <Filter>Source\World\Lighting</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Omnicon.h">
       <Filter>Source\Gui\GameOverlay</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\World\World.h">
-      <Filter>Source\World</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Game\Game.h">
       <Filter>Source\Game</Filter>
@@ -254,9 +242,6 @@
     </ClInclude>
     <ClInclude Include="..\..\source\Game\Storage.h">
       <Filter>Source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\World\Lighting\Pointlight.h">
-      <Filter>Source\World\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Entities\Dynamic\Arrow.h">
       <Filter>Source\Entities\Dynamic</Filter>
@@ -315,17 +300,41 @@
     <ClInclude Include="..\..\Source\Items\Placeable\BlockEntityItem.h">
       <Filter>Source\Items\Placeable</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\World\Generation\Generator.h">
-      <Filter>Source\World\Generation</Filter>
+    <ClInclude Include="..\..\Source\World\Controllers\Background.h">
+      <Filter>Source\World\Controllers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\World\Chunk.h">
+    <ClInclude Include="..\..\Source\World\Controllers\Camera.h">
+      <Filter>Source\World\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain.h">
+      <Filter>Source\World\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Controllers\TimeOfDay.h">
+      <Filter>Source\World\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\World.h">
       <Filter>Source\World</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\World\ChunkManager.h">
-      <Filter>Source\World</Filter>
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain\Chunk.h">
+      <Filter>Source\World\Controllers\Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\World\Terrain.h">
-      <Filter>Source\World</Filter>
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain\ChunkManager.h">
+      <Filter>Source\World\Controllers\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting\LightSource.h">
+      <Filter>Source\World\Controllers\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting\Pointlight.h">
+      <Filter>Source\World\Controllers\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Generation\Generator.h">
+      <Filter>Source\Generation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting.h">
+      <Filter>Source\World\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain\BlockDrawer.h">
+      <Filter>Source\World\Controllers\Terrain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

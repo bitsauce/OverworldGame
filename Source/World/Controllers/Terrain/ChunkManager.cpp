@@ -1,6 +1,5 @@
 #include "ChunkManager.h"
 #include "Game/Debug.h"
-#include "World/Camera.h"
 #include "World/World.h"
 #include "Generation/Generator.h"
 #include "BlockEntities/BlockEntity.h"
@@ -9,30 +8,29 @@
 
 const float QUAD_UVS[40] =
 {
-	0, 24,
-	8, 24,
-	16, 24,
-	24, 24,
-	0, 16,
-	8, 16,
+	0,  16,
+	8,  16,
 	16, 16,
 	24, 16,
-	0, 8,
-	8, 8,
-	16, 8,
-	24, 8,
-	0, 0,
-	8, 0,
-	16, 0,
-	24, 0,
-	0, 40,
-	8, 40,
-	0, 32,
-	8, 32
+	0,  24,
+	8,  24,
+	16, 24,
+	24, 24,
+	0,  32,
+	8,  32,
+	16, 32,
+	24, 32,
+	0,  40,
+	8,  40,
+	16, 40,
+	24, 40,
+	 0,  0,
+	 8,  0,
+	 0,  8,
+	 8,  8
 };
 
 ChunkManager::ChunkManager(World *world, Window *window) :
-	Entity(world, ENTITY_CHUNK_MANAGER),
 	m_applyZoom(true),
 	m_window(window),
 	m_camera(world->getCamera()),
@@ -200,7 +198,7 @@ void ChunkManager::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 	}
 	chunk->m_blockEntities.clear(); // Empty static entity list
 
-									  // Add chunk to chunk pool and remove from active chunks
+	// Add chunk to chunk pool and remove from active chunks
 	m_chunkPool.push_back(chunk);
 	m_chunks.erase(itr->first);
 }
@@ -474,7 +472,6 @@ void ChunkManager::onDraw(DrawEvent *e)
 	{
 		// Load chunks in the loading area using a circle load pattern
 		// Loop through 10 chunks to find one which is not attached
-		Vector2 center = m_camera->getCenter(e->getAlpha());
 		for(int i = 0; i < 10; ++i)
 		{
 			// Get next chunk in the circular load pattern
@@ -503,6 +500,11 @@ void ChunkManager::onDraw(DrawEvent *e)
 	context->enable(GraphicsContext::BLEND);
 }
 
+void ChunkManager::onWindowSizeChanged(WindowEvent *e)
+{
+	updateViewSize(e->getWidth(), e->getHeight());
+}
+
 struct VectorComparator
 {
 	bool operator() (const Vector2i &v0, const Vector2i &v1)
@@ -510,11 +512,6 @@ struct VectorComparator
 		return v0.magnitude() > v1.magnitude();
 	}
 };
-
-void ChunkManager::onWindowSizeChanged(WindowEvent *e)
-{
-	updateViewSize(e->getWidth(), e->getHeight());
-}
 
 void ChunkManager::updateViewSize(int width, int height)
 {
@@ -590,6 +587,8 @@ void ChunkManager::updateViewSize(int width, int height)
 	// Redraw blocks
 	m_redrawGlobalBlocks = true;
 }
+
+#include "Game/Game.h"
 
 void ChunkManager::reattachChunks(GraphicsContext *context)
 {
@@ -682,42 +681,4 @@ void ChunkManager::reattachChunks(GraphicsContext *context)
 	
 	context->setShader(0);
 	context->setRenderTarget(0);
-}
-
-BlockDrawer::BlockDrawer(World *world, const WorldLayer layer) :
-	Entity(world, ENTITY_BACKGROUND),
-	m_chunkManager(world->getChunkManager()),
-	m_camera(world->getCamera()),
-	m_layer(layer)
-{
-}
-
-void BlockDrawer::onDraw(DrawEvent *e)
-{
-	GraphicsContext *graphicsContext = e->getGraphicsContext();
-	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
-
-	// Flush to set the draw order straight
-	spriteBatch->flush();
-
-	// Setup graphics context
-	graphicsContext->setTransformationMatrix(m_camera->getTransformationMatrix(e->getAlpha()));
-
-	// Draw chunk area
-	ChunkManager::ChunkArea area = m_chunkManager->getLoadingArea();
-
-	//graphicsContext->setBlendState(BlendState(BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA));
-	graphicsContext->setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
-	graphicsContext->setShader(m_chunkManager->m_tileMapShader);
-	m_chunkManager->m_tileMapShader->setSampler2D("u_SortedBlockTexture", m_chunkManager->m_sortedBlocksRenderTarget[m_layer]->getTexture(0));
-	m_chunkManager->m_tileMapShader->setSampler2D("u_SortedQuadTexture", m_chunkManager->m_sortedBlocksRenderTarget[m_layer]->getTexture(1));
-
-	float u0 = area.x0 / (float) area.getWidth(),
-		v0 = -area.y0 / (float) area.getHeight(),
-		u1 = u0 + 1.0f,
-		v1 = v0 + 1.0f;
-
-	graphicsContext->drawRectangle(area.x0 * CHUNK_PXF, area.y0 * CHUNK_PXF, area.getWidth() * CHUNK_PXF, area.getHeight() * CHUNK_PXF, Color(255), TextureRegion(u0, v0, u1, v1));
-	graphicsContext->setShader(0);
-	graphicsContext->setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
 }

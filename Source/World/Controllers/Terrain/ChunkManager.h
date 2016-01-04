@@ -9,7 +9,7 @@ class Camera;
 class World;
 class ChunkGenerator;
 
-class ChunkManager : public Entity
+class ChunkManager : public GameObject
 {
 	friend class Debug;
 	friend class Lighting;
@@ -127,19 +127,6 @@ private:
 	int m_lightRadius;
 	bool m_enabled;
 	bool m_redrawLighting;
-};
-
-class BlockDrawer : public Entity
-{
-public:
-	BlockDrawer(World *world, const WorldLayer layer);
-
-	void onDraw(DrawEvent *e);
-
-private:
-	ChunkManager *m_chunkManager;
-	Camera *m_camera;
-	WorldLayer m_layer;
 };
 
 #endif // CHUNK_LOADER_H

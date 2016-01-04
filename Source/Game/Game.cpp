@@ -7,12 +7,7 @@
 #include "Items/ItemData.h"
 #include "World/World.h"
 #include "Game/Debug.h"
-#include "World/Camera.h"
-#include "World/Background.h"
-#include "World/TimeOfDay.h"
-#include "World/Lighting/Lighting.h"
-#include "World/Lighting/Pointlight.h"
-#include "World/Terrain.h"
+#include "World/World.h"
 #include "Networking/Server.h"
 #include "Networking/Client.h"
 #include "Entities/Entity.h"
@@ -240,4 +235,31 @@ void OverworldGame::onDraw(DrawEvent *e)
 			break;
 		}
 	}*/
+}
+
+#include <iomanip>
+
+void savePixmapAsText(string fileName, Pixmap &pixmap)
+{
+	ofstream file(fileName);
+	uchar *data = new uchar[pixmap.getFormat().getPixelSizeInBytes()];
+	for(uint y = 0; y < pixmap.getHeight(); ++y)
+	{
+		for(uint x = 0; x < pixmap.getWidth(); ++x)
+		{
+			pixmap.getPixel(x, y, data);
+			file << "[";
+			for(uint i = 0; i < 4; ++i)
+			{
+				if(pixmap.getFormat().getDataTypeSizeInBytes() == 1)
+					file << right << setw(3) << util::intToStr(((uchar*) data)[i]);
+				else if(pixmap.getFormat().getDataTypeSizeInBytes() == 4)
+					file << right << setw(10) << util::intToStr(((uint*) data)[i]);
+			}
+			file << "] ";
+		}
+		file << endl;
+	}
+	delete[] data;
+	file.close();
 }

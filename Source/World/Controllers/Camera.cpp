@@ -16,7 +16,7 @@ Camera::Camera(World *world, InputManager *input, Window *window) :
 	setZoomLevel(1.0f);
 }
 
-Vector2 Camera::getCenter(const float alpha) const
+Vector2i Camera::getCenter(const float alpha) const
 {
 	return math::lerp(m_prevPosition, m_position, alpha) + m_size * 0.5f;
 }
@@ -47,7 +47,7 @@ Vector2i Camera::getPosition() const
 	return m_position;
 }
 
-Vector2 Camera::getInputPosition() const
+Vector2i Camera::getInputPosition() const
 {
 	return m_position + m_input->getPosition() / m_zoomLevel;
 }

@@ -1,6 +1,5 @@
 #include "Chunk.h"
 #include "ChunkManager.h"
-#include "Terrain.h"
 #include "Constants.h"
 
 #include "World/World.h"
@@ -59,7 +58,7 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 				shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, y, z)]).getOpacity();
 			}
 			pixel[3] = uchar(255 * max(shadow, 0.0f));
-			pixmap.setPixel(x, CHUNK_BLOCKS - y - 1, pixel);
+			pixmap.setPixel(x, y, pixel);
 		}
 	}
 
@@ -126,7 +125,7 @@ bool Chunk::setBlockAt(const int x, const int y, const BlockID block, WorldLayer
 			shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, y, z)]).getOpacity();
 		}
 		pixel[3] = (uchar) (255 * max(shadow, 0.0f));
-		m_blockTexture->updatePixmap(x, CHUNK_BLOCKS - y - 1, Pixmap(1, 1, pixel));
+		m_blockTexture->updatePixmap(x, y, Pixmap(1, 1, pixel));
 
 		return true; // Return true as something was changed
 	}

@@ -25,16 +25,16 @@ void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, BlockID 
 	// Load blocks
 	const int tileX = chunkX * CHUNK_BLOCKS;
 	const int tileY = chunkY * CHUNK_BLOCKS;
-	for(uint y = 0; y < CHUNK_BLOCKS; ++y)
+	for(int y = 0; y < CHUNK_BLOCKS; ++y)
 	{
-		for(uint x = 0; x < CHUNK_BLOCKS; ++x)
+		for(int x = 0; x < CHUNK_BLOCKS; ++x)
 		{
-			for(uint z = 0; z < WORLD_LAYER_COUNT; ++z)
+			for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 			{
 				//BlockID structureBlock;
 				//if((structureBlock = structureBlocks[BLOCK_INDEX(x, y, z)]) == BLOCK_EMPTY)
 				{
-					blocks[BLOCK_INDEX(x, y, z)] = BLOCK_GRASS;// getGroundAt(tileX + x, tileY + y, (WorldLayer) z);
+					blocks[BLOCK_INDEX(x, y, z)] = getGroundAt(tileX + x, tileY + y, (WorldLayer) z);
 				}
 				//else
 				{

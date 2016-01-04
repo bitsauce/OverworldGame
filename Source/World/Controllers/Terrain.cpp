@@ -7,8 +7,6 @@
 #include "Blocks/BlockData.h"
 
 #include "World/World.h"
-#include "World/Lighting/Pointlight.h"
-#include "World/Camera.h"
 
 #include "Entities/Dynamic/ItemDrop.h"
 
@@ -16,23 +14,23 @@
 #include "BlockEntities/BlockEntity.h"
 #include "BlockEntities/BlockEntityData.h"
 
-Terrain::Terrain(World *world) :
-	Entity(world, ENTITY_BACKGROUND),
-	m_world(world)/*,
-	m_background(world->getChunkManager(), world->getCamera(), PRIORITY_TERRAIN_BACKGROUND, WORLD_LAYER_BACK),
-	m_middleground(world->getChunkManager(), world->getCamera(), PRIORITY_TERRAIN_MIDDLEGROUND, WORLD_LAYER_MIDDLE),
-	m_foreground(world->getChunkManager(), world->getCamera(), PRIORITY_TERRAIN_FOREGROUND, WORLD_LAYER_FRONT)*/
+Terrain::Terrain(World *world, Window *window) :
+	Entity(world, ENTITY_TERRAIN),
+	m_world(world)
 {
+	m_chunkManager = new ChunkManager(world, window);
+	addChildLast(m_chunkManager);
 }
 
 Terrain::~Terrain()
 {
+	delete m_chunkManager;
 }
-/*
+
 // BLOCKS
 bool Terrain::setBlockAt(const int x, const int y, BlockID block, const WorldLayer layer = WORLD_LAYER_MIDDLE)
 {
-	if(Connection::getInstance()->isServer())
+	/*if(Connection::getInstance()->isServer())
 	{
 		RakNet::BitStream bitStream;
 		bitStream.Write((RakNet::MessageID)ID_SET_BLOCK);
@@ -51,14 +49,14 @@ bool Terrain::setBlockAt(const int x, const int y, BlockID block, const WorldLay
 		bitStream.Write(block);
 		bitStream.Write(layer);
 		((Client*)Connection::getInstance())->sendPacket(&bitStream);
-	}
+	}*/
 
-	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), block, layer);
+	return m_chunkManager->getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), block, layer);
 }
 
 BlockID Terrain::getBlockAt(const int x, const int y, const WorldLayer layer = WORLD_LAYER_MIDDLE)
 {
-	return m_chunkLoader.getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
+	return m_chunkManager->getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
 }
 
 bool Terrain::isBlockAt(const int x, const int y, WorldLayer layer = WORLD_LAYER_MIDDLE)
@@ -71,8 +69,8 @@ bool Terrain::removeBlockAt(const int x, const int y, WorldLayer layer = WORLD_L
 	BlockID blockID = getBlockAt(x, y, layer);
 	if(setBlockAt(x, y, BLOCK_EMPTY, layer))
 	{
-		ItemDrop *itemDrop = new ItemDrop(m_world, BlockData::get(blockID).getItem());
-		itemDrop->setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
+		//ItemDrop *itemDrop = new ItemDrop(m_world, BlockData::get(blockID).getItem());
+		//itemDrop->setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
 		return true;
 	}
 	return false;
@@ -81,12 +79,12 @@ bool Terrain::removeBlockAt(const int x, const int y, WorldLayer layer = WORLD_L
 void Terrain::placeStaticEntity(BlockEntity *entity)
 {
 	Vector2i pos = entity->getPosition();
-	m_chunkLoader.getChunkAt((int) floor(pos.x / CHUNK_BLOCKSF), (int) floor(pos.y / CHUNK_BLOCKSF)).addStaticEntity(entity);
+	m_chunkManager->getChunkAt((int) floor(pos.x / CHUNK_BLOCKSF), (int) floor(pos.y / CHUNK_BLOCKSF)).addStaticEntity(entity);
 	for(int y = pos.y; y < pos.y + (int) entity->getData()->getHeight(); ++y)
 	{
 		for(int x = pos.x; x < pos.x + (int) entity->getData()->getWidth(); ++x)
 		{
-			m_chunkLoader.getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), BLOCK_ENTITY, WORLD_LAYER_MIDDLE);
+			m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), BLOCK_ENTITY, WORLD_LAYER_MIDDLE);
 		}
 	}
-}*/
+}

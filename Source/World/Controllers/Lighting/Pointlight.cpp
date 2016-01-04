@@ -1,6 +1,5 @@
 #include "Pointlight.h"
 #include "World/World.h"
-#include "World/Lighting/Lighting.h"
 
 Vertex *Pointlight::s_vertices;
 
