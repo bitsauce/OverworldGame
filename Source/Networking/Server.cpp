@@ -11,12 +11,11 @@
 #include "NetworkObject.h"
 #include "Constants.h"
 #include "World/World.h"
-#include "World/Terrain/Terrain.h"
-#include "Entities/Dynamic/Pawn.h"
-#include "Entities/Dynamic/Player.h"
-#include "Entities/Dynamic/PlayerController.h"
-#include "Entities/Dynamic/AIController.h"
-#include "Entities/Dynamic/Mobs/Zombie.h"
+#include "Entities/Pawn.h"
+#include "Entities/Player.h"
+#include "Entities/PlayerController.h"
+#include "Entities/AIController.h"
+#include "Entities/Mobs/Zombie.h"
 #include "Game/Game.h"
 #include "Gui/GameOverlay/GameOverlay.h"
 
@@ -221,7 +220,7 @@ void Server::save()
 {
 	LOG("Saving server...");
 
-	m_game->getWorld()->getTerrain()->getChunkLoader()->clear();
+	m_game->getWorld()->getTerrain()->getChunkManager()->clear();
 
 	// Save all players
 	for(map<string, Pawn*>::iterator itr = m_players.begin(); itr != m_players.end(); ++itr)

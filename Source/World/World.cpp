@@ -2,8 +2,8 @@
 #include "Constants.h"
 
 #include "Entities/EntityData.h"
-#include "Entities/Dynamic/DynamicEntity.h"
-#include "Entities/Dynamic/Pawn.h"
+#include "Entities/DynamicEntity.h"
+#include "Entities/Pawn.h"
 
 #include "BlockEntities/BlockEntity.h"
 

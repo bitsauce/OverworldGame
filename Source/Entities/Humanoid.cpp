@@ -166,19 +166,19 @@ void Humanoid::onTick(TickEvent *e)
 	if(m_preAnimation)
 	{
 		m_prevPreAnimationTime = m_preAnimationTime;
-		m_preAnimationTime += delta;
+		m_preAnimationTime += e->getDelta();
 	}
 
 	if(m_mainAnimation)
 	{
 		m_prevMainAnimationTime = m_mainAnimationTime;
-		m_mainAnimationTime += delta;
+		m_mainAnimationTime += e->getDelta();
 	}
 
 	if(m_postAnimation)
 	{
 		m_prevPostAnimationTime = m_postAnimationTime;
-		m_postAnimationTime += delta;
+		m_postAnimationTime += e->getDelta();
 	}
 }
 
@@ -213,10 +213,10 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 		// Do we need to re-render body part?
 		if(m_renderPart[i])
 		{
-			GraphicsContext &context = spriteBatch->getGraphicsContext();
+			GraphicsContext *context = spriteBatch->getGraphicsContext();
 			Texture2DPtr skeletonAtlas = m_skeleton->getTexture();
 
-			context.setRenderTarget(m_skeletonRenderTarget);
+			context->setRenderTarget(m_skeletonRenderTarget);
 
 			// Get body part region
 			TextureRegion region = m_skeleton->getTextureRegion(getBodyPartName((BodyPart) i));
@@ -224,21 +224,21 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 				x1 = region.uv1.x * skeletonAtlas->getWidth(), y1 = region.uv1.y * skeletonAtlas->getHeight();
 
 			// Clear region
-			context.setBlendState(BlendState(BlendState::BLEND_ZERO, BlendState::BLEND_ZERO));
-			context.drawRectangle(x0, skeletonAtlas->getHeight() - y1, x1 - x0, y1 - y0);
+			context->setBlendState(BlendState(BlendState::BLEND_ZERO, BlendState::BLEND_ZERO));
+			context->drawRectangle(x0, skeletonAtlas->getHeight() - y1, x1 - x0, y1 - y0);
 
 			// For every attachment, draw it to the region
-			context.setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
+			context->setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
 			for(pair<int, Texture2DPtr> at : m_attachments[i])
 			{
 				if(!at.second) continue;
-				context.setTexture(at.second);
-				context.drawRectangle(x0, skeletonAtlas->getHeight() - y1, x1 - x0, y1 - y0);
+				context->setTexture(at.second);
+				context->drawRectangle(x0, skeletonAtlas->getHeight() - y1, x1 - x0, y1 - y0);
 			}
 
 			// Reset context
-			context.setTexture(0);
-			context.setRenderTarget(0);
+			context->setTexture(0);
+			context->setRenderTarget(0);
 
 			// Don't need to render again
 			m_renderPart[i] = false;
@@ -247,10 +247,10 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 
 	// Draw skeleton
 	m_skeleton->setPosition(body->getDrawPosition(alpha) + Vector2(body->getSize().x * 0.5f, 48.0f));
-	GraphicsContext &gfxContext = spriteBatch->getGraphicsContext();
-	gfxContext.setModelViewMatrix(spriteBatch->getState().projectionMatix);
+	GraphicsContext *gfxContext = spriteBatch->getGraphicsContext();
+	gfxContext->setTransformationMatrix(spriteBatch->getState().projectionMatix);
 	m_skeleton->draw(gfxContext);
-	gfxContext.setModelViewMatrix(Matrix4());
+	gfxContext->setTransformationMatrix(Matrix4());
 }
 
 void Humanoid::setAttachmentTexture(const BodyPart part, const int layer, const Texture2DPtr texture)

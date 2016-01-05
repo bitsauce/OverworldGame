@@ -1,10 +1,10 @@
 #include "GameOverlay.h"
-#include "Game/Storage.h"
-#include "Entities/Dynamic/Player.h"
-#include "Items/ItemData.h"
 #include "Game/Game.h"
+#include "Game/Storage.h"
+#include "Items/ItemData.h"
 #include "Networking/Connection.h"
-#include "Entities/Dynamic/ItemDrop.h"
+#include "Entities/Player.h"
+#include "Entities/ItemDrop.h"
 
 GameOverlay::GameOverlay(OverworldGame *game, Scene *scene, GraphicsContext & context) :
 	UiObject(scene, scene->getCanvas()),
@@ -18,26 +18,26 @@ GameOverlay::GameOverlay(OverworldGame *game, Scene *scene, GraphicsContext & co
 	setSize(Vector2(1.0f, 1.0f));
 
 	m_hotbar = new Hotbar(scene, this);
-	m_healthManaStatus = new HealthManaStatus(scene, this);
+	/*m_healthManaStatus = new HealthManaStatus(scene, this);
 	m_omnicon = new Omnicon(scene, this);
 	m_inventory = new Inventory(scene, this);
 	m_crafting = new Crafting(scene, this);
-	m_chat = new Chat(game, context, scene, this);
+	m_chat = new Chat(game, context, scene, this);*/
 }
 
 GameOverlay::~GameOverlay()
 {
 	delete m_hotbar;
-	delete m_healthManaStatus;
+	/*delete m_healthManaStatus;
 	delete m_omnicon;
 	delete m_inventory;
 	delete m_crafting;
-	delete m_chat;
+	delete m_chat;*/
 }
 
 void GameOverlay::onTick(TickEvent *e)
 {
-	if (!m_player) return;
+	if(!m_player) return;
 	Storage::Slot *heldItem = m_player->getHeldItem();
 	if(!heldItem->isEmpty() && !isHovered() && Input::getKeyState(XD_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 	{
@@ -50,7 +50,7 @@ void GameOverlay::onTick(TickEvent *e)
 
 void GameOverlay::draw(SpriteBatch *spriteBatch, const float delta)
 {
-	if (!m_player) return;
+	if(!m_player) return;
 	m_player->getHeldItem()->drawItem(Input::getPosition() + Vector2(5.0f, 0.0f), spriteBatch, m_font);
 }
 
@@ -75,7 +75,7 @@ bool GameOverlay::isHovered() const
 
 void GameOverlay::performSlotAction(Storage::Slot *slot, const VirtualKey type)
 {
-	if (!m_player) return;
+	if(!m_player) return;
 	Storage::Slot *heldSlot = m_player->getHeldItem();
 	if(type == XD_MOUSE_BUTTON_LEFT)
 	{

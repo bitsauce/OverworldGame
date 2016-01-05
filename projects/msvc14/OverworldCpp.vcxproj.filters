@@ -62,6 +62,81 @@
     <ClCompile Include="..\..\Source\World\Controllers\Terrain\BlockDrawer.cpp">
       <Filter>Source\World\Controllers\Terrain</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\Controller.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\DynamicEntity.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\Humanoid.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\Pawn.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\Player.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\PlayerController.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Animation\Animation.cpp">
+      <Filter>Source\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Animation\Bone.cpp">
+      <Filter>Source\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Animation\Skeleton.cpp">
+      <Filter>Source\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Animation\Slot.cpp">
+      <Filter>Source\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Networking\Client.cpp">
+      <Filter>Source\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Networking\Conneciton.cpp">
+      <Filter>Source\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Networking\NetworkObject.cpp">
+      <Filter>Source\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Networking\Server.cpp">
+      <Filter>Source\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game\Storage.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Items\ItemData.cpp">
+      <Filter>Source\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\Mobs\Zombie.cpp">
+      <Filter>Source\Entities\Mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\AIController.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game\Commander.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game\States\InGameState.cpp">
+      <Filter>Source\Game\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game\States\GameState.cpp">
+      <Filter>Source\Game\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\Canvas.cpp">
+      <Filter>Source\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\UiObject.cpp">
+      <Filter>Source\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\GameOverlay.cpp">
+      <Filter>Source\Gui\GameOverlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Hotbar.cpp">
+      <Filter>Source\Gui\GameOverlay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -106,17 +181,8 @@
     <Filter Include="Source\Items\Weapons">
       <UniqueIdentifier>{db3e34cc-807e-4345-8f45-54ab11c8212c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Game\GameStates">
-      <UniqueIdentifier>{499e0ea9-ab1d-4a31-acaa-818d18bbf5ee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{af129b37-b8d0-498e-98c3-cd3641a2a8b3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Entities\Dynamic">
-      <UniqueIdentifier>{d3a56dc7-e376-4b91-bd45-9f8741a71034}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Entities\Dynamic\Mobs">
-      <UniqueIdentifier>{6f0a2029-a2f5-4ae8-ad3a-e33be4f122a5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Gui\GameOverlay">
       <UniqueIdentifier>{0fd551cc-bb89-4e7f-b942-9ddd7dd4cb8c}</UniqueIdentifier>
@@ -135,6 +201,12 @@
     </Filter>
     <Filter Include="Source\Generation">
       <UniqueIdentifier>{5a692e72-0161-4742-a9cc-758450e332dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Entities\Mobs">
+      <UniqueIdentifier>{248099bd-986c-4607-a852-f1450a85a123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\States">
+      <UniqueIdentifier>{4bcc52c1-95f3-47e0-a056-cb999a629774}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -216,12 +288,6 @@
     <ClInclude Include="..\..\Source\Game\Game.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Game\GameStates\InGameState.h">
-      <Filter>Source\Game\GameStates</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Game\GameStates\GameState.h">
-      <Filter>Source\Game\GameStates</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Game\Scene.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
@@ -243,38 +309,8 @@
     <ClInclude Include="..\..\source\Game\Storage.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Dynamic\Arrow.h">
-      <Filter>Source\Entities\Dynamic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Dynamic\DynamicEntity.h">
-      <Filter>Source\Entities\Dynamic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Dynamic\ItemDrop.h">
-      <Filter>Source\Entities\Dynamic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Dynamic\Player.h">
-      <Filter>Source\Entities\Dynamic</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Entities\EntityData.h">
       <Filter>Source\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Dynamic\AIController.h">
-      <Filter>Source\Entities\Dynamic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Dynamic\Controller.h">
-      <Filter>Source\Entities\Dynamic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Dynamic\Humanoid.h">
-      <Filter>Source\Entities\Dynamic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Dynamic\Pawn.h">
-      <Filter>Source\Entities\Dynamic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Dynamic\PlayerController.h">
-      <Filter>Source\Entities\Dynamic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Dynamic\Mobs\Zombie.h">
-      <Filter>Source\Entities\Dynamic\Mobs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Entities\Entity.h">
       <Filter>Source\Entities</Filter>
@@ -335,6 +371,42 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\World\Controllers\Terrain\BlockDrawer.h">
       <Filter>Source\World\Controllers\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\AIController.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\Arrow.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\Controller.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\DynamicEntity.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\Humanoid.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\ItemDrop.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\Pawn.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\Player.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\PlayerController.h">
+      <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\Mobs\Zombie.h">
+      <Filter>Source\Entities\Mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\States\GameState.h">
+      <Filter>Source\Game\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\States\InGameState.h">
+      <Filter>Source\Game\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -407,5 +479,6 @@
     <None Include="..\..\Content\Shaders\TileSort.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

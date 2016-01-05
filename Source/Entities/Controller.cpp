@@ -12,12 +12,12 @@ Controller::Controller()
 
 void Controller::setClientUseItemState(int action)
 {
-	m_clientInputState[INPUT_USE_ITEM] = action == GLFW_PRESS;// && !m_gameOverlay->isHovered();
+	//m_clientInputState[INPUT_USE_ITEM] = action == GLFW_PRESS;// && !m_gameOverlay->isHovered();
 }
 
 void Controller::setClientInputState(int action, int type)
 {
-	m_clientInputState[type] = action == GLFW_PRESS;
+	//m_clientInputState[type] = action == GLFW_PRESS;
 }
 
 void Controller::pack(RakNet::BitStream *bitStream, const Connection *conn)

@@ -2,7 +2,6 @@
 #include "Constants.h"
 
 #include "World/World.h"
-#include "World/Terrain/Terrain.h"
 
 DynamicEntity::DynamicEntity(World *world, const EntityID id) :
 	Entity(world, id),

@@ -8,7 +8,7 @@
 
 #include "World/World.h"
 
-#include "Entities/Dynamic/ItemDrop.h"
+#include "Entities/ItemDrop.h"
 
 #include "Entities/EntityData.h"
 #include "BlockEntities/BlockEntity.h"

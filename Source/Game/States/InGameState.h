@@ -13,7 +13,7 @@ class InGameState : public GameState
 public:
 	InGameState(OverworldGame *game);
 
-	void enter();
+	void onEnter();
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
 

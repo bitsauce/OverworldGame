@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "Pawn.h"
 
@@ -12,5 +13,6 @@ public:
 	{
 		return new Player(world, false);
 	}
-protected:
 };
+
+#endif // PLAYER_H

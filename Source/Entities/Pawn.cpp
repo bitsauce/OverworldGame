@@ -2,8 +2,6 @@
 
 #include "Pawn.h"
 #include "World/World.h"
-#include "World/Camera.h"
-#include "World/Terrain/Terrain.h"
 #include "Constants.h"
 #include "Items/ItemData.h"
 #include "Networking/Connection.h"
@@ -13,7 +11,7 @@
 #include "Animation/Bone.h"
 #include "Gui/GameOverlay/GameOverlay.h"
 #include "Game/Game.h"
-#include "Game/GameStates/GameState.h"
+#include "Game/States/GameState.h"
 #include "Game/Scene.h"
 
 #include "Gui/Canvas.h"
@@ -108,7 +106,7 @@ void Pawn::onTick(TickEvent *e)
 			{
 				applyImpulse(Vector2(0.0f, -2.5f));
 			}
-			m_jumpTimer += delta;
+			m_jumpTimer += e->getDelta();
 		}
 		else if(isContact(WEST) || isContact(EAST)) // Wall jumping
 		{
@@ -149,10 +147,10 @@ void Pawn::onTick(TickEvent *e)
 	}
 
 	// Update physics
-	DynamicEntity::update(delta);
+	DynamicEntity::onTick(e);
 	
 	// Set animations
-	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(getVelocity().x) * 4.0f * delta);
+	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(getVelocity().x) * 4.0f * e->getDelta());
 	if(isContact(SOUTH))
 	{
 		m_humanoid.getMainAnimationState()->setLooping(true);
@@ -216,7 +214,7 @@ void Pawn::onTick(TickEvent *e)
 		{
 			if(!m_lmbPressed)
 			{
-				item->use(this, delta);
+				item->use(this, e->getDelta());
 			}
 			m_lmbPressed = true;
 		}
@@ -225,20 +223,21 @@ void Pawn::onTick(TickEvent *e)
 			//m_humanoid.setPostAnimation(Humanoid::ANIM_NULL);
 			m_lmbPressed = false;
 		}
-		item->update(this, delta);
+		item->update(this, e->getDelta());
 	}
 
-	// Update animations
-	m_humanoid.update(delta);
+	// Update animations // NOTE: Seems wierd to call onTick here...
+	m_humanoid.onTick(e);
 }
 
 void Pawn::onDraw(DrawEvent *e)
 {
-	m_humanoid.draw(this, spriteBatch, alpha);
+	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
+	m_humanoid.draw(this, spriteBatch, e->getAlpha());
 	ItemData *item = ItemData::get(getCurrentItem()->getItem());
 	if(item)
 	{
-		item->draw(this, spriteBatch, alpha);
+		item->draw(this, spriteBatch, e->getAlpha());
 	}
 
 }

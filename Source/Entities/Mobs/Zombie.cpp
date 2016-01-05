@@ -1,7 +1,7 @@
 #include "Zombie.h"
 #include "Game/Game.h"
-#include "Entities/Dynamic/Pawn.h"
-#include "Entities/Dynamic/AIController.h"
+#include "Entities/Pawn.h"
+#include "Entities/AIController.h"
 #include "Constants.h"
 
 Zombie::Zombie(World *world) :
@@ -13,10 +13,10 @@ Zombie::Zombie(World *world) :
 
 void Zombie::onTick(TickEvent *e)
 {
-	Pawn::update(delta);
+	Pawn::onTick(e);
 }
 
 void Zombie::onDraw(DrawEvent *e)
 {
-	Pawn::draw(spriteBatch, alpha);
+	Pawn::onDraw(e);
 }

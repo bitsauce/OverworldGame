@@ -52,7 +52,24 @@ enum PacketID
 
 #define CHUNK_KEY(X, Y) (((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000))
 
-// ENTITY IDS
+/**
+ * \enum	GameStateID
+ *
+ * \brief	Game state IDs.
+ */
+
+enum GameStateID
+{
+	GAME_STATE_IN_GAME,
+	GAME_STATE_MULTIPLAYER
+};
+
+/**
+ * \enum	EntityID
+ *
+ * \brief	Entity IDs.
+ */
+
 enum EntityID
 {
 	ENTITY_NULL,
@@ -72,7 +89,12 @@ enum EntityID
 	ENTITY_COUNT
 };
 
-// BLOCK IDS
+/**
+ * \enum	BlockID
+ *
+ * \brief	Block IDs.
+ */
+
 enum BlockID
 {
 	// Invisible blocks
@@ -99,7 +121,12 @@ enum BlockID
 	BLOCK_COUNT
 };
 
-// BLOCK ENTITY IDS
+/**
+ * \enum	BlockEntityID
+ *
+ * \brief	BlockEntity IDs.
+ */
+
 enum BlockEntityID
 {
 	BLOCK_ENTITY_NULL,
@@ -107,7 +134,12 @@ enum BlockEntityID
 	BLOCK_ENTITY_COUNT
 };
 
-// ITEM IDS
+/**
+ * \enum	ItemID
+ *
+ * \brief	Item IDs.
+ */
+
 enum ItemID
 {
 	ITEM_NONE,
@@ -134,7 +166,12 @@ enum ItemID
 	ITEM_COUNT
 };
 
-// WORLD LAYERS
+/**
+ * \enum	WorldLayer
+ *
+ * \brief	World Layer.
+ */
+
 enum WorldLayer
 {
 	WORLD_LAYER_BACK,
@@ -143,7 +180,12 @@ enum WorldLayer
 	WORLD_LAYER_COUNT
 };
 
-// DIRECTION
+/**
+ * \enum	Direction
+ *
+ * \brief	Direction.
+ */
+
 enum Direction
 {
 	NORTH		= 1 << 0,

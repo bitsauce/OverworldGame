@@ -12,9 +12,9 @@
 #include "NetworkObject.h"
 
 #include "Game/Game.h"
-#include "World/Terrain/Terrain.h"
+#include "World/World.h"
 
-#include "Entities/Dynamic/Pawn.h"
+#include "Entities/Pawn.h"
 
 Client::Client(OverworldGame * game, const string &ip, const ushort port) :
 	Connection(false),

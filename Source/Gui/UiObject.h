@@ -6,11 +6,11 @@
 class UiObject : public GameObject
 {
 public:
-	UiObject(Scene *scene, UiObject *parent);
+	UiObject();
 	virtual ~UiObject();
 
 	// Mouse press event
-	virtual void pressEvent() { }
+	/*virtual void pressEvent() { }
 	virtual void releaseEvent() { }
 	bool isPressed() const;
 	
@@ -50,13 +50,13 @@ public:
 	// Update & draw
 	virtual void onTick(TickEvent *e);
 	virtual void onDraw(DrawEvent *e) { }
-
+	*/
 protected:
 	// Scene object
 	Scene *m_scene;
 
 	// Parent object
-	UiObject *m_parent;
+	//UiObject *m_parent;
 
 	// Rectangle of the object in relative coordinates [0-1]
 	Rect m_rect;

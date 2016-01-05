@@ -4,24 +4,20 @@
 
 #include "Constants.h"
 
-UiObject::UiObject(Scene *scene, UiObject *parent) :
-	m_scene(scene),
-	m_parent(parent),
+UiObject::UiObject() :
 	m_anchor(0.0f, 0.0f),
 	m_rect(),
 	m_hovered(false),
 	m_pressed(false),
 	m_active(false)
 {
-	m_scene->addUiObject(this);
 }
 
 UiObject::~UiObject()
 {
-	m_scene->removeUiObject(this);
 }
 
-bool UiObject::isPressed() const
+/*bool UiObject::isPressed() const
 {
 	return m_pressed;
 }
@@ -118,4 +114,4 @@ Rect UiObject::getRect() const
 void UiObject::setAnchor(const Vector2 &anchor)
 {
 	m_anchor = anchor;
-}
+}*/

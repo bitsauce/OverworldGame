@@ -2,7 +2,7 @@
 #include "Constants.h"
 #include "World/World.h"
 #include "Game/Debug.h"
-#include "Entities/Dynamic/Pawn.h"
+#include "Entities/Pawn.h"
 
 Camera::Camera(World *world, InputManager *input, Window *window) :
 	Entity(world, ENTITY_CAMERA),

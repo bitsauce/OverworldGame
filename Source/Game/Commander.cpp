@@ -1,7 +1,7 @@
 #include "Commander.h"
 #include "Game.h"
 
-#include "Entities/Dynamic/Player.h"
+#include "Entities/Player.h"
 #include "Entities/EntityData.h"
 
 #include "Items/ItemData.h"
@@ -22,7 +22,7 @@ Commander::~Commander()
 }
 
 void Commander::execute(const string &cmdString)
-{
+{/*
 	// Get chat
 	Chat *chat = m_game->getGameOverlay()->getChat();
 
@@ -58,28 +58,28 @@ void Commander::execute(const string &cmdString)
 	}
 
 	// Command not recognized
-	chat->insertMessage(cmdSplitString[0] + " is not a recognized command.");
+	chat->insertMessage(cmdSplitString[0] + " is not a recognized command.");*/
 }
 
 void Commander::spawn(Chat *chat, vector<string> args)
 {
-	EntityData *data = EntityData::getByName(args[0]);
+	/*EntityData *data = EntityData::getByName(args[0]);
 	if(data == 0)
 	{
 		chat->insertMessage("No entity named '" + args[0] + "'");
 		return;
 	}
 
-	DynamicEntity *entity = (DynamicEntity*)data->create(m_game->getWorld());
-	entity->setPosition(m_game->getWorld()->getLocalPlayer()->getPosition() + Vector2(0.0f, 10.0f));
-	
-	chat->insertMessage(args[0] + " spawned");
+	DynamicEntity *entity = (DynamicEntity*) data->create(m_game->getWorld());
+	//entity->setPosition(m_game->getWorld()->getLocalPlayer()->getPosition() + Vector2(0.0f, 10.0f));
+
+	chat->insertMessage(args[0] + " spawned");*/
 }
 
 void Commander::give(Chat *chat, vector<string> args)
 {
 	ItemData *data = ItemData::getByName(args[0]);
-	if(data == 0)
+	/*if(data == 0)
 	{
 		chat->insertMessage("No item named '" + args[0] + "'");
 		return;
@@ -87,13 +87,13 @@ void Commander::give(Chat *chat, vector<string> args)
 
 	if(args.size() == 1)
 	{
-		m_game->getWorld()->getLocalPlayer()->getStorage()->addItem(data->getID());
+		//m_game->getWorld()->getLocalPlayer()->getStorage()->addItem(data->getID());
 		chat->insertMessage(args[0] + " given");
 	}
 	else
 	{
 		int amt = util::strToInt(args[1]);
-		m_game->getWorld()->getLocalPlayer()->getStorage()->addItem(data->getID(), amt);
+		//m_game->getWorld()->getLocalPlayer()->getStorage()->addItem(data->getID(), amt);
 		chat->insertMessage(args[1] + " " + args[0] + " given");
-	}
+	}*/
 }

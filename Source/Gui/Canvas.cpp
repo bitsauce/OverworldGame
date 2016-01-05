@@ -1,24 +1,24 @@
-#include "canvas.h"
-#include "constants.h"
+#include "Canvas.h"
+#include "Constants.h"
 
-Canvas::Canvas(Scene *scene) :
-	UiObject(scene, nullptr),
+Canvas::Canvas() :
+	//UiObject(nullptr),
 	m_canvasSize(1, 1),
 	m_useWindowSize(true)
 {
 }
 
-Canvas::Canvas(Scene *scene, const uint w, const uint h) :
-	UiObject(scene, nullptr),
-	m_canvasSize(w, h),
+Canvas::Canvas(const uint width, const uint height) :
+	//UiObject(nullptr),
+	m_canvasSize(width, height),
 	m_useWindowSize(false)
 {
-	m_anchor.set(0.5f, 0.5f);
+	//m_anchor.set(0.5f, 0.5f);
 }
 
 void Canvas::updateSize()
 {
-	if(m_useWindowSize)
+	/*if(m_useWindowSize)
 	{
 		m_rect.size.set(1.0f, 1.0f);
 	}
@@ -39,11 +39,11 @@ void Canvas::updateSize()
 		}
 		m_rect.size = size/Vector2(Window::getSize());
 	}
-	//Debug::setVaraible("Canvas", "("+util::floatToStr(size.x)+", "+util::floatToStr(size.y)+")");
+	//Debug::setVaraible("Canvas", "("+util::floatToStr(size.x)+", "+util::floatToStr(size.y)+")");*/
 }
 
 void Canvas::onTick(TickEvent *e)
 {
 	updateSize();
-	UiObject::update(delta);
+	UiObject::onTick(e);
 }

@@ -13,11 +13,11 @@ void AIController::update()
 	// Reset all input
 	for(uint i = 0; i < INPUT_COUNT; ++i)
 	{
-		setClientInputState(GLFW_RELEASE, i);
+		//setClientInputState(GLFW_RELEASE, i);
 	}
 
 	Pawn* closestPawn = nullptr;
-	for(Pawn *pawn : m_world->getPawns())
+	/*for(Pawn *pawn : m_world->getPawns())
 	{
 		if(pawn == m_pawn) continue;
 		if(!closestPawn || (pawn->getCenter() - m_pawn->getCenter()).magnitude() < (closestPawn->getCenter() - m_pawn->getCenter()).magnitude())
@@ -44,5 +44,5 @@ void AIController::update()
 		}
 	}
 
-	m_prevPos = m_pawn->getPosition();
+	m_prevPos = m_pawn->getPosition();*/
 }

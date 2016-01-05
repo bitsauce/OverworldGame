@@ -5,9 +5,10 @@ InGameState::InGameState(OverworldGame *game) :
 	GameState(GAME_STATE_IN_GAME, false),
 	m_world(game->getWorld())
 {
+	addChildLast(m_world);
 }
 
-void InGameState::enter()
+void InGameState::onEnter()
 {
 	/*RakNet::BitStream bitStream;
 	bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
@@ -21,17 +22,19 @@ void InGameState::enter()
 		((Client*)Connection::getInstance())->sendPacket(&bitStream);
 	}*/
 
-	Input::setContext(Input::getContext("game"));
+	//Input::setContext(Input::getContext("game"));
 }
 
 void InGameState::onTick(TickEvent *e)
 {
-	m_world->update(delta);
-	m_scene.update(delta);
+	//m_world->update(delta);
+	//m_scene.update(delta);
+	GameState::onTick(e);
 }
 
 void InGameState::onDraw(DrawEvent *e)
 {
-	m_world->draw(spriteBatch, alpha);
-	m_scene.draw(spriteBatch, alpha);
+	//m_world->draw(spriteBatch, alpha);
+	//m_scene.draw(spriteBatch, alpha);
+	GameState::onDraw(e);
 }

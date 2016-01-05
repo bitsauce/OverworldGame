@@ -2,7 +2,7 @@
 #define PHYSICS_BODY_H
 
 #include "Config.h"
-#include "../Entity.h"
+#include "Entity.h"
 
 class Terrain;
 class World;

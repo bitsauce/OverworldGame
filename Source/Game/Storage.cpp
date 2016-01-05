@@ -19,7 +19,8 @@ int Storage::addItem(const ItemID item, int amount)
 			if(m_slots[i].getItem() == item)
 			{
 				amount = m_slots[i].inc(amount);
-				if(amount <= 0) {
+				if(amount <= 0)
+				{
 					return 0;
 				}
 			}
@@ -40,7 +41,8 @@ int Storage::removeItem(const ItemID item, int amount)
 		if(m_slots[i].getItem() == item)
 		{
 			amount = m_slots[i].dec(amount);
-			if(amount <= 0) {
+			if(amount <= 0)
+			{
 				return 0;
 			}
 		}

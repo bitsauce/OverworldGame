@@ -5,7 +5,6 @@
 #include "Gui/UiObject.h"
 #include "Blocks/BlockData.h"
 #include "Items/ItemData.h"
-#include "World/World.h"
 #include "Game/Debug.h"
 #include "World/World.h"
 #include "Networking/Server.h"
@@ -13,7 +12,7 @@
 #include "Entities/Entity.h"
 #include "Entities/EntityData.h"
 #include "BlockEntities/BlockEntityData.h"
-#include "GameStates/InGameState.h"
+#include "States/InGameState.h"
 #include "Gui/GameOverlay/GameOverlay.h"
 
 OverworldGame::OverworldGame() :
@@ -49,7 +48,7 @@ void OverworldGame::onStart(GameEvent *e)
 	EntityData::init(this);
 
 	m_world = new World(this);
-	addChildLast(m_world);
+	//addChildLast(m_world);
 
 	// Initialize block and item data
 	//ItemData::init(this);
@@ -61,16 +60,13 @@ void OverworldGame::onStart(GameEvent *e)
 	getInputManager()->addKeybind(KeybindPtr(new Keybind(CGF_KEY_F1, bind(&Debug::debugFunction, m_debug, placeholders::_1))));
 
 	// Setup commander
-	/*m_commander = new Commander(this);
-
-	// Resize the window
-	getWindow()->setSize(1280, 720);
+	m_commander = new Commander(this);
 
 	// Load world "Debug", or create it if it doesn't exists
-	if(!m_world->load("Debug"))
+	/*if(!m_world->load("Debug"))
 	{
 		m_world->create("Debug");
-	}
+	}*/
 	
 	LOG("Hosting local server on port '45556'...");
 
@@ -79,12 +75,12 @@ void OverworldGame::onStart(GameEvent *e)
 	
 	// Join server as client
 	RakNet::BitStream bitStream;
-	bitStream.Write((RakNet::MessageID)ID_PLAYER_JOIN);
+	bitStream.Write((RakNet::MessageID) ID_PLAYER_JOIN);
 	bitStream.Write("Bitsauce");
-	m_server->getRakPeer()->SendLoopback((const char*)bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
+	m_server->getRakPeer()->SendLoopback((const char*) bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
 	
 	// Create game state
-	InGameState * state = new InGameState(this);
+	InGameState *state = new InGameState(this);
 	//m_gameOverlay = new GameOverlay(this, state->getScene(), graphicsContext);
 
 	// Push game state
@@ -147,34 +143,27 @@ void OverworldGame::onEnd(GameEvent *e)
 }
 
 void OverworldGame::pushState(GameState *state)
-{/*
-	assert(state);
-	m_states.push_front(state);
-	state->enter();*/
+{
+	if(state)
+	{
+		addChildFirst(state);
+		state->onEnter();
+	}
 }
 
 void OverworldGame::popState()
-{/*
-	if(!m_states.empty())
-	{
-		GameState *front = m_states.front();
-		front->leave();
-		m_states.remove(front);
-		delete front;
-	}
-	else
-	{
-		end();
-	}*/
+{
+	((GameState*) getChildren().front())->onLeave();
+	removeChildFront();
+	if(getChildren().empty()) end();
 }
 
 GameState *OverworldGame::peekState(int level)
-{/*
-	if(m_states.size() == 0) return 0;
-	list<GameState*>::iterator itr = m_states.begin();
+{
+	if(getChildren().empty()) return 0;
+	list<GameObject*>::iterator itr = getChildren().begin();
 	advance(itr, level);
-	return *itr;
-*/return 0;
+	return (GameState*) *itr;
 }
 
 void OverworldGame::onTick(TickEvent *e)

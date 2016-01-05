@@ -31,6 +31,7 @@ void ItemData::init(OverworldGame *game)
 {
 	s_data[ITEM_NONE] = new ItemData();
 
+#if 0
 	(s_data[ITEM_BLOCK_GRASS] = new BlockItem(game, WORLD_LAYER_MIDDLE, BLOCK_GRASS))->set(ITEM_BLOCK_GRASS, "Grass", "A block of grass", ":/Sprites/ItemIcons/BlockGrass.png", 255);
 	(s_data[ITEM_BLOCK_DIRT] = new BlockItem(game, WORLD_LAYER_MIDDLE, BLOCK_DIRT))->set(ITEM_BLOCK_DIRT, "Dirt", "A block of dirt", ":/Sprites/ItemIcons/BlockDirt.png", 255);
 	(s_data[ITEM_BLOCK_DIRT_BACK] = new BlockItem(game, WORLD_LAYER_BACK, BLOCK_DIRT_BACK))->set(ITEM_BLOCK_DIRT_BACK, "Dirt backdrop", "", ":/Sprites/ItemIcons/BlockDirtBack.png", 255);
@@ -47,4 +48,5 @@ void ItemData::init(OverworldGame *game)
 	
 	(s_data[ITEM_BOW_WOODEN] = new Bow(game))->set(ITEM_BOW_WOODEN, "Bow", "", ":/Sprites/ItemIcons/WoodenBow.png", 1);
 	(s_data[ITEM_ARROW] = new Ammo(game))->set(ITEM_ARROW, "Arrow", "Needs a bow to fire", ":/Sprites/ItemIcons/Arrow.png", 255);
+#endif
 }

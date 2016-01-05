@@ -1,8 +1,8 @@
 #include "EntityData.h"
-#include "Dynamic/Arrow.h"
-#include "Dynamic/Player.h"
-#include "Dynamic/ItemDrop.h"
-#include "Dynamic/Mobs/Zombie.h"
+#include "Arrow.h"
+#include "Player.h"
+#include "ItemDrop.h"
+#include "Mobs/Zombie.h"
 
 //#include "RedCurrantBush.h"
 //#include "CraftingBench.h"
