@@ -28,7 +28,7 @@ public:
 	Texture2DPtr getTexture() const;
 	TextureRegion getTextureRegion(const string &name) const;
 
-	void draw(GraphicsContext &gfxContext);
+	void draw(GraphicsContext *gfxContext);
 
 private:
 	spSkeleton *m_self;

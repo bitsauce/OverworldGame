@@ -163,7 +163,7 @@ TextureRegion Skeleton::getTextureRegion(const string &name) const
 	return TextureRegion();
 }
 
-void Skeleton::draw(GraphicsContext &context)
+void Skeleton::draw(GraphicsContext *context)
 {
 	// Update world transform
 	spSkeleton_updateWorldTransform(m_self);
@@ -265,9 +265,9 @@ void Skeleton::draw(GraphicsContext &context)
 		}*/
 	}
 
-	context.setTexture(texture);
-	context.drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, vertices, 4 * m_self->slotCount, indices, 6 * m_self->slotCount);
-	context.setTexture(0);
+	context->setTexture(texture);
+	context->drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, vertices, 4 * m_self->slotCount, indices, 6 * m_self->slotCount);
+	context->setTexture(0);
 
 	delete[] vertices;
 }

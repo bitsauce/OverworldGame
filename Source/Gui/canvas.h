@@ -7,8 +7,8 @@
 class Canvas : public UiObject
 {
 public:
-	Canvas(Scene *scene);
-	Canvas(Scene *scene, const uint w, const uint h);
+	Canvas();
+	Canvas(const uint width, const uint height);
 
 	Vector2i getCanvasSize() const { return m_canvasSize; }
 

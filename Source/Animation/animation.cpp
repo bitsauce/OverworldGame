@@ -151,8 +151,8 @@ void AnimationState::setAnimation(Animation *anim)
 
 void AnimationState::onTick(TickEvent *e)
 {
-	m_prevTime += delta;
-	spAnimationState_update(m_self, delta);
+	m_prevTime += e->getDelta();
+	spAnimationState_update(m_self, e->getDelta());
 	spAnimationState_apply(m_self, m_data->m_skeleton->m_self);
 }
 
