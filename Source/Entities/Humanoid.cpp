@@ -46,7 +46,7 @@ Humanoid::Humanoid() :
 	m_preAnimationState->setLooping(true);
 
 	// Create render target
-	m_skeletonRenderTarget = new RenderTarget2D(m_skeleton->getTexture());
+	m_skeletonRenderTarget = new RenderTarget2D(m_skeleton->getTexture().get());
 
 	// Set render array to false
 	for(uint i = 0; i < BODY_PART_COUNT; ++i)
@@ -214,7 +214,7 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 		if(m_renderPart[i])
 		{
 			GraphicsContext *context = spriteBatch->getGraphicsContext();
-			Texture2DPtr skeletonAtlas = m_skeleton->getTexture();
+			Resource<Texture2D> skeletonAtlas = m_skeleton->getTexture();
 
 			context->setRenderTarget(m_skeletonRenderTarget);
 
@@ -229,7 +229,7 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 
 			// For every attachment, draw it to the region
 			context->setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
-			for(pair<int, Texture2DPtr> at : m_attachments[i])
+			for(pair<int, Resource<Texture2D>> at : m_attachments[i])
 			{
 				if(!at.second) continue;
 				context->setTexture(at.second);
@@ -253,14 +253,14 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 	gfxContext->setTransformationMatrix(Matrix4());
 }
 
-void Humanoid::setAttachmentTexture(const BodyPart part, const int layer, const Texture2DPtr texture)
+void Humanoid::setAttachmentTexture(const BodyPart part, const int layer, const Resource<Texture2D> texture)
 {
 	// Set attachemnts
 	if(texture)
 	{
 		TextureRegion region = m_skeleton->getTextureRegion(getBodyPartName(part));
 
-		Texture2DPtr skeletonAtlas = m_skeleton->getTexture();
+		Resource<Texture2D> skeletonAtlas = m_skeleton->getTexture();
 		uint x0 = region.uv0.x * skeletonAtlas->getWidth(), y0 = region.uv0.y * skeletonAtlas->getHeight(),
 			x1 = region.uv1.x * skeletonAtlas->getWidth(), y1 = region.uv1.y * skeletonAtlas->getHeight();
 

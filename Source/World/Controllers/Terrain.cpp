@@ -78,7 +78,7 @@ bool Terrain::removeBlockAt(const int x, const int y, WorldLayer layer = WORLD_L
 
 void Terrain::placeStaticEntity(BlockEntity *entity)
 {
-	Vector2i pos = entity->getPosition();
+	Vector2I pos = entity->getPosition();
 	m_chunkManager->getChunkAt((int) floor(pos.x / CHUNK_BLOCKSF), (int) floor(pos.y / CHUNK_BLOCKSF)).addStaticEntity(entity);
 	for(int y = pos.y; y < pos.y + (int) entity->getData()->getHeight(); ++y)
 	{

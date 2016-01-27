@@ -34,7 +34,7 @@ public:
 	}
 
 	ItemID getID() const { return m_id; }
-	Texture2DPtr getIconTexture() const { return m_iconTexture; }
+	Resource<Texture2D> getIconTexture() const { return m_iconTexture; }
 	uint getMaxStack() const { return m_maxStack; }
 
 protected:
@@ -45,7 +45,7 @@ private:
 	string m_name;
 	string m_desc;
 	uint m_maxStack;
-	Texture2DPtr m_iconTexture;
+	Resource<Texture2D> m_iconTexture;
 
 	static void init(OverworldGame *game);
 	static vector<ItemData*> s_data;

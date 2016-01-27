@@ -26,10 +26,10 @@ private:
 	string m_text;
 
 	// Button font
-	FontPtr m_font;
+	Resource<Font> m_font;
 
 	// Button sprite texture
-	Texture2DPtr m_btnTexture;
+	Resource<Texture2D> m_btnTexture;
 		
 	// Button callback
 	function<void()> m_callback;
@@ -39,7 +39,7 @@ private:
 	void *m_userData;
 	
 	// Text texture
-	Texture2DPtr m_textTexture;
+	Resource<Texture2D> m_textTexture;
 		
 	// Button sprite
 	Sprite *m_buttonSprite;

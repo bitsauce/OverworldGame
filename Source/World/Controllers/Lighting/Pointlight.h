@@ -12,7 +12,7 @@ class Pointlight : public LightSource
 {
 	friend class World;
 public:
-	Pointlight(Lighting *lighting, const Vector2 &position, const float radius, const Color &color);
+	Pointlight(Lighting *lighting, const Vector2F &position, const float radius, const Color &color);
 
 	// Draw spotlight
 	void draw(SpriteBatch *spriteBatch);

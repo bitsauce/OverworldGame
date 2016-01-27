@@ -50,7 +50,7 @@ private:
 	set<BlockEntity*> m_blockEntities;
 
 	// BLOCK GRID TEXTURE
-	Texture2DPtr m_blockTexture;
+	Resource<Texture2D> m_blockTexture;
 
 	// MISC
 	bool m_modified;

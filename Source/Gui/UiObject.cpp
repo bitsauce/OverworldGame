@@ -77,17 +77,17 @@ void UiObject::update(const float)
 	}
 }
 
-void UiObject::setPosition(const Vector2 &position)
+void UiObject::setPosition(const Vector2F &position)
 {
 	m_rect.position = position;
 }
 
-Vector2 UiObject::getPosition() const
+Vector2F UiObject::getPosition() const
 {
-	Vector2 parentPos = m_parent ? m_parent->getPosition() : m_rect.position;
-	Vector2 parentSize = m_parent ? m_parent->getSize() : Window::getSize();
-	Vector2 pos = m_rect.position;
-	Vector2 size = m_rect.size;
+	Vector2F parentPos = m_parent ? m_parent->getPosition() : m_rect.position;
+	Vector2F parentSize = m_parent ? m_parent->getSize() : Window::getSize();
+	Vector2F pos = m_rect.position;
+	Vector2F size = m_rect.size;
 
 	parentPos += parentSize * m_anchor;
 	pos -= size * m_anchor;
@@ -95,12 +95,12 @@ Vector2 UiObject::getPosition() const
 	return parentPos + pos * parentSize;
 }
 
-void UiObject::setSize(const Vector2 &size)
+void UiObject::setSize(const Vector2F &size)
 {
 	m_rect.size = size;
 }
 
-Vector2 UiObject::getSize() const
+Vector2F UiObject::getSize() const
 {
 	if(!m_parent) return Vector2(Window::getSize()) * m_rect.size;
 	return m_parent->getSize() * m_rect.size;
@@ -111,7 +111,7 @@ Rect UiObject::getRect() const
 	return Rect(getPosition(), getSize());
 }
 
-void UiObject::setAnchor(const Vector2 &anchor)
+void UiObject::setAnchor(const Vector2F &anchor)
 {
 	m_anchor = anchor;
 }*/

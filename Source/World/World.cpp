@@ -129,14 +129,14 @@ void World::clear()
 
 void World::onTick(TickEvent *e)
 {
-	GameObject::onTick(e);
+	SceneObject::onTick(e);
 }
 
 void World::onDraw(DrawEvent *e)
 {
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
 	spriteBatch->flush();
-	GameObject::onDraw(e);
+	SceneObject::onDraw(e);
 
 	/*spriteBatch->begin();
 

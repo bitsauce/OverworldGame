@@ -9,7 +9,7 @@ class Camera;
 class World;
 class ChunkGenerator;
 
-class ChunkManager : public GameObject
+class ChunkManager : public SceneObject
 {
 	friend class Debug;
 	friend class Lighting;
@@ -97,33 +97,33 @@ private:
 	uint m_optimalChunkCount;
 
 	// Chunk positions
-	Vector2i m_chunkPositions[4];
-	Vector2  m_averagePosition;
+	Vector2I m_chunkPositions[4];
+	Vector2F  m_averagePosition;
 	uint m_chunkPositionIndex;
 
 	// Cirlce load patterns
-	vector<Vector2i> m_circleLoadPattern;
+	vector<Vector2I> m_circleLoadPattern;
 	uint m_circleLoadIndex;
 
 	// Block rendering shaders
-	ShaderPtr m_tileSortShader;
+	Resource<Shader> m_tileSortShader;
 
 	// Global render target
 	RenderTarget2D *m_blocksRenderTarget;
 	RenderTarget2D *m_sortedBlocksRenderTarget[WORLD_LAYER_COUNT];
 
 	// Block rendering shader
-	ShaderPtr m_tileMapShader;
+	Resource<Shader> m_tileMapShader;
 	float m_time;
 
 	// Lighting
 	RenderTarget2D *m_lightingPass0;
 	RenderTarget2D *m_lightingPass1;
 	RenderTarget2D *m_lightingPass2;
-	ShaderPtr m_directionalLightingShader;
-	ShaderPtr m_radialLightingShader;
-	ShaderPtr m_blurHShader;
-	ShaderPtr m_blurVShader;
+	Resource<Shader> m_directionalLightingShader;
+	Resource<Shader> m_radialLightingShader;
+	Resource<Shader> m_blurHShader;
+	Resource<Shader> m_blurVShader;
 	int m_lightRadius;
 	bool m_enabled;
 	bool m_redrawLighting;

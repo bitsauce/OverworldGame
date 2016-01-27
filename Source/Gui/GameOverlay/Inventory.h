@@ -24,7 +24,7 @@ private:
 	GameOverlay *m_gameOverlay;
 	Sprite m_itemSlotSprite;
 	Sprite m_backgroundSprite;
-	FontPtr m_font;
+	Resource<Font> m_font;
 
 	float m_fadeInAlpha;
 	float m_animationDuration;

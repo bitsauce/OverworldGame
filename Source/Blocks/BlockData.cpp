@@ -3,7 +3,7 @@
 
 vector<BlockData*> BlockData::s_blockData(BLOCK_COUNT);
 TextureAtlas *BlockData::s_blockAtlas = nullptr;
-Texture2DPtr BlockData::s_blockDataTexture = nullptr;
+Resource<Texture2D> BlockData::s_blockDataTexture = nullptr;
 
 struct BlockDescriptor
 {
@@ -65,7 +65,7 @@ void BlockData::init()
 	// Fill block UV data
 	for(int id = 0; id < BLOCK_COUNT; ++id)
 	{
-		Vector2i pos = s_blockAtlas->get(id).uv0 * s_blockAtlas->getTexture()->getSize();
+		Vector2I pos = s_blockAtlas->get(id).uv0 * s_blockAtlas->getTexture()->getSize();
 
 		pixelData[0] = uchar(pos.x & 0xFF);
 		pixelData[1] = uchar((pos.x >> 8) & 0xFF);
@@ -75,7 +75,7 @@ void BlockData::init()
 
 		blockDataPixmap.setPixel(id, 0, pixelData);
 	}
-	s_blockDataTexture = Texture2DPtr(new Texture2D(blockDataPixmap));
+	s_blockDataTexture = Resource<Texture2D>(new Texture2D(blockDataPixmap));
 	s_blockDataTexture->setFiltering(Texture2D::NEAREST);
 }
 

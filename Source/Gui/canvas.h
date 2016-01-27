@@ -10,13 +10,13 @@ public:
 	Canvas();
 	Canvas(const uint width, const uint height);
 
-	Vector2i getCanvasSize() const { return m_canvasSize; }
+	Vector2I getCanvasSize() const { return m_canvasSize; }
 
 	void updateSize();
 	void onTick(TickEvent *e);
 
 private:
-	Vector2i m_canvasSize;
+	Vector2I m_canvasSize;
 	bool m_useWindowSize;
 };
 

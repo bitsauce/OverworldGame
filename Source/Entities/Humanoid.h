@@ -60,7 +60,7 @@ public:
 	void onTick(TickEvent *e);
 	void draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha);
 
-	void setAttachmentTexture(const BodyPart part, const int layer, const Texture2DPtr texture);
+	void setAttachmentTexture(const BodyPart part, const int layer, const Resource<Texture2D> texture);
 
 private:
 	string getBodyPartName(const BodyPart part);
@@ -88,7 +88,7 @@ private:
 
 	RenderTarget2D *m_skeletonRenderTarget;
 	bool m_renderPart[BODY_PART_COUNT];
-	map<int, Texture2DPtr> m_attachments[BODY_PART_COUNT];
+	map<int, Resource<Texture2D>> m_attachments[BODY_PART_COUNT];
 };
 
 #endif // HUMANOID_H

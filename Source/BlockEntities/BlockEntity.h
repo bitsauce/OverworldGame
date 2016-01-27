@@ -21,7 +21,7 @@ public:
 	{
 	}
 
-	Vector2i getPosition() const
+	Vector2I getPosition() const
 	{
 		return m_position;
 	}
@@ -42,7 +42,7 @@ public:
 	}
 
 private:
-	const Vector2i m_position;
+	const Vector2I m_position;
 	const BlockEntityData *m_data;
 	
 protected:

@@ -30,7 +30,7 @@ void DynamicEntity::onTick(TickEvent *e)
 	{
 		m_position.y += m_velocity.y;
 		m_position.x += m_velocity.x;
-		/*Vector2 points[4];
+		/*Vector2F points[4];
 		m_sprite->getAABB(points);
 		
 		// Check down

@@ -25,7 +25,7 @@ private:
 	SpriteAnimation m_cracksAnimation;
 	bool m_drawCracks;
 
-	Vector2i m_prevBlockPosition;
+	Vector2I m_prevBlockPosition;
 	float m_mineCounter;
 	float m_mineTime;
 };

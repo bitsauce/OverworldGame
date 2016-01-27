@@ -31,7 +31,7 @@ protected:
 	void charEvent(const uint code);
 	void keyEvent(const KeyEvent & event);
 
-	FontPtr m_font;
+	Resource<Font> m_font;
 	Color m_color;
 	string m_text;
 	int m_cursorPos;

@@ -7,7 +7,7 @@ enum EntityID;
 class World;
 class EntityData;
 
-class Entity : public GameObject
+class Entity : public SceneObject
 {
 public:
 	Entity(World *world, const EntityID id);

@@ -39,8 +39,8 @@ private:
 		Sprite sprite;
 		float depth;
 		float yOffset;
-		Vector2 pos, prevPos;
-		Vector2 texCoord, prevTexCoord;
+		Vector2F pos, prevPos;
+		Vector2F texCoord, prevTexCoord;
 	};
 
 	struct Cloud

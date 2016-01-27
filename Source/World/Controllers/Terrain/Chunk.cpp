@@ -22,7 +22,7 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 	{
 		m_blocks[i] = BLOCK_EMPTY;
 	}
-	m_blockTexture = Texture2DPtr(new Texture2D(CHUNK_BLOCKS, CHUNK_BLOCKS));
+	m_blockTexture = Resource<Texture2D>(new Texture2D(CHUNK_BLOCKS, CHUNK_BLOCKS));
 }
 
 // BLOCK LOADING

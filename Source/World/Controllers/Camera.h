@@ -13,7 +13,7 @@ public:
 	Camera(World *world, InputManager *input, Window *window);
 
 	// Look at point
-	void lookAt(Vector2 worldPoint);
+	void lookAt(Vector2F worldPoint);
 
 	// Entity to follow
 	void setTargetEntity(DynamicEntity *target);
@@ -23,7 +23,7 @@ public:
 	Matrix4 getTransformationMatrix(const float alpha) const;
 
 	// Get camera center
-	Vector2i getCenter(const float alpha) const;
+	Vector2I getCenter(const float alpha) const;
 
 	// Get zoom level
 	void setZoomLevel(const float zoomLevel);
@@ -42,24 +42,24 @@ public:
 	}*/
 
 	// Position
-	void setPosition(const Vector2 &positon)
+	void setPosition(const Vector2F &positon)
 	{
 		m_position = m_prevPosition = positon; 
 	}
 
-	Vector2i getPosition() const;
+	Vector2I getPosition() const;
 	uint getX() const { return getPosition().x; }
 	uint getY() const { return getPosition().y; }
 
 	// Size
-	void setSize(Vector2i size);
-	void setSize(const uint width, const uint height) { setSize(Vector2i(width, height)); }
-	Vector2i getSize() const;
+	void setSize(Vector2I size);
+	void setSize(const uint width, const uint height) { setSize(Vector2I(width, height)); }
+	Vector2I getSize() const;
 	uint getWidth() const { return getSize().x; }
 	uint getHeight() const { return getSize().y; }
 
 	// Get input position
-	Vector2i getInputPosition() const;
+	Vector2I getInputPosition() const;
 
 	// Update
 	void onTick(TickEvent *e);
@@ -78,10 +78,10 @@ private:
 	Window *m_window;
 
 	// Position
-	Vector2 m_position, m_prevPosition, m_velocity;
+	Vector2F m_position, m_prevPosition, m_velocity;
 
 	// Size
-	Vector2i m_size;
+	Vector2I m_size;
 
 	// Zoom
 	float m_zoomLevel;

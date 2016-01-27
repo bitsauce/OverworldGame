@@ -79,14 +79,14 @@ bool Storage::Slot::isEmpty() const
 	return m_item == ITEM_NONE || m_amount <= 0;
 }
 
-void Storage::Slot::drawItem(const Vector2 position, SpriteBatch *spriteBatch, FontPtr font)
+void Storage::Slot::drawItem(const Vector2F position, SpriteBatch *spriteBatch, Resource<Font> font)
 {
 	if(!isEmpty())
 	{
-		spriteBatch->drawSprite(Sprite(ItemData::get(m_item)->getIconTexture(), Rect(position.x + 5.f, position.y + 5.f, 32.f, 32.f)));
+		spriteBatch->drawSprite(Sprite(ItemData::get(m_item)->getIconTexture().get(), RectF(position.x + 5.f, position.y + 5.f, 32.f, 32.f)));
 		if(m_amount > 1)
 		{
-			spriteBatch->drawText(Vector2(position.x + 3.f, position.y + 3.f), util::intToStr(m_amount), font);
+			spriteBatch->drawText(Vector2F(position.x + 3.f, position.y + 3.f), util::intToStr(m_amount), font.get());
 		}
 	}
 }

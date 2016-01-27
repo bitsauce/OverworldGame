@@ -27,7 +27,7 @@ public:
 		return s_blockAtlas;
 	}
 
-	static Texture2DPtr getBlockDataTexture()
+	static Resource<Texture2D> getBlockDataTexture()
 	{
 		return s_blockDataTexture;
 	}
@@ -41,7 +41,7 @@ private:
 	// Static variables
 	static vector<BlockData*> s_blockData;
 	static TextureAtlas *s_blockAtlas;
-	static Texture2DPtr s_blockDataTexture;
+	static Resource<Texture2D> s_blockDataTexture;
 };
 
 #endif // BLOCK_DATA_H

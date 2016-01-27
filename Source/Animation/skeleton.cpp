@@ -10,7 +10,7 @@
 
 void _spAtlasPage_createTexture(spAtlasPage* self, const char* path)
 {
-	Texture2DPtr *texture = new Texture2DPtr(ResourceManager::get<Texture2D>(path));
+	Resource<Texture2D> *texture = new Resource<Texture2D>(Game::GetInstance()->getResourceManager()->get<Texture2D>(path));
 	if(texture)
 	{
 		self->rendererObject = texture;
@@ -22,7 +22,7 @@ void _spAtlasPage_createTexture(spAtlasPage* self, const char* path)
 void _spAtlasPage_disposeTexture(spAtlasPage* self)
 {
 	if(self->rendererObject) {
-		delete ((Texture2DPtr*)self->rendererObject);
+		delete ((Resource<Texture2D>*)self->rendererObject);
 	}
 }
 
@@ -113,15 +113,15 @@ Bone *Skeleton::findBone(const string &name)
 	return m_bones.find(name) != m_bones.end() ? m_bones[name] : nullptr;
 }
 
-void Skeleton::setPosition(const Vector2 &pos)
+void Skeleton::setPosition(const Vector2F &pos)
 {
 	m_self->x = pos.x;
 	m_self->y = pos.y;
 }
 
-Vector2 Skeleton::getPosition() const
+Vector2F Skeleton::getPosition() const
 {
-	return Vector2(m_self->x, m_self->y);
+	return Vector2F(m_self->x, m_self->y);
 }
 
 void Skeleton::setFlipX(const bool flip)
@@ -144,9 +144,9 @@ bool Skeleton::getFlipY() const
 	return m_self->flipY != 0;
 }
 
-Texture2DPtr Skeleton::getTexture() const
+Resource<Texture2D> Skeleton::getTexture() const
 {
-	return *(Texture2DPtr*)m_atlas->pages->rendererObject;
+	return *(Resource<Texture2D>*)m_atlas->pages->rendererObject;
 }
 
 TextureRegion Skeleton::getTextureRegion(const string &name) const
@@ -171,7 +171,7 @@ void Skeleton::draw(GraphicsContext *context)
 	// Draw vertices
 	Vertex *vertices = new Vertex[4 * m_self->slotCount];
 	uint *indices = new uint[6 * m_self->slotCount];
-	Texture2DPtr texture = 0;
+	Resource<Texture2D> texture = 0;
 	for(int i = 0; i < m_self->slotCount; i++)
 	{
 		spSlot *slot = m_self->drawOrder[i];
@@ -181,7 +181,7 @@ void Skeleton::draw(GraphicsContext *context)
 		if(attachment->type == SP_ATTACHMENT_REGION)
 		{
 			spRegionAttachment* regionAttachment = SUB_CAST(spRegionAttachment, attachment);
-			texture = *(Texture2DPtr*)((spAtlasRegion*)regionAttachment->rendererObject)->page->rendererObject;
+			texture = *(Resource<Texture2D>*)((spAtlasRegion*)regionAttachment->rendererObject)->page->rendererObject;
 			spRegionAttachment_computeWorldVertices(regionAttachment, slot->skeleton->x, slot->skeleton->y, slot->bone, m_worldVertices);
 
 			uchar r = uchar(m_self->r * slot->r * 255);
@@ -265,7 +265,7 @@ void Skeleton::draw(GraphicsContext *context)
 		}*/
 	}
 
-	context->setTexture(texture);
+	context->setTexture(texture.get());
 	context->drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, vertices, 4 * m_self->slotCount, indices, 6 * m_self->slotCount);
 	context->setTexture(0);
 

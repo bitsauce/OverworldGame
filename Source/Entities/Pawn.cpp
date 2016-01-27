@@ -40,8 +40,8 @@ Pawn::Pawn(World *world, const EntityID id) :
 	// Add to player list
 	m_world->m_pawns.push_back(this);
 
-	m_humanoid.setAttachmentTexture(Humanoid::ARM_LEFT, 0, ResourceManager::get<Texture2D>(":/Sprites/Characters/Images/larm.png"));
-	m_humanoid.setAttachmentTexture(Humanoid::ARM_RIGHT, 0, ResourceManager::get<Texture2D>(":/Sprites/Characters/Images/rarm.png"));
+	m_humanoid.setAttachmentTexture(Humanoid::ARM_LEFT, 0, Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Characters/Images/larm.png"));
+	m_humanoid.setAttachmentTexture(Humanoid::ARM_RIGHT, 0, Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Characters/Images/rarm.png"));
 }
 
 Pawn::~Pawn()
@@ -66,7 +66,7 @@ Storage::Slot *Pawn::getCurrentItem()
 void Pawn::activateThing(int action)
 {
 	/*if(action != GLFW_PRESS) return;
-	Vector2 inputPosition = m_camera->getInputPosition();
+	Vector2F inputPosition = m_camera->getInputPosition();
 	int blockX = (int)floor(inputPosition.x / BLOCK_PXF), blockY = (int)floor(inputPosition.y / BLOCK_PXF);
 	for(Thing *thing : m_terrain->getChunkLoader()->getChunkAt((int)floor(inputPosition.x / CHUNK_PXF), (int)floor(inputPosition.y / CHUNK_PXF)).getThings())
 	{
@@ -88,7 +88,7 @@ void Pawn::onTick(TickEvent *e)
 		{
 			if(m_canJump)
 			{
-				applyImpulse(Vector2(0.0f, -12.0f));
+				applyImpulse(Vector2F(0.0f, -12.0f));
 				m_jumpTimer = 0.0f;
 				m_canJump = false;
 			}
@@ -104,7 +104,7 @@ void Pawn::onTick(TickEvent *e)
 		{
 			if(m_controller->getInputState(Controller::INPUT_JUMP)) // High/low jumping
 			{
-				applyImpulse(Vector2(0.0f, -2.5f));
+				applyImpulse(Vector2F(0.0f, -2.5f));
 			}
 			m_jumpTimer += e->getDelta();
 		}
@@ -129,7 +129,7 @@ void Pawn::onTick(TickEvent *e)
 	}
 
 	// Walking
-	applyImpulse(Vector2((m_controller->getInputState(Controller::INPUT_MOVE_RIGHT) - m_controller->getInputState(Controller::INPUT_MOVE_LEFT)) * (m_controller->getInputState(Controller::INPUT_RUN) ? 1.5f : 1.0f) * 10.0f, 0.0f));
+	applyImpulse(Vector2F((m_controller->getInputState(Controller::INPUT_MOVE_RIGHT) - m_controller->getInputState(Controller::INPUT_MOVE_LEFT)) * (m_controller->getInputState(Controller::INPUT_RUN) ? 1.5f : 1.0f) * 10.0f, 0.0f));
 	if(getVelocity().x < -5.0f)
 	{
 		setVelocityX(-m_moveSpeed);
@@ -299,7 +299,7 @@ void Pawn::loadSaveData(FileReader &saveData)
 	int x, y;
 	saveData >> x;
 	saveData >> y;
-	setPosition(Vector2((float) x, (float) y));
+	setPosition(Vector2F((float) x, (float) y));
 
 	// Restore hotbar
 	for(uint i = 0; i < 10; ++i)

@@ -6,7 +6,7 @@
 enum GameStateID;
 class Canvas;
 
-class GameState : public GameObject
+class GameState : public SceneObject
 {
 	friend class OverworldGame;
 protected:

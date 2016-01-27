@@ -9,12 +9,12 @@ class Bone
 public:
 	Bone(spBone *bone);
 
-	void setPosition(const Vector2 &position);
+	void setPosition(const Vector2F &position);
 	void setRotation(const float rotation);
-	void setScale(const Vector2 &scale);
-	Vector2 getWorldPosition() const;
+	void setScale(const Vector2F &scale);
+	Vector2F getWorldPosition() const;
 	float getWorldRotation() const;
-	Vector2 getWorldScale() const;
+	Vector2F getWorldScale() const;
 
 private:
 	spBone *m_self;

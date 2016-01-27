@@ -4,15 +4,15 @@
 #include "GameOverlay.h"
 #include "Game/Storage.h"
 #include "Items/ItemData.h"
-#include "Entities/Dynamic/Player.h"
+#include "Entities/Player.h"
 
 Hotbar::Hotbar(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(scene, gameOverlay),
 	m_gameOverlay(gameOverlay),
-	m_backgroundSprite(ResourceManager::get<Texture2D>(":/Sprites/Inventory/Hotbar.png")),
-	m_slotSprite(ResourceManager::get<Texture2D>(":/Sprites/Inventory/ItemSlot.png")),
-	m_slotSelectedSprite(ResourceManager::get<Texture2D>(":/Sprites/Inventory/ItemSlotSelected.png")),
-	m_font(ResourceManager::get<Font>(UI_INVENTORY_FONT))
+	m_backgroundSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Inventory/Hotbar.png")),
+	m_slotSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Inventory/ItemSlot.png")),
+	m_slotSelectedSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Inventory/ItemSlotSelected.png")),
+	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Inventory"))
 {
 	m_font->setColor(Color(0, 0, 0, 255));
 	m_font->setDepth(1.f);
@@ -45,8 +45,8 @@ void Hotbar::onDraw(DrawEvent *e)
 	if(!player || m_gameOverlay->m_hidden) return;
 
 	// Get size and position
-	Vector2 position = getPosition();
-	Vector2 size = getSize();
+	Vector2F position = getPosition();
+	Vector2F size = getSize();
 	
 	m_backgroundSprite.setPosition(position);
 	m_backgroundSprite.setSize(size);
@@ -80,7 +80,7 @@ void Hotbar::keyEvent(const KeyEvent & event)
 	const VirtualKey key = event.getKey();
 	if(key == XD_MOUSE_BUTTON_LEFT || key == XD_MOUSE_BUTTON_RIGHT)
 	{
-		Vector2 position = getPosition();
+		Vector2F position = getPosition();
 		for(uint i = 0; i < 10; ++i)
 		{
 			Rect rect(position.x + 8.f + i * 48.f, position.y + 7.f, 42.f, 42.f);

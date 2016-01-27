@@ -23,7 +23,7 @@ public:
 		int getAmount() const { return m_amount; }
 		bool isEmpty() const;
 
-		void drawItem(const Vector2 position, SpriteBatch *spriteBatch, FontPtr font);
+		void drawItem(const Vector2F position, SpriteBatch *spriteBatch, Resource<Font> font);
 
 	private:
 		ItemID m_item;

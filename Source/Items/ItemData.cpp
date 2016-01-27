@@ -23,7 +23,7 @@ void ItemData::set(const ItemID id, const string &name, const string &desc, cons
 	m_id = id;
 	m_name = name;
 	m_desc = desc;
-	m_iconTexture = ResourceManager::get<Texture2D>(texture);
+	m_iconTexture = Game::GetInstance()->getResourceManager()->get<Texture2D>(texture);
 	m_maxStack = maxStack;
 }
 

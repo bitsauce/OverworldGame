@@ -8,16 +8,16 @@ class RayCast
 public:
 	RayCast(function<bool(int, int)> plotTest);
 
-	bool trace(const Vector2i p0, const Vector2i p1);
+	bool trace(const Vector2I p0, const Vector2I p1);
 
-	vector<Vector2i> getPoints() const { return m_points; }
+	vector<Vector2I> getPoints() const { return m_points; }
 
 private:
 	// Plot
 	bool plot(const int x, const int y);
 
 	// The rasterized points
-	vector<Vector2i> m_points;
+	vector<Vector2I> m_points;
 	
 	// A func call for plot testing
 	function<bool(int, int)> m_plotTest;

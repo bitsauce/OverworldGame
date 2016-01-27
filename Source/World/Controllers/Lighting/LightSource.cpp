@@ -2,12 +2,12 @@
 
 // TODO: Fix lighting bug where moving a lightsource should detach the lighting
 // on all the chunks affected by this light.
-void LightSource::setPosition(const Vector2 &position)
+void LightSource::setPosition(const Vector2F &position)
 {
 	m_position = position;
 }
 
-Vector2 LightSource::getPosition() const
+Vector2F LightSource::getPosition() const
 {
 	return m_position;
 }

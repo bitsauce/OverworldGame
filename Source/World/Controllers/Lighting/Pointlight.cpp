@@ -4,7 +4,7 @@
 Vertex *Pointlight::s_vertices;
 
 // TODO: This is NOT a spotlight. This is a pointlight.
-Pointlight::Pointlight(Lighting *lighting, const Vector2 &position, const float radius, const Color &color) :
+Pointlight::Pointlight(Lighting *lighting, const Vector2F &position, const float radius, const Color &color) :
 	LightSource(position, radius, color)
 {
 	lighting->addLightSource(this);

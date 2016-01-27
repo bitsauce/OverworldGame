@@ -19,13 +19,13 @@ public:
 	Animation *findAnimation(const string &name);
 	Slot *findSlot(const string &name);
 	Bone *findBone(const string &name);
-	void setPosition(const Vector2 &pos);
-	Vector2 getPosition() const;
+	void setPosition(const Vector2F &pos);
+	Vector2F getPosition() const;
 	void setFlipX(const bool flip);
 	bool getFlipX() const;
 	void setFlipY(const bool flip);
 	bool getFlipY() const;
-	Texture2DPtr getTexture() const;
+	Resource<Texture2D> getTexture() const;
 	TextureRegion getTextureRegion(const string &name) const;
 
 	void draw(GraphicsContext *gfxContext);

@@ -11,11 +11,11 @@ GameOverlay::GameOverlay(OverworldGame *game, Scene *scene, GraphicsContext & co
 	m_game(game),
 	m_player(nullptr),
 	m_craftingEnabled(false),
-	m_font(ResourceManager::get<Font>(UI_INVENTORY_FONT)),
+	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Inventory")),
 	m_hidden(false)
 {
-	setPosition(Vector2(0.0f, 0.0f));
-	setSize(Vector2(1.0f, 1.0f));
+	setPosition(Vector2F(0.0f, 0.0f));
+	setSize(Vector2F(1.0f, 1.0f));
 
 	m_hotbar = new Hotbar(scene, this);
 	/*m_healthManaStatus = new HealthManaStatus(scene, this);

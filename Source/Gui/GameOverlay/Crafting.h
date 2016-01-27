@@ -21,7 +21,7 @@ private:
 	Storage m_storage;
 	Sprite m_itemSlotSprite;
 	Sprite m_backgroundSprite;
-	FontPtr m_font;
+	Resource<Font> m_font;
 };
 
 #endif // CRAFTING_H

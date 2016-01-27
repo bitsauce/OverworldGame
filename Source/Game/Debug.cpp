@@ -34,9 +34,9 @@ Debug::Debug(OverworldGame *game) :
 	m_debugChunkLoader(false),
 	m_debugLighting(false),
 	m_blockPainterEnabled(false),
-	m_font(ResourceManager::get<Font>(UI_DEBUG_FONT)),
+	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Debug")),
 	m_variables(),
-	m_bulbSprite(ResourceManager::get<Texture2D>("Sprites/Debug/Icon_Bulb.png")), // TODO: Replace these with colored cricles as they feel out of place
+	m_bulbSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Debug/Bulb").get()), // TODO: Replace these with colored cricles as they feel out of place
 	m_blockPainterTexture(new Texture2D())
 {
 	// Set font color
@@ -199,8 +199,8 @@ void Debug::onDraw(DrawEvent *e)
 
 	// Set debug variables
 	setVariable("Chunks", util::intToStr(m_world->getTerrain()->getChunkManager()->m_chunks.size()) + " / " + util::intToStr(m_world->getTerrain()->getChunkManager()->m_optimalChunkCount));
-	Vector2i center = m_world->getCamera()->getCenter(e->getAlpha());
-	Vector2 inputPosition = m_world->getCamera()->getInputPosition();
+	Vector2I center = m_world->getCamera()->getCenter(e->getAlpha());
+	Vector2F inputPosition = m_world->getCamera()->getInputPosition();
 	setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
 	setVariable("Zoom", util::intToStr(int(m_world->getCamera()->getZoomLevel() * 100)) + "%");
 	setVariable("Block Under Cursor", util::intToStr(m_world->getTerrain()->getBlockAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), WORLD_LAYER_MIDDLE)) + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
@@ -219,25 +219,25 @@ void Debug::onDraw(DrawEvent *e)
 	{
 		drawString += itr->first + ": " + itr->second + "\n";
 	}
-	m_font->draw(spriteBatch, Vector2(0.0f), drawString);
+	m_font->draw(spriteBatch, Vector2F(0.0f), drawString);
 
-	m_font->draw(spriteBatch, Vector2((float) context->getWidth(), 0.0f), DEBUG_FUNCTIONS_STRING, FONT_ALIGN_RIGHT);
+	m_font->draw(spriteBatch, Vector2F((float) context->getWidth(), 0.0f), DEBUG_FUNCTIONS_STRING, FONT_ALIGN_RIGHT);
 
 
 	// Block painter
 	if(m_blockPainterEnabled)
 	{
 		m_blockPainterTexture->updatePixmap(BlockData::get(m_block).getPixmap());
-		spriteBatch->drawText(Vector2(5.0f, context->getHeight() - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (m_game->getInputManager()->getKeyState(CGF_KEY_LCTRL) ? "BACK" : (m_game->getInputManager()->getKeyState(CGF_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font);
-		Sprite blockSprite(m_blockPainterTexture, Rect(159.0f, context->getHeight() - 50.0f, 32.0f, 32.0f), Vector2(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 0.0f, 1.0f, 2.0f / 3.0f));
+		spriteBatch->drawText(Vector2F(5.0f, context->getHeight() - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (m_game->getInputManager()->getKeyState(CGF_KEY_LCTRL) ? "BACK" : (m_game->getInputManager()->getKeyState(CGF_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font.get());
+		Sprite blockSprite(m_blockPainterTexture.get(), RectF(159.0f, context->getHeight() - 50.0f, 32.0f, 32.0f), Vector2F(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 0.0f, 1.0f, 2.0f / 3.0f));
 		spriteBatch->drawSprite(blockSprite);
 	}
 
 	// Draw block grid
 	context->setTransformationMatrix(m_world->getCamera()->getTransformationMatrix(e->getAlpha()));
 	context->setTexture(nullptr);
-	Vector2 position = m_world->getCamera()->getPosition();
-	Vector2 size = m_world->getCamera()->getSize();
+	Vector2F position = m_world->getCamera()->getPosition();
+	Vector2F size = m_world->getCamera()->getSize();
 	if(m_game->getInputManager()->getKeyState(CGF_KEY_K))
 	{
 		int x0 = (int) floor(position.x / BLOCK_PXF);
@@ -276,8 +276,8 @@ void Debug::onDraw(DrawEvent *e)
 	if(m_debugChunkLoader)
 	{
 		// Draw current view
-		Vector2 position = m_world->getCamera()->getCenter(e->getAlpha()) - context->getSize() * 0.5f;
-		Vector2 size = context->getSize();
+		Vector2F position = m_world->getCamera()->getCenter(e->getAlpha()) - context->getSize() * 0.5f;
+		Vector2F size = context->getSize();
 		context->drawRectangle(position.x, position.y, 1.0f / m_world->getCamera()->getZoomLevel(), size.y, Color(127, 127, 255, 255));
 		context->drawRectangle((position.x + size.x), position.y, 1.0f / m_world->getCamera()->getZoomLevel(), size.y, Color(127, 127, 255, 255));
 		context->drawRectangle(position.x, position.y, size.x, 1.0f / m_world->getCamera()->getZoomLevel(), Color(127, 127, 255, 255));
@@ -314,9 +314,9 @@ void Debug::onDraw(DrawEvent *e)
 		spriteBatch->flush();
 		context->disable(GraphicsContext::BLEND);
 		//spriteBatch->drawSprite(Sprite(m_world->getLighting()->m_lightingRenderTarget->getTexture(), Rect(0.0f, 128.0f, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkManager()->m_lightingPass0->getTexture(), Rect(0.0f, 128.0f * 2, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkManager()->m_lightingPass1->getTexture(), Rect(0.0f, 128.0f * 3, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkManager()->m_lightingPass2->getTexture(), Rect(0.0f, 128.0f * 4, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkManager()->m_lightingPass0->getTexture(), RectF(0.0f, 128.0f * 2, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkManager()->m_lightingPass1->getTexture(), RectF(0.0f, 128.0f * 3, 256.0f, 128.0f)));
+		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkManager()->m_lightingPass2->getTexture(), RectF(0.0f, 128.0f * 4, 256.0f, 128.0f)));
 		spriteBatch->flush();
 		context->enable(GraphicsContext::BLEND);
 
@@ -324,7 +324,7 @@ void Debug::onDraw(DrawEvent *e)
 		spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_world->getCamera()->getTransformationMatrix(e->getAlpha())));
 		for(list<LightSource*>::iterator itr = m_world->getLighting()->m_lightSources.begin(); itr != m_world->getLighting()->m_lightSources.end(); ++itr)
 		{
-			m_bulbSprite.setPosition((*itr)->getPosition() * BLOCK_PXF + Vector2(0.5f, 0.5f));
+			m_bulbSprite.setPosition((*itr)->getPosition() * BLOCK_PXF + Vector2F(0.5f, 0.5f));
 			spriteBatch->drawSprite(m_bulbSprite);
 		}
 	}

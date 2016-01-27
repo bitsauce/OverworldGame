@@ -1,0 +1,19 @@
+<resources>
+	<!--Fonts-->
+	<font>
+		<name>Fonts/Big</name>
+		<path>ArialBold27.fnt</path>
+	</font>
+	<font>
+		<name>Fonts/Inventory</name>
+		<path>Consolas11.fnt</path>
+	</font>
+	<font>
+		<name>Fonts/Debug</name>
+		<path>DebugFont.fnt</path>
+	</font>
+	<font>
+		<name>Fonts/Chat</name>
+		<path>DebugFont.fnt</path>
+	</font>
+</resources>

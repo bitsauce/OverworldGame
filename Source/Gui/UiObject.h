@@ -3,7 +3,7 @@
 
 #include "Config.h"
 
-class UiObject : public GameObject
+class UiObject : public SceneObject
 {
 public:
 	UiObject();
@@ -28,18 +28,18 @@ public:
 	virtual void clickEvent() { }
 	
 	// Set/get position
-	void setPosition(const Vector2 &position);
-	Vector2 getPosition() const;
+	void setPosition(const Vector2F &position);
+	Vector2F getPosition() const;
 
 	// Set/get size
-	void setSize(const Vector2 &size);
-	Vector2 getSize() const;
+	void setSize(const Vector2F &size);
+	Vector2F getSize() const;
 
 	// Get rectangle
 	Rect getRect() const;
 
 	// Set anchor
-	void setAnchor(const Vector2 &anchor);
+	void setAnchor(const Vector2F &anchor);
 
 	// Make active
 	void setActive(const bool active)
@@ -59,10 +59,10 @@ protected:
 	//UiObject *m_parent;
 
 	// Rectangle of the object in relative coordinates [0-1]
-	Rect m_rect;
+	RectF m_rect;
 	
 	// Screen anchor [0-1]
-	Vector2 m_anchor;
+	Vector2F m_anchor;
 
 	// Object state
 	bool m_hovered;

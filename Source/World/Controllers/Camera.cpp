@@ -16,14 +16,14 @@ Camera::Camera(World *world, InputManager *input, Window *window) :
 	setZoomLevel(1.0f);
 }
 
-Vector2i Camera::getCenter(const float alpha) const
+Vector2I Camera::getCenter(const float alpha) const
 {
 	return math::lerp(m_prevPosition, m_position, alpha) + m_size * 0.5f;
 }
 
 Matrix4 Camera::getTransformationMatrix(const float alpha) const
 {
-	Vector2 pos = math::lerp(m_prevPosition, m_position, alpha);
+	Vector2F pos = math::lerp(m_prevPosition, m_position, alpha);
 
 	Matrix4 mat;
 	mat.translate(-pos.x, -pos.y, 0.0f);
@@ -31,7 +31,7 @@ Matrix4 Camera::getTransformationMatrix(const float alpha) const
 	return mat;
 }
 
-void Camera::lookAt(Vector2 worldPoint)
+void Camera::lookAt(Vector2F worldPoint)
 {
 	worldPoint -= m_size * 0.5f;
 	m_position = worldPoint;
@@ -42,24 +42,24 @@ void Camera::setTargetEntity(DynamicEntity * target)
 	m_tagetEntity = target;
 }
 
-Vector2i Camera::getPosition() const
+Vector2I Camera::getPosition() const
 {
 	return m_position;
 }
 
-Vector2i Camera::getInputPosition() const
+Vector2I Camera::getInputPosition() const
 {
 	return m_position + m_input->getPosition() / m_zoomLevel;
 }
 
-Vector2i Camera::getSize() const
+Vector2I Camera::getSize() const
 {
 	return m_size;
 }
 
 void Camera::setZoomLevel(const float zoomLevel)
 {
-	Vector2 center = getCenter(0.0f);
+	Vector2F center = getCenter(0.0f);
 	m_zoomLevel = zoomLevel;
 	m_size = m_window->getSize() / m_zoomLevel;
 	lookAt(center);
@@ -119,7 +119,7 @@ void Camera::onDraw(DrawEvent *e)
 
 void Camera::onMouseWheel(MouseEvent *e)
 {
-	/*Vector2 center = getCenter();
+	/*Vector2F center = getCenter();
 	if(delta > 0) zoomIn();
 	if(delta < 0) zoomOut();
 	lookAt(center);*/

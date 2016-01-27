@@ -18,8 +18,8 @@ Background::Background(World *world, Window *window) :
 	m_topColor(255, 255, 255, 255),
 	m_bottomColor(90, 170, 255, 255),
 	m_wind(20.0f),
-	m_sun(ResourceManager::get<Texture2D>(":/Sprites/Sky/Sun.png")),
-	m_moon(ResourceManager::get<Texture2D>(":/Sprites/Sky/Moon.png"))
+	m_sun(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Sky/Sun").get()),
+	m_moon(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Sky/Moon").get())
 {
 	m_sun.setSize(m_sun.getTexture()->getSize());
 	m_moon.setSize(m_moon.getTexture()->getSize());
@@ -33,12 +33,12 @@ Background::Background(World *world, Window *window) :
 	Random rand;
 	for(uint i = 0; i < 10; ++i)
 	{
-		m_clouds.push_back(new Cloud(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Clouds/Cloud_01.png")), 0.2f + rand.nextDouble() * 0.8f, (float) rand.nextInt(0, m_window->getHeight() / 2), (float) rand.nextInt(0, m_window->getWidth())));
+		m_clouds.push_back(new Cloud(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Backgrounds/Clouds/Cloud_01.png").get()), 0.2f + rand.nextDouble() * 0.8f, (float) rand.nextInt(0, m_window->getHeight() / 2), (float) rand.nextInt(0, m_window->getWidth())));
 	}
 
-	m_layers.push_back(new Layer(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Layer_0.png")), 0.5f, -1080.0f));
-	m_layers.push_back(new Layer(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Layer_1.png")), 0.25f));
-	m_layers.push_back(new Layer(Sprite(ResourceManager::get<Texture2D>(":/Sprites/Backgrounds/Layer_2.png")), 0.125f, -100.0f));
+	m_layers.push_back(new Layer(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Backgrounds/Layer_0.png").get()), 0.5f, -1080.0f));
+	m_layers.push_back(new Layer(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Backgrounds/Layer_1.png").get()), 0.25f));
+	m_layers.push_back(new Layer(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Backgrounds/Layer_2.png").get()), 0.125f, -100.0f));
 }
 
 Background::~Background()
@@ -64,7 +64,7 @@ void Background::onTick(TickEvent *e)
 		if(hour >= 6 && hour < 9)
 		{
 			// Percentage of sunrise
-			float minscale = 1.0f - (540 - time) / 180.0f; // Aka. (9*60-time)/(6*60-9*60)
+			float minscale = 1.0f - (540 - time) / 180.0f; // Aka. (9 * 60 - time) / (6 * 60 - 9 * 60)
 			m_topColor = mixColors(Color(255, 255, 255), Color(0, 0, 0), minscale);
 			m_bottomColor = mixColors(Color(90, 170, 255), Color(10, 60, 110), minscale);
 		}
@@ -77,8 +77,8 @@ void Background::onTick(TickEvent *e)
 
 		// Place sun
 		float ang = (1140 - time) / 720.0f;
-		Vector2 windowSize = m_window->getSize();
-		Vector2 sunSize = m_sun.getSize();
+		Vector2F windowSize = m_window->getSize();
+		Vector2F sunSize = m_sun.getSize();
 		m_sun.setPosition(windowSize.x / 2.0f - sunSize.x / 2.0f + cos(PI*ang) * (windowSize.x / 2.0f + sunSize.x / 4.0f), windowSize.y / 2.0f - sin(PI*ang) * (windowSize.y / 2.0f + 64));
 		m_sun.setRotation(180 * (1.0f - ang));
 	}
@@ -88,7 +88,7 @@ void Background::onTick(TickEvent *e)
 		if(hour >= 18 && hour < 21)
 		{
 			// Percentage of sunset
-			float minscale = 1.0f - (1260 - time) / 180.0f; // Aka. (21*60-time)/(18*60-21*60)
+			float minscale = 1.0f - (1260 - time) / 180.0f; // Aka. (21 * 60 - time) / (18 * 60 - 21 * 60)
 			m_topColor = mixColors(Color(0, 0, 0, 255), Color(255, 255, 255), minscale);
 			m_bottomColor = mixColors(Color(10, 60, 110, 255), Color(90, 170, 255), minscale);
 		}
@@ -101,8 +101,8 @@ void Background::onTick(TickEvent *e)
 
 		// Place moon
 		float ang = (1860 - (time >= 1140 ? time : time + 1440)) / 720.0f;
-		Vector2 windowSize = m_window->getSize();
-		Vector2 moonSize = m_moon.getSize();
+		Vector2F windowSize = m_window->getSize();
+		Vector2F moonSize = m_moon.getSize();
 		m_moon.setPosition(windowSize.x / 2.0f - moonSize.x / 2.0f + cos(PI * ang) * (windowSize.x / 2.0f + moonSize.x / 2.0f), windowSize.y / 2.0f - sin(PI * ang) * windowSize.y / 2.0f);
 		m_moon.setRotation(180 * (1.0f - ang));
 	}
@@ -151,8 +151,8 @@ void Background::onDraw(DrawEvent *e)
 	/*for(Layer *layer : m_layers)
 	{
 		float ratio = m_window->getWidth() / 1920.0f;
-		Vector2i cameraPos = m_camera->getCenter(e->getAlpha());
-		Vector2i layerSize = Vector2i(m_window->getWidth(), (int) (layer->sprite.getTexture()->getHeight() * ratio));
+		Vector2I cameraPos = m_camera->getCenter(e->getAlpha());
+		Vector2I layerSize = Vector2I(m_window->getWidth(), (int) (layer->sprite.getTexture()->getHeight() * ratio));
 		layer->sprite.setSize(layerSize);
 		if(cameraPos.y > 0.0f)
 		{

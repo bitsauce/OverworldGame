@@ -28,7 +28,7 @@ void AIController::update()
 
 	if(closestPawn)
 	{
-		Vector2 playerPosition = closestPawn->getCenter(), position = m_pawn->getCenter();
+		Vector2F playerPosition = closestPawn->getCenter(), position = m_pawn->getCenter();
 		if(playerPosition.x < position.x)
 		{
 			setClientInputState(GLFW_PRESS, INPUT_MOVE_LEFT);

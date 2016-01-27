@@ -161,7 +161,7 @@ void OverworldGame::popState()
 GameState *OverworldGame::peekState(int level)
 {
 	if(getChildren().empty()) return 0;
-	list<GameObject*>::iterator itr = getChildren().begin();
+	list<SceneObject*>::iterator itr = getChildren().begin();
 	advance(itr, level);
 	return (GameState*) *itr;
 }
@@ -190,7 +190,7 @@ void OverworldGame::onTick(TickEvent *e)
 
 	// Update debug
 	m_debug->update(delta);*/
-	GameObject::onTick(e);
+	SceneObject::onTick(e);
 }
 
 void OverworldGame::onDraw(DrawEvent *e)
@@ -211,7 +211,7 @@ void OverworldGame::onDraw(DrawEvent *e)
 
 	m_spriteBatch->begin();
 
-	GameObject::onDraw(e);
+	SceneObject::onDraw(e);
 
 	m_spriteBatch->end();
 

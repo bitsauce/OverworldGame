@@ -19,7 +19,6 @@ enum PacketID
 
 #define UI_INVENTORY_FONT ":/Fonts/Consolas11.fnt"
 #define UI_DEBUG_FONT ":/Fonts/DebugFont.fnt"
-#define UI_MENU_BUTTON_FONT ":/Fonts/ArialBold27.fnt"
 #define UI_CHAT_FONT ":/Fonts/DebugFont.fnt"
 
 #define UI_MENU_BUTTON_TEXTURE ":/sprites/gui/menu_button.png"

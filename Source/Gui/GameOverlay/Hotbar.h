@@ -25,7 +25,7 @@ private:
 	Sprite m_backgroundSprite;
 	Sprite m_slotSprite;
 	Sprite m_slotSelectedSprite;
-	FontPtr m_font;
+	Resource<Font> m_font;
 };
 
 #endif // HOTBAR_SLOT_H

@@ -209,9 +209,6 @@
     <ClInclude Include="..\..\Source\World\World.h" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\..\Content\KeyBinds.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\Content\Shaders\BlurH.frag" />
     <None Include="..\..\Content\Shaders\BlurH.vert" />
     <None Include="..\..\Content\Shaders\BlurV.frag" />
@@ -235,6 +232,10 @@
     <None Include="..\..\Content\Shaders\TileSort.frag" />
     <None Include="..\..\Content\Shaders\TileSort.vert" />
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\Data\KeyBinds.xml" />
+    <Xml Include="..\..\Data\Resources.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

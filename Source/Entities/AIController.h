@@ -16,5 +16,5 @@ public:
 
 private:
 	World *m_world;
-	Vector2 m_prevPos;
+	Vector2F m_prevPos;
 };

@@ -24,7 +24,7 @@ void Canvas::updateSize()
 	}
 	else
 	{
-		Vector2 size;
+		Vector2F size;
 		if(Window::getSize().x < Window::getSize().y)
 		{
 			// Fit width and use inverse aspect ratio

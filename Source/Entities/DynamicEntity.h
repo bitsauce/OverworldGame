@@ -15,7 +15,7 @@ public:
 	virtual void onTick(TickEvent *e);
 
 	/* Position functions */
-	void setPosition(const Vector2 &pos)
+	void setPosition(const Vector2F &pos)
 	{
 		m_lastPosition = m_position = pos;
 	}
@@ -45,29 +45,29 @@ public:
 		return getPosition().y;
 	}
 
-	Vector2 getPosition() const
+	Vector2F getPosition() const
 	{
 		return m_position;
 	}
 
-	Vector2 getLastPosition() const
+	Vector2F getLastPosition() const
 	{
 		return m_lastPosition;
 	}
 
-	void moveTo(const Vector2 &pos)
+	void moveTo(const Vector2F &pos)
 	{
 		m_lastPosition = m_position;
 		m_position = pos;
 	}
 
 	/* Size functions */
-	void setSize(const Vector2 &size)
+	void setSize(const Vector2F &size)
 	{
 		m_size = size;
 	}
 
-	Vector2 getSize() const
+	Vector2F getSize() const
 	{
 		return m_size;
 	}
@@ -98,12 +98,12 @@ public:
 	}
 
 	/* Velocity functions */
-	void setVelocity(const Vector2 &velocity)
+	void setVelocity(const Vector2F &velocity)
 	{
 		m_velocity = velocity;
 	}
 
-	Vector2 getVelocity() const
+	Vector2F getVelocity() const
 	{
 		return m_velocity;
 	}
@@ -175,43 +175,43 @@ public:
 		return m_gravityScale;
 	}
 
-	void setAcceleration(const Vector2 &acc)
+	void setAcceleration(const Vector2F &acc)
 	{
 		m_acceleration = acc;
 	}
 
-	Vector2 getAcceleration() const
+	Vector2F getAcceleration() const
 	{
 		return m_acceleration;
 	}
 
-	void applyImpulse(const Vector2 &impulse)
+	void applyImpulse(const Vector2F &impulse)
 	{
 		m_acceleration += impulse;
 	}
 
-	Vector2 getDrawPosition(const float alpha) const
+	Vector2F getDrawPosition(const float alpha) const
 	{
 		return math::lerp(m_lastPosition, m_position, alpha);
 	}
 
-	Rect getRect() const
+	RectF getRect() const
 	{
-		return Rect(getPosition(), getSize());
+		return RectF(getPosition(), getSize());
 	}
 
-	Vector2 getCenter() const
+	Vector2F getCenter() const
 	{
 		return getPosition() + getSize() * 0.5f;
 	}
 
 	bool m_allowRotation;
 private:
-	Vector2 m_acceleration;
-	Vector2 m_velocity;
-	Vector2 m_position;
-	Vector2 m_lastPosition;
-	Vector2 m_size;
+	Vector2F m_acceleration;
+	Vector2F m_velocity;
+	Vector2F m_position;
+	Vector2F m_lastPosition;
+	Vector2F m_size;
 	float m_rotation;
 	float m_gravityScale;
 	uint m_contact;

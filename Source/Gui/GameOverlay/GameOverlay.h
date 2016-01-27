@@ -55,7 +55,7 @@ private:
 
 	bool m_craftingEnabled;
 
-	FontPtr m_font;
+	Resource<Font> m_font;
 };
 
 #endif // GAME_OVERLAY_H

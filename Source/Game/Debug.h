@@ -9,7 +9,7 @@ class World;
 class CommandLine;
 enum BlockID;
 
-class Debug : public GameObject
+class Debug : public SceneObject
 {
 public:
 	Debug(OverworldGame *game);
@@ -26,7 +26,7 @@ public:
 	void debugFunction(KeyEvent *e);
 
 	bool isEnabled() { return m_enabled; }
-	FontPtr m_font;
+	Resource<Font> m_font;
 
 private:
 	// Enabled flag
@@ -35,7 +35,7 @@ private:
 	bool m_debugLighting;
 	bool m_blockPainterEnabled;
 
-	Texture2DPtr m_blockPainterTexture;
+	Resource<Texture2D> m_blockPainterTexture;
 
 	// Debug variables
 	map<string, string> m_variables;

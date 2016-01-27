@@ -22,7 +22,7 @@ public:
 private:
 	OverworldGame *m_game;
 
-	FontPtr m_font;
+	Resource<Font> m_font;
 
 	LineEdit m_chatInput;
 	

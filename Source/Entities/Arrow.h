@@ -8,14 +8,14 @@ class Arrow : public DynamicEntity
 {
 public:
 
-	Arrow(Pawn *owner, World *world, const Vector2 &pos, const Vector2 &dir, const float speed);
+	Arrow(Pawn *owner, World *world, const Vector2F &pos, const Vector2F &dir, const float speed);
 	void onDraw(DrawEvent *e);
 	bool plotTest(int x, int y);
 	void onTick(TickEvent *e);
 
 	static DynamicEntity *Factory(World * world)
 	{
-		return new Arrow(0, world, Vector2(), Vector2(), 20.0f);
+		return new Arrow(0, world, Vector2F(), Vector2F(), 20.0f);
 	}
 
 private:

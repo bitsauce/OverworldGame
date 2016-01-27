@@ -208,6 +208,9 @@
     <Filter Include="Source\Game\States">
       <UniqueIdentifier>{4bcc52c1-95f3-47e0-a056-cb999a629774}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{c85787b7-0ab4-4a77-a7d6-b4dd1158c1c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\Noise\Simplex.h">
@@ -410,9 +413,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\..\Content\KeyBinds.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\Content\Shaders\BlurH.frag">
       <Filter>Shaders</Filter>
     </None>
@@ -480,5 +480,13 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\Data\KeyBinds.xml">
+      <Filter>Data</Filter>
+    </Xml>
+    <Xml Include="..\..\Data\Resources.xml">
+      <Filter>Data</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

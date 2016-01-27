@@ -5,7 +5,7 @@ Bone::Bone(spBone *bone) :
 {
 }
 
-void Bone::setPosition(const Vector2 &position)
+void Bone::setPosition(const Vector2F &position)
 {
 	m_self->x = position.x;
 	m_self->y = position.y;
@@ -16,13 +16,13 @@ void Bone::setRotation(const float rotation)
 	m_self->rotation = rotation;
 }
 
-void Bone::setScale(const Vector2 &scale)
+void Bone::setScale(const Vector2F &scale)
 {
 	m_self->scaleX = scale.x;
 	m_self->scaleY = scale.y;
 }
 
-Vector2 Bone::getWorldPosition() const
+Vector2F Bone::getWorldPosition() const
 {
 	return Vector2(m_self->worldX, m_self->worldY);
 }
@@ -32,7 +32,7 @@ float Bone::getWorldRotation() const
 	return m_self->worldRotation;
 }
 
-Vector2 Bone::getWorldScale() const
+Vector2F Bone::getWorldScale() const
 {
 	return Vector2(m_self->worldScaleX, m_self->worldScaleY);
 }

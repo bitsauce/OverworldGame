@@ -17,7 +17,7 @@ private:
 	OverworldGame * m_game;
 	Sprite m_sprite;
 	SpriteAnimation m_chargeAnim;
-	Texture2DPtr m_attachTexture;
+	Resource<Texture2D> m_attachTexture;
 	bool m_charging;
 	float m_chargeTime;
 };

@@ -43,10 +43,10 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 	m_lightingPass0(nullptr),
 	m_lightingPass1(nullptr),
 	m_lightingPass2(nullptr),
-	m_directionalLightingShader(ResourceManager::get<Shader>(":/Shaders/DirectionalLighting")),
-	m_radialLightingShader(ResourceManager::get<Shader>(":/Shaders/RadialLighting")),
-	m_blurHShader(ResourceManager::get<Shader>(":/Shaders/BlurH")),
-	m_blurVShader(ResourceManager::get<Shader>(":/Shaders/BlurV")),
+	m_directionalLightingShader(Game::GetInstance()->getResourceManager()->get<Shader>(":/Shaders/DirectionalLighting")),
+	m_radialLightingShader(Game::GetInstance()->getResourceManager()->get<Shader>(":/Shaders/RadialLighting")),
+	m_blurHShader(Game::GetInstance()->getResourceManager()->get<Shader>(":/Shaders/BlurH")),
+	m_blurVShader(Game::GetInstance()->getResourceManager()->get<Shader>(":/Shaders/BlurV")),
 	m_time(0.0f)
 {
 	// Setup vertex format
@@ -55,12 +55,12 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 	vertexFormat.set(VERTEX_TEX_COORD, 2);
 
 	// Load tile map shaders
-	m_tileSortShader = ResourceManager::get<Shader>(":/Shaders/TileSort");
+	m_tileSortShader = Game::GetInstance()->getResourceManager()->get<Shader>(":/Shaders/TileSort");
 	m_tileSortShader->bindFragLocation(0, "out_BlockData");
 	m_tileSortShader->bindFragLocation(1, "out_QuadData");
 	m_tileSortShader->link();
 
-	m_tileMapShader = ResourceManager::get<Shader>(":/Shaders/TileMap");
+	m_tileMapShader = Game::GetInstance()->getResourceManager()->get<Shader>(":/Shaders/TileMap");
 
 	// Set block atlas
 	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
@@ -317,8 +317,8 @@ void ChunkManager::onTick(TickEvent *e)
 void ChunkManager::onDraw(DrawEvent *e)
 {
 	// Update active chunk area
-	Vector2 center = m_camera->getCenter(e->getAlpha());
-	Vector2 size = m_applyZoom ? m_camera->getSize() : m_window->getSize();
+	Vector2F center = m_camera->getCenter(e->getAlpha());
+	Vector2F size = m_applyZoom ? m_camera->getSize() : m_window->getSize();
 
 	// Get active area
 	m_activeArea.x0 = (int) floor(center.x / CHUNK_PXF) - (int) floor(size.x * 0.5f / CHUNK_PXF) - 1;
@@ -438,7 +438,7 @@ void ChunkManager::onDraw(DrawEvent *e)
 		m_averagePosition /= 4.0f;
 
 		// Store previous position
-		m_chunkPositions[m_chunkPositionIndex++ % 4] = Vector2i(m_loadingArea.x0, m_loadingArea.x1);
+		m_chunkPositions[m_chunkPositionIndex++ % 4] = Vector2I(m_loadingArea.x0, m_loadingArea.x1);
 		m_circleLoadIndex = 0; // Reset iterator
 
 		// Store previous position
@@ -475,7 +475,7 @@ void ChunkManager::onDraw(DrawEvent *e)
 		for(int i = 0; i < 10; ++i)
 		{
 			// Get next chunk in the circular load pattern
-			Vector2i centerChunkPosition((int) floor(center.x / CHUNK_PXF), (int) floor(center.y / CHUNK_PXF));
+			Vector2I centerChunkPosition((int) floor(center.x / CHUNK_PXF), (int) floor(center.y / CHUNK_PXF));
 			Chunk &chunk = getChunkAt(centerChunkPosition.x + m_circleLoadPattern[m_circleLoadIndex].x, centerChunkPosition.y + m_circleLoadPattern[m_circleLoadIndex].y);
 
 			// Increase load pattern index by 1
@@ -507,7 +507,7 @@ void ChunkManager::onWindowSizeChanged(WindowEvent *e)
 
 struct VectorComparator
 {
-	bool operator() (const Vector2i &v0, const Vector2i &v1)
+	bool operator() (const Vector2I &v0, const Vector2I &v1)
 	{
 		return v0.magnitude() > v1.magnitude();
 	}
@@ -523,12 +523,12 @@ void ChunkManager::updateViewSize(int width, int height)
 	setOptimalChunkCount(loadAreaWidth * loadAreaHeight * 2);
 
 	// Create circle load pattern
-	priority_queue<Vector2i, vector<Vector2i>, VectorComparator> minHeap;
+	priority_queue<Vector2I, vector<Vector2I>, VectorComparator> minHeap;
 	for(int y = (int) -floor(loadAreaHeight * 0.5f); y <= (int) floor(loadAreaHeight * 0.5f); ++y)
 	{
 		for(int x = (int) -floor(loadAreaWidth * 0.5f); x <= (int) floor(loadAreaWidth * 0.5f); ++x)
 		{
-			minHeap.push(Vector2i(x, y));
+			minHeap.push(Vector2I(x, y));
 		}
 	}
 
@@ -623,12 +623,12 @@ void ChunkManager::reattachChunks(GraphicsContext *context)
 		// TODO: It is inefficient to draw so many circles, so concider adding a check to see if redraw is necessary.
 		// (we only need to redraw when a light source is close to the edge)
 		// Center
-		const Vector2 basePos = Vector2(math::mod(light->getPosition().x, width), math::mod(light->getPosition().y, height)) + Vector2(0.5f, 0.5f);
+		const Vector2F basePos = Vector2(math::mod(light->getPosition().x, width), math::mod(light->getPosition().y, height)) + Vector2(0.5f, 0.5f);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", basePos.x / width, 1.0f - (basePos.y / height));
 		context->drawCircle(basePos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Right
-		Vector2 pos = basePos + Vector2(width, 0.0f);
+		Vector2F pos = basePos + Vector2(width, 0.0f);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
 		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 

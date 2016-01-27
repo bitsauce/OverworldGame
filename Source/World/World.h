@@ -20,7 +20,7 @@ class Pawn;
 /**
 * This class is concerned with the objects contained within the game world
 */
-class World : public GameObject
+class World : public SceneObject
 {
 	friend class Server;
 	friend class Pawn;
