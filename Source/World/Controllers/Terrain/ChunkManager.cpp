@@ -64,7 +64,7 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 
 	// Set block atlas
 	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
-	m_tileMapShader->setSampler2D("u_BlockData", BlockData::getBlockDataTexture());
+	m_tileMapShader->setSampler2D("u_BlockData", BlockData::getBlockDataTexture().get());
 	m_tileMapShader->setUniform2f("u_QuadUVs", QUAD_UVS);
 
 	// Set chunk render caches to null (will be updated by updateViewSize)
@@ -596,7 +596,7 @@ void ChunkManager::reattachChunks(GraphicsContext *context)
 	float height = m_loadingArea.getHeight() * CHUNK_BLOCKSF;
 
 	// Sort blocks
-	context->setShader(m_tileSortShader);
+	context->setShader(m_tileSortShader.get());
 	for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 	{
 		m_tileSortShader->setUniform1ui("u_Layer", z);
@@ -623,47 +623,47 @@ void ChunkManager::reattachChunks(GraphicsContext *context)
 		// TODO: It is inefficient to draw so many circles, so concider adding a check to see if redraw is necessary.
 		// (we only need to redraw when a light source is close to the edge)
 		// Center
-		const Vector2F basePos = Vector2(math::mod(light->getPosition().x, width), math::mod(light->getPosition().y, height)) + Vector2(0.5f, 0.5f);
+		const Vector2F basePos = Vector2F(math::mod(light->getPosition().x, width), math::mod(light->getPosition().y, height)) + Vector2F(0.5f, 0.5f);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", basePos.x / width, 1.0f - (basePos.y / height));
 		context->drawCircle(basePos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Right
-		Vector2F pos = basePos + Vector2(width, 0.0f);
+		Vector2F pos = basePos + Vector2F(width, 0.0f);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
 		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Left
-		pos = basePos + Vector2(-width, 0.0f);
+		pos = basePos + Vector2F(-width, 0.0f);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
 		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Bottom
-		pos = basePos + Vector2(0.0f, height);
+		pos = basePos + Vector2F(0.0f, height);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
 		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Up
-		pos = basePos + Vector2(0.0f, -height);
+		pos = basePos + Vector2F(0.0f, -height);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
 		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Top-left
-		pos = basePos + Vector2(-width, -height);
+		pos = basePos + Vector2F(-width, -height);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
 		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Top-right
-		pos = basePos + Vector2(width, -height);
+		pos = basePos + Vector2F(width, -height);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
 		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Bottom-left
-		pos = basePos + Vector2(-width, height);
+		pos = basePos + Vector2F(-width, height);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
 		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
 		// Bottom-right
-		pos = basePos + Vector2(width, height);
+		pos = basePos + Vector2F(width, height);
 		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
 		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 	}

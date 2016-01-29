@@ -72,7 +72,7 @@ void Client::update()
 
 				m_networkObjects.push_back(player);
 
-				player->setPosition(Vector2(0, 0));
+				player->setPosition(Vector2F(0, 0));
 				player->getStorage()->addItem(ITEM_PICKAXE_IRON);
 				player->getStorage()->addItem(ITEM_TORCH, 255);*/
 			}

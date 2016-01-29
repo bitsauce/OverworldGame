@@ -1,23 +1,22 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "Config.h"
 #include "UiObject.h"
 
 class Canvas : public UiObject
 {
 public:
-	Canvas();
-	Canvas(const uint width, const uint height);
+	Canvas(Window *window);
+	Canvas(Window *window, const int width, const int height);
 
-	Vector2I getCanvasSize() const { return m_canvasSize; }
+	void onWindowSizeChanged(WindowEvent *e);
 
-	void updateSize();
-	void onTick(TickEvent *e);
+	Vector2I getDrawPosition();
+	Vector2I getDrawSize();
 
 private:
-	Vector2I m_canvasSize;
-	bool m_useWindowSize;
+	Window *m_window;
+	const int m_canvasWidth, m_canvasHeight;
 };
 
 #endif // CANVAS_H

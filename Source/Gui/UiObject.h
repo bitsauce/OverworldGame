@@ -2,72 +2,131 @@
 #define UI_OBJECT_H
 
 #include "Config.h"
+#include "UiEvents.h"
 
 class UiObject : public SceneObject
 {
 public:
-	UiObject();
+	UiObject(UiObject *parent);
 	virtual ~UiObject();
 
-	// Mouse press event
-	/*virtual void pressEvent() { }
-	virtual void releaseEvent() { }
-	bool isPressed() const;
-	
 	// Mouse hover
-	virtual void hover() { }
-	virtual void unhover() { }
+	virtual void onHover(HoverEvent*)
+	{
+	}
 	bool isHovered() const;
 
 	// Active state
-	virtual void activateEvent() { }
-	virtual void deactivateEvent() { }
-	bool isActive() const;
+	virtual void onFocus(FocusEvent*)
+	{
+	}
+	bool isFocused() const;
+
+	/**
+	* \fn	void UiObject::setFocused(const bool focused);
+	*
+	* \brief	Make active.
+	*
+	* \param	focused	The focused.
+	*/
+
+	void setFocused(const bool focused);
 
 	// Click event
-	virtual void clickEvent() { }
-	
+	virtual void onClick(ClickEvent*)
+	{
+	}
+	bool isPressed() const;
+
+	// Resize event
+	virtual void onResize(ResizeEvent *e)
+	{
+		for(SceneObject *child : getChildren())
+		{
+			UiObject *uiChild = dynamic_cast<UiObject*>(child);
+			if(uiChild)
+			{
+				Vector2I size = uiChild->getDrawSize();
+				ResizeEvent e(size.x, size.y);
+				uiChild->onResize(&e);
+			}
+		}
+	}
+
 	// Set/get position
 	void setPosition(const Vector2F &position);
+	void setPosition(const float x, const float y);
 	Vector2F getPosition() const;
+
+	// Set/get origin
+	void setOrigin(const Vector2F &origin);
+	void setOrigin(const float x, const float y);
+	Vector2F getOrigin() const;
 
 	// Set/get size
 	void setSize(const Vector2F &size);
+	void setSize(const float width, const float height);
 	Vector2F getSize() const;
 
-	// Get rectangle
-	Rect getRect() const;
+	void setRect(const RectF &rect);
+	RectF getRect() const;
 
-	// Set anchor
-	void setAnchor(const Vector2F &anchor);
-
-	// Make active
-	void setActive(const bool active)
-	{
-		m_active = active;
-	}
-	
-	// Update & draw
-	virtual void onTick(TickEvent *e);
-	virtual void onDraw(DrawEvent *e) { }
+	/**
+	* \fn	void UiObject::setAnchor(const float x, const float y);
+	*
+	* \brief	Set anchoring point.
+	*
+	* \param	x	The x coordinate of anchor.
+	* \param	y	The y coordinate of anchor.
 	*/
-protected:
-	// Scene object
-	Scene *m_scene;
 
-	// Parent object
-	//UiObject *m_parent;
+	void setAnchor(const float x, const float y);
+	void setAnchor(const Vector2F &anchor);
+	Vector2F getAnchor() const;
 
-	// Rectangle of the object in relative coordinates [0-1]
+	virtual Vector2I getDrawPosition();
+	virtual Vector2I getDrawSize();
+	RectI getDrawRect();
+
+	virtual void onDraw(DrawEvent *e);
+
+	/**
+	* \fn	virtual void UiObject::onMouseEvent(MouseEvent *e);
+	*
+	* \brief	Override mouse event to handle UI specific functionality.
+	*
+	* \param [in,out]	e	If non-null, the MouseEvent to process.
+	*/
+
+	virtual void onMouseEvent(MouseEvent *e);
+
+private:
+	/** \brief	The parent UiObject. */
+	UiObject * const m_parent;
+
+	/** \brief	Rectangle of the ui element in relative coordinates [0, 1]. */
 	RectF m_rect;
-	
-	// Screen anchor [0-1]
+
+	/** \brief	The click timer. */
+	SimpleTimer m_clickTimer;
+
+	/** \brief	Number of clicks. */
+	int m_clickCount;
+
+	/** \brief	Screen anchor in relative coordinates [0, 1]. */
 	Vector2F m_anchor;
 
-	// Object state
+	/** \brief	The origin. */
+	Vector2F m_origin;
+
+	/** \brief	true if cursor is hovering the ui object. */
 	bool m_hovered;
+
+	/** \brief	true if ui object is pressed. */
 	bool m_pressed;
-	bool m_active;
+
+	/** \brief	true if ui object has focus. */
+	bool m_focused;
 };
 
 #endif // UI_OBJECT_H

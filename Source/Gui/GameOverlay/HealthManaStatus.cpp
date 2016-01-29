@@ -2,53 +2,56 @@
 #include "Constants.h"
 #include "Game/Game.h"
 #include "GameOverlay.h"
-#include "Entities/Dynamic/Player.h"
+#include "Entities/Player.h"
 
 HealthManaStatus::HealthManaStatus(Scene *scene, GameOverlay *gameOverlay) :
-	UiObject(scene, gameOverlay),
+	UiObject(gameOverlay),
 	m_gameOverlay(gameOverlay),
-	m_heartSprite(ResourceManager::get<Texture2D>(":/Sprites/Gui/GameOverlay/Heart.png")),
-	m_manaSprite(ResourceManager::get<Texture2D>(":/Sprites/Gui/GameOverlay/Mana.png")),
+	m_heartSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Gui/GameOverlay/Heart.png").get()),
+	m_manaSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Gui/GameOverlay/Mana.png").get()),
 	m_heartTime(0.0f)
 {
-	m_heartSprite.setSize(Vector2(32.0f));
-	m_heartSprite.setOrigin(Vector2(16.0f));
+	m_heartSprite.setSize(Vector2F(32.0f));
+	m_heartSprite.setOrigin(Vector2F(16.0f));
 	m_heartSprite.getTexture()->setFiltering(Texture2D::LINEAR);
-	m_manaSprite.setSize(Vector2(32.0f));
-	m_manaSprite.setOrigin(Vector2(16.0f));
+	m_manaSprite.setSize(Vector2F(32.0f));
+	m_manaSprite.setOrigin(Vector2F(16.0f));
 	m_manaSprite.getTexture()->setFiltering(Texture2D::LINEAR);
 
-	setAnchor(Vector2(1.0f, 0.0f));
-	setSize(Vector2(338.0f, 168.0f)/m_parent->getSize());
-	setPosition(Vector2(-48.0f, 48.0f)/m_parent->getSize());
+	setAnchor(Vector2F(1.0f, 0.0f));
+	setSize(Vector2F(338.0f, 168.0f) / m_gameOverlay->getSize());
+	setPosition(Vector2F(-48.0f, 48.0f) / m_gameOverlay->getSize());
 }
 
 void HealthManaStatus::onTick(TickEvent *e)
 {
-	setSize(Vector2(338.0f, 168.0f)/m_parent->getSize());
-	m_heartTime += delta;
-	UiObject::update(delta);
+	setSize(Vector2F(338.0f, 168.0f) / m_gameOverlay->getSize());
+	m_heartTime += e->getDelta();
+	UiObject::onTick(e);
 }
 
 void HealthManaStatus::onDraw(DrawEvent *e)
 {
 	if(!m_gameOverlay->getPlayer() || m_gameOverlay->m_hidden) return;
 
-	Vector2 position = getPosition();
-	Vector2 size = getSize();
+	Vector2F position = getPosition();
+	Vector2F size = getSize();
+
+	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
+	GraphicsContext *context = e->getGraphicsContext();
 
 	for(uint i = 0; i < m_gameOverlay->getPlayer()->getMaxHealth()/4; ++i)
 	{
 		uint x = i % 10, y = i / 10;
-		m_heartSprite.setPosition(position + Vector2(x * 34.0f, y * 34.0f));
-		m_heartSprite.setOrigin(Vector2(16));
+		m_heartSprite.setPosition(position + Vector2F(x * 34.0f, y * 34.0f));
+		m_heartSprite.setOrigin(Vector2F(16));
 		if(i == m_gameOverlay->getPlayer()->getMaxHealth() / 4 - 1)
 		{
-			m_heartSprite.setScale(Vector2(sin(m_heartTime*5.0f) * 0.5f + 0.5f));
+			m_heartSprite.setScale(Vector2F(sin(m_heartTime*5.0f) * 0.5f + 0.5f));
 		}
 		else
 		{
-			m_heartSprite.setScale(Vector2(1.0f));
+			m_heartSprite.setScale(Vector2F(1.0f));
 		}
 		spriteBatch->drawSprite(m_heartSprite);
 	}

@@ -137,6 +137,21 @@
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Hotbar.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Chat.cpp">
+      <Filter>Source\Gui\GameOverlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Crafting.cpp">
+      <Filter>Source\Gui\GameOverlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\HealthManaStatus.cpp">
+      <Filter>Source\Gui\GameOverlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Inventory.cpp">
+      <Filter>Source\Gui\GameOverlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Omnicon.cpp">
+      <Filter>Source\Gui\GameOverlay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -410,6 +425,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Game\States\InGameState.h">
       <Filter>Source\Game\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Gui\UiEvents.h">
+      <Filter>Source\Gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

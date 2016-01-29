@@ -9,7 +9,7 @@ class Commander;
 class Chat : public UiObject
 {
 public:
-	Chat(OverworldGame *game, GraphicsContext & context, Scene *scene, GameOverlay *gameOverlay);
+	Chat(OverworldGame *game, GraphicsContext *context, GameOverlay *gameOverlay);
 
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
@@ -24,7 +24,7 @@ private:
 
 	Resource<Font> m_font;
 
-	LineEdit m_chatInput;
+	LineEdit *m_chatInput;
 	
 	bool m_active;
 	float m_fadeTime;

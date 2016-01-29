@@ -25,7 +25,7 @@ void BlockDrawer::onDraw(DrawEvent *e)
 	ChunkManager::ChunkArea area = m_chunkManager->getLoadingArea();
 
 	graphicsContext->setBlendState(BlendState(BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA));
-	graphicsContext->setShader(m_chunkManager->m_tileMapShader);
+	graphicsContext->setShader(m_chunkManager->m_tileMapShader.get());
 	m_chunkManager->m_tileMapShader->setSampler2D("u_SortedBlockTexture", m_chunkManager->m_sortedBlocksRenderTarget[m_layer]->getTexture(0));
 	m_chunkManager->m_tileMapShader->setSampler2D("u_SortedQuadTexture", m_chunkManager->m_sortedBlocksRenderTarget[m_layer]->getTexture(1));
 

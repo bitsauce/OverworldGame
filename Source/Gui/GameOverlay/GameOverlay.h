@@ -17,7 +17,7 @@ class Player;
 class GameOverlay : public UiObject
 {
 public:
-	GameOverlay(OverworldGame *game, Scene *scene, GraphicsContext *graphicsContext);
+	GameOverlay(OverworldGame *game, UiObject *parent, GraphicsContext *graphicsContext);
 	~GameOverlay();
 
 	void onTick(TickEvent *e);

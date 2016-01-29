@@ -6,8 +6,8 @@
 #include "Entities/Player.h"
 #include "Entities/ItemDrop.h"
 
-GameOverlay::GameOverlay(OverworldGame *game, Scene *scene, GraphicsContext & context) :
-	UiObject(scene, scene->getCanvas()),
+GameOverlay::GameOverlay(OverworldGame *game, UiObject *parent, GraphicsContext *context) :
+	UiObject(parent),
 	m_game(game),
 	m_player(nullptr),
 	m_craftingEnabled(false),
@@ -17,7 +17,7 @@ GameOverlay::GameOverlay(OverworldGame *game, Scene *scene, GraphicsContext & co
 	setPosition(Vector2F(0.0f, 0.0f));
 	setSize(Vector2F(1.0f, 1.0f));
 
-	m_hotbar = new Hotbar(scene, this);
+	m_hotbar = new Hotbar(this);
 	/*m_healthManaStatus = new HealthManaStatus(scene, this);
 	m_omnicon = new Omnicon(scene, this);
 	m_inventory = new Inventory(scene, this);
@@ -38,20 +38,21 @@ GameOverlay::~GameOverlay()
 void GameOverlay::onTick(TickEvent *e)
 {
 	if(!m_player) return;
-	Storage::Slot *heldItem = m_player->getHeldItem();
-	if(!heldItem->isEmpty() && !isHovered() && Input::getKeyState(XD_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+	/*Storage::Slot *heldItem = m_player->getHeldItem();
+	if(!heldItem->isEmpty() && !isHovered() && m_game->getInputManager()->getKeyState(MOUSE_BUTTON_RIGHT))
 	{
 		ItemDrop *itemDrop = new ItemDrop(m_game->getWorld(), heldItem->getItem(), heldItem->getAmount());
-		itemDrop->setPosition(m_player->getCenter() - Vector2(0.0f, 20.0f));
-		itemDrop->applyImpulse(Vector2(m_game->getWorld()->getCamera()->getInputPosition() - m_player->getCenter()).normalized() * 4.0f);
+		itemDrop->setPosition(m_player->getCenter() - Vector2F(0.0f, 20.0f));
+		itemDrop->applyImpulse(Vector2F(m_game->getWorld()->getCamera()->getInputPosition() - m_player->getCenter()).normalized() * 4.0f);
 		heldItem->set(ITEM_NONE, 0);
-	}
+	}*/
 }
 
-void GameOverlay::draw(SpriteBatch *spriteBatch, const float delta)
+void GameOverlay::onDraw(DrawEvent *e)
 {
 	if(!m_player) return;
-	m_player->getHeldItem()->drawItem(Input::getPosition() + Vector2(5.0f, 0.0f), spriteBatch, m_font);
+	SpriteBatch *spriteBatch = (SpriteBatch*)e->getUserData();
+	m_player->getHeldItem()->drawItem(m_game->getInputManager()->getPosition() + Vector2F(5.0f, 0.0f), spriteBatch, m_font);
 }
 
 void GameOverlay::toggleCrafting()
@@ -73,11 +74,11 @@ bool GameOverlay::isHovered() const
 	return m_hotbar->isHovered() || m_inventory->isHovered() || m_crafting->isHovered();
 }
 
-void GameOverlay::performSlotAction(Storage::Slot *slot, const VirtualKey type)
+void GameOverlay::performSlotAction(Storage::Slot *slot, const Keycode type)
 {
 	if(!m_player) return;
 	Storage::Slot *heldSlot = m_player->getHeldItem();
-	if(type == XD_MOUSE_BUTTON_LEFT)
+	if(type == MOUSE_BUTTON_LEFT)
 	{
 		if(!heldSlot->isEmpty())
 		{
@@ -104,12 +105,12 @@ void GameOverlay::performSlotAction(Storage::Slot *slot, const VirtualKey type)
 			}
 		}
 	}
-	else if(type == XD_MOUSE_BUTTON_RIGHT)
+	else if(type == MOUSE_BUTTON_RIGHT)
 	{
 		if(heldSlot->isEmpty())
 		{
 			// Right click with no held item...
-			if(Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS)
+			if(KeyEvent::CTRL)
 			{
 				// ... and with CTRL -> Take half of the clicked slot
 				int halfAmount = (int) ceil(slot->getAmount() / 2.f);
@@ -129,7 +130,7 @@ void GameOverlay::performSlotAction(Storage::Slot *slot, const VirtualKey type)
 			// Right click with a held item -> Place one of the held items into the clicked slot
 			if(heldSlot->getItem() == slot->getItem())
 			{
-				if(Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS)
+				if(KeyEvent::CTRL)
 				{
 					int halfAmount = (int) ceil(heldSlot->getAmount() / 2.f);
 					heldSlot->dec(halfAmount - slot->inc(halfAmount));
@@ -144,7 +145,7 @@ void GameOverlay::performSlotAction(Storage::Slot *slot, const VirtualKey type)
 			}
 			else if(slot->isEmpty())
 			{
-				if(Input::getKeyState(XD_KEY_LEFT_CONTROL) == GLFW_PRESS)
+				if(KeyEvent::CTRL)
 				{
 					int halfAmount = (int) ceil(heldSlot->getAmount() / 2.f);
 					slot->set(heldSlot->getItem(), halfAmount);

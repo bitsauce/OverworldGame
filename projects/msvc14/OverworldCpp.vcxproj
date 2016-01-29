@@ -54,7 +54,7 @@
       <SDLCheck>
       </SDLCheck>
       <AdditionalIncludeDirectories>..\..\Source\;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\SDL\include;..\..\..\x2D-Game-Engine\3rdparty\SDL_image;..\..\..\x2D-Game-Engine\3rdparty\SDL_mixer</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>X2D_DEBUG;X2D_IMPORT;_ITERATOR_DEBUG_LEVEL=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CGF_DEBUG;CGF_IMPORT;_ITERATOR_DEBUG_LEVEL=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -76,7 +76,7 @@
       </SDLCheck>
       <AdditionalIncludeDirectories>..\..\Source\;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\x2D-Game-Engine\include;..\..\..\x2D-Game-Engine\3rdparty\SDL\include;..\..\..\x2D-Game-Engine\3rdparty\SDL_image;..\..\..\x2D-Game-Engine\3rdparty\SDL_mixer</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <PreprocessorDefinitions>X2D_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CGF_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -118,8 +118,13 @@
     <ClCompile Include="..\..\Source\Game\Storage.cpp" />
     <ClCompile Include="..\..\Source\Generation\Generator.cpp" />
     <ClCompile Include="..\..\Source\Gui\Canvas.cpp" />
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Chat.cpp" />
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Crafting.cpp" />
     <ClCompile Include="..\..\Source\Gui\GameOverlay\GameOverlay.cpp" />
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\HealthManaStatus.cpp" />
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Hotbar.cpp" />
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Inventory.cpp" />
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Omnicon.cpp" />
     <ClCompile Include="..\..\Source\Gui\UiObject.cpp" />
     <ClCompile Include="..\..\Source\Items\ItemData.cpp" />
     <ClCompile Include="..\..\Source\Networking\Client.cpp" />
@@ -182,6 +187,7 @@
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Inventory.h" />
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Omnicon.h" />
     <ClInclude Include="..\..\source\gui\LineEdit.h" />
+    <ClInclude Include="..\..\Source\Gui\UiEvents.h" />
     <ClInclude Include="..\..\source\gui\UiObject.h" />
     <ClInclude Include="..\..\source\Items\BlockItem.h" />
     <ClInclude Include="..\..\source\items\ItemData.h" />

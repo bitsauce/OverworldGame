@@ -24,7 +24,7 @@ void Bone::setScale(const Vector2F &scale)
 
 Vector2F Bone::getWorldPosition() const
 {
-	return Vector2(m_self->worldX, m_self->worldY);
+	return Vector2F(m_self->worldX, m_self->worldY);
 }
 
 float Bone::getWorldRotation() const
@@ -34,5 +34,5 @@ float Bone::getWorldRotation() const
 
 Vector2F Bone::getWorldScale() const
 {
-	return Vector2(m_self->worldScaleX, m_self->worldScaleY);
+	return Vector2F(m_self->worldScaleX, m_self->worldScaleY);
 }

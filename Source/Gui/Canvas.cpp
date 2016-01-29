@@ -1,49 +1,64 @@
 #include "Canvas.h"
-#include "Constants.h"
 
-Canvas::Canvas() :
-	//UiObject(nullptr),
-	m_canvasSize(1, 1),
-	m_useWindowSize(true)
+Canvas::Canvas(Window *window) :
+	UiObject(0),
+	m_window(window),
+	m_canvasWidth(0),
+	m_canvasHeight(0)
 {
+	WindowEvent e(WindowEvent::SIZE_CHANGED, window, window->getWidth(), window->getHeight());
+	onWindowSizeChanged(&e);
 }
 
-Canvas::Canvas(const uint width, const uint height) :
-	//UiObject(nullptr),
-	m_canvasSize(width, height),
-	m_useWindowSize(false)
+Canvas::Canvas(Window *window, const int width, const int height) :
+	UiObject(0),
+	m_window(window),
+	m_canvasWidth(width),
+	m_canvasHeight(height)
 {
-	//m_anchor.set(0.5f, 0.5f);
+	setAnchor(0.5f, 0.5f);
+	setOrigin(0.5f, 0.5f);
+
+	WindowEvent e(WindowEvent::SIZE_CHANGED, window, window->getWidth(), window->getHeight());
+	onWindowSizeChanged(&e);
 }
 
-void Canvas::updateSize()
+void Canvas::onWindowSizeChanged(WindowEvent *e)
 {
-	/*if(m_useWindowSize)
+	Vector2F size;
+	if(m_canvasWidth <= 0 || m_canvasHeight <= 0)
 	{
-		m_rect.size.set(1.0f, 1.0f);
+		size.set(e->getWidth(), e->getHeight());
+	}
+	else if(e->getWidth() > e->getHeight())
+	{
+		// Fit width and use inverse aspect ratio
+		size.x = (float) min(m_canvasWidth, e->getWidth());
+		size.y = size.x * (float) m_canvasHeight / (float) m_canvasWidth;
 	}
 	else
 	{
-		Vector2F size;
-		if(Window::getSize().x < Window::getSize().y)
-		{
-			// Fit width and use inverse aspect ratio
-			size.x = (float)min(m_canvasSize.x, Window::getSize().x);
-			size.y = size.x * (float)m_canvasSize.y/(float)m_canvasSize.x; 
-		}
-		else
-		{
-			// Fit height and use aspect ratio
-			size.y = (float)min(m_canvasSize.y, Window::getSize().y);
-			size.x = size.y * (float)m_canvasSize.x/(float)m_canvasSize.y; 
-		}
-		m_rect.size = size/Vector2(Window::getSize());
+		// Fit height and use aspect ratio
+		size.y = (float) min(m_canvasHeight, e->getHeight());
+		size.x = size.y * (float) m_canvasWidth / (float) m_canvasHeight;
 	}
-	//Debug::setVaraible("Canvas", "("+util::floatToStr(size.x)+", "+util::floatToStr(size.y)+")");*/
+	setSize(size);
+	UiObject::onWindowSizeChanged(e);
 }
 
-void Canvas::onTick(TickEvent *e)
+Vector2I Canvas::getDrawPosition()
 {
-	updateSize();
-	UiObject::onTick(e);
+	Vector2F parentPos = Vector2F();
+	Vector2F parentSize = m_window->getSize();
+	Vector2F pos = Vector2F();
+	Vector2F size = getSize();
+
+	parentPos += parentSize * Vector2F(0.5f, 0.5f);
+	pos -= size * Vector2F(0.5f, 0.5f);
+	return parentPos + pos;
+}
+
+Vector2I Canvas::getDrawSize()
+{
+	return getSize();
 }

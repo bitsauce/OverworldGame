@@ -5,7 +5,6 @@
 #include <spine/spine.h>
 
 class Skeleton;
-class Event;
 
 class Animation
 {

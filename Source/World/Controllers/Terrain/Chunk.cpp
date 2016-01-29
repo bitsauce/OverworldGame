@@ -157,7 +157,7 @@ void Chunk::addStaticEntity(BlockEntity * entity)
 void Chunk::attach(GraphicsContext *context, const int x, const int y)
 {
 	// Draw blocks
-	context->setTexture(m_blockTexture);
+	context->setTexture(m_blockTexture.get());
 	context->drawRectangle(x * CHUNK_BLOCKS, y * CHUNK_BLOCKS, CHUNK_BLOCKS, CHUNK_BLOCKS);
 	context->setTexture(0);
 

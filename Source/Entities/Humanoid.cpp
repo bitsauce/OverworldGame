@@ -232,7 +232,7 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 			for(pair<int, Resource<Texture2D>> at : m_attachments[i])
 			{
 				if(!at.second) continue;
-				context->setTexture(at.second);
+				context->setTexture(at.second.get());
 				context->drawRectangle(x0, skeletonAtlas->getHeight() - y1, x1 - x0, y1 - y0);
 			}
 
@@ -246,7 +246,7 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 	}
 
 	// Draw skeleton
-	m_skeleton->setPosition(body->getDrawPosition(alpha) + Vector2(body->getSize().x * 0.5f, 48.0f));
+	m_skeleton->setPosition(body->getDrawPosition(alpha) + Vector2F(body->getSize().x * 0.5f, 48.0f));
 	GraphicsContext *gfxContext = spriteBatch->getGraphicsContext();
 	gfxContext->setTransformationMatrix(spriteBatch->getState().projectionMatix);
 	m_skeleton->draw(gfxContext);

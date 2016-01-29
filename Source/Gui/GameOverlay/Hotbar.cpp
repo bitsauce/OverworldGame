@@ -6,12 +6,12 @@
 #include "Items/ItemData.h"
 #include "Entities/Player.h"
 
-Hotbar::Hotbar(Scene *scene, GameOverlay *gameOverlay) :
-	UiObject(scene, gameOverlay),
+Hotbar::Hotbar(GameOverlay *gameOverlay) :
+	UiObject(gameOverlay),
 	m_gameOverlay(gameOverlay),
-	m_backgroundSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Inventory/Hotbar.png")),
-	m_slotSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Inventory/ItemSlot.png")),
-	m_slotSelectedSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Inventory/ItemSlotSelected.png")),
+	m_backgroundSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Inventory/Hotbar.png").get()),
+	m_slotSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Inventory/ItemSlot.png").get()),
+	m_slotSelectedSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Inventory/ItemSlotSelected.png").get()),
 	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Inventory"))
 {
 	m_font->setColor(Color(0, 0, 0, 255));
@@ -23,9 +23,9 @@ Hotbar::Hotbar(Scene *scene, GameOverlay *gameOverlay) :
 	m_backgroundSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 	m_backgroundSprite.setDepth(-2.f);
 
-	setAnchor(Vector2(0.5f, 0.98f));
-	setSize(Vector2(490.f, 56.f)/m_parent->getSize());
-	setPosition(Vector2(.0f));
+	setAnchor(Vector2F(0.5f, 0.98f));
+	setSize(Vector2F(490.f, 56.f) / gameOverlay->getSize());
+	setPosition(Vector2F(.0f));
 }
 
 Hotbar::~Hotbar()
@@ -34,9 +34,9 @@ Hotbar::~Hotbar()
 
 void Hotbar::onTick(TickEvent *e)
 {
-	setSize(Vector2(490.f, 56.f)/m_parent->getSize());
+	setSize(Vector2F(490.f, 56.f) / m_gameOverlay->getSize());
 
-	UiObject::update(delta);
+	UiObject::onTick(e);
 }
 
 void Hotbar::onDraw(DrawEvent *e)
@@ -45,8 +45,10 @@ void Hotbar::onDraw(DrawEvent *e)
 	if(!player || m_gameOverlay->m_hidden) return;
 
 	// Get size and position
-	Vector2F position = getPosition();
-	Vector2F size = getSize();
+	Vector2F position = getDrawPosition();
+	Vector2F size = getDrawSize();
+
+	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
 	
 	m_backgroundSprite.setPosition(position);
 	m_backgroundSprite.setSize(size);
@@ -55,30 +57,30 @@ void Hotbar::onDraw(DrawEvent *e)
 	for(int i = 0; i < 10; ++i)
 	{
 		Sprite &sprite = i == player->getSelectedSlot() ? m_slotSelectedSprite : m_slotSprite;
-		sprite.setPosition(position + Vector2(8.f + i * 48.f, 7.f));
+		sprite.setPosition(position + Vector2F(8.f + i * 48.f, 7.f));
 		spriteBatch->drawSprite(sprite);
-		m_gameOverlay->getPlayer()->getStorage()->getSlotAt(i)->drawItem(position + Vector2(8.f + i * 48.f, 7.f), spriteBatch, m_font);
+		m_gameOverlay->getPlayer()->getStorage()->getSlotAt(i)->drawItem(position + Vector2F(8.f + i * 48.f, 7.f), spriteBatch, m_font);
 	}
 }
 
 void Hotbar::setSelectedSlot(int action, const uint slot)
 {
-	if(action != GLFW_PRESS) return;
+	//if(action != GLFW_PRESS) return;
 	m_gameOverlay->getPlayer()->setSelectedSlot(slot);
 }
 
-void Hotbar::mouseWheelEvent(const int delta)
+void Hotbar::onMouseWheelEvent(MouseEvent *e)
 {
 	Player *player = m_gameOverlay->getPlayer();
-	player->setSelectedSlot(math::mod(player->getSelectedSlot() + (delta < 0 ? 1 : -1), 10));
+	player->setSelectedSlot(math::mod(player->getSelectedSlot() + (e->getWheelY() < 0 ? 1 : -1), 10));
 }
 
-void Hotbar::keyEvent(const KeyEvent & event)
+void Hotbar::onKeyEvent(KeyEvent *e)
 {
-	if(!event.isAction(KeyEvent::PRESS)) return;
+	if(e->getType() != KeyEvent::DOWN) return;
 
-	const VirtualKey key = event.getKey();
-	if(key == XD_MOUSE_BUTTON_LEFT || key == XD_MOUSE_BUTTON_RIGHT)
+	const Keycode key = e->getKeycode();
+	/*if(key == XD_MOUSE_BUTTON_LEFT || key == XD_MOUSE_BUTTON_RIGHT)
 	{
 		Vector2F position = getPosition();
 		for(uint i = 0; i < 10; ++i)
@@ -100,5 +102,5 @@ void Hotbar::keyEvent(const KeyEvent & event)
 				break;
 			}
 		}
-	}
+	}*/
 }

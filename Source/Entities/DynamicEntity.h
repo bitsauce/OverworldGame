@@ -22,7 +22,7 @@ public:
 
 	void setPosition(const float x, const float y)
 	{
-		setPosition(Vector2(x, y));
+		setPosition(Vector2F(x, y));
 	}
 
 	void setX(const float x)
@@ -74,7 +74,7 @@ public:
 
 	void setSize(const float w, const float h)
 	{
-		setSize(Vector2(w, h));
+		setSize(Vector2F(w, h));
 	}
 
 	void setWidth(const float w)
@@ -110,7 +110,7 @@ public:
 
 	void setVelocity(const float x, const float y)
 	{
-		setVelocity(Vector2(x, y));
+		setVelocity(Vector2F(x, y));
 	}
 
 	void setVelocityX(const float x)
@@ -136,7 +136,7 @@ public:
 	/* Acceleration functions */
 	void setAcceleration(const float x, const float y)
 	{
-		setAcceleration(Vector2(x, y));
+		setAcceleration(Vector2F(x, y));
 	}
 
 	void setAccelerationX(const float x)

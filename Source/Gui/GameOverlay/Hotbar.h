@@ -9,7 +9,7 @@ class GameOverlay;
 class Hotbar : public UiObject
 {
 public:
-	Hotbar(Scene *scene, GameOverlay *gameOverlay);
+	Hotbar(GameOverlay *gameOverlay);
 	~Hotbar();
 
 	void onTick(TickEvent *e);
@@ -17,8 +17,8 @@ public:
 
 	void setSelectedSlot(int action, const uint slot);
 	
-	void onKeyEvent(const KeyEvent & event);
-	void onMouseWheelEvent(const int delta);
+	void onKeyEvent(KeyEvent *e);
+	void onMouseWheelEvent(MouseEvent *e);
 
 private:
 	GameOverlay *m_gameOverlay;

@@ -107,7 +107,7 @@ void Server::update()
 					LOG("Creating new player '%s'...", playerName);
 
 					// Give default load out
-					player->setPosition(Vector2(0, 0));
+					player->setPosition(Vector2F(0, 0));
 					player->getStorage()->addItem(ITEM_PICKAXE_IRON);
 					player->getStorage()->addItem(ITEM_AXE_IRON);
 					player->getStorage()->addItem(ITEM_BOW_WOODEN);
