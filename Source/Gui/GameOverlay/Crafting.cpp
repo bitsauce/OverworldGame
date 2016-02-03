@@ -7,8 +7,8 @@ Crafting::Crafting(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(gameOverlay),
 	m_gameOverlay(gameOverlay),
 	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Inventory")),
-	m_itemSlotSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Inventory/ItemSlot.png").get()),
-	m_backgroundSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Inventory/Inventory.png").get()),
+	m_itemSlotSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Inventory/ItemSlot.png")),
+	m_backgroundSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Inventory/Inventory.png")),
 	m_storage(9)
 {
 	m_font->setDepth(1.f);

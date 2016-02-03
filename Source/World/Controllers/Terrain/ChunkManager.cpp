@@ -64,7 +64,7 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 
 	// Set block atlas
 	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
-	m_tileMapShader->setSampler2D("u_BlockData", BlockData::getBlockDataTexture().get());
+	m_tileMapShader->setSampler2D("u_BlockData", BlockData::getBlockDataTexture());
 	m_tileMapShader->setUniform2f("u_QuadUVs", QUAD_UVS);
 
 	// Set chunk render caches to null (will be updated by updateViewSize)

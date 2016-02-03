@@ -46,7 +46,7 @@ Humanoid::Humanoid() :
 	m_preAnimationState->setLooping(true);
 
 	// Create render target
-	m_skeletonRenderTarget = new RenderTarget2D(m_skeleton->getTexture().get());
+	m_skeletonRenderTarget = new RenderTarget2D(m_skeleton->getTexture());
 
 	// Set render array to false
 	for(uint i = 0; i < BODY_PART_COUNT; ++i)
@@ -232,7 +232,7 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 			for(pair<int, Resource<Texture2D>> at : m_attachments[i])
 			{
 				if(!at.second) continue;
-				context->setTexture(at.second.get());
+				context->setTexture(at.second);
 				context->drawRectangle(x0, skeletonAtlas->getHeight() - y1, x1 - x0, y1 - y0);
 			}
 

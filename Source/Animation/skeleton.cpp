@@ -265,7 +265,7 @@ void Skeleton::draw(GraphicsContext *context)
 		}*/
 	}
 
-	context->setTexture(texture.get());
+	context->setTexture(texture);
 	context->drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, vertices, 4 * m_self->slotCount, indices, 6 * m_self->slotCount);
 	context->setTexture(0);
 
