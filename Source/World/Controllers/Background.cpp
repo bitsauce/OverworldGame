@@ -18,8 +18,8 @@ Background::Background(World *world, Window *window) :
 	m_topColor(255, 255, 255, 255),
 	m_bottomColor(90, 170, 255, 255),
 	m_wind(20.0f),
-	m_sun(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Sky/Sun")),
-	m_moon(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Sky/Moon"))
+	m_sun(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Sun")),
+	m_moon(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Moon"))
 {
 	m_sun.setSize(m_sun.getTexture()->getSize());
 	m_moon.setSize(m_moon.getTexture()->getSize());
@@ -33,12 +33,12 @@ Background::Background(World *world, Window *window) :
 	Random rand;
 	for(uint i = 0; i < 10; ++i)
 	{
-		m_clouds.push_back(new Cloud(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Backgrounds/Clouds/Cloud_01.png")), 0.2f + rand.nextDouble() * 0.8f, (float) rand.nextInt(0, m_window->getHeight() / 2), (float) rand.nextInt(0, m_window->getWidth())));
+		m_clouds.push_back(new Cloud(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Clouds/0")), 0.2f + rand.nextDouble() * 0.8f, (float) rand.nextInt(0, m_window->getHeight() / 2), (float) rand.nextInt(0, m_window->getWidth())));
 	}
 
-	m_layers.push_back(new Layer(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Backgrounds/Layer_0.png")), 0.5f, -1080.0f));
-	m_layers.push_back(new Layer(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Backgrounds/Layer_1.png")), 0.25f));
-	m_layers.push_back(new Layer(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Backgrounds/Layer_2.png")), 0.125f, -100.0f));
+	m_layers.push_back(new Layer(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Layer/0")), 0.5f, -1080.0f));
+	m_layers.push_back(new Layer(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Layer/1")), 0.25f));
+	m_layers.push_back(new Layer(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Layer/2")), 0.125f, -100.0f));
 }
 
 Background::~Background()

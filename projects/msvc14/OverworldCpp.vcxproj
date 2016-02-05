@@ -237,7 +237,6 @@
     <None Include="..\..\Content\Shaders\TileMap.vert" />
     <None Include="..\..\Content\Shaders\TileSort.frag" />
     <None Include="..\..\Content\Shaders\TileSort.vert" />
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\Data\KeyBinds.xml" />

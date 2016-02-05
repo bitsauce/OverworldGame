@@ -16,4 +16,55 @@
 		<name>Fonts/Chat</name>
 		<path>DebugFont.fnt</path>
 	</font>
+	
+	<!--Textures-->
+	<texture>
+		<name>Sprites/Backgrounds/Sun</name>
+		<path>Sprites/Backgrounds/Sun.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Backgrounds/Moon</name>
+		<path>Sprites/Backgrounds/Moon.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Backgrounds/Layer/0</name>
+		<path>Sprites/Backgrounds/Layer_0.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Backgrounds/Layer/1</name>
+		<path>Sprites/Backgrounds/Layer_1.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Backgrounds/Layer/2</name>
+		<path>Sprites/Backgrounds/Layer_2.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Backgrounds/Clouds/0</name>
+		<path>Sprites/Backgrounds/Clouds/Cloud_0.png</path>
+	</texture>
+	<texture>
+		<name>Shaders/DirectionalLighting</name>
+		<vertexShader>Shaders/DirectionalLighting.vert</vertexShader>
+		<fragmentShader>Shaders/DirectionalLighting.frag</fragmentShader>
+	</texture>
+	<texture>
+		<name>Shaders/RadialLighting</name>
+		<vertexShader>Shaders/RadialLighting.vert</vertexShader>
+		<fragmentShader>Shaders/RadialLighting.frag</fragmentShader>
+	</texture>
+	<texture>
+		<name>Shaders/BlurH</name>
+		<vertexShader>Shaders/BlurH.vert</vertexShader>
+		<fragmentShader>Shaders/BlurH.frag</fragmentShader>
+	</texture>
+	<texture>
+		<name>Shaders/BlurV</name>
+		<vertexShader>Shaders/BlurV.vert</vertexShader>
+		<fragmentShader>Shaders/BlurV.frag</fragmentShader>
+	</texture>
+	<texture>
+		<name>Shaders/TileSort</name>
+		<vertexShader>Shaders/TileSort.vert</vertexShader>
+		<fragmentShader>Shaders/TileSort.frag</fragmentShader>
+	</texture>
 </resources>

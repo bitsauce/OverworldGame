@@ -497,7 +497,6 @@
     <None Include="..\..\Content\Shaders\TileSort.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\Data\KeyBinds.xml">
