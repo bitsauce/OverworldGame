@@ -196,9 +196,6 @@
     <Filter Include="Source\Items\Weapons">
       <UniqueIdentifier>{db3e34cc-807e-4345-8f45-54ab11c8212c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{af129b37-b8d0-498e-98c3-cd3641a2a8b3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Gui\GameOverlay">
       <UniqueIdentifier>{0fd551cc-bb89-4e7f-b942-9ddd7dd4cb8c}</UniqueIdentifier>
     </Filter>
@@ -225,6 +222,9 @@
     </Filter>
     <Filter Include="Data">
       <UniqueIdentifier>{c85787b7-0ab4-4a77-a7d6-b4dd1158c1c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Shaders">
+      <UniqueIdentifier>{af129b37-b8d0-498e-98c3-cd3641a2a8b3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -432,70 +432,70 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Content\Shaders\BlurH.frag">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\BlurH.vert">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\BlurV.frag">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\BlurV.vert">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\DirectionalLighting.frag">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\DirectionalLighting.vert">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\DrawChunk.frag">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\DrawChunk.vert">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\GodRays.frag">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\GodRays.vert">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\Outline.frag">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\Outline.vert">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\RadialLighting.frag">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\RadialLighting.vert">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\Simplex3d.frag">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\Simplex3d.vert">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\Simplex3DBlend.frag">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\Simplex3DBlend.vert">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\TileMap.frag">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\TileMap.vert">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\TileSort.frag">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Content\Shaders\TileSort.vert">
-      <Filter>Shaders</Filter>
+      <Filter>Data\Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
