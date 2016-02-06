@@ -42,29 +42,34 @@
 		<name>Sprites/Backgrounds/Clouds/0</name>
 		<path>Sprites/Backgrounds/Clouds/Cloud_0.png</path>
 	</texture>
-	<texture>
+	<shader>
 		<name>Shaders/DirectionalLighting</name>
-		<vertexShader>Shaders/DirectionalLighting.vert</vertexShader>
-		<fragmentShader>Shaders/DirectionalLighting.frag</fragmentShader>
-	</texture>
-	<texture>
+		<vertexFilePath>Shaders/DirectionalLighting.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/DirectionalLighting.frag</fragmentFilePath>
+	</shader>
+	<shader>
 		<name>Shaders/RadialLighting</name>
-		<vertexShader>Shaders/RadialLighting.vert</vertexShader>
-		<fragmentShader>Shaders/RadialLighting.frag</fragmentShader>
-	</texture>
-	<texture>
+		<vertexFilePath>Shaders/RadialLighting.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/RadialLighting.frag</fragmentFilePath>
+	</shader>
+	<shader>
 		<name>Shaders/BlurH</name>
-		<vertexShader>Shaders/BlurH.vert</vertexShader>
-		<fragmentShader>Shaders/BlurH.frag</fragmentShader>
-	</texture>
-	<texture>
+		<vertexFilePath>Shaders/BlurH.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/BlurH.frag</fragmentFilePath>
+	</shader>
+	<shader>
 		<name>Shaders/BlurV</name>
-		<vertexShader>Shaders/BlurV.vert</vertexShader>
-		<fragmentShader>Shaders/BlurV.frag</fragmentShader>
-	</texture>
-	<texture>
+		<vertexFilePath>Shaders/BlurV.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/BlurV.frag</fragmentFilePath>
+	</shader>
+	<shader>
 		<name>Shaders/TileSort</name>
-		<vertexShader>Shaders/TileSort.vert</vertexShader>
-		<fragmentShader>Shaders/TileSort.frag</fragmentShader>
-	</texture>
+		<vertexFilePath>Shaders/TileSort.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/TileSort.frag</fragmentFilePath>
+	</shader>
+	<shader>
+		<name>Shaders/TileMap</name>
+		<vertexFilePath>Shaders/TileMap.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/TileMap.frag</fragmentFilePath>
+	</shader>
 </resources>

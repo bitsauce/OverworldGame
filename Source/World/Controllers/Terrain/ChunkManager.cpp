@@ -43,10 +43,10 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 	m_lightingPass0(nullptr),
 	m_lightingPass1(nullptr),
 	m_lightingPass2(nullptr),
-	m_directionalLightingShader(Game::GetInstance()->getResourceManager()->get<Shader>(":/Shaders/DirectionalLighting")),
-	m_radialLightingShader(Game::GetInstance()->getResourceManager()->get<Shader>(":/Shaders/RadialLighting")),
-	m_blurHShader(Game::GetInstance()->getResourceManager()->get<Shader>(":/Shaders/BlurH")),
-	m_blurVShader(Game::GetInstance()->getResourceManager()->get<Shader>(":/Shaders/BlurV")),
+	m_directionalLightingShader(Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/DirectionalLighting")),
+	m_radialLightingShader(Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/RadialLighting")),
+	m_blurHShader(Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/BlurH")),
+	m_blurVShader(Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/BlurV")),
 	m_time(0.0f)
 {
 	// Setup vertex format
@@ -55,12 +55,12 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 	vertexFormat.set(VERTEX_TEX_COORD, 2);
 
 	// Load tile map shaders
-	m_tileSortShader = Game::GetInstance()->getResourceManager()->get<Shader>(":/Shaders/TileSort");
+	m_tileSortShader = Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/TileSort");
 	m_tileSortShader->bindFragLocation(0, "out_BlockData");
 	m_tileSortShader->bindFragLocation(1, "out_QuadData");
 	m_tileSortShader->link();
 
-	m_tileMapShader = Game::GetInstance()->getResourceManager()->get<Shader>(":/Shaders/TileMap");
+	m_tileMapShader = Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/TileMap");
 
 	// Set block atlas
 	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
@@ -596,7 +596,7 @@ void ChunkManager::reattachChunks(GraphicsContext *context)
 	float height = m_loadingArea.getHeight() * CHUNK_BLOCKSF;
 
 	// Sort blocks
-	context->setShader(m_tileSortShader.get());
+	context->setShader(m_tileSortShader);
 	for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 	{
 		m_tileSortShader->setUniform1ui("u_Layer", z);
