@@ -229,7 +229,7 @@ void Debug::onDraw(DrawEvent *e)
 	{
 		m_blockPainterTexture->updatePixmap(BlockData::get(m_block).getPixmap());
 		spriteBatch->drawText(Vector2F(5.0f, context->getHeight() - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (m_game->getInputManager()->getKeyState(CGF_KEY_LCTRL) ? "BACK" : (m_game->getInputManager()->getKeyState(CGF_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font.get());
-		Sprite blockSprite(m_blockPainterTexture, RectF(159.0f, context->getHeight() - 50.0f, 32.0f, 32.0f), Vector2F(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 0.0f, 1.0f, 2.0f / 3.0f));
+		Sprite blockSprite(m_blockPainterTexture, RectF(159.0f, context->getHeight() - 50.0f, 32.0f, 32.0f), Vector2F(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 1.0f / 3.0f, 1.0f, 1.0f));
 		spriteBatch->drawSprite(blockSprite);
 	}
 

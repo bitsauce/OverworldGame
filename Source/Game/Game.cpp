@@ -57,8 +57,6 @@ void OverworldGame::onStart(GameEvent *e)
 	m_debug = new Debug(this);
 	addChildLast(m_debug);
 
-	getInputManager()->addKeybind(KeybindPtr(new Keybind(CGF_KEY_F1, bind(&Debug::debugFunction, m_debug, placeholders::_1))));
-
 	// Setup commander
 	m_commander = new Commander(this);
 
@@ -130,6 +128,21 @@ void OverworldGame::onStart(GameEvent *e)
 	inputContext = Input::getContext("chat");
 	inputContext->bind("send_message", bind(&Chat::sendMessage, m_gameOverlay->getChat(), placeholders::_1), true);
 	inputContext->bind("escape_chat", bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1), true);*/
+
+	InputContext *inputContext = getInputManager()->getContextByName("game");
+	inputContext->getKeybind("debug_func_1")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
+	inputContext->getKeybind("debug_func_2")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
+	inputContext->getKeybind("debug_func_3")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
+	inputContext->getKeybind("debug_func_4")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
+	inputContext->getKeybind("debug_func_5")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
+	inputContext->getKeybind("debug_func_6")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
+	inputContext->getKeybind("debug_func_7")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
+	inputContext->getKeybind("debug_func_8")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
+	inputContext->getKeybind("debug_func_9")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
+	inputContext->getKeybind("debug_func_10")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
+	inputContext->getKeybind("debug_func_11")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
+	inputContext->getKeybind("debug_func_12")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
+	getInputManager()->setContext(inputContext);
 }
 
 void OverworldGame::onEnd(GameEvent *e)
