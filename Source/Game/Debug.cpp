@@ -170,24 +170,22 @@ void Debug::debugFunction(KeyEvent *e)
 void Debug::onTick(TickEvent *e)
 {
 	if(!m_enabled) return;
-	/*
+
 	if(m_blockPainterEnabled)
 	{
 		// Block painting
 		WorldLayer layer = WORLD_LAYER_MIDDLE;
 		if(m_game->getInputManager()->getKeyState(CGF_KEY_LSHIFT)) layer = WORLD_LAYER_FRONT;
 		if(m_game->getInputManager()->getKeyState(CGF_KEY_LCTRL)) layer = WORLD_LAYER_BACK;
-		if(m_game->getInputManager()->getKeyState(CGF_MOUSE_BUTTON_LEFT))
+		if(m_game->getInputManager()->getKeyState(CGF_MOUSE_BUTTON_LEFT) || m_game->getInputManager()->getKeyState(CGF_MOUSE_BUTTON_RIGHT))
 		{
-			int x = (int) floor(m_world->getCamera()->getInputPosition().x / BLOCK_PXF), y = (int) floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF);
-
-			m_world->getTerrain()->setBlockAt(x, y, m_block, layer);
+			m_world->getTerrain()->setBlockAt(
+				(int) floor(m_world->getCamera()->getInputPosition().x / BLOCK_PXF),
+				(int) floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF),
+				m_game->getInputManager()->getKeyState(CGF_MOUSE_BUTTON_LEFT) ? m_block : BLOCK_EMPTY,
+				layer);
 		}
-		else if(Input::getKeyState(XD_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
-		{
-			m_world->getTerrain()->setBlockAt((int) floor((m_world->getCamera()->getPosition().x + Input::getPosition().x) / BLOCK_PXF), (int) floor((m_world->getCamera()->getPosition().y + Input::getPosition().y) / BLOCK_PXF), BLOCK_EMPTY, layer);
-		}
-	}*/
+	}
 }
 
 void Debug::onDraw(DrawEvent *e)

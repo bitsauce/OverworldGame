@@ -78,7 +78,7 @@ void GameOverlay::performSlotAction(Storage::Slot *slot, const Keycode type)
 {
 	if(!m_player) return;
 	Storage::Slot *heldSlot = m_player->getHeldItem();
-	if(type == MOUSE_BUTTON_LEFT)
+	if(type == CGF_MOUSE_BUTTON_LEFT)
 	{
 		if(!heldSlot->isEmpty())
 		{
@@ -105,7 +105,7 @@ void GameOverlay::performSlotAction(Storage::Slot *slot, const Keycode type)
 			}
 		}
 	}
-	else if(type == MOUSE_BUTTON_RIGHT)
+	else if(type == CGF_MOUSE_BUTTON_RIGHT)
 	{
 		if(heldSlot->isEmpty())
 		{
