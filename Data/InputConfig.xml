@@ -39,7 +39,7 @@
 		<!-- Camera -->
 		<bind>
 			<name>camera_zoom_in</name>
-			<key>equal</key>
+			<key>equals</key>
 		</bind>
 		<bind>
 			<name>camera_zoom_out</name>

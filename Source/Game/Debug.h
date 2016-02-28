@@ -18,8 +18,8 @@ public:
 	void onDraw(DrawEvent *e);
 	void toggle();
 
-	void nextBlock(int action);
-	void prevBlock(int action);
+	void nextBlock(KeyEvent *e);
+	void prevBlock(KeyEvent *e);
 
 	void setVariable(const string &name, const string &value);
 

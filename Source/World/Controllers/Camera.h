@@ -29,17 +29,8 @@ public:
 	void setZoomLevel(const float zoomLevel);
 	float getZoomLevel() const;
 
-	/*void zoomIn(int action)
-	{
-		if(action != GLFW_PRESS) return;
-		setZoomLevel(m_zoomLevel*2.0f);
-	}
-
-	void zoomOut(int action)
-	{
-		if(action != GLFW_PRESS) return;
-		setZoomLevel(m_zoomLevel*0.5f);
-	}*/
+	void zoomIn(KeyEvent *e);
+	void zoomOut(KeyEvent *e);
 
 	// Position
 	void setPosition(const Vector2F &positon)

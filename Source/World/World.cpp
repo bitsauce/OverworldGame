@@ -36,10 +36,8 @@ World::World(Game *game) :
 		addChildLast(m_blockDrawers[i]);
 	}
 
-	//insertChildBefore(m_chunkB);
-	
-	//m_lighting = new Lighting(this);
-	//addChildFirst(m_lighting);
+	m_lighting = new Lighting(this);
+	addChildLast(m_lighting);
 }
 
 void World::create(const string &name)

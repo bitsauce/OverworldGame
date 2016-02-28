@@ -63,11 +63,28 @@ void Camera::setZoomLevel(const float zoomLevel)
 	m_zoomLevel = zoomLevel;
 	m_size = m_window->getSize() / m_zoomLevel;
 	lookAt(center);
+	m_prevPosition = m_position;
 }
 
 float Camera::getZoomLevel() const
 {
 	return m_zoomLevel;
+}
+
+void Camera::zoomIn(KeyEvent *e)
+{
+	if(e->getType() == KeyEvent::DOWN)
+	{
+		setZoomLevel(m_zoomLevel * 2.0f);
+	}
+}
+
+void Camera::zoomOut(KeyEvent *e)
+{
+	if(e->getType() == KeyEvent::DOWN)
+	{
+		setZoomLevel(m_zoomLevel * 0.5f);
+	}
 }
 
 void Camera::onTick(TickEvent *e)

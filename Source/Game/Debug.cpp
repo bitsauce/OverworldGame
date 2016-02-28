@@ -227,7 +227,7 @@ void Debug::onDraw(DrawEvent *e)
 	{
 		m_blockPainterTexture->updatePixmap(BlockData::get(m_block).getPixmap());
 		spriteBatch->drawText(Vector2F(5.0f, context->getHeight() - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (m_game->getInputManager()->getKeyState(CGF_KEY_LCTRL) ? "BACK" : (m_game->getInputManager()->getKeyState(CGF_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font.get());
-		Sprite blockSprite(m_blockPainterTexture, RectF(159.0f, context->getHeight() - 50.0f, 32.0f, 32.0f), Vector2F(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 1.0f / 3.0f, 1.0f, 1.0f));
+		Sprite blockSprite(m_blockPainterTexture, RectF(m_font->getStringWidth("Current block:"), context->getHeight() - 60.0f, 32.0f, 32.0f), Vector2F(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 1.0f / 3.0f, 1.0f, 1.0f));
 		spriteBatch->drawSprite(blockSprite);
 	}
 
@@ -333,24 +333,26 @@ void Debug::toggle()
 	m_enabled = !m_enabled;
 }
 
-void Debug::nextBlock(int action)
+void Debug::nextBlock(KeyEvent *e)
 {
-	/*if(action != GLFW_PRESS) return;
-	if(!m_enabled) return;
-	if((m_block = BlockID(m_block + 1)) >= BLOCK_COUNT)
+	if(m_enabled && e->getType() == KeyEvent::DOWN)
 	{
-		m_block = BlockID(BLOCK_ENTITY + 1);
-	}*/
+		if((m_block = BlockID(m_block + 1)) >= BLOCK_COUNT)
+		{
+			m_block = BlockID(BLOCK_ENTITY + 1);
+		}
+	}
 }
 
-void Debug::prevBlock(int action)
+void Debug::prevBlock(KeyEvent *e)
 {
-	/*if(action != GLFW_PRESS) return;
-	if(!m_enabled) return;
-	if((m_block = BlockID(m_block - 1)) <= BLOCK_ENTITY)
+	if(m_enabled && e->getType() == KeyEvent::DOWN)
 	{
-		m_block = BlockID(BLOCK_COUNT - 1);
-	}*/
+		if((m_block = BlockID(m_block - 1)) <= BLOCK_ENTITY)
+		{
+			m_block = BlockID(BLOCK_COUNT - 1);
+		}
+	}
 }
 
 void Debug::setVariable(const string &name, const string &value)

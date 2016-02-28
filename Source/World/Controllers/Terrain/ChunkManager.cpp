@@ -605,7 +605,7 @@ void ChunkManager::reattachChunks(GraphicsContext *context)
 	}
 
 	// Directional light
-	/*m_directionalLightingShader->setUniform1f("u_OffsetY", (m_loadingArea.y0 * CHUNK_BLOCKSF - 32.0f) / (m_loadingArea.getHeight() * CHUNK_BLOCKS));
+	m_directionalLightingShader->setUniform1f("u_OffsetY", (m_loadingArea.y0 * CHUNK_BLOCKSF - 32.0f) / (m_loadingArea.getHeight() * CHUNK_BLOCKS));
 	m_directionalLightingShader->setUniform1f("u_Direction", 0.0174532925f * 180.0f * (m_world->getTimeOfDay()->isDay() ? (1140.0f - m_world->getTimeOfDay()->getTime()) : (1860.0f - (m_world->getTimeOfDay()->getTime() >= 1140.0f ? m_world->getTimeOfDay()->getTime() : m_world->getTimeOfDay()->getTime() + 1440.0f))) / 720.0f);
 	context->setRenderTarget(m_lightingPass0);
 	context->setShader(m_directionalLightingShader);
@@ -677,7 +677,7 @@ void ChunkManager::reattachChunks(GraphicsContext *context)
 	// Blur vertically (pass 2)
 	context->setRenderTarget(m_lightingPass2);
 	context->setShader(m_blurVShader);
-	context->drawRectangle(0.0f, 0.0f, width, height);*/
+	context->drawRectangle(0.0f, 0.0f, width, height);
 	
 	context->setShader(0);
 	context->setRenderTarget(0);

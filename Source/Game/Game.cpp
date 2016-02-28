@@ -90,9 +90,6 @@ void OverworldGame::onStart(GameEvent *e)
 	inputContext->bind("toggle_full_screen", bind(&OverworldGame::toggleFullscreen, this, placeholders::_1), true);
 	inputContext->bind("take_screen_shot", bind(&OverworldGame::takeScreenshot, this, placeholders::_1), true);
 
-	inputContext->bind("camera_zoom_in", bind(&Camera::zoomIn, m_world->getCamera(), placeholders::_1), true);
-	inputContext->bind("camera_zoom_out", bind(&Camera::zoomOut, m_world->getCamera(), placeholders::_1), true);
-
 	inputContext->bind("show_omnicon", bind(&Omnicon::toggle, m_gameOverlay->getOmnicon(), placeholders::_1), true);
 	inputContext->bind("show_inventory", bind(&Inventory::toggle, m_gameOverlay->getInventory(), placeholders::_1), true);
 	inputContext->bind("show_chat", bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1), true);
@@ -108,21 +105,6 @@ void OverworldGame::onStart(GameEvent *e)
 	inputContext->bind("hotbar_select_8", bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 8), true);
 	inputContext->bind("hotbar_select_9", bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 9), true);
 
-	inputContext->bind("next_block", bind(&Debug::nextBlock, m_debug, placeholders::_1), true);
-	inputContext->bind("prev_block", bind(&Debug::prevBlock, m_debug, placeholders::_1), true);
-	inputContext->bind("debug_func_1", bind(&Debug::debugFunction, m_debug, placeholders::_1, 1), true);
-	inputContext->bind("debug_func_2", bind(&Debug::debugFunction, m_debug, placeholders::_1, 2), true);
-	inputContext->bind("debug_func_3", bind(&Debug::debugFunction, m_debug, placeholders::_1, 3), true);
-	inputContext->bind("debug_func_4", bind(&Debug::debugFunction, m_debug, placeholders::_1, 4), true);
-	inputContext->bind("debug_func_5", bind(&Debug::debugFunction, m_debug, placeholders::_1, 5), true);
-	inputContext->bind("debug_func_6", bind(&Debug::debugFunction, m_debug, placeholders::_1, 6), true);
-	inputContext->bind("debug_func_7", bind(&Debug::debugFunction, m_debug, placeholders::_1, 7), true);
-	inputContext->bind("debug_func_8", bind(&Debug::debugFunction, m_debug, placeholders::_1, 8), true);
-	inputContext->bind("debug_func_9", bind(&Debug::debugFunction, m_debug, placeholders::_1, 9), true);
-	inputContext->bind("debug_func_10", bind(&Debug::debugFunction, m_debug, placeholders::_1, 10), true);
-	inputContext->bind("debug_func_11", bind(&Debug::debugFunction, m_debug, placeholders::_1, 11), true);
-	inputContext->bind("debug_func_12", bind(&Debug::debugFunction, m_debug, placeholders::_1, 12), true);
-
 	Input::setContext(inputContext);
 
 	inputContext = Input::getContext("chat");
@@ -130,6 +112,10 @@ void OverworldGame::onStart(GameEvent *e)
 	inputContext->bind("escape_chat", bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1), true);*/
 
 	InputContext *inputContext = getInputManager()->getContextByName("game");
+
+	inputContext->getKeybind("camera_zoom_in")->setFunction(bind(&Camera::zoomIn, m_world->getCamera(), placeholders::_1));
+	inputContext->getKeybind("camera_zoom_out")->setFunction(bind(&Camera::zoomOut, m_world->getCamera(), placeholders::_1));
+
 	inputContext->getKeybind("debug_func_1")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
 	inputContext->getKeybind("debug_func_2")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
 	inputContext->getKeybind("debug_func_3")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
@@ -142,6 +128,9 @@ void OverworldGame::onStart(GameEvent *e)
 	inputContext->getKeybind("debug_func_10")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
 	inputContext->getKeybind("debug_func_11")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
 	inputContext->getKeybind("debug_func_12")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
+	inputContext->getKeybind("next_block")->setFunction(bind(&Debug::nextBlock, m_debug, placeholders::_1));
+	inputContext->getKeybind("prev_block")->setFunction(bind(&Debug::prevBlock, m_debug, placeholders::_1));
+
 	getInputManager()->setContext(inputContext);
 }
 

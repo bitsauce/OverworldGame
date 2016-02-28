@@ -24,19 +24,19 @@ void Lighting::onDraw(DrawEvent *e)
 
 	GraphicsContext *context = e->getGraphicsContext();
 	
-	/*ChunkManager::ChunkArea area = m_terrain->getChunkManager()->getLoadingArea();
+	ChunkManager::ChunkArea area = m_world->getTerrain()->getChunkManager()->getLoadingArea();
 
 	// Re-enable alpha blending
 	context->setBlendState(BlendState::PRESET_MULTIPLY);
 
-	context->setViewMatrix(m_world->getCamera()->getTransformationMatrix(e->getAlpha()));
-	context->setTexture(m_terrain->getChunkManager()->m_lightingPass2->getTexture());
+	context->setTransformationMatrix(m_world->getCamera()->getTransformationMatrix(e->getAlpha()));
+	context->setTexture(m_world->getTerrain()->getChunkManager()->m_lightingPass2->getTexture());
 
 	float u0 = area.x0 / (float) area.getWidth(),
-		v0 = -area.y0 / (float) area.getHeight(),
+		v0 = area.y0 / (float) area.getHeight(),
 		u1 = u0 + 1.0f,
 		v1 = v0 + 1.0f;
 
 	context->drawRectangle(area.x0 * CHUNK_PXF, area.y0 * CHUNK_PXF, area.getWidth() * CHUNK_PXF, area.getHeight() * CHUNK_PXF, Color(255), TextureRegion(u0, v0, u1, v1));
-	context->setBlendState(BlendState::PRESET_ALPHA_BLEND);*/
+	context->setBlendState(BlendState::PRESET_ALPHA_BLEND);
 }
