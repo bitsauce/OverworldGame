@@ -10,6 +10,14 @@ Color mixColors(Color c1, Color c2, const float a)
 	return c1 * a + c2 * (1.0f - a);
 }
 
+struct CloudSort
+{
+	inline bool operator() (Cloud *cloud1, Cloud *cloud2)
+	{
+		return (cloud1->getDepth() < cloud2->getDepth());
+	}
+};
+
 Background::Background(World *world, Window *window) :
 	Entity(world, ENTITY_BACKGROUND),
 	m_camera(world->getCamera()),
@@ -30,11 +38,11 @@ Background::Background(World *world, Window *window) :
 	m_sun.setDepth(-2.0f);
 	m_moon.setDepth(-2.0f);
 
-	Random rand;
 	for(uint i = 0; i < 10; ++i)
 	{
-		m_clouds.push_back(new Cloud(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Clouds/0")), 0.2f + rand.nextDouble() * 0.8f, (float) rand.nextInt(0, m_window->getHeight() / 2), (float) rand.nextInt(0, m_window->getWidth())));
+		m_clouds.push_back(new Cloud(m_rand, this));
 	}
+	sort(m_clouds.begin(), m_clouds.end(), CloudSort());
 
 	m_layers.push_back(new Layer(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Layer/0")), 0.5f, -1080.0f));
 	m_layers.push_back(new Layer(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Layer/1")), 0.25f));
@@ -110,13 +118,7 @@ void Background::onTick(TickEvent *e)
 	// Apply wind
 	for(Cloud *cloud : m_clouds)
 	{
-		float x = cloud->sprite.getX() + m_wind * cloud->depth * e->getDelta();
-		if(x > m_window->getWidth())
-		{
-			x = -cloud->sprite.getWidth();
-			cloud->sprite.setY(Random().nextInt(0, m_window->getHeight() / 2));
-		}
-		cloud->sprite.setX(x);
+		cloud->onTick(e);
 	}
 }
 
@@ -169,6 +171,6 @@ void Background::onDraw(DrawEvent *e)
 	// Draw clouds
 	for(Cloud *cloud : m_clouds)
 	{
-		spriteBatch->drawSprite(cloud->sprite);
+		cloud->onDraw(e);
 	}
 }
