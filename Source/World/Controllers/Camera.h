@@ -39,8 +39,8 @@ public:
 	}
 
 	Vector2I getPosition() const;
-	uint getX() const { return getPosition().x; }
-	uint getY() const { return getPosition().y; }
+	int getX() const { return getPosition().x; }
+	int getY() const { return getPosition().y; }
 
 	// Size
 	void setSize(Vector2I size);

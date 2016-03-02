@@ -25,7 +25,7 @@ Background::Background(World *world, Window *window) :
 	m_timeOfDay(world->getTimeOfDay()),
 	m_topColor(255, 255, 255, 255),
 	m_bottomColor(90, 170, 255, 255),
-	m_wind(20.0f),
+	m_wind(5.0f),
 	m_sun(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Sun")),
 	m_moon(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Moon"))
 {
@@ -173,4 +173,56 @@ void Background::onDraw(DrawEvent *e)
 	{
 		cloud->onDraw(e);
 	}
+}
+
+#include "Game/Game.h"
+
+Cloud::Cloud(Random &rand, Background * background) :
+	m_game((OverworldGame*) Game::GetInstance()),
+	m_background(background),
+	m_rand(rand)
+{
+	setImage(0);
+	setDepth(0.2f + m_rand.nextDouble() * 0.8f);
+	m_position.x = m_prevPosition.x = (float) m_rand.nextInt(0, m_game->getWindow()->getWidth());
+	m_height = m_rand.nextDouble();
+}
+
+void Cloud::setImage(const int num)
+{
+	m_sprite.setTexture(m_game->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Clouds/" + util::intToStr(num)));
+}
+
+void Cloud::setDepth(const float depth)
+{
+	m_sprite.setSize(m_sprite.getTexture()->getSize() * depth);
+	m_depth = depth;
+}
+
+float Cloud::getDepth() const
+{
+	return m_depth;
+}
+
+void Cloud::onTick(TickEvent *e)
+{
+	m_prevPosition = m_position;
+
+	// Adjust X
+	if(m_position.x > m_game->getWindow()->getWidth())
+	{
+		m_position.x = m_prevPosition.x = -m_sprite.getWidth();
+		m_position.y = m_rand.nextInt(0, m_game->getWindow()->getHeight() / 2);
+	}
+	m_position.x += m_background->getWind() * m_depth * e->getDelta();
+
+	// Adjust Y
+	m_position.y = -m_game->getWorld()->getCamera()->getY() * m_depth * 0.25f;
+}
+
+void Cloud::onDraw(DrawEvent *e)
+{
+	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
+	m_sprite.setPosition(math::lerp(m_prevPosition, m_position, e->getAlpha()));
+	spriteBatch->drawSprite(m_sprite);
 }
