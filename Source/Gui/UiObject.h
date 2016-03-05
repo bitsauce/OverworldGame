@@ -11,31 +11,25 @@ public:
 	virtual ~UiObject();
 
 	// Mouse hover
-	virtual void onHover(HoverEvent*)
-	{
-	}
+	virtual void onHover(HoverEvent*) { }
 	bool isHovered() const;
 
 	// Active state
-	virtual void onFocus(FocusEvent*)
-	{
-	}
+	virtual void onFocus(FocusEvent*) { }
 	bool isFocused() const;
 
 	/**
-	* \fn	void UiObject::setFocused(const bool focused);
-	*
-	* \brief	Make active.
-	*
-	* \param	focused	The focused.
-	*/
+	 * \fn	void UiObject::setFocused(const bool focused);
+	 *
+	 * \brief	Make active.
+	 *
+	 * \param	focused	The focused.
+	 */
 
 	void setFocused(const bool focused);
 
 	// Click event
-	virtual void onClick(ClickEvent*)
-	{
-	}
+	virtual void onClick(ClickEvent*) { }
 	bool isPressed() const;
 
 	// Resize event
@@ -72,13 +66,13 @@ public:
 	RectF getRect() const;
 
 	/**
-	* \fn	void UiObject::setAnchor(const float x, const float y);
-	*
-	* \brief	Set anchoring point.
-	*
-	* \param	x	The x coordinate of anchor.
-	* \param	y	The y coordinate of anchor.
-	*/
+	 * \fn	void UiObject::setAnchor(const float x, const float y);
+	 *
+	 * \brief	Set anchoring point.
+	 *
+	 * \param	x	The x coordinate of anchor.
+	 * \param	y	The y coordinate of anchor.
+	 */
 
 	void setAnchor(const float x, const float y);
 	void setAnchor(const Vector2F &anchor);
@@ -91,15 +85,15 @@ public:
 	virtual void onDraw(DrawEvent *e);
 
 	/**
-	* \fn	virtual void UiObject::onMouseEvent(MouseEvent *e);
-	*
-	* \brief	Override mouse event to handle UI specific functionality.
-	*
-	* \param [in,out]	e	If non-null, the MouseEvent to process.
-	*/
+	 * \fn	virtual void UiObject::onMouseEvent(MouseEvent *e);
+	 *
+	 * \brief	Override mouse event to handle UI specific functionality.
+	 *
+	 * \param [in,out]	e	If non-null, the MouseEvent to process.
+	 */
 
 	virtual void onMouseEvent(MouseEvent *e);
-
+	
 private:
 	/** \brief	The parent UiObject. */
 	UiObject * const m_parent;
@@ -121,7 +115,7 @@ private:
 
 	/** \brief	true if cursor is hovering the ui object. */
 	bool m_hovered;
-
+	
 	/** \brief	true if ui object is pressed. */
 	bool m_pressed;
 

@@ -159,8 +159,8 @@ void UiObject::onDraw(DrawEvent *e)
 
 	if(m_parent)
 	{
-	RectI parentRect = m_parent->getDrawRect();
-	g->drawCircle(parentRect.position + parentRect.size * m_anchor, 2.5f, 5, Color(255, 20, 20, 255));
+		RectI parentRect = m_parent->getDrawRect();
+		g->drawCircle(parentRect.position + parentRect.size * m_anchor, 2.5f, 5, Color(255, 20, 20, 255));
 	}*/
 
 	SceneObject::onDraw(e);

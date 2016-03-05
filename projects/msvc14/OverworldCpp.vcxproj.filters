@@ -152,6 +152,9 @@
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Omnicon.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\LineEdit.cpp">
+      <Filter>Source\Gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />

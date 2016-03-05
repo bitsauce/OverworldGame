@@ -1,8 +1,7 @@
+#include "Game/Game.h"
 #include "Background.h"
 #include "TimeOfDay.h"
-
 #include "Constants.h"
-
 #include "World/World.h"
 
 Color mixColors(Color c1, Color c2, const float a)
@@ -174,8 +173,6 @@ void Background::onDraw(DrawEvent *e)
 		cloud->onDraw(e);
 	}
 }
-
-#include "Game/Game.h"
 
 Cloud::Cloud(Random &rand, Background * background) :
 	m_game((OverworldGame*) Game::GetInstance()),

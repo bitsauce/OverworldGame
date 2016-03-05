@@ -7,7 +7,7 @@ Chat::Chat(OverworldGame *game, GraphicsContext *context, GameOverlay *gameOverl
 	UiObject(gameOverlay),
 	m_game(game),
 	m_active(false),
-	m_chatInput(0),
+	m_chatInput(context, this),
 	m_fadeTime(0.0f),
 	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Chat")),
 	m_redrawText(true),
@@ -16,39 +16,40 @@ Chat::Chat(OverworldGame *game, GraphicsContext *context, GameOverlay *gameOverl
 	m_chatLinePos(0)
 {
 	setAnchor(Vector2F(0.0f, 0.4f));
-	setSize(Vector2F(CHAT_WIDTHF, CHAT_HEIGHTF) / gameOverlay->getSize());
+	setSize(Vector2F(CHAT_WIDTHF, CHAT_HEIGHTF) / gameOverlay->getDrawSize());
 	setPosition(Vector2F(0.01f, 0.0f));
 
-	/*m_chatInput.setAnchor(Vector2F(0.0f, 1.0f));
-	m_chatInput.setSize(Vector2F(CHAT_WIDTHF, CHAT_TEXT_INPUT_HEIGHTF) / getSize());
+	m_chatInput.setAnchor(Vector2F(0.0f, 1.0f));
+	m_chatInput.setSize(Vector2F(CHAT_WIDTHF, CHAT_TEXT_INPUT_HEIGHTF) / getDrawSize());
 	m_chatInput.setPosition(Vector2F(0.0f, 0.0f));
-	*/
+	
 	m_chatRenderTarget = new RenderTarget2D(CHAT_WIDTH, CHAT_HEIGHT);
 	m_font->setColor(Color(255, 255, 255, 255));
 }
 
-void Chat::toggle(int action)
+void Chat::toggle(KeyEvent *e)
 {
-	//if(action != GLFW_PRESS) return;
+	if(e->getType() != KeyEvent::DOWN) return;
+
 	m_active = !m_active;
 
 	if(m_active)
 	{
-		//Input::setContext(Input::getContext("chat"));
+		m_game->getInputManager()->setContext(m_game->getInputManager()->getContextByName("chat"));
 		m_fadeTime = 0.0f;
 	}
 	else
 	{
-		//Input::setContext(Input::getContext("game"));
+		m_game->getInputManager()->setContext(m_game->getInputManager()->getContextByName("game"));
 		m_fadeTime = CHAT_FADE_TIME;
 	}
 }
 
-void Chat::sendMessage(int action)
+void Chat::sendMessage(KeyEvent *e)
 {
-	if(!m_active /*|| action != GLFW_PRESS*/) return;
+	if(!m_active || e->getType() != KeyEvent::DOWN) return;
 
-	string chatStr;// = m_chatInput.getText();
+	string chatStr = m_chatInput.getText();
 	if(!chatStr.empty())
 	{
 		if(chatStr[0] == '/')
@@ -62,33 +63,35 @@ void Chat::sendMessage(int action)
 		}
 		m_redrawText = true;
 	}
-	//m_chatInput.setText("");
-	toggle(action);
+	m_chatInput.setText("");
+	toggle(e);
 }
 
-void Chat::insertMessage(const string & message)
+void Chat::insertMessage(const string &message)
 {
 	m_messages[m_chatLinePos++ % 100] = message;
 }
 
 void Chat::onTick(TickEvent *e)
 {
-	//setSize(Vector2F(CHAT_WIDTHF, CHAT_HEIGHTF) / m_parent->getSize());
-	//m_chatInput.setSize(Vector2F(CHAT_WIDTHF, CHAT_TEXT_INPUT_HEIGHTF) / getSize());
+	//setSize(Vector2F(CHAT_WIDTHF, CHAT_HEIGHTF) / ((UiObject*)getParent())->getDrawSize());
+	//m_chatInput.setSize(Vector2F(CHAT_WIDTHF, CHAT_TEXT_INPUT_HEIGHTF) / getDrawSize());
 
-	//m_chatInput.setActive(m_active);
-	//m_chatInput.onTick(e);
+	m_chatInput.setFocused(m_active);
+	m_chatInput.onTick(e);
 	if(!m_active)
 	{
 		m_fadeTime -= e->getDelta();
 	}
+
+	//UiObject::onTick(e);
 }
 
 void Chat::onDraw(DrawEvent *e)
 {
 	if(!m_active && m_fadeTime <= 0.0f) return;
 
-	Vector2I position = getPosition();
+	Vector2I position = getDrawPosition();
 	Vector2I size = Vector2F(CHAT_WIDTHF, CHAT_HEIGHTF);
 
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
@@ -102,6 +105,7 @@ void Chat::onDraw(DrawEvent *e)
 		// Clear render target
 		context->setBlendState(BlendState(BlendState::BLEND_ZERO, BlendState::BLEND_ZERO));
 		context->drawRectangle(Vector2F(0.0f, 0.0f), size);
+		context->setBlendState(BlendState::PRESET_ALPHA_BLEND);
 
 		// Create chat string
 		string chatStr;
@@ -139,6 +143,6 @@ void Chat::onDraw(DrawEvent *e)
 	// If fade time == 0.0f we draw the chat text input
 	if(m_fadeTime <= 0.0f)
 	{
-		//m_chatInput.draw(spriteBatch);
+		m_chatInput.onDraw(e);
 	}
 }

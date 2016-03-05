@@ -1,105 +1,291 @@
-#include "lineedit.h"
-#include "constants.h"
-#include "Game/Scene.h"
+#include "LineEdit.h"
 
-LineEdit::LineEdit(Scene *scene, UiObject *parent) :
-	UiObject(scene, parent),
-	m_cursorPos(0),
+LineEdit::LineEdit(GraphicsContext *gfx, UiObject *parent) :
+	UiObject(parent),
 	m_cursorTime(0.0f),
-	m_font(ResourceManager::get<Font>(UI_CHAT_FONT))
+	m_offsetX(0.0f),
+	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Chat")),
+	m_renderTarget(0),
+	m_dirty(true),
+	m_spriteBatch(gfx, 100),
+	m_wordBegin(0),
+	m_wordEnd(0)
 {
-	m_font->setColor(Color(255, 255, 255, 255));
+	setText("");
 }
 
 LineEdit::~LineEdit()
-{ }
+{
+}
+
+void LineEdit::setAcceptFunc(function<void()> func)
+{
+	m_acceptFunc = func;
+}
 
 void LineEdit::setText(const string &text)
 {
-	m_text = text;
-	m_cursorPos = m_text.size();
+	m_states.clear();
+
+	for(int i = 0; i < 2; ++i)
+	{
+		TextState *state = new TextState { Cursor(this),  text };
+		m_states.push_back(state);
+		m_undoItr = m_states.end();
+		m_undoItr--;
+		state->cursor.setPosition(text.size());
+	}
+
+	m_dirty = true;
 }
 
 string LineEdit::getText() const
 {
-	return m_text;
+	return (*m_undoItr)->text;
 }
 
 void LineEdit::onTick(TickEvent *e)
 {
-	m_cursorTime -= delta;
+	// Update cursor blink time
+	m_cursorTime -= e->getDelta();
 	if(m_cursorTime <= 0.0f)
 	{
 		m_cursorTime = 1.0f;
 	}
-	UiObject::update(delta);
+	UiObject::onTick(e);
 }
 
-void LineEdit::draw(SpriteBatch *spriteBatch)
+void LineEdit::onDraw(DrawEvent *e)
 {
-	Vector2 position = getPosition();
-	Vector2 size = getSize();
+	// Get state variables
+	TextState *state = *m_undoItr;
+	RectF rect = getDrawRect();
+	GraphicsContext *g = e->getGraphicsContext();
 
-	GraphicsContext &context = spriteBatch->getGraphicsContext();
-	context.setModelViewMatrix(Matrix4());
-	context.drawRectangle(position, size, Color(0, 0, 0, 127));
-
-	// Apply center alignment
-	//position.x += (size.x - m_font->getStringWidth(m_text)) * 0.5f;
-
-	position += Vector2(5.0f);
-
-	m_font->draw(spriteBatch, position, m_text);
-
-	if(m_active && m_cursorTime >= 0.5f)
+	// Update text offset if dirty
+	if(m_dirty)
 	{
-		context.drawRectangle(position.x + m_font->getStringWidth(m_text.substr(0, m_cursorPos)), position.y + 2, 2, m_font->getHeight() - 4, m_font->getColor());
+		updateOffset();
+	}
+
+	// Get text offset
+	Vector2F textOffset = Vector2F(8.0f - m_offsetX, rect.size.y * 0.5f - m_font->getHeight() * 0.5f);
+
+	// Update visualization if dirty
+	if(m_dirty)
+	{
+		// Update line edit visualization
+		g->setRenderTarget(m_renderTarget);
+		const float w = m_renderTarget->getWidth(), h = m_renderTarget->getHeight();
+		g->setTexture(0);
+
+		// Clear render target
+		g->setBlendState(BlendState(BlendState::BLEND_ZERO, BlendState::BLEND_ZERO));
+		g->drawRectangle(0.0f, 0.0f, w, h);
+		g->setBlendState(BlendState(BlendState::BLEND_SRC_ALPHA, BlendState::BLEND_ONE_MINUS_SRC_ALPHA, BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA));
+
+		// Render input rectangle
+		g->drawRectangle(0.0f, 0.0f, w, h, Color(0, 0, 0, 127));
+
+		// Get the string to render and set text color
+		string text = state->text;
+
+		// Find the visible portion of the text
+		int begin = getTextIndexAtPosition(text, rect.position);
+		int end = getTextIndexAtPosition(text, rect.position + rect.size);
+		string visibleText = text.substr(begin, end - begin);
+		float dx = m_font->getStringWidth(text.substr(0, end)) - m_font->getStringWidth(visibleText);
+
+		// Draw and clip the text using scissoring rectangle
+		g->enableScissor(0, 0, w, h);
+		m_spriteBatch.begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState(BlendState::BLEND_SRC_ALPHA, BlendState::BLEND_ONE_MINUS_SRC_ALPHA, BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA)));
+		m_font->draw(&m_spriteBatch, textOffset.x + dx, textOffset.y, visibleText);
+		m_spriteBatch.end();
+		g->disableScissor();
+
+		// Reset render target
+		g->setRenderTarget(0);
+		 
+		// No longer dirty
+		m_dirty = false;
+	}
+
+	// Draw line edit visualization
+	g->setBlendState(BlendState(BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA));
+	g->setTexture(m_renderTarget->getTexture());
+	g->drawRectangle(rect);
+	g->setTexture(0);
+	g->setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
+
+	// Draw text cursor
+	if(isFocused() && m_cursorTime >= 0.5f)
+	{
+		g->drawRectangle(
+			rect.position.x + textOffset.x + m_font->getStringWidth(state->text.substr(0, state->cursor.getPosition())),
+			rect.position.y + textOffset.y,
+			2, m_font->getHeight(),
+			Color(0, 0, 0, 255)
+			);
+	}
+
+	// Draw selection rectangle
+	g->enableScissor(rect.position.x + 8, g->getHeight() - rect.position.y - rect.size.y, rect.size.x - 16, rect.size.y);
+	g->drawRectangle(
+		rect.position.x + textOffset.x + m_font->getStringWidth(state->text.substr(0, state->cursor.getSelectionStart())),
+		rect.position.y + textOffset.y,
+		m_font->getStringWidth(state->text.substr(state->cursor.getSelectionStart(), state->cursor.getSelectionLength())),
+		m_font->getHeight(),
+		isFocused() ? Color(0, 0, 0, 127) : Color(127, 127, 127, 127)
+		);
+	g->disableScissor();
+
+	UiObject::onDraw(e);
+}
+
+void LineEdit::onResize(ResizeEvent *e)
+{
+	delete m_renderTarget;
+	m_renderTarget = new RenderTarget2D(e->getWidth(), e->getHeight());
+	m_dirty = true;
+}
+
+void LineEdit::onFocus(FocusEvent * e)
+{
+	// Mark as dirty
+	m_dirty = true;
+}
+
+LineEdit::TextState *LineEdit::insertAt(const int pos, const string &str)
+{
+	TextState *state = *m_undoItr;
+
+	// Add to undo stack
+	if(m_textTimer.stop() >= 1.0f)
+	{
+		state = addUndoState();
+	}
+	m_textTimer.start();
+
+	// Insert string at index
+	string endStr = state->text.substr(pos);
+	state->text = state->text.substr(0, pos);
+	state->text += str + endStr;
+
+	// Mark as dirty
+	m_dirty = true;
+
+	return state;
+}
+
+LineEdit::TextState *LineEdit::removeAt(const int pos, const int length)
+{
+	TextState *state = *m_undoItr;
+
+	// Add to undo stack
+	if(m_textTimer.stop() >= 1.0f)
+	{
+		state = addUndoState();
+	}
+	m_textTimer.start();
+
+	// Remove char at index
+	string endStr = state->text.substr(pos + length);
+	state->text = state->text.substr(0, pos);
+	state->text += endStr;
+
+	// Mark as dirty
+	m_dirty = true;
+
+	return state;
+}
+
+int LineEdit::getTextIndexAtPosition(const string &str, Vector2I pos)
+{
+	// TODO: Use binary search instead of linear
+	RectI rect = getDrawRect();
+	pos -= rect.position;
+	pos -= Vector2F(8.0f - m_offsetX, rect.size.y * 0.5f - m_font->getHeight() * 0.5f);
+	for(int i = 0; i < (int) str.size(); ++i)
+	{
+		if(pos.x < m_font->getStringWidth(str.substr(0, i)))
+		{
+			return i;
+		}
+	}
+	return str.size();
+}
+
+void LineEdit::updateOffset()
+{
+	Vector2I size = getDrawSize();
+	TextState *state = *m_undoItr;
+	float cursorPos = m_font->getStringWidth(state->text.substr(0, state->cursor.getPosition()));
+	if(cursorPos - m_offsetX > size.x - 16.0f)
+	{
+		m_offsetX = max(cursorPos - (size.x - 16.0f), 0.0f);
+	}
+	else if(cursorPos - m_offsetX < 0.0f)
+	{
+		m_offsetX = cursorPos;
 	}
 }
 
-void LineEdit::insertAt(const uint at, const string &str)
+LineEdit::TextState *LineEdit::addUndoState()
 {
-	// Check valid index
-	if(at > m_text.size())
-		return;
+	TextState *state = *m_undoItr;
 
-	// Insert string at index
-	string endStr = m_text.substr(at);
-	m_text = m_text.substr(0, at);
-	m_text += str + endStr;
+	m_states.erase(++m_undoItr, m_states.end());
+
+	TextState *newState = new TextState { state->cursor, state->text };
+	m_states.push_back(newState);
+	m_undoItr = m_states.end();
+	m_undoItr--;
+	return newState;
 }
 
-void LineEdit::removeAt(const uint at)
+bool isInvalidChar(char c)
 {
-	// Check valid index
-	if(at > m_text.size())
-		return;
-
-	// Remove char at index
-	string endStr = m_text.substr(at);
-	m_text = m_text.substr(0, at - 1);
-	m_text += endStr;
+	// This removes most control characters
+	// including new line
+	return c < 32;
 }
 
-void LineEdit::charEvent(const uint c)
+void LineEdit::onTextInput(TextEvent *e)
 {
 	// Only add text if active
-	if(!m_active) return;
+	if(!isFocused()) return;
+
+	TextState *state = *m_undoItr;
+
+	if(state->cursor.getSelectionLength() > 0)
+	{
+		// Remove selected text
+		state = removeAt(state->cursor.getSelectionStart(), state->cursor.getSelectionLength());
+		state->cursor.setPosition(state->cursor.getSelectionStart());
+	}
 
 	// Add text
-	insertAt(m_cursorPos, string("") + (char) c);//formatUtf8(code));
-	m_cursorPos++;
+	state = insertAt(state->cursor.getPosition(), string("") + e->getChar());
+	state->cursor.moveCursor(1);
 }
 
-void LineEdit::keyEvent(const KeyEvent & event)
+void LineEdit::onKeyEvent(KeyEvent *e)
 {
 	// Only add text if active
-	if(!m_active || event.isAction(KeyEvent::RELEASE)) return;
+	if(!isFocused() || e->getType() == KeyEvent::UP) return;
 
-	switch(event.getKey())
+	TextState *state = *m_undoItr;
+
+	const int cursorPosition = state->cursor.getPosition();
+	const int selectionLength = state->cursor.getSelectionLength();
+	const int selectionPosition = state->cursor.getSelectionStart();
+	const bool modShift = (e->getModifiers() & KeyEvent::SHIFT) != 0;
+	const bool modCtrl = (e->getModifiers() & KeyEvent::CTRL) != 0;
+
+	switch(e->getKeycode())
 	{
 		// Enter
-		case XD_KEY_ENTER:
+		case CGF_KEY_RETURN:
 		{
 			// Call accept function
 			if(m_acceptFunc)
@@ -110,106 +296,279 @@ void LineEdit::keyEvent(const KeyEvent & event)
 		}
 
 		// Backspace
-		case XD_KEY_BACKSPACE:
+		case CGF_KEY_BACKSPACE:
 		{
-			// Remove char behind
-			if(m_cursorPos != 0)
+			if(!modCtrl)
 			{
-				removeAt(m_cursorPos);
-				m_cursorPos--;
+				if(selectionLength == 0)
+				{
+					// Remove char behind
+					if(cursorPosition != 0)
+					{
+						state = removeAt(cursorPosition - 1);
+						state->cursor.moveCursor(-1);
+					}
+				}
+				else
+				{
+					state = removeAt(selectionPosition, selectionLength);
+					state->cursor.setPosition(selectionPosition);
+				}
+			}
+			else
+			{
+				if(cursorPosition != 0)
+				{
+					// Remove previous word
+					int tmp = cursorPosition;
+					while(tmp > 0 && state->text[tmp - 1] == ' ') tmp--;
+					while(tmp > 0 && state->text[tmp - 1] != ' ') tmp--;
+					state = removeAt(tmp, cursorPosition - tmp);
+					state->cursor.setPosition(tmp);
+				}
 			}
 			break;
 		}
 
 		// Delete
-		case XD_KEY_DELETE:
+		case CGF_KEY_DELETE:
 		{
-			// Remove char in front
-			if(m_cursorPos + 1 <= (int) m_text.size())
+			if(!modCtrl)
 			{
-				removeAt(m_cursorPos + 1);
+				if(selectionLength == 0)
+				{
+					// Remove char in front
+					if(cursorPosition < (int) state->text.size())
+					{
+						state = removeAt(cursorPosition);
+					}
+				}
+				else
+				{
+					state = removeAt(selectionPosition, selectionLength);
+					state->cursor.setPosition(selectionPosition);
+				}
+			}
+			else
+			{
+				if(cursorPosition < (int) state->text.size())
+				{
+					// Remove next word
+					int tmp = cursorPosition;
+					while(tmp < state->text.size() - 1 && state->text[tmp] != ' ') tmp++;
+					while(tmp < state->text.size() - 1 && state->text[tmp + 1] == ' ') tmp++;
+					state = removeAt(cursorPosition, tmp - cursorPosition + 1);
+					state->cursor.setPosition(cursorPosition);
+				}
 			}
 		}
 		break;
 
 		// Left cursor key
-		case XD_KEY_LEFT:
+		case CGF_KEY_LEFT:
 		{
-			if(event.isModifier(KeyEvent::CONTROL))
+			if(modCtrl)
 			{
-				// Move cursor to the right of the previous word
-				while(--m_cursorPos >= 0 && m_text[m_cursorPos] == ' ');
-				while(--m_cursorPos >= 0 && m_text[m_cursorPos] != ' ');
-				m_cursorPos++;
+				// Move cursor to the left of the previous word
+				int tmp = cursorPosition;
+				while(tmp > 0 && state->text[--tmp] == ' ');
+				while(tmp > 0 && state->text[tmp - 1] != ' ') tmp--;
+				state->cursor.setPosition(tmp, modShift);
 			}
 			else
 			{
 				// Move cursor one step to the left
-				m_cursorPos = max(m_cursorPos - 1, 0);
+				state->cursor.moveCursor(-1, modShift);
 			}
 		}
 		break;
 
 		// Right cursor key
-		case XD_KEY_RIGHT:
+		case CGF_KEY_RIGHT:
 		{
-			if(event.isModifier(KeyEvent::CONTROL))
+			if(modCtrl)
 			{
 				// Move cursor to the left of the next word
-				while((uint) m_cursorPos <= m_text.size() && m_text[m_cursorPos++] != ' ');
-				while((uint) m_cursorPos <= m_text.size() && m_text[m_cursorPos++] == ' ');
-				m_cursorPos--;
+				int tmp = cursorPosition;
+				while((uint) tmp < state->text.size() && state->text[++tmp] != ' ');
+				while((uint) tmp < state->text.size() && state->text[tmp] == ' ') tmp++;
+				state->cursor.setPosition(tmp, modShift);
 			}
 			else
 			{
 				// Move cursor one step to the right
-				m_cursorPos = min(m_cursorPos + 1, (int) m_text.size());
+				state->cursor.moveCursor(1, modShift);
 			}
 		}
 		break;
 
 		// Home key
-		case XD_KEY_HOME:
+		case CGF_KEY_HOME:
 		{
-			m_cursorPos = 0;
+			state->cursor.setPosition(0, modShift);
 		}
 		break;
 
 		// End key
-		case XD_KEY_END:
+		case CGF_KEY_END:
 		{
-			m_cursorPos = m_text.size();
+			state->cursor.setPosition(state->text.size(), modShift);
 		}
 		break;
 
-		// Copy
-		case XD_KEY_C:
+		case CGF_KEY_A:
 		{
-			if(event.isModifier(KeyEvent::CONTROL))
+			if(modCtrl)
 			{
-				// TODO
+				state->cursor.setPosition(0);
+				state->cursor.setPosition(state->text.size(), true);
 			}
 		}
+		break;
 
-		// Cut
-		case XD_KEY_X:
+		// Cut and copy
+		case CGF_KEY_X:
+		case CGF_KEY_C:
 		{
-			if(event.isModifier(KeyEvent::CONTROL))
+			if(modCtrl)
 			{
-				// TODO
+				if(state->cursor.getSelectionLength() > 0)
+				{
+					// Put selected text on clipboard
+					e->getInputManager()->setClipboardString(state->text.substr(state->cursor.getSelectionStart(), state->cursor.getSelectionLength()));
+
+					if(e->getKeycode() == CGF_KEY_X)
+					{
+						// For cut we remove the selected text afterwards
+						state = removeAt(state->cursor.getSelectionStart(), state->cursor.getSelectionLength());
+						state->cursor.setPosition(state->cursor.getSelectionStart());
+					}
+				}
 			}
 		}
+		break;
 
 		// Paste
-		case XD_KEY_V:
+		case CGF_KEY_V:
 		{
-			if(event.isModifier(KeyEvent::CONTROL))
+			if(modCtrl)
 			{
-				string str = Input::getClipboardString();
-				insertAt(m_cursorPos, str);
-				m_cursorPos += str.size();
+				string str = e->getInputManager()->getClipboardString();
+				if(!str.empty())
+				{
+					if(state->cursor.getSelectionLength() > 0)
+					{
+						// Remove selected text
+						state = removeAt(state->cursor.getSelectionStart(), state->cursor.getSelectionLength());
+						state->cursor.setPosition(state->cursor.getSelectionStart());
+					}
+
+					// Remove all new lines
+					str.erase(std::remove_if(str.begin(), str.end(), isInvalidChar), str.end());
+
+					// Insert text
+					state = insertAt(state->cursor.getPosition(), str);
+					state->cursor.moveCursor(str.size());
+				}
+			}
+		}
+		break;
+
+		// Undo
+		case CGF_KEY_Z:
+		{
+			if(modShift)
+			{
+				goto redo;
+			}
+
+			if(modCtrl)
+			{
+				if(!m_states.empty() && m_undoItr != m_states.begin())
+				{
+					m_undoItr--;
+					m_dirty = true;
+				}
+			}
+		}
+		break;
+
+		// Redo
+		case CGF_KEY_Y:
+		{
+			redo:
+			if(modCtrl)
+			{
+				if(!m_states.empty() && *m_undoItr != m_states.back())
+				{
+					m_undoItr++;
+					m_dirty = true;
+				}
 			}
 		}
 		break;
 	}
+
+	m_cursorTime = 1.0f;
+}
+
+void LineEdit::onClick(ClickEvent *e)
+{
+	TextState *state = *m_undoItr;
+	const Vector2I mousePosition = e->getMouseEvent()->getPosition();
+	switch(e->getType())
+	{
+		case ClickEvent::BEGIN:
+		{
+			if((e->getClickCount() - 1) % 2 == 0)
+			{
+				state->cursor.setPosition(getTextIndexAtPosition(state->text, mousePosition));
+			}
+			else if((e->getClickCount() - 1) % 2 == 1)
+			{
+				int tmp = getTextIndexAtPosition(state->text, mousePosition);
+				while(tmp > 0 && state->text[tmp - 1] == ' ') tmp--;
+				while(tmp > 0 && state->text[tmp - 1] != ' ') tmp--;
+				state->cursor.setPosition(m_wordBegin = tmp);
+				while(tmp < state->text.size() && state->text[tmp++] != ' ');
+				while(tmp < state->text.size() && state->text[tmp] == ' ') tmp++;
+				state->cursor.setPosition(m_wordEnd = tmp, true);
+			}
+		}
+		break;
+
+		case ClickEvent::DRAG:
+		{
+			if((e->getClickCount() - 1) % 2 == 0)
+			{
+				state->cursor.setPosition(getTextIndexAtPosition(state->text, mousePosition), true);
+			}
+			else if((e->getClickCount() - 1) % 2 == 1)
+			{
+				int tmp = getTextIndexAtPosition(state->text, mousePosition);
+				if(tmp < m_wordBegin)
+				{
+					state->cursor.setPosition(m_wordEnd);
+				}
+				else
+				{
+					state->cursor.setPosition(m_wordBegin);
+				}
+
+				if(tmp < m_wordBegin)
+				{
+					while(tmp > 0 && state->text[--tmp] != ' ');
+				}
+
+				if(tmp > 0)
+				{
+					while(tmp < state->text.size() && state->text[tmp] != ' ') tmp++;
+					while(tmp < state->text.size() && state->text[++tmp] == ' ');
+				}
+				state->cursor.setPosition(tmp, true);
+			}
+		}
+		break;
+	}
+	m_cursorTime = 1.0f;
 }

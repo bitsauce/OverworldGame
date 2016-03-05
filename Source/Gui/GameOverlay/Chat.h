@@ -14,9 +14,8 @@ public:
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
 
-	void toggle(int action);
-
-	void sendMessage(int action);
+	void toggle(KeyEvent *e);
+	void sendMessage(KeyEvent *e);
 	void insertMessage(const string &message);
 
 private:
@@ -24,7 +23,7 @@ private:
 
 	Resource<Font> m_font;
 
-	LineEdit *m_chatInput;
+	LineEdit m_chatInput;
 	
 	bool m_active;
 	float m_fadeTime;

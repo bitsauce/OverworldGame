@@ -77,9 +77,15 @@ void OverworldGame::onStart(GameEvent *e)
 	bitStream.Write("Bitsauce");
 	m_server->getRakPeer()->SendLoopback((const char*) bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
 	
+
+	m_canvas = new Canvas(getWindow(), 1280, 720);
+
+
 	// Create game state
 	InGameState *state = new InGameState(this);
-	//m_gameOverlay = new GameOverlay(this, state->getScene(), graphicsContext);
+	m_gameOverlay = new GameOverlay(this, m_canvas, graphicsContext);
+
+	addChildLast(m_canvas);
 
 	// Push game state
 	pushState(state);
@@ -116,6 +122,8 @@ void OverworldGame::onStart(GameEvent *e)
 	inputContext->getKeybind("camera_zoom_in")->setFunction(bind(&Camera::zoomIn, m_world->getCamera(), placeholders::_1));
 	inputContext->getKeybind("camera_zoom_out")->setFunction(bind(&Camera::zoomOut, m_world->getCamera(), placeholders::_1));
 
+	inputContext->getKeybind("show_chat")->setFunction(bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1));
+
 	inputContext->getKeybind("debug_func_1")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
 	inputContext->getKeybind("debug_func_2")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
 	inputContext->getKeybind("debug_func_3")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
@@ -132,6 +140,10 @@ void OverworldGame::onStart(GameEvent *e)
 	inputContext->getKeybind("prev_block")->setFunction(bind(&Debug::prevBlock, m_debug, placeholders::_1));
 
 	getInputManager()->setContext(inputContext);
+
+	inputContext = getInputManager()->getContextByName("chat");
+	inputContext->getKeybind("send_message")->setFunction(bind(&Chat::sendMessage, m_gameOverlay->getChat(), placeholders::_1));
+	inputContext->getKeybind("escape_chat")->setFunction(bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1));
 }
 
 void OverworldGame::onEnd(GameEvent *e)

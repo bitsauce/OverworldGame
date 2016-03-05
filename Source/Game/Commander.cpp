@@ -22,7 +22,7 @@ Commander::~Commander()
 }
 
 void Commander::execute(const string &cmdString)
-{/*
+{
 	// Get chat
 	Chat *chat = m_game->getGameOverlay()->getChat();
 
@@ -58,7 +58,7 @@ void Commander::execute(const string &cmdString)
 	}
 
 	// Command not recognized
-	chat->insertMessage(cmdSplitString[0] + " is not a recognized command.");*/
+	chat->insertMessage(cmdSplitString[0] + " is not a recognized command.");
 }
 
 void Commander::spawn(Chat *chat, vector<string> args)

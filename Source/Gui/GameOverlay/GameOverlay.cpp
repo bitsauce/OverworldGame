@@ -21,8 +21,8 @@ GameOverlay::GameOverlay(OverworldGame *game, UiObject *parent, GraphicsContext 
 	/*m_healthManaStatus = new HealthManaStatus(scene, this);
 	m_omnicon = new Omnicon(scene, this);
 	m_inventory = new Inventory(scene, this);
-	m_crafting = new Crafting(scene, this);
-	m_chat = new Chat(game, context, scene, this);*/
+	m_crafting = new Crafting(scene, this);*/
+	m_chat = new Chat(game, context, this);
 }
 
 GameOverlay::~GameOverlay()
@@ -31,12 +31,13 @@ GameOverlay::~GameOverlay()
 	/*delete m_healthManaStatus;
 	delete m_omnicon;
 	delete m_inventory;
-	delete m_crafting;
-	delete m_chat;*/
+	delete m_crafting;*/
+	delete m_chat;
 }
 
 void GameOverlay::onTick(TickEvent *e)
 {
+	UiObject::onTick(e);
 	if(!m_player) return;
 	/*Storage::Slot *heldItem = m_player->getHeldItem();
 	if(!heldItem->isEmpty() && !isHovered() && m_game->getInputManager()->getKeyState(MOUSE_BUTTON_RIGHT))
@@ -50,6 +51,9 @@ void GameOverlay::onTick(TickEvent *e)
 
 void GameOverlay::onDraw(DrawEvent *e)
 {
+	e->getGraphicsContext()->setTransformationMatrix(Matrix4());
+	UiObject::onDraw(e);
+
 	if(!m_player) return;
 	SpriteBatch *spriteBatch = (SpriteBatch*)e->getUserData();
 	m_player->getHeldItem()->drawItem(m_game->getInputManager()->getPosition() + Vector2F(5.0f, 0.0f), spriteBatch, m_font);

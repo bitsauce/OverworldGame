@@ -125,6 +125,7 @@
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Hotbar.cpp" />
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Inventory.cpp" />
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Omnicon.cpp" />
+    <ClCompile Include="..\..\Source\Gui\LineEdit.cpp" />
     <ClCompile Include="..\..\Source\Gui\UiObject.cpp" />
     <ClCompile Include="..\..\Source\Items\ItemData.cpp" />
     <ClCompile Include="..\..\Source\Networking\Client.cpp" />

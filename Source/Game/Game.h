@@ -79,6 +79,7 @@ private:
 	bool m_takeScreenshot;
 
 	// Game modules
+	Canvas *m_canvas;
 	Commander *m_commander;
 	Debug *m_debug;
 	World *m_world;
