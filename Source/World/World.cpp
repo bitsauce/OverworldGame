@@ -12,8 +12,7 @@
 
 World::World(Game *game) :
 	m_worldPath(""),
-	m_worldFile(nullptr),
-	m_entitiesByLayer(WORLD_LAYER_COUNT)
+	m_worldFile(nullptr)
 {
 	Pointlight::s_vertices = new Vertex[POINTLIGHT_SEGMENTS + 2];
 
@@ -34,6 +33,9 @@ World::World(Game *game) :
 	{
 		m_blockDrawers[i] = new BlockDrawer(this, (WorldLayer) i);
 		addChildLast(m_blockDrawers[i]);
+
+		m_entityLayers[i] = new EntityLayer(this);
+		addChildLast(m_entityLayers[i]);
 	}
 
 	m_lighting = new Lighting(this);
@@ -101,7 +103,7 @@ bool World::load(const string &name)
 
 void World::clear()
 {
-	LOG("Reseting world...");
+	LOG("Resetting world...");
 
 	// Reset world path and file
 	m_worldPath.clear();
@@ -118,7 +120,7 @@ void World::clear()
 
 	for(uint i = 0; i < WORLD_LAYER_COUNT; ++i)
 	{
-		m_entitiesByLayer[i].clear();
+		m_entityLayers[i]->clearEntities();
 	}
 
 	m_pawns.clear();
@@ -181,13 +183,13 @@ void World::onDraw(DrawEvent *e)
 
 void World::addEntity(Entity *entity)
 {
-	m_entitiesByLayer[entity->getData()->getLayer()].push_back(entity);
+	m_entityLayers[entity->getData()->getLayer()]->addEntity(entity);
 	m_entities.push_back(entity);
 }
 
 void World::removeEntity(Entity *entity)
 {
-	m_entitiesByLayer[entity->getData()->getLayer()].remove(entity);
+	m_entityLayers[entity->getData()->getLayer()]->removeEntity(entity);
 	m_entities.remove(entity);
 }
 
@@ -196,7 +198,53 @@ list<Entity*> World::getEntities() const
 	return m_entities;
 }
 
-list<Entity*> World::getEntitiesByLayer(const WorldLayer layer) const
+EntityLayer *World::getEntitiyLayer(const WorldLayer layer) const
 {
-	return m_entitiesByLayer[layer];
+	return m_entityLayers[layer];
+}
+
+EntityLayer::EntityLayer(World *world) :
+	m_world(world)
+{
+}
+
+void EntityLayer::addEntity(Entity *entity)
+{
+	m_entities.push_back(entity);
+	addChildLast(entity);
+}
+
+void EntityLayer::removeEntity(Entity * entity)
+{
+	m_entities.remove(entity);
+	removeChild(entity);
+}
+
+void EntityLayer::clearEntities()
+{
+	m_entities.clear();
+}
+
+list<Entity*> EntityLayer::getEntities() const
+{
+	return m_entities;
+}
+
+void EntityLayer::onTick(TickEvent *e)
+{
+	SceneObject::onTick(e);
+}
+
+void EntityLayer::onDraw(DrawEvent *e)
+{
+	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
+	
+	spriteBatch->end();
+	
+	SpriteBatch::State state;
+	state.transformationMatix = m_world->getCamera()->getTransformationMatrix(e->getAlpha());
+
+	spriteBatch->begin(state);
+
+	SceneObject::onDraw(e);
 }

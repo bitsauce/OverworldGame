@@ -43,6 +43,6 @@ private:
 protected:
 	RakNet::RakNetGUID m_guid;
 	Pawn *m_pawn;
-	void setClientInputState(int action, int type);
-	void setClientUseItemState(int action);
+	void setClientInputState(KeyEvent *e, int type);
+	void setClientUseItemState(KeyEvent *e);
 };

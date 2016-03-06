@@ -7,7 +7,7 @@ enum WorldLayer;
 class ChunkManager;
 class Camera;
 
-class BlockDrawer : public Entity
+class BlockDrawer : public SceneObject
 {
 public:
 	BlockDrawer(World *world, const WorldLayer layer);

@@ -3,7 +3,6 @@
 #include "Constants.h"
 
 BlockDrawer::BlockDrawer(World *world, const WorldLayer layer) :
-	Entity(world, ENTITY_BACKGROUND),
 	m_chunkManager(world->getTerrain()->getChunkManager()),
 	m_camera(world->getCamera()),
 	m_layer(layer)

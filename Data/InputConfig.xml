@@ -33,7 +33,7 @@
 		</bind>
 		<bind>
 			<name>run</name>
-			<key>left_shift</key>
+			<key>lshift</key>
 		</bind>
 
 		<!-- Camera -->

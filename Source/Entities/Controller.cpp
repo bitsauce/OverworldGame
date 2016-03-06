@@ -10,14 +10,14 @@ Controller::Controller()
 	}
 }
 
-void Controller::setClientUseItemState(int action)
+void Controller::setClientUseItemState(KeyEvent *e)
 {
-	//m_clientInputState[INPUT_USE_ITEM] = action == GLFW_PRESS;// && !m_gameOverlay->isHovered();
+	m_clientInputState[INPUT_USE_ITEM] = e->getType() != KeyEvent::UP;// && !m_gameOverlay->isHovered();
 }
 
-void Controller::setClientInputState(int action, int type)
+void Controller::setClientInputState(KeyEvent *e, int type)
 {
-	//m_clientInputState[type] = action == GLFW_PRESS;
+	m_clientInputState[type] = e->getType() != KeyEvent::UP;
 }
 
 void Controller::pack(RakNet::BitStream *bitStream, const Connection *conn)

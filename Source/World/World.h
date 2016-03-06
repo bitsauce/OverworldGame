@@ -16,6 +16,7 @@ class Client;
 class BlockEntity;
 class Player;
 class Pawn;
+class EntityLayer;
 
 /**
 * This class is concerned with the objects contained within the game world
@@ -73,11 +74,11 @@ public:
 	// Entities
 	void addEntity(Entity *entity);
 	void removeEntity(Entity *entity);
+	EntityLayer *getEntitiyLayer(const WorldLayer layer) const;
 	list<Entity*> getEntities() const;
-	list<Entity*> getEntitiesByLayer(const WorldLayer layer) const;
 
 	// Pawns
-	/*list<Pawn*> getPawns() const
+	list<Pawn*> getPawns() const
 	{
 		return m_pawns;
 	}
@@ -86,7 +87,7 @@ public:
 	Player *getLocalPlayer() const
 	{
 		return m_localPlayer;
-	}*/
+	}
 
 private:
 	Terrain *m_terrain;
@@ -102,9 +103,26 @@ private:
 	Player* m_localPlayer;
 
 	BlockDrawer *m_blockDrawers[WORLD_LAYER_COUNT];
+	EntityLayer *m_entityLayers[WORLD_LAYER_COUNT];
 
-	// Entities
-	vector<list<Entity*>> m_entitiesByLayer;
+	list<Entity*> m_entities;
+};
+
+class EntityLayer : public SceneObject
+{
+public:
+	EntityLayer(World *world);
+
+	void addEntity(Entity *entity);
+	void removeEntity(Entity *entity);
+	void clearEntities();
+	list<Entity*> getEntities() const;
+	
+	void onTick(TickEvent *e);
+	void onDraw(DrawEvent *e);
+
+private:
+	World *m_world;
 	list<Entity*> m_entities;
 };
 

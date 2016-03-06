@@ -2,11 +2,11 @@
 #define CAMERA_H
 
 #include "Config.h"
-#include "Entities/Entity.h"
 
 class DynamicEntity;
+class World;
 
-class Camera : public Entity
+class Camera : public SceneObject
 {
 public:
 	// Constructor

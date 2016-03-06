@@ -14,19 +14,25 @@
 
 class NetworkObject;
 
-class Connection
+class Connection : public SceneObject
 {
 	friend class NetworkObject;
 public:
-	Connection(const bool isServer) : m_isServer(isServer), m_rakPeer(nullptr) { s_instance = this; }
+	Connection(const bool isServer) :
+		m_isServer(isServer)
+	{
+		m_rakPeer = RakNet::RakPeerInterface::GetInstance(); 
+		s_instance = this;
+	}
 
 	bool isServer() const { return m_isServer; }
 	bool isClient() const { return !m_isServer; }
 	RakNet::RakNetGUID getGUID() const { return m_rakPeer->GetMyGUID(); }
+	RakNet::RakPeerInterface *getRakPeer() const { return m_rakPeer; }
 
 	static Connection *getInstance() { return s_instance; }
 
-public://protected:
+protected:
 	bool m_isServer;
 	RakNet::RakPeerInterface *m_rakPeer;
 	RakNet::NetworkIDManager m_networkIDManager;

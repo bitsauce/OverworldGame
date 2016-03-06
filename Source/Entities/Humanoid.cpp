@@ -21,7 +21,7 @@ Humanoid::Humanoid() :
 	m_postAnimMixAlpha(0.0f)
 {
 	// Load skeleton data
-	m_skeleton = new Skeleton(":/Sprites/Characters/Skeleton.json", ":/Sprites/Characters/Skeleton.atlas", 1.0f);
+	m_skeleton = new Skeleton("Sprites/Characters/Skeleton.json", "Sprites/Characters/Skeleton.atlas", 1.0f);
 	m_skeleton->getTexture()->setFiltering(Texture2D::LINEAR);
 	m_skeleton->setFlipY(true); // Not sure why this is needed, oh well
 
@@ -248,7 +248,7 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 	// Draw skeleton
 	m_skeleton->setPosition(body->getDrawPosition(alpha) + Vector2F(body->getSize().x * 0.5f, 48.0f));
 	GraphicsContext *gfxContext = spriteBatch->getGraphicsContext();
-	gfxContext->setTransformationMatrix(spriteBatch->getState().projectionMatix);
+	gfxContext->setTransformationMatrix(spriteBatch->getState().transformationMatix);
 	m_skeleton->draw(gfxContext);
 	gfxContext->setTransformationMatrix(Matrix4());
 }

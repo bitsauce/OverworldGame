@@ -2,7 +2,6 @@
 #define BACKGROUND_H
 
 #include "Config.h"
-#include "Entities/Entity.h"
 
 class Camera;
 class TimeOfDay;
@@ -10,7 +9,7 @@ class World;
 class Cloud;
 class OverworldGame;
 
-class Background : public Entity
+class Background : public SceneObject
 {
 public:
 	Background(World *world, Window *window);

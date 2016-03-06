@@ -194,6 +194,8 @@ void Debug::onDraw(DrawEvent *e)
 
 	GraphicsContext *context = e->getGraphicsContext();
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
+	spriteBatch->end();
+	spriteBatch->begin();
 
 	// Set debug variables
 	setVariable("Chunks", util::intToStr(m_world->getTerrain()->getChunkManager()->m_chunks.size()) + " / " + util::intToStr(m_world->getTerrain()->getChunkManager()->m_optimalChunkCount));
@@ -210,6 +212,15 @@ void Debug::onDraw(DrawEvent *e)
 		minStr = min < 10 ? ("0" + util::intToStr(min)) : util::intToStr(min);
 	}
 	setVariable("Time", hourStr + ":" + minStr);
+
+	if(m_game->getWorld()->getLocalPlayer())
+	{
+		Player *player = m_game->getWorld()->getLocalPlayer();
+		Controller *controller = player->getController();
+		setVariable("Velocity", player->getVelocity().toString());
+		setVariable("Move dir", util::intToStr(controller->getInputState(Controller::INPUT_MOVE_RIGHT) - controller->getInputState(Controller::INPUT_MOVE_LEFT)));
+		setVariable("Running", util::intToStr(controller->getInputState(Controller::INPUT_RUN)));
+	}
 
 	// Draw top-left debug info
 	string drawString;

@@ -60,6 +60,13 @@ void OverworldGame::onStart(GameEvent *e)
 	// Setup commander
 	m_commander = new Commander(this);
 
+	// Create GUI canvas
+	m_canvas = new Canvas(getWindow(), 1280, 720);
+	addChildLast(m_canvas);
+
+	// Create game overlay
+	m_gameOverlay = new GameOverlay(this, m_canvas, graphicsContext);
+
 	// Load world "Debug", or create it if it doesn't exists
 	/*if(!m_world->load("Debug"))
 	{
@@ -70,22 +77,16 @@ void OverworldGame::onStart(GameEvent *e)
 
 	// Create server object
 	m_server = new Server(this, 45556);
+	addChildFirst(m_server);
 	
 	// Join server as client
 	RakNet::BitStream bitStream;
 	bitStream.Write((RakNet::MessageID) ID_PLAYER_JOIN);
 	bitStream.Write("Bitsauce");
 	m_server->getRakPeer()->SendLoopback((const char*) bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
-	
-
-	m_canvas = new Canvas(getWindow(), 1280, 720);
-
 
 	// Create game state
 	InGameState *state = new InGameState(this);
-	m_gameOverlay = new GameOverlay(this, m_canvas, graphicsContext);
-
-	addChildLast(m_canvas);
 
 	// Push game state
 	pushState(state);
@@ -200,10 +201,7 @@ void OverworldGame::onTick(TickEvent *e)
 		{
 			break;
 		}
-	}
-
-	// Update debug
-	m_debug->update(delta);*/
+	}*/
 	SceneObject::onTick(e);
 }
 

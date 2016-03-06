@@ -8,14 +8,13 @@
 #include "Terrain/BlockDrawer.h"
 
 #include "Generation/Generator.h"
-#include "Entities/Entity.h"
 
 enum WorldLayer;
 enum BlockID;
 
 class BlockEntity;
 
-class Terrain : public Entity
+class Terrain : public SceneObject
 {
 	friend class World;
 public:

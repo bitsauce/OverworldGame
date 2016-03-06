@@ -3,7 +3,6 @@
 #include "World/World.h"
 
 Lighting::Lighting(World *world) :
-	Entity(world, ENTITY_LIGHTING),
 	m_world(world),
 	m_enabled(true)
 {

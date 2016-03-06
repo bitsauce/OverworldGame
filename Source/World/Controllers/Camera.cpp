@@ -5,7 +5,6 @@
 #include "Entities/Pawn.h"
 
 Camera::Camera(World *world, InputManager *input, Window *window) :
-	Entity(world, ENTITY_CAMERA),
 	m_position(0.0f, 0.0f),
 	m_prevPosition(0.0f, 0.0f),
 	m_velocity(0.0f, 0.0f),

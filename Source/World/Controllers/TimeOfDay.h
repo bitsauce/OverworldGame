@@ -2,11 +2,10 @@
 #define TIME_OF_DAY_H
 
 #include "Config.h"
-#include "Entities/Entity.h"
 
 class World;
 
-class TimeOfDay : public Entity
+class TimeOfDay : public SceneObject
 {
 public:
 	TimeOfDay(World *world);

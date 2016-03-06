@@ -20,7 +20,6 @@ Client::Client(OverworldGame * game, const string &ip, const ushort port) :
 	Connection(false),
 	m_game(game)
 {
-	m_rakPeer = RakNet::RakPeerInterface::GetInstance();
 	RakNet::SocketDescriptor socketDescriptor;
 	assert(m_rakPeer->Startup(1, &socketDescriptor, 1) == RakNet::RAKNET_STARTED);
 	assert(m_rakPeer->Connect(ip.c_str(), port, 0, 0) == RakNet::CONNECTION_ATTEMPT_STARTED);

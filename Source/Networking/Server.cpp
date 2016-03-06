@@ -23,7 +23,6 @@ Server::Server(OverworldGame * game, const ushort port) :
 	Connection(true),
 	m_game(game)
 {
-	m_rakPeer = RakNet::RakPeerInterface::GetInstance();
 	RakNet::SocketDescriptor socketDescriptor(port, 0);
 	if(m_rakPeer->Startup(2, &socketDescriptor, 1) != RakNet::RAKNET_STARTED)
 	{
@@ -33,7 +32,7 @@ Server::Server(OverworldGame * game, const ushort port) :
 	m_rakPeer->SetMaximumIncomingConnections(2);
 }
 
-void Server::update()
+void Server::onTick(TickEvent *e)
 {
 	m_isServer = false;
 	for(NetworkObject *object : m_networkObjects)
@@ -79,7 +78,8 @@ void Server::update()
 				bool local = getGUID() == packet->guid;
 
 				// Create player
-				Player *player = new Player(m_game->getWorld(), local);
+				Player *player = new Player(m_game->getInputManager(), m_game->getWorld(), local);
+				m_game->getWorld()->addEntity(player);
 
 				// If player is hosting locally
 				if(local)

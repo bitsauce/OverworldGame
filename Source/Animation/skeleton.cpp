@@ -10,7 +10,7 @@
 
 void _spAtlasPage_createTexture(spAtlasPage* self, const char* path)
 {
-	Resource<Texture2D> *texture = new Resource<Texture2D>(Game::GetInstance()->getResourceManager()->get<Texture2D>(path));
+	Resource<Texture2D> *texture = new Resource<Texture2D>(new Texture2D(Pixmap(path)));
 	if(texture)
 	{
 		self->rendererObject = texture;
@@ -21,7 +21,8 @@ void _spAtlasPage_createTexture(spAtlasPage* self, const char* path)
 
 void _spAtlasPage_disposeTexture(spAtlasPage* self)
 {
-	if(self->rendererObject) {
+	if(self->rendererObject)
+	{
 		delete ((Resource<Texture2D>*)self->rendererObject);
 	}
 }
@@ -191,19 +192,19 @@ void Skeleton::draw(GraphicsContext *context)
 
 			vertices[i * 4].set4ub(VERTEX_COLOR, r, g, b, a);
 			vertices[i * 4].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X1], m_worldVertices[SP_VERTEX_Y1]);
-			vertices[i * 4].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X1], 1.0f - regionAttachment->uvs[SP_VERTEX_Y1]);
+			vertices[i * 4].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X1], regionAttachment->uvs[SP_VERTEX_Y1]);
 
 			vertices[i * 4 + 1].set4ub(VERTEX_COLOR, r, g, b, a);
 			vertices[i * 4 + 1].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X2], m_worldVertices[SP_VERTEX_Y2]);
-			vertices[i * 4 + 1].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X2], 1.0f - regionAttachment->uvs[SP_VERTEX_Y2]);
+			vertices[i * 4 + 1].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X2], regionAttachment->uvs[SP_VERTEX_Y2]);
 
 			vertices[i * 4 + 2].set4ub(VERTEX_COLOR, r, g, b, a);
 			vertices[i * 4 + 2].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X4], m_worldVertices[SP_VERTEX_Y4]);
-			vertices[i * 4 + 2].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X4], 1.0f - regionAttachment->uvs[SP_VERTEX_Y4]);
+			vertices[i * 4 + 2].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X4], regionAttachment->uvs[SP_VERTEX_Y4]);
 			
 			vertices[i * 4 + 3].set4ub(VERTEX_COLOR, r, g, b, a);
 			vertices[i * 4 + 3].set4f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X3], m_worldVertices[SP_VERTEX_Y3]);
-			vertices[i * 4 + 3].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X3], 1.0f - regionAttachment->uvs[SP_VERTEX_Y3]);
+			vertices[i * 4 + 3].set4f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X3], regionAttachment->uvs[SP_VERTEX_Y3]);
 
 			indices[i * 6 + 0] = i * 4 + 0;
 			indices[i * 6 + 1] = i * 4 + 1;

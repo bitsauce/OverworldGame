@@ -6,12 +6,12 @@
 class Player : public Pawn
 {
 public:
-	Player(World *world, const bool local);
+	Player(InputManager *input, World *world, const bool local);
 	~Player();
 
 	static DynamicEntity *Factory(World *world)
 	{
-		return new Player(world, false);
+		return new Player(Game::GetInstance()->getInputManager(), world, false);
 	}
 };
 

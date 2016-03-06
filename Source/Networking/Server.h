@@ -16,12 +16,10 @@ class Server : public Connection
 public:
 	Server(OverworldGame * game, const ushort port);
 
-	void update();
+	void onTick(TickEvent *e);
+
 	void sendPacket(RakNet::BitStream *bitStream);
-
 	void save();
-
-	RakNet::RakPeerInterface *getRakPeer() const { return m_rakPeer; }
 
 private:
 	void savePlayer(string playerName);

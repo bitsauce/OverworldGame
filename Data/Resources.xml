@@ -1,5 +1,5 @@
 <resources>
-	<!--Fonts-->
+	<!-- Fonts -->
 	<font>
 		<name>Fonts/Big</name>
 		<path>Fonts/ArialBold27.fnt</path>
@@ -17,7 +17,7 @@
 		<path>Fonts/DebugFont.fnt</path>
 	</font>
 	
-	<!--Textures-->
+	<!-- Textures -->
 	<texture>
 		<name>Sprites/Backgrounds/Sun</name>
 		<path>Sprites/Backgrounds/Sun.png</path>
@@ -42,6 +42,16 @@
 		<name>Sprites/Backgrounds/Clouds/0</name>
 		<path>Sprites/Backgrounds/Clouds/Cloud_0.png</path>
 	</texture>
+	<texture>
+		<name>Sprites/Characters/Images/rarm</name>
+		<path>Sprites/Characters/Images/rarm.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Characters/Images/larm</name>
+		<path>Sprites/Characters/Images/larm.png</path>
+	</texture>
+
+	<!-- Shaders -->
 	<shader>
 		<name>Shaders/DirectionalLighting</name>
 		<vertexFilePath>Shaders/DirectionalLighting.vert</vertexFilePath>

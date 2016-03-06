@@ -18,7 +18,6 @@ struct CloudSort
 };
 
 Background::Background(World *world, Window *window) :
-	Entity(world, ENTITY_BACKGROUND),
 	m_camera(world->getCamera()),
 	m_window(window),
 	m_timeOfDay(world->getTimeOfDay()),

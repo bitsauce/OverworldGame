@@ -15,7 +15,6 @@
 #include "BlockEntities/BlockEntityData.h"
 
 Terrain::Terrain(World *world, Window *window) :
-	Entity(world, ENTITY_TERRAIN),
 	m_world(world)
 {
 	m_chunkManager = new ChunkManager(world, window);

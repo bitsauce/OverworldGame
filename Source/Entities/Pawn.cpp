@@ -40,15 +40,15 @@ Pawn::Pawn(World *world, const EntityID id) :
 	// Add to player list
 	m_world->m_pawns.push_back(this);
 
-	m_humanoid.setAttachmentTexture(Humanoid::ARM_LEFT, 0, Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Characters/Images/larm.png"));
-	m_humanoid.setAttachmentTexture(Humanoid::ARM_RIGHT, 0, Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Characters/Images/rarm.png"));
+	m_humanoid.setAttachmentTexture(Humanoid::ARM_LEFT, 0, Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/larm"));
+	m_humanoid.setAttachmentTexture(Humanoid::ARM_RIGHT, 0, Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/rarm"));
 }
 
 Pawn::~Pawn()
 {
 }
 
-void Pawn::setController(Controller * controller)
+void Pawn::setController(Controller *controller)
 {
 	m_controller = controller;
 	m_controller->setPawn(this);
@@ -88,7 +88,7 @@ void Pawn::onTick(TickEvent *e)
 		{
 			if(m_canJump)
 			{
-				applyImpulse(Vector2F(0.0f, -12.0f));
+				applyImpulse(Vector2F(0.0f, -6.0f));
 				m_jumpTimer = 0.0f;
 				m_canJump = false;
 			}
@@ -100,11 +100,11 @@ void Pawn::onTick(TickEvent *e)
 	}
 	else
 	{
-		if(m_jumpTimer < 0.1f)
+		if(m_jumpTimer < 0.25f)
 		{
 			if(m_controller->getInputState(Controller::INPUT_JUMP)) // High/low jumping
 			{
-				applyImpulse(Vector2F(0.0f, -2.5f));
+				applyImpulse(Vector2F(0.0f, -1.0f));
 			}
 			m_jumpTimer += e->getDelta();
 		}
@@ -129,15 +129,16 @@ void Pawn::onTick(TickEvent *e)
 	}
 
 	// Walking
-	applyImpulse(Vector2F((m_controller->getInputState(Controller::INPUT_MOVE_RIGHT) - m_controller->getInputState(Controller::INPUT_MOVE_LEFT)) * (m_controller->getInputState(Controller::INPUT_RUN) ? 1.5f : 1.0f) * 10.0f, 0.0f));
-	if(getVelocity().x < -5.0f)
+	float maxSpeed = (m_controller->getInputState(Controller::INPUT_RUN) ? 1.5f : 1.0f) * m_moveSpeed;
+	applyImpulse(Vector2F((m_controller->getInputState(Controller::INPUT_MOVE_RIGHT) - m_controller->getInputState(Controller::INPUT_MOVE_LEFT)) * (m_controller->getInputState(Controller::INPUT_RUN) ? 1.5f : 1.0f) * 1.0f, 0.0f));
+	if(getVelocity().x < -maxSpeed)
 	{
-		setVelocityX(-m_moveSpeed);
+		setVelocityX(-maxSpeed);
 		setAccelerationX(0.0f);
 	}
-	else if(getVelocity().x > 5.0f)
+	else if(getVelocity().x > maxSpeed)
 	{
-		setVelocityX(m_moveSpeed);
+		setVelocityX(maxSpeed);
 		setAccelerationX(0.0f);
 	}
 	else
@@ -150,7 +151,7 @@ void Pawn::onTick(TickEvent *e)
 	DynamicEntity::onTick(e);
 	
 	// Set animations
-	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(getVelocity().x) * 4.0f * e->getDelta());
+	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(getVelocity().x) * 0.1f);
 	if(isContact(SOUTH))
 	{
 		m_humanoid.getMainAnimationState()->setLooping(true);

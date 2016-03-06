@@ -17,7 +17,7 @@ GameOverlay::GameOverlay(OverworldGame *game, UiObject *parent, GraphicsContext 
 	setPosition(Vector2F(0.0f, 0.0f));
 	setSize(Vector2F(1.0f, 1.0f));
 
-	m_hotbar = new Hotbar(this);
+	//m_hotbar = new Hotbar(this);
 	/*m_healthManaStatus = new HealthManaStatus(scene, this);
 	m_omnicon = new Omnicon(scene, this);
 	m_inventory = new Inventory(scene, this);

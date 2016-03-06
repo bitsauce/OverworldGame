@@ -3,15 +3,13 @@
 
 #include "Config.h"
 
-#include "Entities/Entity.h"
-
 #include "Lighting/LightSource.h"
 #include "Lighting/Pointlight.h"
 
 class Terrain;
 class World;
 
-class Lighting : public Entity
+class Lighting : public SceneObject
 {
 	friend class ChunkManager;
 	friend class Debug;
