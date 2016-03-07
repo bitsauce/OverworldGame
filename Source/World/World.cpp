@@ -47,7 +47,7 @@ void World::create(const string &name)
 	LOG("Creating world '%s'...", name.c_str());
 
 	// Set the world path
-	m_worldPath = "saves:/Overworld/" + name;
+	m_worldPath = "prefs:/" + name;
 	m_worldFile = new IniFile(m_worldPath + "/World.ini");
 
 	FileSystem::MakeDir(m_worldPath);
@@ -70,13 +70,13 @@ void World::save()
 
 bool World::load(const string &name)
 {
-	string worldFile = "saves:/Overworld/" + name + "/World.ini";
+	string worldFile = "prefs:/" + name + "/World.ini";
 	if(util::fileExists(worldFile))
 	{
 		LOG("Loading world '%s'...", name.c_str());
 
 		// Set the world path
-		m_worldPath = "saves:/Overworld/" + name;
+		m_worldPath = "prefs:/Overworld/" + name;
 		m_worldFile = new IniFile(worldFile);
 
 		/*FileSystemIterator itr(m_worldPath + "/Objects", "*.obj", FileSystemIterator::FILES);

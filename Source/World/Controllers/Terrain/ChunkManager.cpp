@@ -181,15 +181,16 @@ void ChunkManager::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 	// Open file writer
 	string filePath = util::getAbsoluteFilePath(m_world->getWorldPath() + "/Chunks/" + util::intToStr(itr->first) + ".obj");
 	FileWriter file(filePath);
-	if(!file.isOpen())
+	if(file.isOpen())
+	{
+		// Save chunk data
+		saveBlockData(file, chunk->m_blocks);
+		saveEntities(file, chunk->m_blockEntities);
+	}
+	else
 	{
 		LOG("Unable to load block data from '%s' (reason: %s)", filePath.c_str(), strerror(errno));
-		return;
 	}
-
-	// Save chunk data
-	saveBlockData(file, chunk->m_blocks);
-	saveEntities(file, chunk->m_blockEntities);
 
 	// Delete static entities
 	for(BlockEntity *entity : chunk->m_blockEntities)
