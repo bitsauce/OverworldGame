@@ -464,12 +464,7 @@ void ChunkManager::onDraw(DrawEvent *e)
 		}
 	}
 
-	if(redrawChunks)
-	{
-		// Redraw attached chunks
-		reattachChunks(context);
-	}
-	else if(m_circleLoadPattern.size() > 0)
+	if(m_circleLoadPattern.size() > 0)
 	{
 		// Load chunks in the loading area using a circle load pattern
 		// Loop through 10 chunks to find one which is not attached
@@ -495,6 +490,13 @@ void ChunkManager::onDraw(DrawEvent *e)
 				break;
 			}
 		}
+	}
+
+	if(redrawChunks)
+	{
+		// TODO: Need to redraw only the new chunks to the surface.
+		// Redraw attached chunks
+		reattachChunks(context);
 	}
 
 	context->setRenderTarget(0);
