@@ -15,8 +15,8 @@ public:
 	// BLOCK LOADING
 	void load(int chunkX, int chunkY, BlockID *blocks);
 	
-	// VBO LOADING
 	bool isAttached() const { return m_attached; }
+	bool isVisualized() const { return m_visualized; }
 	bool isModified() const { return m_modified; }
 	
 	int getX() const { return m_x; }
@@ -55,6 +55,7 @@ private:
 	// MISC
 	bool m_modified;
 	bool m_attached;
+	bool m_visualized; // m_sorted makes more sense.
 };
 
 #endif // TERRAIN_CHUNK_H

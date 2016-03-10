@@ -79,7 +79,7 @@ void Server::onTick(TickEvent *e)
 
 				// Create player
 				Player *player = new Player(m_game->getInputManager(), m_game->getWorld(), local);
-				m_game->getWorld()->addEntity(player);
+				//m_game->getWorld()->addEntity(player);
 
 				// If player is hosting locally
 				if(local)

@@ -11,6 +11,7 @@ BlockDrawer::BlockDrawer(World *world, const WorldLayer layer) :
 
 void BlockDrawer::onDraw(DrawEvent *e)
 {
+	// Get sprite batch
 	GraphicsContext *graphicsContext = e->getGraphicsContext();
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
 

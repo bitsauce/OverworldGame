@@ -6,6 +6,8 @@
 #include "Entities/EntityData.h"
 #include "Blocks/BlockData.h"
 
+#include "Game/Game.h"
+
 const float QUAD_UVS[40] =
 {
 	0,  16,
@@ -39,7 +41,7 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 	m_chunkPositionIndex(0),
 	m_loadAreaRadius(5),
 	m_circleLoadIndex(0),
-	m_redrawGlobalBlocks(true),
+	m_reattachAllChunks(true),
 	m_lightingPass0(nullptr),
 	m_lightingPass1(nullptr),
 	m_lightingPass2(nullptr),
@@ -339,32 +341,26 @@ void ChunkManager::onDraw(DrawEvent *e)
 		freeInactiveChunk();
 	}
 
-	bool redrawChunks = false;
-
 	// Setup context
 	GraphicsContext *context = e->getGraphicsContext();
 	context->disable(GraphicsContext::BLEND);
 	context->setTransformationMatrix(Matrix4());
-	context->setRenderTarget(m_blocksRenderTarget);
 
 	// This should be called when a new area is entered
-	if(m_redrawGlobalBlocks)
+	if(m_reattachAllChunks)
 	{
 		// Attach chunks
-		for(int y = m_loadingArea.y0; y <= m_loadingArea.y1; ++y)
+		for(int y = m_loadingArea.y0 + 1; y <= m_loadingArea.y1 - 1; ++y)
 		{
-			for(int x = m_loadingArea.x0; x <= m_loadingArea.x1; ++x)
+			for(int x = m_loadingArea.x0 + 1; x <= m_loadingArea.x1 - 1; ++x)
 			{
-				getChunkAt(x, y).attach(context, math::mod(x, m_loadingArea.getWidth()), math::mod(y, m_loadingArea.getHeight()));
+				reattachChunk(getChunkAt(x, y), context);
 			}
 		}
-		
-		// Need to redraw attached chunks
-		redrawChunks = true;
 
 		// Set state variables
 		m_prevLoadingArea = m_loadingArea;
-		m_redrawGlobalBlocks = false;
+		m_reattachAllChunks = false;
 	}
 	else if(m_loadingArea != m_prevLoadingArea)
 	{
@@ -453,13 +449,10 @@ void ChunkManager::onDraw(DrawEvent *e)
 		{
 			// Is this chunk not attached?
 			Chunk &chunk = getChunkAt(x, y);
-			if(!chunk.isAttached())
+			if(!chunk.isVisualized())
 			{
 				// Attach chunk
-				chunk.attach(context, math::mod(chunk.getX(), m_loadingArea.getWidth()), math::mod(chunk.getY(), m_loadingArea.getHeight()));
-
-				// Need to redraw attached chunks
-				redrawChunks = true;
+				reattachChunk(chunk, context);
 			}
 		}
 	}
@@ -478,25 +471,15 @@ void ChunkManager::onDraw(DrawEvent *e)
 			m_circleLoadIndex = (m_circleLoadIndex + 1) % m_circleLoadPattern.size();
 
 			// Is this chunk not attached?
-			if(!chunk.isAttached())
+			if(!chunk.isVisualized())
 			{
 				// Attach chunk
-				chunk.attach(context, math::mod(chunk.getX(), m_loadingArea.getWidth()), math::mod(chunk.getY(), m_loadingArea.getHeight()));
-
-				// Need to redraw attached chunks
-				redrawChunks = true;
+				reattachChunk(chunk, context);
 
 				// Found a chunk which was not attached, break out
 				break;
 			}
 		}
-	}
-
-	if(redrawChunks)
-	{
-		// TODO: Need to redraw only the new chunks to the surface.
-		// Redraw attached chunks
-		reattachChunks(context);
 	}
 
 	context->setRenderTarget(0);
@@ -527,9 +510,9 @@ void ChunkManager::updateViewSize(int width, int height)
 
 	// Create circle load pattern
 	priority_queue<Vector2I, vector<Vector2I>, VectorComparator> minHeap;
-	for(int y = (int) -floor(loadAreaHeight * 0.5f); y <= (int) floor(loadAreaHeight * 0.5f); ++y)
+	for(int y = (int) -floor((loadAreaHeight - 2) * 0.5f); y <= (int) floor((loadAreaHeight - 2) * 0.5f); ++y)
 	{
-		for(int x = (int) -floor(loadAreaWidth * 0.5f); x <= (int) floor(loadAreaWidth * 0.5f); ++x)
+		for(int x = (int) -floor((loadAreaWidth - 2) * 0.5f); x <= (int) floor((loadAreaWidth - 2) * 0.5f); ++x)
 		{
 			minHeap.push(Vector2I(x, y));
 		}
@@ -588,12 +571,10 @@ void ChunkManager::updateViewSize(int width, int height)
 	m_blurVShader->setUniform1i("u_Height", loadAreaHeight * CHUNK_BLOCKS);
 
 	// Redraw blocks
-	m_redrawGlobalBlocks = true;
+	m_reattachAllChunks = true;
 }
 
-#include "Game/Game.h"
-
-void ChunkManager::reattachChunks(GraphicsContext *context)
+/*void ChunkManager::reattachChunks(GraphicsContext *context)
 {
 	float width = m_loadingArea.getWidth() * CHUNK_BLOCKSF;
 	float height = m_loadingArea.getHeight() * CHUNK_BLOCKSF;
@@ -682,6 +663,124 @@ void ChunkManager::reattachChunks(GraphicsContext *context)
 	context->setShader(m_blurVShader);
 	context->drawRectangle(0.0f, 0.0f, width, height);
 	
+	context->setShader(0);
+	context->setRenderTarget(0);
+}*/
+
+void ChunkManager::reattachChunk(Chunk &chunk, GraphicsContext *context)
+{
+	// Attach neighbouring chunks
+	context->setRenderTarget(m_blocksRenderTarget);
+	for(int i = -1; i <= 1; i++)
+	{
+		for(int j = -1; j <= 1; j++)
+		{
+			Chunk &neighbour = getChunkAt(chunk.getX() + i, chunk.getY() + j);
+			if(!neighbour.isAttached())
+			{
+				neighbour.attach(context, math::mod(neighbour.getX(), m_loadingArea.getWidth()), math::mod(neighbour.getY(), m_loadingArea.getHeight()));
+			}
+		}
+	}
+			
+	// Sort blocks
+	context->setShader(m_tileSortShader);
+	for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
+	{
+		m_tileSortShader->setUniform1ui("u_Layer", z);
+		context->setRenderTarget(m_sortedBlocksRenderTarget[z]);
+
+		TextureRegion textureRegion(
+			float(chunk.getX()) / float(m_loadingArea.getWidth()),
+			float(chunk.getY()) / float(m_loadingArea.getHeight()),
+			float(chunk.getX() + 1) / float(m_loadingArea.getWidth()),
+			float(chunk.getY() + 1) / float(m_loadingArea.getHeight())
+			);
+
+		context->drawRectangle(
+			math::mod(chunk.getX(), m_loadingArea.getWidth())  * CHUNK_BLOCKSF,
+			math::mod(chunk.getY(), m_loadingArea.getHeight()) * CHUNK_BLOCKSF,
+			CHUNK_BLOCKSF, CHUNK_BLOCKSF, Color(255), textureRegion
+			);
+	}
+
+	chunk.m_visualized = true;
+
+	// Directional light
+	/*m_directionalLightingShader->setUniform1f("u_OffsetY", (m_loadingArea.y0 * CHUNK_BLOCKSF - 32.0f) / (m_loadingArea.getHeight() * CHUNK_BLOCKS));
+	m_directionalLightingShader->setUniform1f("u_Direction", 0.0174532925f * 180.0f * (m_world->getTimeOfDay()->isDay() ? (1140.0f - m_world->getTimeOfDay()->getTime()) : (1860.0f - (m_world->getTimeOfDay()->getTime() >= 1140.0f ? m_world->getTimeOfDay()->getTime() : m_world->getTimeOfDay()->getTime() + 1440.0f))) / 720.0f);
+	context->setRenderTarget(m_lightingPass0);
+	context->setShader(m_directionalLightingShader);
+	context->drawRectangle(0.0f, 0.0f, width, height);
+
+	// Draw light sources
+	context->enable(GraphicsContext::BLEND);
+	context->setShader(m_radialLightingShader);
+	context->setBlendState(BlendState::PRESET_ADDITIVE);
+	for(LightSource *light : m_world->getLighting()->m_lightSources)
+	{
+		m_radialLightingShader->setUniform2f("u_Radius", light->getRadius() / width, light->getRadius() / height);
+		m_radialLightingShader->setUniform3f("u_Color", light->getColor().r / 255.0f, light->getColor().g / 255.0f, light->getColor().b / 255.0f);
+
+		// TODO: It is inefficient to draw so many circles, so concider adding a check to see if redraw is necessary.
+		// (we only need to redraw when a light source is close to the edge)
+		// Center
+		const Vector2F basePos = Vector2F(math::mod(light->getPosition().x, width), math::mod(light->getPosition().y, height)) + Vector2F(0.5f, 0.5f);
+		m_radialLightingShader->setUniform2f("u_LightTexCoord", basePos.x / width, 1.0f - (basePos.y / height));
+		context->drawCircle(basePos, light->getRadius(), light->getRadius() * 1.5f);
+
+		// Right
+		Vector2F pos = basePos + Vector2F(width, 0.0f);
+		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+
+		// Left
+		pos = basePos + Vector2F(-width, 0.0f);
+		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+
+		// Bottom
+		pos = basePos + Vector2F(0.0f, height);
+		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+
+		// Up
+		pos = basePos + Vector2F(0.0f, -height);
+		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+
+		// Top-left
+		pos = basePos + Vector2F(-width, -height);
+		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+
+		// Top-right
+		pos = basePos + Vector2F(width, -height);
+		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+
+		// Bottom-left
+		pos = basePos + Vector2F(-width, height);
+		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+
+		// Bottom-right
+		pos = basePos + Vector2F(width, height);
+		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+	}
+	context->disable(GraphicsContext::BLEND);
+
+	// Blur horizontally (pass 1)
+	context->setRenderTarget(m_lightingPass1);
+	context->setShader(m_blurHShader);
+	context->drawRectangle(0.0f, 0.0f, width, height);
+
+	// Blur vertically (pass 2)
+	context->setRenderTarget(m_lightingPass2);
+	context->setShader(m_blurVShader);
+	context->drawRectangle(0.0f, 0.0f, width, height);*/
+
 	context->setShader(0);
 	context->setRenderTarget(0);
 }

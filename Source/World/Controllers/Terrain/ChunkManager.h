@@ -73,7 +73,7 @@ private:
 
 	void updateViewSize(int width, int height);
 
-	void reattachChunks(GraphicsContext *context);
+	void reattachChunk(Chunk &chunk, GraphicsContext *context);
 
 	bool m_applyZoom;
 	Window *m_window;
@@ -87,7 +87,7 @@ private:
 	ChunkArea m_activeArea;
 	ChunkArea m_loadingArea;
 	ChunkArea m_prevLoadingArea;
-	bool m_redrawGlobalBlocks;
+	bool m_reattachAllChunks;
 
 	// Loading area radius
 	uint m_loadAreaRadius;

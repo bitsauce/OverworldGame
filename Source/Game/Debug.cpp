@@ -304,6 +304,10 @@ void Debug::onDraw(DrawEvent *e)
 		{
 			for(int x = x0; x <= x1; ++x)
 			{
+				// DARK BLUE: No blocks loaded
+				// LIGHT BLUE: Blocks loaded in memory, but not rendered to the global render target
+				// RED: Blocks rendered to the global render target, but not sorted
+				// BLANK: Blocks rendered and sorted.
 				if(!m_world->getTerrain()->getChunkManager()->isChunkLoadedAt(x, y))
 				{
 					context->drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(0, 100, 170, 127));
@@ -311,6 +315,10 @@ void Debug::onDraw(DrawEvent *e)
 				else if(!m_world->getTerrain()->getChunkManager()->getChunkAt(x, y).isAttached())
 				{
 					context->drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(0, 160, 230, 127));
+				}
+				else if(!m_world->getTerrain()->getChunkManager()->getChunkAt(x, y).isVisualized())
+				{
+					context->drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(230, 30, 30, 127));
 				}
 			}
 		}

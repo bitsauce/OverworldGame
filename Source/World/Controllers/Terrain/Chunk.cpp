@@ -14,7 +14,7 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 	m_chunkManager(chunkManager)
 {
 	// Setup flags and such
-	m_attached = m_modified = false; // Not modified
+	m_attached = m_modified = m_visualized = false; // Not modified
 
 	// Initialize blocks
 	m_blocks = new BlockID[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
@@ -166,5 +166,5 @@ void Chunk::attach(GraphicsContext *context, const int x, const int y)
 
 void Chunk::detach()
 {
-	m_attached = false;
+	m_visualized = m_attached = false;
 }
