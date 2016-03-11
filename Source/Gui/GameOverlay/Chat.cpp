@@ -13,7 +13,8 @@ Chat::Chat(OverworldGame *game, GraphicsContext *context, GameOverlay *gameOverl
 	m_redrawText(true),
 	m_textSpriteBatch(context),
 	m_messages(100),
-	m_chatLinePos(0)
+	m_chatLinePos(0),
+	m_inputHistoryIndex(0)
 {
 	setAnchor(Vector2F(0.0f, 0.4f));
 	setSize(Vector2F(CHAT_WIDTHF, CHAT_HEIGHTF) / gameOverlay->getDrawSize());
@@ -62,9 +63,29 @@ void Chat::sendMessage(KeyEvent *e)
 			insertMessage("Bitsauce: " + chatStr);
 		}
 		m_redrawText = true;
+		m_inputHistory.push_back(chatStr);
+		m_inputHistoryIndex = m_inputHistory.size();
 	}
 	m_chatInput.setText("");
 	toggle(e);
+}
+
+void Chat::nextMessage(KeyEvent *e)
+{
+	if(e->getType() != KeyEvent::DOWN) return;
+	if(m_inputHistoryIndex + 1 < m_inputHistory.size())
+	{
+		m_chatInput.setText(m_inputHistory[++m_inputHistoryIndex]);
+	}
+}
+
+void Chat::prevMessage(KeyEvent *e)
+{
+	if(e->getType() != KeyEvent::DOWN) return;
+	if(m_inputHistoryIndex - 1 >= 0)
+	{
+		m_chatInput.setText(m_inputHistory[--m_inputHistoryIndex]);
+	}
 }
 
 void Chat::insertMessage(const string &message)

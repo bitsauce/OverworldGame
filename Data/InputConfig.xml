@@ -160,6 +160,8 @@
 			<key>f12</key>
 		</bind>
 	</game>
+
+	<!-- CHAT -->
 	<chat>
 		<bind>
 			<name>escape_chat</name>
@@ -168,6 +170,14 @@
 		<bind>
 			<name>send_message</name>
 			<key>enter</key>
+		</bind>
+		<bind>
+			<name>prev_message</name>
+			<key>up</key>
+		</bind>
+		<bind>
+			<name>next_message</name>
+			<key>down</key>
 		</bind>
 	</chat>
 </default>

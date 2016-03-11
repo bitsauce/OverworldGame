@@ -213,7 +213,7 @@ void Cloud::onTick(TickEvent *e)
 	m_position.x += m_background->getWind() * m_depth * e->getDelta();
 
 	// Adjust Y
-	m_position.y = -m_game->getWorld()->getCamera()->getY() * m_depth * 0.25f;
+	m_position.y = 500 - (m_game->getWorld()->getCamera()->getY() + 2000) * m_depth * 0.25f;
 }
 
 void Cloud::onDraw(DrawEvent *e)

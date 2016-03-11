@@ -16,6 +16,8 @@ public:
 
 	void toggle(KeyEvent *e);
 	void sendMessage(KeyEvent *e);
+	void nextMessage(KeyEvent *e);
+	void prevMessage(KeyEvent *e);
 	void insertMessage(const string &message);
 
 private:
@@ -29,7 +31,12 @@ private:
 	float m_fadeTime;
 
 	int m_chatLinePos;
+
 	vector<string> m_messages;
+
+	// Message history
+	vector<string> m_inputHistory;
+	int m_inputHistoryIndex;
 
 	bool m_redrawText;
 	RenderTarget2D * m_chatRenderTarget;

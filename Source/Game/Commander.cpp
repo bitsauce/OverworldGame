@@ -15,6 +15,7 @@ Commander::Commander(OverworldGame *game) :
 	//m_commands.push_back(Command("place", "1", "<BlockEntityName> [x] [y] [dataTag]", bind(&Commander::place, this, placeholders::_1, placeholders::_2)));
 	//m_commands.push_back(Command("setblock", "3", "<BlockName> <x> <y>", bind(&Commander::setBlock, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("give", "1|2|3", "<ItemName> [amount] [player]", bind(&Commander::give, this, placeholders::_1, placeholders::_2)));
+	m_commands.push_back(Command("testphysics", "6", "<gravity> <jumpforce> <jumpease> <movespeed> <maxspeed> <friction>", bind(&Commander::setGravity, this, placeholders::_1, placeholders::_2)));
 }
 
 Commander::~Commander()
@@ -96,4 +97,16 @@ void Commander::give(Chat *chat, vector<string> args)
 		//m_game->getWorld()->getLocalPlayer()->getStorage()->addItem(data->getID(), amt);
 		chat->insertMessage(args[1] + " " + args[0] + " given");
 	}*/
+}
+
+void Commander::setGravity(Chat *, vector<string> args)
+{
+	// <gravity> <jumpforce> <jumpease> <movespeed> <maxspeed> <friction>
+	Pawn *player = m_game->getWorld()->getLocalPlayer();
+	player->setGravityScale(util::strToFloat(args[0]));
+	player->m_jumpForce = util::strToFloat(args[1]);
+	player->m_jumpEase = util::strToFloat(args[2]);
+	player->m_moveSpeed = util::strToFloat(args[3]);
+	player->m_maxSpeed = util::strToFloat(args[4]);
+	player->m_friction = util::strToFloat(args[5]);
 }

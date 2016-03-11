@@ -27,9 +27,13 @@ Pawn::Pawn(World *world, const EntityID id) :
 	m_lmbPressed(false),
 	m_storage(10),
 	m_bag(new Bag(20, 5)),
-	m_moveSpeed(5.0f),
 	m_prevItem(ITEM_NONE),
-	m_selectedSlot(0)
+	m_selectedSlot(0),
+	m_jumpForce(20.0f),
+	m_jumpEase(1.5f),
+	m_moveSpeed(3.5f),
+	m_maxSpeed(7.5f),
+	m_friction(0.85f)
 {
 	// Set body size
 	setSize(24, 48);
@@ -88,7 +92,7 @@ void Pawn::onTick(TickEvent *e)
 		{
 			if(m_canJump)
 			{
-				applyImpulse(Vector2F(0.0f, -6.0f));
+				applyImpulse(Vector2F(0.0f, -m_jumpForce));
 				m_jumpTimer = 0.0f;
 				m_canJump = false;
 			}
@@ -104,7 +108,7 @@ void Pawn::onTick(TickEvent *e)
 		{
 			if(m_controller->getInputState(Controller::INPUT_JUMP)) // High/low jumping
 			{
-				applyImpulse(Vector2F(0.0f, -1.0f));
+				applyImpulse(Vector2F(0.0f, -m_jumpEase));
 			}
 			m_jumpTimer += e->getDelta();
 		}
@@ -129,8 +133,8 @@ void Pawn::onTick(TickEvent *e)
 	}
 
 	// Walking
-	float maxSpeed = (m_controller->getInputState(Controller::INPUT_RUN) ? 1.5f : 1.0f) * m_moveSpeed;
-	applyImpulse(Vector2F((m_controller->getInputState(Controller::INPUT_MOVE_RIGHT) - m_controller->getInputState(Controller::INPUT_MOVE_LEFT)) * (m_controller->getInputState(Controller::INPUT_RUN) ? 1.5f : 1.0f) * 1.0f, 0.0f));
+	float maxSpeed = (m_controller->getInputState(Controller::INPUT_RUN) ? 1.5f : 1.0f) * m_maxSpeed;
+	applyImpulse(Vector2F((m_controller->getInputState(Controller::INPUT_MOVE_RIGHT) - m_controller->getInputState(Controller::INPUT_MOVE_LEFT)) * (m_controller->getInputState(Controller::INPUT_RUN) ? 1.5f : 1.0f) * m_moveSpeed, 0.0f));
 	if(getVelocity().x < -maxSpeed)
 	{
 		setVelocityX(-maxSpeed);
@@ -144,7 +148,7 @@ void Pawn::onTick(TickEvent *e)
 	else
 	{
 		// Apply friction
-		setVelocityX(getVelocity().x * 0.85f);
+		setVelocityX(getVelocity().x * m_friction);
 	}
 
 	// Update physics

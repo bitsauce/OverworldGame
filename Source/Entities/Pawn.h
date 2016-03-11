@@ -88,9 +88,6 @@ protected:
 	// Pawn controller
 	Controller *m_controller;
 
-	// Physics
-	float m_moveSpeed;
-
 	// Inventory
 	Storage::Slot m_heldItem;
 	Bag *m_bag;
@@ -110,6 +107,14 @@ protected:
 	// Physics
 	float m_jumpTimer;
 	bool m_canJump;
+
+	float m_jumpForce;
+	float m_jumpEase;
+	float m_maxSpeed;
+	float m_moveSpeed;
+	float m_friction;
+
+	friend class Commander;
 
 	bool m_lmbPressed;
 };
