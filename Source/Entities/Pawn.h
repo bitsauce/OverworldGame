@@ -112,8 +112,6 @@ protected:
 	bool m_canJump;
 
 	bool m_lmbPressed;
-
-	Timer timer;
 };
 
 #endif // PAWN_H

@@ -42,7 +42,6 @@ Pawn::Pawn(World *world, const EntityID id) :
 
 	m_humanoid.setAttachmentTexture(Humanoid::ARM_LEFT, 0, Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/larm"));
 	m_humanoid.setAttachmentTexture(Humanoid::ARM_RIGHT, 0, Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/rarm"));
-	timer.start();
 }
 
 Pawn::~Pawn()
@@ -80,9 +79,6 @@ void Pawn::activateThing(int action)
 
 void Pawn::onTick(TickEvent *e)
 {
-	LOG("Time: %f", timer.getElapsedTime());
-	timer.start();
-
 	m_controller->update();
 
 	// Jumping
