@@ -8,7 +8,7 @@ void BlockEntityData::init()
 {
 	// TODO: Make some shader for drawing animated block entities
 	/*s_data[BLOCK_ENTITY_NULL] = new BlockEntityData(BLOCK_ENTITY_NULL, "NULL", Pixmap(), 1, 1, function<BlockEntity*(World*, const int, const int, const BlockEntityData*)>());
-	s_data[BLOCK_ENTITY_TORCH] = new BlockEntityData(BLOCK_ENTITY_TORCH, "Torch", Pixmap(":/Sprites/BlockEntities/LightSources/Torch.png", true), 1, 1, Torch::Factory);
+	s_data[BLOCK_ENTITY_TORCH] = new BlockEntityData(BLOCK_ENTITY_TORCH, "Torch", Pixmap("Sprites/BlockEntities/LightSources/Torch", true), 1, 1, Torch::Factory);
 
 	// Create block entity texture atlas
 	vector<Pixmap> pixmaps;

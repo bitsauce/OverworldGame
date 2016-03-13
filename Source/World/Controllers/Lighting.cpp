@@ -19,7 +19,6 @@ void Lighting::addLightSource(LightSource *source)
 
 void Lighting::onDraw(DrawEvent *e)
 {
-	return;
 	if(!m_enabled) return;
 
 	GraphicsContext *context = e->getGraphicsContext();

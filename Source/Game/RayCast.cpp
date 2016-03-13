@@ -8,7 +8,7 @@ RayCast::RayCast(function<bool(int, int)> plotTest) :
 }
 
 // This function casts a ray from p0 to p1
-bool RayCast::trace(const Vector2i p0, const Vector2i p1)
+bool RayCast::trace(const Vector2I p0, const Vector2I p1)
 {
 	// Clear previous points
 	m_points.clear();
@@ -43,7 +43,7 @@ bool RayCast::trace(const Vector2i p0, const Vector2i p1)
 		}
 			
 		// Check if we have reached the end
-		if((x0 == x1 && y0 == y1) || (m_range > 0.0f && (Vector2(x0, y0) - Vector2(p0)).magnitude() > m_range))
+		if((x0 == x1 && y0 == y1) || (m_range > 0.0f && (Vector2F(x0, y0) - Vector2F(p0)).magnitude() > m_range))
 		{
 			break;
 		}	
@@ -71,6 +71,6 @@ bool RayCast::trace(const Vector2i p0, const Vector2i p1)
 bool RayCast::plot(const int x, const int y)
 {
 	// Plot the point
-	m_points.push_back(Vector2i(x, y));
+	m_points.push_back(Vector2I(x, y));
 	return m_plotTest == nullptr || m_plotTest(x, y);
 }

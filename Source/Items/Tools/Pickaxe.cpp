@@ -2,18 +2,17 @@
 #include "Constants.h"
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
-#include "Entities/Dynamic/Player.h"
-#include "World/Camera.h"
-#include "Entities/Dynamic/ItemDrop.h"
-#include "World/Terrain/Terrain.h"
+#include "Entities/Player.h"
+#include "World/World.h"
+#include "Entities/ItemDrop.h"
 #include "Game/Game.h"
 
 Pickaxe::Pickaxe(OverworldGame * game) :
 	m_game(game),
-	m_cracksSprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Tools/Pickaxes/MiningCracks.png")),
+	m_cracksSprite(game->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Pickaxes/MiningCracks")),
 	m_cracksAnimation(1, 4),
 	m_drawCracks(false),
-	m_sprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Tools/Pickaxes/IronPickaxe.png")),
+	m_sprite(game->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Pickaxes/IronPickaxe")),
 	m_prevBlockPosition(0, 0),
 	m_mineCounter(0.0f),
 	m_mineTime(0.1f)
@@ -35,7 +34,7 @@ void Pickaxe::unequip(Pawn *player)
 void Pickaxe::update(Pawn *pawn, const float delta)
 {
 	// Get block input position
-	Vector2i position = m_game->getWorld()->getCamera()->getInputPosition();
+	Vector2I position = m_game->getWorld()->getCamera()->getInputPosition();
 	position.x = (int) floor(position.x / BLOCK_PXF);
 	position.y = (int) floor(position.y / BLOCK_PXF);
 

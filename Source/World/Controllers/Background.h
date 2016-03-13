@@ -11,17 +11,17 @@ class OverworldGame;
 
 class Background : public SceneObject
 {
+	friend class Commander;
 public:
 	Background(World *world, Window *window);
 	~Background();
 
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
-
-	float getWind() const
-	{
-		return m_wind;
-	}
+	
+	float getWind() const { return m_wind; }
+	float getCloudHeight() const { return m_cloudHeight; }
+	float getCloudOffset() const { return m_cloudOffset; }
 
 private:
 	// Manager objects
@@ -50,7 +50,7 @@ private:
 	};
 
 	Random m_rand;
-	float m_wind;
+	float m_wind, m_cloudHeight, m_cloudOffset;
 	Shader *m_simplexNoise;
 	Texture2D *m_cloudGradient;
 	Sprite m_sun, m_moon;

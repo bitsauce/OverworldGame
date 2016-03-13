@@ -1,7 +1,6 @@
 #include "BlockEntityItem.h"
-#include "World/Terrain/Terrain.h"
-#include "Entities/Dynamic/Pawn.h"
-#include "World/Camera.h"
+#include "World/World.h"
+#include "Entities/Pawn.h"
 #include "Game/Game.h"
 #include "BlockEntities/BlockEntityData.h"
 
@@ -29,7 +28,7 @@ void BlockEntityItem::unequip(Pawn *pawn)
 void BlockEntityItem::use(Pawn *pawn, const float delta)
 {
 	// Get block input position
-	Vector2i blockPos = math::floor(m_game->getWorld()->getCamera()->getInputPosition() / BLOCK_PXF);
+	Vector2I blockPos = math::floor(m_game->getWorld()->getCamera()->getInputPosition() / BLOCK_PXF);
 
 	// Set block if not occupied
 	/*if(m_game->getWorld()->getTerrain()->setThingAt(blockPos.x, blockPos.y, m_entityID))

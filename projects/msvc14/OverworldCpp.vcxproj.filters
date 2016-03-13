@@ -155,6 +155,30 @@
     <ClCompile Include="..\..\Source\Gui\LineEdit.cpp">
       <Filter>Source\Gui</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Items\Weapons\Bow.cpp">
+      <Filter>Source\Items\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Items\Weapons\Ammo.cpp">
+      <Filter>Source\Items\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Items\Tools\Axe.cpp">
+      <Filter>Source\Items\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Items\Tools\Pickaxe.cpp">
+      <Filter>Source\Items\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Items\Placeable\BlockEntityItem.cpp">
+      <Filter>Source\Items\Placeable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\Arrow.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game\RayCast.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Items\BlockItem.cpp">
+      <Filter>Source\Items\Placeable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />

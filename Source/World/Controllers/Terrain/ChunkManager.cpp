@@ -706,80 +706,84 @@ void ChunkManager::reattachChunk(Chunk &chunk, GraphicsContext *context)
 
 	chunk.m_visualized = true;
 
-	// Directional light
-	/*m_directionalLightingShader->setUniform1f("u_OffsetY", (m_loadingArea.y0 * CHUNK_BLOCKSF - 32.0f) / (m_loadingArea.getHeight() * CHUNK_BLOCKS));
-	m_directionalLightingShader->setUniform1f("u_Direction", 0.0174532925f * 180.0f * (m_world->getTimeOfDay()->isDay() ? (1140.0f - m_world->getTimeOfDay()->getTime()) : (1860.0f - (m_world->getTimeOfDay()->getTime() >= 1140.0f ? m_world->getTimeOfDay()->getTime() : m_world->getTimeOfDay()->getTime() + 1440.0f))) / 720.0f);
-	context->setRenderTarget(m_lightingPass0);
-	context->setShader(m_directionalLightingShader);
-	context->drawRectangle(0.0f, 0.0f, width, height);
-
-	// Draw light sources
-	context->enable(GraphicsContext::BLEND);
-	context->setShader(m_radialLightingShader);
-	context->setBlendState(BlendState::PRESET_ADDITIVE);
-	for(LightSource *light : m_world->getLighting()->m_lightSources)
 	{
-		m_radialLightingShader->setUniform2f("u_Radius", light->getRadius() / width, light->getRadius() / height);
-		m_radialLightingShader->setUniform3f("u_Color", light->getColor().r / 255.0f, light->getColor().g / 255.0f, light->getColor().b / 255.0f);
+		const float width = m_loadingArea.getWidth() * CHUNK_BLOCKSF, height = m_loadingArea.getHeight() * CHUNK_BLOCKSF;
 
-		// TODO: It is inefficient to draw so many circles, so concider adding a check to see if redraw is necessary.
-		// (we only need to redraw when a light source is close to the edge)
-		// Center
-		const Vector2F basePos = Vector2F(math::mod(light->getPosition().x, width), math::mod(light->getPosition().y, height)) + Vector2F(0.5f, 0.5f);
-		m_radialLightingShader->setUniform2f("u_LightTexCoord", basePos.x / width, 1.0f - (basePos.y / height));
-		context->drawCircle(basePos, light->getRadius(), light->getRadius() * 1.5f);
+		// Directional light
+		m_directionalLightingShader->setUniform1f("u_OffsetY", (m_loadingArea.y0 * CHUNK_BLOCKSF - 32.0f) / (m_loadingArea.getHeight() * CHUNK_BLOCKS));
+		m_directionalLightingShader->setUniform1f("u_Direction", 0.0174532925f * 180.0f * (m_world->getTimeOfDay()->isDay() ? (1140.0f - m_world->getTimeOfDay()->getTime()) : (1860.0f - (m_world->getTimeOfDay()->getTime() >= 1140.0f ? m_world->getTimeOfDay()->getTime() : m_world->getTimeOfDay()->getTime() + 1440.0f))) / 720.0f);
+		context->setRenderTarget(m_lightingPass0);
+		context->setShader(m_directionalLightingShader);
+		context->drawRectangle(0.0f, 0.0f, width, height);
 
-		// Right
-		Vector2F pos = basePos + Vector2F(width, 0.0f);
-		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+		// Draw light sources
+		context->enable(GraphicsContext::BLEND);
+		context->setShader(m_radialLightingShader);
+		context->setBlendState(BlendState::PRESET_ADDITIVE);
+		for(LightSource *light : m_world->getLighting()->m_lightSources)
+		{
+			m_radialLightingShader->setUniform2f("u_Radius", light->getRadius() / width, light->getRadius() / height);
+			m_radialLightingShader->setUniform3f("u_Color", light->getColor().r / 255.0f, light->getColor().g / 255.0f, light->getColor().b / 255.0f);
 
-		// Left
-		pos = basePos + Vector2F(-width, 0.0f);
-		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+			// TODO: It is inefficient to draw so many circles, so concider adding a check to see if redraw is necessary.
+			// (we only need to redraw when a light source is close to the edge)
+			// Center
+			const Vector2F basePos = Vector2F(math::mod(light->getPosition().x, width), math::mod(light->getPosition().y, height)) + Vector2F(0.5f, 0.5f);
+			m_radialLightingShader->setUniform2f("u_LightTexCoord", basePos.x / width, 1.0f - (basePos.y / height));
+			context->drawCircle(basePos, light->getRadius(), light->getRadius() * 1.5f);
 
-		// Bottom
-		pos = basePos + Vector2F(0.0f, height);
-		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+			// Right
+			Vector2F pos = basePos + Vector2F(width, 0.0f);
+			m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+			context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
-		// Up
-		pos = basePos + Vector2F(0.0f, -height);
-		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+			// Left
+			pos = basePos + Vector2F(-width, 0.0f);
+			m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+			context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
-		// Top-left
-		pos = basePos + Vector2F(-width, -height);
-		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+			// Bottom
+			pos = basePos + Vector2F(0.0f, height);
+			m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+			context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
-		// Top-right
-		pos = basePos + Vector2F(width, -height);
-		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+			// Up
+			pos = basePos + Vector2F(0.0f, -height);
+			m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+			context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
-		// Bottom-left
-		pos = basePos + Vector2F(-width, height);
-		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+			// Top-left
+			pos = basePos + Vector2F(-width, -height);
+			m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+			context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
-		// Bottom-right
-		pos = basePos + Vector2F(width, height);
-		m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-		context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+			// Top-right
+			pos = basePos + Vector2F(width, -height);
+			m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+			context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+
+			// Bottom-left
+			pos = basePos + Vector2F(-width, height);
+			m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+			context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+
+			// Bottom-right
+			pos = basePos + Vector2F(width, height);
+			m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
+			context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
+		}
+		context->disable(GraphicsContext::BLEND);
+
+		// Blur horizontally (pass 1)
+		context->setRenderTarget(m_lightingPass1);
+		context->setShader(m_blurHShader);
+		context->drawRectangle(0.0f, 0.0f, width, height);
+
+		// Blur vertically (pass 2)
+		context->setRenderTarget(m_lightingPass2);
+		context->setShader(m_blurVShader);
+		context->drawRectangle(0.0f, 0.0f, width, height);
 	}
-	context->disable(GraphicsContext::BLEND);
-
-	// Blur horizontally (pass 1)
-	context->setRenderTarget(m_lightingPass1);
-	context->setShader(m_blurHShader);
-	context->drawRectangle(0.0f, 0.0f, width, height);
-
-	// Blur vertically (pass 2)
-	context->setRenderTarget(m_lightingPass2);
-	context->setShader(m_blurVShader);
-	context->drawRectangle(0.0f, 0.0f, width, height);*/
 
 	context->setShader(0);
 	context->setRenderTarget(0);

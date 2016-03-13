@@ -1,10 +1,10 @@
 #include "Arrow.h"
 #include "Game/RayCast.h"
 
-Arrow::Arrow(Pawn *owner, World *world, const Vector2 &pos, const Vector2 &dir, const float speed) :
+Arrow::Arrow(Pawn *owner, World *world, const Vector2F &pos, const Vector2F &dir, const float speed) :
 	DynamicEntity(world, ENTITY_ARROW),
 	m_owner(owner),
-	m_sprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Weapons/Arrow.png")),
+	m_sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Items/Weapons/Arrow")),
 	m_hasHit(false),
 	m_deleteTime(0.0f)
 {
@@ -22,9 +22,10 @@ Arrow::Arrow(Pawn *owner, World *world, const Vector2 &pos, const Vector2 &dir, 
 
 void Arrow::onDraw(DrawEvent *e)
 {
-	float angle = math::lerp(m_prevAngle, m_angle, alpha);
+	float angle = math::lerp(m_prevAngle, m_angle, e->getAlpha());
 	m_sprite.setRotation(angle * (180.0f / PI));
-	m_sprite.setPosition(getDrawPosition(alpha));
+	m_sprite.setPosition(getDrawPosition(e->getAlpha()));
+	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
 	spriteBatch->drawSprite(m_sprite);
 }
 
@@ -37,7 +38,7 @@ void Arrow::onTick(TickEvent *e)
 {
 	if(m_hasHit)
 	{
-		m_deleteTime += delta;
+		m_deleteTime += e->getDelta();;
 		if(m_deleteTime > 10.0f)
 		{
 			delete this;
@@ -49,15 +50,15 @@ void Arrow::onTick(TickEvent *e)
 	m_allowRotation = true;
 	if(!m_hasHit)
 	{
-		DynamicEntity::update(delta);
+		DynamicEntity::onTick(e);
 	}
 
 	// Ray cast
-	Vector2 aabb[4];
+	Vector2F aabb[4];
 	m_sprite.getAABB(aabb);
 
-	Vector2 dt = getPosition() - getLastPosition();
-	Vector2 pos = (aabb[1] + aabb[2]) / 2.0f;
+	Vector2F dt = getPosition() - getLastPosition();
+	Vector2F pos = (aabb[1] + aabb[2]) / 2.0f;
 
 	RayCast rayCast(bind(&Arrow::plotTest, this, placeholders::_1, placeholders::_2));
 	if(!m_hasHit && rayCast.trace(pos, pos + dt))

@@ -9,9 +9,9 @@
 Hotbar::Hotbar(GameOverlay *gameOverlay) :
 	UiObject(gameOverlay),
 	m_gameOverlay(gameOverlay),
-	m_backgroundSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Inventory/Hotbar.png")),
-	m_slotSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Inventory/ItemSlot.png")),
-	m_slotSelectedSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>(":/Sprites/Inventory/ItemSlotSelected.png")),
+	m_backgroundSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Inventory/Hotbar")),
+	m_slotSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Inventory/ItemSlot")),
+	m_slotSelectedSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Inventory/ItemSlotSelected")),
 	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Inventory"))
 {
 	m_font->setColor(Color(0, 0, 0, 255));

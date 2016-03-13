@@ -24,6 +24,8 @@ Background::Background(World *world, Window *window) :
 	m_topColor(255, 255, 255, 255),
 	m_bottomColor(90, 170, 255, 255),
 	m_wind(5.0f),
+	m_cloudHeight(0.0f),
+	m_cloudOffset(500.0f),
 	m_sun(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Sun")),
 	m_moon(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Moon"))
 {
@@ -213,12 +215,12 @@ void Cloud::onTick(TickEvent *e)
 	m_position.x += m_background->getWind() * m_depth * e->getDelta();
 
 	// Adjust Y
-	m_position.y = 500 - (m_game->getWorld()->getCamera()->getY() + 2000) * m_depth * 0.25f;
+	m_position.y = m_background->getCloudHeight() - (m_game->getWorld()->getCamera()->getY() + m_background->getCloudOffset()) * m_depth * 0.05f;
 }
 
 void Cloud::onDraw(DrawEvent *e)
 {
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
-	m_sprite.setPosition(math::lerp(m_prevPosition, m_position, e->getAlpha()));
+	m_sprite.setPosition(/*math::lerp(m_prevPosition, */m_position/*, e->getAlpha())*/);
 	spriteBatch->drawSprite(m_sprite);
 }

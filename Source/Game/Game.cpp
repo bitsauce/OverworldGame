@@ -51,7 +51,7 @@ void OverworldGame::onStart(GameEvent *e)
 	//addChildLast(m_world);
 
 	// Initialize block and item data
-	//ItemData::init(this);
+	ItemData::init(this);
 
 	// Setup debug
 	m_debug = new Debug(this);

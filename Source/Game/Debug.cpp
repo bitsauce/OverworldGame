@@ -35,7 +35,6 @@ Debug::Debug(OverworldGame *game) :
 	m_debugLighting(false),
 	m_blockPainterEnabled(false),
 	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Debug")),
-	m_variables(),
 	m_bulbSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Debug/Bulb")), // TODO: Replace these with colored cricles as they feel out of place
 	m_blockPainterTexture(new Texture2D())
 {
@@ -142,7 +141,7 @@ void Debug::debugFunction(KeyEvent *e)
 			else
 			{
 				// Attach camera to local player
-				//camera->setTargetEntity(m_world->getLocalPlayer());
+				camera->setTargetEntity(m_world->getLocalPlayer());
 			}
 		}
 		break;

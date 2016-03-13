@@ -1,7 +1,6 @@
 #include "BlockItem.h"
-#include "Entities/Dynamic/Pawn.h"
-#include "World/Camera.h"
-#include "World/Terrain/Terrain.h"
+#include "Entities/Pawn.h"
+#include "World/World.h"
 #include "Blocks/BlockData.h"
 #include "Game/Game.h"
 
@@ -16,7 +15,7 @@ BlockItem::BlockItem(OverworldGame * game, const WorldLayer layer, const BlockID
 void BlockItem::use(Pawn *pawn, const float delta)
 {
 	// Get block input position
-	Vector2i blockPos = m_camera->getInputPosition();
+	Vector2I blockPos = m_camera->getInputPosition();
 	blockPos.x = (int) floor(blockPos.x/BLOCK_PXF);
 	blockPos.y = (int) floor(blockPos.y/BLOCK_PXF);
 

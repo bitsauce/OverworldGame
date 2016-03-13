@@ -16,6 +16,7 @@ Commander::Commander(OverworldGame *game) :
 	//m_commands.push_back(Command("setblock", "3", "<BlockName> <x> <y>", bind(&Commander::setBlock, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("give", "1|2|3", "<ItemName> [amount] [player]", bind(&Commander::give, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("testphysics", "6", "<gravity> <jumpforce> <jumpease> <movespeed> <maxspeed> <friction>", bind(&Commander::setGravity, this, placeholders::_1, placeholders::_2)));
+	m_commands.push_back(Command("testclouds", "2", "<height> <offset>", bind(&Commander::testclouds, this, placeholders::_1, placeholders::_2)));
 }
 
 Commander::~Commander()
@@ -109,4 +110,11 @@ void Commander::setGravity(Chat *, vector<string> args)
 	player->m_moveSpeed = util::strToFloat(args[3]);
 	player->m_maxSpeed = util::strToFloat(args[4]);
 	player->m_friction = util::strToFloat(args[5]);
+}
+
+void Commander::testclouds(Chat*, vector<string> args)
+{
+	Background *background = m_game->getWorld()->getBackground();
+	background->m_cloudHeight = util::strToFloat(args[0]);
+	background->m_cloudOffset = util::strToFloat(args[1]);
 }

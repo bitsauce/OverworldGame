@@ -51,6 +51,64 @@
 		<path>Sprites/Characters/Images/larm.png</path>
 	</texture>
 
+	<texture>
+		<name>Sprites/ItemIcons/BlockGrass</name>
+		<path>Sprites/ItemIcons/BlockGrass.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/ItemIcons/BlockDirt</name>
+		<path>Sprites/ItemIcons/BlockDirt.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/ItemIcons/BlockDirtBack</name>
+		<path>Sprites/ItemIcons/BlockDirtBack.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/ItemIcons/BlockStone</name>
+		<path>Sprites/ItemIcons/BlockStone.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/ItemIcons/BlockOakWood</name>
+		<path>Sprites/ItemIcons/BlockOakWood.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/ItemIcons/BlockOakLeaves</name>
+		<path>Sprites/ItemIcons/BlockOakLeaves.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/ItemIcons/IronPickaxe</name>
+		<path>Sprites/ItemIcons/IronPickaxe.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/ItemIcons/IronAxe</name>
+		<path>Sprites/ItemIcons/IronAxe.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/ItemIcons/Torch</name>
+		<path>Sprites/ItemIcons/Torch.png</path>
+	</texture>
+
+	<texture>
+		<name>Sprites/Items/Tools/Pickaxes/IronPickaxe</name>
+		<path>Sprites/Items/Tools/Pickaxes/IronPickaxe.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Items/Tools/Pickaxes/MiningCracks</name>
+		<path>Sprites/Items/Tools/Pickaxes/MiningCracks.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Items/Tools/Axes/IronAxe</name>
+		<path>Sprites/Items/Tools/Axes/IronAxe.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Items/Weapons/WoodenBowAnim</name>
+		<path>Sprites/Items/Weapons/WoodenBowAnim.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Items/Weapons/WoodenBow</name>
+		<path>Sprites/Items/Weapons/WoodenBow.png</path>
+	</texture>
+
 	<!-- Shaders -->
 	<shader>
 		<name>Shaders/DirectionalLighting</name>

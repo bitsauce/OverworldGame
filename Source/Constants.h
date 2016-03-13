@@ -17,12 +17,6 @@ enum PacketID
 
 #define DEFAULT_PORT 45557
 
-#define UI_INVENTORY_FONT ":/Fonts/Consolas11.fnt"
-#define UI_DEBUG_FONT ":/Fonts/DebugFont.fnt"
-#define UI_CHAT_FONT ":/Fonts/DebugFont.fnt"
-
-#define UI_MENU_BUTTON_TEXTURE ":/sprites/gui/menu_button.png"
-
 #define CHAT_FADE_TIME 10.0f
 #define CHAT_WIDTH 400
 #define CHAT_HEIGHT 250

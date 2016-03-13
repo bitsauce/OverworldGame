@@ -1,16 +1,16 @@
 #include "Bow.h"
 #include "Constants.h"
-#include "Entities/Dynamic/Pawn.h"
-#include "Entities/Dynamic/Arrow.h"
-#include "World/Camera.h"
+#include "Entities/Pawn.h"
+#include "Entities/Arrow.h"
 #include "World/World.h"
 #include "Game/Game.h"
 #include "Animation/Skeleton.h"
+#include "Animation/Bone.h"
 
 Bow::Bow(OverworldGame * game) :
 	m_game(game),
-	m_attachTexture(ResourceManager::get<Texture2D>(":/Sprites/Items/Weapons/WoodenBow.png")),
-	m_sprite(ResourceManager::get<Texture2D>(":/Sprites/Items/Weapons/WoodenBowAnim.png")),
+	m_attachTexture(game->getResourceManager()->get<Texture2D>("Sprites/Items/Weapons/WoodenBow")),
+	m_sprite(game->getResourceManager()->get<Texture2D>("Sprites/Items/Weapons/WoodenBowAnim")),
 	m_charging(false),
 	m_chargeTime(0.0f),
 	m_chargeAnim(1, 4)
@@ -32,7 +32,7 @@ void Bow::unequip(Pawn *player)
 
 void Bow::update(Pawn *pawn, const float delta)
 {
-	Vector2 dir = m_game->getWorld()->getCamera()->getInputPosition() - pawn->getCenter();
+	Vector2F dir = m_game->getWorld()->getCamera()->getInputPosition() - pawn->getCenter();
 	if(pawn->getController()->getInputState(Controller::INPUT_USE_ITEM))
 	{
 		m_charging = true;
@@ -82,8 +82,6 @@ void Bow::update(Pawn *pawn, const float delta)
 	}
 }
 
-#include "Animation/Bone.h"
-
 void Bow::draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha)
 {
 	if(m_charging)
@@ -104,7 +102,7 @@ void Bow::draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha)
 			angle *= -1;
 		}
 
-		Vector2 pos = skeleton->getPosition() + skeleton->findBone("lhand")->getWorldPosition();
+		Vector2F pos = skeleton->getPosition() + skeleton->findBone("lhand")->getWorldPosition();
 		m_sprite.setPosition(pos - m_sprite.getSize() * 0.5f);
 		m_sprite.setOrigin(m_sprite.getSize() * 0.5f);
 		m_sprite.setRotation(angle);
