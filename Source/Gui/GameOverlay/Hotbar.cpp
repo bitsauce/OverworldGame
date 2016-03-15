@@ -23,9 +23,10 @@ Hotbar::Hotbar(GameOverlay *gameOverlay) :
 	m_backgroundSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 	m_backgroundSprite.setDepth(-2.f);
 
-	setAnchor(Vector2F(0.5f, 0.98f));
-	setSize(Vector2F(490.f, 56.f) / gameOverlay->getSize());
-	setPosition(Vector2F(.0f));
+	setAnchor(0.5f, 0.95f);
+	setSize(Vector2F(490.f, 56.f) / gameOverlay->getDrawSize());
+	setPosition(0.0f, 0.0f);
+	setOrigin(0.5f, 0.5f);
 }
 
 Hotbar::~Hotbar()
@@ -34,8 +35,7 @@ Hotbar::~Hotbar()
 
 void Hotbar::onTick(TickEvent *e)
 {
-	setSize(Vector2F(490.f, 56.f) / m_gameOverlay->getSize());
-
+	setSize(Vector2F(490.f, 56.f) / m_gameOverlay->getDrawSize());
 	UiObject::onTick(e);
 }
 
@@ -63,9 +63,9 @@ void Hotbar::onDraw(DrawEvent *e)
 	}
 }
 
-void Hotbar::setSelectedSlot(int action, const uint slot)
+void Hotbar::setSelectedSlot(KeyEvent *e, const uint slot)
 {
-	//if(action != GLFW_PRESS) return;
+	if(e->getType() != KeyEvent::DOWN) return;
 	m_gameOverlay->getPlayer()->setSelectedSlot(slot);
 }
 

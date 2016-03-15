@@ -15,7 +15,7 @@ public:
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
 
-	void setSelectedSlot(int action, const uint slot);
+	void setSelectedSlot(KeyEvent* e, const uint slot);
 	
 	void onKeyEvent(KeyEvent *e);
 	void onMouseWheelEvent(MouseEvent *e);

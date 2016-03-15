@@ -76,6 +76,14 @@
 		<path>Sprites/ItemIcons/BlockOakLeaves.png</path>
 	</texture>
 	<texture>
+		<name>Sprites/ItemIcons/CraftingBench</name>
+		<path>Sprites/ItemIcons/CraftingBench.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/ItemIcons/Arrow</name>
+		<path>Sprites/ItemIcons/Arrow.png</path>
+	</texture>
+	<texture>
 		<name>Sprites/ItemIcons/IronPickaxe</name>
 		<path>Sprites/ItemIcons/IronPickaxe.png</path>
 	</texture>
@@ -86,6 +94,10 @@
 	<texture>
 		<name>Sprites/ItemIcons/Torch</name>
 		<path>Sprites/ItemIcons/Torch.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/ItemIcons/WoodenBow</name>
+		<path>Sprites/ItemIcons/WoodenBow.png</path>
 	</texture>
 
 	<texture>
@@ -109,6 +121,24 @@
 		<path>Sprites/Items/Weapons/WoodenBow.png</path>
 	</texture>
 
+	<texture>
+		<name>Sprites/Inventory/Hotbar</name>
+		<path>Sprites/Inventory/Hotbar.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Inventory/ItemSlot</name>
+		<path>Sprites/Inventory/ItemSlot.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Inventory/ItemSlotSelected</name>
+		<path>Sprites/Inventory/ItemSlotSelected.png</path>
+	</texture>
+
+	<texture>
+		<name>Sprites/Debug/Bulb</name>
+		<path>Sprites/Debug/Bulb.png</path>
+	</texture>
+	
 	<!-- Shaders -->
 	<shader>
 		<name>Shaders/DirectionalLighting</name>

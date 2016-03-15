@@ -7,17 +7,17 @@
 		</bind>
 		<bind>
 			<name>take_screen_shot</name>
-			<key>print_screen</key>
+			<key>printscreen</key>
 		</bind>
 
 		<!-- Player -->
 		<bind>
 			<name>activate_thing</name>
-			<key>mouse_button_right</key>
+			<key>rmb</key>
 		</bind>
 		<bind>
 			<name>use_item</name>
-			<key>mouse_button_left</key>
+			<key>lmb</key>
 		</bind>
 		<bind>
 			<name>move_left</name>

@@ -17,7 +17,7 @@ GameOverlay::GameOverlay(OverworldGame *game, UiObject *parent, GraphicsContext 
 	setPosition(Vector2F(0.0f, 0.0f));
 	setSize(Vector2F(1.0f, 1.0f));
 
-	//m_hotbar = new Hotbar(this);
+	m_hotbar = new Hotbar(this);
 	/*m_healthManaStatus = new HealthManaStatus(scene, this);
 	m_omnicon = new Omnicon(scene, this);
 	m_inventory = new Inventory(scene, this);
@@ -52,10 +52,15 @@ void GameOverlay::onTick(TickEvent *e)
 void GameOverlay::onDraw(DrawEvent *e)
 {
 	e->getGraphicsContext()->setTransformationMatrix(Matrix4());
+	
+	SpriteBatch *spriteBatch = (SpriteBatch*)e->getUserData();
+	spriteBatch->end();
+	spriteBatch->begin(SpriteBatch::State());
+
 	UiObject::onDraw(e);
 
 	if(!m_player) return;
-	SpriteBatch *spriteBatch = (SpriteBatch*)e->getUserData();
+
 	m_player->getHeldItem()->drawItem(m_game->getInputManager()->getPosition() + Vector2F(5.0f, 0.0f), spriteBatch, m_font);
 }
 

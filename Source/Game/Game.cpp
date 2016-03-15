@@ -94,29 +94,18 @@ void OverworldGame::onStart(GameEvent *e)
 	// Set key bindings
 	/*InputContext *inputContext = Input::getContext("game");
 
-	inputContext->bind("toggle_full_screen", bind(&OverworldGame::toggleFullscreen, this, placeholders::_1), true);
-	inputContext->bind("take_screen_shot", bind(&OverworldGame::takeScreenshot, this, placeholders::_1), true);
+	inputContext->bind("toggle_full_screen"->setFunction(bind(&OverworldGame::toggleFullscreen, this, placeholders::_1), true);
+	inputContext->bind("take_screen_shot"->setFunction(bind(&OverworldGame::takeScreenshot, this, placeholders::_1), true);
 
-	inputContext->bind("show_omnicon", bind(&Omnicon::toggle, m_gameOverlay->getOmnicon(), placeholders::_1), true);
-	inputContext->bind("show_inventory", bind(&Inventory::toggle, m_gameOverlay->getInventory(), placeholders::_1), true);
-	inputContext->bind("show_chat", bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1), true);
-
-	inputContext->bind("hotbar_select_0", bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 0), true);
-	inputContext->bind("hotbar_select_1", bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 1), true);
-	inputContext->bind("hotbar_select_2", bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 2), true);
-	inputContext->bind("hotbar_select_3", bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 3), true);
-	inputContext->bind("hotbar_select_4", bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 4), true);
-	inputContext->bind("hotbar_select_5", bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 5), true);
-	inputContext->bind("hotbar_select_6", bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 6), true);
-	inputContext->bind("hotbar_select_7", bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 7), true);
-	inputContext->bind("hotbar_select_8", bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 8), true);
-	inputContext->bind("hotbar_select_9", bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 9), true);
+	inputContext->bind("show_omnicon"->setFunction(bind(&Omnicon::toggle, m_gameOverlay->getOmnicon(), placeholders::_1), true);
+	inputContext->bind("show_inventory"->setFunction(bind(&Inventory::toggle, m_gameOverlay->getInventory(), placeholders::_1), true);
+	inputContext->bind("show_chat"->setFunction(bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1), true);
 
 	Input::setContext(inputContext);
 
 	inputContext = Input::getContext("chat");
-	inputContext->bind("send_message", bind(&Chat::sendMessage, m_gameOverlay->getChat(), placeholders::_1), true);
-	inputContext->bind("escape_chat", bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1), true);*/
+	inputContext->bind("send_message"->setFunction(bind(&Chat::sendMessage, m_gameOverlay->getChat(), placeholders::_1), true);
+	inputContext->bind("escape_chat"->setFunction(bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1), true);*/
 
 	InputContext *inputContext = getInputManager()->getContextByName("game");
 
@@ -124,6 +113,17 @@ void OverworldGame::onStart(GameEvent *e)
 	inputContext->getKeybind("camera_zoom_out")->setFunction(bind(&Camera::zoomOut, m_world->getCamera(), placeholders::_1));
 
 	inputContext->getKeybind("show_chat")->setFunction(bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1));
+
+	inputContext->getKeybind("hotbar_select_0")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 0));
+	inputContext->getKeybind("hotbar_select_1")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 1));
+	inputContext->getKeybind("hotbar_select_2")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 2));
+	inputContext->getKeybind("hotbar_select_3")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 3));
+	inputContext->getKeybind("hotbar_select_4")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 4));
+	inputContext->getKeybind("hotbar_select_5")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 5));
+	inputContext->getKeybind("hotbar_select_6")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 6));
+	inputContext->getKeybind("hotbar_select_7")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 7));
+	inputContext->getKeybind("hotbar_select_8")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 8));
+	inputContext->getKeybind("hotbar_select_9")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 9));
 
 	inputContext->getKeybind("debug_func_1")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
 	inputContext->getKeybind("debug_func_2")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));

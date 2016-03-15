@@ -349,6 +349,15 @@ void ChunkManager::onDraw(DrawEvent *e)
 	// This should be called when a new area is entered
 	if(m_reattachAllChunks)
 	{
+		// Detach chunks
+		for(int y = m_loadingArea.y0 + 1; y <= m_loadingArea.y1 - 1; ++y)
+		{
+			for(int x = m_loadingArea.x0 + 1; x <= m_loadingArea.x1 - 1; ++x)
+			{
+				getChunkAt(x, y).detach();
+			}
+		}
+
 		// Attach chunks
 		for(int y = m_loadingArea.y0 + 1; y <= m_loadingArea.y1 - 1; ++y)
 		{
