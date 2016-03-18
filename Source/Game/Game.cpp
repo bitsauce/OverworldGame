@@ -43,8 +43,7 @@ void OverworldGame::onStart(GameEvent *e)
 	
 	// Init world
 	BlockData::init();
-	//BlockEntityData::init();
-
+	BlockEntityData::init();
 	EntityData::init(this);
 
 	m_world = new World(this);

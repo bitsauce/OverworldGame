@@ -179,6 +179,9 @@
     <ClCompile Include="..\..\Source\Items\BlockItem.cpp">
       <Filter>Source\Items\Placeable</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\BlockEntities\Torch.cpp">
+      <Filter>Source\BlockEntities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />

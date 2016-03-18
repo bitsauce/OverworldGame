@@ -139,6 +139,11 @@
 	</texture>
 
 	<texture>
+		<name>Sprites/BlockEntities/LightSources/Torch</name>
+		<path>Sprites/BlockEntities/LightSources/Torch.png</path>
+	</texture>
+	
+	<texture>
 		<name>Sprites/Debug/Bulb</name>
 		<path>Sprites/Debug/Bulb.png</path>
 	</texture>
