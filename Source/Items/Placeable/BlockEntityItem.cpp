@@ -12,17 +12,12 @@ BlockEntityItem::BlockEntityItem(OverworldGame *game, const BlockEntityID id) :
 
 void BlockEntityItem::equip(Pawn *pawn)
 {
-	/*BlockEntityData *data = BlockEntityData::get(m_blockEntityID);
-	if(data)
-	{
-		data->getPixmap();
-	}
-	player->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, m_sprite.getTexture());*/
+	pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, getIconTexture());
 }
 
 void BlockEntityItem::unequip(Pawn *pawn)
 {
-	//player->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, 0);
+	pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, 0);
 }
 
 void BlockEntityItem::use(Pawn *pawn, const float delta)

@@ -21,8 +21,7 @@ public:
 private:
 	Pawn *m_owner;
 	Sprite m_sprite;
-	float m_angle;
-	float m_prevAngle;
+	Vector2F m_prevVelocity;
 	bool m_hasHit;
 	float m_deleteTime;
 };

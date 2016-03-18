@@ -17,12 +17,20 @@ Arrow::Arrow(Pawn *owner, World *world, const Vector2F &pos, const Vector2F &dir
 	setPosition(pos - m_sprite.getSize() * 0.5f);
 	setVelocity(dir.normalized() * speed);
 	setGravityScale(0.75f);
-	m_angle = m_prevAngle = atan2(dir.y, dir.x);
 }
 
 void Arrow::onDraw(DrawEvent *e)
 {
-	float angle = math::lerp(m_prevAngle, m_angle, e->getAlpha());
+	float angle;
+	if(m_hasHit)
+	{
+		angle = m_sprite.getRotation() / 180.0f * PI;
+	}
+	else
+	{
+		Vector2F velocity = math::lerp(m_prevVelocity, getVelocity(), e->getAlpha());
+		angle = atan2(velocity.y, velocity.x);
+	}
 	m_sprite.setRotation(angle * (180.0f / PI));
 	m_sprite.setPosition(getDrawPosition(e->getAlpha()));
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
@@ -38,7 +46,8 @@ void Arrow::onTick(TickEvent *e)
 {
 	if(m_hasHit)
 	{
-		m_deleteTime += e->getDelta();;
+		setPosition(getPosition());
+		m_deleteTime += e->getDelta();
 		if(m_deleteTime > 10.0f)
 		{
 			delete this;
@@ -50,6 +59,7 @@ void Arrow::onTick(TickEvent *e)
 	m_allowRotation = true;
 	if(!m_hasHit)
 	{
+		m_prevVelocity = getVelocity();
 		DynamicEntity::onTick(e);
 	}
 
@@ -79,7 +89,4 @@ void Arrow::onTick(TickEvent *e)
 	m_deleteTime = 11.0f;
 	}
 	}*/
-
-	m_prevAngle = m_angle;
-	m_angle = m_hasHit ? (m_sprite.getRotation() / 180.0f * PI) : atan2(getVelocity().y, getVelocity().x);
 }

@@ -12,6 +12,6 @@ PlayerController::PlayerController(InputManager *input, const bool local)
 		inputContext->getKeybind("move_right")->setFunction(bind(&PlayerController::setClientInputState, this, placeholders::_1, INPUT_MOVE_RIGHT));
 		inputContext->getKeybind("jump")->setFunction(bind(&PlayerController::setClientInputState, this, placeholders::_1, INPUT_JUMP));
 		inputContext->getKeybind("run")->setFunction(bind(&PlayerController::setClientInputState, this, placeholders::_1, INPUT_RUN));
-		//inputContext->getKeybind("use_item")->setFunction(bind(&PlayerController::setClientUseItemState, this, placeholders::_1));
+		inputContext->getKeybind("use_item")->setFunction(bind(&PlayerController::setClientUseItemState, this, placeholders::_1));
 	}
 }
