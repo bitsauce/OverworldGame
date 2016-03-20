@@ -89,7 +89,7 @@ void ChunkManager::clear()
 }
 
 // SERIALIZATION
-void ChunkManager::saveBlockData(FileWriter &file, BlockID * blockData)
+void ChunkManager::saveBlockData(FileWriter &file, Block *blockData)
 {
 	// Write blocks to stream
 	BlockID currentBlock = blockData[0];
@@ -113,7 +113,7 @@ void ChunkManager::saveBlockData(FileWriter &file, BlockID * blockData)
 	file << length << endl;
 }
 
-void ChunkManager::loadBlockData(FileReader &file, BlockID *blockData)
+void ChunkManager::loadBlockData(FileReader &file, Block *blockData)
 {
 	// Read blocks from stream
 	int pos = 0;
@@ -186,8 +186,8 @@ void ChunkManager::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 	if(file.isOpen())
 	{
 		// Save chunk data
-		saveBlockData(file, chunk->m_blocks);
-		saveEntities(file, chunk->m_blockEntities);
+		//saveBlockData(file, chunk->m_blocks);
+		//saveEntities(file, chunk->m_blockEntities);
 	}
 	else
 	{
@@ -195,11 +195,11 @@ void ChunkManager::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 	}
 
 	// Delete static entities
-	for(BlockEntity *entity : chunk->m_blockEntities)
+	/*for(BlockEntity *entity : chunk->m_blockEntities)
 	{
 		delete entity;
 	}
-	chunk->m_blockEntities.clear(); // Empty static entity list
+	chunk->m_blockEntities.clear();*/ // Empty static entity list
 
 	// Add chunk to chunk pool and remove from active chunks
 	m_chunkPool.push_back(chunk);
@@ -268,7 +268,7 @@ Chunk *ChunkManager::loadChunkAt(const int chunkX, const int chunkY)
 	}
 
 	// Get block data
-	BlockID blocks[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
+	Block blocks[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
 	if(file)
 	{
 		LOG("Loading chunk [%i, %i]...", chunkX, chunkY);

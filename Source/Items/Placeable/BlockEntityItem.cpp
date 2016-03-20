@@ -33,11 +33,11 @@ void BlockEntityItem::use(Pawn *pawn, const float delta)
 	}*/
 
 	BlockEntityData *data = BlockEntityData::get(m_blockEntityID);
-	if(data)
+	if(!data)
 	{
-		data->create(m_game->getWorld(), blockPos.x, blockPos.y);
-		pawn->getCurrentItem()->dec();
+		return;
 	}
+	m_game->getWorld()->getTerrain()->setBlockAt(blockPos.x, blockPos.y, data->create(m_game->getWorld(), blockPos.x, blockPos.y), WORLD_LAYER_MIDDLE);
 }
 
 void BlockEntityItem::draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha)

@@ -13,13 +13,9 @@ public:
 	BlockEntity(World *world, const int x, const int y, const BlockEntityData *data);
 	~BlockEntity();
 
-	virtual void update(const float dt)
-	{
-	}
+	//virtual void onTick(const float dt);
 
-	virtual void onDraw(DrawEvent *e)
-	{
-	}
+	virtual void getVertices(vector<Vertex> &vertices) = 0;
 
 	Vector2I getPosition() const
 	{
@@ -36,9 +32,14 @@ public:
 		return m_position.y;
 	}
 
-	const BlockEntityData *getData()
+	const BlockEntityData *getData() const
 	{
 		return m_data;
+	}
+
+	BlockEntityData *getData()
+	{
+		return const_cast<BlockEntityData*>(m_data);
 	}
 
 private:

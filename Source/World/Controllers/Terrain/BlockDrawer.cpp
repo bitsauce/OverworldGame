@@ -37,4 +37,19 @@ void BlockDrawer::onDraw(DrawEvent *e)
 	graphicsContext->drawRectangle(area.x0 * CHUNK_PXF, area.y0 * CHUNK_PXF, area.getWidth() * CHUNK_PXF, area.getHeight() * CHUNK_PXF, Color(255), TextureRegion(u0, v0, u1, v1));
 	graphicsContext->setShader(0);
 	graphicsContext->setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
+
+	if(m_layer == WORLD_LAYER_MIDDLE)
+	{
+		graphicsContext->setTexture(BlockEntityData::s_atlas->getTexture());
+		// Draw block entitites
+		ChunkManager::ChunkArea activeArea = m_chunkManager->getActiveArea();
+		for(int y = activeArea.y0; y <= activeArea.y1; ++y)
+		{
+			for(int x = activeArea.x0; x <= activeArea.x1; ++x)
+			{
+				m_chunkManager->getChunkAt(x, y).drawBlockEntities(graphicsContext);
+			}
+		}
+		graphicsContext->setTexture(0);
+	}
 }

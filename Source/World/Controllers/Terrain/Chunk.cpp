@@ -2,9 +2,7 @@
 #include "ChunkManager.h"
 #include "Constants.h"
 #include "World/World.h"
-#include "Blocks/BlockData.h"
 #include "Generation/Generator.h"
-#include "BlockEntities/BlockEntity.h"
 
 Chunk::Chunk(ChunkManager *chunkManager) :
 	m_chunkManager(chunkManager)
@@ -13,7 +11,7 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 	m_attached = m_modified = m_sorted = false; // Not modified
 
 	// Initialize blocks
-	m_blocks = new BlockID[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
+	m_blocks = new Block[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
 	for(int i = 0; i < CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT; ++i)
 	{
 		m_blocks[i] = BLOCK_EMPTY;
@@ -21,7 +19,7 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 	m_blockTexture = Resource<Texture2D>(new Texture2D(CHUNK_BLOCKS, CHUNK_BLOCKS));
 }
 
-void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
+void Chunk::load(int chunkX, int chunkY, Block *blocks)
 {
 	// Set position
 	m_x = chunkX;
@@ -49,8 +47,9 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 			float shadow = 1.0f;
 			for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 			{
-				pixel[z] = (uchar) m_blocks[BLOCK_INDEX(x, y, z)];
-				shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, y, z)]).getOpacity();
+				BlockData *data = m_blocks[BLOCK_INDEX(x, y, z)].getBlockData();
+				pixel[z] = (uchar) data->getID();
+				shadow -= data->getOpacity();
 			}
 			pixel[3] = uchar(255 * max(shadow, 0.0f));
 			pixmap.setPixel(x, y, pixel);
@@ -67,8 +66,7 @@ void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 	LOG("Chunk [%i, %i] generated", m_x, m_y);
 }
 
-// BLOCKS
-BlockID Chunk::getBlockAt(const int x, const int y, WorldLayer layer) const
+Block Chunk::getBlockAt(const int x, const int y, WorldLayer layer) const
 {
 	return m_blocks[BLOCK_INDEX(x, y, layer)];
 }
@@ -83,7 +81,7 @@ bool Chunk::isBlockOccupied(const int x, const int y, WorldLayer layer) const
 	return m_blocks[BLOCK_INDEX(x, y, layer)] >= BLOCK_ENTITY;
 }
 	
-bool Chunk::setBlockAt(const int x, const int y, const BlockID block, WorldLayer layer)
+bool Chunk::setBlockAt(const int x, const int y, const Block block, WorldLayer layer)
 {
 	// Make sure we can add a block here
 	if(m_blocks[BLOCK_INDEX(x, y, layer)] != block)
@@ -116,8 +114,9 @@ bool Chunk::setBlockAt(const int x, const int y, const BlockID block, WorldLayer
 		float shadow = 1.0f;
 		for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 		{
-			pixel[z] = (uchar) m_blocks[BLOCK_INDEX(x, y, z)];
-			shadow -= BlockData::get(m_blocks[BLOCK_INDEX(x, y, z)]).getOpacity();
+			BlockData *data = m_blocks[BLOCK_INDEX(x, y, z)].getBlockData();
+			pixel[z] = (uchar) data->getID();
+			shadow -= data->getOpacity();
 		}
 		pixel[3] = (uchar) (255 * max(shadow, 0.0f));
 		m_blockTexture->updatePixmap(x, y, Pixmap(1, 1, pixel));
@@ -125,6 +124,20 @@ bool Chunk::setBlockAt(const int x, const int y, const BlockID block, WorldLayer
 		return true; // Return true as something was changed
 	}
 	return false; // Nothing changed
+}
+
+bool Chunk::addBlockEntity(const int x, const int y, const Block block, WorldLayer layer)
+{
+	m_blockEntities.push_back(block.getBlockEntity());
+
+	vector<Vertex> vertices;
+	for(BlockEntity *blockEntity : m_blockEntities)
+	{
+		blockEntity->getVertices(vertices);
+	}
+
+	m_blockEntityVBO.setData(&vertices[0], vertices.size());
+	return true;
 }
 
 void Chunk::attach(GraphicsContext *context, const int x, const int y)
@@ -142,4 +155,9 @@ void Chunk::attach(GraphicsContext *context, const int x, const int y)
 void Chunk::detach()
 {
 	m_sorted = m_attached = false;
+}
+
+void Chunk::drawBlockEntities(GraphicsContext *context)
+{
+	context->drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, &m_blockEntityVBO);
 }

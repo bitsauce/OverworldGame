@@ -2,18 +2,18 @@
 
 #include "Config.h"
 #include "BlockEntity.h"
-#include "Torch.h"
+#include "Blocks/BlockData.h"
 
 class World;
 
-class BlockEntityData
+class BlockEntityData : public BlockData
 {
 	friend class OverworldGame;
 public:
 	BlockEntityData(const BlockEntityID id, const string &name, const Pixmap &pixmap, const uint width, const uint height, const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> factory) :
+		BlockData(BLOCK_ENTITY, pixmap, ITEM_NONE, 1.0f),
 		m_id(id),
 		m_name(name),
-		m_pixmap(pixmap),
 		m_width(width),
 		m_height(height),
 		m_factory(factory)
@@ -56,11 +56,6 @@ public:
 		return m_id;
 	}
 
-	Pixmap getPixmap() const
-	{
-		return m_pixmap;
-	}
-
 	uint getWidth() const
 	{
 		return m_width;
@@ -71,14 +66,16 @@ public:
 		return m_height;
 	}
 
+	//getTextureCoordinates()
+
 private:
 	const BlockEntityID m_id;
 	const string &m_name;
 	const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> m_factory;
 	const uint m_width, m_height;
-	const Pixmap m_pixmap;
 
 	static void init();
 	static vector<BlockEntityData*> s_data;
-	static TextureAtlas *s_atlas;
+public:
+	static TextureAtlas *s_atlas; // TODO: Should not be public
 };

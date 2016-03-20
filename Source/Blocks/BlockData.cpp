@@ -87,7 +87,7 @@ BlockData::BlockData(BlockID id, const Pixmap &pixmap, const ItemID item, const 
 {
 }
 
-BlockData &BlockData::get(const BlockID block)
+BlockData *BlockData::get(const BlockID block)
 {
-	return *s_blockData[block];
+	return s_blockData[block];
 }

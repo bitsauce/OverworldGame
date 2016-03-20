@@ -20,7 +20,7 @@ public:
 
 	// Static functions
 	static void init();
-	static BlockData &get(const BlockID id);
+	static BlockData *get(const BlockID id);
 
 	static TextureAtlas *getBlockAtlas()
 	{

@@ -5,6 +5,7 @@
 #include "Constants.h"
 #include "Noise/Simplex.h"
 #include <unordered_set>
+#include "Blocks/Block.h"
 
 class ChunkGenerator
 {
@@ -15,7 +16,7 @@ public:
 	Simplex2D &getSimplexNoise() { return m_noise; }
 	Random getRandom() { return m_random; }
 
-	void getChunkBlocks(const int chunkX, const int chunkY, BlockID *blocks);
+	void getChunkBlocks(const int chunkX, const int chunkY, Block *blocks);
 	int getGroundHeight(const int x);
 
 	void setBlockAt(const int x, const int y, const WorldLayer z, const BlockID block);

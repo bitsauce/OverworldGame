@@ -12,7 +12,7 @@ ChunkGenerator::ChunkGenerator(const uint seed) :
 	m_random.setSeed(seed);
 }
 
-void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, BlockID *blocks)
+void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, Block *blocks)
 {
 	// Load structures
 	//loadStructures(chunkX, chunkY);

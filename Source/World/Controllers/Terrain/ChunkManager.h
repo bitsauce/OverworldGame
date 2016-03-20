@@ -4,6 +4,7 @@
 #include "Config.h"
 #include "Chunk.h"
 #include "Entities/Entity.h"
+#include "Blocks/Block.h"
 
 class Camera;
 class World;
@@ -62,8 +63,8 @@ public:
 private:
 	Chunk *loadChunkAt(const int chunkX, const int chunkY);
 	
-	void saveBlockData(FileWriter &file, BlockID *blockData);
-	void loadBlockData(FileReader &file, BlockID *blockData);
+	void saveBlockData(FileWriter &file, Block *blockData);
+	void loadBlockData(FileReader &file, Block *blockData);
 
 	void saveEntities(FileWriter &file, set<BlockEntity*> entities);
 	void loadEntities(FileReader &file);
@@ -84,9 +85,6 @@ private:
 
 	// Chunks
 	unordered_map<uint, Chunk*> m_chunks;
-
-	// Block entity VBO
-	StaticVertexBuffer m_blockEntityVBO;
 
 	// Active area
 	ChunkArea m_activeArea;

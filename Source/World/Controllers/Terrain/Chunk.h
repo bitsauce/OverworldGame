@@ -3,27 +3,7 @@
 
 #include "Config.h"
 #include "Constants.h"
-
-class BlockEntity;
-
-/*class Block
-{
-public:
-	Block(BlockID id) :
-		m_block(id)
-	{
-	}
-
-	bool isEntity()
-	{
-		return m_entity;
-	}
-
-private:
-	BlockEntityData *m_data;
-	BlockID m_block;
-	bool m_entity;
-};*/
+#include "Blocks/Block.h"
 
 class Chunk
 {
@@ -37,7 +17,7 @@ public:
 	 * \param chunkY The global chunk y-coordinate
 	 * \param blocks Array of blocks to load into the chunk
 	 */
-	void load(int chunkX, int chunkY, BlockID *blocks);
+	void load(int chunkX, int chunkY, Block *blocks);
 	
 	bool isAttached() const { return m_attached; }
 	bool isVisualized() const { return m_sorted; }
@@ -46,21 +26,28 @@ public:
 	int getX() const { return m_x; }
 	int getY() const { return m_y; }
 	
-	BlockID getBlockAt(const int x, const int y, WorldLayer layer) const;
+	Block getBlockAt(const int x, const int y, WorldLayer layer) const;
 	bool isBlockAt(const int x, const int y, WorldLayer layer) const;
 	bool isBlockOccupied(const int x, const int y, WorldLayer layer) const;
-	bool setBlockAt(const int x, const int y, const BlockID block, WorldLayer layer);
+	bool setBlockAt(const int x, const int y, const Block block, WorldLayer layer);
+
+	bool addBlockEntity(const int x, const int y, const Block block, WorldLayer layer);
 	
-	// DRAWING
 	void attach(GraphicsContext *context, const int x, const int y);
 	void detach();
+
+	void drawBlockEntities(GraphicsContext *context);
 
 private:
 	Chunk(const Chunk &) { }
 
 	// Chunk
 	int m_x, m_y;
-	BlockID *m_blocks;
+	Block *m_blocks;
+	list<BlockEntity*> m_blockEntities;
+
+	// Block entity VBO
+	StaticVertexBuffer m_blockEntityVBO;
 
 	// Chunk manager
 	ChunkManager *m_chunkManager;

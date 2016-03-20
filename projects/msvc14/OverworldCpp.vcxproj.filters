@@ -182,6 +182,9 @@
     <ClCompile Include="..\..\Source\BlockEntities\Torch.cpp">
       <Filter>Source\BlockEntities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Blocks\Block.cpp">
+      <Filter>Source\Blocks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -458,6 +461,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Gui\UiEvents.h">
       <Filter>Source\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Blocks\Block.h">
+      <Filter>Source\Blocks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
