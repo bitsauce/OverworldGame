@@ -75,13 +75,18 @@ private:
 
 	void reattachChunk(Chunk &chunk, GraphicsContext *context);
 
+	// Manager classes
 	bool m_applyZoom;
 	Window *m_window;
 	Camera *m_camera;
 	World *m_world;
 	ChunkGenerator *m_generator;
 
+	// Chunks
 	unordered_map<uint, Chunk*> m_chunks;
+
+	// Block entity VBO
+	StaticVertexBuffer m_blockEntityVBO;
 
 	// Active area
 	ChunkArea m_activeArea;

@@ -1,20 +1,16 @@
 #include "Chunk.h"
 #include "ChunkManager.h"
 #include "Constants.h"
-
 #include "World/World.h"
 #include "Blocks/BlockData.h"
-
 #include "Generation/Generator.h"
-
 #include "BlockEntities/BlockEntity.h"
 
-// CONSTRUCTOR
 Chunk::Chunk(ChunkManager *chunkManager) :
 	m_chunkManager(chunkManager)
 {
 	// Setup flags and such
-	m_attached = m_modified = m_visualized = false; // Not modified
+	m_attached = m_modified = m_sorted = false; // Not modified
 
 	// Initialize blocks
 	m_blocks = new BlockID[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
@@ -25,7 +21,6 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 	m_blockTexture = Resource<Texture2D>(new Texture2D(CHUNK_BLOCKS, CHUNK_BLOCKS));
 }
 
-// BLOCK LOADING
 void Chunk::load(int chunkX, int chunkY, BlockID *blocks)
 {
 	// Set position
@@ -132,28 +127,6 @@ bool Chunk::setBlockAt(const int x, const int y, const BlockID block, WorldLayer
 	return false; // Nothing changed
 }
 
-void Chunk::update(const float dt)
-{
-	for(BlockEntity *blockEntity : m_blockEntities)
-	{
-		blockEntity->update(dt);
-	}
-}
-
-void Chunk::onDraw(DrawEvent *e)
-{
-	/*for(BlockEntity *blockEntity : m_blockEntities)
-	{
-		blockEntity->draw(spriteBatch, alpha);
-	}*/
-}
-
-void Chunk::addStaticEntity(BlockEntity * entity)
-{
-	m_blockEntities.insert(entity);
-}
-
-// DRAWING
 void Chunk::attach(GraphicsContext *context, const int x, const int y)
 {
 	// Draw blocks
@@ -161,10 +134,12 @@ void Chunk::attach(GraphicsContext *context, const int x, const int y)
 	context->drawRectangle(x * CHUNK_BLOCKS, y * CHUNK_BLOCKS, CHUNK_BLOCKS, CHUNK_BLOCKS);
 	context->setTexture(0);
 
+	// TODO: Render block entities to the global surface?
+
 	m_attached = true;
 }
 
 void Chunk::detach()
 {
-	m_visualized = m_attached = false;
+	m_sorted = m_attached = false;
 }

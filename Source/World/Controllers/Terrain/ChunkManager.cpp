@@ -691,7 +691,7 @@ void ChunkManager::reattachChunk(Chunk &chunk, GraphicsContext *context)
 			}
 		}
 	}
-			
+	
 	// Sort blocks
 	context->setShader(m_tileSortShader);
 	for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
@@ -713,7 +713,7 @@ void ChunkManager::reattachChunk(Chunk &chunk, GraphicsContext *context)
 			);
 	}
 
-	chunk.m_visualized = true;
+	chunk.m_sorted = true;
 
 	{
 		const float width = m_loadingArea.getWidth() * CHUNK_BLOCKSF, height = m_loadingArea.getHeight() * CHUNK_BLOCKSF;
