@@ -21,31 +21,4 @@ void Torch::onTick(TickEvent *e)
 
 void Torch::getVertices(vector<Vertex>& out)
 {
-	Vertex vertices[4];
-
-	float x = getX() * BLOCK_PX, y = getY() * BLOCK_PXF;
-
-	vertices[0].set4f(VERTEX_POSITION, x, y);
-	vertices[1].set4f(VERTEX_POSITION, x, y + BLOCK_PXF);
-	vertices[2].set4f(VERTEX_POSITION, x + BLOCK_PXF, y);
-	vertices[3].set4f(VERTEX_POSITION, x + BLOCK_PXF, y + BLOCK_PXF);
-
-	TextureRegion region = BlockEntityData::s_atlas->get(getData()->getID());
-	vertices[0].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
-	vertices[1].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
-	vertices[2].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
-	vertices[3].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv1.x);
-
-	vertices[0].set4ub(VERTEX_COLOR, 255, 255, 255, 255);
-	vertices[1].set4ub(VERTEX_COLOR, 255, 255, 255, 255);
-	vertices[2].set4ub(VERTEX_COLOR, 255, 255, 255, 255);
-	vertices[3].set4ub(VERTEX_COLOR, 255, 255, 255, 255);
-
-	out.push_back(vertices[0]);
-	out.push_back(vertices[1]);
-	out.push_back(vertices[2]);
-
-	out.push_back(vertices[2]);
-	out.push_back(vertices[1]);
-	out.push_back(vertices[3]);
 }

@@ -110,14 +110,13 @@ private:
 
 	// Block rendering shaders
 	Resource<Shader> m_tileSortShader;
+	Resource<Shader> m_tileMapShader;
+	Resource<Shader> m_blockEntityShader;
+	float m_time;
 
 	// Global render target
 	RenderTarget2D *m_blocksRenderTarget;
 	RenderTarget2D *m_sortedBlocksRenderTarget[WORLD_LAYER_COUNT];
-
-	// Block rendering shader
-	Resource<Shader> m_tileMapShader;
-	float m_time;
 
 	// Lighting
 	RenderTarget2D *m_lightingPass0;

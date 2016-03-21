@@ -14,8 +14,21 @@ public:
 	~BlockEntity();
 
 	//virtual void onTick(const float dt);
+	/*
+	virtual void onInteract()
+	{
+		if(m_open) {
+			m_open = false;
+			m_frameIndex = 0.0f;
+		}
+		else {
+			m_open = true;
+			m_frameIndex = 1.0f;
+		}
+	}
+	*/
 
-	virtual void getVertices(vector<Vertex> &vertices) = 0;
+	void getVertices(Vertex *vertices, uint *indices, int i);
 
 	Vector2I getPosition() const
 	{

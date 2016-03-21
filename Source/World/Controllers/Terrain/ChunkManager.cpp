@@ -64,6 +64,9 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 
 	m_tileMapShader = Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/TileMap");
 
+	m_blockEntityShader = Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/BlockEntitiesDraw");
+	m_blockEntityShader->setSampler2D("u_TextureAtlas", BlockEntityData::s_atlas->getTexture());
+
 	// Set block atlas
 	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
 	m_tileMapShader->setSampler2D("u_BlockData", BlockData::getBlockDataTexture());
@@ -315,6 +318,8 @@ void ChunkManager::onTick(TickEvent *e)
 	// Update block animation
 	m_tileMapShader->setUniform1f("u_Time", m_time);
 	m_time += e->getDelta();
+
+	m_blockEntityShader->setUniform1f("u_Time", m_time);
 }
 
 void ChunkManager::onDraw(DrawEvent *e)

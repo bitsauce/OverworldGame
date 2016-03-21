@@ -10,12 +10,13 @@ class BlockEntityData : public BlockData
 {
 	friend class OverworldGame;
 public:
-	BlockEntityData(const BlockEntityID id, const string &name, const Pixmap &pixmap, const uint width, const uint height, const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> factory) :
+	BlockEntityData(const BlockEntityID id, const string &name, const Pixmap &pixmap, const uint width, const uint height, const uint frameCount, const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> factory) :
 		BlockData(BLOCK_ENTITY, pixmap, ITEM_NONE, 1.0f),
 		m_id(id),
 		m_name(name),
 		m_width(width),
 		m_height(height),
+		m_frameCount(frameCount),
 		m_factory(factory)
 	{
 	}
@@ -73,6 +74,8 @@ private:
 	const string &m_name;
 	const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> m_factory;
 	const uint m_width, m_height;
+	const uint m_frameCount;
+	// m_animateWithTime?
 
 	static void init();
 	static vector<BlockEntityData*> s_data;

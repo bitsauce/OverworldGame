@@ -17,6 +17,19 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 		m_blocks[i] = BLOCK_EMPTY;
 	}
 	m_blockTexture = Resource<Texture2D>(new Texture2D(CHUNK_BLOCKS, CHUNK_BLOCKS));
+
+	uchar data[4] { };
+	Random rand;
+	Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS);
+	for(int y = 0; y < CHUNK_BLOCKS; y++)
+	{
+		for(int x = 0; x < CHUNK_BLOCKS; x++)
+		{
+			data[0] = rand.nextInt(255);
+			pixmap.setPixel(x, y, &data);
+		}
+	}
+	m_timeOffsetTexture = Resource<Texture2D>(new Texture2D(pixmap));
 }
 
 void Chunk::load(int chunkX, int chunkY, Block *blocks)
@@ -130,13 +143,18 @@ bool Chunk::addBlockEntity(const int x, const int y, const Block block, WorldLay
 {
 	m_blockEntities.push_back(block.getBlockEntity());
 
-	vector<Vertex> vertices;
+	Vertex *vertices = new Vertex[m_blockEntities.size() * 4];
+	uint *indices = new uint[m_blockEntities.size() * 6];
+	int i = 0;
 	for(BlockEntity *blockEntity : m_blockEntities)
 	{
-		blockEntity->getVertices(vertices);
+		blockEntity->getVertices(vertices + i * 4, indices + i * 6, i);
+		i++;
 	}
 
-	m_blockEntityVBO.setData(&vertices[0], vertices.size());
+	m_blockEntityVBO.setData(vertices, m_blockEntities.size() * 4);
+	m_blockEntityIBO.setData(indices, m_blockEntities.size() * 6);
+	delete[] vertices;
 	return true;
 }
 
@@ -159,5 +177,5 @@ void Chunk::detach()
 
 void Chunk::drawBlockEntities(GraphicsContext *context)
 {
-	context->drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, &m_blockEntityVBO);
+	context->drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, &m_blockEntityVBO, &m_blockEntityIBO);
 }

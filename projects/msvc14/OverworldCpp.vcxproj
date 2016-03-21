@@ -231,6 +231,8 @@
     <Xml Include="..\..\Data\Resources.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Data\Shaders\BlockEntitiesDraw.frag" />
+    <None Include="..\..\Data\Shaders\BlockEntitiesDraw.vert" />
     <None Include="..\..\Data\Shaders\BlurH.frag" />
     <None Include="..\..\Data\Shaders\BlurH.vert" />
     <None Include="..\..\Data\Shaders\BlurV.frag" />

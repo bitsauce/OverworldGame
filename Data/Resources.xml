@@ -179,4 +179,14 @@
 		<vertexFilePath>Shaders/TileMap.vert</vertexFilePath>
 		<fragmentFilePath>Shaders/TileMap.frag</fragmentFilePath>
 	</shader>
+	<shader>
+		<name>Shaders/BlockEntitiesDraw</name>
+		<vertexFilePath>Shaders/BlockEntitiesDraw.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/BlockEntitiesDraw.frag</fragmentFilePath>
+	</shader>
+	<shader>
+		<name>Shaders/BlockEntitiesApplyTime</name>
+		<vertexFilePath>Shaders/BlockEntitiesApplyTime.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/BlockEntitiesApplyTime.frag</fragmentFilePath>
+	</shader>
 </resources>

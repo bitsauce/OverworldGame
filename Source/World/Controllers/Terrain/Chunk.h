@@ -48,6 +48,11 @@ private:
 
 	// Block entity VBO
 	StaticVertexBuffer m_blockEntityVBO;
+	StaticIndexBuffer m_blockEntityIBO;
+
+public:
+	// Block entity time
+	Resource<Texture2D> m_timeOffsetTexture;
 
 	// Chunk manager
 	ChunkManager *m_chunkManager;

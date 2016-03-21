@@ -40,16 +40,21 @@ void BlockDrawer::onDraw(DrawEvent *e)
 
 	if(m_layer == WORLD_LAYER_MIDDLE)
 	{
-		graphicsContext->setTexture(BlockEntityData::s_atlas->getTexture());
+		graphicsContext->setShader(m_chunkManager->m_blockEntityShader);
+
+
 		// Draw block entitites
 		ChunkManager::ChunkArea activeArea = m_chunkManager->getActiveArea();
 		for(int y = activeArea.y0; y <= activeArea.y1; ++y)
 		{
 			for(int x = activeArea.x0; x <= activeArea.x1; ++x)
 			{
-				m_chunkManager->getChunkAt(x, y).drawBlockEntities(graphicsContext);
+				Chunk &chunk = m_chunkManager->getChunkAt(x, y);
+				m_chunkManager->m_blockEntityShader->setSampler2D("u_TimeOffsetTexture", chunk.m_timeOffsetTexture);
+				chunk.drawBlockEntities(graphicsContext);
 			}
 		}
-		graphicsContext->setTexture(0);
+
+		graphicsContext->setShader(0);
 	}
 }
