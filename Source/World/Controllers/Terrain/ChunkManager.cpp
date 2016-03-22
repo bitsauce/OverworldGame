@@ -66,6 +66,7 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 
 	m_blockEntityShader = Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/BlockEntitiesDraw");
 	m_blockEntityShader->setSampler2D("u_TextureAtlas", BlockEntityData::s_atlas->getTexture());
+	m_blockEntityShader->setSampler2D("u_BlockEntityData", BlockEntityData::s_blockEntityDataTexture);
 
 	// Set block atlas
 	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());

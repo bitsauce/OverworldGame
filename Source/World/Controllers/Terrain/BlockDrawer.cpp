@@ -50,7 +50,7 @@ void BlockDrawer::onDraw(DrawEvent *e)
 			for(int x = activeArea.x0; x <= activeArea.x1; ++x)
 			{
 				Chunk &chunk = m_chunkManager->getChunkAt(x, y);
-				m_chunkManager->m_blockEntityShader->setSampler2D("u_TimeOffsetTexture", chunk.m_timeOffsetTexture);
+				m_chunkManager->m_blockEntityShader->setSampler2D("u_TimeOffsets", chunk.m_timeOffsetTexture);
 				chunk.drawBlockEntities(graphicsContext);
 			}
 		}

@@ -32,7 +32,7 @@ public:
 
 	static BlockEntityData *getByName(const string &name)
 	{
-		for(int i = 0; i < ENTITY_COUNT; ++i)
+		for(int i = 0; i < BLOCK_ENTITY_COUNT; ++i)
 		{
 			if(s_data[i] && s_data[i]->m_name == name)
 			{
@@ -71,7 +71,7 @@ public:
 
 private:
 	const BlockEntityID m_id;
-	const string &m_name;
+	const string m_name;
 	const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> m_factory;
 	const uint m_width, m_height;
 	const uint m_frameCount;
@@ -81,4 +81,5 @@ private:
 	static vector<BlockEntityData*> s_data;
 public:
 	static TextureAtlas *s_atlas; // TODO: Should not be public
+	static Resource<Texture2D> s_blockEntityDataTexture;
 };

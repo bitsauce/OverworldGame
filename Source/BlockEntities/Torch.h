@@ -12,8 +12,6 @@ public:
 
 	void onTick(TickEvent *e);
 
-	void getVertices(vector<Vertex> &vertices);
-
 	static BlockEntity *Factory(World * world, const int x, const int y, const BlockEntityData *data)
 	{
 		return new Torch(world, x, y, data);

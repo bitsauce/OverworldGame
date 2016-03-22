@@ -22,16 +22,15 @@ void BlockEntity::getVertices(Vertex *vertices, uint *indices, int i)
 	vertices[2].set4f(VERTEX_POSITION, x + BLOCK_PXF, y);
 	vertices[3].set4f(VERTEX_POSITION, x + BLOCK_PXF, y + BLOCK_PXF);
 
-	TextureRegion region = BlockEntityData::s_atlas->get(getData()->getID(), 0,0, 1/3.0f, 1.0f);
-	vertices[0].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv0.y);
-	vertices[1].set4f(VERTEX_TEX_COORD, region.uv0.x, region.uv1.y);
-	vertices[2].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv0.y);
-	vertices[3].set4f(VERTEX_TEX_COORD, region.uv1.x, region.uv1.x);
+	vertices[0].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
+	vertices[1].set4f(VERTEX_TEX_COORD, 0.0f, 1.0f);
+	vertices[2].set4f(VERTEX_TEX_COORD, 1.0f, 0.0f);
+	vertices[3].set4f(VERTEX_TEX_COORD, 1.0f, 1.0f);
 
-	vertices[0].set4ub(VERTEX_COLOR, cx, cy, 255, 255);
-	vertices[1].set4ub(VERTEX_COLOR, cx, cy, 255, 255);
-	vertices[2].set4ub(VERTEX_COLOR, cx, cy, 255, 255);
-	vertices[3].set4ub(VERTEX_COLOR, cx, cy, 255, 255);
+	vertices[0].set4ub(VERTEX_COLOR, cx, cy, getData()->getID(), 255);
+	vertices[1].set4ub(VERTEX_COLOR, cx, cy, getData()->getID(), 255);
+	vertices[2].set4ub(VERTEX_COLOR, cx, cy, getData()->getID(), 255);
+	vertices[3].set4ub(VERTEX_COLOR, cx, cy, getData()->getID(), 255);
 
 	indices[0] = i * 4 + 0;
 	indices[1] = i * 4 + 1;

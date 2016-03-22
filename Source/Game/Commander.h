@@ -43,6 +43,7 @@ public:
 private:
 	void spawn(Chat*, vector<string>);
 	void give(Chat*, vector<string>);
+	void place(Chat*, vector<string>);
 	void setGravity(Chat*, vector<string>);
 	void testclouds(Chat*, vector<string>);
 	void setres(Chat*, vector<string>);

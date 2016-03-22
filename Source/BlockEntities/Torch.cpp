@@ -18,7 +18,3 @@ void Torch::onTick(TickEvent *e)
 	//m_chunkLoader->setFrameIndex(m_position.x, m_position.y, m_time);
 	m_time += e->getDelta();
 }
-
-void Torch::getVertices(vector<Vertex>& out)
-{
-}

@@ -12,7 +12,7 @@ Commander::Commander(OverworldGame *game) :
 	m_game(game)
 {
 	m_commands.push_back(Command("spawn", "1", "<EntityName> [x] [y] [dataTag]", bind(&Commander::spawn, this, placeholders::_1, placeholders::_2)));
-	//m_commands.push_back(Command("place", "1", "<BlockEntityName> [x] [y] [dataTag]", bind(&Commander::place, this, placeholders::_1, placeholders::_2)));
+	m_commands.push_back(Command("place", "1|3", "<BlockEntityName> [x] [y] [dataTag]", bind(&Commander::place, this, placeholders::_1, placeholders::_2)));
 	//m_commands.push_back(Command("setblock", "3", "<BlockName> <x> <y>", bind(&Commander::setBlock, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("give", "1|2|3", "<ItemName> [amount] [player]", bind(&Commander::give, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("testphysics", "6", "<gravity> <jumpforce> <jumpease> <movespeed> <maxspeed> <friction>", bind(&Commander::setGravity, this, placeholders::_1, placeholders::_2)));
@@ -99,6 +99,19 @@ void Commander::give(Chat *chat, vector<string> args)
 		//m_game->getWorld()->getLocalPlayer()->getStorage()->addItem(data->getID(), amt);
 		chat->insertMessage(args[1] + " " + args[0] + " given");
 	}*/
+}
+
+void Commander::place(Chat *, vector<string> args)
+{
+	if(args.size() == 1)
+	{
+		BlockEntityData *data = BlockEntityData::getByName(args[0]);
+		if(data)
+		{
+			Vector2F blockPos = math::floor(m_game->getWorld()->getLocalPlayer()->getCenter() / BLOCK_PXF);
+			m_game->getWorld()->getTerrain()->setBlockAt(blockPos.x, blockPos.y, data->create(m_game->getWorld(), blockPos.x, blockPos.y), WORLD_LAYER_MIDDLE);
+		}
+	}
 }
 
 void Commander::setGravity(Chat *, vector<string> args)
