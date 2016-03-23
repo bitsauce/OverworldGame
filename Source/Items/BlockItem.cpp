@@ -20,10 +20,8 @@ void BlockItem::use(Pawn *pawn, const float delta)
 	blockPos.y = (int) floor(blockPos.y/BLOCK_PXF);
 
 	// Set block if not occupied
-	if(!m_terrain->isBlockAt(blockPos.x, blockPos.y, m_layer))
+	if(m_terrain->setBlockAt(blockPos.x, blockPos.y, m_blockID, m_layer))
 	{
-		m_terrain->setBlockAt(blockPos.x, blockPos.y, m_blockID, m_layer);
-
 		// Remove item from player inventory
 		pawn->getCurrentItem()->dec();
 	}

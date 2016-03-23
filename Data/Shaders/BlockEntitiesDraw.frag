@@ -14,7 +14,7 @@ void main()
 	vec2 dataTexel = 1.0 / textureSize(u_BlockEntityData, 0);
 	vec2 atlasTexel = 1.0 / textureSize(u_TextureAtlas, 0);
 
-	float offset = texture(u_TimeOffsets, v_BlockPos).r;
+	float offset = floor(texture(u_TimeOffsets, v_BlockPos).r * 255.5);
 
 	// data[0]: Width (px)
 	// data[1]: Height (px)

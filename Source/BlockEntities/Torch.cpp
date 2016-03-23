@@ -18,3 +18,11 @@ void Torch::onTick(TickEvent *e)
 	//m_chunkLoader->setFrameIndex(m_position.x, m_position.y, m_time);
 	m_time += e->getDelta();
 }
+
+int ____i = 0;
+
+void Torch::onNeighbourChanged(NeighborChangedEvent *e)
+{
+	LOG("Neighbour [%i, %i] of type %i changed into %i", e->getDx(), e->getDy(), e->getOldBlock()->getBlockData()->getID(), e->getNewBlock()->getBlockData()->getID());
+	m_world->getTerrain()->setBlockEntityFrameAt(getX(), getY(), ____i++ % 3);
+}

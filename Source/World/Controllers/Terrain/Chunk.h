@@ -20,7 +20,7 @@ public:
 	void load(int chunkX, int chunkY, Block *blocks);
 	
 	bool isAttached() const { return m_attached; }
-	bool isVisualized() const { return m_sorted; }
+	bool isSorted() const { return m_sorted; }
 	bool isModified() const { return m_modified; }
 	
 	int getX() const { return m_x; }
@@ -30,9 +30,11 @@ public:
 	bool isBlockAt(const int x, const int y, WorldLayer layer) const;
 	bool isBlockOccupied(const int x, const int y, WorldLayer layer) const;
 	bool setBlockAt(const int x, const int y, const Block block, WorldLayer layer);
-
-	bool addBlockEntity(const int x, const int y, const Block block, WorldLayer layer);
 	
+	bool addBlockEntity(const int x, const int y, const Block block, WorldLayer layer);
+	bool removeBlockEntity(BlockEntity *blockEntity);
+	void setBlockEntityFrameAt(const int x, const int y, const uint frame, const WorldLayer layer);
+
 	void attach(GraphicsContext *context, const int x, const int y);
 	void detach();
 
@@ -43,12 +45,13 @@ private:
 
 	// Chunk
 	int m_x, m_y;
-	Block *m_blocks;
+	Block *m_blocks; // TODO: Consider allowing storing block entities and blocks on the same position
 	list<BlockEntity*> m_blockEntities;
 
 	// Block entity VBO
 	StaticVertexBuffer m_blockEntityVBO;
 	StaticIndexBuffer m_blockEntityIBO;
+	bool m_generateBlockEntityBuffers;
 
 public:
 	// Block entity time

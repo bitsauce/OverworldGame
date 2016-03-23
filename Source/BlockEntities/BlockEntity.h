@@ -5,7 +5,45 @@
 #include "Constants.h"
 
 class World;
+class Block;
 class BlockEntityData;
+
+class NeighborChangedEvent
+{
+public:
+	NeighborChangedEvent(const int dx, const int dy, const Block *oldBlock, const Block *newBlock) :
+		m_dx(dx),
+		m_dy(dy),
+		m_oldBlock(oldBlock),
+		m_newBlock(newBlock)
+	{
+	}
+
+	int getDx() const
+	{
+		return m_dx;
+	}
+
+	int getDy() const
+	{
+		return m_dy;
+	}
+
+	const Block *getOldBlock() const
+	{
+		return m_oldBlock;
+	}
+
+	const Block *getNewBlock() const
+	{
+		return m_newBlock;
+	}
+
+private:
+	const int m_dx, m_dy;
+	const Block *m_oldBlock;
+	const Block *m_newBlock;
+};
 
 class BlockEntity
 {
@@ -27,6 +65,8 @@ public:
 		}
 	}
 	*/
+
+	virtual void onNeighbourChanged(NeighborChangedEvent *e) { }
 
 	void getVertices(Vertex *vertices, uint *indices, int i);
 

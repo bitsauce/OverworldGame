@@ -26,7 +26,7 @@ BlockEntity* dummy(World*, const int, const int, const BlockEntityData*)
 static BlockEntityDescriptor g_blockEntityData[] = {
 	{ BLOCK_ENTITY_NULL, "NULL", "Sprites/Blocks/Empty.png", 1, 1, 1, 0, dummy },
 
-	{ BLOCK_ENTITY_TORCH, "Torch", "Sprites/BlockEntities/LightSources/Torch_anim.png", 1, 1, 3, 255, Torch::Factory },
+	{ BLOCK_ENTITY_TORCH, "Torch", "Sprites/BlockEntities/LightSources/Torch_anim.png", 1, 1, 3, 0, Torch::Factory },
 	{ BLOCK_ENTITY_TORCH_2, "Torch2", "Sprites/BlockEntities/LightSources/Torch_anim_2.png", 1, 1, 6, 0, Torch::Factory },
 
 	{ BLOCK_ENTITY_COUNT, "", "", 0, 0, 0, 0, dummy }

@@ -11,6 +11,7 @@ public:
 	Torch(World * world, int x, int y, const BlockEntityData *data);
 
 	void onTick(TickEvent *e);
+	void onNeighbourChanged(NeighborChangedEvent *e);
 
 	static BlockEntity *Factory(World * world, const int x, const int y, const BlockEntityData *data)
 	{

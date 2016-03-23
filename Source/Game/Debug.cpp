@@ -182,7 +182,8 @@ void Debug::onTick(TickEvent *e)
 				(int) floor(m_world->getCamera()->getInputPosition().x / BLOCK_PXF),
 				(int) floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF),
 				m_game->getInputManager()->getKeyState(CGF_MOUSE_BUTTON_LEFT) ? m_block : BLOCK_EMPTY,
-				layer);
+				layer,
+				true);
 		}
 	}
 }
@@ -315,7 +316,7 @@ void Debug::onDraw(DrawEvent *e)
 				{
 					context->drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(0, 160, 230, 127));
 				}
-				else if(!m_world->getTerrain()->getChunkManager()->getChunkAt(x, y).isVisualized())
+				else if(!m_world->getTerrain()->getChunkManager()->getChunkAt(x, y).isSorted())
 				{
 					context->drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(230, 30, 30, 127));
 				}

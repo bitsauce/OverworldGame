@@ -19,9 +19,11 @@ public:
 	Terrain(World *world, Window *window);
 	~Terrain();
 	
-	bool setBlockAt(const int x, const int y, const Block block, const WorldLayer layer);
+	bool setBlockAt(const int x, const int y, const Block block, const WorldLayer layer = WORLD_LAYER_MIDDLE, const bool _override = false);
 	Block getBlockAt(const int x, const int y, const WorldLayer layer);
 	bool isBlockAt(const int x, const int y, const WorldLayer layer);
+
+	void setBlockEntityFrameAt(const int x, const int y, const uint frame, const WorldLayer layer = WORLD_LAYER_MIDDLE);
 
 	// Removes the block at [x, y], creating an ItemDrop for the block type in the process
 	bool removeBlockAt(const int x, const int y, const WorldLayer layer);

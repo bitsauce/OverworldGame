@@ -44,7 +44,7 @@ void Client::update()
 	{
 		switch(packet->data[0])
 		{
-		case ID_SET_BLOCK:
+			case ID_SET_BLOCK:
 			{
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -52,11 +52,11 @@ void Client::update()
 				int y; bitStream.Read(y);
 				BlockID block; bitStream.Read(block);
 				WorldLayer layer; bitStream.Read(layer);
-				m_game->getWorld()->getTerrain()->setBlockAt(x, y, block, layer);
+				m_game->getWorld()->getTerrain()->setBlockAt(x, y, block, layer, true);
 			}
 			break;
 
-		case ID_CREATE_ENTITY:
+			case ID_CREATE_ENTITY:
 			{
 				/*RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
@@ -76,21 +76,22 @@ void Client::update()
 				player->getStorage()->addItem(ITEM_TORCH, 255);*/
 			}
 			break;
-			
-		case ID_NETWORK_OBJECT_UPDATE:
+
+			case ID_NETWORK_OBJECT_UPDATE:
 			{
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
 				RakNet::NetworkID id; bitStream.Read(id);
 				NetworkObject *object = m_networkIDManager.GET_OBJECT_FROM_ID<NetworkObject*>(id);
-				if(object) {
+				if(object)
+				{
 					object->unpack(&bitStream, this);
 				}
 			}
 			break;
 
-		case ID_CONNECTION_REQUEST_ACCEPTED:
+			case ID_CONNECTION_REQUEST_ACCEPTED:
 			{
 				RakNet::BitStream bitStream;
 				bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
@@ -99,9 +100,9 @@ void Client::update()
 			}
 			break;
 
-		default:
-			LOG("Received packet type %s", RakNet::PacketLogger::BaseIDTOString(packet->data[0]));
-			break;
+			default:
+				LOG("Received packet type %s", RakNet::PacketLogger::BaseIDTOString(packet->data[0]));
+				break;
 		}
 	}
 }
