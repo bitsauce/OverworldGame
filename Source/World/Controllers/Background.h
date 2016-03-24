@@ -59,7 +59,7 @@ private:
 	vector<Layer*> m_layers;
 	
 	// Sky colors
-	Color m_topColor, m_bottomColor;
+	ColorRGB m_topColor, m_bottomColor;
 
 	// Sky quad
 	Vertex m_vertices[4];

@@ -2,6 +2,7 @@
 #include "Chat.h"
 #include "GameOverlay.h"
 #include "Game/Game.h"
+#include "Entities/Player.h"
 
 Chat::Chat(OverworldGame *game, GraphicsContext *context, GameOverlay *gameOverlay) :
 	UiObject(gameOverlay),
@@ -59,8 +60,7 @@ void Chat::sendMessage(KeyEvent *e)
 		}
 		else
 		{
-			// TODO: Get player name and insert
-			insertMessage("Bitsauce: " + chatStr);
+			insertMessage(m_game->getWorld()->getLocalPlayer()->getName() + ": " + chatStr);
 		}
 		m_redrawText = true;
 		m_inputHistory.push_back(chatStr);

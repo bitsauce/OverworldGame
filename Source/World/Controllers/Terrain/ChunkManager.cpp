@@ -64,13 +64,14 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 
 	m_tileMapShader = Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/TileMap");
 
+	// Setup block entity shader
 	m_blockEntityShader = Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/BlockEntitiesDraw");
-	m_blockEntityShader->setSampler2D("u_TextureAtlas", BlockEntityData::s_atlas->getTexture());
-	m_blockEntityShader->setSampler2D("u_BlockEntityData", BlockEntityData::s_blockEntityDataTexture);
+	m_blockEntityShader->setSampler2D("u_TextureAtlas", BlockEntityData::getTextureAtlas()->getTexture());
+	m_blockEntityShader->setSampler2D("u_BlockEntityData", BlockEntityData::getDataTexture());
 
-	// Set block atlas
-	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getBlockAtlas()->getTexture());
-	m_tileMapShader->setSampler2D("u_BlockData", BlockData::getBlockDataTexture());
+	// Setup block rendering shader
+	m_tileMapShader->setSampler2D("u_BlockAtlas", BlockData::getTextureAtlas()->getTexture());
+	m_tileMapShader->setSampler2D("u_BlockData", BlockData::getDataTexture());
 	m_tileMapShader->setUniform2f("u_QuadUVs", QUAD_UVS);
 
 	// Set chunk render caches to null (will be updated by updateViewSize)
@@ -645,7 +646,7 @@ void ChunkManager::reattachChunk(Chunk &chunk, GraphicsContext *context)
 		for(LightSource *light : m_world->getLighting()->m_lightSources)
 		{
 			m_radialLightingShader->setUniform2f("u_Radius", light->getRadius() / width, light->getRadius() / height);
-			m_radialLightingShader->setUniform3f("u_Color", light->getColor().r / 255.0f, light->getColor().g / 255.0f, light->getColor().b / 255.0f);
+			m_radialLightingShader->setUniform3f("u_Color", light->getColor().getR() / 255.0f, light->getColor().getG() / 255.0f, light->getColor().getB() / 255.0f);
 
 			// TODO: It is inefficient to draw so many circles, so concider adding a check to see if redraw is necessary.
 			// (we only need to redraw when a light source is close to the edge)

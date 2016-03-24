@@ -24,7 +24,7 @@ public:
 protected:
 	LightSource(Vector2F position, float radius, Color color) : m_position(position), m_radius(radius), m_color(color) {}
 
-	Vector2I m_position;
+	Vector2F m_position;
 	float m_radius;
 	Color m_color;
 };

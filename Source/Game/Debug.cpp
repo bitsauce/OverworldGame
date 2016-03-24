@@ -35,13 +35,10 @@ Debug::Debug(OverworldGame *game) :
 	m_debugLighting(false),
 	m_blockPainterEnabled(false),
 	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Debug")),
-	m_bulbSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Debug/Bulb")), // TODO: Replace these with colored cricles as they feel out of place
 	m_blockPainterTexture(new Texture2D())
 {
 	// Set font color
 	m_font->setColor(Color(255, 255, 255, 255));
-
-	m_bulbSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 }
 
 void Debug::debugFunction(KeyEvent *e)
@@ -104,7 +101,7 @@ void Debug::debugFunction(KeyEvent *e)
 		case CGF_KEY_F8:
 		{
 			// Spawn light
-			new Pointlight(m_world->getLighting(), m_world->getCamera()->getInputPosition() / BLOCK_PXF, 20, Color((uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255)));
+			new Pointlight(m_world->getLighting(), math::floor(Vector2F(m_world->getCamera()->getInputPosition()) / BLOCK_PXF) + Vector2F(0.5f, 0.5f), 20, Color((uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), 255));
 			// Spawn zombie
 
 			// Create zombie
@@ -327,23 +324,20 @@ void Debug::onDraw(DrawEvent *e)
 	// Debug lighting
 	if(m_debugLighting)
 	{
-		// Show lighting passes
-		spriteBatch->flush();
-		context->disable(GraphicsContext::BLEND);
-		//spriteBatch->drawSprite(Sprite(m_world->getLighting()->m_lightingRenderTarget->getTexture(), Rect(0.0f, 128.0f, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkManager()->m_lightingPass0->getTexture(), RectF(0.0f, 128.0f * 2, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkManager()->m_lightingPass1->getTexture(), RectF(0.0f, 128.0f * 3, 256.0f, 128.0f)));
-		spriteBatch->drawSprite(Sprite(m_world->getTerrain()->getChunkManager()->m_lightingPass2->getTexture(), RectF(0.0f, 128.0f * 4, 256.0f, 128.0f)));
-		spriteBatch->flush();
-		context->enable(GraphicsContext::BLEND);
-
-		// Show light sources as light bulbs // TODO: Replace with cricles
-		spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_world->getCamera()->getTransformationMatrix(e->getAlpha())));
+		// Show light sources
 		for(list<LightSource*>::iterator itr = m_world->getLighting()->m_lightSources.begin(); itr != m_world->getLighting()->m_lightSources.end(); ++itr)
 		{
-			m_bulbSprite.setPosition((*itr)->getPosition() * BLOCK_PXF + Vector2F(0.5f, 0.5f));
-			spriteBatch->drawSprite(m_bulbSprite);
+			context->drawCircle((*itr)->getPosition() * BLOCK_PXF, BLOCK_PX / 2 - 1, 12, math::lerp(Color(243, 230, 188, 255), (*itr)->getColor(), 0.75f));
 		}
+
+		// Show lighting passes
+		context->setTransformationMatrix(Matrix4());
+		context->disable(GraphicsContext::BLEND);
+		//context->setTexture(m_world->getTerrain()->getChunkManager()->m_lightRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 1, 256.0f, 128.0f);
+		context->setTexture(m_world->getTerrain()->getChunkManager()->m_lightingPass0->getTexture()); context->drawRectangle(0.0f, 128.0f * 2, 256.0f, 128.0f);
+		context->setTexture(m_world->getTerrain()->getChunkManager()->m_lightingPass1->getTexture()); context->drawRectangle(0.0f, 128.0f * 3, 256.0f, 128.0f);
+		context->setTexture(m_world->getTerrain()->getChunkManager()->m_lightingPass2->getTexture()); context->drawRectangle(0.0f, 128.0f * 4, 256.0f, 128.0f);
+		context->enable(GraphicsContext::BLEND);
 	}
 }
 

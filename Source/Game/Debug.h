@@ -44,9 +44,6 @@ private:
 	OverworldGame *m_game;
 	World *m_world;
 
-	// Debug sprites
-	Sprite m_bulbSprite;
-
 	// Paint block
 	BlockID m_block;
 

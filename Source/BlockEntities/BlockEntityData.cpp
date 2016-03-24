@@ -3,8 +3,8 @@
 #include "Torch.h"
 
 vector<BlockEntityData*> BlockEntityData::s_data(BLOCK_ENTITY_COUNT);
-TextureAtlas *BlockEntityData::s_atlas;
-Resource<Texture2D> BlockEntityData::s_blockEntityDataTexture = nullptr;
+TextureAtlas *BlockEntityData::s_textureAtlas;
+Resource<Texture2D> BlockEntityData::s_dataTexture = nullptr;
 
 struct BlockEntityDescriptor
 {
@@ -60,12 +60,12 @@ void BlockEntityData::init()
 	}
 
 	// Create block entity texture atlas
-	s_atlas = new TextureAtlas(pixmaps);
+	s_textureAtlas = new TextureAtlas(pixmaps);
 
 	// Fill block entity UV data
 	for(uint i = 0; i < BLOCK_ENTITY_COUNT; ++i)
 	{
-		Vector2I pos = s_atlas->get(i).uv0 * s_atlas->getTexture()->getSize();
+		Vector2I pos = s_textureAtlas->get(i).uv0 * s_textureAtlas->getTexture()->getSize();
 
 		pixelData[0] = uchar(pos.x & 0xFF);
 		pixelData[1] = uchar((pos.x >> 8) & 0xFF);
@@ -75,8 +75,8 @@ void BlockEntityData::init()
 
 		blockDataPixmap.setPixel(i, 0, pixelData);
 	}
-	s_blockEntityDataTexture = Resource<Texture2D>(new Texture2D(blockDataPixmap));
-	s_blockEntityDataTexture->setFiltering(Texture2D::NEAREST);
+	s_dataTexture = Resource<Texture2D>(new Texture2D(blockDataPixmap));
+	s_dataTexture->setFiltering(Texture2D::NEAREST);
 }
 
 bool BlockEntityData::canPlace(const int x, const int y, const WorldLayer layer, Terrain *terrain) const

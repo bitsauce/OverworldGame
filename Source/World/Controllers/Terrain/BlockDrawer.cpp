@@ -38,6 +38,7 @@ void BlockDrawer::onDraw(DrawEvent *e)
 	graphicsContext->setShader(0);
 	graphicsContext->setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
 
+	// TODO: This should probably not be here
 	if(m_layer == WORLD_LAYER_MIDDLE)
 	{
 		graphicsContext->setShader(m_chunkManager->m_blockEntityShader);

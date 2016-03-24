@@ -84,6 +84,16 @@ public:
 		return m_placement;
 	}
 
+	static const TextureAtlas *getTextureAtlas()
+	{
+		return s_textureAtlas;
+	}
+
+	static const Resource<Texture2D> getDataTexture()
+	{
+		return s_dataTexture;
+	}
+
 	bool canPlace(const int x, const int y, const enum WorldLayer layer, class Terrain *terrain) const;
 
 private:
@@ -97,8 +107,9 @@ private:
 	const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> m_factory;
 
 	static void init();
+
+	// Static data
 	static vector<BlockEntityData*> s_data;
-public:
-	static TextureAtlas *s_atlas; // TODO: Should not be public
-	static Resource<Texture2D> s_blockEntityDataTexture;
+	static TextureAtlas *s_textureAtlas;
+	static Resource<Texture2D> s_dataTexture;
 };

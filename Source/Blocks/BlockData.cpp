@@ -1,9 +1,9 @@
 #include "BlockData.h"
 #include "World/World.h"
 
-vector<BlockData*> BlockData::s_blockData(BLOCK_COUNT);
-TextureAtlas *BlockData::s_blockAtlas = nullptr;
-Resource<Texture2D> BlockData::s_blockDataTexture = nullptr;
+vector<BlockData*> BlockData::s_data(BLOCK_COUNT);
+TextureAtlas *BlockData::s_textureAtlas = nullptr;
+Resource<Texture2D> BlockData::s_dataTexture = nullptr;
 
 struct BlockDescriptor
 {
@@ -44,7 +44,7 @@ void BlockData::init()
 	{
 		// Create block data object
 		Pixmap pixmap(blockData->imagePath, true);
-		s_blockData[blockData->id] = new BlockData(blockData->id, pixmap, blockData->itemID, blockData->opacity);
+		s_data[blockData->id] = new BlockData(blockData->id, pixmap, blockData->itemID, blockData->opacity);
 		pixmaps[blockData->id] = pixmap;
 
 		// Store meta data
@@ -59,12 +59,12 @@ void BlockData::init()
 	}
 
 	// Create block atlas
-	s_blockAtlas = new TextureAtlas(pixmaps, 0);
+	s_textureAtlas = new TextureAtlas(pixmaps, 0);
 
 	// Fill block UV data
 	for(int id = 0; id < BLOCK_COUNT; ++id)
 	{
-		Vector2I pos = s_blockAtlas->get(id).uv0 * s_blockAtlas->getTexture()->getSize();
+		Vector2I pos = s_textureAtlas->get(id).uv0 * s_textureAtlas->getTexture()->getSize();
 
 		pixelData[0] = uchar(pos.x & 0xFF);
 		pixelData[1] = uchar((pos.x >> 8) & 0xFF);
@@ -74,8 +74,8 @@ void BlockData::init()
 
 		blockDataPixmap.setPixel(id, 0, pixelData);
 	}
-	s_blockDataTexture = Resource<Texture2D>(new Texture2D(blockDataPixmap));
-	s_blockDataTexture->setFiltering(Texture2D::NEAREST);
+	s_dataTexture = Resource<Texture2D>(new Texture2D(blockDataPixmap));
+	s_dataTexture->setFiltering(Texture2D::NEAREST);
 }
 
 BlockData::BlockData(BlockID id, const Pixmap &pixmap, const ItemID item, const float opacity) :
@@ -88,5 +88,5 @@ BlockData::BlockData(BlockID id, const Pixmap &pixmap, const ItemID item, const 
 
 BlockData *BlockData::get(const BlockID block)
 {
-	return s_blockData[block];
+	return s_data[block];
 }

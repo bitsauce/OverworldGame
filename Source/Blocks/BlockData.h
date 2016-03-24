@@ -22,14 +22,14 @@ public:
 	static void init();
 	static BlockData *get(const BlockID id);
 
-	static TextureAtlas *getBlockAtlas()
+	static TextureAtlas *getTextureAtlas()
 	{
-		return s_blockAtlas;
+		return s_textureAtlas;
 	}
 
-	static Resource<Texture2D> getBlockDataTexture()
+	static Resource<Texture2D> getDataTexture()
 	{
-		return s_blockDataTexture;
+		return s_dataTexture;
 	}
 	
 private:
@@ -38,10 +38,10 @@ private:
 	const Pixmap m_pixmap;
 	const float m_opacity;
 
-	// Static variables
-	static vector<BlockData*> s_blockData;
-	static TextureAtlas *s_blockAtlas;
-	static Resource<Texture2D> s_blockDataTexture;
+	// Static data
+	static vector<BlockData*> s_data;
+	static TextureAtlas *s_textureAtlas;
+	static Resource<Texture2D> s_dataTexture;
 };
 
 #endif // BLOCK_DATA_H

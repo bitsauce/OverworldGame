@@ -4,11 +4,6 @@
 #include "Constants.h"
 #include "World/World.h"
 
-Color mixColors(Color c1, Color c2, const float a)
-{
-	return c1 * a + c2 * (1.0f - a);
-}
-
 struct CloudSort
 {
 	inline bool operator() (Cloud *cloud1, Cloud *cloud2)
@@ -21,8 +16,8 @@ Background::Background(World *world, Window *window) :
 	m_camera(world->getCamera()),
 	m_window(window),
 	m_timeOfDay(world->getTimeOfDay()),
-	m_topColor(255, 255, 255, 255),
-	m_bottomColor(90, 170, 255, 255),
+	m_topColor(255, 255, 255),
+	m_bottomColor(90, 170, 255),
 	m_wind(5.0f),
 	m_cloudHeight(0.0f),
 	m_cloudOffset(500.0f),
@@ -73,14 +68,14 @@ void Background::onTick(TickEvent *e)
 		{
 			// Percentage of sunrise
 			float minscale = 1.0f - (540 - time) / 180.0f; // Aka. (9 * 60 - time) / (6 * 60 - 9 * 60)
-			m_topColor = mixColors(Color(255, 255, 255), Color(0, 0, 0), minscale);
-			m_bottomColor = mixColors(Color(90, 170, 255), Color(10, 60, 110), minscale);
+			m_topColor = math::lerp(ColorRGB(255, 255, 255), ColorRGB(0, 0, 0), minscale);
+			m_bottomColor = math::lerp(ColorRGB(90, 170, 255), ColorRGB(10, 60, 110), minscale);
 		}
 		else
 		{
 			// Set day gradient
-			m_topColor = Color(255, 255, 255);
-			m_bottomColor = Color(90, 170, 255);
+			m_topColor = ColorRGB(255, 255, 255);
+			m_bottomColor = ColorRGB(90, 170, 255);
 		}
 
 		// Place sun
@@ -97,14 +92,14 @@ void Background::onTick(TickEvent *e)
 		{
 			// Percentage of sunset
 			float minscale = 1.0f - (1260 - time) / 180.0f; // Aka. (21 * 60 - time) / (18 * 60 - 21 * 60)
-			m_topColor = mixColors(Color(0, 0, 0, 255), Color(255, 255, 255), minscale);
-			m_bottomColor = mixColors(Color(10, 60, 110, 255), Color(90, 170, 255), minscale);
+			m_topColor = math::lerp(ColorRGB(0, 0, 0), ColorRGB(255, 255, 255), minscale);
+			m_bottomColor = math::lerp(ColorRGB(10, 60, 110), ColorRGB(90, 170, 255), minscale);
 		}
 		else
 		{
 			// Set night gradient
-			m_topColor = Color(0, 0, 0);
-			m_bottomColor = Color(10, 60, 110);
+			m_topColor = ColorRGB(0, 0, 0);
+			m_bottomColor = ColorRGB(10, 60, 110);
 		}
 
 		// Place moon
@@ -132,10 +127,10 @@ void Background::onDraw(DrawEvent *e)
 	m_vertices[1].set4f(VERTEX_POSITION, 0.0f, (float) graphicsContext->getHeight());
 	m_vertices[2].set4f(VERTEX_POSITION, (float) graphicsContext->getWidth(), 0.0f);
 	m_vertices[3].set4f(VERTEX_POSITION, (float) graphicsContext->getWidth(), (float) graphicsContext->getHeight());
-	m_vertices[0].set4ub(VERTEX_COLOR, m_topColor.r, m_topColor.g, m_topColor.b, m_topColor.a);
-	m_vertices[1].set4ub(VERTEX_COLOR, m_bottomColor.r, m_bottomColor.g, m_bottomColor.b, m_bottomColor.a);
-	m_vertices[2].set4ub(VERTEX_COLOR, m_topColor.r, m_topColor.g, m_topColor.b, m_topColor.a);
-	m_vertices[3].set4ub(VERTEX_COLOR, m_bottomColor.r, m_bottomColor.g, m_bottomColor.b, m_bottomColor.a);
+	m_vertices[0].set4ub(VERTEX_COLOR, m_topColor.getR(), m_topColor.getG(), m_topColor.getB(), 255);
+	m_vertices[1].set4ub(VERTEX_COLOR, m_bottomColor.getR(), m_bottomColor.getG(), m_bottomColor.getB(), 255);
+	m_vertices[2].set4ub(VERTEX_COLOR, m_topColor.getR(), m_topColor.getG(), m_topColor.getB(), 255);
+	m_vertices[3].set4ub(VERTEX_COLOR, m_bottomColor.getR(), m_bottomColor.getG(), m_bottomColor.getB(), 255);
 	graphicsContext->drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_STRIP, m_vertices, 4);
 
 	// Draw sun/moon

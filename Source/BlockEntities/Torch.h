@@ -18,5 +18,5 @@ public:
 	}
 
 private:
-	//Pointlight m_pointlight;
+	Pointlight m_pointlight;
 };

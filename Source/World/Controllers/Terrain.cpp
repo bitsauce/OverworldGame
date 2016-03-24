@@ -46,7 +46,28 @@ bool Terrain::setBlockAt(const int x, const int y, const WorldLayer layer, const
 		((Client*)Connection::getInstance())->sendPacket(&bitStream);
 	}*/
 
-	return m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer, blockID, replace);
+	Chunk &chunk = m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF));
+	const ChunkBlock block = chunk.getChunkBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
+
+	if(!replace)
+	{
+		// Check if we can place a block here
+		if(block != BLOCK_EMPTY || (layer == WORLD_LAYER_MIDDLE && block.getBlockEntity()))
+		{
+			return false;
+		}
+	}
+	else
+	{
+		// If there is a block entity at this position 
+		if(layer == WORLD_LAYER_MIDDLE && block.getBlockEntity())
+		{
+			BlockEntity *blockEntity = block.getBlockEntity();
+			m_chunkManager->getChunkAt((int) floor(blockEntity->getX() / CHUNK_BLOCKSF), (int) floor(blockEntity->getY() / CHUNK_BLOCKSF)).removeBlockEntity(blockEntity);
+		}
+	}
+
+	return chunk.setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer, blockID);
 }
 
 BlockID Terrain::getBlockAt(const int x, const int y, const WorldLayer layer)
@@ -104,7 +125,7 @@ BlockEntity *Terrain::createBlockEntityAt(const int x, const int y, const BlockE
 
 				if(data->getLayer() == WORLD_LAYER_MIDDLE)
 				{
-					chunk.setBlockAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), data->getLayer(), BLOCK_EMPTY, true);
+					chunk.setBlockAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), data->getLayer(), BLOCK_EMPTY);
 				}
 			}
 		}
@@ -158,21 +179,3 @@ bool Terrain::isEmptyAt(const int x, const int y, const WorldLayer layer)
 {
 	return m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).isEmptyAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
 }
-
-/*void Terrain::setBlockEntityAt(const int x, const int y, const BlockEntityID blockEntityID)
-{
-	BlockEntityData *data = BlockEntityData::get(blockEntityID);
-	if(data)
-	{
-		data->create(m_game->getWorld(), blockPos.x, blockPos.y);
-		pawn->getCurrentItem()->dec();
-	}
-
-	for(int y1 = y; y1 < y + data->getHeight(); y1++)
-	{
-		for(int x1 = x; x1 < x + data->getWidth(); x1++)
-		{
-			m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), BLOCK_ENTITY, WORLD_LAYER_MIDDLE);
-		}
-	}
-}*/

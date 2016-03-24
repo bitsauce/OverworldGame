@@ -143,11 +143,6 @@
 		<path>Sprites/BlockEntities/LightSources/Torch.png</path>
 	</texture>
 	
-	<texture>
-		<name>Sprites/Debug/Bulb</name>
-		<path>Sprites/Debug/Bulb.png</path>
-	</texture>
-	
 	<!-- Shaders -->
 	<shader>
 		<name>Shaders/DirectionalLighting</name>

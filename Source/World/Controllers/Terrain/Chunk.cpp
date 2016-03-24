@@ -79,29 +79,10 @@ void Chunk::load(int chunkX, int chunkY, ChunkBlock *blocks)
 	LOG("Chunk [%i, %i] generated", m_x, m_y);
 }
 	
-bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID blockID, const bool replace)
+bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID blockID)
 {
-	const ChunkBlock block = m_blocks[BLOCK_INDEX(x, y, layer)];
-
-	if(!replace)
-	{
-		// Check if we can place a block here
-		if(block != BLOCK_EMPTY || (layer == WORLD_LAYER_MIDDLE && block.getBlockEntity() != 0))
-		{
-			return false;
-		}
-	}
-	else
-	{
-		// If there is a block entity at this position 
-		if(layer == WORLD_LAYER_MIDDLE && block.getBlockEntity())
-		{
-			BlockEntity *blockEntity = block.getBlockEntity();
-			m_chunkManager->getChunkAt((int) floor(blockEntity->getX() / CHUNK_BLOCKSF), (int) floor(blockEntity->getY() / CHUNK_BLOCKSF)).removeBlockEntity(blockEntity);
-		}
-	}
-
 	// Check if we need to do anything
+	const ChunkBlock &block = m_blocks[BLOCK_INDEX(x, y, layer)];
 	if(block != blockID)
 	{
 		// Get adjacent chunks
@@ -234,9 +215,14 @@ BlockID Chunk::getBlockAt(const int x, const int y, const WorldLayer layer) cons
 	return m_blocks[BLOCK_INDEX(x, y, layer)];
 }
 
+ChunkBlock Chunk::getChunkBlockAt(const int x, const int y, const WorldLayer layer) const
+{
+	return m_blocks[BLOCK_INDEX(x, y, layer)];
+}
+
 bool Chunk::isEmptyAt(const int x, const int y, const WorldLayer layer) const
 {
-	return m_blocks[BLOCK_INDEX(x, y, layer)] == BLOCK_EMPTY && m_blocks[BLOCK_INDEX(x, y, layer)].getBlockEntity() == 0;
+	return m_blocks[BLOCK_INDEX(x, y, layer)].isEmpty();
 }
 
 void Chunk::addBlockEntity(BlockEntity *blockEntity)

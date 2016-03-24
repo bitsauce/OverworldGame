@@ -5,10 +5,16 @@
 #include "Constants.h"
 #include "Blocks/Block.h"
 
+// TODO: This class needs better encapsulation.
+// While the friend class solution works, it is not pretty.
+// Ideally, I want the user to only be able to manipulate the chunks through the Terrain class
 class Chunk
 {
+	friend class Terrain;
 	friend class ChunkManager;
-public:
+	friend class BlockDrawer;
+	friend class Debug;
+private:
 	Chunk(ChunkManager *chunkManager);
 
 	/**
@@ -25,9 +31,10 @@ public:
 	
 	int getX() const { return m_x; }
 	int getY() const { return m_y; }
-	
-	bool setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID blockID, const bool replace);
+
+	bool setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID blockID);
 	BlockID getBlockAt(const int x, const int y, const WorldLayer layer) const;
+	ChunkBlock getChunkBlockAt(const int x, const int y, const WorldLayer layer) const;
 
 	void addBlockEntity(BlockEntity *blockEntity);
 	bool removeBlockEntity(BlockEntity *blockEntity);
