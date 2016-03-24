@@ -6,31 +6,33 @@
 #include "BlockEntities/BlockEntity.h"
 #include "BlockEntities/BlockEntityData.h"
 
-class Block
+class ChunkBlock
 {
 public:
-	Block() :
-		m_blockData(0),
+	ChunkBlock() :
+		m_blockData(BlockData::get(BLOCK_EMPTY)),
 		m_blockEntity(0)
 	{
 	}
 
-	Block(const BlockID id) :
-		m_blockData(BlockData::get(id)),
-		m_blockEntity(0)
+	void setBlockID(const BlockID id)
 	{
+		m_blockData = BlockData::get(id);
 	}
 
-	Block(BlockEntity *blockEntity) :
-		m_blockData(blockEntity->getData()),
-		m_blockEntity(blockEntity)
+	void setBlockEntity(BlockEntity *entity)
 	{
+		m_blockEntity = entity;
 	}
 
-	Block(BlockData *data) :
-		m_blockData(data),
-		m_blockEntity(0)
+	void setBlockData(BlockData *data)
 	{
+		m_blockData = data;
+	}
+
+	BlockID getBlockID() const
+	{
+		return m_blockData->getID();
 	}
 
 	BlockData *getBlockData() const
@@ -43,9 +45,24 @@ public:
 		return m_blockEntity;
 	}
 
-	operator BlockID() const
+	operator BlockEntity* () const
+	{
+		return m_blockEntity;
+	}
+
+	operator BlockData* () const
+	{
+		return m_blockData;
+	}
+
+	operator BlockID () const
 	{
 		return m_blockData->getID();
+	}
+
+	bool isEmpty() const
+	{
+		return *this == BLOCK_EMPTY && m_blockEntity == 0;
 	}
 
 private:

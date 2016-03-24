@@ -149,7 +149,7 @@ void Server::onTick(TickEvent *e)
 				int y; bitStream.Read(y);
 				BlockID block; bitStream.Read(block);
 				WorldLayer layer; bitStream.Read(layer);
-				m_game->getWorld()->getTerrain()->setBlockAt(x, y, block, layer, true);
+				m_game->getWorld()->getTerrain()->setBlockAt(x, y, layer, block, true);
 			}
 			break;
 

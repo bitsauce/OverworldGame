@@ -10,7 +10,6 @@ class Torch : public BlockEntity
 public:
 	Torch(World * world, int x, int y, const BlockEntityData *data);
 
-	void onTick(TickEvent *e);
 	void onNeighbourChanged(NeighborChangedEvent *e);
 
 	static BlockEntity *Factory(World * world, const int x, const int y, const BlockEntityData *data)
@@ -20,6 +19,4 @@ public:
 
 private:
 	//Pointlight m_pointlight;
-	Sprite m_sprite;
-	float m_time;
 };

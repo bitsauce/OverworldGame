@@ -17,7 +17,7 @@ public:
 	 * \param chunkY The global chunk y-coordinate
 	 * \param blocks Array of blocks to load into the chunk
 	 */
-	void load(int chunkX, int chunkY, Block *blocks);
+	void load(int chunkX, int chunkY, ChunkBlock *blocks);
 	
 	bool isAttached() const { return m_attached; }
 	bool isSorted() const { return m_sorted; }
@@ -26,14 +26,16 @@ public:
 	int getX() const { return m_x; }
 	int getY() const { return m_y; }
 	
-	Block getBlockAt(const int x, const int y, WorldLayer layer) const;
-	bool isBlockAt(const int x, const int y, WorldLayer layer) const;
-	bool isBlockOccupied(const int x, const int y, WorldLayer layer) const;
-	bool setBlockAt(const int x, const int y, const Block block, WorldLayer layer);
-	
-	bool addBlockEntity(const int x, const int y, const Block block, WorldLayer layer);
+	bool setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID blockID, const bool replace);
+	BlockID getBlockAt(const int x, const int y, const WorldLayer layer) const;
+
+	void addBlockEntity(BlockEntity *blockEntity);
 	bool removeBlockEntity(BlockEntity *blockEntity);
-	void setBlockEntityFrameAt(const int x, const int y, const uint frame, const WorldLayer layer);
+	void setBlockEntityAt(const int x, const int y, const WorldLayer layer, BlockEntity *blockEntity) const;
+	BlockEntity *getBlockEntityAt(const int x, const int y, const WorldLayer layer) const;
+	bool setBlockEntityFrameAt(const int x, const int y, const WorldLayer layer, const uint frame);
+
+	bool isEmptyAt(const int x, const int y, const WorldLayer layer) const;
 
 	void attach(GraphicsContext *context, const int x, const int y);
 	void detach();
@@ -45,7 +47,7 @@ private:
 
 	// Chunk
 	int m_x, m_y;
-	Block *m_blocks; // TODO: Consider allowing storing block entities and blocks on the same position
+	ChunkBlock *m_blocks;
 	list<BlockEntity*> m_blockEntities;
 
 	// Block entity VBO

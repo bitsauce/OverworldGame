@@ -6,17 +6,19 @@
 
 class World;
 
-class BlockEntityData : public BlockData
+class BlockEntityData
 {
 	friend class OverworldGame;
 public:
-	BlockEntityData(const BlockEntityID id, const string &name, const Pixmap &pixmap, const uint width, const uint height, const uint frameCount, const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> factory) :
-		BlockData(BLOCK_ENTITY, pixmap, ITEM_NONE, 1.0f),
+	BlockEntityData(const BlockEntityID id, const string &name, const Pixmap &pixmap, const uint width, const uint height, const uint frameCount, const WorldLayer layer, const uint placement, const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> factory) :
+		m_pixmap(pixmap),
 		m_id(id),
 		m_name(name),
 		m_width(width),
 		m_height(height),
 		m_frameCount(frameCount),
+		m_layer(layer),
+		m_placement(placement),
 		m_factory(factory)
 	{
 	}
@@ -67,15 +69,32 @@ public:
 		return m_height;
 	}
 
-	//getTextureCoordinates()
+	Pixmap getPixmap() const
+	{
+		return m_pixmap;
+	}
+
+	WorldLayer getLayer() const
+	{
+		return m_layer;
+	}
+
+	uint getPlacement() const
+	{
+		return m_placement;
+	}
+
+	bool canPlace(const int x, const int y, const enum WorldLayer layer, class Terrain *terrain) const;
 
 private:
 	const BlockEntityID m_id;
 	const string m_name;
-	const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> m_factory;
+	const Pixmap m_pixmap;
 	const uint m_width, m_height;
 	const uint m_frameCount;
-	// m_animateWithTime?
+	const WorldLayer m_layer;
+	const uint m_placement;
+	const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> m_factory;
 
 	static void init();
 	static vector<BlockEntityData*> s_data;

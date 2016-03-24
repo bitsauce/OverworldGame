@@ -12,7 +12,7 @@ ChunkGenerator::ChunkGenerator(const uint seed) :
 	m_random.setSeed(seed);
 }
 
-void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, Block *blocks)
+void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, ChunkBlock *blocks)
 {
 	// Load structures
 	//loadStructures(chunkX, chunkY);
@@ -34,7 +34,7 @@ void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, Block *b
 				//BlockID structureBlock;
 				//if((structureBlock = structureBlocks[BLOCK_INDEX(x, y, z)]) == BLOCK_EMPTY)
 				{
-					blocks[BLOCK_INDEX(x, y, z)] = getGroundAt(tileX + x, tileY + y, (WorldLayer) z);
+					blocks[BLOCK_INDEX(x, y, z)].setBlockID(getGroundAt(tileX + x, tileY + y, (WorldLayer) z));
 				}
 				//else
 				{

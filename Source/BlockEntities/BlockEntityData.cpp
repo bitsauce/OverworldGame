@@ -15,6 +15,8 @@ struct BlockEntityDescriptor
 	const uint height;
 	const uint frameCount;
 	const uint animationSpeed; // 0 = 0%, 255 = Every tick
+	const WorldLayer layer;
+	const uint placement; // NEED_WALL, NEED_ROOF, NEED_FLOOR, NEED_BACKGROUND, CAN_OVERLAP
 	const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> factory;
 };
 
@@ -24,12 +26,11 @@ BlockEntity* dummy(World*, const int, const int, const BlockEntityData*)
 }
 
 static BlockEntityDescriptor g_blockEntityData[] = {
-	{ BLOCK_ENTITY_NULL, "NULL", "Sprites/Blocks/Empty.png", 1, 1, 1, 0, dummy },
+	{ BLOCK_ENTITY_NULL, "NULL", "Sprites/Blocks/Empty.png", 1, 1, 1, 0, WORLD_LAYER_MIDDLE, true, dummy },
 
-	{ BLOCK_ENTITY_TORCH, "Torch", "Sprites/BlockEntities/LightSources/Torch_anim.png", 1, 1, 3, 0, Torch::Factory },
-	{ BLOCK_ENTITY_TORCH_2, "Torch2", "Sprites/BlockEntities/LightSources/Torch_anim_2.png", 1, 1, 6, 0, Torch::Factory },
+	{ BLOCK_ENTITY_TORCH, "Torch", "Sprites/BlockEntities/LightSources/Torch_anim_2.png", 1, 1, 3, 0, WORLD_LAYER_MIDDLE, false, Torch::Factory },
 
-	{ BLOCK_ENTITY_COUNT, "", "", 0, 0, 0, 0, dummy }
+	{ BLOCK_ENTITY_COUNT, "", "", 0, 0, 0, 0, (WorldLayer)0, false, dummy }
 };
 
 void BlockEntityData::init()
@@ -45,7 +46,7 @@ void BlockEntityData::init()
 	{
 		// Create block entity data objects
 		Pixmap pixmap(data->texturePath);
-		s_data[data->id] = new BlockEntityData(data->id, data->name, pixmap, data->width, data->height, data->frameCount, data->factory);
+		s_data[data->id] = new BlockEntityData(data->id, data->name, pixmap, data->width, data->height, data->frameCount, data->layer, data->placement, data->factory);
 		pixmaps[data->id] = pixmap;
 
 		pixelData[0] = data->width * BLOCK_PXF;
@@ -76,4 +77,19 @@ void BlockEntityData::init()
 	}
 	s_blockEntityDataTexture = Resource<Texture2D>(new Texture2D(blockDataPixmap));
 	s_blockEntityDataTexture->setFiltering(Texture2D::NEAREST);
+}
+
+bool BlockEntityData::canPlace(const int x, const int y, const WorldLayer layer, Terrain *terrain) const
+{
+	for(int y1 = y; y1 < y + m_height; y1++)
+	{
+		for(int x1 = x; x1 < x + m_width; x1++)
+		{
+			if(terrain->isBlockEntityAt(x1, y1, layer) || (layer == WORLD_LAYER_MIDDLE && terrain->isBlockAt(x1, y1, layer)))
+			{
+				return false;
+			}
+		}
+	}
+	return true;
 }

@@ -1,15 +1,11 @@
 #include "BitStream.h"
 #include "Networking/Server.h"
 #include "Networking/Client.h"
-
 #include "Terrain.h"
 #include "Constants.h"
 #include "Blocks/BlockData.h"
-
 #include "World/World.h"
-
 #include "Entities/ItemDrop.h"
-
 #include "Entities/EntityData.h"
 #include "BlockEntities/BlockEntity.h"
 #include "BlockEntities/BlockEntityData.h"
@@ -27,7 +23,7 @@ Terrain::~Terrain()
 }
 
 // BLOCKS
-bool Terrain::setBlockAt(const int x, const int y, const Block block, const WorldLayer layer, const bool _override)
+bool Terrain::setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID blockID, const bool replace)
 {
 	/*if(Connection::getInstance()->isServer())
 	{
@@ -50,76 +46,117 @@ bool Terrain::setBlockAt(const int x, const int y, const Block block, const Worl
 		((Client*)Connection::getInstance())->sendPacket(&bitStream);
 	}*/
 
-	Chunk &chunk = m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF));
-
-	// Check if we can place a block here
-	if(!_override)
-	{
-		if(chunk.getBlockAt(x, y, layer) != BLOCK_EMPTY)
-		{
-			return false;
-		}
-	}
-	else
-	{
-		// If override is true, make sure that whatever was here before is removed
-		Block block = chunk.getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
-		if(block == BLOCK_ENTITY)
-		{
-			BlockEntity *blockEntity = block.getBlockEntity();
-			m_chunkManager->getChunkAt((int) floor(blockEntity->getX() / CHUNK_BLOCKSF), (int) floor(blockEntity->getY() / CHUNK_BLOCKSF)).removeBlockEntity(blockEntity);
-		}
-	}
-
-	// If we're placing a block entity
-	if(block == BLOCK_ENTITY)
-	{
-		BlockEntityData *data = (BlockEntityData*) block.getBlockData();
-		if(!data)
-		{
-			return false;
-		}
-
-		for(int y1 = y; y1 < y + data->getHeight(); y1++)
-		{
-			for(int x1 = x; x1 < x + data->getWidth(); x1++)
-			{
-				m_chunkManager->getChunkAt((int) floor(x1 / CHUNK_BLOCKSF), (int) floor(y1 / CHUNK_BLOCKSF)).setBlockAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), block, layer);
-			}
-		}
-		LOG("Entity added: [%i, %i]", x, y);
-		return chunk.addBlockEntity(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), block, layer);
-	}
-
-	LOG("Block added: [%i, %i]", x, y);
-	return chunk.setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), block, layer);
+	return m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer, blockID, replace);
 }
 
-Block Terrain::getBlockAt(const int x, const int y, const WorldLayer layer = WORLD_LAYER_MIDDLE)
+BlockID Terrain::getBlockAt(const int x, const int y, const WorldLayer layer)
 {
 	return m_chunkManager->getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF)).getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
 }
 
-bool Terrain::isBlockAt(const int x, const int y, const WorldLayer layer = WORLD_LAYER_MIDDLE)
+bool Terrain::isBlockAt(const int x, const int y, const WorldLayer layer)
 {
 	return getBlockAt(x, y, layer) != BLOCK_EMPTY;
 }
 
-void Terrain::setBlockEntityFrameAt(const int x, const int y, const uint frame, const WorldLayer layer)
-{
-	return m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).setBlockEntityFrameAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), frame, layer);
-}
-
-bool Terrain::removeBlockAt(const int x, const int y, const WorldLayer layer = WORLD_LAYER_MIDDLE)
+bool Terrain::removeBlockAt(const int x, const int y, const WorldLayer layer, const bool createItem)
 {
 	BlockID blockID = getBlockAt(x, y, layer);
-	if(setBlockAt(x, y, BLOCK_EMPTY, layer))
+	if(setBlockAt(x, y, layer, BLOCK_EMPTY, true))
 	{
-		//ItemDrop *itemDrop = new ItemDrop(m_world, BlockData::get(blockID).getItem());
-		//itemDrop->setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
+		if(createItem)
+		{
+			//ItemDrop *itemDrop = new ItemDrop(m_world, BlockData::get(blockID).getItem());
+			//itemDrop->setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
+		}
 		return true;
 	}
 	return false;
+}
+
+BlockEntity *Terrain::createBlockEntityAt(const int x, const int y, const BlockEntityID blockEntityID, const bool replace)
+{
+	BlockEntityData *data = BlockEntityData::get(blockEntityID);
+	if(!data) return 0;
+
+	if(!replace)
+	{
+		// Check if we can place the block entity here
+		if(!data->canPlace(x, y, data->getLayer(), this))
+		{
+			return 0;
+		}
+	}
+	else
+	{
+		// Make sure block and block entites are removed
+		for(int y1 = y; y1 < y + data->getHeight(); y1++)
+		{
+			for(int x1 = x; x1 < x + data->getWidth(); x1++)
+			{
+				Chunk &chunk = m_chunkManager->getChunkAt((int) floor(x1 / CHUNK_BLOCKSF), (int) floor(y1 / CHUNK_BLOCKSF));
+
+				BlockEntity *blockEntity = chunk.getBlockEntityAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), data->getLayer());
+				if(blockEntity)
+				{
+					chunk.removeBlockEntity(blockEntity);
+				}
+
+				if(data->getLayer() == WORLD_LAYER_MIDDLE)
+				{
+					chunk.setBlockAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), data->getLayer(), BLOCK_EMPTY, true);
+				}
+			}
+		}
+	}
+
+	BlockEntity *blockEntity = data->create(m_world, x, y);
+
+	// Set block entity in all the positions it occupies
+	for(int y1 = y; y1 < y + data->getHeight(); y1++)
+	{
+		for(int x1 = blockEntity->getX(); x1 < x + data->getWidth(); x1++)
+		{
+			m_chunkManager->getChunkAt((int) floor(x1 / CHUNK_BLOCKSF), (int) floor(y1 / CHUNK_BLOCKSF)).setBlockEntityAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), data->getLayer(), blockEntity);
+		}
+	}
+	m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).addBlockEntity(blockEntity);
+	return blockEntity;
+}
+
+BlockEntity *Terrain::getBlockEntityAt(const int x, const int y, const WorldLayer layer)
+{
+	return m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).getBlockEntityAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
+}
+
+bool Terrain::isBlockEntityAt(const int x, const int y, const WorldLayer layer)
+{
+	return getBlockEntityAt(x, y ,layer) != 0;
+}
+
+bool Terrain::removeBlockEntityAt(const int x, const int y, const WorldLayer layer, const bool createItem)
+{
+	BlockEntity *blockEntity = getBlockEntityAt(x, y, layer);
+	if(blockEntity)
+	{
+		m_chunkManager->getChunkAt((int) floor(blockEntity->getX() / CHUNK_BLOCKSF), (int) floor(blockEntity->getY() / CHUNK_BLOCKSF)).removeBlockEntity(blockEntity);
+		if(createItem)
+		{
+			// TODO: Create item
+		}
+		return true;
+	}
+	return false;
+}
+
+bool Terrain::setBlockEntityFrameAt(const int x, const int y, const WorldLayer layer, const uint frame)
+{
+	return m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).setBlockEntityFrameAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer, frame);
+}
+
+bool Terrain::isEmptyAt(const int x, const int y, const WorldLayer layer)
+{
+	return m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).isEmptyAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
 }
 
 /*void Terrain::setBlockEntityAt(const int x, const int y, const BlockEntityID blockEntityID)

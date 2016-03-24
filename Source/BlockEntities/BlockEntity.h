@@ -5,13 +5,13 @@
 #include "Constants.h"
 
 class World;
-class Block;
+class ChunkBlock;
 class BlockEntityData;
 
 class NeighborChangedEvent
 {
 public:
-	NeighborChangedEvent(const int dx, const int dy, const Block *oldBlock, const Block *newBlock) :
+	NeighborChangedEvent(const int dx, const int dy, const ChunkBlock *oldBlock, const ChunkBlock *newBlock) :
 		m_dx(dx),
 		m_dy(dy),
 		m_oldBlock(oldBlock),
@@ -29,20 +29,20 @@ public:
 		return m_dy;
 	}
 
-	const Block *getOldBlock() const
+	const ChunkBlock *getOldBlock() const
 	{
 		return m_oldBlock;
 	}
 
-	const Block *getNewBlock() const
+	const ChunkBlock *getNewBlock() const
 	{
 		return m_newBlock;
 	}
 
 private:
 	const int m_dx, m_dy;
-	const Block *m_oldBlock;
-	const Block *m_newBlock;
+	const ChunkBlock *m_oldBlock;
+	const ChunkBlock *m_newBlock;
 };
 
 class BlockEntity

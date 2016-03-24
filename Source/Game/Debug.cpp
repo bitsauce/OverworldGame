@@ -181,8 +181,8 @@ void Debug::onTick(TickEvent *e)
 			m_world->getTerrain()->setBlockAt(
 				(int) floor(m_world->getCamera()->getInputPosition().x / BLOCK_PXF),
 				(int) floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF),
-				m_game->getInputManager()->getKeyState(CGF_MOUSE_BUTTON_LEFT) ? m_block : BLOCK_EMPTY,
 				layer,
+				m_game->getInputManager()->getKeyState(CGF_MOUSE_BUTTON_LEFT) ? m_block : BLOCK_EMPTY,
 				true);
 		}
 	}
@@ -358,7 +358,7 @@ void Debug::nextBlock(KeyEvent *e)
 	{
 		if((m_block = BlockID(m_block + 1)) >= BLOCK_COUNT)
 		{
-			m_block = BlockID(BLOCK_ENTITY + 1);
+			m_block = BlockID(BLOCK_EMPTY + 1);
 		}
 	}
 }
@@ -367,7 +367,7 @@ void Debug::prevBlock(KeyEvent *e)
 {
 	if(m_enabled && e->getType() == KeyEvent::DOWN)
 	{
-		if((m_block = BlockID(m_block - 1)) <= BLOCK_ENTITY)
+		if((m_block = BlockID(m_block - 1)) <= BLOCK_EMPTY)
 		{
 			m_block = BlockID(BLOCK_COUNT - 1);
 		}

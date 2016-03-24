@@ -1,28 +1,30 @@
 #include "Torch.h"
 
 Torch::Torch(World *world, int x, int y, const BlockEntityData *data) :
-	BlockEntity(world, x, y, data),
-	m_time(0.0f),
-	m_sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/BlockEntities/LightSources/Torch"))//,
+	BlockEntity(world, x, y, data)//,
 	//m_pointlight(world->getLighting(), Vector2((float) x, (float) y), 10.0f, Color(255, 190, 90))
 {
-	//m_terrain->setBlockTimeAt(torchPos.x, torchPos.y, torchPos.z, WORLD_LAYER_BACK);
-	m_sprite.setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
+	// updateFrame();
 }
-
-void Torch::onTick(TickEvent *e)
-{
-	// TODO: ChunkLoader::setFrameIndex() will set the frame index of the furniture
-	// at the given position by updating a value in a texture object containing all
-	// frame indexes
-	//m_chunkLoader->setFrameIndex(m_position.x, m_position.y, m_time);
-	m_time += e->getDelta();
-}
-
-int ____i = 0;
 
 void Torch::onNeighbourChanged(NeighborChangedEvent *e)
 {
-	LOG("Neighbour [%i, %i] of type %i changed into %i", e->getDx(), e->getDy(), e->getOldBlock()->getBlockData()->getID(), e->getNewBlock()->getBlockData()->getID());
-	m_world->getTerrain()->setBlockEntityFrameAt(getX(), getY(), ____i++ % 3);
+	int frame = 0;
+	if(!m_world->getTerrain()->isBlockAt(getX(), getY() + 1, WORLD_LAYER_MIDDLE) && !m_world->getTerrain()->isBlockAt(getX(), getY(), WORLD_LAYER_BACK))
+	{
+		if(m_world->getTerrain()->isBlockAt(getX() + 1, getY(), WORLD_LAYER_MIDDLE))
+		{
+			frame = 2;
+		}
+		else if(m_world->getTerrain()->isBlockAt(getX() - 1, getY(), WORLD_LAYER_MIDDLE))
+		{
+			frame = 1;
+		}
+		else
+		{
+			m_world->getTerrain()->setBlockAt(getX(), getY(), WORLD_LAYER_MIDDLE, BLOCK_EMPTY, true);
+			return;
+		}
+	}
+	m_world->getTerrain()->setBlockEntityFrameAt(getX(), getY(), WORLD_LAYER_MIDDLE, frame);
 }

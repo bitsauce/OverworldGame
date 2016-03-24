@@ -23,7 +23,7 @@ void BlockEntityItem::unequip(Pawn *pawn)
 void BlockEntityItem::use(Pawn *pawn, const float delta)
 {
 	// Get block input position
-	Vector2I blockPos = math::floor(m_game->getWorld()->getCamera()->getInputPosition() / BLOCK_PXF);
+	Vector2I blockPos = math::floor(Vector2F(m_game->getWorld()->getCamera()->getInputPosition()) / BLOCK_PXF);
 
 	// Set block if not occupied
 	/*if(m_game->getWorld()->getTerrain()->setThingAt(blockPos.x, blockPos.y, m_entityID))
@@ -32,14 +32,7 @@ void BlockEntityItem::use(Pawn *pawn, const float delta)
 		player->getCurrentItem()->dec();
 	}*/
 
-	BlockEntityData *data = BlockEntityData::get(m_blockEntityID);
-
-	if(!data)
-	{
-		return;
-	}
-
-	if(m_game->getWorld()->getTerrain()->setBlockAt(blockPos.x, blockPos.y, data->create(m_game->getWorld(), blockPos.x, blockPos.y), WORLD_LAYER_MIDDLE)) // TODO: Memory leak if returns false
+	if(m_game->getWorld()->getTerrain()->createBlockEntityAt(blockPos.x, blockPos.y, m_blockEntityID))
 	{
 		pawn->getCurrentItem()->dec();
 	}

@@ -12,11 +12,7 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 	m_attached = m_modified = m_sorted = false; // Not modified
 
 	// Initialize blocks
-	m_blocks = new Block[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
-	for(int i = 0; i < CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT; ++i)
-	{
-		m_blocks[i] = BLOCK_EMPTY;
-	}
+	m_blocks = new ChunkBlock[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
 	m_blockTexture = Resource<Texture2D>(new Texture2D(CHUNK_BLOCKS, CHUNK_BLOCKS));
 
 	uchar data[4] = { 0 };
@@ -33,7 +29,7 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 	m_timeOffsetTexture = Resource<Texture2D>(new Texture2D(pixmap));
 }
 
-void Chunk::load(int chunkX, int chunkY, Block *blocks)
+void Chunk::load(int chunkX, int chunkY, ChunkBlock *blocks)
 {
 	// Set position
 	m_x = chunkX;
@@ -82,26 +78,31 @@ void Chunk::load(int chunkX, int chunkY, Block *blocks)
 	// Chunk generated
 	LOG("Chunk [%i, %i] generated", m_x, m_y);
 }
+	
+bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID blockID, const bool replace)
+{
+	const ChunkBlock block = m_blocks[BLOCK_INDEX(x, y, layer)];
 
-Block Chunk::getBlockAt(const int x, const int y, WorldLayer layer) const
-{
-	return m_blocks[BLOCK_INDEX(x, y, layer)];
-}
-	
-bool Chunk::isBlockAt(const int x, const int y, WorldLayer layer) const
-{
-	return m_blocks[BLOCK_INDEX(x, y, layer)] != BLOCK_EMPTY;
-}
-	
-bool Chunk::isBlockOccupied(const int x, const int y, WorldLayer layer) const
-{
-	return m_blocks[BLOCK_INDEX(x, y, layer)] >= BLOCK_ENTITY;
-}
-	
-bool Chunk::setBlockAt(const int x, const int y, const Block block, WorldLayer layer)
-{
-	// Make sure we can add a block here
-	if(m_blocks[BLOCK_INDEX(x, y, layer)] != block)
+	if(!replace)
+	{
+		// Check if we can place a block here
+		if(block != BLOCK_EMPTY || (layer == WORLD_LAYER_MIDDLE && block.getBlockEntity() != 0))
+		{
+			return false;
+		}
+	}
+	else
+	{
+		// If there is a block entity at this position 
+		if(layer == WORLD_LAYER_MIDDLE && block.getBlockEntity())
+		{
+			BlockEntity *blockEntity = block.getBlockEntity();
+			m_chunkManager->getChunkAt((int) floor(blockEntity->getX() / CHUNK_BLOCKSF), (int) floor(blockEntity->getY() / CHUNK_BLOCKSF)).removeBlockEntity(blockEntity);
+		}
+	}
+
+	// Check if we need to do anything
+	if(block != blockID)
 	{
 		// Get adjacent chunks
 		Chunk *neighborChunks[8];
@@ -114,11 +115,11 @@ bool Chunk::setBlockAt(const int x, const int y, const Block block, WorldLayer l
 		neighborChunks[6] = &m_chunkManager->getChunkAt(m_x - 1, m_y + 1);
 		neighborChunks[7] = &m_chunkManager->getChunkAt(m_x - 1, m_y);
 
-		Block *neighborBlocks[8];
+		ChunkBlock *neighborBlocks[8];
 		if(neighborChunks[0] && x == 0 && y == 0)
 		{
 			neighborBlocks[0] = &neighborChunks[0]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, CHUNK_BLOCKS - 1, layer)];
-			neighborChunks[0]->m_attached = true; // TODO: false?
+			neighborChunks[0]->m_attached = false;
 		}
 		else
 		{
@@ -128,7 +129,7 @@ bool Chunk::setBlockAt(const int x, const int y, const Block block, WorldLayer l
 		if(neighborChunks[1] && y == 0)
 		{
 			neighborBlocks[1] = &neighborChunks[1]->m_blocks[BLOCK_INDEX(x, CHUNK_BLOCKS - 1, layer)];
-			neighborChunks[1]->m_attached = true;
+			neighborChunks[1]->m_attached = false;
 		}
 		else
 		{
@@ -138,7 +139,7 @@ bool Chunk::setBlockAt(const int x, const int y, const Block block, WorldLayer l
 		if(neighborChunks[2] && x == CHUNK_BLOCKS - 1 && y == 0)
 		{
 			neighborBlocks[2] = &neighborChunks[2]->m_blocks[BLOCK_INDEX(x, CHUNK_BLOCKS - 1, layer)];
-			neighborChunks[2]->m_attached = true;
+			neighborChunks[2]->m_attached = false;
 		}
 		else
 		{
@@ -148,7 +149,7 @@ bool Chunk::setBlockAt(const int x, const int y, const Block block, WorldLayer l
 		if(neighborChunks[3] && x == CHUNK_BLOCKS - 1)
 		{
 			neighborBlocks[3] = &neighborChunks[3]->m_blocks[BLOCK_INDEX(0, y, layer)];
-			neighborChunks[3]->m_attached = true;
+			neighborChunks[3]->m_attached = false;
 		}
 		else
 		{
@@ -158,7 +159,7 @@ bool Chunk::setBlockAt(const int x, const int y, const Block block, WorldLayer l
 		if(neighborChunks[4] && x == CHUNK_BLOCKS - 1 && y == CHUNK_BLOCKS - 1)
 		{
 			neighborBlocks[4] = &neighborChunks[4]->m_blocks[BLOCK_INDEX(0, 0, layer)];
-			neighborChunks[4]->m_attached = true;
+			neighborChunks[4]->m_attached = false;
 		}
 		else
 		{
@@ -168,7 +169,7 @@ bool Chunk::setBlockAt(const int x, const int y, const Block block, WorldLayer l
 		if(neighborChunks[5] && y == CHUNK_BLOCKS - 1)
 		{
 			neighborBlocks[5] = &neighborChunks[5]->m_blocks[BLOCK_INDEX(x, 0, layer)];
-			neighborChunks[5]->m_attached = true;
+			neighborChunks[5]->m_attached = false;
 		}
 		else
 		{
@@ -178,7 +179,7 @@ bool Chunk::setBlockAt(const int x, const int y, const Block block, WorldLayer l
 		if(neighborChunks[6] && x == 0 && y == CHUNK_BLOCKS - 1)
 		{
 			neighborBlocks[6] = &neighborChunks[6]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, 0, layer)];
-			neighborChunks[6]->m_attached = true;
+			neighborChunks[6]->m_attached = false;
 		}
 		else
 		{
@@ -188,30 +189,30 @@ bool Chunk::setBlockAt(const int x, const int y, const Block block, WorldLayer l
 		if(neighborChunks[7] && x == 0)
 		{
 			neighborBlocks[7] = &neighborChunks[7]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, y, layer)];
-			neighborChunks[7]->m_attached = true;
+			neighborChunks[7]->m_attached = false;
 		}
 		else
 		{
 			neighborBlocks[7] = &m_blocks[BLOCK_INDEX(x - 1, y, layer)];
 		}
+
+		// Set the block value
+		m_blocks[BLOCK_INDEX(x, y, layer)].setBlockID(blockID);
+		m_sorted = m_attached = false; m_modified = true; // Mark chunk as modified
 		
 		// Notify block entities
 		const int dirX[8] = {  1,  0, -1, -1, -1,  0,  1,  1 };
 		const int dirY[8] = {  1,  1,  1,  0, -1, -1, -1,  0 };
 		for(int i = 0; i < 8; i++)
 		{
-			if(*neighborBlocks[i] == BLOCK_ENTITY)
+			if(neighborBlocks[i]->getBlockEntity())
 			{
-				NeighborChangedEvent e(dirX[i], dirY[i], &m_blocks[BLOCK_INDEX(x, y, layer)], &block);
+				NeighborChangedEvent e(dirX[i], dirY[i], &block, &m_blocks[BLOCK_INDEX(x, y, layer)]);
 				neighborBlocks[i]->getBlockEntity()->onNeighbourChanged(&e);
 			}
 		}
 
-		// Set the block value
-		m_blocks[BLOCK_INDEX(x, y, layer)] = block;
-		m_sorted = m_attached = false; m_modified = true; // Mark chunk as modified
-
-		// Update block map
+		// Update block texture
 		uchar pixel[4];
 		float shadow = 1.0f;
 		for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
@@ -228,28 +229,62 @@ bool Chunk::setBlockAt(const int x, const int y, const Block block, WorldLayer l
 	return false; // Nothing changed
 }
 
-bool Chunk::addBlockEntity(const int x, const int y, const Block block, WorldLayer layer)
+BlockID Chunk::getBlockAt(const int x, const int y, const WorldLayer layer) const
 {
-	m_blockEntities.push_back(block.getBlockEntity());
+	return m_blocks[BLOCK_INDEX(x, y, layer)];
+}
+
+bool Chunk::isEmptyAt(const int x, const int y, const WorldLayer layer) const
+{
+	return m_blocks[BLOCK_INDEX(x, y, layer)] == BLOCK_EMPTY && m_blocks[BLOCK_INDEX(x, y, layer)].getBlockEntity() == 0;
+}
+
+void Chunk::addBlockEntity(BlockEntity *blockEntity)
+{
+	// Add to block entity list
+	m_blockEntities.push_back(blockEntity);
 	m_generateBlockEntityBuffers = true;
-	return true;
 }
 
 bool Chunk::removeBlockEntity(BlockEntity *blockEntity)
 {
+	BlockEntityData *data = blockEntity->getData();
+
+	// Remove block entity from all the positions it occupied
+	for(int y = blockEntity->getY(); y < data->getHeight() + blockEntity->getY(); y++)
+	{
+		for(int x = blockEntity->getX(); x < data->getWidth() + blockEntity->getX(); x++)
+		{
+			m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).m_blocks[BLOCK_INDEX(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), data->getLayer())].setBlockEntity(0);
+		}
+	}
+
+	// Remove block entity from list
 	m_blockEntities.remove(blockEntity);
-	delete blockEntity;
 	m_generateBlockEntityBuffers = true;
+
+	// Delete object
+	delete blockEntity;
 	return true;
 }
 
-void Chunk::setBlockEntityFrameAt(const int x, const int y, const uint frame, const WorldLayer layer)
+void Chunk::setBlockEntityAt(const int x, const int y, const WorldLayer layer, BlockEntity *blockEntity) const
+{
+	m_blocks[BLOCK_INDEX(x, y, layer)].setBlockEntity(blockEntity);
+}
+
+BlockEntity * Chunk::getBlockEntityAt(const int x, const int y, const WorldLayer layer) const
+{
+	return nullptr;
+}
+
+bool Chunk::setBlockEntityFrameAt(const int x, const int y, const WorldLayer layer, const uint frame)
 {
 	uchar data[4];
 	data[0] = frame;
 	data[1] = data[2] = data[3] = 0;
 	m_timeOffsetTexture->updatePixmap(x, y, Pixmap(1, 1, data));
-	LOG("%i", frame);
+	return true;
 }
 
 void Chunk::attach(GraphicsContext *context, const int x, const int y)

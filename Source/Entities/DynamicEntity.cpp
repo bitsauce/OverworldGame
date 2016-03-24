@@ -67,7 +67,7 @@ void DynamicEntity::onTick(TickEvent *e)
 			{
 				for(int x = x0; x <= x1 && m_velocity.y > 0.0f; ++x)
 				{
-					if(m_terrain->getBlockAt(x, y, WORLD_LAYER_MIDDLE) > BLOCK_ENTITY)
+					if(m_terrain->isBlockAt(x, y, WORLD_LAYER_MIDDLE))
 					{
 						m_position.y = y * BLOCK_PXF - m_size.y;
 						m_velocity.y = 0.0f;
@@ -84,7 +84,7 @@ void DynamicEntity::onTick(TickEvent *e)
 			{
 				for(int x = x0; x <= x1 && m_velocity.y < 0.0f; ++x)
 				{
-					if(m_terrain->getBlockAt(x, y, WORLD_LAYER_MIDDLE) > BLOCK_ENTITY)
+					if(m_terrain->isBlockAt(x, y, WORLD_LAYER_MIDDLE))
 					{
 						m_position.y = y * BLOCK_PXF + BLOCK_PXF;
 						m_velocity.y = 0.0f;
@@ -106,7 +106,7 @@ void DynamicEntity::onTick(TickEvent *e)
 			{
 				for(int y = y0; y <= y1 && m_velocity.x > 0.0f; ++y)
 				{
-					if(m_terrain->getBlockAt(x, y, WORLD_LAYER_MIDDLE) > BLOCK_ENTITY)
+					if(m_terrain->isBlockAt(x, y, WORLD_LAYER_MIDDLE))
 					{
 						m_position.x = x * BLOCK_PXF - m_size.x;
 						m_velocity.x = 0.0f;
@@ -123,7 +123,7 @@ void DynamicEntity::onTick(TickEvent *e)
 			{
 				for(int y = y0; y <= y1 && m_velocity.x < 0.0f; ++y)
 				{
-					if(m_terrain->getBlockAt(x, y, WORLD_LAYER_MIDDLE) > BLOCK_ENTITY)
+					if(m_terrain->isBlockAt(x, y, WORLD_LAYER_MIDDLE))
 					{
 						m_position.x = x * BLOCK_PXF + BLOCK_PXF;
 						m_velocity.x = 0.0f;

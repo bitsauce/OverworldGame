@@ -42,7 +42,7 @@ void Axe::update(Pawn *pawn, const float delta)
 
 	Terrain *terrain = m_game->getWorld()->getTerrain();
 	if(pawn->getController()->getInputState(Controller::INPUT_USE_ITEM) && // Do we have user input and...
-		terrain->getBlockAt(position.x, position.y, WORLD_LAYER_BACK) > BLOCK_ENTITY) // ... is there a block at this position?
+		terrain->isBlockAt(position.x, position.y, WORLD_LAYER_BACK)) // ... is there a block at this position?
 	{
 		// Reset timer if block position have changed
 		if(position != m_prevBlockPosition)

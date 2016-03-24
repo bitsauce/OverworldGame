@@ -93,7 +93,7 @@ void ChunkManager::clear()
 }
 
 // SERIALIZATION
-void ChunkManager::saveBlockData(FileWriter &file, Block *blockData)
+void ChunkManager::saveBlockData(FileWriter &file, ChunkBlock *blockData)
 {
 	// Write blocks to stream
 	BlockID currentBlock = blockData[0];
@@ -117,7 +117,7 @@ void ChunkManager::saveBlockData(FileWriter &file, Block *blockData)
 	file << length << endl;
 }
 
-void ChunkManager::loadBlockData(FileReader &file, Block *blockData)
+void ChunkManager::loadBlockData(FileReader &file, ChunkBlock *blockData)
 {
 	// Read blocks from stream
 	int pos = 0;
@@ -128,7 +128,7 @@ void ChunkManager::loadBlockData(FileReader &file, Block *blockData)
 		file >> length;
 		for(int i = 0; i < length; ++i)
 		{
-			blockData[pos + i] = (BlockID) block;
+			blockData[pos + i].setBlockID((BlockID) block);
 		}
 		pos += length;
 	}
@@ -272,7 +272,7 @@ Chunk *ChunkManager::loadChunkAt(const int chunkX, const int chunkY)
 	}
 
 	// Get block data
-	Block blocks[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
+	ChunkBlock blocks[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
 	if(file)
 	{
 		LOG("Loading chunk [%i, %i]...", chunkX, chunkY);

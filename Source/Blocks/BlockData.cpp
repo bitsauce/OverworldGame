@@ -16,7 +16,6 @@ struct BlockDescriptor
 
 static BlockDescriptor g_blockData[] = {
 	{ BLOCK_EMPTY, "Sprites/Blocks/Empty.png", ITEM_NONE, 0.0f, 1 },
-	{ BLOCK_ENTITY, "Sprites/Blocks/Empty.png", ITEM_NONE, 0.0f, 1 },
 
 	{ BLOCK_GRASS, "Sprites/Blocks/Grass.png", ITEM_BLOCK_DIRT, 1.0f, 1 },
 	{ BLOCK_DIRT, "Sprites/Blocks/Dirt.png", ITEM_BLOCK_DIRT, 1.0f, 1 },

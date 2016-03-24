@@ -39,7 +39,7 @@ void Pickaxe::update(Pawn *pawn, const float delta)
 	position.y = (int) floor(position.y / BLOCK_PXF);
 
 	if(pawn->getController()->getInputState(Controller::INPUT_USE_ITEM) && // Do we have user input and...
-		m_game->getWorld()->getTerrain()->getBlockAt(position.x, position.y, WORLD_LAYER_MIDDLE) > BLOCK_ENTITY) // ... is there a block at this position?
+		m_game->getWorld()->getTerrain()->isBlockAt(position.x, position.y, WORLD_LAYER_MIDDLE)) // ... is there a block at this position?
 	{
 		// Reset timer if block position have changed
 		if(position != m_prevBlockPosition)
