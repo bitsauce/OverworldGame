@@ -10,7 +10,7 @@ class BlockEntityData
 {
 	friend class OverworldGame;
 public:
-	BlockEntityData(const BlockEntityID id, const string &name, const Pixmap &pixmap, const uint width, const uint height, const uint frameCount, const WorldLayer layer, const uint placement, const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> factory) :
+	BlockEntityData(const BlockEntityID id, const string &name, const Pixmap &pixmap, const int width, const int height, const uint frameCount, const WorldLayer layer, const uint placement, const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> factory) :
 		m_pixmap(pixmap),
 		m_id(id),
 		m_name(name),
@@ -59,12 +59,12 @@ public:
 		return m_id;
 	}
 
-	uint getWidth() const
+	int getWidth() const
 	{
 		return m_width;
 	}
 
-	uint getHeight() const
+	int getHeight() const
 	{
 		return m_height;
 	}
@@ -84,6 +84,11 @@ public:
 		return m_placement;
 	}
 
+	string getName() const
+	{
+		return m_name;
+	}
+
 	static const TextureAtlas *getTextureAtlas()
 	{
 		return s_textureAtlas;
@@ -100,7 +105,7 @@ private:
 	const BlockEntityID m_id;
 	const string m_name;
 	const Pixmap m_pixmap;
-	const uint m_width, m_height;
+	const int m_width, m_height;
 	const uint m_frameCount;
 	const WorldLayer m_layer;
 	const uint m_placement;

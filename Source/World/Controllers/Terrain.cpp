@@ -120,7 +120,7 @@ BlockEntity *Terrain::createBlockEntityAt(const int x, const int y, const BlockE
 				BlockEntity *blockEntity = chunk.getBlockEntityAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), data->getLayer());
 				if(blockEntity)
 				{
-					chunk.removeBlockEntity(blockEntity);
+					m_chunkManager->getChunkAt((int) floor(blockEntity->getX() / CHUNK_BLOCKSF), (int) floor(blockEntity->getY() / CHUNK_BLOCKSF)).removeBlockEntity(blockEntity);
 				}
 
 				if(data->getLayer() == WORLD_LAYER_MIDDLE)
@@ -136,7 +136,7 @@ BlockEntity *Terrain::createBlockEntityAt(const int x, const int y, const BlockE
 	// Set block entity in all the positions it occupies
 	for(int y1 = y; y1 < y + data->getHeight(); y1++)
 	{
-		for(int x1 = blockEntity->getX(); x1 < x + data->getWidth(); x1++)
+		for(int x1 = x; x1 < x + data->getWidth(); x1++)
 		{
 			m_chunkManager->getChunkAt((int) floor(x1 / CHUNK_BLOCKSF), (int) floor(y1 / CHUNK_BLOCKSF)).setBlockEntityAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), data->getLayer(), blockEntity);
 		}

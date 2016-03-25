@@ -112,6 +112,14 @@ void Commander::place(Chat *, vector<string> args)
 			m_game->getWorld()->getTerrain()->createBlockEntityAt(blockPos.x, blockPos.y, data->getID(), true);
 		}
 	}
+	else if(args.size() == 3)
+	{
+		BlockEntityData *data = BlockEntityData::getByName(args[0]);
+		if(data)
+		{
+			m_game->getWorld()->getTerrain()->createBlockEntityAt(util::strToInt(args[1]), util::strToInt(args[2]), data->getID(), true);
+		}
+	}
 }
 
 void Commander::setGravity(Chat *, vector<string> args)

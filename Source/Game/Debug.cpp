@@ -201,6 +201,13 @@ void Debug::onDraw(DrawEvent *e)
 	setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
 	setVariable("Zoom", util::intToStr(int(m_world->getCamera()->getZoomLevel() * 100)) + "%");
 	setVariable("Block Under Cursor", util::intToStr(m_world->getTerrain()->getBlockAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), WORLD_LAYER_MIDDLE)) + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
+	
+	{
+		BlockEntity *blockEntity = m_world->getTerrain()->getBlockEntityAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), WORLD_LAYER_MIDDLE);
+		const string name = blockEntity ? blockEntity->getData()->getName() : "NULL";
+		setVariable("Block Entity Under Cursor", name + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
+	}
+
 	string hourStr, minStr;
 	{
 		int hour = m_world->getTimeOfDay()->getHour();

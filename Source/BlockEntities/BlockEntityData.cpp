@@ -1,6 +1,7 @@
 #include "Constants.h"
 #include "BlockEntityData.h"
 #include "Torch.h"
+#include "Bush.h"
 
 vector<BlockEntityData*> BlockEntityData::s_data(BLOCK_ENTITY_COUNT);
 TextureAtlas *BlockEntityData::s_textureAtlas;
@@ -11,8 +12,8 @@ struct BlockEntityDescriptor
 	const BlockEntityID id;
 	const string name;
 	const string texturePath;
-	const uint width;
-	const uint height;
+	const int width;
+	const int height;
 	const uint frameCount;
 	const uint animationSpeed; // 0 = 0%, 255 = Every tick
 	const WorldLayer layer;
@@ -29,6 +30,7 @@ static BlockEntityDescriptor g_blockEntityData[] = {
 	{ BLOCK_ENTITY_NULL, "NULL", "Sprites/Blocks/Empty.png", 1, 1, 1, 0, WORLD_LAYER_MIDDLE, true, dummy },
 
 	{ BLOCK_ENTITY_TORCH, "Torch", "Sprites/BlockEntities/LightSources/Torch_anim_2.png", 1, 1, 3, 0, WORLD_LAYER_MIDDLE, false, Torch::Factory },
+	{ BLOCK_ENTITY_BUSH, "Bush", "Sprites/BlockEntities/Vegetation/RedCurrantBush.png", 4, 2, 2, 0, WORLD_LAYER_MIDDLE, false, Bush::Factory },
 
 	{ BLOCK_ENTITY_COUNT, "", "", 0, 0, 0, 0, (WorldLayer)0, false, dummy }
 };

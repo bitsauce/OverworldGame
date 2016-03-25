@@ -246,8 +246,8 @@ bool Chunk::removeBlockEntity(BlockEntity *blockEntity)
 	}
 
 	// Remove block entity from list
-	m_blockEntities.remove(blockEntity);
 	m_generateBlockEntityBuffers = true;
+	m_blockEntities.remove(blockEntity);
 
 	// Delete object
 	delete blockEntity;
@@ -259,9 +259,9 @@ void Chunk::setBlockEntityAt(const int x, const int y, const WorldLayer layer, B
 	m_blocks[BLOCK_INDEX(x, y, layer)].setBlockEntity(blockEntity);
 }
 
-BlockEntity * Chunk::getBlockEntityAt(const int x, const int y, const WorldLayer layer) const
+BlockEntity *Chunk::getBlockEntityAt(const int x, const int y, const WorldLayer layer) const
 {
-	return nullptr;
+	return m_blocks[BLOCK_INDEX(x, y, layer)].getBlockEntity();
 }
 
 bool Chunk::setBlockEntityFrameAt(const int x, const int y, const WorldLayer layer, const uint frame)

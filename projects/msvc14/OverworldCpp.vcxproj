@@ -99,6 +99,7 @@
     <ClCompile Include="..\..\Source\Animation\slot.cpp" />
     <ClCompile Include="..\..\Source\BlockEntities\BlockEntity.cpp" />
     <ClCompile Include="..\..\Source\BlockEntities\BlockEntityData.cpp" />
+    <ClCompile Include="..\..\Source\BlockEntities\Bush.cpp" />
     <ClCompile Include="..\..\Source\BlockEntities\Torch.cpp" />
     <ClCompile Include="..\..\Source\Blocks\Block.cpp" />
     <ClCompile Include="..\..\Source\Blocks\BlockData.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="..\..\source\animation\Slot.h" />
     <ClInclude Include="..\..\Source\BlockEntities\BlockEntity.h" />
     <ClInclude Include="..\..\Source\BlockEntities\BlockEntityData.h" />
+    <ClInclude Include="..\..\Source\BlockEntities\Bush.h" />
     <ClInclude Include="..\..\Source\BlockEntities\Torch.h" />
     <ClInclude Include="..\..\Source\Blocks\Block.h" />
     <ClInclude Include="..\..\source\Blocks\BlockData.h" />
