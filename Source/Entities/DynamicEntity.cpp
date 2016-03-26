@@ -20,6 +20,7 @@ DynamicEntity::DynamicEntity(World *world, const EntityID id) :
 
 void DynamicEntity::onTick(TickEvent *e)
 {
+	m_lastContact = m_contact;
 	m_lastPosition = m_position;
 	m_contact = 0; 
 	m_acceleration.y += 2.0f * m_gravityScale;

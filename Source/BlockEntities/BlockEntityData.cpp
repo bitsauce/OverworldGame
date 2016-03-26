@@ -1,7 +1,9 @@
 #include "Constants.h"
 #include "BlockEntityData.h"
+
 #include "Torch.h"
 #include "Bush.h"
+#include "Pot.h"
 
 vector<BlockEntityData*> BlockEntityData::s_data(BLOCK_ENTITY_COUNT);
 TextureAtlas *BlockEntityData::s_textureAtlas;
@@ -31,6 +33,7 @@ static BlockEntityDescriptor g_blockEntityData[] = {
 
 	{ BLOCK_ENTITY_TORCH, "Torch", "Sprites/BlockEntities/LightSources/Torch_anim_2.png", 1, 1, 3, 0, WORLD_LAYER_MIDDLE, NEED_WALL | NEED_FLOOR | NEED_BACK_BLOCK, Torch::Factory },
 	{ BLOCK_ENTITY_BUSH, "Bush", "Sprites/BlockEntities/Vegetation/RedCurrantBush.png", 4, 2, 2, 0, WORLD_LAYER_MIDDLE, NEED_FLOOR, Bush::Factory },
+	{ BLOCK_ENTITY_POT, "Pot", "Sprites/BlockEntities/Furniture/Pot.png", 2, 2, 1, 0, WORLD_LAYER_MIDDLE, NEED_FLOOR, Pot::Factory },
 
 	{ BLOCK_ENTITY_COUNT, "", "", 0, 0, 0, 0, (WorldLayer)0, false, dummy }
 };

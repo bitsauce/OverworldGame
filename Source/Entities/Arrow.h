@@ -22,6 +22,7 @@ private:
 	Pawn *m_owner;
 	Sprite m_sprite;
 	Vector2F m_prevVelocity;
-	bool m_hasHit;
+	uint m_hitState;
 	float m_deleteTime;
+	float m_moveToAlpha;
 };

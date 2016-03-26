@@ -5,8 +5,9 @@ Arrow::Arrow(Pawn *owner, World *world, const Vector2F &pos, const Vector2F &dir
 	DynamicEntity(world, ENTITY_ARROW),
 	m_owner(owner),
 	m_sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Items/Weapons/Arrow")),
-	m_hasHit(false),
-	m_deleteTime(0.0f)
+	m_hitState(false),
+	m_deleteTime(0.0f),
+	m_moveToAlpha(0.0f)
 {
 	// Set up sprite
 	m_sprite.getTexture()->setFiltering(Texture2D::LINEAR);
@@ -14,25 +15,38 @@ Arrow::Arrow(Pawn *owner, World *world, const Vector2F &pos, const Vector2F &dir
 	m_sprite.setOrigin(m_sprite.getSize() * 0.5f);
 
 	// Set position, angle, velocity and gravity scale
-	setPosition(pos - m_sprite.getSize() * 0.5f);
+	setPosition(pos);
 	setVelocity(dir.normalized() * speed);
 	setGravityScale(0.75f);
 }
 
 void Arrow::onDraw(DrawEvent *e)
 {
-	float angle;
-	if(m_hasHit)
-	{
-		angle = m_sprite.getRotation() / 180.0f * PI;
-	}
-	else
+	if(m_hitState == 0)
 	{
 		Vector2F velocity = math::lerp(m_prevVelocity, getVelocity(), e->getAlpha());
-		angle = atan2(velocity.y, velocity.x);
+		float angle = atan2(velocity.y, velocity.x);
+
+		m_sprite.setRotation(angle * (180.0f / PI));
+		m_sprite.setPosition(getDrawPosition(e->getAlpha()));
 	}
-	m_sprite.setRotation(angle * (180.0f / PI));
-	m_sprite.setPosition(getDrawPosition(e->getAlpha()));
+	else if(m_hitState == 1)
+	{
+		if(e->getAlpha() < m_moveToAlpha)
+		{
+			m_sprite.setPosition(getDrawPosition(min(m_moveToAlpha, e->getAlpha())));
+		}
+		else
+		{
+			m_hitState = 2;
+		}
+	}
+
+	if(m_hitState == 2)
+	{
+		m_sprite.setPosition(getDrawPosition(m_moveToAlpha));
+	}
+
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
 	spriteBatch->drawSprite(m_sprite);
 }
@@ -44,9 +58,30 @@ bool Arrow::plotTest(int x, int y)
 
 void Arrow::onTick(TickEvent *e)
 {
-	if(m_hasHit)
+	m_allowRotation = true;
+	if(m_hitState == 0)
 	{
-		setPosition(getPosition());
+		m_prevVelocity = getVelocity();
+		DynamicEntity::onTick(e);
+
+		// Ray cast
+		Vector2F aabb[4];
+		m_sprite.getAABB(aabb);
+		Vector2F dt = getPosition() - getLastPosition();
+		Vector2F pos = (aabb[1] + aabb[2]) / 2.0f;
+		RayCast rayCast(bind(&Arrow::plotTest, this, placeholders::_1, placeholders::_2));
+		if(rayCast.trace(pos, pos + dt))
+		{
+			Vector2F hitPosition = rayCast.getPoints().back();
+			m_moveToAlpha = (hitPosition - getLastPosition()).length() / dt.length();
+			setPosition(getLastPosition());
+			moveTo(hitPosition);
+			m_hitState = 1;
+		}
+	}
+	else
+	{
+		m_hitState = 2;
 		m_deleteTime += e->getDelta();
 		if(m_deleteTime > 10.0f)
 		{
@@ -56,27 +91,6 @@ void Arrow::onTick(TickEvent *e)
 		return;
 	}
 
-	m_allowRotation = true;
-	if(!m_hasHit)
-	{
-		m_prevVelocity = getVelocity();
-		DynamicEntity::onTick(e);
-	}
-
-	// Ray cast
-	Vector2F aabb[4];
-	m_sprite.getAABB(aabb);
-
-	Vector2F dt = getPosition() - getLastPosition();
-	Vector2F pos = (aabb[1] + aabb[2]) / 2.0f;
-
-	RayCast rayCast(bind(&Arrow::plotTest, this, placeholders::_1, placeholders::_2));
-	if(!m_hasHit && rayCast.trace(pos, pos + dt))
-	{
-		m_hasHit = true;
-		moveTo(rayCast.getPoints().back() - m_sprite.getSize() * 0.5f);
-	}
-
 	/*
 	// Add to testPlot
 	for(Pawn *pawn : m_world->getPawns())
@@ -84,7 +98,7 @@ void Arrow::onTick(TickEvent *e)
 	if(pawn == m_owner) continue;
 	if(pawn->getRect().contains(Rect(m_sprite.getPosition(), m_sprite.getSize())))
 	{
-	m_hasHit = true;
+	m_hitState = true;
 	pawn->decHealth(100);
 	m_deleteTime = 11.0f;
 	}

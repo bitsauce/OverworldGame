@@ -156,7 +156,7 @@ void Pawn::onTick(TickEvent *e)
 	
 	// Set animations
 	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(getVelocity().x) * 0.1f);
-	if(isContact(SOUTH))
+	if(isLastContact(SOUTH))
 	{
 		m_humanoid.getMainAnimationState()->setLooping(true);
 		if(getVelocity().x >= 0.1f)
@@ -193,7 +193,7 @@ void Pawn::onTick(TickEvent *e)
 			m_humanoid.setMainAnimation(Humanoid::ANIM_WALL_SLIDE);
 		}
 		else*/
-		{
+		{ // TODO: Need a land animation
 			m_humanoid.getMainAnimationState()->setLooping(false);
 			m_humanoid.getMainAnimationState()->setTimeScale(1.0f);
 			m_humanoid.setMainAnimation(Humanoid::ANIM_JUMP);

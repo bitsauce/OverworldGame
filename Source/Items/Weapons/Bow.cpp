@@ -103,7 +103,7 @@ void Bow::draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha)
 		}
 
 		Vector2F pos = skeleton->getPosition() + skeleton->findBone("lhand")->getWorldPosition();
-		m_sprite.setPosition(pos - m_sprite.getSize() * 0.5f);
+		m_sprite.setPosition(pos);
 		m_sprite.setOrigin(m_sprite.getSize() * 0.5f);
 		m_sprite.setRotation(angle);
 		spriteBatch->drawSprite(m_sprite);

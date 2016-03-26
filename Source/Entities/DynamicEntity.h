@@ -164,6 +164,11 @@ public:
 	{
 		return (m_contact & dir) != 0;
 	}
+	
+	bool isLastContact(const uint dir)
+	{
+		return (m_lastContact & dir) != 0;
+	}
 
 	void setGravityScale(const float gs)
 	{
@@ -214,7 +219,7 @@ private:
 	Vector2F m_size;
 	float m_rotation;
 	float m_gravityScale;
-	uint m_contact;
+	uint m_contact, m_lastContact;
 
 	Terrain *m_terrain;
 };

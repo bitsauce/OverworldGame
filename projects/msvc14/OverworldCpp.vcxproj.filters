@@ -188,6 +188,9 @@
     <ClCompile Include="..\..\Source\BlockEntities\Bush.cpp">
       <Filter>Source\BlockEntities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\BlockEntities\Pot.cpp">
+      <Filter>Source\BlockEntities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -469,6 +472,9 @@
       <Filter>Source\Blocks</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\BlockEntities\Bush.h">
+      <Filter>Source\BlockEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BlockEntities\Pot.h">
       <Filter>Source\BlockEntities</Filter>
     </ClInclude>
   </ItemGroup>
