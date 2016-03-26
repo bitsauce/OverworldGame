@@ -7,4 +7,5 @@ Bush::Bush(World *world, int x, int y, const BlockEntityData *data) :
 
 void Bush::onNeighbourChanged(NeighborChangedEvent *e)
 {
+	BlockEntity::onNeighbourChanged(e);
 }

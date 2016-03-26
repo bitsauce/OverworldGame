@@ -20,7 +20,7 @@ public:
 
 	void clear();
 
-	Chunk &getChunkAt(const int chunkX, const int chunkY);
+	Chunk *getChunkAt(const int chunkX, const int chunkY, const bool loadChunk);
 	bool isChunkLoadedAt(const int chunkX, const int chunkY) const;
 
 	void setOptimalChunkCount(const uint maxChunkCount);
@@ -74,7 +74,7 @@ private:
 
 	void updateViewSize(int width, int height);
 
-	void reattachChunk(Chunk &chunk, GraphicsContext *context);
+	void reattachChunk(Chunk *chunk, GraphicsContext *context);
 
 	// Manager classes
 	bool m_applyZoom;

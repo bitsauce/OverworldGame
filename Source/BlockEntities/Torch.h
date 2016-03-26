@@ -10,6 +10,8 @@ class Torch : public BlockEntity
 public:
 	Torch(World * world, int x, int y, const BlockEntityData *data);
 
+	void updateBaseFrame();
+
 	void onNeighbourChanged(NeighborChangedEvent *e);
 
 	static BlockEntity *Factory(World * world, const int x, const int y, const BlockEntityData *data)

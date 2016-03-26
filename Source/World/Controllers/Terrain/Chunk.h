@@ -24,6 +24,8 @@ private:
 	 * \param blocks Array of blocks to load into the chunk
 	 */
 	void load(int chunkX, int chunkY, ChunkBlock *blocks);
+
+	void unload();
 	
 	bool isAttached() const { return m_attached; }
 	bool isSorted() const { return m_sorted; }
@@ -52,17 +54,20 @@ private:
 private:
 	Chunk(const Chunk &) { }
 
+	ChunkBlock *getNeighborBlock(const int x, const int y, const WorldLayer layer) const;
+
 	// Chunk
 	int m_x, m_y;
 	ChunkBlock *m_blocks;
 	list<BlockEntity*> m_blockEntities;
+	Chunk *m_neighborChunks[8];
 
 	// Block entity VBO
 	StaticVertexBuffer m_blockEntityVBO;
 	StaticIndexBuffer m_blockEntityIBO;
 	bool m_generateBlockEntityBuffers;
 
-public:
+public: // TODO: private
 	// Block entity time
 	Resource<Texture2D> m_timeOffsetTexture;
 

@@ -4,6 +4,11 @@
 #include "World/World.h"
 #include "Generation/Generator.h"
 
+const uint OPPOSITE_INDEX[8] = { 4, 5, 6, 7, 0, 1, 2, 3 };
+const uint DIR_INDEX[16] = { 0, 5, 1, -1, 3, 4, 2, -1, 7, 6, 0, -1, -1, -1, -1, -1 };
+const int DIR_X[8] = { -1,  0,  1,  1,  1,  0, -1, -1 };
+const int DIR_Y[8] = { -1, -1, -1,  0,  1,  1,  1,  0 };
+
 Chunk::Chunk(ChunkManager *chunkManager) :
 	m_chunkManager(chunkManager),
 	m_generateBlockEntityBuffers(false)
@@ -66,6 +71,17 @@ void Chunk::load(int chunkX, int chunkY, ChunkBlock *blocks)
 		}
 	}
 
+	// Setup neighbour chunks
+	for(int i = 0; i < 8; i++)
+	{
+		Chunk *chunk = m_chunkManager->getChunkAt(m_x + DIR_X[i], m_y + DIR_Y[i], false);
+		m_neighborChunks[i] = chunk;
+		if(chunk)
+		{
+			chunk->m_neighborChunks[OPPOSITE_INDEX[i]] = this;
+		}
+	}
+
 	// Create tile map texture
 	m_blockTexture->updatePixmap(pixmap);
 
@@ -78,119 +94,65 @@ void Chunk::load(int chunkX, int chunkY, ChunkBlock *blocks)
 	// Chunk generated
 	LOG("Chunk [%i, %i] generated", m_x, m_y);
 }
-	
+
+void Chunk::unload()
+{
+	// Notify neighbour chunks
+	for(int i = 0; i < 8; i++)
+	{
+		Chunk *chunk = m_chunkManager->getChunkAt(m_x + DIR_X[i], m_y + DIR_Y[i], false);
+		if(chunk)
+		{
+			chunk->m_neighborChunks[OPPOSITE_INDEX[i]] = 0;
+		}
+	}
+}
+
 bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID blockID)
 {
 	// Check if we need to do anything
-	const ChunkBlock &block = m_blocks[BLOCK_INDEX(x, y, layer)];
+	const ChunkBlock block = m_blocks[BLOCK_INDEX(x, y, layer)];
 	if(block != blockID)
 	{
-		// Get adjacent chunks
-		Chunk *neighborChunks[8];
-		neighborChunks[0] = &m_chunkManager->getChunkAt(m_x - 1, m_y - 1);
-		neighborChunks[1] = &m_chunkManager->getChunkAt(m_x, m_y - 1);
-		neighborChunks[2] = &m_chunkManager->getChunkAt(m_x + 1, m_y - 1);
-		neighborChunks[3] = &m_chunkManager->getChunkAt(m_x + 1, m_y);
-		neighborChunks[4] = &m_chunkManager->getChunkAt(m_x + 1, m_y + 1);
-		neighborChunks[5] = &m_chunkManager->getChunkAt(m_x, m_y + 1);
-		neighborChunks[6] = &m_chunkManager->getChunkAt(m_x - 1, m_y + 1);
-		neighborChunks[7] = &m_chunkManager->getChunkAt(m_x - 1, m_y);
-
-		ChunkBlock *neighborBlocks[8];
-		if(neighborChunks[0] && x == 0 && y == 0)
-		{
-			neighborBlocks[0] = &neighborChunks[0]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, CHUNK_BLOCKS - 1, layer)];
-			neighborChunks[0]->m_attached = false;
-		}
-		else
-		{
-			neighborBlocks[0] = &m_blocks[BLOCK_INDEX(x - 1, y - 1, layer)];
-		}
-
-		if(neighborChunks[1] && y == 0)
-		{
-			neighborBlocks[1] = &neighborChunks[1]->m_blocks[BLOCK_INDEX(x, CHUNK_BLOCKS - 1, layer)];
-			neighborChunks[1]->m_attached = false;
-		}
-		else
-		{
-			neighborBlocks[1] = &m_blocks[BLOCK_INDEX(x, y - 1, layer)];
-		}
-
-		if(neighborChunks[2] && x == CHUNK_BLOCKS - 1 && y == 0)
-		{
-			neighborBlocks[2] = &neighborChunks[2]->m_blocks[BLOCK_INDEX(x, CHUNK_BLOCKS - 1, layer)];
-			neighborChunks[2]->m_attached = false;
-		}
-		else
-		{
-			neighborBlocks[2] = &m_blocks[BLOCK_INDEX(x + 1, y - 1, layer)];
-		}
-
-		if(neighborChunks[3] && x == CHUNK_BLOCKS - 1)
-		{
-			neighborBlocks[3] = &neighborChunks[3]->m_blocks[BLOCK_INDEX(0, y, layer)];
-			neighborChunks[3]->m_attached = false;
-		}
-		else
-		{
-			neighborBlocks[3] = &m_blocks[BLOCK_INDEX(x + 1, y, layer)];
-		}
-
-		if(neighborChunks[4] && x == CHUNK_BLOCKS - 1 && y == CHUNK_BLOCKS - 1)
-		{
-			neighborBlocks[4] = &neighborChunks[4]->m_blocks[BLOCK_INDEX(0, 0, layer)];
-			neighborChunks[4]->m_attached = false;
-		}
-		else
-		{
-			neighborBlocks[4] = &m_blocks[BLOCK_INDEX(x + 1, y + 1, layer)];
-		}
-
-		if(neighborChunks[5] && y == CHUNK_BLOCKS - 1)
-		{
-			neighborBlocks[5] = &neighborChunks[5]->m_blocks[BLOCK_INDEX(x, 0, layer)];
-			neighborChunks[5]->m_attached = false;
-		}
-		else
-		{
-			neighborBlocks[5] = &m_blocks[BLOCK_INDEX(x, y + 1, layer)];
-		}
-
-		if(neighborChunks[6] && x == 0 && y == CHUNK_BLOCKS - 1)
-		{
-			neighborBlocks[6] = &neighborChunks[6]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, 0, layer)];
-			neighborChunks[6]->m_attached = false;
-		}
-		else
-		{
-			neighborBlocks[6] = &m_blocks[BLOCK_INDEX(x - 1, y + 1, layer)];
-		}
-
-		if(neighborChunks[7] && x == 0)
-		{
-			neighborBlocks[7] = &neighborChunks[7]->m_blocks[BLOCK_INDEX(CHUNK_BLOCKS - 1, y, layer)];
-			neighborChunks[7]->m_attached = false;
-		}
-		else
-		{
-			neighborBlocks[7] = &m_blocks[BLOCK_INDEX(x - 1, y, layer)];
-		}
+		if(m_neighborChunks[0] && x == 0 && y == 0)                               { m_neighborChunks[0]->m_sorted = m_neighborChunks[0]->m_attached = false; }
+		if(m_neighborChunks[1] && y == 0)                                         { m_neighborChunks[1]->m_sorted = m_neighborChunks[1]->m_attached = false; }
+		if(m_neighborChunks[2] && x == CHUNK_BLOCKS - 1 && y == 0)                { m_neighborChunks[2]->m_sorted = m_neighborChunks[2]->m_attached = false; }
+		if(m_neighborChunks[3] && x == CHUNK_BLOCKS - 1)                          { m_neighborChunks[3]->m_sorted = m_neighborChunks[3]->m_attached = false; }
+		if(m_neighborChunks[4] && x == CHUNK_BLOCKS - 1 && y == CHUNK_BLOCKS - 1) { m_neighborChunks[4]->m_sorted = m_neighborChunks[4]->m_attached = false; }
+		if(m_neighborChunks[5] && y == CHUNK_BLOCKS - 1)                          { m_neighborChunks[5]->m_sorted = m_neighborChunks[5]->m_attached = false; }
+		if(m_neighborChunks[6] && x == 0 && y == CHUNK_BLOCKS - 1)                { m_neighborChunks[6]->m_sorted = m_neighborChunks[6]->m_attached = false; }
+		if(m_neighborChunks[7] && x == 0)                                         { m_neighborChunks[7]->m_sorted = m_neighborChunks[7]->m_attached = false; }
 
 		// Set the block value
 		m_blocks[BLOCK_INDEX(x, y, layer)].setBlockID(blockID);
 		m_sorted = m_attached = false; m_modified = true; // Mark chunk as modified
 		
-		// Notify block entities
-		const int dirX[8] = {  1,  0, -1, -1, -1,  0,  1,  1 };
-		const int dirY[8] = {  1,  1,  1,  0, -1, -1, -1,  0 };
+		// Get neighboring block entities
+		set<BlockEntity*> neighbourBlockEntities;
 		for(int i = 0; i < 8; i++)
 		{
-			if(neighborBlocks[i]->getBlockEntity())
+			const ChunkBlock *neighborBlock = getNeighborBlock(x + DIR_X[i], y + DIR_Y[i], layer);
+			if(neighborBlock && neighborBlock->getBlockEntity())
 			{
-				NeighborChangedEvent e(dirX[i], dirY[i], &block, &m_blocks[BLOCK_INDEX(x, y, layer)]);
-				neighborBlocks[i]->getBlockEntity()->onNeighbourChanged(&e);
+				neighbourBlockEntities.insert(neighborBlock->getBlockEntity());
 			}
+		}
+
+		{
+			// This ensures that block entities attached to the background will be destroyed when background is removed
+			// ... This is not the best solution
+			BlockEntity *blockEntity = m_blocks[BLOCK_INDEX(x, y, WORLD_LAYER_MIDDLE)].getBlockEntity();
+			if(blockEntity)
+			{
+				neighbourBlockEntities.insert(blockEntity);
+			}
+		}
+		
+		// Notify block entities
+		for(BlockEntity *blockEntity : neighbourBlockEntities)
+		{
+			NeighborChangedEvent e((x + m_x * CHUNK_BLOCKS) - blockEntity->getX(), (y + m_y * CHUNK_BLOCKS) - blockEntity->getY(), &block, &m_blocks[BLOCK_INDEX(x, y, layer)]);
+			blockEntity->onNeighbourChanged(&e);
 		}
 
 		// Update block texture
@@ -241,7 +203,7 @@ bool Chunk::removeBlockEntity(BlockEntity *blockEntity)
 	{
 		for(int x = blockEntity->getX(); x < data->getWidth() + blockEntity->getX(); x++)
 		{
-			m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF)).m_blocks[BLOCK_INDEX(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), data->getLayer())].setBlockEntity(0);
+			m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF), true)->m_blocks[BLOCK_INDEX(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), data->getLayer())].setBlockEntity(0);
 		}
 	}
 
@@ -312,4 +274,21 @@ void Chunk::drawBlockEntities(GraphicsContext *context)
 
 	// TODO: I should store BlockEntities in a global buffer of some sort.
 	context->drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, &m_blockEntityVBO, &m_blockEntityIBO);
+}
+
+ChunkBlock *Chunk::getNeighborBlock(const int x, const int y, const WorldLayer layer) const
+{
+	uchar dir = 0;
+	if(x < 0) dir |= 0b1000;
+	else if(x > CHUNK_BLOCKS - 1) dir |= 0b0100;
+	if(y < 0) dir |= 0b0010;
+	else if(y > CHUNK_BLOCKS - 1) dir |= 0b0001;
+	if(dir == 0) return &m_blocks[BLOCK_INDEX(x, y, layer)]; 
+
+	Chunk *neighborChunk = m_neighborChunks[DIR_INDEX[dir]];
+	if(neighborChunk)
+	{
+		return &neighborChunk->m_blocks[BLOCK_INDEX(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer)];
+	}
+	return 0;
 }

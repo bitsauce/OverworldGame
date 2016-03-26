@@ -17,7 +17,7 @@ struct BlockEntityDescriptor
 	const uint frameCount;
 	const uint animationSpeed; // 0 = 0%, 255 = Every tick
 	const WorldLayer layer;
-	const uint placement; // NEED_WALL, NEED_ROOF, NEED_FLOOR, NEED_BACKGROUND, CAN_OVERLAP
+	const uint placement;
 	const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> factory;
 };
 
@@ -29,8 +29,8 @@ BlockEntity* dummy(World*, const int, const int, const BlockEntityData*)
 static BlockEntityDescriptor g_blockEntityData[] = {
 	{ BLOCK_ENTITY_NULL, "NULL", "Sprites/Blocks/Empty.png", 1, 1, 1, 0, WORLD_LAYER_MIDDLE, true, dummy },
 
-	{ BLOCK_ENTITY_TORCH, "Torch", "Sprites/BlockEntities/LightSources/Torch_anim_2.png", 1, 1, 3, 0, WORLD_LAYER_MIDDLE, false, Torch::Factory },
-	{ BLOCK_ENTITY_BUSH, "Bush", "Sprites/BlockEntities/Vegetation/RedCurrantBush.png", 4, 2, 2, 0, WORLD_LAYER_MIDDLE, false, Bush::Factory },
+	{ BLOCK_ENTITY_TORCH, "Torch", "Sprites/BlockEntities/LightSources/Torch_anim_2.png", 1, 1, 3, 0, WORLD_LAYER_MIDDLE, NEED_WALL | NEED_FLOOR | NEED_BACK_BLOCK, Torch::Factory },
+	{ BLOCK_ENTITY_BUSH, "Bush", "Sprites/BlockEntities/Vegetation/RedCurrantBush.png", 4, 2, 2, 0, WORLD_LAYER_MIDDLE, NEED_FLOOR, Bush::Factory },
 
 	{ BLOCK_ENTITY_COUNT, "", "", 0, 0, 0, 0, (WorldLayer)0, false, dummy }
 };
@@ -81,17 +81,90 @@ void BlockEntityData::init()
 	s_dataTexture->setFiltering(Texture2D::NEAREST);
 }
 
-bool BlockEntityData::canPlace(const int x, const int y, const WorldLayer layer, Terrain *terrain) const
+bool BlockEntityData::isValidPlacement(const int x, const int y, Terrain *terrain, BlockEntity *ignoreThis) const
 {
+	// Check that the required space is available
 	for(int y1 = y; y1 < y + m_height; y1++)
 	{
 		for(int x1 = x; x1 < x + m_width; x1++)
 		{
-			if(terrain->isBlockEntityAt(x1, y1, layer) || (layer == WORLD_LAYER_MIDDLE && terrain->isBlockAt(x1, y1, layer)))
+			if(terrain->getBlockEntityAt(x1, y1, m_layer) != ignoreThis || (m_layer == WORLD_LAYER_MIDDLE && terrain->isBlockAt(x1, y1, m_layer)))
 			{
 				return false;
 			}
 		}
 	}
-	return true;
+
+	// Check if we have floor
+	if((m_placement & NEED_FLOOR) != 0)
+	{
+		bool valid = true;
+		for(int x1 = x; x1 < x + m_width; x1++)
+		{
+			if(!terrain->isBlockAt(x1, y + m_height, m_layer))
+			{
+				valid = false; break;
+			}
+		}
+		if(valid) return true;
+	}
+
+	// Check if we have walls
+	if((m_placement & NEED_WALL) != 0)
+	{
+		// Left
+		bool valid = true;
+		for(int y1 = y; y1 < y + m_height; y1++)
+		{
+			if(!terrain->isBlockAt(x - 1, y1, m_layer))
+			{
+				valid = false; break;
+			}
+		}
+		if(valid) return true;
+
+		// Right
+		valid = true;
+		for(int y1 = y; y1 < y + m_height; y1++)
+		{
+			if(!terrain->isBlockAt(x + m_width, y1, m_layer))
+			{
+				valid = false; break;
+			}
+		}
+		if(valid) return true;
+	}
+
+	// Check if we have roof
+	if((m_placement & NEED_ROOF) != 0)
+	{
+		bool valid = true;
+		for(int x1 = x; x1 < x + m_width; x1++)
+		{
+			if(!terrain->isBlockAt(x1, y - 1, m_layer))
+			{
+				valid = false; break;
+			}
+		}
+		if(valid) return true;
+	}
+
+	// Check if we have back blocks
+	if((m_placement & NEED_BACK_BLOCK) != 0)
+	{
+		bool valid = true;
+		for(int y1 = y; y1 < y + m_height; y1++)
+		{
+			for(int x1 = x; x1 < x + m_width; x1++)
+			{
+				if(!terrain->isBlockAt(x1, y1, WORLD_LAYER_BACK))
+				{
+					valid = false; break;
+				}
+			}
+		}
+		if(valid) return true;
+	}
+
+	return false;
 }

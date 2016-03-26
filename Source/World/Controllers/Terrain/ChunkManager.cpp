@@ -199,6 +199,8 @@ void ChunkManager::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 		LOG("Unable to load block data from '%s' (reason: %s)", filePath.c_str(), strerror(errno));
 	}
 
+	chunk->unload();
+
 	// Delete static entities
 	/*for(BlockEntity *entity : chunk->m_blockEntities)
 	{
@@ -230,15 +232,22 @@ void ChunkManager::setOptimalChunkCount(const uint optimalChunkCount)
 	m_optimalChunkCount = optimalChunkCount;
 }
 
-Chunk &ChunkManager::getChunkAt(const int chunkX, const int chunkY)
+Chunk *ChunkManager::getChunkAt(const int chunkX, const int chunkY, const bool loadChunk)
 {
 	uint key = CHUNK_KEY(chunkX, chunkY);
 	if(m_chunks.find(key) == m_chunks.end())
 	{
-		// Load block data for this chunk
-		return *loadChunkAt(chunkX, chunkY);
+		if(loadChunk)
+		{
+			// Load block data for this chunk
+			return loadChunkAt(chunkX, chunkY);
+		}
+		else
+		{
+			return 0;
+		}
 	}
-	return *m_chunks[key];
+	return m_chunks[key];
 }
 
 Chunk *ChunkManager::loadChunkAt(const int chunkX, const int chunkY)
@@ -361,7 +370,7 @@ void ChunkManager::onDraw(DrawEvent *e)
 		{
 			for(int x = m_loadingArea.x0 + 1; x <= m_loadingArea.x1 - 1; ++x)
 			{
-				getChunkAt(x, y).detach();
+				getChunkAt(x, y, true)->detach();
 			}
 		}
 
@@ -370,7 +379,7 @@ void ChunkManager::onDraw(DrawEvent *e)
 		{
 			for(int x = m_loadingArea.x0 + 1; x <= m_loadingArea.x1 - 1; ++x)
 			{
-				reattachChunk(getChunkAt(x, y), context);
+				reattachChunk(getChunkAt(x, y, true), context);
 			}
 		}
 
@@ -419,7 +428,7 @@ void ChunkManager::onDraw(DrawEvent *e)
 		{
 			for(int y = y0; y <= y1; ++y)
 			{
-				getChunkAt(x, y).detach();
+				getChunkAt(x, y, true)->detach();
 			}
 		}
 
@@ -429,7 +438,7 @@ void ChunkManager::onDraw(DrawEvent *e)
 			{
 				for(int y = y0; y <= y1; ++y)
 				{
-					getChunkAt(x, y).detach();
+					getChunkAt(x, y, true)->detach();
 				}
 			}
 
@@ -437,7 +446,7 @@ void ChunkManager::onDraw(DrawEvent *e)
 			{
 				for(int y = m_loadingArea.y0; y <= m_loadingArea.y1; ++y)
 				{
-					getChunkAt(x, y).detach();
+					getChunkAt(x, y, true)->detach();
 				}
 			}
 		}
@@ -464,8 +473,8 @@ void ChunkManager::onDraw(DrawEvent *e)
 		for(int x = m_activeArea.x0; x <= m_activeArea.x1; ++x)
 		{
 			// Is this chunk not attached?
-			Chunk &chunk = getChunkAt(x, y);
-			if(!chunk.isSorted())
+			Chunk *chunk = getChunkAt(x, y, true);
+			if(!chunk->isSorted())
 			{
 				// Attach chunk
 				reattachChunk(chunk, context);
@@ -481,13 +490,13 @@ void ChunkManager::onDraw(DrawEvent *e)
 		{
 			// Get next chunk in the circular load pattern
 			Vector2I centerChunkPosition((int) floor(center.x / CHUNK_PXF), (int) floor(center.y / CHUNK_PXF));
-			Chunk &chunk = getChunkAt(centerChunkPosition.x + m_circleLoadPattern[m_circleLoadIndex].x, centerChunkPosition.y + m_circleLoadPattern[m_circleLoadIndex].y);
+			Chunk *chunk = getChunkAt(centerChunkPosition.x + m_circleLoadPattern[m_circleLoadIndex].x, centerChunkPosition.y + m_circleLoadPattern[m_circleLoadIndex].y, true);
 
 			// Increase load pattern index by 1
 			m_circleLoadIndex = (m_circleLoadIndex + 1) % m_circleLoadPattern.size();
 
 			// Is this chunk not attached?
-			if(!chunk.isSorted())
+			if(!chunk->isSorted())
 			{
 				// Attach chunk
 				reattachChunk(chunk, context);
@@ -590,7 +599,7 @@ void ChunkManager::updateViewSize(int width, int height)
 	m_reattachAllChunks = true;
 }
 
-void ChunkManager::reattachChunk(Chunk &chunk, GraphicsContext *context)
+void ChunkManager::reattachChunk(Chunk *chunk, GraphicsContext *context)
 {
 	// Attach neighbouring chunks
 	context->setRenderTarget(m_blocksRenderTarget);
@@ -598,10 +607,10 @@ void ChunkManager::reattachChunk(Chunk &chunk, GraphicsContext *context)
 	{
 		for(int j = -1; j <= 1; j++)
 		{
-			Chunk &neighbour = getChunkAt(chunk.getX() + i, chunk.getY() + j);
-			if(!neighbour.isAttached())
+			Chunk *neighbour = getChunkAt(chunk->getX() + i, chunk->getY() + j, true);
+			if(!neighbour->isAttached())
 			{
-				neighbour.attach(context, math::mod(neighbour.getX(), m_loadingArea.getWidth()), math::mod(neighbour.getY(), m_loadingArea.getHeight()));
+				neighbour->attach(context, math::mod(neighbour->getX(), m_loadingArea.getWidth()), math::mod(neighbour->getY(), m_loadingArea.getHeight()));
 			}
 		}
 	}
@@ -614,20 +623,20 @@ void ChunkManager::reattachChunk(Chunk &chunk, GraphicsContext *context)
 		context->setRenderTarget(m_sortedBlocksRenderTarget[z]);
 
 		TextureRegion textureRegion(
-			float(chunk.getX()) / float(m_loadingArea.getWidth()),
-			float(chunk.getY()) / float(m_loadingArea.getHeight()),
-			float(chunk.getX() + 1) / float(m_loadingArea.getWidth()),
-			float(chunk.getY() + 1) / float(m_loadingArea.getHeight())
+			float(chunk->getX()) / float(m_loadingArea.getWidth()),
+			float(chunk->getY()) / float(m_loadingArea.getHeight()),
+			float(chunk->getX() + 1) / float(m_loadingArea.getWidth()),
+			float(chunk->getY() + 1) / float(m_loadingArea.getHeight())
 			);
 
 		context->drawRectangle(
-			math::mod(chunk.getX(), m_loadingArea.getWidth())  * CHUNK_BLOCKSF,
-			math::mod(chunk.getY(), m_loadingArea.getHeight()) * CHUNK_BLOCKSF,
+			math::mod(chunk->getX(), m_loadingArea.getWidth())  * CHUNK_BLOCKSF,
+			math::mod(chunk->getY(), m_loadingArea.getHeight()) * CHUNK_BLOCKSF,
 			CHUNK_BLOCKSF, CHUNK_BLOCKSF, Color(255), textureRegion
 			);
 	}
 
-	chunk.m_sorted = true;
+	chunk->m_sorted = true;
 
 	{
 		const float width = m_loadingArea.getWidth() * CHUNK_BLOCKSF, height = m_loadingArea.getHeight() * CHUNK_BLOCKSF;

@@ -12,6 +12,17 @@ BlockEntity::~BlockEntity()
 {
 }
 
+void BlockEntity::onNeighbourChanged(NeighborChangedEvent *e)
+{
+	//LOG("Neighbor at [%i, %i] changed from %i to %i", e->getDx(), e->getDy(), e->getOldBlock()->getBlockID(), e->getNewBlock()->getBlockID());
+
+	// If the placement is no longer valid, remove this block entity
+	if(!m_data->isValidPlacement(m_position.x, m_position.y, m_world->getTerrain(), this))
+	{
+		m_world->getTerrain()->removeBlockEntityAt(m_position.x, m_position.y, m_data->getLayer(), true);
+	}
+}
+
 void BlockEntity::getVertices(Vertex *vertices, uint *indices, int i)
 {
 	float x = getX() * BLOCK_PX, y = getY() * BLOCK_PXF;

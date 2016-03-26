@@ -316,11 +316,11 @@ void Debug::onDraw(DrawEvent *e)
 				{
 					context->drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(0, 100, 170, 127));
 				}
-				else if(!m_world->getTerrain()->getChunkManager()->getChunkAt(x, y).isAttached())
+				else if(!m_world->getTerrain()->getChunkManager()->getChunkAt(x, y, true)->isAttached())
 				{
 					context->drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(0, 160, 230, 127));
 				}
-				else if(!m_world->getTerrain()->getChunkManager()->getChunkAt(x, y).isSorted())
+				else if(!m_world->getTerrain()->getChunkManager()->getChunkAt(x, y, true)->isSorted())
 				{
 					context->drawRectangle(x * CHUNK_PXF, y * CHUNK_PXF, CHUNK_PXF, CHUNK_PXF, Color(230, 30, 30, 127));
 				}

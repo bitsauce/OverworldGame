@@ -66,7 +66,7 @@ public:
 	}
 	*/
 
-	virtual void onNeighbourChanged(NeighborChangedEvent *e) { }
+	virtual void onNeighbourChanged(NeighborChangedEvent *e);
 
 	void getVertices(Vertex *vertices, uint *indices, int i);
 

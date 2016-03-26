@@ -6,6 +6,15 @@
 
 class World;
 
+enum PlacementRule
+{
+	NEED_FLOOR = 1 << 1,
+	NEED_WALL = 1 << 2,
+	NEED_ROOF = 1 << 3,
+	NEED_BACK_BLOCK = 1 << 4,
+	NEED_ANY = NEED_FLOOR | NEED_WALL | NEED_ROOF | NEED_BACK_BLOCK
+};
+
 class BlockEntityData
 {
 	friend class OverworldGame;
@@ -99,7 +108,7 @@ public:
 		return s_dataTexture;
 	}
 
-	bool canPlace(const int x, const int y, const enum WorldLayer layer, class Terrain *terrain) const;
+	bool isValidPlacement(const int x, const int y, class Terrain *terrain, BlockEntity *ignoreThis) const;
 
 private:
 	const BlockEntityID m_id;
