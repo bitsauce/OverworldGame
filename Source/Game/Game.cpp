@@ -151,11 +151,11 @@ void OverworldGame::onStart(GameEvent *e)
 void OverworldGame::onEnd(GameEvent *e)
 {
 	// Save the world as we're exiting
-	/*if(m_world) m_world->save();
+	if(m_world) m_world->save();
 	if(m_server) m_server->save();
 	delete m_world;
 	delete m_debug;
-	delete m_commander;*/
+	delete m_commander;
 }
 
 void OverworldGame::pushState(GameState *state)

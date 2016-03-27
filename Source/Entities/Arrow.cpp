@@ -53,6 +53,27 @@ void Arrow::onDraw(DrawEvent *e)
 
 bool Arrow::plotTest(int x, int y)
 {
+	/*
+	// Add to testPlot
+	for(Pawn *pawn : m_world->getPawns())
+	{
+	if(pawn == m_owner) continue;
+	if(pawn->getRect().contains(Rect(m_sprite.getPosition(), m_sprite.getSize())))
+	{
+	m_hitState = true;
+	pawn->decHealth(100);
+	m_deleteTime = 11.0f;
+	}
+	}*/
+
+	// Remove destructable block entities
+	BlockEntity *blockEntity = m_world->getTerrain()->getBlockEntityAt(floor(x / BLOCK_PXF), floor(y / BLOCK_PXF), WORLD_LAYER_MIDDLE);
+	if(blockEntity && blockEntity->getData()->getID() == BLOCK_ENTITY_POT)
+	{
+		m_world->getTerrain()->removeBlockEntityAt(blockEntity->getX(), blockEntity->getY(), WORLD_LAYER_MIDDLE);
+		return true;
+	}
+
 	return !m_world->getTerrain()->isBlockAt(floor(x / BLOCK_PXF), floor(y / BLOCK_PXF), WORLD_LAYER_MIDDLE);
 }
 
@@ -90,17 +111,4 @@ void Arrow::onTick(TickEvent *e)
 		}
 		return;
 	}
-
-	/*
-	// Add to testPlot
-	for(Pawn *pawn : m_world->getPawns())
-	{
-	if(pawn == m_owner) continue;
-	if(pawn->getRect().contains(Rect(m_sprite.getPosition(), m_sprite.getSize())))
-	{
-	m_hitState = true;
-	pawn->decHealth(100);
-	m_deleteTime = 11.0f;
-	}
-	}*/
 }

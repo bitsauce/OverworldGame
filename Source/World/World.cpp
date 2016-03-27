@@ -76,7 +76,7 @@ bool World::load(const string &name)
 		LOG("Loading world '%s'...", name.c_str());
 
 		// Set the world path
-		m_worldPath = "prefs:/Overworld/" + name;
+		m_worldPath = "prefs:/" + name;
 		m_worldFile = new IniFile(worldFile);
 
 		/*FileSystemIterator itr(m_worldPath + "/Objects", "*.obj", FileSystemIterator::FILES);

@@ -2,6 +2,7 @@
 #include "Game/Debug.h"
 #include "World/World.h"
 #include "Generation/Generator.h"
+#include "BlockEntities/BlockEntityData.h"
 #include "BlockEntities/BlockEntity.h"
 #include "Entities/EntityData.h"
 #include "Blocks/BlockData.h"
@@ -135,16 +136,15 @@ void ChunkManager::loadBlockData(FileReader &file, ChunkBlock *blockData)
 	}
 }
 
-void ChunkManager::saveEntities(FileWriter &file, set<BlockEntity*> entities)
+void ChunkManager::saveEntities(FileWriter &file, list<BlockEntity*> entities)
 {
 	// Write entity data
 	file << (int) entities.size() << endl;
-	for(BlockEntity * entity : entities)
+	for(BlockEntity *entity : entities)
 	{
-		file << /*entity->getID()*/0 << endl;
+		file << entity->getData()->getID() << endl;
 		file << entity->getX() << endl;
 		file << entity->getY() << endl;
-		//entity->createSaveData(file);
 	}
 }
 
@@ -159,7 +159,8 @@ void ChunkManager::loadEntities(FileReader &file)
 		file >> id;
 		file >> x;
 		file >> y;
-		//((StaticEntityData*) EntityData::get((EntityID) id))->create(m_world, x, y)->loadSaveData(file);
+		m_world->getTerrain()->createBlockEntityAt(x, y, (BlockEntityID) id);
+		//BlockEntityData::get((BlockEntityID) id)->create(m_world, x, y);
 	}
 }
 
@@ -186,27 +187,20 @@ void ChunkManager::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 	Chunk *chunk = itr->second;
 
 	// Open file writer
-	string filePath = util::getAbsoluteFilePath(m_world->getWorldPath() + "/Chunks/" + util::intToStr(itr->first) + ".obj");
-	FileWriter file(filePath);
+	const string chunkFilePath = util::getAbsoluteFilePath(m_world->getWorldPath() + "/Chunks/" + util::intToStr(itr->first) + ".obj");
+	FileWriter file(chunkFilePath);
 	if(file.isOpen())
 	{
 		// Save chunk data
-		//saveBlockData(file, chunk->m_blocks);
-		//saveEntities(file, chunk->m_blockEntities);
+		saveBlockData(file, chunk->m_blocks);
+		saveEntities(file, chunk->m_blockEntities);
 	}
 	else
 	{
-		LOG("Unable to load block data from '%s' (reason: %s)", filePath.c_str(), strerror(errno));
+		LOG("Unable to save block data to '%s' (reason: %s)", chunkFilePath.c_str(), strerror(errno));
 	}
 
 	chunk->unload();
-
-	// Delete static entities
-	/*for(BlockEntity *entity : chunk->m_blockEntities)
-	{
-		delete entity;
-	}
-	chunk->m_blockEntities.clear();*/ // Empty static entity list
 
 	// Add chunk to chunk pool and remove from active chunks
 	m_chunkPool.push_back(chunk);
@@ -252,6 +246,7 @@ Chunk *ChunkManager::getChunkAt(const int chunkX, const int chunkY, const bool l
 
 Chunk *ChunkManager::loadChunkAt(const int chunkX, const int chunkY)
 {
+	// Do we have any available chunks?
 	if(m_chunkPool.empty())
 	{
 		// This makes sure there is an available chunk in the pool
@@ -266,17 +261,17 @@ Chunk *ChunkManager::loadChunkAt(const int chunkX, const int chunkY)
 	m_chunkPool.pop_back();
 
 	// Get chunk file path
-	uint key = CHUNK_KEY(chunkX, chunkY);
-	string chunkFilePath = util::getAbsoluteFilePath(m_world->getWorldPath() + "/Chunks/" + util::intToStr(key) + ".obj");
+	const uint key = CHUNK_KEY(chunkX, chunkY);
+	const string chunkFilePath = util::getAbsoluteFilePath(m_world->getWorldPath() + "/Chunks/" + util::intToStr(key) + ".obj");
 
-	// Open file writer
+	// If the chunk file exists, open a file reader
 	FileReader *file = 0;
 	if(util::fileExists(chunkFilePath))
 	{
 		file = new FileReader(chunkFilePath);
 		if(!file->isOpen())
 		{
-			LOG("Unable to save block data to '%s'", chunkFilePath);
+			LOG("Unable to load block data from '%s' (reason: %s)", chunkFilePath.c_str(), strerror(errno));
 			file = 0;
 		}
 	}

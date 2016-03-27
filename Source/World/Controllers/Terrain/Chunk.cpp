@@ -5,7 +5,7 @@
 #include "Generation/Generator.h"
 
 const uint OPPOSITE_INDEX[8] = { 4, 5, 6, 7, 0, 1, 2, 3 };
-const uint DIR_INDEX[16] = { 0, 5, 1, -1, 3, 4, 2, -1, 7, 6, 0, -1, -1, -1, -1, -1 };
+const int DIR_INDEX[16] = { 0, 5, 1, -1, 3, 4, 2, -1, 7, 6, 0, -1, -1, -1, -1, -1 };
 const int DIR_X[8] = { -1,  0,  1,  1,  1,  0, -1, -1 };
 const int DIR_Y[8] = { -1, -1, -1,  0,  1,  1,  1,  0 };
 
@@ -105,6 +105,12 @@ void Chunk::unload()
 		{
 			chunk->m_neighborChunks[OPPOSITE_INDEX[i]] = 0;
 		}
+	}
+
+	// Remove block entities
+	for(BlockEntity *entity : list<BlockEntity*>(m_blockEntities))
+	{
+		removeBlockEntity(entity);
 	}
 }
 

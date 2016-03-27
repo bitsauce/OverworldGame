@@ -66,7 +66,7 @@ private:
 	void saveBlockData(FileWriter &file, ChunkBlock *blockData);
 	void loadBlockData(FileReader &file, ChunkBlock *blockData);
 
-	void saveEntities(FileWriter &file, set<BlockEntity*> entities);
+	void saveEntities(FileWriter &file, list<BlockEntity*> entities);
 	void loadEntities(FileReader &file);
 
 	bool freeInactiveChunk();
