@@ -111,6 +111,7 @@
     <ClCompile Include="..\..\Source\Entities\Entity.cpp" />
     <ClCompile Include="..\..\Source\Entities\EntityData.cpp" />
     <ClCompile Include="..\..\Source\Entities\Humanoid.cpp" />
+    <ClCompile Include="..\..\Source\Entities\ItemDrop.cpp" />
     <ClCompile Include="..\..\Source\Entities\Mobs\Zombie.cpp" />
     <ClCompile Include="..\..\Source\Entities\Pawn.cpp" />
     <ClCompile Include="..\..\Source\Entities\Player.cpp" />

@@ -10,20 +10,15 @@ Controller::Controller()
 	}
 }
 
-void Controller::setClientUseItemState(KeyEvent *e)
+void Controller::setClientInputState(const bool state, int type)
 {
-	m_clientInputState[INPUT_USE_ITEM] = e->getType() != KeyEvent::UP;// && !m_gameOverlay->isHovered();
-}
-
-void Controller::setClientInputState(KeyEvent *e, int type)
-{
-	m_clientInputState[type] = e->getType() != KeyEvent::UP;
+	m_clientInputState[type] = state;
 }
 
 void Controller::pack(RakNet::BitStream *bitStream, const Connection *conn)
 {
 	// If is local
-	//if(conn->getGUID() == m_guid)
+	//if(m_local)
 	{
 		for(uint i = 0; i < INPUT_COUNT; ++i)
 		{

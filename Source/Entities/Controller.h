@@ -36,13 +36,9 @@ public:
 
 	virtual void update() { }
 
-private:
+protected:
+	Pawn *m_pawn;
 	bool m_inputState[INPUT_COUNT];
 	bool m_clientInputState[INPUT_COUNT];
-
-protected:
-	RakNet::RakNetGUID m_guid;
-	Pawn *m_pawn;
-	void setClientInputState(KeyEvent *e, int type);
-	void setClientUseItemState(KeyEvent *e);
+	void setClientInputState(const bool state, int type);
 };

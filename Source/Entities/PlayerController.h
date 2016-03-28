@@ -11,5 +11,6 @@ public:
 	PlayerController(InputManager *input, const bool local);
 
 private:
-	//RakNet::RakNetGUID m_guid;
+	void updateClientInputState(KeyEvent *e, int type);
+	void updateClientUseItemState(KeyEvent *e);
 };

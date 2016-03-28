@@ -66,17 +66,17 @@ void Commander::execute(const string &cmdString)
 
 void Commander::spawn(Chat *chat, vector<string> args)
 {
-	/*EntityData *data = EntityData::getByName(args[0]);
-	if(data == 0)
+	EntityData *data = EntityData::getByName(args[0]);
+	if(!data)
 	{
 		chat->insertMessage("No entity named '" + args[0] + "'");
 		return;
 	}
 
 	DynamicEntity *entity = (DynamicEntity*) data->create(m_game->getWorld());
-	//entity->setPosition(m_game->getWorld()->getLocalPlayer()->getPosition() + Vector2F(0.0f, 10.0f));
+	entity->setPosition(m_game->getWorld()->getLocalPlayer()->getPosition());
 
-	chat->insertMessage(args[0] + " spawned");*/
+	chat->insertMessage(args[0] + " spawned");
 }
 
 void Commander::give(Chat *chat, vector<string> args)

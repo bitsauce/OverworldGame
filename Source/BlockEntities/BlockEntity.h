@@ -4,6 +4,12 @@
 #include "Config.h"
 #include "Constants.h"
 
+#define BLOCK_ENTITY_FACTORY(classname) \
+	static BlockEntity *Factory(World *world, const int x, const int y, const BlockEntityData *data) \
+	{ \
+		return new classname(world, x, y, data); \
+	}
+
 class World;
 class ChunkBlock;
 class BlockEntityData;

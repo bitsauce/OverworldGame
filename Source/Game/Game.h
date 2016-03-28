@@ -63,16 +63,16 @@ public:
 	void popState();
 	GameState *peekState(int level = 0);
 
-	/*void takeScreenshot(int action)
+	void takeScreenshot(KeyEvent *e)
 	{
-	if(action != GLFW_PRESS) return;
-	m_takeScreenshot = true;
+		if(e->getType() != KeyEvent::DOWN) return;
+		m_takeScreenshot = true;
 	}
 
-	void toggleFullscreen(int action)
+	/*void toggleFullscreen(int action)
 	{
-	if(action != GLFW_PRESS) return;
-	Window::setFullScreen(!Window::getFullScreen());
+		if(e->getType() != KeyEvent::DOWN) return;
+		Window::setFullScreen(!Window::getFullScreen());
 	}*/
 
 private:

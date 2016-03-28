@@ -5,7 +5,7 @@ Bush::Bush(World *world, int x, int y, const BlockEntityData *data) :
 {
 }
 
-void Bush::onNeighbourChanged(NeighborChangedEvent *e)
+Beehive::Beehive(World *world, int x, int y, const BlockEntityData *data) :
+	BlockEntity(world, x, y, data)
 {
-	BlockEntity::onNeighbourChanged(e);
 }

@@ -15,7 +15,7 @@ ItemDrop::ItemDrop(World *world, const ItemID item, const int amount) :
 	m_prevHoverTime(0.0f)
 {
 	setGravityScale(0.1f);
-	setSize(Vector2(16.0f));
+	setSize(Vector2F(16.0f));
 }
 
 void ItemDrop::onTick(TickEvent *e)
@@ -25,7 +25,7 @@ void ItemDrop::onTick(TickEvent *e)
 		list<Pawn*> pawns = m_world->getPawns();
 		for(Pawn *pawn : pawns)
 		{
-			Vector2 deltaPosition = pawn->getCenter() - getCenter();
+			Vector2F deltaPosition = pawn->getCenter() - getCenter();
 			if(pawn->getRect().contains(getCenter()))
 			{
 				m_amount -= m_amount - pawn->getStorage()->addItem(m_itemID, m_amount);
@@ -41,19 +41,20 @@ void ItemDrop::onTick(TickEvent *e)
 			}
 		}
 	}
-	m_noPickupTime -= delta;
+	m_noPickupTime -= e->getDelta();
 
 	m_prevHoverTime = m_hoverTime;
-	m_hoverTime += 5.0f * delta;
+	m_hoverTime += 5.0f * e->getDelta();
 
-	DynamicEntity::update(delta);
+	DynamicEntity::onTick(e);
 }
 
 void ItemDrop::onDraw(DrawEvent *e)
 {
-	spriteBatch->drawSprite(Sprite(ItemData::get(m_itemID)->getIconTexture(), Rect(
-		getDrawPosition(alpha) - Vector2(0.0f, ((sin(math::lerp(m_prevHoverTime, m_hoverTime, alpha)) * 0.5f + 0.5f) * 8.0f)),
+	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
+	spriteBatch->drawSprite(Sprite(ItemData::get(m_itemID)->getIconTexture(), RectF(
+		getDrawPosition(e->getAlpha()) - Vector2F(0.0f, ((sin(math::lerp(m_prevHoverTime, m_hoverTime, e->getAlpha())) * 0.5f + 0.5f) * 8.0f)),
 		getSize()),
-		Vector2(), 0.0f, TextureRegion(4.0f / 24.0f, 4.0f / 24.0f, 1.0f - 4.0f / 24.0f, 1.0f - 4.0f / 24.0f))
+		Vector2F(), 0.0f, TextureRegion(4.0f / 24.0f, 4.0f / 24.0f, 1.0f - 4.0f / 24.0f, 1.0f - 4.0f / 24.0f))
 		);
 }

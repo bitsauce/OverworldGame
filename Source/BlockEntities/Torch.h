@@ -8,17 +8,14 @@ class BlockEntityData;
 class Torch : public BlockEntity
 {
 public:
+	static BlockEntity *Factory(World * world, const int x, const int y, const BlockEntityData *data) { return new Torch(world, x, y, data); }
+
+	void onNeighbourChanged(NeighborChangedEvent *e);
+
+private:
 	Torch(World * world, int x, int y, const BlockEntityData *data);
 
 	void updateBaseFrame();
 
-	void onNeighbourChanged(NeighborChangedEvent *e);
-
-	static BlockEntity *Factory(World * world, const int x, const int y, const BlockEntityData *data)
-	{
-		return new Torch(world, x, y, data);
-	}
-
-private:
 	Pointlight m_pointlight;
 };

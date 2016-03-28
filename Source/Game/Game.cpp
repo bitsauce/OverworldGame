@@ -94,7 +94,6 @@ void OverworldGame::onStart(GameEvent *e)
 	/*InputContext *inputContext = Input::getContext("game");
 
 	inputContext->bind("toggle_full_screen"->setFunction(bind(&OverworldGame::toggleFullscreen, this, placeholders::_1), true);
-	inputContext->bind("take_screen_shot"->setFunction(bind(&OverworldGame::takeScreenshot, this, placeholders::_1), true);
 
 	inputContext->bind("show_omnicon"->setFunction(bind(&Omnicon::toggle, m_gameOverlay->getOmnicon(), placeholders::_1), true);
 	inputContext->bind("show_inventory"->setFunction(bind(&Inventory::toggle, m_gameOverlay->getInventory(), placeholders::_1), true);
@@ -112,6 +111,8 @@ void OverworldGame::onStart(GameEvent *e)
 	inputContext->getKeybind("camera_zoom_out")->setFunction(bind(&Camera::zoomOut, m_world->getCamera(), placeholders::_1));
 
 	inputContext->getKeybind("show_chat")->setFunction(bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1));
+
+	inputContext->getKeybind("take_screen_shot")->setFunction(bind(&OverworldGame::takeScreenshot, this, placeholders::_1));
 
 	inputContext->getKeybind("hotbar_select_0")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 0));
 	inputContext->getKeybind("hotbar_select_1")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 1));

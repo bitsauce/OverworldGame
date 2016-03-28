@@ -5,15 +5,18 @@
 
 class Bush : public BlockEntity
 {
-public:
+public:	
+	static BlockEntity *Factory(World * world, const int x, const int y, const BlockEntityData *data) { return new Bush(world, x, y, data); }
+	
+private:
 	Bush(World * world, int x, int y, const BlockEntityData *data);
+};
 
-	void onNeighbourChanged(NeighborChangedEvent *e);
-
-	static BlockEntity *Factory(World * world, const int x, const int y, const BlockEntityData *data)
-	{
-		return new Bush(world, x, y, data);
-	}
+class Beehive : public BlockEntity
+{
+public:
+	BLOCK_ENTITY_FACTORY(Beehive)
 
 private:
+	Beehive(World * world, int x, int y, const BlockEntityData *data);
 };

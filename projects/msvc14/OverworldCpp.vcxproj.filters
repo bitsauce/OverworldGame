@@ -191,6 +191,9 @@
     <ClCompile Include="..\..\Source\BlockEntities\Pot.cpp">
       <Filter>Source\BlockEntities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\ItemDrop.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
