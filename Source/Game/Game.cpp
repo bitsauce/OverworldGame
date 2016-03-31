@@ -97,13 +97,8 @@ void OverworldGame::onStart(GameEvent *e)
 
 	inputContext->bind("show_omnicon"->setFunction(bind(&Omnicon::toggle, m_gameOverlay->getOmnicon(), placeholders::_1), true);
 	inputContext->bind("show_inventory"->setFunction(bind(&Inventory::toggle, m_gameOverlay->getInventory(), placeholders::_1), true);
-	inputContext->bind("show_chat"->setFunction(bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1), true);
 
-	Input::setContext(inputContext);
-
-	inputContext = Input::getContext("chat");
-	inputContext->bind("send_message"->setFunction(bind(&Chat::sendMessage, m_gameOverlay->getChat(), placeholders::_1), true);
-	inputContext->bind("escape_chat"->setFunction(bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1), true);*/
+	Input::setContext(inputContext);*/
 
 	InputContext *inputContext = getInputManager()->getContextByName("game");
 
@@ -185,25 +180,6 @@ GameState *OverworldGame::peekState(int level)
 
 void OverworldGame::onTick(TickEvent *e)
 {
-	// Update game connections
-	/*if(Connection::getInstance()->isServer())
-	{
-		((Server*)Connection::getInstance())->update();
-	}
-	else
-	{
-		((Client*)Connection::getInstance())->update();
-	}
-
-	// Update game states
-	for(list<GameState*>::iterator itr = m_states.begin(); itr != m_states.end(); ++itr)
-	{
-		(*itr)->update(delta);
-		if(!(*itr)->isTransparent())
-		{
-			break;
-		}
-	}*/
 	SceneObject::onTick(e);
 }
 
@@ -238,31 +214,4 @@ void OverworldGame::onDraw(DrawEvent *e)
 			break;
 		}
 	}*/
-}
-
-#include <iomanip>
-
-void savePixmapAsText(string fileName, Pixmap &pixmap)
-{
-	ofstream file(fileName);
-	uchar *data = new uchar[pixmap.getFormat().getPixelSizeInBytes()];
-	for(uint y = 0; y < pixmap.getHeight(); ++y)
-	{
-		for(uint x = 0; x < pixmap.getWidth(); ++x)
-		{
-			pixmap.getPixel(x, y, data);
-			file << "[";
-			for(uint i = 0; i < 4; ++i)
-			{
-				if(pixmap.getFormat().getDataTypeSizeInBytes() == 1)
-					file << right << setw(3) << util::intToStr(((uchar*) data)[i]);
-				else if(pixmap.getFormat().getDataTypeSizeInBytes() == 4)
-					file << right << setw(10) << util::intToStr(((uint*) data)[i]);
-			}
-			file << "] ";
-		}
-		file << endl;
-	}
-	delete[] data;
-	file.close();
 }

@@ -137,48 +137,6 @@ void World::onDraw(DrawEvent *e)
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
 	spriteBatch->flush();
 	SceneObject::onDraw(e);
-
-	/*spriteBatch->begin();
-
-	m_camera->interpolate(alpha);
-
-	m_terrain->getChunkLoader()->draw(spriteBatch->getGraphicsContext(), alpha);
-
-	m_background->draw(spriteBatch, alpha);
-
-	spriteBatch->end();
-	spriteBatch->begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState::PRESET_ALPHA_BLEND, m_camera->getModelViewMatrix(alpha)));
-
-	// Draw background
-	m_terrain->m_background.draw(spriteBatch, alpha);
-	for(Entity *entity : m_entitiesByLayer[WORLD_LAYER_BACK])
-	{
-	entity->draw(spriteBatch, alpha);
-	}
-
-	// Draw middleground
-	m_terrain->m_middleground.draw(spriteBatch, alpha);
-	for(Entity *entity : m_entitiesByLayer[WORLD_LAYER_MIDDLE])
-	{
-	entity->draw(spriteBatch, alpha);
-	}
-
-	for(BlockEntity *staticEntity : m_staticEntities)
-	{
-	staticEntity->draw(spriteBatch, alpha);
-	}
-
-	// Draw foreground
-	m_terrain->m_foreground.draw(spriteBatch, alpha);
-	for(Entity *entity : m_entitiesByLayer[WORLD_LAYER_FRONT])
-	{
-	entity->draw(spriteBatch, alpha);
-	}
-
-	// Draw lighting
-	m_lighting->draw(spriteBatch, alpha);
-
-	spriteBatch->end();*/
 }
 
 void World::addEntity(Entity *entity)
