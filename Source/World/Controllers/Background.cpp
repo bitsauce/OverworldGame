@@ -123,10 +123,10 @@ void Background::onDraw(DrawEvent *e)
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
 
 	// Draw sky gradient
-	m_vertices[0].set4f(VERTEX_POSITION, 0.0f, 0.0f);
-	m_vertices[1].set4f(VERTEX_POSITION, 0.0f, (float) graphicsContext->getHeight());
-	m_vertices[2].set4f(VERTEX_POSITION, (float) graphicsContext->getWidth(), 0.0f);
-	m_vertices[3].set4f(VERTEX_POSITION, (float) graphicsContext->getWidth(), (float) graphicsContext->getHeight());
+	m_vertices[0].set2f(VERTEX_POSITION, 0.0f, 0.0f);
+	m_vertices[1].set2f(VERTEX_POSITION, 0.0f, (float) graphicsContext->getHeight());
+	m_vertices[2].set2f(VERTEX_POSITION, (float) graphicsContext->getWidth(), 0.0f);
+	m_vertices[3].set2f(VERTEX_POSITION, (float) graphicsContext->getWidth(), (float) graphicsContext->getHeight());
 	m_vertices[0].set4ub(VERTEX_COLOR, m_topColor.getR(), m_topColor.getG(), m_topColor.getB(), 255);
 	m_vertices[1].set4ub(VERTEX_COLOR, m_bottomColor.getR(), m_bottomColor.getG(), m_bottomColor.getB(), 255);
 	m_vertices[2].set4ub(VERTEX_COLOR, m_topColor.getR(), m_topColor.getG(), m_topColor.getB(), 255);

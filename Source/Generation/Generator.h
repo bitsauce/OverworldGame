@@ -28,6 +28,9 @@ private:
 
 	uint m_seed;
 	Simplex2D m_noise;
+
+	//Resource<Shader> m_ge;
+
 	Random m_random;
 
 	map<int, BlockID*> m_chunkStructures;

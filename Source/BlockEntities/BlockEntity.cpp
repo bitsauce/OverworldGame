@@ -29,15 +29,15 @@ void BlockEntity::getVertices(Vertex *vertices, uint *indices, int i)
 	int w = getData()->getWidth(), h = getData()->getHeight();
 	int cx = getX() - math::floor(getX() / CHUNK_BLOCKSF) * CHUNK_BLOCKSF, cy = getY() - math::floor(getY() / CHUNK_BLOCKSF) * CHUNK_BLOCKSF;
 
-	vertices[0].set4f(VERTEX_POSITION, x, y);
-	vertices[1].set4f(VERTEX_POSITION, x, y + BLOCK_PXF * h);
-	vertices[2].set4f(VERTEX_POSITION, x + BLOCK_PXF * w, y);
-	vertices[3].set4f(VERTEX_POSITION, x + BLOCK_PXF * w, y + BLOCK_PXF * h);
+	vertices[0].set2f(VERTEX_POSITION, x, y);
+	vertices[1].set2f(VERTEX_POSITION, x, y + BLOCK_PXF * h);
+	vertices[2].set2f(VERTEX_POSITION, x + BLOCK_PXF * w, y);
+	vertices[3].set2f(VERTEX_POSITION, x + BLOCK_PXF * w, y + BLOCK_PXF * h);
 
-	vertices[0].set4f(VERTEX_TEX_COORD, 0.0f, 0.0f);
-	vertices[1].set4f(VERTEX_TEX_COORD, 0.0f, 1.0f);
-	vertices[2].set4f(VERTEX_TEX_COORD, 1.0f, 0.0f);
-	vertices[3].set4f(VERTEX_TEX_COORD, 1.0f, 1.0f);
+	vertices[0].set2f(VERTEX_TEX_COORD, 0.0f, 0.0f);
+	vertices[1].set2f(VERTEX_TEX_COORD, 0.0f, 1.0f);
+	vertices[2].set2f(VERTEX_TEX_COORD, 1.0f, 0.0f);
+	vertices[3].set2f(VERTEX_TEX_COORD, 1.0f, 1.0f);
 
 	vertices[0].set4ub(VERTEX_COLOR, cx, cy, getData()->getID(), 255);
 	vertices[1].set4ub(VERTEX_COLOR, cx, cy, getData()->getID(), 255);
