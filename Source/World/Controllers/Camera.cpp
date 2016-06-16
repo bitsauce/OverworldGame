@@ -90,26 +90,26 @@ void Camera::onTick(TickEvent *e)
 {
 	if(!m_tagetEntity)
 	{
-		float acc = (m_input->getKeyState(CGF_KEY_LCTRL) ? 32.0f : 256.0f) * e->getDelta();
+		float acc = (m_input->getKeyState(SAUCE_KEY_LCTRL) ? 32.0f : 256.0f) * e->getDelta();
 
 		m_prevPosition = m_position;
 
-		if(m_input->getKeyState(CGF_KEY_LEFT))
+		if(m_input->getKeyState(SAUCE_KEY_LEFT))
 		{
 			m_velocity.x -= acc;
 		}
 
-		if(m_input->getKeyState(CGF_KEY_RIGHT))
+		if(m_input->getKeyState(SAUCE_KEY_RIGHT))
 		{
 			m_velocity.x += acc;
 		}
 
-		if(m_input->getKeyState(CGF_KEY_UP))
+		if(m_input->getKeyState(SAUCE_KEY_UP))
 		{
 			m_velocity.y -= acc;
 		}
 
-		if(m_input->getKeyState(CGF_KEY_DOWN))
+		if(m_input->getKeyState(SAUCE_KEY_DOWN))
 		{
 			m_velocity.y += acc;
 		}

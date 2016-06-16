@@ -44,7 +44,7 @@ Debug::Debug(OverworldGame *game) :
 void Debug::debugFunction(KeyEvent *e)
 {
 	// Debug functions only called when debug enabled
-	if(e->getType() != KeyEvent::DOWN || (!m_enabled && e->getKeycode() != CGF_KEY_F1))
+	if(e->getType() != KeyEvent::DOWN || (!m_enabled && e->getKeycode() != SAUCE_KEY_F1))
 	{
 		return;
 	}
@@ -52,31 +52,31 @@ void Debug::debugFunction(KeyEvent *e)
 	switch(e->getKeycode())
 	{
 		// Toggle debug
-		case CGF_KEY_F1: toggle(); break;
+		case SAUCE_KEY_F1: toggle(); break;
 
 		// Toggle lighting
-		case CGF_KEY_F2:
+		case SAUCE_KEY_F2:
 		{
 			m_world->getLighting()->m_enabled = !m_world->getLighting()->m_enabled;
 		}
 		break;
 
 		// Toggle overlay
-		case CGF_KEY_F3:
+		case SAUCE_KEY_F3:
 		{
 			m_game->getGameOverlay()->m_hidden = !m_game->getGameOverlay()->m_hidden;
 		}
 		break;
 
 		// Toggle block painter
-		case CGF_KEY_F4:
+		case SAUCE_KEY_F4:
 		{
 			m_blockPainterEnabled = !m_blockPainterEnabled;
 		}
 		break;
 
 		// Toggle chunk loader info
-		case CGF_KEY_F5:
+		case SAUCE_KEY_F5:
 		{
 			m_debugChunkLoader = !m_debugChunkLoader;
 			m_world->getTerrain()->getChunkManager()->m_applyZoom = !m_world->getTerrain()->getChunkManager()->m_applyZoom;
@@ -84,21 +84,21 @@ void Debug::debugFunction(KeyEvent *e)
 		break;
 
 		// Toggle lighting info
-		case CGF_KEY_F6:
+		case SAUCE_KEY_F6:
 		{
 			m_debugLighting = !m_debugLighting;
 		}
 		break;
 
 		// Set time
-		case CGF_KEY_F7:
+		case SAUCE_KEY_F7:
 		{
-			m_world->getTimeOfDay()->setTime(m_world->getTimeOfDay()->getTime() + (m_game->getInputManager()->getKeyState(CGF_KEY_LSHIFT) ? -100 : 100));
+			m_world->getTimeOfDay()->setTime(m_world->getTimeOfDay()->getTime() + (m_game->getInputManager()->getKeyState(SAUCE_KEY_LSHIFT) ? -100 : 100));
 		}
 		break;
 
 		// Show spawn menu
-		case CGF_KEY_F8:
+		case SAUCE_KEY_F8:
 		{
 			// Spawn light
 			new Pointlight(m_world->getLighting(), math::floor(Vector2F(m_world->getCamera()->getInputPosition()) / BLOCK_PXF) + Vector2F(0.5f, 0.5f), 20, Color((uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), 255));
@@ -113,7 +113,7 @@ void Debug::debugFunction(KeyEvent *e)
 		break;
 
 		// Multiplayer menu
-		case CGF_KEY_F9:
+		case SAUCE_KEY_F9:
 		{
 			if(m_game->peekState()->getID() == GAME_STATE_MULTIPLAYER)
 			{
@@ -127,7 +127,7 @@ void Debug::debugFunction(KeyEvent *e)
 		break;
 
 		// Attach/detach camera
-		case CGF_KEY_F10:
+		case SAUCE_KEY_F10:
 		{
 			Camera *camera = m_world->getCamera();
 			if(camera->getTargetEntity())
@@ -143,7 +143,7 @@ void Debug::debugFunction(KeyEvent *e)
 		}
 		break;
 
-		case CGF_KEY_F11:
+		case SAUCE_KEY_F11:
 		{
 			ChunkManager::ChunkArea area = m_world->getTerrain()->getChunkManager()->getActiveArea();
 			for(int y = area.y0 * CHUNK_BLOCKS; y <= area.y1 * CHUNK_BLOCKS; ++y)
@@ -156,7 +156,7 @@ void Debug::debugFunction(KeyEvent *e)
 		}
 		break;
 
-		case CGF_KEY_F12:
+		case SAUCE_KEY_F12:
 		{
 		}
 		break;
@@ -171,15 +171,15 @@ void Debug::onTick(TickEvent *e)
 	{
 		// Block painting
 		WorldLayer layer = WORLD_LAYER_MIDDLE;
-		if(m_game->getInputManager()->getKeyState(CGF_KEY_LSHIFT)) layer = WORLD_LAYER_FRONT;
-		if(m_game->getInputManager()->getKeyState(CGF_KEY_LCTRL)) layer = WORLD_LAYER_BACK;
-		if(m_game->getInputManager()->getKeyState(CGF_MOUSE_BUTTON_LEFT) || m_game->getInputManager()->getKeyState(CGF_MOUSE_BUTTON_RIGHT))
+		if(m_game->getInputManager()->getKeyState(SAUCE_KEY_LSHIFT)) layer = WORLD_LAYER_FRONT;
+		if(m_game->getInputManager()->getKeyState(SAUCE_KEY_LCTRL)) layer = WORLD_LAYER_BACK;
+		if(m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) || m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_RIGHT))
 		{
 			m_world->getTerrain()->setBlockAt(
 				(int) floor(m_world->getCamera()->getInputPosition().x / BLOCK_PXF),
 				(int) floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF),
 				layer,
-				m_game->getInputManager()->getKeyState(CGF_MOUSE_BUTTON_LEFT) ? m_block : BLOCK_EMPTY,
+				m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) ? m_block : BLOCK_EMPTY,
 				true);
 		}
 	}
@@ -241,7 +241,7 @@ void Debug::onDraw(DrawEvent *e)
 	if(m_blockPainterEnabled)
 	{
 		m_blockPainterTexture->updatePixmap(BlockData::get(m_block)->getPixmap());
-		spriteBatch->drawText(Vector2F(5.0f, context->getHeight() - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (m_game->getInputManager()->getKeyState(CGF_KEY_LCTRL) ? "BACK" : (m_game->getInputManager()->getKeyState(CGF_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font.get());
+		spriteBatch->drawText(Vector2F(5.0f, context->getHeight() - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (m_game->getInputManager()->getKeyState(SAUCE_KEY_LCTRL) ? "BACK" : (m_game->getInputManager()->getKeyState(SAUCE_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font.get());
 		Sprite blockSprite(m_blockPainterTexture, RectF(m_font->getStringWidth("Current block:"), context->getHeight() - 60.0f, 32.0f, 32.0f), Vector2F(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 1.0f / 3.0f, 1.0f, 1.0f));
 		spriteBatch->drawSprite(blockSprite);
 	}
@@ -251,7 +251,7 @@ void Debug::onDraw(DrawEvent *e)
 	context->setTexture(nullptr);
 	Vector2F position = m_world->getCamera()->getPosition();
 	Vector2F size = m_world->getCamera()->getSize();
-	if(m_game->getInputManager()->getKeyState(CGF_KEY_K))
+	if(m_game->getInputManager()->getKeyState(SAUCE_KEY_K))
 	{
 		int x0 = (int) floor(position.x / BLOCK_PXF);
 		int y0 = (int) floor(position.y / BLOCK_PXF);

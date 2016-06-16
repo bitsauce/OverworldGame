@@ -25,7 +25,7 @@ OverworldGame::OverworldGame() :
 	m_debug(nullptr),
 	m_commander(nullptr)
 {
-	setFlags(CGF_EXPORT_LOG);
+	setFlags(SAUCE_EXPORT_LOG);
 }
 
 void OverworldGame::onStart(GameEvent *e)

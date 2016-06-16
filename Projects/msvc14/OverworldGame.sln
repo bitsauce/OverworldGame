@@ -5,9 +5,9 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "spine", "..\..\3rdparty\spine\project\spine.vcxproj", "{5D74934A-7512-45EE-8402-7B95D3642E85}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CrossGame", "..\..\..\x2D-Game-Engine\projects\msvc14\CrossGame.vcxproj", "{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SauceEngine", "..\..\..\Sauce-Engine\projects\msvc14\SauceEngine.vcxproj", "{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OverworldCpp", "OverworldCpp.vcxproj", "{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OverworldGame", "OverworldGame.vcxproj", "{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A} = {F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}
 		{5D74934A-7512-45EE-8402-7B95D3642E85} = {5D74934A-7512-45EE-8402-7B95D3642E85}
