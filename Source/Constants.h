@@ -84,7 +84,6 @@ enum EntityID
 
 enum BlockID
 {
-	// Invisible blocks
 	BLOCK_EMPTY,
 
 	BLOCK_GRASS,

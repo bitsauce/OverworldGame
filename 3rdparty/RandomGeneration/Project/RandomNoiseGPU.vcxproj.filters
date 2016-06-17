@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Data">
+      <UniqueIdentifier>{e0854144-82d1-4ba6-997e-4278e98406ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{1a09836e-7326-4937-b645-d5715fae4e5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{3b8728e8-dbe1-4ab7-9ad2-5e0860390c2d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Data\Resources.xml">
+      <Filter>Data</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Data\Shader\Generation.frag">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="..\Data\Shader\Generation.vert">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="..\Data\Shader\Testing.frag">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="..\Data\Shader\Testing.vert">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="..\Data\Shader\Colorize.vert">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="..\Data\Shader\Colorize.frag">
+      <Filter>Data</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Source\Generator.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Include\Generator.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
