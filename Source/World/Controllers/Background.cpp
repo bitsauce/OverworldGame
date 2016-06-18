@@ -57,7 +57,6 @@ void Background::onTick(TickEvent *e)
 {
 	// Get hour and mintue
 	int hour = m_timeOfDay->getHour();
-	//int minute = m_timeOfDay->getMinute();
 	float time = m_timeOfDay->getTime();
 
 	// Change background depending on time
@@ -79,11 +78,14 @@ void Background::onTick(TickEvent *e)
 		}
 
 		// Place sun
-		float ang = (1140 - time) / 720.0f;
+		float ang = (time - 360.0f) / 720.0f;
 		Vector2F windowSize = m_window->getSize();
 		Vector2F sunSize = m_sun.getSize();
-		m_sun.setPosition(windowSize.x / 2.0f - sunSize.x / 2.0f + cos(PI*ang) * (windowSize.x / 2.0f + sunSize.x / 4.0f), windowSize.y / 2.0f - sin(PI*ang) * (windowSize.y / 2.0f + 64));
-		m_sun.setRotation(180 * (1.0f - ang));
+		m_sun.setPosition(
+			windowSize.x * 0.5f - cos(PI * ang) * (windowSize.x * 0.5f + sunSize.x),
+			windowSize.y - sin(PI * ang) * windowSize.y + sunSize.y * 0.5f
+			);
+		m_sun.setRotation(180 * ang);
 	}
 	else
 	{
@@ -103,11 +105,14 @@ void Background::onTick(TickEvent *e)
 		}
 
 		// Place moon
-		float ang = (1860 - (time >= 1140 ? time : time + 1440)) / 720.0f;
+		float ang = (time > 360.0f ? (time - 1080.0f) : (time + 360.0f)) / 720.0f;
 		Vector2F windowSize = m_window->getSize();
 		Vector2F moonSize = m_moon.getSize();
-		m_moon.setPosition(windowSize.x / 2.0f - moonSize.x / 2.0f + cos(PI * ang) * (windowSize.x / 2.0f + moonSize.x / 2.0f), windowSize.y / 2.0f - sin(PI * ang) * windowSize.y / 2.0f);
-		m_moon.setRotation(180 * (1.0f - ang));
+		m_moon.setPosition(
+			windowSize.x * 0.5f - cos(PI * ang) * (windowSize.x * 0.5f + moonSize.x),
+			windowSize.y - sin(PI * ang) * windowSize.y + moonSize.y * 0.5f
+			);
+		m_moon.setRotation(180 * ang);
 	}
 
 	// Apply wind
@@ -170,7 +175,7 @@ void Background::onDraw(DrawEvent *e)
 	}
 }
 
-Cloud::Cloud(Random &rand, Background * background) :
+Cloud::Cloud(Random &rand, Background *background) :
 	m_game((OverworldGame*) Game::GetInstance()),
 	m_background(background),
 	m_rand(rand)

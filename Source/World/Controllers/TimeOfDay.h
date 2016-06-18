@@ -22,18 +22,17 @@ public:
 	
 	int getHour() const
 	{
-		return int(time/60.0f);
+		return int(time / 60.0f);
 	}
 	
 	int getMinute() const
 	{
-		return int(time-getHour()*60.0f);
+		return int(time - getHour() * 60.0f);
 	}
 	
 	bool isDay() const
 	{
-		int hour = getHour();
-		return hour >= 6 && hour < 18;
+		return time >= 360 && time < 1080;
 	}
 	
 	bool isNight() const

@@ -83,7 +83,7 @@ void Storage::Slot::drawItem(const Vector2F position, SpriteBatch *spriteBatch, 
 {
 	if(!isEmpty())
 	{
-		spriteBatch->drawSprite(Sprite(ItemData::get(m_item)->getIconTexture(), RectF(position.x + 5.f, position.y + 5.f, 32.f, 32.f)));
+		spriteBatch->drawSprite(Sprite(ItemData::get(m_item)->getIconTexture(), RectF(position.x, position.y, 42.f, 42.f)));
 		if(m_amount > 1)
 		{
 			spriteBatch->drawText(Vector2F(position.x + 3.f, position.y + 3.f), util::intToStr(m_amount), font.get());
