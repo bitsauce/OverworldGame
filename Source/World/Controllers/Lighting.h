@@ -27,7 +27,7 @@ private:
 	World *m_world;
 
 	bool m_enabled;
-	bool m_redrawLighting;
+	bool m_redraw;
 
 	list<LightSource*> m_lightSources;
 };

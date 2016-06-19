@@ -32,7 +32,8 @@ Pawn::Pawn(World *world, const EntityID id) :
 	m_jumpEase(1.5f),
 	m_moveSpeed(3.5f),
 	m_maxSpeed(7.5f),
-	m_friction(0.85f)
+	m_friction(0.85f),
+	m_pointLight(new Pointlight(world, LightSource::DYNAMIC, Vector2F(0.0f), 3.0f, Color(127)))
 {
 	// Set body size
 	setSize(24, 48);
@@ -236,6 +237,8 @@ void Pawn::onTick(TickEvent *e)
 
 void Pawn::onDraw(DrawEvent *e)
 {
+	m_pointLight->setPosition(math::lerp(getLastPosition() + getSize() * 0.5f, getPosition() + getSize() * 0.5f, e->getAlpha()) / BLOCK_PXF);
+
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
 	m_humanoid.draw(this, spriteBatch, e->getAlpha());
 	ItemData *item = ItemData::get(getCurrentItem()->getItem());

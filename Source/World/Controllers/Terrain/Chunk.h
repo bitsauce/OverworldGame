@@ -5,6 +5,8 @@
 #include "Constants.h"
 #include "Blocks/Block.h"
 
+class LightSource;
+
 // TODO: This class needs better encapsulation.
 // While the friend class solution works, it is not pretty.
 // Ideally, I want the user to only be able to manipulate the chunks through the Terrain class
@@ -14,6 +16,7 @@ class Chunk
 	friend class ChunkManager;
 	friend class BlockDrawer;
 	friend class Debug;
+	friend class Pointlight;
 private:
 	Chunk(ChunkManager *chunkManager);
 
@@ -40,7 +43,7 @@ private:
 
 	void addBlockEntity(BlockEntity *blockEntity);
 	bool removeBlockEntity(BlockEntity *blockEntity);
-	void setBlockEntityAt(const int x, const int y, const WorldLayer layer, BlockEntity *blockEntity) const;
+	void setBlockEntityAt(const int x, const int y, const WorldLayer layer, BlockEntity *blockEntity);
 	BlockEntity *getBlockEntityAt(const int x, const int y, const WorldLayer layer) const;
 	bool setBlockEntityFrameAt(const int x, const int y, const WorldLayer layer, const uint frame);
 
@@ -67,6 +70,9 @@ private:
 	StaticIndexBuffer m_blockEntityIBO;
 	bool m_generateBlockEntityBuffers;
 
+	// List of light sources that affect this chunk
+	//list<LightSource*> m_lightSources;
+
 public: // TODO: private
 	// Block entity time
 	Resource<Texture2D> m_timeOffsetTexture;
@@ -79,7 +85,7 @@ public: // TODO: private
 
 	// Flags
 	bool m_modified;
-	bool m_attached;
+	bool m_attached; //< attached = the block data of this chunk are rendered into the global render-target
 	bool m_sorted;
 };
 

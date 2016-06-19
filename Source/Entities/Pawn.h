@@ -117,6 +117,8 @@ protected:
 	friend class Commander;
 
 	bool m_lmbPressed;
+
+	class Pointlight *m_pointLight;
 };
 
 #endif // PAWN_H

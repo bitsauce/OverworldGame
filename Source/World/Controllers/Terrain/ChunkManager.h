@@ -75,6 +75,7 @@ private:
 	void updateViewSize(int width, int height);
 
 	void reattachChunk(Chunk *chunk, GraphicsContext *context);
+	void redrawLighting(GraphicsContext *context);
 
 	// Manager classes
 	bool m_applyZoom;
@@ -119,6 +120,7 @@ private:
 	RenderTarget2D *m_sortedBlocksRenderTarget[WORLD_LAYER_COUNT];
 
 	// Lighting
+	RenderTarget2D *m_staticLightingRenderTarget;
 	RenderTarget2D *m_lightingPass0;
 	RenderTarget2D *m_lightingPass1;
 	RenderTarget2D *m_lightingPass2;

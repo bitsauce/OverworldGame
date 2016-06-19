@@ -3,14 +3,23 @@
 
 Vertex *Pointlight::s_vertices;
 
-Pointlight::Pointlight(World *world, const Vector2F &position, const float radius, const Color &color) :
-	LightSource(position, radius, color)
+Pointlight::Pointlight(World *world, Type type, const Vector2F &position, const float radius, const Color &color) :
+	LightSource(world, type, position, radius, color)
 {
-	world->getLighting()->addLightSource(this);
-	//world->getTerrain()->getChunkManager()->getChunkAt(position.x / CHUNK_PXF, position.y / CHUNK_PXF, false)->m_lightSource.push_back(this);
+	/*int x0 = math::floor((position.x - radius) / CHUNK_BLOCKSF), y0 = math::floor((position.y - radius) / CHUNK_BLOCKSF),
+		x1 = math::floor((position.x + radius) / CHUNK_BLOCKSF), y1 = math::floor((position.y + radius) / CHUNK_BLOCKSF);
+	for(int y = y0; y <= y1; y++)
+	{
+		for(int x = x0; x <= x1; x++)
+		{
+			Chunk *chunk = world->getTerrain()->getChunkManager()->getChunkAt(x, y, true);
+			chunk->m_attached = false;
+			//chunk->m_lightSources.push_back(this);
+		}
+	}*/
 }
 
-void Pointlight::draw(SpriteBatch *spriteBatch)
+/*void Pointlight::draw(SpriteBatch *spriteBatch)
 {
 	GraphicsContext *gfxContext = spriteBatch->getGraphicsContext();
 	s_vertices[0].set2f(VERTEX_POSITION, m_position.x, m_position.y);
@@ -24,4 +33,4 @@ void Pointlight::draw(SpriteBatch *spriteBatch)
 		s_vertices[i].set2f(VERTEX_TEX_COORD, (1 + cos(r))/2.0f, 1.0f - (1 + sin(r))/2.0f);
 	}
 	gfxContext->drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_FAN, s_vertices, POINTLIGHT_SEGMENTS + 2);
-}
+}*/

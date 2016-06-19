@@ -1,5 +1,4 @@
-#ifndef SPOTLIGHT_H
-#define SPOTLIGHT_H
+#pragma once
 
 #include "Config.h"
 #include "LightSource.h"
@@ -12,14 +11,12 @@ class Pointlight : public LightSource
 {
 	friend class World;
 public:
-	Pointlight(World *world, const Vector2F &position, const float radius, const Color &color);
+	Pointlight(World *world, Type type, const Vector2F &position, const float radius, const Color &color);
 
 	// Draw spotlight
-	void draw(SpriteBatch *spriteBatch);
+	//void draw(SpriteBatch *spriteBatch);
 
 private:
 	// TODO: Maybe I should just have a global array of vct vertices that can be reused whenever
 	static Vertex *s_vertices;
 };
-
-#endif // SPOTLIGHT_H

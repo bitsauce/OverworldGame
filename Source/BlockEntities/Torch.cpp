@@ -2,7 +2,7 @@
 
 Torch::Torch(World *world, int x, int y, const BlockEntityData *data) :
 	BlockEntity(world, x, y, data),
-	m_pointlight(world, Vector2F(x, y) + Vector2F(0.5f, 0.5f), 10.0f, Color(255, 190, 90, 255))
+	m_pointlight(world, LightSource::STATIC, Vector2F(x, y) + Vector2F(0.5f, 0.5f), 10.0f, Color(255, 190, 90, 255))
 {
 	updateBaseFrame();
 }

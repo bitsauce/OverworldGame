@@ -35,7 +35,8 @@ Debug::Debug(OverworldGame *game) :
 	m_debugLighting(false),
 	m_blockPainterEnabled(false),
 	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Debug")),
-	m_blockPainterTexture(new Texture2D())
+	m_blockPainterTexture(new Texture2D()),
+	m_mousePointlight(0)
 {
 	// Set font color
 	m_font->setColor(Color(255, 255, 255, 255));
@@ -101,7 +102,7 @@ void Debug::debugFunction(KeyEvent *e)
 		case SAUCE_KEY_F8:
 		{
 			// Spawn light
-			new Pointlight(m_world, math::floor(Vector2F(m_world->getCamera()->getInputPosition()) / BLOCK_PXF) + Vector2F(0.5f, 0.5f), 20, Color((uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), 255));
+			new Pointlight(m_world, LightSource::STATIC, math::floor(Vector2F(m_world->getCamera()->getInputPosition()) / BLOCK_PXF) + Vector2F(0.5f, 0.5f), 20, Color((uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), 255));
 			// Spawn zombie
 
 			// Create zombie
@@ -188,6 +189,11 @@ void Debug::onTick(TickEvent *e)
 void Debug::onDraw(DrawEvent *e)
 {
 	if(!m_enabled) return;
+
+	if(m_mousePointlight)
+	{
+		m_mousePointlight->setPosition(Vector2F(m_world->getCamera()->getInputPosition()) / BLOCK_PXF);
+	}
 
 	GraphicsContext *context = e->getGraphicsContext();
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
@@ -341,9 +347,9 @@ void Debug::onDraw(DrawEvent *e)
 		context->setTransformationMatrix(Matrix4());
 		context->disable(GraphicsContext::BLEND);
 		//context->setTexture(m_world->getTerrain()->getChunkManager()->m_lightRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 1, 256.0f, 128.0f);
-		context->setTexture(m_world->getTerrain()->getChunkManager()->m_lightingPass0->getTexture()); context->drawRectangle(0.0f, 128.0f * 2, 256.0f, 128.0f);
-		context->setTexture(m_world->getTerrain()->getChunkManager()->m_lightingPass1->getTexture()); context->drawRectangle(0.0f, 128.0f * 3, 256.0f, 128.0f);
-		context->setTexture(m_world->getTerrain()->getChunkManager()->m_lightingPass2->getTexture()); context->drawRectangle(0.0f, 128.0f * 4, 256.0f, 128.0f);
+		context->setTexture(m_world->getTerrain()->getChunkManager()->m_staticLightingRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 2, 256.0f, 128.0f);
+		context->setTexture(m_world->getTerrain()->getChunkManager()->m_lightingPass0->getTexture()); context->drawRectangle(0.0f, 128.0f * 3, 256.0f, 128.0f);
+		context->setTexture(m_world->getTerrain()->getChunkManager()->m_lightingPass1->getTexture()); context->drawRectangle(0.0f, 128.0f * 4, 256.0f, 128.0f);
 		context->enable(GraphicsContext::BLEND);
 	}
 }
@@ -351,6 +357,11 @@ void Debug::onDraw(DrawEvent *e)
 void Debug::toggle()
 {
 	m_enabled = !m_enabled;
+
+	if(m_enabled)
+	{
+		m_mousePointlight = new Pointlight(m_world, LightSource::DYNAMIC, m_world->getCamera()->getInputPosition(), 20, Color((uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), 255));
+	}
 }
 
 void Debug::nextBlock(KeyEvent *e)

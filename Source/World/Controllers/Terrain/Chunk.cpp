@@ -14,7 +14,7 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 	m_generateBlockEntityBuffers(false)
 {
 	// Setup flags and such
-	m_attached = m_modified = m_sorted = false; // Not modified
+	m_attached = m_sorted = m_modified = false; // Not modified
 
 	// Initialize blocks
 	m_blocks = new ChunkBlock[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
@@ -86,7 +86,7 @@ void Chunk::load(int chunkX, int chunkY, ChunkBlock *blocks)
 	m_blockTexture->updatePixmap(pixmap);
 
 	// Mark as not modified
-	m_attached = m_modified = false;
+	m_attached = m_sorted = m_modified = false;
 
 	// Generate block entity buffers
 	m_generateBlockEntityBuffers = true;
@@ -222,7 +222,7 @@ bool Chunk::removeBlockEntity(BlockEntity *blockEntity)
 	return true;
 }
 
-void Chunk::setBlockEntityAt(const int x, const int y, const WorldLayer layer, BlockEntity *blockEntity) const
+void Chunk::setBlockEntityAt(const int x, const int y, const WorldLayer layer, BlockEntity *blockEntity)
 {
 	m_blocks[BLOCK_INDEX(x, y, layer)].setBlockEntity(blockEntity);
 }
@@ -248,14 +248,12 @@ void Chunk::attach(GraphicsContext *context, const int x, const int y)
 	context->drawRectangle(x * CHUNK_BLOCKS, y * CHUNK_BLOCKS, CHUNK_BLOCKS, CHUNK_BLOCKS);
 	context->setTexture(0);
 
-	// TODO: Render block entities to the global surface?
-
 	m_attached = true;
 }
 
 void Chunk::detach()
 {
-	m_sorted = m_attached = false;
+	m_attached = false;
 }
 
 void Chunk::drawBlockEntities(GraphicsContext *context)

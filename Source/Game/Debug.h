@@ -49,6 +49,8 @@ private:
 
 	// Random
 	Random m_random;
+
+	class Pointlight *m_mousePointlight;
 };
 
 #endif // DEBUG_H
