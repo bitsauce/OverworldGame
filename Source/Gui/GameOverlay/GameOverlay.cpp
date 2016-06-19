@@ -80,7 +80,7 @@ void GameOverlay::toggleCrafting()
 
 bool GameOverlay::isHovered() const
 {
-	return m_hotbar->isHovered() || m_inventory->isHovered() || m_crafting->isHovered();
+	return m_hotbar->isHovered();// || m_inventory->isHovered() || m_crafting->isHovered();
 }
 
 void GameOverlay::performSlotAction(Storage::Slot *slot, const Keycode type)

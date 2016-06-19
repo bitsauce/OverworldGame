@@ -9,7 +9,6 @@
 #include "Animation/Animation.h"
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
-#include "Gui/GameOverlay/GameOverlay.h"
 #include "Game/Game.h"
 #include "Game/States/GameState.h"
 #include "Game/Scene.h"

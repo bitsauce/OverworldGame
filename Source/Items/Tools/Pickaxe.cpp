@@ -7,15 +7,15 @@
 #include "Entities/ItemDrop.h"
 #include "Game/Game.h"
 
-Pickaxe::Pickaxe(OverworldGame * game) :
+Pickaxe::Pickaxe(OverworldGame *game) :
 	m_game(game),
-	m_cracksSprite(game->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Pickaxes/MiningCracks")),
+	m_cracksSprite(game->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Pickaxes/Mining_Cracks")),
+	m_sprite(game->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Pickaxes/IronPickaxe")),
 	m_cracksAnimation(1, 4),
 	m_drawCracks(false),
-	m_sprite(game->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Pickaxes/IronPickaxe")),
 	m_prevBlockPosition(0, 0),
 	m_mineCounter(0.0f),
-	m_mineTime(0.1f)
+	m_mineTime(0.5f)
 {
 	m_cracksSprite.setRegion(TextureRegion(0.0f, 0.0f, 0.25f, 1.0f), true);
 	m_sprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);

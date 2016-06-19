@@ -101,7 +101,7 @@ void Debug::debugFunction(KeyEvent *e)
 		case SAUCE_KEY_F8:
 		{
 			// Spawn light
-			new Pointlight(m_world->getLighting(), math::floor(Vector2F(m_world->getCamera()->getInputPosition()) / BLOCK_PXF) + Vector2F(0.5f, 0.5f), 20, Color((uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), 255));
+			new Pointlight(m_world, math::floor(Vector2F(m_world->getCamera()->getInputPosition()) / BLOCK_PXF) + Vector2F(0.5f, 0.5f), 20, Color((uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), 255));
 			// Spawn zombie
 
 			// Create zombie

@@ -2,12 +2,12 @@
 #include "Player.h"
 #include "PlayerController.h"
 
-Player::Player(const string &name, InputManager *input, World *world, const bool local) :
-	Pawn(world, ENTITY_PLAYER),
+Player::Player(const string &name, OverworldGame *game, const bool local) :
+	Pawn(game->getWorld(), ENTITY_PLAYER),
 	m_name(name)
 {
 	// Create player controller
-	setController(new PlayerController(input, local));
+	setController(new PlayerController(game, local));
 }
 
 Player::~Player()

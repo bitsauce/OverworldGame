@@ -84,20 +84,20 @@
 		<path>Sprites/ItemIcons/Arrow.png</path>
 	</texture>
 	<texture>
-		<name>Sprites/ItemIcons/IronPickaxe</name>
-		<path>Sprites/ItemIcons/IronPickaxe.png</path>
+		<name>Sprites/ItemIcons/Pickaxe_Iron</name>
+		<path>Sprites/ItemIcons/Pickaxe_Iron.png</path>
 	</texture>
 	<texture>
-		<name>Sprites/ItemIcons/IronAxe</name>
-		<path>Sprites/ItemIcons/IronAxe.png</path>
+		<name>Sprites/ItemIcons/Axe_Iron</name>
+		<path>Sprites/ItemIcons/Axe_Iron.png</path>
 	</texture>
 	<texture>
 		<name>Sprites/ItemIcons/Torch</name>
 		<path>Sprites/ItemIcons/Torch.png</path>
 	</texture>
 	<texture>
-		<name>Sprites/ItemIcons/WoodenBow</name>
-		<path>Sprites/ItemIcons/WoodenBow.png</path>
+		<name>Sprites/ItemIcons/Bow</name>
+		<path>Sprites/ItemIcons/Bow.png</path>
 	</texture>
 
 	<texture>
@@ -105,8 +105,8 @@
 		<path>Sprites/Items/Tools/Pickaxes/IronPickaxe.png</path>
 	</texture>
 	<texture>
-		<name>Sprites/Items/Tools/Pickaxes/MiningCracks</name>
-		<path>Sprites/Items/Tools/Pickaxes/MiningCracks.png</path>
+		<name>Sprites/Items/Tools/Pickaxes/Mining_Cracks</name>
+		<path>Sprites/Items/Tools/Pickaxes/Mining_Cracks.png</path>
 	</texture>
 	<texture>
 		<name>Sprites/Items/Tools/Axes/IronAxe</name>

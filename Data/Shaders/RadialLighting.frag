@@ -12,19 +12,7 @@ void main()
 	float sum = 1.0;
 	for(float i = 1.0; i > 0.0; i -= 1.0 / float(u_Iterations))
 	{
-		sum *= 1U - min(1U, uint(texture(u_LightMap, u_LightTexCoord + (mix(v_TexCoord, vec2(0.5), i) * 2.0 - vec2(1.0)) * u_Radius)[1] * 255.5) / 2U);
+		sum *= 1U - min(1U, uint(texture(u_LightMap, u_LightTexCoord + (mix(v_TexCoord, vec2(0.0), i) * 2.0 - vec2(1.0)) * u_Radius)[1] * 255.5));
 	}
 	out_FragColor = vec4(u_Color * sum, 1.0);
 }
-
-
-/*void main()
-{
-	vec2 dir = (vec2(0.5) - v_TexCoord)/float(u_Iterations);
-	float sum = 1.0;
-	for(float i = 0.0; i < float(u_Iterations); i += 1.0)
-	{
-		sum -= texture2D(u_LightMap, u_LightTexCoord + ((v_TexCoord + dir * i) * 2.0 - vec2(1.0)) * u_Radius).g;
-	}
-	out_FragColor = vec4(vec3(sum), 1.0);
-}*/

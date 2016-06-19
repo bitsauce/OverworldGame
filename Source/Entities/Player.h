@@ -2,16 +2,17 @@
 #define PLAYER_H
 
 #include "Pawn.h"
+#include "Game/Game.h"
 
 class Player : public Pawn
 {
 public:
-	Player(const string &name, InputManager *input, World *world, const bool local);
+	Player(const string &name, OverworldGame *game, const bool local);
 	~Player();
 
-	static DynamicEntity *Factory(World *world)
+	static DynamicEntity *Factory(World*)
 	{
-		return new Player("NULL", Game::GetInstance()->getInputManager(), world, false);
+		return new Player("NULL", (OverworldGame*) Game::GetInstance(), false);
 	}
 
 	string getName() const

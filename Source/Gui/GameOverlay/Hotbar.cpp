@@ -12,10 +12,14 @@ Hotbar::Hotbar(GameOverlay *gameOverlay) :
 	m_backgroundSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Inventory/Hotbar")),
 	m_slotSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Inventory/ItemSlot")),
 	m_slotSelectedSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Inventory/ItemSlotSelected")),
-	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Inventory"))
+	m_itemAmountFont(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Inventory")),
+	m_itemDescFont(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Debug")),
+	m_mousePosition(0.0f)
 {
-	m_font->setColor(Color(0, 0, 0, 255));
-	m_font->setDepth(1.f);
+	m_itemAmountFont->setColor(Color(0, 0, 0, 255));
+	m_itemAmountFont->setDepth(1.f);
+	m_itemDescFont->setColor(Color(255, 255, 255, 255));
+	m_itemDescFont->setDepth(1.f);
 	m_slotSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 	m_slotSprite.setDepth(-1.f);
 	m_slotSelectedSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
@@ -54,12 +58,27 @@ void Hotbar::onDraw(DrawEvent *e)
 	m_backgroundSprite.setSize(size);
 	spriteBatch->drawSprite(m_backgroundSprite);
 	
+	// Draw hotbar item slots
 	for(int i = 0; i < 10; ++i)
 	{
+		// Get and draw slot sprite
 		Sprite &sprite = i == player->getSelectedSlot() ? m_slotSelectedSprite : m_slotSprite;
 		sprite.setPosition(position + Vector2F(8.f + i * 48.f, 7.f));
 		spriteBatch->drawSprite(sprite);
-		m_gameOverlay->getPlayer()->getStorage()->getSlotAt(i)->drawItem(position + Vector2F(8.f + i * 48.f, 7.f), spriteBatch, m_font);
+
+		// Get item slot
+		Storage::Slot *slot = m_gameOverlay->getPlayer()->getStorage()->getSlotAt(i);
+
+		// Draw item in slot
+		slot->drawItem(position + Vector2F(8.f + i * 48.f, 7.f), spriteBatch, m_itemAmountFont);
+
+		// Check if mouse is hovering over this item
+		if(!slot->isEmpty() && RectF(sprite.getPosition(), sprite.getSize()).contains(m_mousePosition))
+		{
+			ItemData *itemData = ItemData::get(slot->getItem());
+			m_itemDescFont->drawBox(spriteBatch, sprite.getPosition() - Vector2F(0.0f, m_itemDescFont->getHeight() * 2), 200, itemData->getDesc());
+			m_itemDescFont->draw(spriteBatch, sprite.getPosition() - Vector2F(0.0f, m_itemDescFont->getHeight()*3), itemData->getName());
+		}
 	}
 }
 
@@ -69,26 +88,29 @@ void Hotbar::setSelectedSlot(KeyEvent *e, const uint slot)
 	m_gameOverlay->getPlayer()->setSelectedSlot(slot);
 }
 
-void Hotbar::onMouseWheelEvent(MouseEvent *e)
+void Hotbar::onMouseWheel(MouseEvent *e)
 {
 	Player *player = m_gameOverlay->getPlayer();
 	player->setSelectedSlot(math::mod(player->getSelectedSlot() + (e->getWheelY() < 0 ? 1 : -1), 10));
 }
 
-void Hotbar::onKeyEvent(KeyEvent *e)
+void Hotbar::onMouseMove(MouseEvent *e)
 {
-	if(e->getType() != KeyEvent::DOWN) return;
+	m_mousePosition = e->getPosition();
+}
 
-	const Keycode key = e->getKeycode();
-	/*if(key == XD_MOUSE_BUTTON_LEFT || key == XD_MOUSE_BUTTON_RIGHT)
+void Hotbar::onMouseDown(MouseEvent *e)
+{
+	const MouseButton button = e->getButton();
+	if(button == SAUCE_MOUSE_BUTTON_LEFT || button == SAUCE_MOUSE_BUTTON_RIGHT)
 	{
-		Vector2F position = getPosition();
+		Vector2F position = getDrawPosition();
 		for(uint i = 0; i < 10; ++i)
 		{
-			Rect rect(position.x + 8.f + i * 48.f, position.y + 7.f, 42.f, 42.f);
-			if(rect.contains(Input::getPosition()))
+			RectF rect(position.x + 8.f + i * 48.f, position.y + 7.f, 42.f, 42.f);
+			if(rect.contains(m_mousePosition))
 			{
-				if(key == XD_MOUSE_BUTTON_LEFT)
+				if(button == SAUCE_MOUSE_BUTTON_LEFT)
 				{
 					if(m_gameOverlay->getPlayer()->getHeldItem()->isEmpty())
 					{
@@ -97,10 +119,9 @@ void Hotbar::onKeyEvent(KeyEvent *e)
 						break;
 					}
 				}
-				m_gameOverlay->performSlotAction(m_gameOverlay->getPlayer()->getStorage()->getSlotAt(i), key);
-
+				//m_gameOverlay->performSlotAction(m_gameOverlay->getPlayer()->getStorage()->getSlotAt(i), button);
 				break;
 			}
 		}
-	}*/
+	}
 }

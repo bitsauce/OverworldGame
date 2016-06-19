@@ -78,7 +78,7 @@ void Server::onTick(TickEvent *e)
 				bool local = getGUID() == packet->guid;
 
 				// Create player
-				Player *player = new Player(playerName, m_game->getInputManager(), m_game->getWorld(), local);
+				Player *player = new Player(playerName, m_game, local);
 				//m_game->getWorld()->addEntity(player);
 
 				// If player is hosting locally

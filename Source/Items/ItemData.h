@@ -36,6 +36,8 @@ public:
 	ItemID getID() const { return m_id; }
 	Resource<Texture2D> getIconTexture() const { return m_iconTexture; }
 	uint getMaxStack() const { return m_maxStack; }
+	string getName() const { return m_name; }
+	string getDesc() const { return m_desc; }
 
 protected:
 	virtual void set(const ItemID id, const string &name, const string &desc, const string &texture, const uint maxStack);

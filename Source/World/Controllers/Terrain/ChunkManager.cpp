@@ -635,8 +635,8 @@ void ChunkManager::reattachChunk(Chunk *chunk, GraphicsContext *context)
 
 	{
 		const float width = m_loadingArea.getWidth() * CHUNK_BLOCKSF, height = m_loadingArea.getHeight() * CHUNK_BLOCKSF;
-
-		// Directional light
+		
+		// Directional light // TODO: Directional lighting cannot be here in the static lighting part
 		m_directionalLightingShader->setUniform1f("u_OffsetY", (m_loadingArea.y0 * CHUNK_BLOCKSF - 32.0f) / (m_loadingArea.getHeight() * CHUNK_BLOCKS));
 		m_directionalLightingShader->setUniform1f("u_Direction", 0.0174532925f * 180.0f * (m_world->getTimeOfDay()->isDay() ? (1140.0f - m_world->getTimeOfDay()->getTime()) : (1860.0f - (m_world->getTimeOfDay()->getTime() >= 1140.0f ? m_world->getTimeOfDay()->getTime() : m_world->getTimeOfDay()->getTime() + 1440.0f))) / 720.0f);
 		context->setRenderTarget(m_lightingPass0);
@@ -647,20 +647,56 @@ void ChunkManager::reattachChunk(Chunk *chunk, GraphicsContext *context)
 		context->enable(GraphicsContext::BLEND);
 		context->setShader(m_radialLightingShader);
 		context->setBlendState(BlendState::PRESET_ADDITIVE);
+
+		// TODO: The chunk has to keep track of what light sources affects it, and when reattaching, only
+		// take into account the light which affects the chunk.
 		for(LightSource *light : m_world->getLighting()->m_lightSources)
+		{
+			m_radialLightingShader->setUniform2f("u_Radius", light->getRadius() / width, light->getRadius() / height);
+			m_radialLightingShader->setUniform3f("u_Color", light->getColor().getR() / 255.0f, light->getColor().getG() / 255.0f, light->getColor().getB() / 255.0f);
+
+			// Center
+			const Vector2F basePos = Vector2F(math::mod(light->getPosition().x, width), math::mod(light->getPosition().y, height)) + Vector2F(0.5f, 0.5f);
+			m_radialLightingShader->setUniform2f("u_LightTexCoord", basePos.x / width, basePos.y / height);
+			context->drawCircle(basePos, light->getRadius(), light->getRadius() * 1.5f);
+
+			/*{
+				int x = basePos.x, y = int(basePos.y );
+				Pixmap pixmap = m_blocksRenderTarget->getTexture()->getPixmap();
+				uchar data[4];
+				pixmap.getPixel(x, y, data);
+				LOG("(%i, %i, %i, %i)", data[0], data[1], data[2], data[3]);
+			}*/
+		}
+
+		/*for(int i = -1; i <= 1; i++)
+		{
+			for(int j = -1; j <= 1; j++)
+			{
+				Chunk *neighbour = getChunkAt(chunk->getX() + i, chunk->getY() + j, true);
+				if(!neighbour->isAttached())
+				{
+					neighbour->m_lightSources;
+					neighbour->attach(context, math::mod(neighbour->getX(), m_loadingArea.getWidth()), math::mod(neighbour->getY(), m_loadingArea.getHeight()));
+				}
+			}
+		}*/
+
+		/*for(LightSource *light : m_world->getLighting()->m_lightSources)
 		{
 			m_radialLightingShader->setUniform2f("u_Radius", light->getRadius() / width, light->getRadius() / height);
 			m_radialLightingShader->setUniform3f("u_Color", light->getColor().getR() / 255.0f, light->getColor().getG() / 255.0f, light->getColor().getB() / 255.0f);
 
 			// TODO: It is inefficient to draw so many circles, so concider adding a check to see if redraw is necessary.
 			// (we only need to redraw when a light source is close to the edge)
+			
 			// Center
 			const Vector2F basePos = Vector2F(math::mod(light->getPosition().x, width), math::mod(light->getPosition().y, height)) + Vector2F(0.5f, 0.5f);
 			m_radialLightingShader->setUniform2f("u_LightTexCoord", basePos.x / width, 1.0f - (basePos.y / height));
 			context->drawCircle(basePos, light->getRadius(), light->getRadius() * 1.5f);
 
 			// Right
-			Vector2F pos = basePos + Vector2F(width, 0.0f);
+			/*Vector2F pos = basePos + Vector2F(width, 0.0f);
 			m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
 			context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
 
@@ -697,10 +733,12 @@ void ChunkManager::reattachChunk(Chunk *chunk, GraphicsContext *context)
 			// Bottom-right
 			pos = basePos + Vector2F(width, height);
 			m_radialLightingShader->setUniform2f("u_LightTexCoord", pos.x / width, 1.0f - (pos.y / height));
-			context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);
-		}
+			context->drawCircle(pos, light->getRadius(), light->getRadius() * 1.5f);*/
+		//}
 		context->disable(GraphicsContext::BLEND);
 
+		// TODO: Blur has to be applied at a later stage because we
+		// probably want to blur dynamic lighting as well
 		// Blur horizontally (pass 1)
 		context->setRenderTarget(m_lightingPass1);
 		context->setShader(m_blurHShader);

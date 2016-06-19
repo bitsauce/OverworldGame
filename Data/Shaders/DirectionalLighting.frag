@@ -7,7 +7,7 @@ uniform float u_Direction;
 uniform float u_Width;
 uniform float u_Height;
 
-void main()
+/*void main()
 {
 	float factor = v_TexCoord.y - u_OffsetY;
 	if(factor < 0.1) factor = 0.0;
@@ -20,6 +20,10 @@ void main()
 	sum /= 10.0;
 	
 	out_FragColor = vec4(vec3(sum), 1.0);
-	
-	//out_FragColor = vec4(vec3(0.0), min(texture2D(u_Texture, v_TexCoord).a, min(texture2D(u_Texture, v_TexCoord + vec2(1.0/u_Width, 0.0)).a, min(texture2D(u_Texture, v_TexCoord - vec2(1.0/u_Width, 0.0)).a, min(texture2D(u_Texture, v_TexCoord + vec2(0.0, 1.0/u_Height)).a, texture2D(u_Texture, v_TexCoord - vec2(0.0, 1.0/u_Height)).a)))));
+}*/
+
+void main()
+{
+	float sum = texture(u_Texture, v_TexCoord).a;
+	out_FragColor = vec4(vec3(sum), 1.0);
 }
