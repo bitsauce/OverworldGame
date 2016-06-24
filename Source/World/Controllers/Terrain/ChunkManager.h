@@ -120,14 +120,14 @@ private:
 	RenderTarget2D *m_sortedBlocksRenderTarget[WORLD_LAYER_COUNT];
 
 	// Lighting
-	RenderTarget2D *m_staticLightingRenderTarget;
-	RenderTarget2D *m_lightingPass0;
-	RenderTarget2D *m_lightingPass1;
-	RenderTarget2D *m_lightingPass2;
+	RenderTarget2D *m_blockLightingRenderTarget;
 	Resource<Shader> m_directionalLightingShader;
 	Resource<Shader> m_radialLightingShader;
 	Resource<Shader> m_blurHShader;
 	Resource<Shader> m_blurVShader;
+
+	RenderTarget2D *m_shadowCasterRenderTarget;
+
 	int m_lightRadius;
 	bool m_enabled;
 	bool m_redrawLighting;

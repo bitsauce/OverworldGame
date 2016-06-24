@@ -12,11 +12,23 @@ BlockEntityItem::BlockEntityItem(OverworldGame *game, const BlockEntityID id) :
 
 void BlockEntityItem::equip(Pawn *pawn)
 {
+	if(m_blockEntityID == BLOCK_ENTITY_TORCH)
+	{
+		pawn->m_pointLight->setRadius(25);
+		pawn->m_pointLight->setColor(Color(255, 200, 15, 255));
+	}
+
 	pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, getIconTexture());
 }
 
 void BlockEntityItem::unequip(Pawn *pawn)
 {
+	if(m_blockEntityID == BLOCK_ENTITY_TORCH)
+	{
+		pawn->m_pointLight->setRadius(10);
+		pawn->m_pointLight->setColor(Color(127));
+	}
+
 	pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, 0);
 }
 

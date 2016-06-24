@@ -346,10 +346,11 @@ void Debug::onDraw(DrawEvent *e)
 		// Show lighting passes
 		context->setTransformationMatrix(Matrix4());
 		context->disable(GraphicsContext::BLEND);
-		//context->setTexture(m_world->getTerrain()->getChunkManager()->m_lightRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 1, 256.0f, 128.0f);
-		context->setTexture(m_world->getTerrain()->getChunkManager()->m_staticLightingRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 2, 256.0f, 128.0f);
-		context->setTexture(m_world->getTerrain()->getChunkManager()->m_lightingPass0->getTexture()); context->drawRectangle(0.0f, 128.0f * 3, 256.0f, 128.0f);
-		context->setTexture(m_world->getTerrain()->getChunkManager()->m_lightingPass1->getTexture()); context->drawRectangle(0.0f, 128.0f * 4, 256.0f, 128.0f);
+		context->setTexture(m_world->getTerrain()->getChunkManager()->m_blockLightingRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 0, 256.0f, 128.0f);
+		context->setTexture(m_world->getLighting()->m_lightingPass0->getTexture()); context->drawRectangle(0.0f, 128.0f * 1, 256.0f, 128.0f);
+		context->setTexture(m_world->getLighting()->m_lightingPass2->getTexture()); context->drawRectangle(0.0f, 128.0f * 2, 256.0f, 128.0f);
+		context->setTexture(m_world->getLighting()->m_shadowsRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 3, 256.0f, 128.0f);
+		context->setTexture(m_world->getTerrain()->getChunkManager()->m_shadowCasterRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 4, 256.0f, 128.0f);
 		context->enable(GraphicsContext::BLEND);
 	}
 }
@@ -360,7 +361,7 @@ void Debug::toggle()
 
 	if(m_enabled)
 	{
-		m_mousePointlight = new Pointlight(m_world, LightSource::DYNAMIC, m_world->getCamera()->getInputPosition(), 20, Color((uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), 255));
+		m_mousePointlight = new Pointlight(m_world, LightSource::DYNAMIC, m_world->getCamera()->getInputPosition(), 40, Color(255));
 	}
 }
 

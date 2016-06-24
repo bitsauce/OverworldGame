@@ -12,10 +12,6 @@ class Pointlight : public LightSource
 	friend class World;
 public:
 	Pointlight(World *world, Type type, const Vector2F &position, const float radius, const Color &color);
-
-	// Draw spotlight
-	//void draw(SpriteBatch *spriteBatch);
-
 private:
 	// TODO: Maybe I should just have a global array of vct vertices that can be reused whenever
 	static Vertex *s_vertices;

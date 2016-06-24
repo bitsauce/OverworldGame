@@ -526,18 +526,6 @@
     <None Include="..\..\Data\Shaders\RadialLighting.vert">
       <Filter>Data\Shaders</Filter>
     </None>
-    <None Include="..\..\Data\Shaders\Simplex3d.frag">
-      <Filter>Data\Shaders</Filter>
-    </None>
-    <None Include="..\..\Data\Shaders\Simplex3d.vert">
-      <Filter>Data\Shaders</Filter>
-    </None>
-    <None Include="..\..\Data\Shaders\Simplex3DBlend.frag">
-      <Filter>Data\Shaders</Filter>
-    </None>
-    <None Include="..\..\Data\Shaders\Simplex3DBlend.vert">
-      <Filter>Data\Shaders</Filter>
-    </None>
     <None Include="..\..\Data\Shaders\TileMap.frag">
       <Filter>Data\Shaders</Filter>
     </None>
@@ -554,6 +542,24 @@
       <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Data\Shaders\BlockEntitiesDraw.vert">
+      <Filter>Data\Shaders</Filter>
+    </None>
+    <None Include="..\..\Data\Shaders\Pointlight_Dynamic.frag">
+      <Filter>Data\Shaders</Filter>
+    </None>
+    <None Include="..\..\Data\Shaders\Pointlight_Dynamic.vert">
+      <Filter>Data\Shaders</Filter>
+    </None>
+    <None Include="..\..\Data\Shaders\Shadow_Map.vert">
+      <Filter>Data\Shaders</Filter>
+    </None>
+    <None Include="..\..\Data\Shaders\Shadow_Render.frag">
+      <Filter>Data\Shaders</Filter>
+    </None>
+    <None Include="..\..\Data\Shaders\Shadow_Render.vert">
+      <Filter>Data\Shaders</Filter>
+    </None>
+    <None Include="..\..\Data\Shaders\Shadow_Map.frag">
       <Filter>Data\Shaders</Filter>
     </None>
   </ItemGroup>

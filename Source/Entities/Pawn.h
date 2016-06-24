@@ -117,7 +117,7 @@ protected:
 	friend class Commander;
 
 	bool m_lmbPressed;
-
+public:
 	class Pointlight *m_pointLight;
 };
 

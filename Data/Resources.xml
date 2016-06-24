@@ -155,6 +155,11 @@
 		<fragmentFilePath>Shaders/RadialLighting.frag</fragmentFilePath>
 	</shader>
 	<shader>
+		<name>Shaders/Pointlight_Dynamic</name>
+		<vertexFilePath>Shaders/Pointlight_Dynamic.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/Pointlight_Dynamic.frag</fragmentFilePath>
+	</shader>
+	<shader>
 		<name>Shaders/BlurH</name>
 		<vertexFilePath>Shaders/BlurH.vert</vertexFilePath>
 		<fragmentFilePath>Shaders/BlurH.frag</fragmentFilePath>
@@ -183,5 +188,16 @@
 		<name>Shaders/BlockEntitiesApplyTime</name>
 		<vertexFilePath>Shaders/BlockEntitiesApplyTime.vert</vertexFilePath>
 		<fragmentFilePath>Shaders/BlockEntitiesApplyTime.frag</fragmentFilePath>
+	</shader>
+
+	<shader>
+		<name>Shaders/Shadow_Map</name>
+		<vertexFilePath>Shaders/Shadow_Map.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/Shadow_Map.frag</fragmentFilePath>
+	</shader>
+	<shader>
+		<name>Shaders/Shadow_Render</name>
+		<vertexFilePath>Shaders/Shadow_Render.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/Shadow_Render.frag</fragmentFilePath>
 	</shader>
 </resources>

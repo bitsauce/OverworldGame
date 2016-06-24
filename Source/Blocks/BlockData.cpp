@@ -19,7 +19,7 @@ static BlockDescriptor g_blockData[] = {
 
 	{ BLOCK_GRASS, "Sprites/Blocks/Grass.png", ITEM_BLOCK_DIRT, 1.0f, 1 },
 	{ BLOCK_DIRT, "Sprites/Blocks/Dirt.png", ITEM_BLOCK_DIRT, 1.0f, 1 },
-	{ BLOCK_DIRT_BACK, "Sprites/Blocks/DirtBack.png", ITEM_BLOCK_DIRT_BACK, 0.95f, 1 },
+	{ BLOCK_DIRT_BACK, "Sprites/Blocks/DirtBack.png", ITEM_BLOCK_DIRT_BACK, 1.0f, 1 },
 
 	{ BLOCK_OAK_WOOD, "Sprites/Blocks/OakWood.png", ITEM_BLOCK_OAK_WOOD, 0.75f, 1 },
 	{ BLOCK_OAK_LEAVES, "Sprites/Blocks/OakLeaves.png", ITEM_BLOCK_OAK_LEAVES, 0.0f, 1 },

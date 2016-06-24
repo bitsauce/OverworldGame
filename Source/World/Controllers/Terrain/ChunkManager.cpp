@@ -6,7 +6,6 @@
 #include "BlockEntities/BlockEntity.h"
 #include "Entities/EntityData.h"
 #include "Blocks/BlockData.h"
-
 #include "Game/Game.h"
 
 const float QUAD_UVS[40] =
@@ -43,10 +42,7 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 	m_loadAreaRadius(5),
 	m_circleLoadIndex(0),
 	m_reattachAllChunks(true),
-	m_staticLightingRenderTarget(nullptr),
-	m_lightingPass0(nullptr),
-	m_lightingPass1(nullptr),
-	m_lightingPass2(nullptr),
+	m_blockLightingRenderTarget(nullptr),
 	m_directionalLightingShader(Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/DirectionalLighting")),
 	m_radialLightingShader(Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/RadialLighting")),
 	m_blurHShader(Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/BlurH")),
@@ -566,26 +562,35 @@ void ChunkManager::updateViewSize(int width, int height)
 	m_blocksRenderTarget->getTexture()->setWrapping(Texture2D::REPEAT);
 	m_blocksRenderTarget->getTexture()->setFiltering(Texture2D::NEAREST);
 
+	Lighting *lighting = m_world->getLighting();
+
 	// Clear old render targets
-	delete m_staticLightingRenderTarget;
-	delete m_lightingPass0;
-	delete m_lightingPass1;
-	delete m_lightingPass2;
+	delete m_blockLightingRenderTarget;
+	delete lighting->m_lightingPass0;
+	delete lighting->m_lightingPass1;
+	delete lighting->m_lightingPass2;
 
 	// Create shadow textures
-	m_staticLightingRenderTarget = new RenderTarget2D(loadAreaWidth * CHUNK_BLOCKS, loadAreaHeight * CHUNK_BLOCKS);
-	m_staticLightingRenderTarget->getTexture()->setFiltering(Texture2D::LINEAR);
-	m_staticLightingRenderTarget->getTexture()->setWrapping(Texture2D::REPEAT);
-	m_lightingPass0 = new RenderTarget2D(loadAreaWidth * CHUNK_BLOCKS, loadAreaHeight * CHUNK_BLOCKS);
-	m_lightingPass0->getTexture()->setFiltering(Texture2D::LINEAR);
-	m_lightingPass0->getTexture()->setWrapping(Texture2D::REPEAT);
-	m_lightingPass1 = new RenderTarget2D(loadAreaWidth * CHUNK_BLOCKS, loadAreaHeight * CHUNK_BLOCKS);
-	m_lightingPass1->getTexture()->setFiltering(Texture2D::LINEAR);
-	m_lightingPass1->getTexture()->setWrapping(Texture2D::REPEAT);
+	m_blockLightingRenderTarget = new RenderTarget2D(loadAreaWidth * CHUNK_BLOCKS, loadAreaHeight * CHUNK_BLOCKS);
+	m_blockLightingRenderTarget->getTexture()->setFiltering(Texture2D::LINEAR);
+	m_blockLightingRenderTarget->getTexture()->setWrapping(Texture2D::REPEAT);
+	lighting->m_lightingPass0 = new RenderTarget2D(loadAreaWidth * CHUNK_BLOCKS, loadAreaHeight * CHUNK_BLOCKS);
+	lighting->m_lightingPass0->getTexture()->setFiltering(Texture2D::LINEAR);
+	lighting->m_lightingPass0->getTexture()->setWrapping(Texture2D::REPEAT);
+	lighting->m_lightingPass1 = new RenderTarget2D(loadAreaWidth * CHUNK_BLOCKS, loadAreaHeight * CHUNK_BLOCKS);
+	lighting->m_lightingPass1->getTexture()->setFiltering(Texture2D::LINEAR);
+	lighting->m_lightingPass1->getTexture()->setWrapping(Texture2D::REPEAT);
+	lighting->m_lightingPass2 = new RenderTarget2D(loadAreaWidth * CHUNK_BLOCKS, loadAreaHeight * CHUNK_BLOCKS);
+	lighting->m_lightingPass2->getTexture()->setFiltering(Texture2D::LINEAR);
+	lighting->m_lightingPass2->getTexture()->setWrapping(Texture2D::REPEAT);
 
-	m_lightingPass2 = new RenderTarget2D(loadAreaWidth * CHUNK_BLOCKS, loadAreaHeight * CHUNK_BLOCKS);
-	m_lightingPass2->getTexture()->setFiltering(Texture2D::LINEAR);
-	m_lightingPass2->getTexture()->setWrapping(Texture2D::REPEAT);
+	//lighting->m_dynamicLightingRenderTarget = new RenderTarget2D(width, height);
+	//lighting->m_dynamicLightingRenderTarget->getTexture()->setFiltering(Texture2D::LINEAR);
+	//lighting->m_dynamicLightingRenderTarget->getTexture()->setWrapping(Texture2D::REPEAT);
+	
+	m_shadowCasterRenderTarget = new RenderTarget2D(width, height);
+	m_shadowCasterRenderTarget->getTexture()->setFiltering(Texture2D::LINEAR);
+	m_shadowCasterRenderTarget->getTexture()->setWrapping(Texture2D::REPEAT);
 
 	// Set shader uniforms
 	m_tileSortShader->setSampler2D("u_BlockGrid", m_blocksRenderTarget->getTexture());
@@ -595,14 +600,16 @@ void ChunkManager::updateViewSize(int width, int height)
 	m_directionalLightingShader->setUniform1f("u_Height", loadAreaHeight * CHUNK_BLOCKS);
 
 	m_radialLightingShader->setSampler2D("u_LightMap", m_blocksRenderTarget->getTexture());
-	m_radialLightingShader->setUniform1i("u_Iterations", 8);
+	m_radialLightingShader->setUniform1i("u_Iterations", 100);
 
-	m_blurHShader->setSampler2D("u_Texture", m_lightingPass2->getTexture());
+	//lighting->m_pointlightDynamicShader->setSampler2D("u_BlockTexture", m_blocksRenderTarget->getTexture());
+
+	m_blurHShader->setSampler2D("u_Texture", lighting->m_lightingPass0->getTexture());
 	m_blurHShader->setUniform1i("u_Width", loadAreaWidth * CHUNK_BLOCKS);
 
-	m_blurVShader->setSampler2D("u_Texture", m_lightingPass0->getTexture());
+	m_blurVShader->setSampler2D("u_Texture", lighting->m_lightingPass1->getTexture());
 	m_blurVShader->setUniform1i("u_Height", loadAreaHeight * CHUNK_BLOCKS);
-
+	
 	// Redraw blocks
 	m_reattachAllChunks = true;
 }
@@ -662,7 +669,7 @@ void ChunkManager::redrawLighting(GraphicsContext *context)
 	// Directional light // TODO: Directional lighting cannot be here in the static lighting part
 	m_directionalLightingShader->setUniform1f("u_OffsetY", (m_loadingArea.y0 * CHUNK_BLOCKSF - 32.0f) / (m_loadingArea.getHeight() * CHUNK_BLOCKS));
 	m_directionalLightingShader->setUniform1f("u_Direction", 0.0174532925f * 180.0f * (m_world->getTimeOfDay()->isDay() ? (1140.0f - m_world->getTimeOfDay()->getTime()) : (1860.0f - (m_world->getTimeOfDay()->getTime() >= 1140.0f ? m_world->getTimeOfDay()->getTime() : m_world->getTimeOfDay()->getTime() + 1440.0f))) / 720.0f);
-	context->setRenderTarget(m_staticLightingRenderTarget);
+	context->setRenderTarget(m_blockLightingRenderTarget);
 	context->setShader(m_directionalLightingShader);
 	context->drawRectangle(0.0f, 0.0f, width, height);
 

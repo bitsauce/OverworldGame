@@ -33,7 +33,7 @@ Pawn::Pawn(World *world, const EntityID id) :
 	m_moveSpeed(3.5f),
 	m_maxSpeed(7.5f),
 	m_friction(0.85f),
-	m_pointLight(new Pointlight(world, LightSource::DYNAMIC, Vector2F(0.0f), 3.0f, Color(127)))
+	m_pointLight(new Pointlight(world, LightSource::DYNAMIC, Vector2F(0.0f), 10.0f, Color(127)))
 {
 	// Set body size
 	setSize(24, 48);
