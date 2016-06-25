@@ -7,6 +7,7 @@ class Lighting;
 class OverworldGame;
 class World;
 class CommandLine;
+class Pointlight;
 enum BlockID;
 
 class Debug : public SceneObject
@@ -20,6 +21,9 @@ public:
 
 	void nextBlock(KeyEvent *e);
 	void prevBlock(KeyEvent *e);
+
+	void randomizeLight(KeyEvent *e);
+	void placeLight(KeyEvent *e);
 
 	void setVariable(const string &name, const string &value);
 
@@ -50,7 +54,8 @@ private:
 	// Random
 	Random m_random;
 
-	class Pointlight *m_mousePointlight;
+	// Pointlight
+	Pointlight *m_activePointlight;
 };
 
 #endif // DEBUG_H

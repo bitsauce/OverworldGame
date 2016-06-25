@@ -14,7 +14,7 @@ void BlockEntityItem::equip(Pawn *pawn)
 {
 	if(m_blockEntityID == BLOCK_ENTITY_TORCH)
 	{
-		pawn->m_pointLight->setRadius(25);
+		pawn->m_pointLight->setRadius(40);
 		pawn->m_pointLight->setColor(Color(255, 200, 15, 255));
 	}
 

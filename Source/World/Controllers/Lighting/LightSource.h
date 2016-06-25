@@ -33,7 +33,9 @@ public:
 
 protected:
 	LightSource(World *world, Type type, Vector2F position, float radius, Color color);
+	virtual ~LightSource();
 
+	World *m_world;
 	Vector2F m_position;
 	float m_radius;
 	Color m_color;

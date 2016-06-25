@@ -159,6 +159,14 @@
 			<name>debug_func_12</name>
 			<key>f12</key>
 		</bind>
+		<bind>
+			<name>place_light</name>
+			<key>k</key>
+		</bind>
+		<bind>
+			<name>randomize_light</name>
+			<key>j</key>
+		</bind>
 	</game>
 
 	<!-- CHAT -->

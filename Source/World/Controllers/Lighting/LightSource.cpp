@@ -2,12 +2,18 @@
 #include "World/World.h"
 
 LightSource::LightSource(World *world, Type type, Vector2F position, float radius, Color color) :
+	m_world(world),
 	m_type(type),
 	m_position(position),
 	m_radius(radius),
 	m_color(color)
 {
-	world->getLighting()->addLightSource(this);
+	m_world->getLighting()->addLightSource(this);
+}
+
+LightSource::~LightSource()
+{
+	m_world->getLighting()->removeLightSource(this);
 }
 
 

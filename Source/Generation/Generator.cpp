@@ -60,7 +60,7 @@ BlockID ChunkGenerator::getGroundAt(const int x, const int y, const WorldLayer l
 
 				f *= (math::clamp(y / 1000.0f, 0.0f, 1.0f));
 
-				return (f < 0.1f) ? BLOCK_GRASS : BLOCK_STONE;
+				return BLOCK_GRASS;//(f < 0.1f) ? BLOCK_GRASS : BLOCK_STONE;
 			}
 		}
 		break;

@@ -13,6 +13,7 @@ class Lighting : public SceneObject
 {
 	friend class ChunkManager;
 	friend class Debug;
+	friend class LightSource;
 public:
 	// CONSTRUCTOR
 	Lighting(World *world);
@@ -20,17 +21,12 @@ public:
 
 	// DRAWING
 	void onDraw(DrawEvent *e);
-	
-	void addLightSource(LightSource *lightSource);
 
 private:
 	World *m_world;
 
 	bool m_enabled;
 	bool m_redraw;
-
-	void setLightMapResolution(const int size);
-	void drawLight(LightSource *light, RenderTarget2D *dest, GraphicsContext *context);
 
 	RenderTarget2D *m_lightingPass0;
 	RenderTarget2D *m_lightingPass1;
@@ -45,6 +41,12 @@ private:
 	int m_lightMapSize;
 
 	list<LightSource*> m_lightSources;
+
+	void addLightSource(LightSource *lightSource);
+	void removeLightSource(LightSource *lightSource);
+
+	void setLightMapResolution(const int size);
+	void drawLight(LightSource *light, RenderTarget2D *dest, GraphicsContext *context);
 };
 
 #endif // LIGHTING_H

@@ -30,6 +30,11 @@ void Lighting::addLightSource(LightSource *source)
 	m_redraw = true;
 }
 
+void Lighting::removeLightSource(LightSource *lightSource)
+{
+	m_lightSources.remove(lightSource);
+}
+
 void Lighting::onDraw(DrawEvent *e)
 {
 	if(!m_enabled) return;
@@ -118,8 +123,8 @@ void Lighting::drawLight(LightSource *light, RenderTarget2D *dest, GraphicsConte
 	m_shadowRenderShader->setUniform2f("u_Resolution", m_lightMapSize, m_lightMapSize);
 	Color color = light->getColor();
 	m_shadowRenderShader->setUniform3f("u_Color", color.getR() / 255.0f, color.getG() / 255.0f, color.getB() / 255.0f);
-	m_shadowRenderShader->setUniform1f("u_SoftShadows", 1.0f);
 	m_shadowRenderShader->setSampler2D("u_Texture", m_shadowMapRenderTarget->getTexture());
+	m_shadowRenderShader->setSampler2D("u_OccluderTexture", m_occludersRenderTarget->getTexture());
 	context->drawRectangle(position - Vector2F(radius * 0.5f), Vector2F(radius));
 
 	// Reset

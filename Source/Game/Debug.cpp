@@ -36,7 +36,7 @@ Debug::Debug(OverworldGame *game) :
 	m_blockPainterEnabled(false),
 	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Debug")),
 	m_blockPainterTexture(new Texture2D()),
-	m_mousePointlight(0)
+	m_activePointlight(0)
 {
 	// Set font color
 	m_font->setColor(Color(255, 255, 255, 255));
@@ -88,6 +88,11 @@ void Debug::debugFunction(KeyEvent *e)
 		case SAUCE_KEY_F6:
 		{
 			m_debugLighting = !m_debugLighting;
+			if(!m_debugLighting)
+			{
+				delete m_activePointlight;
+				m_activePointlight = 0;
+			}
 		}
 		break;
 
@@ -190,11 +195,6 @@ void Debug::onDraw(DrawEvent *e)
 {
 	if(!m_enabled) return;
 
-	if(m_mousePointlight)
-	{
-		m_mousePointlight->setPosition(Vector2F(m_world->getCamera()->getInputPosition()) / BLOCK_PXF);
-	}
-
 	GraphicsContext *context = e->getGraphicsContext();
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
 	spriteBatch->end();
@@ -241,7 +241,6 @@ void Debug::onDraw(DrawEvent *e)
 	m_font->draw(spriteBatch, Vector2F(0.0f), drawString);
 
 	m_font->draw(spriteBatch, Vector2F((float) context->getWidth(), 0.0f), DEBUG_FUNCTIONS_STRING, FONT_ALIGN_RIGHT);
-
 
 	// Block painter
 	if(m_blockPainterEnabled)
@@ -337,6 +336,12 @@ void Debug::onDraw(DrawEvent *e)
 	// Debug lighting
 	if(m_debugLighting)
 	{
+		// Move active pointlight
+		if(m_activePointlight)
+		{
+			m_activePointlight->setPosition(Vector2F(m_world->getCamera()->getInputPosition()) / BLOCK_PXF);
+		}
+
 		// Show light sources
 		for(list<LightSource*>::iterator itr = m_world->getLighting()->m_lightSources.begin(); itr != m_world->getLighting()->m_lightSources.end(); ++itr)
 		{
@@ -358,11 +363,6 @@ void Debug::onDraw(DrawEvent *e)
 void Debug::toggle()
 {
 	m_enabled = !m_enabled;
-
-	if(m_enabled)
-	{
-		m_mousePointlight = new Pointlight(m_world, LightSource::DYNAMIC, m_world->getCamera()->getInputPosition(), 40, Color(255));
-	}
 }
 
 void Debug::nextBlock(KeyEvent *e)
@@ -384,6 +384,28 @@ void Debug::prevBlock(KeyEvent *e)
 		{
 			m_block = BlockID(BLOCK_COUNT - 1);
 		}
+	}
+}
+
+void Debug::randomizeLight(KeyEvent *e)
+{
+	if(m_enabled && m_debugLighting && e->getType() == KeyEvent::DOWN)
+	{
+		if(m_activePointlight == 0)
+		{
+			m_activePointlight = new Pointlight(m_world, LightSource::DYNAMIC, m_world->getCamera()->getInputPosition() / BLOCK_PXF, 0, Color());
+		}
+		Random random;
+		m_activePointlight->setColor(Color(random.nextInt(255), random.nextInt(255), random.nextInt(255), 255));
+		m_activePointlight->setRadius(random.nextInt(10, 100));
+	}
+}
+
+void Debug::placeLight(KeyEvent *e)
+{
+	if(m_enabled && m_debugLighting && e->getType() == KeyEvent::DOWN)
+	{
+		m_activePointlight = 0;
 	}
 }
 
