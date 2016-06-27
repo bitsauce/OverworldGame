@@ -14,8 +14,8 @@ void BlockEntityItem::equip(Pawn *pawn)
 {
 	if(m_blockEntityID == BLOCK_ENTITY_TORCH)
 	{
-		pawn->m_pointLight->setRadius(40);
-		pawn->m_pointLight->setColor(Color(255, 200, 15, 255));
+		pawn->m_pointLight->setRadius(34.0f);
+		pawn->m_pointLight->setColor(Color(216, 206, 64, 255));
 	}
 
 	pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, getIconTexture());

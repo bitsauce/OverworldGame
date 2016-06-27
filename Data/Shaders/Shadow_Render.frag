@@ -5,7 +5,7 @@ out vec4 out_FragColor;
 
 uniform sampler2D u_Texture;
 uniform sampler2D u_OccluderTexture;
-uniform vec2 u_Resolution;
+//uniform vec2 u_Resolution;
 uniform vec3 u_Color;
 
 // Sample from the distance map

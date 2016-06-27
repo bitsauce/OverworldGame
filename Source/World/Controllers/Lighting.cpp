@@ -120,7 +120,7 @@ void Lighting::drawLight(LightSource *light, RenderTarget2D *dest, GraphicsConte
 	context->enable(GraphicsContext::BLEND);
 	context->setBlendState(BlendState::PRESET_ADDITIVE);
 	context->setShader(m_shadowRenderShader);
-	m_shadowRenderShader->setUniform2f("u_Resolution", m_lightMapSize, m_lightMapSize);
+	//m_shadowRenderShader->setUniform2f("u_Resolution", m_lightMapSize, m_lightMapSize);
 	Color color = light->getColor();
 	m_shadowRenderShader->setUniform3f("u_Color", color.getR() / 255.0f, color.getG() / 255.0f, color.getB() / 255.0f);
 	m_shadowRenderShader->setSampler2D("u_Texture", m_shadowMapRenderTarget->getTexture());
