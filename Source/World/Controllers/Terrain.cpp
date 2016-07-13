@@ -23,7 +23,7 @@ Terrain::~Terrain()
 }
 
 // BLOCKS
-bool Terrain::setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID blockID, const bool replace)
+bool Terrain::setBlockAt(const int x, const int y, const WorldLayer layer, const BlockData *blockData, const bool replace)
 {
 	/*if(Connection::getInstance()->isServer())
 	{
@@ -52,33 +52,33 @@ bool Terrain::setBlockAt(const int x, const int y, const WorldLayer layer, const
 	if(!replace)
 	{
 		// Check if we can place a block here
-		if(block != BLOCK_EMPTY || (layer == WORLD_LAYER_MIDDLE && block.getBlockEntity()))
+		if(block.getBlockData() != 0 || (layer == WORLD_LAYER_MIDDLE && block.getBlockEntity()))
 		{
 			return false;
 		}
 	}
 
-	return chunk->setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer, blockID);
+	return chunk->setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer, blockData);
 }
 
-BlockID Terrain::getBlockAt(const int x, const int y, const WorldLayer layer)
+const BlockData *Terrain::getBlockAt(const int x, const int y, const WorldLayer layer)
 {
 	return m_chunkManager->getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF), true)->getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
 }
 
 bool Terrain::isBlockAt(const int x, const int y, const WorldLayer layer)
 {
-	return getBlockAt(x, y, layer) != BLOCK_EMPTY;
+	return getBlockAt(x, y, layer) != 0;
 }
 
 bool Terrain::removeBlockAt(const int x, const int y, const WorldLayer layer, const bool createItem)
 {
-	BlockID blockID = getBlockAt(x, y, layer);
-	if(setBlockAt(x, y, layer, BLOCK_EMPTY, true))
+	const BlockData *block = getBlockAt(x, y, layer);
+	if(setBlockAt(x, y, layer, 0, true))
 	{
 		if(createItem)
 		{
-			ItemDrop *itemDrop = new ItemDrop(m_world, BlockData::get(blockID)->getItem());
+			ItemDrop *itemDrop = new ItemDrop(m_world, block->getItem());
 			itemDrop->setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
 		}
 		return true;
@@ -108,7 +108,7 @@ BlockEntity *Terrain::createBlockEntityAt(const int x, const int y, const BlockE
 
 				if(data->getLayer() == WORLD_LAYER_MIDDLE)
 				{
-					chunk->setBlockAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), data->getLayer(), BLOCK_EMPTY);
+					chunk->setBlockAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), data->getLayer(), 0);
 				}
 			}
 		}

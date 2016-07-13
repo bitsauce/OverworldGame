@@ -45,6 +45,9 @@ void BlockEntityData::init()
 	Pixmap blockDataPixmap(BLOCK_ENTITY_COUNT, 2);
 	uchar pixelData[4];
 
+	// Create block entity texture atlas
+	s_textureAtlas = new TextureAtlas();
+
 	// Load block entity data
 	BlockEntityDescriptor *data = &g_blockEntityData[0];
 	vector<Pixmap> pixmaps(BLOCK_ENTITY_COUNT);
@@ -53,7 +56,7 @@ void BlockEntityData::init()
 		// Create block entity data objects
 		Pixmap pixmap(data->texturePath);
 		s_data[data->id] = new BlockEntityData(data->id, data->name, pixmap, data->width, data->height, data->frameCount, data->layer, data->placement, data->factory);
-		pixmaps[data->id] = pixmap;
+		s_textureAtlas->add(util::intToStr(data->id), pixmap);
 
 		pixelData[0] = data->width * BLOCK_PXF;
 		pixelData[1] = data->height * BLOCK_PXF;
@@ -65,13 +68,11 @@ void BlockEntityData::init()
 		data++;
 	}
 
-	// Create block entity texture atlas
-	s_textureAtlas = new TextureAtlas(pixmaps);
-
 	// Fill block entity UV data
 	for(uint i = 0; i < BLOCK_ENTITY_COUNT; ++i)
 	{
-		Vector2I pos = s_textureAtlas->get(i).uv0 * s_textureAtlas->getTexture()->getSize();
+		// TODO: Old code
+		Vector2I pos = s_textureAtlas->get(util::intToStr(i)).uv0 * s_textureAtlas->getTexture()->getSize();
 
 		pixelData[0] = uchar(pos.x & 0xFF);
 		pixelData[1] = uchar((pos.x >> 8) & 0xFF);

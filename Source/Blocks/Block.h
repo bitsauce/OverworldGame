@@ -10,14 +10,14 @@ class ChunkBlock
 {
 public:
 	ChunkBlock() :
-		m_blockData(BlockData::get(BLOCK_EMPTY)),
+		m_blockData(0),
 		m_blockEntity(0)
 	{
 	}
 
-	void setBlockID(const BlockID id)
+	void setBlock(const BlockData *block)
 	{
-		m_blockData = BlockData::get(id);
+		m_blockData = block;
 	}
 
 	void setBlockEntity(BlockEntity *entity)
@@ -30,12 +30,7 @@ public:
 		m_blockData = data;
 	}
 
-	BlockID getBlockID() const
-	{
-		return m_blockData->getID();
-	}
-
-	BlockData *getBlockData() const
+	const BlockData *getBlockData() const
 	{
 		return m_blockData;
 	}
@@ -50,22 +45,17 @@ public:
 		return m_blockEntity;
 	}
 
-	operator BlockData* () const
+	operator const BlockData* () const
 	{
 		return m_blockData;
 	}
 
-	operator BlockID () const
-	{
-		return m_blockData->getID();
-	}
-
 	bool isEmpty() const
 	{
-		return *this == BLOCK_EMPTY && m_blockEntity == 0;
+		return m_blockData == 0 && m_blockEntity == 0;
 	}
 
 private:
-	BlockData *m_blockData;
+	const BlockData *m_blockData;
 	BlockEntity *m_blockEntity;
 };

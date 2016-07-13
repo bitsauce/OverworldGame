@@ -1,18 +1,28 @@
 #include "BlockData.h"
 #include "World/World.h"
 
-map<BlockID, BlockData*> BlockData::s_data;
+map<BlockID, BlockData*> BlockData::s_idToData;
+map<string, BlockData*> BlockData::s_nameToData;
 TextureAtlas *BlockData::s_textureAtlas = nullptr;
 Resource<Texture2D> BlockData::s_dataTexture = nullptr;
 
-BlockData *BlockData::getByName(const string &name)
+BlockData *BlockData::get(const BlockID id)
 {
-	for(map<BlockID, BlockData*>::iterator itr = s_data.begin(); itr != s_data.end(); ++itr)
+	if(id < 1) return 0;
+	map<BlockID, BlockData*>::iterator itr;
+	if((itr = s_idToData.find(id)) != s_idToData.end())
 	{
-		if(itr->second && itr->second->m_name == name)
-		{
-			return itr->second;
-		}
+		return itr->second;
+	}
+	return 0;
+}
+
+BlockData *BlockData::get(const string &name)
+{
+	map<string, BlockData*>::iterator itr;
+	if((itr = s_nameToData.find(name)) != s_nameToData.end())
+	{
+		return itr->second;
 	}
 	return 0;
 }
@@ -33,6 +43,13 @@ void BlockData::init()
 
 	// Load block data from file
 	vector<BlockDataDesc> blockDataDesc;
+
+	{
+		// Add the "empty" block
+		BlockDataDesc desc = { 0, "null_block", "Sprites/Blocks/Empty.png", 0, 0.0f, 1 };
+		blockDataDesc.push_back(desc);
+	}
+
 	if(util::fileExists("BlockData.xml"))
 	{
 		tinyxml2::XMLDocument doc;
@@ -60,7 +77,7 @@ void BlockData::init()
 
 			if(id && name && image && item && opacity && frames)
 			{
-				BlockDataDesc desc = { util::strToInt(id->GetText()), name->GetText(), image->GetText(), 0, util::strToFloat(opacity->GetText()), util::strToInt(frames->GetText()) };
+				BlockDataDesc desc = { util::strToInt(id->GetText()), name->GetText(), image->GetText(), 0, util::strToFloat(opacity->GetText()), (uint)util::strToInt(frames->GetText()) };
 				blockDataDesc.push_back(desc);
 			}
 			else
@@ -88,19 +105,21 @@ void BlockData::init()
 		THROW("BlockData.xml is missing!");
 	}
 
+	// Create block atlas
+	s_textureAtlas = new TextureAtlas();
+
 	// Block data pixmap
 	Pixmap blockDataPixmap(blockDataDesc.size(), 2);
 	uchar pixelData[4];
 
-	vector<Pixmap> pixmaps(blockDataDesc.size());
 	for(int i = 0; i < blockDataDesc.size(); i++)
 	{
 		BlockDataDesc *blockData = &blockDataDesc[i];
 
 		// Create block data object
 		Pixmap pixmap(blockData->imagePath, true);
-		s_data[blockData->id] = new BlockData(blockData->id, blockData->name, pixmap, blockData->itemID, blockData->opacity);
-		pixmaps[blockData->id] = pixmap;
+		s_nameToData[blockData->name] = s_idToData[blockData->id] = new BlockData(blockData->id, blockData->name, pixmap, blockData->itemID, blockData->opacity);
+		s_textureAtlas->add(util::intToStr(blockData->id), pixmap);
 
 		// Store meta data
 		pixelData[0] = blockData->frameCount;
@@ -108,18 +127,16 @@ void BlockData::init()
 		pixelData[2] = 0;
 		pixelData[3] = 0;
 		blockDataPixmap.setPixel(blockData->id, 1, pixelData);
-
-		// Next block desc
-		blockData++;
 	}
 
-	// Create block atlas
-	s_textureAtlas = new TextureAtlas(pixmaps, 0);
+	s_textureAtlas->create();
 
 	// Fill block UV data
-	for(int id = 0; id < blockDataDesc.size(); ++id)
+	for(int i = 0; i < blockDataDesc.size(); ++i)
 	{
-		Vector2I pos = s_textureAtlas->get(id).uv0 * s_textureAtlas->getTexture()->getSize();
+		BlockDataDesc *blockData = &blockDataDesc[i];
+
+		Vector2I pos = s_textureAtlas->get(util::intToStr(blockData->id)).uv0 * s_textureAtlas->getTexture()->getSize();
 
 		pixelData[0] = uchar(pos.x & 0xFF);
 		pixelData[1] = uchar((pos.x >> 8) & 0xFF);
@@ -127,7 +144,7 @@ void BlockData::init()
 		pixelData[2] = uchar(pos.y & 0xFF);
 		pixelData[3] = uchar((pos.y >> 8) & 0xFF);
 
-		blockDataPixmap.setPixel(id, 0, pixelData);
+		blockDataPixmap.setPixel(blockData->id, 0, pixelData);
 	}
 	s_dataTexture = Resource<Texture2D>(new Texture2D(blockDataPixmap));
 	s_dataTexture->setFiltering(Texture2D::NEAREST);
@@ -140,9 +157,4 @@ BlockData::BlockData(const BlockID id, const string &name, const Pixmap &pixmap,
 	m_item(item),
 	m_opacity(opacity)
 {
-}
-
-BlockData *BlockData::get(const BlockID block)
-{
-	return s_data[block];
 }

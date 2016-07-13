@@ -58,7 +58,7 @@ void Axe::update(Pawn *pawn, const float delta)
 		m_mineCounter -= delta;
 		if(m_mineCounter <= 0.0f)
 		{
-			BlockID blockID = terrain->getBlockAt(position.x, position.y, WORLD_LAYER_BACK);
+			const BlockData *block = terrain->getBlockAt(position.x, position.y, WORLD_LAYER_BACK);
 			terrain->removeBlockAt(position.x, position.y, WORLD_LAYER_BACK);
 
 			// If the block removed was a wood type block

@@ -50,9 +50,9 @@ void Client::update()
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 				int x; bitStream.Read(x);
 				int y; bitStream.Read(y);
-				BlockID block; bitStream.Read(block);
+				BlockID blockID; bitStream.Read(blockID);
 				WorldLayer layer; bitStream.Read(layer);
-				m_game->getWorld()->getTerrain()->setBlockAt(x, y, layer, block, true);
+				m_game->getWorld()->getTerrain()->setBlockAt(x, y, layer, BlockData::get(blockID), true);
 			}
 			break;
 

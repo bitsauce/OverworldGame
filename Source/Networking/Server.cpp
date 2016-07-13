@@ -18,7 +18,7 @@
 #include "Entities/Mobs/Zombie.h"
 #include "Game/Game.h"
 #include "Gui/GameOverlay/GameOverlay.h"
-#include "Items/ItemData.h"""
+#include "Items/ItemData.h"
 
 Server::Server(OverworldGame * game, const ushort port) :
 	Connection(true),
@@ -148,9 +148,9 @@ void Server::onTick(TickEvent *e)
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 				int x; bitStream.Read(x);
 				int y; bitStream.Read(y);
-				BlockID block; bitStream.Read(block);
+				BlockID blockID; bitStream.Read(blockID);
 				WorldLayer layer; bitStream.Read(layer);
-				m_game->getWorld()->getTerrain()->setBlockAt(x, y, layer, block, true);
+				m_game->getWorld()->getTerrain()->setBlockAt(x, y, layer, BlockData::get(blockID), true);
 			}
 			break;
 

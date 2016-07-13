@@ -37,8 +37,8 @@ private:
 	int getX() const { return m_x; }
 	int getY() const { return m_y; }
 
-	bool setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID blockID);
-	BlockID getBlockAt(const int x, const int y, const WorldLayer layer) const;
+	bool setBlockAt(const int x, const int y, const WorldLayer layer, const BlockData *block);
+	const BlockData *getBlockAt(const int x, const int y, const WorldLayer layer) const;
 	ChunkBlock getChunkBlockAt(const int x, const int y, const WorldLayer layer) const;
 
 	void addBlockEntity(BlockEntity *blockEntity);

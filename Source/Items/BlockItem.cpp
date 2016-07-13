@@ -37,7 +37,7 @@ BlockItem::BlockItem(OverworldGame *game, const ItemDataDesc *desc) :
 	if(desc->userData.find("block") != desc->userData.end())
 	{
 		const string blockName = desc->userData.at("block");
-		m_blockData = BlockData::getByName(blockName);
+		m_blockData = BlockData::get(blockName);
 		if(!m_blockData)
 		{
 			LOG("Block item 'block' (says: %s) could not be found", blockName.c_str());
@@ -57,7 +57,7 @@ void BlockItem::use(Pawn *pawn, const float delta)
 	blockPos.y = (int) floor(blockPos.y/BLOCK_PXF);
 
 	// Set block if not occupied
-	if(m_terrain->setBlockAt(blockPos.x, blockPos.y, m_layer, m_blockData->getID()))
+	if(m_terrain->setBlockAt(blockPos.x, blockPos.y, m_layer, m_blockData))
 	{
 		// Remove item from player inventory
 		pawn->getCurrentItem()->dec();

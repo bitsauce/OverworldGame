@@ -54,7 +54,7 @@ void Chunk::load(int chunkX, int chunkY, ChunkBlock *blocks)
 
 	// Load block and shadow textures
 	Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS);
-	uchar pixel[4];
+	uchar pixel[4] = { 0, 0, 0, 0 };
 	for(int y = 0; y < CHUNK_BLOCKS; y++)
 	{
 		for(int x = 0; x < CHUNK_BLOCKS; x++)
@@ -62,9 +62,12 @@ void Chunk::load(int chunkX, int chunkY, ChunkBlock *blocks)
 			float shadow = 1.0f;
 			for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 			{
-				BlockData *data = m_blocks[BLOCK_INDEX(x, y, z)].getBlockData();
-				pixel[z] = (uchar) data->getID();
-				shadow -= data->getOpacity();
+				const BlockData *data = m_blocks[BLOCK_INDEX(x, y, z)].getBlockData();
+				if(data)
+				{
+					pixel[z] = (uchar) data->getID();
+					shadow -= data->getOpacity();
+				}
 			}
 			pixel[3] = uchar(255 * max(shadow, 0.0f));
 			pixmap.setPixel(x, y, pixel);
@@ -114,11 +117,11 @@ void Chunk::unload()
 	}
 }
 
-bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID blockID)
+bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const BlockData *newBlock)
 {
 	// Check if we need to do anything
 	const ChunkBlock block = m_blocks[BLOCK_INDEX(x, y, layer)];
-	if(block != blockID)
+	if(block != newBlock)
 	{
 		if(m_neighborChunks[0] && x == 0 && y == 0)                               { m_neighborChunks[0]->m_sorted = m_neighborChunks[0]->m_attached = false; }
 		if(m_neighborChunks[1] && y == 0)                                         { m_neighborChunks[1]->m_sorted = m_neighborChunks[1]->m_attached = false; }
@@ -130,7 +133,7 @@ bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const B
 		if(m_neighborChunks[7] && x == 0)                                         { m_neighborChunks[7]->m_sorted = m_neighborChunks[7]->m_attached = false; }
 
 		// Set the block value
-		m_blocks[BLOCK_INDEX(x, y, layer)].setBlockID(blockID);
+		m_blocks[BLOCK_INDEX(x, y, layer)].setBlock(newBlock);
 		m_sorted = m_attached = false; m_modified = true; // Mark chunk as modified
 		
 		// Get neighboring block entities
@@ -162,13 +165,16 @@ bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const B
 		}
 
 		// Update block texture
-		uchar pixel[4];
+		uchar pixel[4] = { 0, 0, 0, 0 };
 		float shadow = 1.0f;
 		for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 		{
-			BlockData *data = m_blocks[BLOCK_INDEX(x, y, z)].getBlockData();
-			pixel[z] = (uchar) data->getID();
-			shadow -= data->getOpacity();
+			const BlockData *data = m_blocks[BLOCK_INDEX(x, y, z)].getBlockData();
+			if(data)
+			{
+				pixel[z] = (uchar) data->getID();
+				shadow -= data->getOpacity();
+			}
 		}
 		pixel[3] = (uchar) (255 * max(shadow, 0.0f));
 		m_blockTexture->updatePixmap(x, y, Pixmap(1, 1, pixel));
@@ -178,9 +184,9 @@ bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const B
 	return false; // Nothing changed
 }
 
-BlockID Chunk::getBlockAt(const int x, const int y, const WorldLayer layer) const
+const BlockData *Chunk::getBlockAt(const int x, const int y, const WorldLayer layer) const
 {
-	return m_blocks[BLOCK_INDEX(x, y, layer)];
+	return m_blocks[BLOCK_INDEX(x, y, layer)].getBlockData();
 }
 
 ChunkBlock Chunk::getChunkBlockAt(const int x, const int y, const WorldLayer layer) const

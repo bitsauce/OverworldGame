@@ -1,4 +1,5 @@
 <blocks>
+	<!--
 	<b>
 		<id>0</id>
 		<name>empty_block</name>
@@ -7,6 +8,7 @@
 		<opacity>0.0</opacity>
 		<frames>1</frames>
 	</b>
+	-->
 	<b>
 		<id>1</id>
 		<name>grass_block</name>

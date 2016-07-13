@@ -83,7 +83,7 @@ enum EntityID
  */
 
 typedef int BlockID;
-#define BLOCK_EMPTY 0
+//#define BLOCK_EMPTY 0
 #define BLOCK_GRASS 1
 #define BLOCK_STONE 3
 #define BLOCK_DIRT_BACK 4
@@ -112,32 +112,6 @@ enum BlockEntityID
 
 typedef int ItemID;
 #define ITEM_NONE 0
-
-/*enum ItemID
-{
-	ITEM_NONE,
-	
-	ITEM_BLOCK_GRASS,
-	ITEM_BLOCK_DIRT,
-	ITEM_BLOCK_DIRT_BACK,
-	ITEM_BLOCK_STONE,
-	ITEM_BLOCK_OAK_WOOD,
-	ITEM_BLOCK_OAK_LEAVES,
-
-	ITEM_PICKAXE_IRON,
-
-	ITEM_AXE_IRON,
-
-	ITEM_TORCH,
-	ITEM_CRAFTING_BENCH,
-	ITEM_RED_CURRANT_BUSH,
-
-	ITEM_BOW_WOODEN,
-
-	ITEM_ARROW,
-
-	ITEM_COUNT
-};*/
 
 /**
  * \enum	WorldLayer

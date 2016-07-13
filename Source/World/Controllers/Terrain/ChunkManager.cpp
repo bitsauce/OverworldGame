@@ -95,11 +95,11 @@ void ChunkManager::clear()
 void ChunkManager::saveBlockData(FileWriter &file, ChunkBlock *blockData)
 {
 	// Write blocks to stream
-	BlockID currentBlock = blockData[0];
+	BlockID currentBlock = blockData[0].getBlockData()->getID();
 	int length = 1;
 	for(int i = 1; i < CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT; ++i)
 	{
-		BlockID block = blockData[i];
+		BlockID block = blockData[i].getBlockData()->getID();
 		if(block == currentBlock)
 		{
 			length++;
@@ -127,7 +127,7 @@ void ChunkManager::loadBlockData(FileReader &file, ChunkBlock *blockData)
 		file >> length;
 		for(int i = 0; i < length; ++i)
 		{
-			blockData[pos + i].setBlockID((BlockID) block);
+			blockData[pos + i].setBlock(BlockData::get(block));
 		}
 		pos += length;
 	}

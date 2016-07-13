@@ -5,12 +5,14 @@
 
 class BlockData
 {
+	friend class Debug;
 public:
-	// Constructors
+	// Constructor
 	BlockData(const BlockID id, const string &name, const Pixmap &pixmap, const ItemID item, const float opacity);
 	
-	// Data getters
+	// Getters
 	BlockID getID() const { return m_id; }
+	string getName() const { return m_name; }
 	ItemID getItem() const { return m_item; }
 	Pixmap getPixmap() const { return m_pixmap; }
 	float getOpacity() const { return m_opacity; }
@@ -18,7 +20,7 @@ public:
 	// Static functions
 	static void init();
 	static BlockData *get(const BlockID id);
-	static BlockData *getByName(const string &name);
+	static BlockData *get(const string &name);
 
 	static TextureAtlas *getTextureAtlas()
 	{
@@ -29,16 +31,6 @@ public:
 	{
 		return s_dataTexture;
 	}
-
-	static map<BlockID, BlockData*>::const_iterator begin()
-	{
-		return s_data.cbegin();
-	}
-	
-	static map<BlockID, BlockData*>::const_iterator end()
-	{
-		return s_data.cend();
-	}
 	
 private:
 	const string m_name;
@@ -48,7 +40,8 @@ private:
 	const float m_opacity;
 
 	// Static data
-	static map<BlockID, BlockData*> s_data;
+	static map<BlockID, BlockData*> s_idToData;
+	static map<string, BlockData*> s_nameToData;
 	static TextureAtlas *s_textureAtlas;
 	static Resource<Texture2D> s_dataTexture;
 };

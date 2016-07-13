@@ -29,7 +29,7 @@
 Debug::Debug(OverworldGame *game) :
 	m_game(game),
 	m_world(game->getWorld()),
-	m_block(BlockData::begin()),
+	m_block(BlockData::s_idToData.cbegin()),
 	m_enabled(false),
 	m_debugChunkLoader(false),
 	m_debugLighting(false),
@@ -185,7 +185,7 @@ void Debug::onTick(TickEvent *e)
 				(int) floor(m_world->getCamera()->getInputPosition().x / BLOCK_PXF),
 				(int) floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF),
 				layer,
-				m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) ? m_block->second->getID() : BLOCK_EMPTY,
+				m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) ? m_block->second : 0,
 				true);
 		}
 	}
@@ -206,7 +206,29 @@ void Debug::onDraw(DrawEvent *e)
 	Vector2F inputPosition = m_world->getCamera()->getInputPosition();
 	setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
 	setVariable("Zoom", util::intToStr(int(m_world->getCamera()->getZoomLevel() * 100)) + "%");
-	setVariable("Block Under Cursor", util::intToStr(m_world->getTerrain()->getBlockAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), WORLD_LAYER_MIDDLE)) + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
+	{
+		const BlockData *blocks[WORLD_LAYER_COUNT];
+		const int blockX = (int) floor(inputPosition.x / BLOCK_PXF);
+		const int blockY = (int) floor(inputPosition.y / BLOCK_PXF);
+
+		blocks[WORLD_LAYER_BACK] = m_world->getTerrain()->getBlockAt(blockX, blockY, WORLD_LAYER_BACK);
+		blocks[WORLD_LAYER_MIDDLE] = m_world->getTerrain()->getBlockAt(blockX, blockY, WORLD_LAYER_MIDDLE);
+		blocks[WORLD_LAYER_FRONT] = m_world->getTerrain()->getBlockAt(blockX, blockY, WORLD_LAYER_FRONT);
+
+		stringstream ss;
+		if(!blocks[WORLD_LAYER_BACK] && !blocks[WORLD_LAYER_MIDDLE] && !blocks[WORLD_LAYER_FRONT])
+		{
+			ss << "None";
+		}
+		else
+		{
+			if(blocks[WORLD_LAYER_BACK]) { ss << "Back: " << blocks[WORLD_LAYER_BACK]->getName() << " "; }
+			if(blocks[WORLD_LAYER_MIDDLE]) { ss << "Middle: " << blocks[WORLD_LAYER_MIDDLE]->getName() << " "; }
+			if(blocks[WORLD_LAYER_FRONT]) { ss << "Front: " << blocks[WORLD_LAYER_FRONT]->getName() << " "; }
+			ss << "at " << blockX << ", " << blockY;
+		}
+		setVariable("Blocks Under Cursor", ss.str());
+	}
 	
 	{
 		BlockEntity *blockEntity = m_world->getTerrain()->getBlockEntityAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), WORLD_LAYER_MIDDLE);
@@ -369,9 +391,9 @@ void Debug::nextBlock(KeyEvent *e)
 {
 	if(m_enabled && e->getType() == KeyEvent::DOWN)
 	{
-		if(m_block++ == BlockData::end())
+		if(m_block++ == BlockData::s_idToData.cend())
 		{
-			m_block = BlockData::begin();
+			m_block = BlockData::s_idToData.cbegin();
 		}
 	}
 }
@@ -380,9 +402,9 @@ void Debug::prevBlock(KeyEvent *e)
 {
 	if(m_enabled && e->getType() == KeyEvent::DOWN)
 	{
-		if(m_block == BlockData::begin())
+		if(m_block == BlockData::s_idToData.cbegin())
 		{
-			m_block = BlockData::end();
+			m_block = BlockData::s_idToData.cend();
 		}
 		m_block--;
 	}
