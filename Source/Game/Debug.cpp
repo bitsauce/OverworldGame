@@ -29,7 +29,7 @@
 Debug::Debug(OverworldGame *game) :
 	m_game(game),
 	m_world(game->getWorld()),
-	m_block(BLOCK_GRASS),
+	m_block(BlockData::begin()),
 	m_enabled(false),
 	m_debugChunkLoader(false),
 	m_debugLighting(false),
@@ -185,7 +185,7 @@ void Debug::onTick(TickEvent *e)
 				(int) floor(m_world->getCamera()->getInputPosition().x / BLOCK_PXF),
 				(int) floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF),
 				layer,
-				m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) ? m_block : BLOCK_EMPTY,
+				m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) ? m_block->second->getID() : BLOCK_EMPTY,
 				true);
 		}
 	}
@@ -245,8 +245,8 @@ void Debug::onDraw(DrawEvent *e)
 	// Block painter
 	if(m_blockPainterEnabled)
 	{
-		m_blockPainterTexture->updatePixmap(BlockData::get(m_block)->getPixmap());
-		spriteBatch->drawText(Vector2F(5.0f, context->getHeight() - 48.0f), "Current block:   (" + util::intToStr(m_block) + ")\n" + "Current layer: " + (m_game->getInputManager()->getKeyState(SAUCE_KEY_LCTRL) ? "BACK" : (m_game->getInputManager()->getKeyState(SAUCE_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font.get());
+		m_blockPainterTexture->updatePixmap(m_block->second->getPixmap());
+		spriteBatch->drawText(Vector2F(5.0f, context->getHeight() - 48.0f), "Current block:   (" + util::intToStr(m_block->second->getID()) + ")\n" + "Current layer: " + (m_game->getInputManager()->getKeyState(SAUCE_KEY_LCTRL) ? "BACK" : (m_game->getInputManager()->getKeyState(SAUCE_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font.get());
 		Sprite blockSprite(m_blockPainterTexture, RectF(m_font->getStringWidth("Current block:"), context->getHeight() - 60.0f, 32.0f, 32.0f), Vector2F(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 1.0f / 3.0f, 1.0f, 1.0f));
 		spriteBatch->drawSprite(blockSprite);
 	}
@@ -369,9 +369,9 @@ void Debug::nextBlock(KeyEvent *e)
 {
 	if(m_enabled && e->getType() == KeyEvent::DOWN)
 	{
-		if((m_block = BlockID(m_block + 1)) >= BLOCK_COUNT)
+		if(m_block++ == BlockData::end())
 		{
-			m_block = BlockID(BLOCK_EMPTY + 1);
+			m_block = BlockData::begin();
 		}
 	}
 }
@@ -380,10 +380,11 @@ void Debug::prevBlock(KeyEvent *e)
 {
 	if(m_enabled && e->getType() == KeyEvent::DOWN)
 	{
-		if((m_block = BlockID(m_block - 1)) <= BLOCK_EMPTY)
+		if(m_block == BlockData::begin())
 		{
-			m_block = BlockID(BLOCK_COUNT - 1);
+			m_block = BlockData::end();
 		}
+		m_block--;
 	}
 }
 

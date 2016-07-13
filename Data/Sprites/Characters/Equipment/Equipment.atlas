@@ -1,0 +1,47 @@
+
+Equipment.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+BlockDirt
+  rotate: false
+  xy: 2, 28
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BlockDirtBack
+  rotate: false
+  xy: 36, 28
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BlockGrass
+  rotate: false
+  xy: 70, 28
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BlockOakLeaves
+  rotate: false
+  xy: 104, 28
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+BlockOakWood
+  rotate: false
+  xy: 2, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+BlockStone
+  rotate: false
+  xy: 138, 28
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

@@ -4,6 +4,8 @@
 #include "Animation/Animation.h"
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
+#include "Animation/Slot.h"
+#include "Animation/Attachment.h"
 
 #include "DynamicEntity.h"
 
@@ -53,6 +55,22 @@ Humanoid::Humanoid() :
 	{
 		m_renderPart[i] = false;
 	}
+
+	// Set default appearance
+	m_appearance[HEAD] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Head");
+	m_appearance[ARM_LEFT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Left_Arm");
+	m_appearance[ARM_RIGHT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Right_Arm");
+	m_appearance[TORSO] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Torso");
+	m_appearance[THIGH_LEFT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Left_Thigh");
+	m_appearance[THIGH_RIGHT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Right_Thigh");
+	m_appearance[SHOULDER_LEFT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Left_Shoulder");
+	m_appearance[SHOULDER_RIGHT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Right_Shoulder");
+	m_appearance[HIPS] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Hips");
+	m_appearance[LEG_LEFT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Left_Leg");
+	m_appearance[LEG_RIGHT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Right_Leg");
+
+	Attachment *att = new Attachment();
+	m_skeleton->findSlot("Right_Hand")->setAttachment(att);
 }
 
 Humanoid::~Humanoid()
@@ -64,18 +82,18 @@ string Humanoid::getBodyPartName(const BodyPart part)
 {
 	switch(part)
 	{
-	case HEAD:				return "head";
-	case NECK:				return "neck";
-	case TORSO:				return "torso";
-	case HIPS:				return "hips";
-	case THIGH_LEFT:		return "lthigh";
-	case THIGH_RIGHT:		return "rthigh";
-	case SHOULDER_RIGHT:	return "rshoulder";
-	case SHOULDER_LEFT:		return "lshoulder";
-	case ARM_RIGHT:			return "rarm";
-	case ARM_LEFT:			return "larm";
-	case LEG_RIGHT:			return "rleg";
-	case LEG_LEFT:			return "lleg";
+	case HEAD:				return "Head";
+	case NECK:				return "Neck";
+	case TORSO:				return "Torso";
+	case HIPS:				return "Hips";
+	case THIGH_LEFT:		return "Left_Thigh";
+	case THIGH_RIGHT:		return "Right_Thigh";
+	case SHOULDER_RIGHT:	return "Right_Shoulder";
+	case SHOULDER_LEFT:		return "Left_Shoulder";
+	case ARM_RIGHT:			return "Right_Arm";
+	case ARM_LEFT:			return "Left_Arm";
+	case LEG_RIGHT:			return "Right_Leg";
+	case LEG_LEFT:			return "Left_Leg";
 	default:				return "null";
 	}
 }
@@ -229,12 +247,8 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 
 			// For every attachment, draw it to the region
 			context->setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
-			for(pair<int, Resource<Texture2D>> at : m_attachments[i])
-			{
-				if(!at.second) continue;
-				context->setTexture(at.second);
-				context->drawRectangle(x0, skeletonAtlas->getHeight() - y1, x1 - x0, y1 - y0);
-			}
+			context->setTexture(m_appearance[i]);
+			context->drawRectangle(x0, skeletonAtlas->getHeight() - y1, x1 - x0, y1 - y0);
 
 			// Reset context
 			context->setTexture(0);
@@ -253,7 +267,7 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 	gfxContext->setTransformationMatrix(Matrix4());
 }
 
-void Humanoid::setAttachmentTexture(const BodyPart part, const int layer, const Resource<Texture2D> texture)
+void Humanoid::setAppearanceTexture(const BodyPart part, const Resource<Texture2D> texture)
 {
 	// Set attachemnts
 	if(texture)
@@ -264,13 +278,14 @@ void Humanoid::setAttachmentTexture(const BodyPart part, const int layer, const 
 		uint x0 = region.uv0.x * skeletonAtlas->getWidth(), y0 = region.uv0.y * skeletonAtlas->getHeight(),
 			x1 = region.uv1.x * skeletonAtlas->getWidth(), y1 = region.uv1.y * skeletonAtlas->getHeight();
 
-		if((x1 - x0) != texture->getWidth() || (y1 - y0) != texture->getHeight())
+		if((x1 - x0) == texture->getWidth() && (y1 - y0) == texture->getHeight())
 		{
-			LOG("Humanoid::setAttachmentTexture: Needs texture and the body part region size needs to be the same (for now).");
-			return;
+			m_appearance[part] = texture;
+			m_renderPart[part] = true;
+		}
+		else
+		{
+			LOG("Appearance texture and body part region size needs to be the same.");
 		}
 	}
-
-	m_attachments[part][layer] = texture;
-	m_renderPart[part] = true;
 }

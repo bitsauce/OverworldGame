@@ -8,7 +8,7 @@ enum EntityID;
 class BlockEntityItem : public ItemData
 {
 public:
-	BlockEntityItem(OverworldGame * game, const BlockEntityID id);
+	BlockEntityItem(OverworldGame *game, const ItemDataDesc *desc);
 
 	void equip(Pawn *player);
 	void unequip(Pawn *player);
@@ -17,7 +17,8 @@ public:
 
 private:
 	OverworldGame * m_game;
-	const BlockEntityID m_blockEntityID;
+	
+	BlockEntityID m_blockEntityID;
 };
 
 #endif // BLOCK_ENTITY_ITEM_H

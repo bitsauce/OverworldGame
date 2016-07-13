@@ -1,81 +1,88 @@
 
-skeleton.png
+Skeleton.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-head
+Head
   rotate: false
-  xy: 134, 108
+  xy: 46, 21
   size: 15, 18
   orig: 15, 18
   offset: 0, 0
   index: -1
-hips
+Hips
   rotate: false
-  xy: 2, 2
+  xy: 74, 33
   size: 11, 6
   orig: 11, 6
   offset: 0, 0
   index: -1
-larm
+Left_Arm
   rotate: false
-  xy: 2, 62
-  size: 64, 64
-  orig: 64, 64
+  xy: 77, 41
+  size: 28, 21
+  orig: 28, 21
   offset: 0, 0
   index: -1
-lleg
+Left_Leg
   rotate: false
-  xy: 21, 44
+  xy: 13, 2
   size: 8, 16
   orig: 8, 16
   offset: 0, 0
   index: -1
-lshoulder
-  rotate: true
-  xy: 134, 89
+Left_Shoulder
+  rotate: false
+  xy: 23, 12
   size: 17, 6
   orig: 17, 6
   offset: 0, 0
   index: -1
-lthigh
-  rotate: false
-  xy: 2, 10
+Left_Thigh
+  rotate: true
+  xy: 23, 2
   size: 8, 11
   orig: 8, 11
   offset: 0, 0
   index: -1
-rarm
+Pickaxe_Iron
   rotate: false
-  xy: 68, 62
-  size: 64, 64
-  orig: 64, 64
+  xy: 2, 20
+  size: 42, 42
+  orig: 42, 42
   offset: 0, 0
   index: -1
-rleg
+Right_Arm
   rotate: false
-  xy: 2, 23
+  xy: 46, 41
+  size: 29, 21
+  orig: 29, 21
+  offset: 0, 0
+  index: -1
+Right_Leg
+  rotate: false
+  xy: 2, 2
   size: 9, 16
   orig: 9, 16
   offset: 0, 0
   index: -1
-rshoulder
+Right_Shoulder
   rotate: false
-  xy: 31, 55
+  xy: 87, 34
   size: 11, 5
   orig: 11, 5
   offset: 0, 0
   index: -1
-rthigh
+Right_Thigh
   rotate: false
-  xy: 151, 115
+  xy: 63, 28
   size: 9, 11
   orig: 9, 11
   offset: 0, 0
   index: -1
-torso
-  rotate: false
-  xy: 2, 41
+Torso
+  rotate: true
+  xy: 107, 45
   size: 17, 19
   orig: 17, 19
   offset: 0, 0

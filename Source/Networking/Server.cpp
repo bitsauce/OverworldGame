@@ -18,6 +18,7 @@
 #include "Entities/Mobs/Zombie.h"
 #include "Game/Game.h"
 #include "Gui/GameOverlay/GameOverlay.h"
+#include "Items/ItemData.h"""
 
 Server::Server(OverworldGame * game, const ushort port) :
 	Connection(true),
@@ -108,12 +109,12 @@ void Server::onTick(TickEvent *e)
 
 					// Give default load out
 					player->setPosition(Vector2F(0, 0));
-					player->getStorage()->addItem(ITEM_PICKAXE_IRON);
-					player->getStorage()->addItem(ITEM_AXE_IRON);
-					player->getStorage()->addItem(ITEM_BOW_WOODEN);
-					player->getStorage()->addItem(ITEM_CRAFTING_BENCH);
-					player->getStorage()->addItem(ITEM_TORCH, 255);
-					player->getStorage()->addItem(ITEM_ARROW, 255);
+					player->getStorage()->addItem(ItemData::getByName("iron_pickaxe_item")->getID());
+					player->getStorage()->addItem(ItemData::getByName("iron_axe_item")->getID());
+					player->getStorage()->addItem(ItemData::getByName("bow_item")->getID());
+					player->getStorage()->addItem(ItemData::getByName("crafting_bench_item")->getID());
+					player->getStorage()->addItem(ItemData::getByName("torch_item")->getID(), 255);
+					player->getStorage()->addItem(ItemData::getByName("arrow_item")->getID(), 255);
 				}
 
 				{

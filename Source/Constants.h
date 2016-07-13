@@ -82,29 +82,11 @@ enum EntityID
  * \brief	Block IDs.
  */
 
-enum BlockID
-{
-	BLOCK_EMPTY,
-
-	BLOCK_GRASS,
-	BLOCK_DIRT,
-	BLOCK_DIRT_BACK,
-	
-	BLOCK_OAK_WOOD,
-	BLOCK_OAK_LEAVES,
-	
-	BLOCK_STONE,
-
-	BLOCK_ANIM_TEST,
-	BLOCK_TORCH_TEST,
-
-	//BLOCK_SAND,
-	//BLOCK_MUD,
-	//BLOCK_,
-	
-	
-	BLOCK_COUNT
-};
+typedef int BlockID;
+#define BLOCK_EMPTY 0
+#define BLOCK_GRASS 1
+#define BLOCK_STONE 3
+#define BLOCK_DIRT_BACK 4
 
 /**
  * \enum	BlockEntityID
@@ -128,7 +110,10 @@ enum BlockEntityID
  * \brief	Item IDs.
  */
 
-enum ItemID
+typedef int ItemID;
+#define ITEM_NONE 0
+
+/*enum ItemID
 {
 	ITEM_NONE,
 	
@@ -152,7 +137,7 @@ enum ItemID
 	ITEM_ARROW,
 
 	ITEM_COUNT
-};
+};*/
 
 /**
  * \enum	WorldLayer

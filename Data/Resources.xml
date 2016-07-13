@@ -42,13 +42,54 @@
 		<name>Sprites/Backgrounds/Clouds/0</name>
 		<path>Sprites/Backgrounds/Clouds/Cloud_0.png</path>
 	</texture>
+	
 	<texture>
-		<name>Sprites/Characters/Images/rarm</name>
-		<path>Sprites/Characters/Images/rarm.png</path>
+		<name>Sprites/Characters/Images/Right_Arm</name>
+		<path>Sprites/Characters/Images/Right_Arm.png</path>
 	</texture>
 	<texture>
-		<name>Sprites/Characters/Images/larm</name>
-		<path>Sprites/Characters/Images/larm.png</path>
+		<name>Sprites/Characters/Images/Left_Arm</name>
+		<path>Sprites/Characters/Images/Left_Arm.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Characters/Images/Head</name>
+		<path>Sprites/Characters/Images/Head.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Characters/Images/Hips</name>
+		<path>Sprites/Characters/Images/Hips.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Characters/Images/Left_Leg</name>
+		<path>Sprites/Characters/Images/Left_Leg.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Characters/Images/Left_Shoulder</name>
+		<path>Sprites/Characters/Images/Left_Shoulder.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Characters/Images/Left_Thigh</name>
+		<path>Sprites/Characters/Images/Left_Thigh.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Characters/Images/Right_Arm</name>
+		<path>Sprites/Characters/Images/Right_Arm.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Characters/Images/Right_Leg</name>
+		<path>Sprites/Characters/Images/Right_Leg.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Characters/Images/Right_Shoulder</name>
+		<path>Sprites/Characters/Images/Right_Shoulder.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Characters/Images/Right_Thigh</name>
+		<path>Sprites/Characters/Images/Right_Thigh.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Characters/Images/Torso</name>
+		<path>Sprites/Characters/Images/Torso.png</path>
 	</texture>
 
 	<texture>

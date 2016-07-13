@@ -5,8 +5,6 @@
 #include "Game/Game.h"
 #include "DynamicEntity.h"
 
-enum ItemID;
-
 class ItemDrop : public DynamicEntity
 {
 public:

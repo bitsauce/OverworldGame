@@ -8,7 +8,7 @@ class OverworldGame;
 class World;
 class CommandLine;
 class Pointlight;
-enum BlockID;
+class BlockData;
 
 class Debug : public SceneObject
 {
@@ -49,7 +49,7 @@ private:
 	World *m_world;
 
 	// Paint block
-	BlockID m_block;
+	map<BlockID, BlockData*>::const_iterator m_block;
 
 	// Random
 	Random m_random;

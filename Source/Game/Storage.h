@@ -4,7 +4,6 @@
 #include "Config.h"
 
 class ItemData;
-enum ItemID;
 
 class Storage
 {

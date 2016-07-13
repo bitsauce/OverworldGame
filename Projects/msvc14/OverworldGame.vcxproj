@@ -94,9 +94,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\Animation\animation.cpp" />
+    <ClCompile Include="..\..\Source\Animation\Attachment.cpp" />
     <ClCompile Include="..\..\Source\Animation\bone.cpp" />
     <ClCompile Include="..\..\Source\Animation\Skeleton.cpp" />
     <ClCompile Include="..\..\Source\Animation\slot.cpp" />
+    <ClCompile Include="..\..\Source\Apparel\ApparelData.cpp" />
     <ClCompile Include="..\..\Source\BlockEntities\BlockEntity.cpp" />
     <ClCompile Include="..\..\Source\BlockEntities\BlockEntityData.cpp" />
     <ClCompile Include="..\..\Source\BlockEntities\Bush.cpp" />
@@ -135,6 +137,7 @@
     <ClCompile Include="..\..\Source\Gui\LineEdit.cpp" />
     <ClCompile Include="..\..\Source\Gui\UiObject.cpp" />
     <ClCompile Include="..\..\Source\Items\BlockItem.cpp" />
+    <ClCompile Include="..\..\Source\Items\Item.cpp" />
     <ClCompile Include="..\..\Source\Items\ItemData.cpp" />
     <ClCompile Include="..\..\Source\Items\Placeable\BlockEntityItem.cpp" />
     <ClCompile Include="..\..\Source\Items\Tools\Axe.cpp" />
@@ -161,9 +164,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\animation\Animation.h" />
+    <ClInclude Include="..\..\Source\Animation\Attachment.h" />
     <ClInclude Include="..\..\source\animation\Bone.h" />
     <ClInclude Include="..\..\source\animation\Skeleton.h" />
     <ClInclude Include="..\..\source\animation\Slot.h" />
+    <ClInclude Include="..\..\Source\Apparel\ApparelData.h" />
     <ClInclude Include="..\..\Source\BlockEntities\BlockEntity.h" />
     <ClInclude Include="..\..\Source\BlockEntities\BlockEntityData.h" />
     <ClInclude Include="..\..\Source\BlockEntities\Bush.h" />
@@ -207,6 +212,7 @@
     <ClInclude Include="..\..\Source\Gui\UiEvents.h" />
     <ClInclude Include="..\..\source\gui\UiObject.h" />
     <ClInclude Include="..\..\source\Items\BlockItem.h" />
+    <ClInclude Include="..\..\Source\Items\Item.h" />
     <ClInclude Include="..\..\source\items\ItemData.h" />
     <ClInclude Include="..\..\Source\Items\Placeable\BlockEntityItem.h" />
     <ClInclude Include="..\..\Source\Items\Tools\Axe.h" />
@@ -232,7 +238,9 @@
     <ClInclude Include="..\..\Source\World\World.h" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\..\Data\BlockData.xml" />
     <Xml Include="..\..\Data\InputConfig.xml" />
+    <Xml Include="..\..\Data\ItemData.xml" />
     <Xml Include="..\..\Data\Resources.xml" />
   </ItemGroup>
   <ItemGroup>

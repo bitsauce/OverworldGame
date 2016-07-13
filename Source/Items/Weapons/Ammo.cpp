@@ -1,6 +1,6 @@
 #include "Ammo.h"
 
-Ammo::Ammo(OverworldGame*):
-	ItemData()
+Ammo::Ammo(const ItemDataDesc *desc) :
+	ItemData(desc)
 {
 }

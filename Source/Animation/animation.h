@@ -55,9 +55,6 @@ public:
 	void setTimeScale(const float timeScale);
 	float getTimeScale() const;
 
-	//void setEventCallback(asIScriptFunction *func);
-	//asIScriptFunction *getEventCallback() const;
-
 	void setAnimation(const string &name);
 	void setAnimation(Animation *anim);
 	void addAnimation(const string &name, const float delay);
@@ -73,7 +70,6 @@ private:
 	spAnimationState *m_self;
 	bool m_looping;
 	float m_prevTime;
-	//asIScriptFunction *m_eventCallback;
 };
 
 #endif // ANIMATION_H

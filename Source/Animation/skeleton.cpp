@@ -1,7 +1,7 @@
-#include "skeleton.h"
-#include "animation.h"
-#include "slot.h"
-#include "bone.h"
+#include "Skeleton.h"
+#include "Animation.h"
+#include "Slot.h"
+#include "Bone.h"
 #include <spine/extension.h>
 
 #ifndef SPINE_MESH_VERTEX_COUNT_MAX
@@ -45,17 +45,24 @@ Skeleton::Skeleton(const string &jsonFile, const string &atlasFile, const float 
 	m_atlas(nullptr)
 {
 	m_atlas = spAtlas_createFromFile(atlasFile.c_str(), 0);
-	spSkeletonJson* json = spSkeletonJson_create(m_atlas);
+	spSkeletonJson *json = spSkeletonJson_create(m_atlas);
 	json->scale = scale;
+
+	/*spAttachmentLoader_newAttachment();
+
+	spRegionAttachment *test = spRegionAttachment_create("rhand");
+	spRegionAttachment_setUVs(test, 0, 0, 1, 1, 0);
+
+	spSkeleton_setAttachment(m_self, "rhand", "rhand");*/
 
 	m_data = spSkeletonJson_readSkeletonDataFile(json, jsonFile.c_str());
 	if(!m_data)
 	{
-		LOG("Skeleton::Skeleton(): JSON Error '%s'", json->error);
+		LOG("JSON Error '%s'", json->error);
 		return;
 	}
 
-	LOG("Skeleton::Skeleton(): Default skin name '%s'", m_data->defaultSkin->name);
+	LOG("Default skin name '%s'", m_data->defaultSkin->name);
 	spSkeletonJson_dispose(json);
 
 	m_worldVertices = MALLOC(float, SPINE_MESH_VERTEX_COUNT_MAX);
@@ -172,18 +179,31 @@ void Skeleton::draw(GraphicsContext *context)
 	// Draw vertices
 	Vertex *vertices = new Vertex[4 * m_self->slotCount];
 	uint *indices = new uint[6 * m_self->slotCount];
-	Resource<Texture2D> texture = 0;
+	Resource<Texture2D> texture = 0; int startIndex = 0;
 	for(int i = 0; i < m_self->slotCount; i++)
 	{
 		spSlot *slot = m_self->drawOrder[i];
 		spAttachment *attachment = slot->attachment;
 		if(!attachment)
+		{
 			continue;
+		}
+
 		if(attachment->type == SP_ATTACHMENT_REGION)
 		{
+			Resource<Texture2D> prevTexture = texture;
+
 			spRegionAttachment* regionAttachment = SUB_CAST(spRegionAttachment, attachment);
 			texture = *(Resource<Texture2D>*)((spAtlasRegion*)regionAttachment->rendererObject)->page->rendererObject;
 			spRegionAttachment_computeWorldVertices(regionAttachment, slot->skeleton->x, slot->skeleton->y, slot->bone, m_worldVertices);
+
+
+			if(prevTexture != texture)
+			{
+				context->setTexture(prevTexture);
+				context->drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, vertices + 4 * startIndex, 4 * (i - startIndex), indices + 6 * startIndex, 6 * (i - startIndex));
+				startIndex = i;
+			}
 
 			uchar r = uchar(m_self->r * slot->r * 255);
 			uchar g = uchar(m_self->g * slot->g * 255);
@@ -206,12 +226,12 @@ void Skeleton::draw(GraphicsContext *context)
 			vertices[i * 4 + 3].set2f(VERTEX_POSITION, m_worldVertices[SP_VERTEX_X3], m_worldVertices[SP_VERTEX_Y3]);
 			vertices[i * 4 + 3].set2f(VERTEX_TEX_COORD, regionAttachment->uvs[SP_VERTEX_X3], regionAttachment->uvs[SP_VERTEX_Y3]);
 
-			indices[i * 6 + 0] = i * 4 + 0;
-			indices[i * 6 + 1] = i * 4 + 1;
-			indices[i * 6 + 2] = i * 4 + 2;
-			indices[i * 6 + 3] = i * 4 + 2;
-			indices[i * 6 + 4] = i * 4 + 1;
-			indices[i * 6 + 5] = i * 4 + 3;
+			indices[i * 6 + 0] = (i - startIndex) * 4 + 0;
+			indices[i * 6 + 1] = (i - startIndex) * 4 + 1;
+			indices[i * 6 + 2] = (i - startIndex) * 4 + 2;
+			indices[i * 6 + 3] = (i - startIndex) * 4 + 2;
+			indices[i * 6 + 4] = (i - startIndex) * 4 + 1;
+			indices[i * 6 + 5] = (i - startIndex) * 4 + 3;
 		}
 		/*else if (attachment->type == ATTACHMENT_MESH)
 		{
@@ -267,7 +287,7 @@ void Skeleton::draw(GraphicsContext *context)
 	}
 
 	context->setTexture(texture);
-	context->drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, vertices, 4 * m_self->slotCount, indices, 6 * m_self->slotCount);
+	context->drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, vertices + startIndex * 4, 4 * (m_self->slotCount - startIndex), indices + startIndex * 6, 6 * (m_self->slotCount - startIndex));
 	context->setTexture(0);
 
 	delete[] vertices;

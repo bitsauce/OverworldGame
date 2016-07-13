@@ -7,7 +7,8 @@
 #include "Entities/ItemDrop.h"
 #include "Game/Game.h"
 
-Pickaxe::Pickaxe(OverworldGame *game) :
+Pickaxe::Pickaxe(OverworldGame *game, const ItemDataDesc *desc) :
+	ItemData(desc),
 	m_game(game),
 	m_cracksSprite(game->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Pickaxes/Mining_Cracks")),
 	m_sprite(game->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Pickaxes/IronPickaxe")),
@@ -23,12 +24,12 @@ Pickaxe::Pickaxe(OverworldGame *game) :
 
 void Pickaxe::equip(Pawn *player)
 {
-	player->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, m_sprite.getTexture());
+	player->getHumanoid().setAppearanceTexture(Humanoid::ARM_RIGHT, m_sprite.getTexture());
 }
 
 void Pickaxe::unequip(Pawn *player)
 {
-	player->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, 0);
+	player->getHumanoid().setAppearanceTexture(Humanoid::ARM_RIGHT, 0);
 }
 
 void Pickaxe::update(Pawn *pawn, const float delta)

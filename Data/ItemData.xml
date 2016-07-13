@@ -1,0 +1,144 @@
+<items>
+	<i>
+		<id>1</id>
+		<name>grass_block_item</name>
+		<inventoryName>Grass Block</inventoryName>
+		<description>A block of grass</description>
+		<type>block_item</type>
+		<icon>Sprites/ItemIcons/BlockGrass</icon>
+		<maxStack>255</maxStack>
+		<userData>
+			<layer>middle</layer>
+			<block>grass_block</block>
+		</userData>
+	</i>
+	<i>
+		<id>2</id>
+		<name>dirt_block_item</name>
+		<inventoryName>Dirt Block</inventoryName>
+		<description>A block of dirt</description>
+		<type>block_item</type>
+		<icon>Sprites/ItemIcons/BlockDirt</icon>
+		<maxStack>255</maxStack>
+		<userData>
+			<layer>middle</layer>
+			<block>dirt_block</block>
+		</userData>
+	</i>
+	<i>
+		<id>3</id>
+		<name>dirt_back_block_item</name>
+		<inventoryName>Dirt Backdrop</inventoryName>
+		<description>A block of dirt</description>
+		<type>block_item</type>
+		<icon>Sprites/ItemIcons/BlockDirtBack</icon>
+		<maxStack>255</maxStack>
+		<userData>
+			<layer>back</layer>
+			<block>dirt_back_block</block>
+		</userData>
+	</i>
+	<i>
+		<id>4</id>
+		<name>stone_block_item</name>
+		<inventoryName>Stone Block</inventoryName>
+		<description>A block of stone</description>
+		<type>block_item</type>
+		<icon>Sprites/ItemIcons/BlockStone</icon>
+		<maxStack>255</maxStack>
+		<userData>
+			<layer>middle</layer>
+			<block>stone_block</block>
+		</userData>
+	</i>
+	<i>
+		<id>5</id>
+		<name>oak_block_item</name>
+		<inventoryName>Oak Block</inventoryName>
+		<description>A block of oak</description>
+		<type>block_item</type>
+		<icon>Sprites/ItemIcons/BlockOakWood</icon>
+		<maxStack>255</maxStack>
+		<userData>
+			<layer>middle</layer>
+			<block>oak_block</block>
+		</userData>
+	</i>
+	<i>
+		<id>6</id>
+		<name>oak_leaves_block_item</name>
+		<inventoryName>Oak Leaves</inventoryName>
+		<description>A block of oak leaves</description>
+		<type>block_item</type>
+		<icon>Sprites/ItemIcons/BlockOakLeaves</icon>
+		<maxStack>255</maxStack>
+		<userData>
+			<layer>middle</layer>
+			<block>oak_leaves_block</block>
+		</userData>
+	</i>
+	
+	<i>
+		<id>7</id>
+		<name>iron_pickaxe_item</name>
+		<inventoryName>Iron Pickaxe</inventoryName>
+		<description>An iron pickaxe. Used for mining ores</description>
+		<type>pickaxe</type>
+		<icon>Sprites/ItemIcons/Pickaxe_Iron</icon>
+		<maxStack>1</maxStack>
+	</i>
+	<i>
+		<id>8</id>
+		<name>iron_axe_item</name>
+		<inventoryName>Iron Axe</inventoryName>
+		<description>An iron axe. Used for chopping down trees</description>
+		<type>axe</type>
+		<icon>Sprites/ItemIcons/Axe_Iron</icon>
+		<maxStack>1</maxStack>
+	</i>
+	<i>
+		<id>9</id>
+		<name>torch_item</name>
+		<inventoryName>Torch</inventoryName>
+		<description>Useful light source during night or when exploring dark areas</description>
+		<type>torch</type>
+		<icon>Sprites/ItemIcons/Torch</icon>
+		<maxStack>255</maxStack>
+	</i>
+	<i>
+		<id>10</id>
+		<name>crafting_bench_item</name>
+		<inventoryName>Crafting Bench</inventoryName>
+		<description>For crafting the items of your dreams</description>
+		<type>block_entity_item</type>
+		<icon>Sprites/ItemIcons/CraftingBench</icon>
+		<maxStack>1</maxStack>
+	</i>
+	<i>
+		<id>11</id>
+		<name>red_currant_bush_item</name>
+		<inventoryName>Red Currant Bush</inventoryName>
+		<description>Pland and maintain to grow red currants</description>
+		<type>block_entity_item</type>
+		<icon>Sprites/ItemIcons/Torch</icon>
+		<maxStack>1</maxStack>
+	</i>
+	<i>
+		<id>12</id>
+		<name>bow_item</name>
+		<inventoryName>Bow</inventoryName>
+		<description>Ranged weapon. Charge up to fire arrows further. Require arrows to use</description>
+		<type>bow</type>
+		<icon>Sprites/ItemIcons/Bow</icon>
+		<maxStack>1</maxStack>
+	</i>
+	<i>
+		<id>13</id>
+		<name>arrow_item</name>
+		<inventoryName>Arrow</inventoryName>
+		<description>Common projectile for a bow</description>
+		<type>ammo</type>
+		<icon>Sprites/ItemIcons/Arrow</icon>
+		<maxStack>255</maxStack>
+	</i>
+</items>

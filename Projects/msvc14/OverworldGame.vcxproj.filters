@@ -194,6 +194,15 @@
     <ClCompile Include="..\..\Source\Entities\ItemDrop.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Apparel\ApparelData.cpp">
+      <Filter>Source\Apparels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Animation\Attachment.cpp">
+      <Filter>Source\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Items\Item.cpp">
+      <Filter>Source\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -267,6 +276,9 @@
     </Filter>
     <Filter Include="Data\Shaders">
       <UniqueIdentifier>{af129b37-b8d0-498e-98c3-cd3641a2a8b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Apparels">
+      <UniqueIdentifier>{c70c692d-42bf-4b5f-9cc6-d2dad30ea596}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -480,12 +492,27 @@
     <ClInclude Include="..\..\Source\BlockEntities\Pot.h">
       <Filter>Source\BlockEntities</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Apparel\ApparelData.h">
+      <Filter>Source\Apparels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Animation\Attachment.h">
+      <Filter>Source\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Items\Item.h">
+      <Filter>Source\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\Data\Resources.xml">
       <Filter>Data</Filter>
     </Xml>
     <Xml Include="..\..\Data\InputConfig.xml">
+      <Filter>Data</Filter>
+    </Xml>
+    <Xml Include="..\..\Data\BlockData.xml">
+      <Filter>Data</Filter>
+    </Xml>
+    <Xml Include="..\..\Data\ItemData.xml">
       <Filter>Data</Filter>
     </Xml>
   </ItemGroup>

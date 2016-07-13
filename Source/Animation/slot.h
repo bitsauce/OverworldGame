@@ -4,10 +4,14 @@
 #include "Config.h"
 #include <spine/spine.h>
 
+class Attachment;
+
 class Slot
 {
 public:
 	Slot(spSlot *slot);
+
+	void setAttachment(Attachment *attachment);
 
 private:
 	spSlot *m_self;

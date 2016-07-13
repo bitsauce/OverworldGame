@@ -7,7 +7,7 @@
 class Bow : public ItemData
 {
 public:
-	Bow(OverworldGame * game);
+	Bow(OverworldGame *game, const ItemDataDesc *desc);
 	void equip(Pawn *player);
 	void unequip(Pawn *player);
 	void update(Pawn *player, const float delta);

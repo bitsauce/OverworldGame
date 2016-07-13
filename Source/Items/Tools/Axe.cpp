@@ -9,9 +9,10 @@
 #include "Game/Game.h"
 #include "Blocks/BlockData.h"
 
-Axe::Axe(OverworldGame * game) :
+Axe::Axe(OverworldGame *game, const ItemDataDesc *desc) :
+	ItemData(desc),
 	m_game(game),
-	m_cracksSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Pickaxes/MiningCracks")),
+	m_cracksSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Pickaxes/Mining_Cracks")),
 	m_cracksAnimation(1, 4),
 	m_drawCracks(false),
 	m_sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Axes/IronAxe")),
@@ -25,12 +26,12 @@ Axe::Axe(OverworldGame * game) :
 
 void Axe::equip(Pawn *player)
 {
-	player->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, m_sprite.getTexture());
+	player->getHumanoid().setAppearanceTexture(Humanoid::ARM_RIGHT, m_sprite.getTexture());
 }
 
 void Axe::unequip(Pawn *player)
 {
-	player->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, 0);
+	player->getHumanoid().setAppearanceTexture(Humanoid::ARM_RIGHT, 0);
 }
 
 void Axe::update(Pawn *pawn, const float delta)
@@ -61,14 +62,14 @@ void Axe::update(Pawn *pawn, const float delta)
 			terrain->removeBlockAt(position.x, position.y, WORLD_LAYER_BACK);
 
 			// If the block removed was a wood type block
-			if(blockID == BLOCK_OAK_WOOD)
+			/*if(blockID == BLOCK_OAK_WOOD) // TODO: Replace with "If block is breakable by axe"
 			{
 				// Make the rest of the tree fall
 				makeTreeFall(position.x + 1, position.y);
 				makeTreeFall(position.x - 1, position.y);
 				makeTreeFall(position.x, position.y + 1);
 				makeTreeFall(position.x, position.y - 1);
-			}
+			}*/
 
 			// Don't draw cracks
 			m_drawCracks = false;
@@ -101,7 +102,7 @@ void Axe::draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha)
 	}
 }
 
-void Axe::makeTreeFall(const int x, const int y)
+/*void Axe::makeTreeFall(const int x, const int y)
 {
 	Terrain *terrain = m_game->getWorld()->getTerrain();
 	if(terrain->getBlockAt(x, y, WORLD_LAYER_BACK) != BLOCK_OAK_WOOD) return;
@@ -178,4 +179,4 @@ void Axe::makeLeavesFall(const int x, const int y)
 	{
 		terrain->removeBlockAt(n.first, n.second, WORLD_LAYER_FRONT);
 	}
-}
+}*/

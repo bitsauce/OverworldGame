@@ -6,13 +6,12 @@
 
 class Camera;
 class Terrain;
-enum BlockID;
-enum TerrainLayer;
+class BlockData;
 
 class BlockItem : public ItemData
 {
 public:
-	BlockItem(OverworldGame * game, const WorldLayer layer, const BlockID blockID);
+	BlockItem(OverworldGame *game, const ItemDataDesc *desc);
 
 	void use(Pawn *pawn, const float delta);
 	void draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha);
@@ -20,8 +19,8 @@ public:
 private:
 	Camera *m_camera;
 	Terrain *m_terrain;
-	const WorldLayer m_layer;
-	const BlockID m_blockID;
+	WorldLayer m_layer;
+	BlockData *m_blockData;
 };
 
 #endif // BLOCK_ITEM_H

@@ -60,7 +60,8 @@ public:
 	void onTick(TickEvent *e);
 	void draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha);
 
-	void setAttachmentTexture(const BodyPart part, const int layer, const Resource<Texture2D> texture);
+	void setAppearanceTexture(const BodyPart part, const Resource<Texture2D> texture);
+	//void setAttachment(const BodyPart part, const );
 
 private:
 	string getBodyPartName(const BodyPart part);
@@ -88,7 +89,9 @@ private:
 
 	RenderTarget2D *m_skeletonRenderTarget;
 	bool m_renderPart[BODY_PART_COUNT];
-	map<int, Resource<Texture2D>> m_attachments[BODY_PART_COUNT];
+
+	// List of textures of this characters appearance
+	Resource<Texture2D> m_appearance[BODY_PART_COUNT];
 };
 
 #endif // HUMANOID_H

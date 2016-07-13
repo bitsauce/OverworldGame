@@ -6,7 +6,7 @@
 class Axe : public ItemData
 {
 public:
-	Axe(OverworldGame * game);
+	Axe(OverworldGame *game, const ItemDataDesc *desc);
 
 	void equip(Pawn *player);
 	void unequip(Pawn *player);

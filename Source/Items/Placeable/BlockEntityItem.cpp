@@ -4,10 +4,23 @@
 #include "Game/Game.h"
 #include "BlockEntities/BlockEntityData.h"
 
-BlockEntityItem::BlockEntityItem(OverworldGame *game, const BlockEntityID id) :
-	m_game(game),
-	m_blockEntityID(id)
+BlockEntityItem::BlockEntityItem(OverworldGame *game, const ItemDataDesc *desc) :
+	ItemData(desc),
+	m_game(game)
 {
+	/*if(desc->userData.find("blockEntity") != desc->userData.end())
+	{
+		const string blockName = desc->userData.at("block");
+		m_blockEntityID = BlockData::getByName(blockName);
+		if(!m_blockData)
+		{
+			LOG("Block item 'block' (says: %s) could not be found", blockName);
+		}
+	}
+	else
+	{
+		LOG("Block item '%s' missing 'block' data", desc->name);
+	}*/
 }
 
 void BlockEntityItem::equip(Pawn *pawn)
@@ -18,7 +31,7 @@ void BlockEntityItem::equip(Pawn *pawn)
 		pawn->m_pointLight->setColor(Color(216, 206, 64, 255));
 	}
 
-	pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, getIconTexture());
+//	pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, getIconTexture());
 }
 
 void BlockEntityItem::unequip(Pawn *pawn)
@@ -29,7 +42,7 @@ void BlockEntityItem::unequip(Pawn *pawn)
 		pawn->m_pointLight->setColor(Color(127));
 	}
 
-	pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, 0);
+//	pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_RIGHT, 1, 0);
 }
 
 void BlockEntityItem::use(Pawn *pawn, const float delta)

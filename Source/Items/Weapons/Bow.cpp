@@ -7,7 +7,8 @@
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
 
-Bow::Bow(OverworldGame * game) :
+Bow::Bow(OverworldGame *game, const ItemDataDesc *desc) :
+	ItemData(desc),
 	m_game(game),
 	m_attachTexture(game->getResourceManager()->get<Texture2D>("Sprites/Items/Weapons/WoodenBow")),
 	m_sprite(game->getResourceManager()->get<Texture2D>("Sprites/Items/Weapons/WoodenBowAnim")),
@@ -22,12 +23,12 @@ Bow::Bow(OverworldGame * game) :
 
 void Bow::equip(Pawn *player)
 {
-	player->getHumanoid().setAttachmentTexture(Humanoid::ARM_LEFT, 1, m_attachTexture);
+	//player->getHumanoid().setAttachmentTexture(Humanoid::ARM_LEFT, 1, m_attachTexture);
 }
 
 void Bow::unequip(Pawn *player)
 {
-	player->getHumanoid().setAttachmentTexture(Humanoid::ARM_LEFT, 1, 0);
+	//player->getHumanoid().setAttachmentTexture(Humanoid::ARM_LEFT, 1, 0);
 }
 
 void Bow::update(Pawn *pawn, const float delta)
@@ -67,18 +68,18 @@ void Bow::update(Pawn *pawn, const float delta)
 				pawn->getHumanoid().setPostBlendAnimations(Humanoid::ANIM_ARROW_AIM_FW, Humanoid::ANIM_ARROW_AIM_UP, alpha);
 			}
 		}
-		pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_LEFT, 1, 0);
+		//pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_LEFT, 1, 0);
 	}
 	else if(m_charging)
 	{
-		if(pawn->getStorage()->removeItem(ITEM_ARROW) == 0)
+		if(pawn->getStorage()->removeItem(ItemData::getByName("arrow_item")->getID()) == 0)
 		{
 			new Arrow(pawn, m_game->getWorld(), pawn->getCenter(), dir, 45.0f * min(m_chargeTime, 1.0f));
 		}
 		m_chargeTime = 0.0f;
 		m_charging = false;
 		pawn->getHumanoid().setPostBlendAnimations(Humanoid::ANIM_NULL, Humanoid::ANIM_NULL, 0.0f);
-		pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_LEFT, 1, m_attachTexture);
+		//pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_LEFT, 1, m_attachTexture);
 	}
 }
 
