@@ -54,7 +54,7 @@ void Chunk::load(int chunkX, int chunkY, ChunkBlock *blocks)
 
 	// Load block and shadow textures
 	Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS);
-	uchar pixel[4] = { 0, 0, 0, 0 };
+	uchar pixel[4];
 	for(int y = 0; y < CHUNK_BLOCKS; y++)
 	{
 		for(int x = 0; x < CHUNK_BLOCKS; x++)
@@ -67,6 +67,10 @@ void Chunk::load(int chunkX, int chunkY, ChunkBlock *blocks)
 				{
 					pixel[z] = (uchar) data->getID();
 					shadow -= data->getOpacity();
+				}
+				else
+				{
+					pixel[z] = 0;
 				}
 			}
 			pixel[3] = uchar(255 * max(shadow, 0.0f));
@@ -165,7 +169,7 @@ bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const B
 		}
 
 		// Update block texture
-		uchar pixel[4] = { 0, 0, 0, 0 };
+		uchar pixel[4];
 		float shadow = 1.0f;
 		for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 		{
@@ -174,6 +178,10 @@ bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const B
 			{
 				pixel[z] = (uchar) data->getID();
 				shadow -= data->getOpacity();
+			}
+			else
+			{
+				pixel[z] = 0;
 			}
 		}
 		pixel[3] = (uchar) (255 * max(shadow, 0.0f));
