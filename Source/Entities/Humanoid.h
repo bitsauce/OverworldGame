@@ -9,6 +9,7 @@ class AnimationState;
 class Animation;
 class DynamicEntity;
 class AtlasAttachmentLoader;
+class RegionAttachment;
 
 class Humanoid
 {
@@ -64,7 +65,8 @@ public:
 	void draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha);
 
 	void setAppearanceTexture(const BodyPart part, const Resource<Texture2D> texture);
-	void setAttachment(const BodyPart part, const string &name);
+	RegionAttachment *setAttachment(const BodyPart part, const string &name, const string &path);
+	void clearAttachment(const BodyPart part);
 
 private:
 	string getBodyPartName(const BodyPart part);

@@ -3,52 +3,59 @@ Equipment.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-BlockDirt
+Axe_Iron
   rotate: false
-  xy: 46, 12
+  xy: 2, 80
+  size: 42, 42
+  orig: 42, 42
+  offset: 0, 0
+  index: -1
+Dirt_Backdrop
+  rotate: false
+  xy: 46, 90
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-BlockDirtBack
+Dirt_Block
   rotate: false
-  xy: 80, 12
+  xy: 2, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-BlockGrass
+Grass_Block
   rotate: false
-  xy: 114, 12
+  xy: 46, 56
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-BlockOakLeaves
+Oak_Leaves_Block
   rotate: false
-  xy: 148, 12
+  xy: 80, 90
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-BlockOakWood
+Oak_Wood_Block
   rotate: false
-  xy: 216, 20
+  xy: 46, 30
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-BlockStone
-  rotate: false
-  xy: 182, 12
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
 Pickaxe_Iron
   rotate: false
-  xy: 2, 2
+  xy: 2, 36
   size: 42, 42
   orig: 42, 42
+  offset: 0, 0
+  index: -1
+Stone_Block
+  rotate: false
+  xy: 80, 56
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1

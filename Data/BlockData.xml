@@ -11,7 +11,7 @@
 	-->
 	<b>
 		<id>1</id>
-		<name>grass_block</name>
+		<name>Grass_Block</name>
 		<image>Sprites/Blocks/Grass.png</image>
 		<item>grass_block_item</item>
 		<opacity>1.0</opacity>
@@ -19,7 +19,7 @@
 	</b>
 	<b>
 		<id>2</id>
-		<name>dirt_block</name>
+		<name>Dirt_Block</name>
 		<image>Sprites/Blocks/Dirt.png</image>
 		<item>dirt_block_item</item>
 		<opacity>1.0</opacity>
@@ -27,7 +27,7 @@
 	</b>
 	<b>
 		<id>4</id>
-		<name>dirt_back_block</name>
+		<name>Dirt_Backdrop</name>
 		<image>Sprites/Blocks/DirtBack.png</image>
 		<item>dirt_back_block_item</item>
 		<opacity>1.0</opacity>
@@ -35,7 +35,7 @@
 	</b>
 	<b>
 		<id>5</id>
-		<name>oak_block</name>
+		<name>Oak_Wood_Block</name>
 		<image>Sprites/Blocks/OakWood.png</image>
 		<item>oak_block_item</item>
 		<opacity>1.0</opacity>
@@ -43,7 +43,7 @@
 	</b>
 	<b>
 		<id>6</id>
-		<name>oak_leaves_block</name>
+		<name>Oak_Leaves_Block</name>
 		<image>Sprites/Blocks/OakLeaves.png</image>
 		<item>oak_leaves_block_item</item>
 		<opacity>1.0</opacity>
@@ -51,7 +51,7 @@
 	</b>
 	<b>
 		<id>3</id>
-		<name>stone_block</name>
+		<name>Stone_Block</name>
 		<image>Sprites/Blocks/Stone.png</image>
 		<item>stone_block_item</item>
 		<opacity>1.0</opacity>

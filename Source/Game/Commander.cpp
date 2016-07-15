@@ -82,7 +82,7 @@ void Commander::spawn(Chat *chat, vector<string> args)
 void Commander::give(Chat *chat, vector<string> args)
 {
 	ItemData *data = ItemData::getByName(args[0]);
-	/*if(data == 0)
+	if(data == 0)
 	{
 		chat->insertMessage("No item named '" + args[0] + "'");
 		return;
@@ -90,15 +90,15 @@ void Commander::give(Chat *chat, vector<string> args)
 
 	if(args.size() == 1)
 	{
-		//m_game->getWorld()->getLocalPlayer()->getStorage()->addItem(data->getID());
+		m_game->getWorld()->getLocalPlayer()->getStorage()->addItem(data->getID());
 		chat->insertMessage(args[0] + " given");
 	}
 	else
 	{
 		int amt = util::strToInt(args[1]);
-		//m_game->getWorld()->getLocalPlayer()->getStorage()->addItem(data->getID(), amt);
+		m_game->getWorld()->getLocalPlayer()->getStorage()->addItem(data->getID(), amt);
 		chat->insertMessage(args[1] + " " + args[0] + " given");
-	}*/
+	}
 }
 
 void Commander::place(Chat *, vector<string> args)

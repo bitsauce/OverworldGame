@@ -15,7 +15,7 @@ ItemDrop::ItemDrop(World *world, const ItemID item, const int amount) :
 	m_prevHoverTime(0.0f)
 {
 	setGravityScale(0.1f);
-	setSize(Vector2F(16.0f));
+	setSize(Vector2F(24.0f));
 }
 
 void ItemDrop::onTick(TickEvent *e)
@@ -55,6 +55,6 @@ void ItemDrop::onDraw(DrawEvent *e)
 	spriteBatch->drawSprite(Sprite(ItemData::get(m_itemID)->getIconTexture(), RectF(
 		getDrawPosition(e->getAlpha()) - Vector2F(0.0f, ((sin(math::lerp(m_prevHoverTime, m_hoverTime, e->getAlpha())) * 0.5f + 0.5f) * 8.0f)),
 		getSize()),
-		Vector2F(), 0.0f, TextureRegion(4.0f / 24.0f, 4.0f / 24.0f, 1.0f - 4.0f / 24.0f, 1.0f - 4.0f / 24.0f))
+		Vector2F(), 0.0f, TextureRegion())
 		);
 }

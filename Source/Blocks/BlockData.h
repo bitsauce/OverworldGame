@@ -3,17 +3,19 @@
 
 #include "Config.h"
 
+class ItemData;
+
 class BlockData
 {
 	friend class Debug;
 public:
 	// Constructor
-	BlockData(const BlockID id, const string &name, const Pixmap &pixmap, const ItemID item, const float opacity);
+	BlockData(const BlockID id, const string &name, const Pixmap &pixmap, const string &item, const float opacity);
 	
 	// Getters
 	BlockID getID() const { return m_id; }
 	string getName() const { return m_name; }
-	ItemID getItem() const { return m_item; }
+	ItemData *getItem() const;
 	Pixmap getPixmap() const { return m_pixmap; }
 	float getOpacity() const { return m_opacity; }
 
@@ -35,7 +37,7 @@ public:
 private:
 	const string m_name;
 	const BlockID m_id;
-	const ItemID m_item;
+	const string m_itemName;
 	const Pixmap m_pixmap;
 	const float m_opacity;
 

@@ -292,17 +292,25 @@ void Humanoid::setAppearanceTexture(const BodyPart part, const Resource<Texture2
 	}
 }
 
-void Humanoid::setAttachment(const BodyPart part, const string &name)
+RegionAttachment *Humanoid::setAttachment(const BodyPart part, const string &name, const string &path)
 {
-	if(name.empty())
+	RegionAttachment *attachment = m_equipmentAttachmentLoader->newAttachment(name.c_str(), path.c_str());
+	if(attachment)
 	{
-		m_skeleton->findSlot(getBodyPartName(HAND_RIGHT))->setAttachment(0);
+		Slot *slot = m_skeleton->findSlot(getBodyPartName(part));
+		if(slot)
+		{
+			slot->setAttachment(attachment);
+		}
 	}
-	else
+	return attachment;
+}
+
+void Humanoid::clearAttachment(const BodyPart part)
+{
+	Slot* slot = m_skeleton->findSlot(getBodyPartName(part));
+	if(slot)
 	{
-		RegionAttachment *attachment = m_equipmentAttachmentLoader->getAttachment(name.c_str());
-		attachment->setPosition(0.8f, 12.7f);
-		attachment->setRotation(405.0f);
-		m_skeleton->findSlot(getBodyPartName(HAND_RIGHT))->setAttachment(attachment);
+		slot->setAttachment(0);
 	}
 }

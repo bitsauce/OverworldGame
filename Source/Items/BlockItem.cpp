@@ -1,5 +1,6 @@
 #include "BlockItem.h"
 #include "Entities/Pawn.h"
+#include "Animation/RegionAttachment.h"
 #include "World/World.h"
 #include "Blocks/BlockData.h"
 #include "Game/Game.h"
@@ -47,6 +48,19 @@ BlockItem::BlockItem(OverworldGame *game, const ItemDataDesc *desc) :
 	{
 		LOG("Block item '%s' missing 'block' data", desc->name.c_str());
 	}
+}
+
+void BlockItem::equip(Pawn *player)
+{
+	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "Right_Hand_Equip", m_blockData->getName());
+	attachment->setPosition(0.8f, 12.7f);
+	attachment->setRotation(405.0f);
+	attachment->setSize(24, 24);
+}
+
+void BlockItem::unequip(Pawn *player)
+{
+	player->getHumanoid().clearAttachment(Humanoid::HAND_RIGHT);
 }
 
 void BlockItem::use(Pawn *pawn, const float delta)

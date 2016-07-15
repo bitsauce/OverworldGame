@@ -32,7 +32,7 @@ struct BlockDataDesc
 	const BlockID id;
 	const string name;
 	const string imagePath;
-	const ItemID itemID;
+	const string itemName;
 	const float opacity;
 	const uint frameCount;
 };
@@ -46,7 +46,7 @@ void BlockData::init()
 
 	{
 		// Add the "empty" block
-		BlockDataDesc desc = { 0, "null_block", "Sprites/Blocks/Empty.png", 0, 0.0f, 1 };
+		BlockDataDesc desc = { 0, "null_block", "Sprites/Blocks/Empty.png", "", 0.0f, 1 };
 		blockDataDesc.push_back(desc);
 	}
 
@@ -77,7 +77,7 @@ void BlockData::init()
 
 			if(id && name && image && item && opacity && frames)
 			{
-				BlockDataDesc desc = { util::strToInt(id->GetText()), name->GetText(), image->GetText(), 0, util::strToFloat(opacity->GetText()), (uint)util::strToInt(frames->GetText()) };
+				BlockDataDesc desc = { util::strToInt(id->GetText()), name->GetText(), image->GetText(), item->GetText(), util::strToFloat(opacity->GetText()), (uint)util::strToInt(frames->GetText()) };
 				blockDataDesc.push_back(desc);
 			}
 			else
@@ -118,7 +118,7 @@ void BlockData::init()
 
 		// Create block data object
 		Pixmap pixmap(blockData->imagePath, true);
-		s_nameToData[blockData->name] = s_idToData[blockData->id] = new BlockData(blockData->id, blockData->name, pixmap, blockData->itemID, blockData->opacity);
+		s_nameToData[blockData->name] = s_idToData[blockData->id] = new BlockData(blockData->id, blockData->name, pixmap, blockData->itemName, blockData->opacity);
 		s_textureAtlas->add(util::intToStr(blockData->id), pixmap);
 
 		// Store meta data
@@ -150,11 +150,18 @@ void BlockData::init()
 	s_dataTexture->setFiltering(Texture2D::NEAREST);
 }
 
-BlockData::BlockData(const BlockID id, const string &name, const Pixmap &pixmap, const ItemID item, const float opacity) :
+BlockData::BlockData(const BlockID id, const string &name, const Pixmap &pixmap, const string &itemName, const float opacity) :
 	m_name(name),
 	m_id(id),
 	m_pixmap(pixmap),
-	m_item(item),
+	m_itemName(itemName),
 	m_opacity(opacity)
 {
+}
+
+#include "Items/ItemData.h"
+
+ItemData *BlockData::getItem() const
+{
+	return ItemData::getByName(m_itemName);
 }

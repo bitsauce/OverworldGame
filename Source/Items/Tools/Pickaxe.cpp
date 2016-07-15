@@ -2,6 +2,7 @@
 #include "Constants.h"
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
+#include "Animation/RegionAttachment.h"
 #include "Entities/Player.h"
 #include "World/World.h"
 #include "Entities/ItemDrop.h"
@@ -24,14 +25,14 @@ Pickaxe::Pickaxe(OverworldGame *game, const ItemDataDesc *desc) :
 
 void Pickaxe::equip(Pawn *player)
 {
-	player->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "Pickaxe_Iron");
-	//player->getHumanoid().setAppearanceTexture(Humanoid::ARM_RIGHT, m_sprite.getTexture());
+	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "Right_Hand_Equip", "Pickaxe_Iron");
+	attachment->setPosition(0.8f, 12.7f);
+	attachment->setRotation(405.0f);
 }
 
 void Pickaxe::unequip(Pawn *player)
 {
-	player->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "");
-	//player->getHumanoid().setAppearanceTexture(Humanoid::ARM_RIGHT, 0);
+	player->getHumanoid().clearAttachment(Humanoid::HAND_RIGHT);
 }
 
 void Pickaxe::update(Pawn *pawn, const float delta)

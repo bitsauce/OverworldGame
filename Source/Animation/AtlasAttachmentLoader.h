@@ -8,7 +8,7 @@ class AtlasAttachmentLoader
 public:
 	AtlasAttachmentLoader(const string &atlasFile);
 
-	RegionAttachment *getAttachment(const string &name);
+	RegionAttachment *newAttachment(const string &name, const string &path);
 
 private:
 	spAtlas *m_atlas;

@@ -9,7 +9,7 @@
 		<maxStack>255</maxStack>
 		<userData>
 			<layer>middle</layer>
-			<block>grass_block</block>
+			<block>Grass_Block</block>
 		</userData>
 	</i>
 	<i>
@@ -22,7 +22,7 @@
 		<maxStack>255</maxStack>
 		<userData>
 			<layer>middle</layer>
-			<block>dirt_block</block>
+			<block>Dirt_Block</block>
 		</userData>
 	</i>
 	<i>
@@ -35,7 +35,7 @@
 		<maxStack>255</maxStack>
 		<userData>
 			<layer>back</layer>
-			<block>dirt_back_block</block>
+			<block>Dirt_Backdrop</block>
 		</userData>
 	</i>
 	<i>
@@ -48,7 +48,7 @@
 		<maxStack>255</maxStack>
 		<userData>
 			<layer>middle</layer>
-			<block>stone_block</block>
+			<block>Stone_Block</block>
 		</userData>
 	</i>
 	<i>
@@ -61,7 +61,7 @@
 		<maxStack>255</maxStack>
 		<userData>
 			<layer>middle</layer>
-			<block>oak_block</block>
+			<block>Oak_Wood_Block</block>
 		</userData>
 	</i>
 	<i>
@@ -74,7 +74,7 @@
 		<maxStack>255</maxStack>
 		<userData>
 			<layer>middle</layer>
-			<block>oak_leaves_block</block>
+			<block>Oak_Leaves_Block</block>
 		</userData>
 	</i>
 	

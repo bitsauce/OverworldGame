@@ -13,6 +13,8 @@ class BlockItem : public ItemData
 public:
 	BlockItem(OverworldGame *game, const ItemDataDesc *desc);
 
+	void equip(Pawn *player);
+	void unequip(Pawn *player);
 	void use(Pawn *pawn, const float delta);
 	void draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha);
 

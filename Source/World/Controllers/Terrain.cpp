@@ -71,6 +71,8 @@ bool Terrain::isBlockAt(const int x, const int y, const WorldLayer layer)
 	return getBlockAt(x, y, layer) != 0;
 }
 
+#include "Items/ItemData.h"
+
 bool Terrain::removeBlockAt(const int x, const int y, const WorldLayer layer, const bool createItem)
 {
 	const BlockData *block = getBlockAt(x, y, layer);
@@ -78,7 +80,7 @@ bool Terrain::removeBlockAt(const int x, const int y, const WorldLayer layer, co
 	{
 		if(createItem)
 		{
-			ItemDrop *itemDrop = new ItemDrop(m_world, block->getItem());
+			ItemDrop *itemDrop = new ItemDrop(m_world, block->getItem()->getID());
 			itemDrop->setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
 		}
 		return true;
