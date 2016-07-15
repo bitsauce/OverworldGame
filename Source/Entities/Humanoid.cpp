@@ -5,7 +5,8 @@
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
 #include "Animation/Slot.h"
-#include "Animation/Attachment.h"
+#include "Animation/RegionAttachment.h"
+#include "Animation/AtlasAttachmentLoader.h"
 
 #include "DynamicEntity.h"
 
@@ -69,8 +70,11 @@ Humanoid::Humanoid() :
 	m_appearance[LEG_LEFT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Left_Leg");
 	m_appearance[LEG_RIGHT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Right_Leg");
 
-	Attachment *att = new Attachment();
-	m_skeleton->findSlot("Right_Hand")->setAttachment(att);
+	AtlasAttachmentLoader atlasAttachmentLoader("Sprites/Characters/Images/Equipment/Equipment.atlas");
+	RegionAttachment *attachment = atlasAttachmentLoader.getAttachment("Pickaxe_Iron");
+	attachment->setPosition(0.8f, 12.7f);
+	attachment->setRotation(405.0f);
+	m_skeleton->findSlot("Right_Hand")->setAttachment(attachment);
 }
 
 Humanoid::~Humanoid()

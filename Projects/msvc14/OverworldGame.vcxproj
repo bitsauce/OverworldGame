@@ -94,7 +94,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\Animation\animation.cpp" />
-    <ClCompile Include="..\..\Source\Animation\Attachment.cpp" />
+    <ClCompile Include="..\..\Source\Animation\AtlasAttachmentLoader.cpp" />
+    <ClCompile Include="..\..\Source\Animation\RegionAttachment.cpp" />
     <ClCompile Include="..\..\Source\Animation\bone.cpp" />
     <ClCompile Include="..\..\Source\Animation\Skeleton.cpp" />
     <ClCompile Include="..\..\Source\Animation\slot.cpp" />
@@ -164,7 +165,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\animation\Animation.h" />
-    <ClInclude Include="..\..\Source\Animation\Attachment.h" />
+    <ClInclude Include="..\..\Source\Animation\AtlasAttachmentLoader.h" />
+    <ClInclude Include="..\..\Source\Animation\RegionAttachment.h" />
     <ClInclude Include="..\..\source\animation\Bone.h" />
     <ClInclude Include="..\..\source\animation\Skeleton.h" />
     <ClInclude Include="..\..\source\animation\Slot.h" />

@@ -188,6 +188,10 @@ void Skeleton::draw(GraphicsContext *context)
 		{
 			continue;
 		}
+		if(string(attachment->name) == "Right_Hand_Equip")
+		{
+			LOG("");
+		}
 
 		if(attachment->type == SP_ATTACHMENT_REGION)
 		{

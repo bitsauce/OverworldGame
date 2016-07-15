@@ -1,5 +1,5 @@
 #include "slot.h"
-#include "Attachment.h"
+#include "RegionAttachment.h"
 #include <spine/extension.h>
 
 Slot::Slot(spSlot *slot) :
@@ -7,7 +7,7 @@ Slot::Slot(spSlot *slot) :
 {
 }
 
-void Slot::setAttachment(Attachment *attachment)
+void Slot::setAttachment(RegionAttachment *attachment)
 {
 	if(attachment)
 	{

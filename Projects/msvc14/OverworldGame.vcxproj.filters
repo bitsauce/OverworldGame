@@ -197,11 +197,14 @@
     <ClCompile Include="..\..\Source\Apparel\ApparelData.cpp">
       <Filter>Source\Apparels</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Animation\Attachment.cpp">
-      <Filter>Source\Animation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Items\Item.cpp">
       <Filter>Source\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Animation\AtlasAttachmentLoader.cpp">
+      <Filter>Source\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Animation\RegionAttachment.cpp">
+      <Filter>Source\Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -495,11 +498,14 @@
     <ClInclude Include="..\..\Source\Apparel\ApparelData.h">
       <Filter>Source\Apparels</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Animation\Attachment.h">
-      <Filter>Source\Animation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Items\Item.h">
       <Filter>Source\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Animation\AtlasAttachmentLoader.h">
+      <Filter>Source\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Animation\RegionAttachment.h">
+      <Filter>Source\Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

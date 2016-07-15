@@ -10,8 +10,8 @@
 		return new classname(world, x, y, data); \
 	}
 
-class World;
 class ChunkBlock;
+class World;
 class BlockEntityData;
 
 class NeighborChangedEvent
