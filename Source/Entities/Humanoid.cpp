@@ -70,11 +70,7 @@ Humanoid::Humanoid() :
 	m_appearance[LEG_LEFT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Left_Leg");
 	m_appearance[LEG_RIGHT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Right_Leg");
 
-	AtlasAttachmentLoader atlasAttachmentLoader("Sprites/Characters/Images/Equipment/Equipment.atlas");
-	RegionAttachment *attachment = atlasAttachmentLoader.getAttachment("Pickaxe_Iron");
-	attachment->setPosition(0.8f, 12.7f);
-	attachment->setRotation(405.0f);
-	m_skeleton->findSlot("Right_Hand")->setAttachment(attachment);
+	m_equipmentAttachmentLoader = new AtlasAttachmentLoader("Sprites/Characters/Images/Equipment/Equipment.atlas");
 }
 
 Humanoid::~Humanoid()
@@ -98,6 +94,8 @@ string Humanoid::getBodyPartName(const BodyPart part)
 	case ARM_LEFT:			return "Left_Arm";
 	case LEG_RIGHT:			return "Right_Leg";
 	case LEG_LEFT:			return "Left_Leg";
+	case HAND_RIGHT:		return "Right_Hand";
+	case HAND_LEFT:			return "Left_Hand";
 	default:				return "null";
 	}
 }
@@ -291,5 +289,20 @@ void Humanoid::setAppearanceTexture(const BodyPart part, const Resource<Texture2
 		{
 			LOG("Appearance texture and body part region size needs to be the same.");
 		}
+	}
+}
+
+void Humanoid::setAttachment(const BodyPart part, const string &name)
+{
+	if(name.empty())
+	{
+		m_skeleton->findSlot(getBodyPartName(HAND_RIGHT))->setAttachment(0);
+	}
+	else
+	{
+		RegionAttachment *attachment = m_equipmentAttachmentLoader->getAttachment(name.c_str());
+		attachment->setPosition(0.8f, 12.7f);
+		attachment->setRotation(405.0f);
+		m_skeleton->findSlot(getBodyPartName(HAND_RIGHT))->setAttachment(attachment);
 	}
 }

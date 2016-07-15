@@ -8,6 +8,7 @@ class AnimationStateData;
 class AnimationState;
 class Animation;
 class DynamicEntity;
+class AtlasAttachmentLoader;
 
 class Humanoid
 {
@@ -29,6 +30,8 @@ public:
 		HIPS,
 		LEG_LEFT,
 		LEG_RIGHT,
+		HAND_LEFT,
+		HAND_RIGHT,
 		BODY_PART_COUNT
 	};
 
@@ -61,7 +64,7 @@ public:
 	void draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha);
 
 	void setAppearanceTexture(const BodyPart part, const Resource<Texture2D> texture);
-	//void setAttachment(const BodyPart part, const );
+	void setAttachment(const BodyPart part, const string &name);
 
 private:
 	string getBodyPartName(const BodyPart part);
@@ -89,6 +92,8 @@ private:
 
 	RenderTarget2D *m_skeletonRenderTarget;
 	bool m_renderPart[BODY_PART_COUNT];
+
+	AtlasAttachmentLoader *m_equipmentAttachmentLoader;
 
 	// List of textures of this characters appearance
 	Resource<Texture2D> m_appearance[BODY_PART_COUNT];

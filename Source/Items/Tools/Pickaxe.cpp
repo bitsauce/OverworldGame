@@ -24,12 +24,14 @@ Pickaxe::Pickaxe(OverworldGame *game, const ItemDataDesc *desc) :
 
 void Pickaxe::equip(Pawn *player)
 {
-	player->getHumanoid().setAppearanceTexture(Humanoid::ARM_RIGHT, m_sprite.getTexture());
+	player->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "Pickaxe_Iron");
+	//player->getHumanoid().setAppearanceTexture(Humanoid::ARM_RIGHT, m_sprite.getTexture());
 }
 
 void Pickaxe::unequip(Pawn *player)
 {
-	player->getHumanoid().setAppearanceTexture(Humanoid::ARM_RIGHT, 0);
+	player->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "");
+	//player->getHumanoid().setAppearanceTexture(Humanoid::ARM_RIGHT, 0);
 }
 
 void Pickaxe::update(Pawn *pawn, const float delta)
