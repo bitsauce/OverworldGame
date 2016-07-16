@@ -24,16 +24,29 @@ public:
 private:
 	void loadStructures(const int superChunkX, const int superChunkY);
 
-	BlockID getGroundAt(const int x, const int y, const WorldLayer layer);
+	Resource<Shader> m_generationShader;
+
+	enum BlockType
+	{
+		BLOCK_EMPTY,
+		BLOCK_GRASS,
+		BLOCK_STONE,
+		BLOCK_DIRT_BACK,
+		BLOCK_COUNT
+	};
+
+	BlockType getGroundAt(const int x, const int y, const WorldLayer layer);
 
 	uint m_seed;
 	Simplex2D m_noise;
-
-	//Resource<Shader> m_ge;
-
 	Random m_random;
 
+	const BlockData *m_blockData[BLOCK_COUNT];
+
 	map<int, BlockID*> m_chunkStructures;
+
+	GraphicsContext *m_graphicsContext;
+	Resource<RenderTarget2D> m_renderTarget;
 };
 
 #endif // WORLD_GENERATOR_H

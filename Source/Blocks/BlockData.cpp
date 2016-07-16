@@ -8,7 +8,6 @@ Resource<Texture2D> BlockData::s_dataTexture = nullptr;
 
 BlockData *BlockData::get(const BlockID id)
 {
-	if(id < 1) return 0;
 	map<BlockID, BlockData*>::iterator itr;
 	if((itr = s_idToData.find(id)) != s_idToData.end())
 	{
@@ -35,6 +34,7 @@ struct BlockDataDesc
 	const string itemName;
 	const float opacity;
 	const uint frameCount;
+	const bool solid; // TODO: Collision mask maybe
 };
 
 void BlockData::init()
@@ -43,12 +43,6 @@ void BlockData::init()
 
 	// Load block data from file
 	vector<BlockDataDesc> blockDataDesc;
-
-	{
-		// Add the "empty" block
-		BlockDataDesc desc = { 0, "null_block", "Sprites/Blocks/Empty.png", "", 0.0f, 1 };
-		blockDataDesc.push_back(desc);
-	}
 
 	if(util::fileExists("BlockData.xml"))
 	{
@@ -74,10 +68,11 @@ void BlockData::init()
 			tinyxml2::XMLElement *item = blockNode->FirstChildElement("item");
 			tinyxml2::XMLElement *opacity = blockNode->FirstChildElement("opacity");
 			tinyxml2::XMLElement *frames = blockNode->FirstChildElement("frames");
+			tinyxml2::XMLElement *solid = blockNode->FirstChildElement("solid");
 
 			if(id && name && image && item && opacity && frames)
 			{
-				BlockDataDesc desc = { util::strToInt(id->GetText()), name->GetText(), image->GetText(), item->GetText(), util::strToFloat(opacity->GetText()), (uint)util::strToInt(frames->GetText()) };
+				BlockDataDesc desc = { util::strToInt(id->GetText()), name->GetText(), image->GetText(), item->GetText(), util::strToFloat(opacity->GetText()), (uint)util::strToInt(frames->GetText()), solid == 0 };
 				blockDataDesc.push_back(desc);
 			}
 			else
@@ -118,7 +113,7 @@ void BlockData::init()
 
 		// Create block data object
 		Pixmap pixmap(blockData->imagePath, true);
-		s_nameToData[blockData->name] = s_idToData[blockData->id] = new BlockData(blockData->id, blockData->name, pixmap, blockData->itemName, blockData->opacity);
+		s_nameToData[blockData->name] = s_idToData[blockData->id] = new BlockData(blockData->id, blockData->name, pixmap, blockData->itemName, blockData->opacity, blockData->solid);
 		s_textureAtlas->add(util::intToStr(blockData->id), pixmap);
 
 		// Store meta data
@@ -150,12 +145,13 @@ void BlockData::init()
 	s_dataTexture->setFiltering(Texture2D::NEAREST);
 }
 
-BlockData::BlockData(const BlockID id, const string &name, const Pixmap &pixmap, const string &itemName, const float opacity) :
+BlockData::BlockData(const BlockID id, const string &name, const Pixmap &pixmap, const string &itemName, const float opacity, const bool solid) :
 	m_name(name),
 	m_id(id),
 	m_pixmap(pixmap),
 	m_itemName(itemName),
-	m_opacity(opacity)
+	m_opacity(opacity),
+	m_solid(solid)
 {
 }
 

@@ -23,16 +23,10 @@
     <None Include="..\Data\Shader\Generation.vert">
       <Filter>Data</Filter>
     </None>
-    <None Include="..\Data\Shader\Testing.frag">
+    <None Include="..\Data\Shader\Draw_Blocks.vert">
       <Filter>Data</Filter>
     </None>
-    <None Include="..\Data\Shader\Testing.vert">
-      <Filter>Data</Filter>
-    </None>
-    <None Include="..\Data\Shader\Colorize.vert">
-      <Filter>Data</Filter>
-    </None>
-    <None Include="..\Data\Shader\Colorize.frag">
+    <None Include="..\Data\Shader\Draw_Blocks.frag">
       <Filter>Data</Filter>
     </None>
   </ItemGroup>

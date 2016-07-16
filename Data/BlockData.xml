@@ -1,14 +1,13 @@
 <blocks>
-	<!--
 	<b>
 		<id>0</id>
-		<name>empty_block</name>
+		<name>Empty_Block</name>
 		<image>Sprites/Blocks/Empty.png</image>
 		<item>null_item</item>
 		<opacity>0.0</opacity>
 		<frames>1</frames>
+		<solid>0</solid>
 	</b>
-	-->
 	<b>
 		<id>1</id>
 		<name>Grass_Block</name>

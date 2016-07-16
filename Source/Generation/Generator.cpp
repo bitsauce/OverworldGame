@@ -7,9 +7,23 @@
 //#include "Structures/OakTree.h"
 
 ChunkGenerator::ChunkGenerator(const uint seed) :
-	m_seed(seed)
+	m_seed(seed),
+	m_graphicsContext(Game::GetInstance()->getWindow()->getGraphicsContext())
 {
 	m_random.setSeed(seed);
+
+	m_generationShader = Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/Generation");
+	m_generationShader->setUniform1i("u_ShowNoise", false);
+	m_generationShader->setUniform2f("u_Resolution", CHUNK_BLOCKS, CHUNK_BLOCKS);
+	m_generationShader->setUniform1ui("u_Seed", 512);
+	m_generationShader->setUniform1f("u_CliffingDelta", 70.0f);
+
+	m_renderTarget = Resource<RenderTarget2D>(new RenderTarget2D(CHUNK_BLOCKS, CHUNK_BLOCKS));
+
+	m_blockData[BLOCK_EMPTY] = BlockData::get("Empty_Block");
+	m_blockData[BLOCK_GRASS] = BlockData::get("Grass_Block");
+	m_blockData[BLOCK_DIRT_BACK] = BlockData::get("Dirt_Backdrop");
+	m_blockData[BLOCK_STONE] = BlockData::get("Stone_Block");
 }
 
 void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, ChunkBlock *blocks)
@@ -22,8 +36,31 @@ void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, ChunkBlo
 	// the chunk has to be loaded when we know that all the structures that will affect this chunk are generated.
 	//BlockID *structureBlocks = m_chunkStructures[CHUNK_KEY(chunkX, chunkY)];
 
+	m_generationShader->setUniform2f("u_Position", chunkX * CHUNK_BLOCKS, chunkY * CHUNK_BLOCKS);
+	m_graphicsContext->setRenderTarget(m_renderTarget.get());
+	//m_graphicsContext->disable(GraphicsContext::BLEND);
+	m_graphicsContext->setShader(m_generationShader);
+	m_graphicsContext->drawRectangle(0, 0, CHUNK_BLOCKSF, CHUNK_BLOCKSF);
+	m_graphicsContext->setShader(0);
+	m_graphicsContext->setRenderTarget(0);
+	//m_graphicsContext->enable(GraphicsContext::BLEND);
+
+	Pixmap pixmap = m_renderTarget->getTexture()->getPixmap();
+	uchar pixel[4];
+	for(int y = 0; y < CHUNK_BLOCKS; ++y)
+	{
+		for(int x = 0; x < CHUNK_BLOCKS; ++x)
+		{
+			pixmap.getPixel(x, y, pixel);
+			for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
+			{
+				blocks[BLOCK_INDEX(x, y, z)].setBlockData(BlockData::get(pixel[z]));
+			}
+		}
+	}
+
 	// Load blocks
-	const int tileX = chunkX * CHUNK_BLOCKS;
+	/*const int tileX = chunkX * CHUNK_BLOCKS;
 	const int tileY = chunkY * CHUNK_BLOCKS;
 	for(int y = 0; y < CHUNK_BLOCKS; ++y)
 	{
@@ -34,7 +71,7 @@ void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, ChunkBlo
 				//BlockID structureBlock;
 				//if((structureBlock = structureBlocks[BLOCK_INDEX(x, y, z)]) == BLOCK_EMPTY)
 				{
-					blocks[BLOCK_INDEX(x, y, z)].setBlock(BlockData::get(getGroundAt(tileX + x, tileY + y, (WorldLayer) z)));
+					blocks[BLOCK_INDEX(x, y, z)].setBlockData(m_blockData[getGroundAt(tileX + x, tileY + y, (WorldLayer) z)]);
 				}
 				//else
 				{
@@ -42,10 +79,10 @@ void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, ChunkBlo
 				}
 			}
 		}
-	}
+	}*/
 }
 	
-BlockID ChunkGenerator::getGroundAt(const int x, const int y, const WorldLayer layer)
+ChunkGenerator::BlockType ChunkGenerator::getGroundAt(const int x, const int y, const WorldLayer layer)
 {
 	switch(layer)
 	{
@@ -74,7 +111,7 @@ BlockID ChunkGenerator::getGroundAt(const int x, const int y, const WorldLayer l
 		}
 		break;
 	}
-	return 0;
+	return BLOCK_EMPTY;
 }
 
 void ChunkGenerator::loadStructures(const int chunkX, const int chunkY)

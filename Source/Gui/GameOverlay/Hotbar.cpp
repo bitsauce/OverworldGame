@@ -39,6 +39,13 @@ Hotbar::~Hotbar()
 
 void Hotbar::onTick(TickEvent *e)
 {
+	if(m_mouseWheel != 0)
+	{
+		Player *player = m_gameOverlay->getPlayer();
+		player->setSelectedSlot(math::mod(player->getSelectedSlot() + (m_mouseWheel < 0 ? 1 : -1), 10));
+		m_mouseWheel = 0;
+	}
+
 	setSize(Vector2F(490.f, 56.f) / m_gameOverlay->getDrawSize());
 	UiObject::onTick(e);
 }
@@ -90,8 +97,7 @@ void Hotbar::setSelectedSlot(KeyEvent *e, const uint slot)
 
 void Hotbar::onMouseWheel(MouseEvent *e)
 {
-	Player *player = m_gameOverlay->getPlayer();
-	player->setSelectedSlot(math::mod(player->getSelectedSlot() + (e->getWheelY() < 0 ? 1 : -1), 10));
+	m_mouseWheel = e->getWheelY();
 }
 
 void Hotbar::onMouseMove(MouseEvent *e)

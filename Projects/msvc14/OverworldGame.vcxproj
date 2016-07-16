@@ -254,6 +254,8 @@
     <None Include="..\..\Data\Shaders\BlurV.vert" />
     <None Include="..\..\Data\Shaders\DirectionalLighting.frag" />
     <None Include="..\..\Data\Shaders\DirectionalLighting.vert" />
+    <None Include="..\..\Data\Shaders\Generation.frag" />
+    <None Include="..\..\Data\Shaders\Generation.vert" />
     <None Include="..\..\Data\Shaders\GodRays.frag" />
     <None Include="..\..\Data\Shaders\GodRays.vert" />
     <None Include="..\..\Data\Shaders\Outline.frag" />

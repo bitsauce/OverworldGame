@@ -241,4 +241,9 @@
 		<vertexFilePath>Shaders/Shadow_Render.vert</vertexFilePath>
 		<fragmentFilePath>Shaders/Shadow_Render.frag</fragmentFilePath>
 	</shader>
+	<shader>
+		<name>Shaders/Generation</name>
+		<vertexFilePath>Shaders/Generation.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/Generation.frag</fragmentFilePath>
+	</shader>
 </resources>

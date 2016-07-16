@@ -95,12 +95,10 @@
     <Xml Include="..\Data\Resources.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Data\Shader\Colorize.frag" />
-    <None Include="..\Data\Shader\Colorize.vert" />
     <None Include="..\Data\Shader\Generation.frag" />
     <None Include="..\Data\Shader\Generation.vert" />
-    <None Include="..\Data\Shader\Testing.frag" />
-    <None Include="..\Data\Shader\Testing.vert" />
+    <None Include="..\Data\Shader\Draw_Blocks.frag" />
+    <None Include="..\Data\Shader\Draw_Blocks.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\Generator.h" />

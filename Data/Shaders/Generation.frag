@@ -6,7 +6,6 @@ uniform vec2 u_Position;
 uniform vec2 u_Resolution;
 uniform uint u_Seed;
 uniform float u_Time;
-uniform float u_Scale;
 uniform float u_CliffingDelta;
 
 int hash(int x)
@@ -69,23 +68,17 @@ float fractalNoise2D(int octaves, vec2 pos)
 #define HEIGHT_MIN 720
 #define HEIGHT_MAX 0
 
-//uniform sampler2D u_Block;
-
-
 #define BLOCK_EMPTY 0U
 #define BLOCK_GRASS 1U
 #define BLOCK_DIRT 2U
-#define BLOCK_DIRT_BACK 3U
-#define BLOCK_STONE 4U
-#define BLOCK_STONE_BACK 5U
+#define BLOCK_DIRT_BACK 4U
+#define BLOCK_STONE 3U
+//#define BLOCK_STONE_BACK 5U
 
 void main()
 {
-	vec2 blockPos = floor(v_TexCoord * u_Resolution * u_Scale + u_Position);
-	
-	//float baseHeight = fractalNoise1D(4, 0.1 * blockPos.x / u_Resolution.x) * 10000.0;
+	vec2 blockPos = floor(v_TexCoord * u_Resolution + u_Position);
 	float f = u_Resolution.x / 720.0;
-
 
 	// Get noise value
 	float height = /*baseHeight +*/ mix(HEIGHT_MAX, HEIGHT_MIN - u_CliffingDelta, fractalNoise1D(4, 5.0 * f * blockPos.x / u_Resolution.x));
@@ -109,7 +102,7 @@ void main()
 
 	if(distanceToGround < -25)
 	{
-		blockIDs[0] = BLOCK_STONE_BACK;
+		blockIDs[0] = BLOCK_DIRT_BACK;//BLOCK_STONE_BACK;
 	}
 	else if(distanceToGround < -5)
 	{

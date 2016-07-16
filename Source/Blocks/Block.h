@@ -15,17 +15,12 @@ public:
 	{
 	}
 
-	void setBlock(const BlockData *block)
-	{
-		m_blockData = block;
-	}
-
 	void setBlockEntity(BlockEntity *entity)
 	{
 		m_blockEntity = entity;
 	}
 
-	void setBlockData(BlockData *data)
+	void setBlockData(const BlockData *data)
 	{
 		m_blockData = data;
 	}

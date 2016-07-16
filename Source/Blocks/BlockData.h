@@ -10,7 +10,7 @@ class BlockData
 	friend class Debug;
 public:
 	// Constructor
-	BlockData(const BlockID id, const string &name, const Pixmap &pixmap, const string &item, const float opacity);
+	BlockData(const BlockID id, const string &name, const Pixmap &pixmap, const string &item, const float opacity, const bool solid);
 	
 	// Getters
 	BlockID getID() const { return m_id; }
@@ -18,6 +18,7 @@ public:
 	ItemData *getItem() const;
 	Pixmap getPixmap() const { return m_pixmap; }
 	float getOpacity() const { return m_opacity; }
+	bool isSolid() const { return m_solid; }
 
 	// Static functions
 	static void init();
@@ -40,6 +41,7 @@ private:
 	const string m_itemName;
 	const Pixmap m_pixmap;
 	const float m_opacity;
+	const bool m_solid;
 
 	// Static data
 	static map<BlockID, BlockData*> s_idToData;

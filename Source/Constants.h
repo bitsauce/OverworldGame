@@ -83,10 +83,6 @@ enum EntityID
  */
 
 typedef int BlockID;
-//#define BLOCK_EMPTY 0
-#define BLOCK_GRASS 1
-#define BLOCK_STONE 3
-#define BLOCK_DIRT_BACK 4
 
 /**
  * \enum	BlockEntityID

@@ -28,6 +28,7 @@ private:
 	Sprite m_slotSelectedSprite;
 	Resource<Font> m_itemAmountFont, m_itemDescFont;
 	Vector2F m_mousePosition;
+	int m_mouseWheel;
 };
 
 #endif // HOTBAR_SLOT_H

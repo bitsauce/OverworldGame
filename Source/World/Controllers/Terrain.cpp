@@ -68,7 +68,7 @@ const BlockData *Terrain::getBlockAt(const int x, const int y, const WorldLayer 
 
 bool Terrain::isBlockAt(const int x, const int y, const WorldLayer layer)
 {
-	return getBlockAt(x, y, layer) != 0;
+	return getBlockAt(x, y, layer)->isSolid();
 }
 
 #include "Items/ItemData.h"
@@ -76,7 +76,7 @@ bool Terrain::isBlockAt(const int x, const int y, const WorldLayer layer)
 bool Terrain::removeBlockAt(const int x, const int y, const WorldLayer layer, const bool createItem)
 {
 	const BlockData *block = getBlockAt(x, y, layer);
-	if(setBlockAt(x, y, layer, 0, true))
+	if(setBlockAt(x, y, layer, BlockData::get(0), true))
 	{
 		if(createItem)
 		{

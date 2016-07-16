@@ -122,12 +122,12 @@ void ChunkManager::loadBlockData(FileReader &file, ChunkBlock *blockData)
 	int pos = 0;
 	while(pos < CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT)
 	{
-		int block, length;
-		file >> block;
+		int blockID, length;
+		file >> blockID;
 		file >> length;
 		for(int i = 0; i < length; ++i)
 		{
-			blockData[pos + i].setBlock(BlockData::get(block));
+			blockData[pos + i].setBlockData(BlockData::get(blockID));
 		}
 		pos += length;
 	}
@@ -620,7 +620,6 @@ void ChunkManager::reattachChunk(Chunk *chunk, GraphicsContext *context)
 	m_world->getLighting()->m_redraw = true;
 
 	// Attach this chunk's and its neighbours' block data to the block data render-target
-	context->setRenderTarget(m_blocksRenderTarget);
 	for(int i = -1; i <= 1; i++)
 	{
 		for(int j = -1; j <= 1; j++)
@@ -628,6 +627,8 @@ void ChunkManager::reattachChunk(Chunk *chunk, GraphicsContext *context)
 			Chunk *neighbour = getChunkAt(chunk->getX() + i, chunk->getY() + j, true);
 			if(!neighbour->isAttached())
 			{
+				//context->disable(GraphicsContext::BLEND);
+				context->setRenderTarget(m_blocksRenderTarget);
 				neighbour->attach(context, math::mod(neighbour->getX(), m_loadingArea.getWidth()), math::mod(neighbour->getY(), m_loadingArea.getHeight()));
 			}
 		}
