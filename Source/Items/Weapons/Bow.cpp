@@ -6,6 +6,7 @@
 #include "Game/Game.h"
 #include "Animation/Skeleton.h"
 #include "Animation/Bone.h"
+#include "Animation/RegionAttachment.h"
 
 Bow::Bow(OverworldGame *game, const ItemDataDesc *desc) :
 	ItemData(desc),
@@ -23,12 +24,14 @@ Bow::Bow(OverworldGame *game, const ItemDataDesc *desc) :
 
 void Bow::equip(Pawn *player)
 {
-	//player->getHumanoid().setAttachmentTexture(Humanoid::ARM_LEFT, 1, m_attachTexture);
+	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "Right_Hand_Equip", "Bow");
+	attachment->setPosition(-3.5f, 0.0f);
+	attachment->setRotation(0.0f);
 }
 
 void Bow::unequip(Pawn *player)
 {
-	//player->getHumanoid().setAttachmentTexture(Humanoid::ARM_LEFT, 1, 0);
+	player->getHumanoid().clearAttachment(Humanoid::HAND_RIGHT);
 }
 
 void Bow::update(Pawn *pawn, const float delta)
@@ -68,7 +71,7 @@ void Bow::update(Pawn *pawn, const float delta)
 				pawn->getHumanoid().setPostBlendAnimations(Humanoid::ANIM_ARROW_AIM_FW, Humanoid::ANIM_ARROW_AIM_UP, alpha);
 			}
 		}
-		//pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_LEFT, 1, 0);
+		pawn->getHumanoid().clearAttachment(Humanoid::HAND_RIGHT);
 	}
 	else if(m_charging)
 	{
@@ -79,7 +82,10 @@ void Bow::update(Pawn *pawn, const float delta)
 		m_chargeTime = 0.0f;
 		m_charging = false;
 		pawn->getHumanoid().setPostBlendAnimations(Humanoid::ANIM_NULL, Humanoid::ANIM_NULL, 0.0f);
-		//pawn->getHumanoid().setAttachmentTexture(Humanoid::ARM_LEFT, 1, m_attachTexture);
+
+		RegionAttachment *attachment = pawn->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "Right_Hand_Equip", "Bow");
+		attachment->setPosition(-3.5f, 0.0f);
+		attachment->setRotation(0.0f);
 	}
 }
 

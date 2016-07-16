@@ -216,15 +216,15 @@ void Debug::onDraw(DrawEvent *e)
 		blocks[WORLD_LAYER_FRONT] = m_world->getTerrain()->getBlockAt(blockX, blockY, WORLD_LAYER_FRONT);
 
 		stringstream ss;
-		if(!blocks[WORLD_LAYER_BACK] && !blocks[WORLD_LAYER_MIDDLE] && !blocks[WORLD_LAYER_FRONT])
+		if(blocks[WORLD_LAYER_BACK]->getID() == 0 && blocks[WORLD_LAYER_MIDDLE]->getID() == 0 && blocks[WORLD_LAYER_FRONT]->getID() == 0)
 		{
 			ss << "None";
 		}
 		else
 		{
-			if(blocks[WORLD_LAYER_BACK]) { ss << "Back: " << blocks[WORLD_LAYER_BACK]->getName() << " "; }
-			if(blocks[WORLD_LAYER_MIDDLE]) { ss << "Middle: " << blocks[WORLD_LAYER_MIDDLE]->getName() << " "; }
-			if(blocks[WORLD_LAYER_FRONT]) { ss << "Front: " << blocks[WORLD_LAYER_FRONT]->getName() << " "; }
+			if(blocks[WORLD_LAYER_BACK]->getID() != 0) { ss << "Back: " << blocks[WORLD_LAYER_BACK]->getName() << " "; }
+			if(blocks[WORLD_LAYER_MIDDLE]->getID() != 0) { ss << "Middle: " << blocks[WORLD_LAYER_MIDDLE]->getName() << " "; }
+			if(blocks[WORLD_LAYER_FRONT]->getID() != 0) { ss << "Front: " << blocks[WORLD_LAYER_FRONT]->getName() << " "; }
 			ss << "at " << blockX << ", " << blockY;
 		}
 		setVariable("Blocks Under Cursor", ss.str());

@@ -78,7 +78,7 @@ float fractalNoise2D(int octaves, vec2 pos)
 void main()
 {
 	vec2 blockPos = floor(v_TexCoord * u_Resolution + u_Position);
-	float f = u_Resolution.x / 720.0;
+	float f = u_Resolution.x / 720.0; // TODO: f can be integrated into u_Resolution (by u_Resolution /= f)
 
 	// Get noise value
 	float height = /*baseHeight +*/ mix(HEIGHT_MAX, HEIGHT_MIN - u_CliffingDelta, fractalNoise1D(4, 5.0 * f * blockPos.x / u_Resolution.x));
