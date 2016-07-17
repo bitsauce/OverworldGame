@@ -102,7 +102,6 @@ private:
 
 	// Chunk positions
 	Vector2I m_chunkPositions[4];
-	Vector2F  m_averagePosition;
 	uint m_chunkPositionIndex;
 
 	// Cirlce load patterns

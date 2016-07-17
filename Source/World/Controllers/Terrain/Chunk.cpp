@@ -253,7 +253,7 @@ void Chunk::attach(GraphicsContext *context, const int x, const int y)
 
 void Chunk::detach()
 {
-	m_attached = false;
+	m_attached = m_sorted = false;
 }
 
 void Chunk::drawBlockEntities(GraphicsContext *context)

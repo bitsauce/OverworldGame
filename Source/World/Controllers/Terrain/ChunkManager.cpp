@@ -36,7 +36,7 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 	m_applyZoom(true),
 	m_window(window),
 	m_camera(world->getCamera()),
-	m_generator(new ChunkGenerator(9823)),
+	m_generator(new ChunkGenerator(512)),
 	m_world(world),
 	m_chunkPositionIndex(0),
 	m_loadAreaRadius(5),
@@ -381,7 +381,7 @@ void ChunkManager::onDraw(DrawEvent *e)
 	}
 	else if(m_loadingArea != m_prevLoadingArea)
 	{
-		// Get chunks leaved
+		// Get chunks left
 		int x0, x1, y0, y1;
 		if(m_loadingArea.x0 > m_prevLoadingArea.x0) // Moved right
 		{
@@ -442,14 +442,6 @@ void ChunkManager::onDraw(DrawEvent *e)
 				}
 			}
 		}
-
-		// Calculate average position
-		m_averagePosition.set(0.0f, 0.0f);
-		for(int i = 0; i < 4; ++i)
-		{
-			m_averagePosition += m_chunkPositions[i];
-		}
-		m_averagePosition /= 4.0f;
 
 		// Store previous position
 		m_chunkPositions[m_chunkPositionIndex++ % 4] = Vector2I(m_loadingArea.x0, m_loadingArea.x1);

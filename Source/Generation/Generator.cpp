@@ -15,7 +15,7 @@ ChunkGenerator::ChunkGenerator(const uint seed) :
 	m_generationShader = Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/Generation");
 	m_generationShader->setUniform1i("u_ShowNoise", false);
 	m_generationShader->setUniform2f("u_Resolution", CHUNK_BLOCKS, CHUNK_BLOCKS);
-	m_generationShader->setUniform1ui("u_Seed", 512);
+	m_generationShader->setUniform1ui("u_Seed", seed);
 	m_generationShader->setUniform1f("u_CliffingDelta", 70.0f);
 
 	m_renderTarget = Resource<RenderTarget2D>(new RenderTarget2D(CHUNK_BLOCKS, CHUNK_BLOCKS));

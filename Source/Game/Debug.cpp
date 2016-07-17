@@ -200,10 +200,18 @@ void Debug::onDraw(DrawEvent *e)
 	spriteBatch->end();
 	spriteBatch->begin();
 
-	// Set debug variables
-	setVariable("Chunks", util::intToStr(m_world->getTerrain()->getChunkManager()->m_chunks.size()) + " / " + util::intToStr(m_world->getTerrain()->getChunkManager()->m_optimalChunkCount));
 	Vector2I center = m_world->getCamera()->getCenter(e->getAlpha());
 	Vector2F inputPosition = m_world->getCamera()->getInputPosition();
+
+	// Set debug variables
+	setVariable("Chunks", util::intToStr(m_world->getTerrain()->getChunkManager()->m_chunks.size()) + " / " + util::intToStr(m_world->getTerrain()->getChunkManager()->m_optimalChunkCount));
+	
+	{
+		const int chunkX = (int) floor(inputPosition.x / CHUNK_PXF);
+		const int chunkY = (int) floor(inputPosition.y / CHUNK_PXF);
+		setVariable("Chunk Under Cursor", util::intToStr(chunkX) + ", " + util::intToStr(chunkY));
+	}
+
 	setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
 	setVariable("Zoom", util::intToStr(int(m_world->getCamera()->getZoomLevel() * 100)) + "%");
 	{
