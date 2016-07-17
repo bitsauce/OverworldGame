@@ -80,7 +80,6 @@ void Server::onTick(TickEvent *e)
 
 				// Create player
 				Player *player = new Player(playerName, m_game, local);
-				//m_game->getWorld()->addEntity(player);
 
 				// If player is hosting locally
 				if(local)
@@ -107,8 +106,15 @@ void Server::onTick(TickEvent *e)
 				{
 					LOG("Creating new player '%s'...", playerName);
 
+					// Find spawn location
+					{
+						const int x = rand() % 1024 - 512;
+						int y = 0;
+						while(!m_game->getWorld()->getTerrain()->isBlockAt(x, y, WORLD_LAYER_MIDDLE)) y++;
+						player->setPosition(x * BLOCK_PXF, y * BLOCK_PXF - player->getHeight());
+					}
+
 					// Give default load out
-					player->setPosition(Vector2F(0, 0));
 					player->getStorage()->addItem(ItemData::getByName("iron_pickaxe_item")->getID());
 					player->getStorage()->addItem(ItemData::getByName("iron_axe_item")->getID());
 					player->getStorage()->addItem(ItemData::getByName("bow_item")->getID());

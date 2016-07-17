@@ -89,7 +89,14 @@ public:
 		return m_localPlayer;
 	}
 
+	uint getSeed() const
+	{
+		return m_seed;
+	}
+
 private:
+	uint m_seed;
+
 	Terrain *m_terrain;
 	Background *m_background;
 	TimeOfDay *m_timeOfDay;

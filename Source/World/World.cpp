@@ -56,9 +56,9 @@ void World::create(const string &name)
 	FileSystem::MakeDir(m_worldPath + "/Entities");
 
 	// Create world file
-	uint seed = Random().nextInt();
+	m_seed = Random().nextInt();
 	m_worldFile->setValue("world", "name", name);
-	m_worldFile->setValue("world", "seed", util::intToStr(seed));
+	m_worldFile->setValue("world", "seed", util::intToStr(m_seed));
 	m_worldFile->save();
 
 	//m_generator->setSeed(seed);
@@ -78,6 +78,8 @@ bool World::load(const string &name)
 		// Set the world path
 		m_worldPath = "prefs:/" + name;
 		m_worldFile = new IniFile(worldFile);
+
+		m_seed = util::strToInt(m_worldFile->getValue("world", "seed"));
 
 		/*FileSystemIterator itr(m_worldPath + "/Objects", "*.obj", FileSystemIterator::FILES);
 		while(itr.hasNext())

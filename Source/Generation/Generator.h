@@ -13,8 +13,6 @@ public:
 	ChunkGenerator(const uint seed);
 
 	uint getSeed() const { return m_seed; }
-	Simplex2D &getSimplexNoise() { return m_noise; }
-	Random getRandom() { return m_random; }
 
 	void getChunkBlocks(const int chunkX, const int chunkY, ChunkBlock *blocks);
 	int getGroundHeight(const int x);
@@ -22,9 +20,6 @@ public:
 	void setBlockAt(const int x, const int y, const WorldLayer z, const BlockID block);
 
 private:
-	void loadStructures(const int superChunkX, const int superChunkY);
-
-	Resource<Shader> m_generationShader;
 
 	enum BlockType
 	{
@@ -35,18 +30,12 @@ private:
 		BLOCK_COUNT
 	};
 
-	BlockType getGroundAt(const int x, const int y, const WorldLayer layer);
-
-	uint m_seed;
-	Simplex2D m_noise;
-	Random m_random;
-
+	const uint m_seed;
 	const BlockData *m_blockData[BLOCK_COUNT];
-
-	map<int, BlockID*> m_chunkStructures;
 
 	GraphicsContext *m_graphicsContext;
 	Resource<RenderTarget2D> m_renderTarget;
+	Resource<Shader> m_generationShader;
 };
 
 #endif // WORLD_GENERATOR_H
