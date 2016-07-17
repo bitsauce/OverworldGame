@@ -16,7 +16,7 @@ class Client : public Connection
 public:
 	Client(OverworldGame * game, const string &ip, const ushort port);
 
-	void update();
+	void onTick(TickEvent *e);
 	void sendPacket(RakNet::BitStream *bitStream);
 
 private:

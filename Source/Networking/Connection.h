@@ -13,6 +13,7 @@
 #include "PacketLogger.h"
 
 class NetworkObject;
+class Entity;
 
 class Connection : public SceneObject
 {
@@ -37,6 +38,7 @@ protected:
 	RakNet::RakPeerInterface *m_rakPeer;
 	RakNet::NetworkIDManager m_networkIDManager;
 	list<NetworkObject*> m_networkObjects;
+	list<Entity*> m_networkEntities;
 	static Connection *s_instance;
 
 protected:

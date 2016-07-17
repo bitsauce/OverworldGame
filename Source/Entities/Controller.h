@@ -39,6 +39,5 @@ public:
 protected:
 	Pawn *m_pawn;
 	bool m_inputState[INPUT_COUNT];
-	bool m_clientInputState[INPUT_COUNT];
-	void setClientInputState(const bool state, int type);
+	void setInputState(const bool state, int type);
 };

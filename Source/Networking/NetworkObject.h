@@ -12,9 +12,12 @@ public:
 	NetworkObject();
 	~NetworkObject();
 	
-	virtual void pack(RakNet::BitStream *bitStream, const Connection *conn) = 0;
-	virtual void unpack(RakNet::BitStream *bitStream, const Connection *conn) = 0;
+	// TODO: pack -> onPack, unpack -> onUnpack
+	virtual void pack(RakNet::BitStream *bitStream, const Connection *conn) {}
+	virtual void unpack(RakNet::BitStream *bitStream, const Connection *conn) {}
 
+	//bool isLocal() const;
+	bool m_local;
 private:
 };
 

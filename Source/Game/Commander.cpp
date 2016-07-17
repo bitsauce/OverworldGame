@@ -18,6 +18,7 @@ Commander::Commander(OverworldGame *game) :
 	m_commands.push_back(Command("testphysics", "6", "<gravity> <jumpforce> <jumpease> <movespeed> <maxspeed> <friction>", bind(&Commander::setGravity, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("testclouds", "2", "<height> <offset>", bind(&Commander::testclouds, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("setres", "2", "<w> <h>", bind(&Commander::setres, this, placeholders::_1, placeholders::_2)));
+	m_commands.push_back(Command("connect", "1|2", "<ip> [port]", bind(&Commander::connect, this, placeholders::_1, placeholders::_2)));
 }
 
 Commander::~Commander()
@@ -144,4 +145,26 @@ void Commander::testclouds(Chat*, vector<string> args)
 void Commander::setres(Chat *, vector<string> args)
 {
 	m_game->getWindow()->setSize(util::strToFloat(args[0]), util::strToFloat(args[1]));
+}
+
+#include "Game/States/InGameState.h"
+#include "Networking/Client.h"
+
+void Commander::connect(Chat *, vector<string> args)
+{
+	ushort port = 45556;
+	if(args.size() == 2)
+	{
+		port = util::strToInt(args[1]);
+	}
+
+	// Create client object
+	Client *client = new Client(m_game, args[0], port);
+
+	// Create game state
+	InGameState *state = new InGameState(m_game, client);
+
+	// Push game state
+	m_game->popState();
+	m_game->pushState(state);
 }

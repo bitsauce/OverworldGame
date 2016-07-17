@@ -24,7 +24,8 @@ class EntityLayer;
 class World : public SceneObject
 {
 	friend class Server;
-	friend class Pawn;
+	friend class Client;
+	friend class Pawn; // TODO: ???
 public:
 	World(Game *game);
 

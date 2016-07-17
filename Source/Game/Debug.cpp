@@ -21,10 +21,10 @@
 	"F6: Show lighting info\n" \
 	"F7: Set time\n" \
 	"F8: Spawn menu\n" \
-	"F9: Multiplayer menu\n" \
+	"F9: [No function]\n" \
 	"F10: Detach/attach camera\n" \
-	"F11: [No func]\n" \
-	"F12: [No func]"
+	"F11: Stress-test block entitites\n" \
+	"F12: [No function]"
 
 Debug::Debug(OverworldGame *game) :
 	m_game(game),
@@ -118,17 +118,8 @@ void Debug::debugFunction(KeyEvent *e)
 		}
 		break;
 
-		// Multiplayer menu
 		case SAUCE_KEY_F9:
 		{
-			if(m_game->peekState()->getID() == GAME_STATE_MULTIPLAYER)
-			{
-				m_game->popState();
-			}
-			else
-			{
-				//m_game.pushState(new MultiplayerScene(m_world));
-			}
 		}
 		break;
 

@@ -3,7 +3,6 @@
 
 #include "Config.h"
 #include "Game/Storage.h"
-#include "Networking/NetworkObject.h"
 #include "Humanoid.h"
 #include "DynamicEntity.h"
 #include "Controller.h"
@@ -36,7 +35,7 @@ private:
 	const uint m_height;
 };
 
-class Pawn : public DynamicEntity, public NetworkObject
+class Pawn : public DynamicEntity
 {
 public:
 	Pawn(World *world, const EntityID id);

@@ -2,12 +2,13 @@
 #define ENTITY_H
 
 #include "Config.h"
+#include "Networking/NetworkObject.h"
 
 enum EntityID;
 class World;
 class EntityData;
 
-class Entity : public SceneObject
+class Entity : public SceneObject, public NetworkObject
 {
 public:
 	Entity(World *world, const EntityID id);

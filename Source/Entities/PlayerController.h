@@ -11,10 +11,11 @@ class PlayerController : public Controller
 {
 public:
 	PlayerController(OverworldGame *game, const bool local);
+	~PlayerController();
 
 private:
 	OverworldGame *m_game;
 
-	void updateClientInputState(KeyEvent *e, int type);
-	void updateClientUseItemState(KeyEvent *e);
+	void updateInputState(KeyEvent *e, int type);
+	void updateUseItemState(KeyEvent *e);
 };

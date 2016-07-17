@@ -15,8 +15,7 @@ WorldLayer toWorldLayer(const string &layer)
 
 BlockItem::BlockItem(OverworldGame *game, const ItemDataDesc *desc) :
 	ItemData(desc),
-	m_camera(game->getWorld()->getCamera()),
-	m_terrain(game->getWorld()->getTerrain())
+	m_game(game)
 {
 	if(desc->userData.find("layer") != desc->userData.end())
 	{
@@ -66,12 +65,12 @@ void BlockItem::unequip(Pawn *player)
 void BlockItem::use(Pawn *pawn, const float delta)
 {
 	// Get block input position
-	Vector2I blockPos = m_camera->getInputPosition();
+	Vector2I blockPos = m_game->getWorld()->getCamera()->getInputPosition();
 	blockPos.x = (int) floor(blockPos.x/BLOCK_PXF);
 	blockPos.y = (int) floor(blockPos.y/BLOCK_PXF);
 
 	// Set block if not occupied
-	if(m_terrain->setBlockAt(blockPos.x, blockPos.y, m_layer, m_blockData))
+	if(m_game->getWorld()->getTerrain()->setBlockAt(blockPos.x, blockPos.y, m_layer, m_blockData))
 	{
 		// Remove item from player inventory
 		pawn->getCurrentItem()->dec();

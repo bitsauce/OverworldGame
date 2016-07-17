@@ -13,7 +13,7 @@ void AIController::update()
 	// Reset all input
 	for(uint i = 0; i < INPUT_COUNT; ++i)
 	{
-		setClientInputState(false, i);
+		setInputState(false, i);
 	}
 
 	Pawn* closestPawn = nullptr;
@@ -31,16 +31,16 @@ void AIController::update()
 		Vector2F playerPosition = closestPawn->getCenter(), position = m_pawn->getCenter();
 		if(playerPosition.x < position.x)
 		{
-			setClientInputState(true, INPUT_MOVE_LEFT);
+			setInputState(true, INPUT_MOVE_LEFT);
 		}
 		else
 		{
-			setClientInputState(true, INPUT_MOVE_RIGHT);
+			setInputState(true, INPUT_MOVE_RIGHT);
 		}
 
 		if(m_prevPos.x == m_pawn->getX())
 		{
-			setClientInputState(true, INPUT_JUMP);
+			setInputState(true, INPUT_JUMP);
 		}
 	}
 

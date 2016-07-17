@@ -14,29 +14,38 @@
 #include "Game/Game.h"
 #include "World/World.h"
 
-#include "Entities/Pawn.h"
+#include "Entities/Player.h"
 
-Client::Client(OverworldGame * game, const string &ip, const ushort port) :
+#include "Gui/GameOverlay/GameOverlay.h"
+
+Client::Client(OverworldGame *game, const string &ip, const ushort port) :
 	Connection(false),
 	m_game(game)
 {
 	RakNet::SocketDescriptor socketDescriptor;
 	assert(m_rakPeer->Startup(1, &socketDescriptor, 1) == RakNet::RAKNET_STARTED);
 	assert(m_rakPeer->Connect(ip.c_str(), port, 0, 0) == RakNet::CONNECTION_ATTEMPT_STARTED);
+
+	m_rakPeer->SetTimeoutTime(600000, RakNet::UNASSIGNED_SYSTEM_ADDRESS); // For debugging
 }
 
-void Client::update()
+#include "Entities/PlayerController.h"
+
+void Client::onTick(TickEvent *e)
 {
 	for(NetworkObject *object : m_networkObjects)
 	{
-		RakNet::BitStream bitStream;
-		bitStream.Write((RakNet::MessageID)ID_NETWORK_OBJECT_UPDATE);
-		bitStream.Write(object->GetNetworkID());
-		uint bitsBefore = bitStream.GetNumberOfBitsUsed();
-		object->pack(&bitStream, this);
-		if(bitsBefore < bitStream.GetNumberOfBitsUsed())
+		if(object->m_local)
 		{
-			sendPacket(&bitStream);
+			RakNet::BitStream bitStream;
+			bitStream.Write((RakNet::MessageID)ID_NETWORK_OBJECT_UPDATE);
+			bitStream.Write(object->GetNetworkID());
+			uint bitsBefore = bitStream.GetNumberOfBitsUsed();
+			object->pack(&bitStream, this);
+			if(bitsBefore < bitStream.GetNumberOfBitsUsed())
+			{
+				sendPacket(&bitStream);
+			}
 		}
 	}
 
@@ -56,24 +65,58 @@ void Client::update()
 			}
 			break;
 
+			case ID_PLAYER_JOIN:
+			{
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
+
+				char *playerName = new char[512]; bitStream.Read(playerName);
+				RakNet::RakNetGUID guid; bitStream.Read(guid);
+				RakNet::NetworkID playerNetworkID; bitStream.Read(playerNetworkID);
+				RakNet::NetworkID controllerNetworkID; bitStream.Read(controllerNetworkID);
+
+				// Create player
+				Player *player = new Player("BitsauceClient", m_game, true);
+				player->SetNetworkIDManager(&m_networkIDManager);
+				player->SetNetworkID(playerNetworkID);
+				player->unpack(&bitStream, this);
+
+				// Create player controller
+				PlayerController *playerController = new PlayerController(m_game, true);
+				playerController->SetNetworkIDManager(&m_networkIDManager);
+				playerController->SetNetworkID(controllerNetworkID);
+				player->setController(playerController);
+
+				player->m_local = true;
+				playerController->m_local = true;
+
+				m_game->getGameOverlay()->setPlayer(player);
+				m_game->getWorld()->getCamera()->setTargetEntity(player);
+				m_game->getWorld()->m_localPlayer = player;
+			}
+			break;
+
 			case ID_CREATE_ENTITY:
 			{
-				/*RakNet::BitStream bitStream(packet->data, packet->length, false);
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
-				//bitStream.Read(entityID);
+
+				EntityID entityID; bitStream.Read(entityID);
 				RakNet::NetworkID networkID; bitStream.Read(networkID);
 				RakNet::RakNetGUID guid; bitStream.Read(guid);
 
-				// Create player
-				Pawn *player = new Pawn(m_game, guid);
-				player->SetNetworkIDManager(&m_networkIDManager);
-				player->SetNetworkID(networkID);
-
-				m_networkObjects.push_back(player);
-
-				player->setPosition(Vector2F(0, 0));
-				player->getStorage()->addItem(ITEM_PICKAXE_IRON);
-				player->getStorage()->addItem(ITEM_TORCH, 255);*/
+				switch(entityID)
+				{
+					case ENTITY_PLAYER:
+					{
+						// Create player
+						Player *player = new Player("", m_game, false);
+						player->SetNetworkIDManager(&m_networkIDManager);
+						player->SetNetworkID(networkID);
+						player->setController(new PlayerController(m_game, false));
+					}
+					break;
+				}
 			}
 			break;
 
@@ -93,9 +136,12 @@ void Client::update()
 
 			case ID_CONNECTION_REQUEST_ACCEPTED:
 			{
+				m_game->getWorld()->clear();
+
+				// Connection accepted, join as player
 				RakNet::BitStream bitStream;
-				bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
-				//bitStream.Write(ENTITY_PLAYER);
+				bitStream.Write((RakNet::MessageID) ID_PLAYER_JOIN);
+				bitStream.Write("BitsauceClient");
 				sendPacket(&bitStream);
 			}
 			break;

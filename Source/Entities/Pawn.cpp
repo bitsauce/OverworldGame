@@ -251,19 +251,39 @@ void Pawn::onDraw(DrawEvent *e)
 
 void Pawn::pack(RakNet::BitStream *bitStream, const Connection *conn)
 {
-	if(conn->isServer())
-	{
-		bitStream->Write(getPosition().x);
-		bitStream->Write(getPosition().y);
-		bitStream->Write(getVelocity().x);
-		bitStream->Write(getVelocity().y);
-	}
+	bitStream->Write(getPosition().x);
+	bitStream->Write(getPosition().y);
+	bitStream->Write(getVelocity().x);
+	bitStream->Write(getVelocity().y);
 }
 
 void Pawn::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 {
-	if(conn->isClient())
+	if(conn->isServer())
 	{
+		// Get position and velocity
+		Vector2F position, velocity;
+		bitStream->Read(position.x);
+		bitStream->Read(position.y);
+		bitStream->Read(velocity.x);
+		bitStream->Read(velocity.y);
+
+		// TODO: Verify using some time detla between this and previous packet
+		/*if(getVelocity().length() * delta_time < (getPosition() - Vector2F(x, y)).length())
+		{
+			// Invalid position, lets not accept the values we we're sent (do nothing?)
+
+		}
+		else
+		{*/
+			// Lets move the player to their new position
+			setPosition(position);
+			setVelocity(velocity);
+		//}
+	}
+	else
+	{
+		// Recieved player update packet from server, apply it
 		float x; bitStream->Read(x);
 		float y; bitStream->Read(y);
 		setPosition(x, y);

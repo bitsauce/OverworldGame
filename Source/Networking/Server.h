@@ -9,7 +9,7 @@ namespace RakNet {
 }
 
 class OverworldGame;
-class Pawn;
+class Player;
 
 class Server : public Connection
 {
@@ -22,10 +22,10 @@ public:
 	void save();
 
 private:
-	void savePlayer(string playerName);
+	void savePlayer(Player *player);
 
 	OverworldGame * m_game;
-	map<string, Pawn*> m_players;
+	map<RakNet::RakNetGUID, Player*> m_players;
 };
 
 #endif // SERVER_H

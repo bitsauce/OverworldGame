@@ -37,16 +37,6 @@ public:
 		return m_world;
 	}
 
-	Client *getClient() const
-	{
-		return m_client;
-	}
-
-	Server *getServer() const
-	{
-		return m_server;
-	}
-
 	GameOverlay *getGameOverlay() const
 	{
 		return m_gameOverlay;
@@ -74,6 +64,8 @@ public:
 	}*/
 
 private:
+	void initKeybindings();
+
 	bool m_takeScreenshot;
 
 	// Game modules
@@ -86,8 +78,8 @@ private:
 
 	//list<GameState*> m_states;
 
-	Server *m_server;
-	Client *m_client;
+	//Server *m_server;
+	//Client *m_client;
 };
 
 #endif // GAME_MANAGER_H

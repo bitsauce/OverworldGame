@@ -6,24 +6,20 @@ Controller::Controller()
 	// Set input states to false
 	for(uint i = 0; i < INPUT_COUNT; ++i)
 	{
-		m_clientInputState[i] = m_inputState[i] = false;
+		m_inputState[i] = false;
 	}
 }
 
-void Controller::setClientInputState(const bool state, int type)
+void Controller::setInputState(const bool state, int type)
 {
-	m_clientInputState[type] = state;
+	m_inputState[type] = state;
 }
 
 void Controller::pack(RakNet::BitStream *bitStream, const Connection *conn)
 {
-	// If is local
-	//if(m_local)
+	for(uint i = 0; i < INPUT_COUNT; ++i)
 	{
-		for(uint i = 0; i < INPUT_COUNT; ++i)
-		{
-			bitStream->Write(m_clientInputState[i]);
-		}
+		bitStream->Write(m_inputState[i]);
 	}
 }
 

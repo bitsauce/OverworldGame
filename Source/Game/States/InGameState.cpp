@@ -1,11 +1,13 @@
 #include "InGameState.h"
 #include "Game/Game.h"
 
-InGameState::InGameState(OverworldGame *game) :
+InGameState::InGameState(OverworldGame *game, Connection *connection) :
 	GameState(GAME_STATE_IN_GAME, false),
-	m_world(game->getWorld())
+	m_world(game->getWorld()),
+	m_connection(connection)
 {
 	addChildLast(m_world);
+	addChildLast(m_connection);
 }
 
 void InGameState::onEnter()
@@ -23,6 +25,12 @@ void InGameState::onEnter()
 	}*/
 
 	//Input::setContext(Input::getContext("game"));
+	LOG("onEnter");
+}
+
+void InGameState::onLeave()
+{
+	LOG("onLeave");
 }
 
 void InGameState::onTick(TickEvent *e)

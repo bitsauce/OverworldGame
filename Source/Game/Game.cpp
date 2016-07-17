@@ -19,13 +19,11 @@ OverworldGame::OverworldGame() :
 	Game("Overworld"),
 	m_world(nullptr),
 	m_takeScreenshot(false),
-	m_client(nullptr),
-	m_server(nullptr),
 	m_gameOverlay(nullptr),
 	m_debug(nullptr),
 	m_commander(nullptr)
 {
-	setFlags(SAUCE_EXPORT_LOG);
+	setFlags(SAUCE_EXPORT_LOG | SAUCE_RUN_IN_BACKGROUND);
 }
 
 void OverworldGame::onStart(GameEvent *e)
@@ -42,16 +40,14 @@ void OverworldGame::onStart(GameEvent *e)
 
 	getWindow()->setVSync(0);
 	
-	// Init world
+	// Inititialze data
 	BlockData::init();
 	BlockEntityData::init();
 	EntityData::init(this);
+	ItemData::init(this);
 
 	m_world = new World(this);
 	//addChildLast(m_world);
-
-	// Initialize block and item data
-	ItemData::init(this);
 
 	// Setup debug
 	m_debug = new Debug(this);
@@ -76,21 +72,60 @@ void OverworldGame::onStart(GameEvent *e)
 	LOG("Hosting local server on port '45556'...");
 
 	// Create server object
-	m_server = new Server(this, 45556);
-	addChildFirst(m_server);
+	Server *server = new Server(this, 45556);
 	
 	// Join server as client
 	RakNet::BitStream bitStream;
 	bitStream.Write((RakNet::MessageID) ID_PLAYER_JOIN);
 	bitStream.Write("Bitsauce");
-	m_server->getRakPeer()->SendLoopback((const char*) bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
+	server->getRakPeer()->SendLoopback((const char*) bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
 
 	// Create game state
-	InGameState *state = new InGameState(this);
+	InGameState *state = new InGameState(this, server);
 
 	// Push game state
 	pushState(state);
 
+	// Setup keys
+	initKeybindings();
+}
+
+void OverworldGame::onEnd(GameEvent *e)
+{
+	// Save the world as we're exiting
+	if(m_world) m_world->save();
+	//if(m_server) m_server->save();
+	delete m_world;
+	delete m_debug;
+	delete m_commander;
+}
+
+void OverworldGame::pushState(GameState *state)
+{
+	if(state)
+	{
+		addChildFirst(state);
+		state->onEnter();
+	}
+}
+
+void OverworldGame::popState()
+{
+	((GameState*) getChildren().front())->onLeave();
+	removeChildFront();
+	if(getChildren().empty()) end();
+}
+
+GameState *OverworldGame::peekState(int level)
+{
+	if(getChildren().empty()) return 0;
+	list<SceneObject*>::iterator itr = getChildren().begin();
+	advance(itr, level);
+	return (GameState*) *itr;
+}
+
+void OverworldGame::initKeybindings()
+{
 	// Set key bindings
 	/*InputContext *inputContext = Input::getContext("game");
 
@@ -145,40 +180,6 @@ void OverworldGame::onStart(GameEvent *e)
 	inputContext->getKeybind("next_message")->setFunction(bind(&Chat::nextMessage, m_gameOverlay->getChat(), placeholders::_1));
 	inputContext->getKeybind("prev_message")->setFunction(bind(&Chat::prevMessage, m_gameOverlay->getChat(), placeholders::_1));
 	inputContext->getKeybind("escape_chat")->setFunction(bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1));
-}
-
-void OverworldGame::onEnd(GameEvent *e)
-{
-	// Save the world as we're exiting
-	if(m_world) m_world->save();
-	if(m_server) m_server->save();
-	delete m_world;
-	delete m_debug;
-	delete m_commander;
-}
-
-void OverworldGame::pushState(GameState *state)
-{
-	if(state)
-	{
-		addChildFirst(state);
-		state->onEnter();
-	}
-}
-
-void OverworldGame::popState()
-{
-	((GameState*) getChildren().front())->onLeave();
-	removeChildFront();
-	if(getChildren().empty()) end();
-}
-
-GameState *OverworldGame::peekState(int level)
-{
-	if(getChildren().empty()) return 0;
-	list<SceneObject*>::iterator itr = getChildren().begin();
-	advance(itr, level);
-	return (GameState*) *itr;
 }
 
 void OverworldGame::onTick(TickEvent *e)

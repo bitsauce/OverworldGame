@@ -20,8 +20,13 @@ public:
 		return m_name;
 	}
 
+
+	virtual void onDraw(DrawEvent *e);
+
 private:
 	const string m_name;
+
+	Resource<Font> m_font;
 };
 
 #endif // PLAYER_H

@@ -20,25 +20,30 @@
 #include "Gui/GameOverlay/GameOverlay.h"
 #include "Items/ItemData.h"
 
-Server::Server(OverworldGame * game, const ushort port) :
+Server::Server(OverworldGame *game, const ushort port) :
 	Connection(true),
 	m_game(game)
 {
 	RakNet::SocketDescriptor socketDescriptor(port, 0);
 	if(m_rakPeer->Startup(2, &socketDescriptor, 1) != RakNet::RAKNET_STARTED)
 	{
+		LOG("Could not host server on port '%i' (port may be in use), hosting local server on port 0 instead", port);
 		socketDescriptor.port = 0;
 		assert(m_rakPeer->Startup(2, &socketDescriptor, 1) == RakNet::RAKNET_STARTED);
 	}
 	m_rakPeer->SetMaximumIncomingConnections(2);
+
+	m_rakPeer->SetTimeoutTime(600000, RakNet::UNASSIGNED_SYSTEM_ADDRESS); // For debugging
 }
+
+#include "Entities/EntityData.h"
 
 void Server::onTick(TickEvent *e)
 {
 	m_isServer = false;
 	for(NetworkObject *object : m_networkObjects)
 	{
-		//if(object->isLocal())
+		if(object->m_local)
 		{
 			RakNet::BitStream bitStream;
 			bitStream.Write((RakNet::MessageID)ID_NETWORK_OBJECT_UPDATE);
@@ -57,12 +62,14 @@ void Server::onTick(TickEvent *e)
 			{
 				LOG("Client connected from %s with GUID %s", packet->systemAddress.ToString(true), packet->guid.ToString());
 
-				for(NetworkObject *object : m_networkObjects)
+				// Send entities???
+				for(Entity *entity : m_networkEntities)
 				{
 					RakNet::BitStream bitStream;
 					bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
-					bitStream.Write(object->GetNetworkID());
-					bitStream.Write(m_rakPeer->GetMyGUID()/*object->GetGUID()*/);
+					bitStream.Write(entity->getData()->getID());
+					bitStream.Write(entity->GetNetworkID());
+					bitStream.Write(m_rakPeer->GetMyGUID()/*entity->GetGUID()*/);
 					sendPacket(&bitStream);
 				}
 			}
@@ -81,6 +88,12 @@ void Server::onTick(TickEvent *e)
 				// Create player
 				Player *player = new Player(playerName, m_game, local);
 
+				// Create player controller
+				PlayerController *playerController = new PlayerController(m_game, local);
+				playerController->SetNetworkIDManager(&m_networkIDManager);
+				player->setController(playerController);
+				player->m_local = playerController->m_local = local;
+
 				// If player is hosting locally
 				if(local)
 				{
@@ -90,7 +103,9 @@ void Server::onTick(TickEvent *e)
 				}
 
 				// Add to network objects
-				m_players[playerName] = player;
+				m_players[packet->guid] = player;
+
+				m_networkEntities.push_back(player);
 
 				string playerFilePath = m_game->getWorld()->getWorldPath() + "/Players/" + playerName + ".obj";
 				if(util::fileExists(playerFilePath))
@@ -126,8 +141,10 @@ void Server::onTick(TickEvent *e)
 				{
 					// Brodcast the packet to all clients with the network id of the object added
 					RakNet::BitStream bitStream(packet->data, packet->length, true);
-					bitStream.Write(player->GetNetworkID());
 					bitStream.Write(packet->guid);
+					bitStream.Write(player->GetNetworkID());
+					bitStream.Write(playerController->GetNetworkID());
+					player->pack(&bitStream, this);
 					sendPacket(&bitStream);
 				}
 			}
@@ -141,10 +158,10 @@ void Server::onTick(TickEvent *e)
 				char *playerName = new char[512];
 				bitStream.Read(playerName);
 
-				savePlayer(playerName);
+				savePlayer(m_players[packet->guid]);
 
-				delete m_players[playerName];
-				m_players.erase(playerName);
+				delete m_players[packet->guid];
+				m_players.erase(packet->guid);
 			}
 			break;
 
@@ -200,13 +217,15 @@ void Server::onTick(TickEvent *e)
 				if(object)
 				{
 					object->unpack(&bitStream, this);
-					//object->update();
 
 					RakNet::BitStream outStream;
 					outStream.Write((RakNet::MessageID)ID_NETWORK_OBJECT_UPDATE);
 					outStream.Write(object->GetNetworkID());
 					object->pack(&outStream, this);
-					sendPacket(&outStream);
+					
+					// Send packet to all except the one who sent it
+					assert(m_rakPeer->Send(&bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, true) != 0);
+					//sendPacket(&outStream);
 				}
 			}
 			break;
@@ -230,11 +249,12 @@ void Server::save()
 	m_game->getWorld()->getTerrain()->getChunkManager()->clear();
 
 	// Save all players
-	for(map<string, Pawn*>::iterator itr = m_players.begin(); itr != m_players.end(); ++itr)
+	for(map<RakNet::RakNetGUID, Player*>::iterator itr = m_players.begin(); itr != m_players.end(); ++itr)
 	{
-		savePlayer(itr->first);
+		savePlayer(itr->second);
 	}
 
+	// TODO: Save all entities to files
 	/*for(Entity *e : m_entities)
 	{
 	FileWriter file(m_worldPath + "/Objects");
@@ -244,10 +264,9 @@ void Server::save()
 	}*/
 }
 
-void Server::savePlayer(string playerName)
+void Server::savePlayer(Player *player)
 {
-	Pawn *player = m_players[playerName];
-	string playerFilePath = m_game->getWorld()->getWorldPath() + "/Players/" + playerName + ".obj";
+	string playerFilePath = m_game->getWorld()->getWorldPath() + "/Players/" + player->getName() + ".obj";
 	FileWriter file(playerFilePath);
 	player->createSaveData(file);
 	file.close();

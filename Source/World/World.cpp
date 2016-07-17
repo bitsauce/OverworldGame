@@ -103,6 +103,9 @@ bool World::load(const string &name)
 	return true;
 }
 
+#include "Game/Game.h"
+#include "Gui/GameOverlay/GameOverlay.h"
+
 void World::clear()
 {
 	LOG("Resetting world...");
@@ -114,17 +117,18 @@ void World::clear()
 	m_worldFile = nullptr;
 
 	// Delete all entities
-	for(Entity *entity : m_entities)
+	for(Entity *entity : list<Entity*>(m_entities))
 	{
 		delete entity;
 	}
 	m_entities.clear();
 
+	((OverworldGame*) Game::GetInstance())->getGameOverlay()->setPlayer(0);
+
 	for(uint i = 0; i < WORLD_LAYER_COUNT; ++i)
 	{
 		m_entityLayers[i]->clearEntities();
 	}
-
 	m_pawns.clear();
 	m_localPlayer = nullptr;
 }

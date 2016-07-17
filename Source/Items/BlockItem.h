@@ -19,8 +19,7 @@ public:
 	void draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha);
 
 private:
-	Camera *m_camera;
-	Terrain *m_terrain;
+	OverworldGame *const m_game;
 	WorldLayer m_layer;
 	BlockData *m_blockData;
 };
