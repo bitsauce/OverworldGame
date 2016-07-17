@@ -39,6 +39,7 @@ public:
 	}
 
 	Vector2I getPosition() const;
+	Vector2F getDrawPosition(const float alpha) const;
 	int getX() const { return getPosition().x; }
 	int getY() const { return getPosition().y; }
 

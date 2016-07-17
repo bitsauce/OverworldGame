@@ -64,7 +64,7 @@ void Lighting::onDraw(DrawEvent *e)
 
 	// Calculate view UVs
 	ChunkManager::ChunkArea area = m_world->getTerrain()->getChunkManager()->getLoadingArea();
-	Vector2F cameraPosition = m_world->getCamera()->getPosition(), cameraSize = m_world->getCamera()->getSize();
+	Vector2F cameraPosition = m_world->getCamera()->getDrawPosition(e->getAlpha()), cameraSize = m_world->getCamera()->getSize();
 	float u0 = cameraPosition.x / (area.getWidth() * CHUNK_PXF),
 		v0 = cameraPosition.y / (area.getHeight() * CHUNK_PXF),
 		u1 = (cameraPosition.x + cameraSize.x) / (area.getWidth() * CHUNK_PXF),

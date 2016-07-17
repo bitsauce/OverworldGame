@@ -24,6 +24,7 @@ void BlockDrawer::onDraw(DrawEvent *e)
 	// Draw chunk area
 	ChunkManager::ChunkArea area = m_chunkManager->getLoadingArea();
 	
+	// If world layer == middle we draw blocks to a render target instead (used for shadow casting)
 	if(m_layer == WORLD_LAYER_MIDDLE)
 	{
 		graphicsContext->disable(GraphicsContext::BLEND);
@@ -37,7 +38,7 @@ void BlockDrawer::onDraw(DrawEvent *e)
 
 	if(m_layer == WORLD_LAYER_MIDDLE)
 	{
-		Vector2F cameraPosition = m_camera->getPosition(), cameraSize = m_camera->getSize();
+		Vector2F cameraPosition = m_camera->getDrawPosition(e->getAlpha()), cameraSize = m_camera->getSize();
 		float u0 = cameraPosition.x / (area.getWidth() * CHUNK_PXF),
 			v0 = cameraPosition.y / (area.getHeight() * CHUNK_PXF),
 			u1 = (cameraPosition.x + cameraSize.x) / (area.getWidth() * CHUNK_PXF),

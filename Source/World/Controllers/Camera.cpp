@@ -46,6 +46,11 @@ Vector2I Camera::getPosition() const
 	return m_position;
 }
 
+Vector2F Camera::getDrawPosition(const float alpha) const
+{
+	return math::lerp(m_prevPosition, m_position, alpha);
+}
+
 Vector2I Camera::getInputPosition() const
 {
 	return m_position + m_input->getPosition() / m_zoomLevel;
