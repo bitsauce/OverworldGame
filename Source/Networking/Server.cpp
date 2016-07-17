@@ -11,6 +11,7 @@
 #include "NetworkObject.h"
 #include "Constants.h"
 #include "World/World.h"
+#include "Entities/EntityData.h"
 #include "Entities/Pawn.h"
 #include "Entities/Player.h"
 #include "Entities/PlayerController.h"
@@ -35,8 +36,6 @@ Server::Server(OverworldGame *game, const ushort port) :
 
 	m_rakPeer->SetTimeoutTime(600000, RakNet::UNASSIGNED_SYSTEM_ADDRESS); // For debugging
 }
-
-#include "Entities/EntityData.h"
 
 void Server::onTick(TickEvent *e)
 {

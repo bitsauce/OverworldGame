@@ -19,6 +19,7 @@ public:
 	//bool isLocal() const;
 	bool m_local;
 private:
+	//RakNet::RakNetGUID m_origin;
 };
 
 #endif // NETWORK_OBJECT_H

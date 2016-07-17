@@ -47,10 +47,7 @@ public:
 		return m_controller;
 	}
 
-	void setSelectedSlot(const int slot)
-	{
-		m_selectedSlot = slot;
-	}
+	void setSelectedSlot(const int slot);
 
 	int getSelectedSlot() const
 	{
@@ -94,7 +91,7 @@ protected:
 	int m_selectedSlot;
 
 	// Equiped item
-	ItemID m_prevItem;
+	ItemID m_prevItem, m_equipedItem;
 
 	// Pawn health
 	int m_maxHealth;

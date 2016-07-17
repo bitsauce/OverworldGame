@@ -14,7 +14,8 @@ Hotbar::Hotbar(GameOverlay *gameOverlay) :
 	m_slotSelectedSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Inventory/ItemSlotSelected")),
 	m_itemAmountFont(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Inventory")),
 	m_itemDescFont(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Debug")),
-	m_mousePosition(0.0f)
+	m_mousePosition(0.0f),
+	m_mouseWheel(0)
 {
 	m_itemAmountFont->setColor(Color(0, 0, 0, 255));
 	m_itemAmountFont->setDepth(1.f);

@@ -27,6 +27,7 @@ Pawn::Pawn(World *world, const EntityID id) :
 	m_storage(10),
 	m_bag(new Bag(20, 5)),
 	m_prevItem(ITEM_NONE),
+	m_equipedItem(ITEM_NONE),
 	m_selectedSlot(0),
 	m_jumpForce(20.0f),
 	m_jumpEase(1.5f),
@@ -56,6 +57,12 @@ void Pawn::setController(Controller *controller)
 {
 	m_controller = controller;
 	m_controller->setPawn(this);
+}
+
+void Pawn::setSelectedSlot(const int slot)
+{
+	m_selectedSlot = slot;
+	m_equipedItem = getCurrentItem()->getItem();
 }
 
 Storage::Slot *Pawn::getCurrentItem()
@@ -112,7 +119,7 @@ void Pawn::onTick(TickEvent *e)
 			}
 			m_jumpTimer += e->getDelta();
 		}
-		else if(isContact(WEST) || isContact(EAST)) // Wall jumping
+		/*else if(isContact(WEST) || isContact(EAST)) // Wall jumping
 		{
 			setVelocityY(getVelocity().y * 0.5f);
 			if(m_controller->getInputState(Controller::INPUT_JUMP))
@@ -129,7 +136,7 @@ void Pawn::onTick(TickEvent *e)
 			{
 				m_canJump = true;
 			}
-		}
+		}*/
 	}
 
 	// Walking
@@ -201,7 +208,7 @@ void Pawn::onTick(TickEvent *e)
 	}
 
 	// Item swaped?
-	ItemID currentItem = getCurrentItem()->getItem();
+	ItemID currentItem = m_equipedItem;
 	if(m_prevItem != currentItem)
 	{
 		ItemData *item = ItemData::get(m_prevItem);
@@ -255,6 +262,7 @@ void Pawn::pack(RakNet::BitStream *bitStream, const Connection *conn)
 	bitStream->Write(getPosition().y);
 	bitStream->Write(getVelocity().x);
 	bitStream->Write(getVelocity().y);
+	bitStream->Write(m_equipedItem);
 }
 
 void Pawn::unpack(RakNet::BitStream *bitStream, const Connection *conn)
@@ -267,6 +275,7 @@ void Pawn::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 		bitStream->Read(position.y);
 		bitStream->Read(velocity.x);
 		bitStream->Read(velocity.y);
+		bitStream->Read(m_equipedItem);
 
 		// TODO: Verify using some time detla between this and previous packet
 		/*if(getVelocity().length() * delta_time < (getPosition() - Vector2F(x, y)).length())
@@ -291,6 +300,7 @@ void Pawn::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 		bitStream->Read(y);
 		setVelocityX(x);
 		setVelocityY(y);
+		bitStream->Read(m_equipedItem);
 	}
 }
 

@@ -15,6 +15,7 @@
 #include "World/World.h"
 
 #include "Entities/Player.h"
+#include "Entities/PlayerController.h"
 
 #include "Gui/GameOverlay/GameOverlay.h"
 
@@ -26,10 +27,8 @@ Client::Client(OverworldGame *game, const string &ip, const ushort port) :
 	assert(m_rakPeer->Startup(1, &socketDescriptor, 1) == RakNet::RAKNET_STARTED);
 	assert(m_rakPeer->Connect(ip.c_str(), port, 0, 0) == RakNet::CONNECTION_ATTEMPT_STARTED);
 
-	m_rakPeer->SetTimeoutTime(600000, RakNet::UNASSIGNED_SYSTEM_ADDRESS); // For debugging
+	m_rakPeer->SetTimeoutTime(600000, RakNet::UNASSIGNED_SYSTEM_ADDRESS); // For debugging purposes
 }
-
-#include "Entities/PlayerController.h"
 
 void Client::onTick(TickEvent *e)
 {
