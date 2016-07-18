@@ -31,7 +31,7 @@
 #include <spine/Bone.h>
 #include <spine/extension.h>
 
-static int yDown;
+static int yDown = 1;
 
 void spBone_setYDown (int value) {
 	yDown = value;
