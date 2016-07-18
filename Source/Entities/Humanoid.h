@@ -99,7 +99,7 @@ private:
 	AtlasAttachmentLoader *m_equipmentAttachmentLoader;
 
 	// List of textures of this characters appearance
-	Resource<Texture2D> m_appearance[BODY_PART_COUNT];
+	string m_appearance[BODY_PART_COUNT];
 };
 
 #endif // HUMANOID_H

@@ -48,13 +48,6 @@ Skeleton::Skeleton(const string &jsonFile, const string &atlasFile, const float 
 	spSkeletonJson *json = spSkeletonJson_create(m_atlas);
 	json->scale = scale;
 
-	/*spAttachmentLoader_newAttachment();
-
-	spRegionAttachment *test = spRegionAttachment_create("rhand");
-	spRegionAttachment_setUVs(test, 0, 0, 1, 1, 0);
-
-	spSkeleton_setAttachment(m_self, "rhand", "rhand");*/
-
 	m_data = spSkeletonJson_readSkeletonDataFile(json, jsonFile.c_str());
 	if(!m_data)
 	{
@@ -88,6 +81,8 @@ Skeleton::Skeleton(const string &jsonFile, const string &atlasFile, const float 
 		spBone *bone = m_self->bones[i];
 		m_bones[bone->data->name] = new Bone(bone);
 	}
+
+	m_apparelAtlas = spAtlas_createFromFile("Sprites/Characters/Images/Apparel/Apparel.atlas", 0);
 }
 
 Skeleton::~Skeleton()
@@ -196,7 +191,6 @@ void Skeleton::draw(GraphicsContext *context)
 			spRegionAttachment* regionAttachment = SUB_CAST(spRegionAttachment, attachment);
 			texture = *(Resource<Texture2D>*)((spAtlasRegion*)regionAttachment->rendererObject)->page->rendererObject;
 			spRegionAttachment_computeWorldVertices(regionAttachment, slot->skeleton->x, slot->skeleton->y, slot->bone, m_worldVertices);
-
 
 			if(prevTexture != texture)
 			{

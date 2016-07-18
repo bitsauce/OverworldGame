@@ -58,17 +58,19 @@ Humanoid::Humanoid() :
 	}
 
 	// Set default appearance
-	m_appearance[HEAD] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Head");
-	m_appearance[ARM_LEFT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Left_Arm");
-	m_appearance[ARM_RIGHT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Right_Arm");
-	m_appearance[TORSO] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Torso");
-	m_appearance[THIGH_LEFT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Left_Thigh");
-	m_appearance[THIGH_RIGHT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Right_Thigh");
-	m_appearance[SHOULDER_LEFT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Left_Shoulder");
-	m_appearance[SHOULDER_RIGHT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Right_Shoulder");
-	m_appearance[HIPS] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Hips");
-	m_appearance[LEG_LEFT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Left_Leg");
-	m_appearance[LEG_RIGHT] = Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Right_Leg");
+	m_appearance[HEAD] = "Head_Less";
+	m_appearance[ARM_LEFT] = "Default_Left_Arm";
+	m_appearance[ARM_RIGHT] = "Default_Right_Arm";
+	m_appearance[TORSO] = "Default_Torso";
+	m_appearance[THIGH_LEFT] = "Default_Left_Thigh";
+	m_appearance[THIGH_RIGHT] = "Default_Right_Thigh";
+	m_appearance[SHOULDER_LEFT] = "Default_Left_Shoulder";
+	m_appearance[SHOULDER_RIGHT] = "Default_Right_Shoulder";
+	m_appearance[HIPS] = "Default_Hips";
+	m_appearance[LEG_LEFT] = "Default_Left_Leg";
+	m_appearance[LEG_RIGHT] = "Default_Right_Leg";
+
+	m_renderPart[HEAD] = true;
 
 	m_equipmentAttachmentLoader = new AtlasAttachmentLoader("Sprites/Characters/Images/Equipment/Equipment.atlas");
 }
@@ -244,16 +246,16 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 			uint x0 = region.uv0.x * skeletonAtlas->getWidth(), y0 = region.uv0.y * skeletonAtlas->getHeight(),
 				x1 = region.uv1.x * skeletonAtlas->getWidth(), y1 = region.uv1.y * skeletonAtlas->getHeight();
 
-			// Clear region
-			context->setBlendState(BlendState(BlendState::BLEND_ZERO, BlendState::BLEND_ZERO));
-			context->drawRectangle(x0, skeletonAtlas->getHeight() - y1, x1 - x0, y1 - y0);
+			// Draw apparel to the region
+			context->disable(GraphicsContext::BLEND);
 
-			// For every attachment, draw it to the region
-			context->setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
-			context->setTexture(m_appearance[i]);
-			context->drawRectangle(x0, skeletonAtlas->getHeight() - y1, x1 - x0, y1 - y0);
+			spAtlasRegion *tt = spAtlas_findRegion(m_skeleton->m_apparelAtlas, m_appearance[i].c_str());
+
+			context->setTexture(*(Resource<Texture2D>*)m_skeleton->m_apparelAtlas->pages->rendererObject);
+			context->drawRectangle(x0, skeletonAtlas->getHeight() - y1, x1 - x0, y1 - y0, Color(255), TextureRegion(tt->u, tt->v, tt->u2, tt->v2));
 
 			// Reset context
+			context->enable(GraphicsContext::BLEND);
 			context->setTexture(0);
 			context->setRenderTarget(0);
 
@@ -273,7 +275,7 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 void Humanoid::setAppearanceTexture(const BodyPart part, const Resource<Texture2D> texture)
 {
 	// Set attachemnts
-	if(texture)
+	/*if(texture)
 	{
 		TextureRegion region = m_skeleton->getTextureRegion(getBodyPartName(part));
 
@@ -291,6 +293,7 @@ void Humanoid::setAppearanceTexture(const BodyPart part, const Resource<Texture2
 			LOG("Appearance texture and body part region size needs to be the same.");
 		}
 	}
+	*/
 }
 
 RegionAttachment *Humanoid::setAttachment(const BodyPart part, const string &name, const string &path)

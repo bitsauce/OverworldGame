@@ -1,89 +1,89 @@
 
-Skeleton.png
+Apparel.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-Equipment/Torch
+Default_Head
   rotate: false
-  xy: 2, 20
-  size: 42, 42
-  orig: 42, 42
-  offset: 0, 0
-  index: -1
-Head
-  rotate: false
-  xy: 46, 21
+  xy: 82, 12
   size: 15, 18
   orig: 15, 18
   offset: 0, 0
   index: -1
-Hips
+Default_Hips
   rotate: false
-  xy: 74, 33
+  xy: 138, 24
   size: 11, 6
   orig: 11, 6
   offset: 0, 0
   index: -1
-Left_Arm
+Default_Left_Arm
   rotate: false
-  xy: 77, 41
+  xy: 33, 9
   size: 28, 21
   orig: 28, 21
   offset: 0, 0
   index: -1
-Left_Leg
-  rotate: false
-  xy: 13, 2
+Default_Left_Leg
+  rotate: true
+  xy: 82, 2
   size: 8, 16
   orig: 8, 16
   offset: 0, 0
   index: -1
-Left_Shoulder
+Default_Left_Shoulder
   rotate: false
-  xy: 23, 12
+  xy: 63, 3
   size: 17, 6
   orig: 17, 6
   offset: 0, 0
   index: -1
-Left_Thigh
+Default_Left_Thigh
   rotate: true
-  xy: 23, 2
+  xy: 100, 2
   size: 8, 11
   orig: 8, 11
   offset: 0, 0
   index: -1
-Right_Arm
+Default_Right_Arm
   rotate: false
-  xy: 46, 41
+  xy: 2, 9
   size: 29, 21
   orig: 29, 21
   offset: 0, 0
   index: -1
-Right_Leg
+Default_Right_Leg
   rotate: false
-  xy: 2, 2
+  xy: 116, 14
   size: 9, 16
   orig: 9, 16
   offset: 0, 0
   index: -1
-Right_Shoulder
+Default_Right_Shoulder
   rotate: false
-  xy: 87, 34
+  xy: 2, 2
   size: 11, 5
   orig: 11, 5
   offset: 0, 0
   index: -1
-Right_Thigh
+Default_Right_Thigh
   rotate: false
-  xy: 63, 28
+  xy: 127, 19
   size: 9, 11
   orig: 9, 11
   offset: 0, 0
   index: -1
-Torso
-  rotate: true
-  xy: 107, 45
+Default_Torso
+  rotate: false
+  xy: 63, 11
   size: 17, 19
   orig: 17, 19
+  offset: 0, 0
+  index: -1
+Head_Less
+  rotate: false
+  xy: 99, 12
+  size: 15, 18
+  orig: 15, 18
   offset: 0, 0
   index: -1

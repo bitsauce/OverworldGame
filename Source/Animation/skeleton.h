@@ -38,6 +38,9 @@ private:
 	map<string, Animation*> m_animations;
 	map<string, Slot*> m_slots;
 	map<string, Bone*> m_bones;
+
+public:
+	spAtlas* m_apparelAtlas;
 };
 
 #endif // SKELETON_H
