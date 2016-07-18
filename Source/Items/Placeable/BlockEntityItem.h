@@ -10,10 +10,10 @@ class BlockEntityItem : public ItemData
 public:
 	BlockEntityItem(OverworldGame *game, const ItemDataDesc *desc);
 
-	void equip(Pawn *player);
-	void unequip(Pawn *player);
-	void use(Pawn *player, const float delta);
-	void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha);
+	virtual void equip(Pawn *player);
+	virtual void unequip(Pawn *player);
+	virtual void use(Pawn *player, const float delta);
+	virtual void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:
 	OverworldGame * m_game;

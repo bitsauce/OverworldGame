@@ -176,9 +176,6 @@
     <ClCompile Include="..\..\Source\Game\RayCast.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Items\BlockItem.cpp">
-      <Filter>Source\Items\Placeable</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\BlockEntities\Torch.cpp">
       <Filter>Source\BlockEntities</Filter>
     </ClCompile>
@@ -197,14 +194,17 @@
     <ClCompile Include="..\..\Source\Apparel\ApparelData.cpp">
       <Filter>Source\Apparels</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Items\Item.cpp">
-      <Filter>Source\Items</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Animation\AtlasAttachmentLoader.cpp">
       <Filter>Source\Animation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Animation\RegionAttachment.cpp">
       <Filter>Source\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Items\Placeable\TorchItem.cpp">
+      <Filter>Source\Items\Placeable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Items\Placeable\BlockItem.cpp">
+      <Filter>Source\Items\Placeable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -326,9 +326,6 @@
     </ClInclude>
     <ClInclude Include="..\..\source\items\ItemData.h">
       <Filter>Source\Items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\Items\BlockItem.h">
-      <Filter>Source\Items\Placeable</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\gui\GameOverlay\Hotbar.h">
       <Filter>Source\Gui\GameOverlay</Filter>
@@ -498,14 +495,17 @@
     <ClInclude Include="..\..\Source\Apparel\ApparelData.h">
       <Filter>Source\Apparels</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Items\Item.h">
-      <Filter>Source\Items</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Animation\AtlasAttachmentLoader.h">
       <Filter>Source\Animation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Animation\RegionAttachment.h">
       <Filter>Source\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Items\Placeable\TorchItem.h">
+      <Filter>Source\Items\Placeable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Items\Placeable\BlockItem.h">
+      <Filter>Source\Items\Placeable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

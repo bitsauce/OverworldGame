@@ -1,9 +1,10 @@
 #include "ItemData.h"
 #include "Constants.h"
-#include "BlockItem.h"
 #include "Tools/Pickaxe.h"
 #include "Tools/Axe.h"
+#include "Placeable/BlockItem.h"
 #include "Placeable/BlockEntityItem.h"
+#include "Placeable/TorchItem.h"
 #include "Weapons/Bow.h"
 #include "Weapons/Ammo.h"
 
@@ -124,7 +125,7 @@ void ItemData::init(OverworldGame *game)
 		}
 		else if(itemDataDesc->type == "torch")
 		{
-			itemData = new BlockEntityItem(game, itemDataDesc);
+			itemData = new TorchItem(game, itemDataDesc);
 		}
 		else if(itemDataDesc->type == "block_entity_item")
 		{

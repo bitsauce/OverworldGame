@@ -115,6 +115,7 @@ Animation *Humanoid::getAnimation(const Anim anim)
 	case ANIM_ARROW_AIM_UP: animName = "arrow_aim_up"; break;
 	case ANIM_ARROW_AIM_FW: animName = "arrow_aim_fw"; break;
 	case ANIM_ARROW_AIM_DW: animName = "arrow_aim_dw"; break;
+	case ANIM_HOLD_TORCH: animName = "Hold_Torch"; break;
 	}
 	return m_skeleton->findAnimation(animName);
 }

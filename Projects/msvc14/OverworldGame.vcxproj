@@ -137,10 +137,10 @@
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Omnicon.cpp" />
     <ClCompile Include="..\..\Source\Gui\LineEdit.cpp" />
     <ClCompile Include="..\..\Source\Gui\UiObject.cpp" />
-    <ClCompile Include="..\..\Source\Items\BlockItem.cpp" />
-    <ClCompile Include="..\..\Source\Items\Item.cpp" />
     <ClCompile Include="..\..\Source\Items\ItemData.cpp" />
     <ClCompile Include="..\..\Source\Items\Placeable\BlockEntityItem.cpp" />
+    <ClCompile Include="..\..\Source\Items\Placeable\BlockItem.cpp" />
+    <ClCompile Include="..\..\Source\Items\Placeable\TorchItem.cpp" />
     <ClCompile Include="..\..\Source\Items\Tools\Axe.cpp" />
     <ClCompile Include="..\..\Source\Items\Tools\Pickaxe.cpp" />
     <ClCompile Include="..\..\Source\Items\Weapons\Ammo.cpp" />
@@ -213,10 +213,10 @@
     <ClInclude Include="..\..\source\gui\LineEdit.h" />
     <ClInclude Include="..\..\Source\Gui\UiEvents.h" />
     <ClInclude Include="..\..\source\gui\UiObject.h" />
-    <ClInclude Include="..\..\source\Items\BlockItem.h" />
-    <ClInclude Include="..\..\Source\Items\Item.h" />
     <ClInclude Include="..\..\source\items\ItemData.h" />
     <ClInclude Include="..\..\Source\Items\Placeable\BlockEntityItem.h" />
+    <ClInclude Include="..\..\Source\Items\Placeable\BlockItem.h" />
+    <ClInclude Include="..\..\Source\Items\Placeable\TorchItem.h" />
     <ClInclude Include="..\..\Source\Items\Tools\Axe.h" />
     <ClInclude Include="..\..\source\Items\Tools\Pickaxe.h" />
     <ClInclude Include="..\..\Source\Items\Weapons\Ammo.h" />
