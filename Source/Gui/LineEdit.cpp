@@ -59,7 +59,7 @@ void LineEdit::onDraw(DrawEvent *e)
 {
 	// Get state variables
 	TextState *state = *m_undoItr;
-	RectF rect = getDrawRect();
+	RectI rect = getDrawRect();
 	GraphicsContext *g = e->getGraphicsContext();
 
 	// Update text offset if dirty
@@ -69,7 +69,7 @@ void LineEdit::onDraw(DrawEvent *e)
 	}
 
 	// Get text offset
-	Vector2F textOffset = Vector2F(8.0f - m_offsetX, rect.size.y * 0.5f - m_font->getHeight() * 0.5f);
+	Vector2I textOffset(8.0f - m_offsetX, rect.size.y * 0.5f - m_font->getHeight() * 0.5f);
 
 	// Update visualization if dirty
 	if(m_dirty)

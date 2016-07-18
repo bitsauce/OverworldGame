@@ -26,7 +26,6 @@ Humanoid::Humanoid() :
 	// Load skeleton data
 	m_skeleton = new Skeleton("Sprites/Characters/Skeleton.json", "Sprites/Characters/Skeleton.atlas", 1.0f);
 	m_skeleton->getTexture()->setFiltering(Texture2D::LINEAR);
-	m_skeleton->setFlipY(true); // Not sure why this is needed, oh well
 
 	// Setup spine animations
 	m_animationStateData = new AnimationStateData(m_skeleton);

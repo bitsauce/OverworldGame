@@ -21,7 +21,7 @@ Chat::Chat(OverworldGame *game, GraphicsContext *context, GameOverlay *gameOverl
 	setSize(Vector2F(CHAT_WIDTHF, CHAT_HEIGHTF) / gameOverlay->getDrawSize());
 	setPosition(Vector2F(0.01f, 0.0f));
 
-	m_chatInput.setAnchor(Vector2F(0.0f, 1.0f));
+	m_chatInput.setAnchor(Vector2F(0.0f, 0.9f));
 	m_chatInput.setSize(Vector2F(CHAT_WIDTHF, CHAT_TEXT_INPUT_HEIGHTF) / getDrawSize());
 	m_chatInput.setPosition(Vector2F(0.0f, 0.0f));
 	
