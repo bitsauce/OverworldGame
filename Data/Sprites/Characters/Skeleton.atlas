@@ -3,86 +3,79 @@ Skeleton.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-Equipment/Torch
-  rotate: false
-  xy: 2, 20
-  size: 42, 42
-  orig: 42, 42
-  offset: 0, 0
-  index: -1
 Head
   rotate: false
-  xy: 46, 21
+  xy: 82, 12
   size: 15, 18
   orig: 15, 18
   offset: 0, 0
   index: -1
 Hips
   rotate: false
-  xy: 74, 33
+  xy: 120, 16
   size: 11, 6
   orig: 11, 6
   offset: 0, 0
   index: -1
 Left_Arm
   rotate: false
-  xy: 77, 41
+  xy: 33, 9
   size: 28, 21
   orig: 28, 21
   offset: 0, 0
   index: -1
 Left_Leg
   rotate: false
-  xy: 13, 2
+  xy: 110, 14
   size: 8, 16
   orig: 8, 16
   offset: 0, 0
   index: -1
 Left_Shoulder
   rotate: false
-  xy: 23, 12
+  xy: 120, 24
   size: 17, 6
   orig: 17, 6
   offset: 0, 0
   index: -1
 Left_Thigh
-  rotate: true
-  xy: 23, 2
+  rotate: false
+  xy: 150, 19
   size: 8, 11
   orig: 8, 11
   offset: 0, 0
   index: -1
 Right_Arm
   rotate: false
-  xy: 46, 41
+  xy: 2, 9
   size: 29, 21
   orig: 29, 21
   offset: 0, 0
   index: -1
 Right_Leg
   rotate: false
-  xy: 2, 2
+  xy: 99, 14
   size: 9, 16
   orig: 9, 16
   offset: 0, 0
   index: -1
 Right_Shoulder
   rotate: false
-  xy: 87, 34
+  xy: 2, 2
   size: 11, 5
   orig: 11, 5
   offset: 0, 0
   index: -1
 Right_Thigh
   rotate: false
-  xy: 63, 28
+  xy: 139, 19
   size: 9, 11
   orig: 9, 11
   offset: 0, 0
   index: -1
 Torso
-  rotate: true
-  xy: 107, 45
+  rotate: false
+  xy: 63, 11
   size: 17, 19
   orig: 17, 19
   offset: 0, 0

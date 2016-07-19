@@ -80,16 +80,7 @@
     <ClCompile Include="..\..\Source\Entities\PlayerController.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Animation\Animation.cpp">
-      <Filter>Source\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Animation\Bone.cpp">
-      <Filter>Source\Animation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Animation\Skeleton.cpp">
-      <Filter>Source\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Animation\Slot.cpp">
       <Filter>Source\Animation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Networking\Client.cpp">
@@ -205,6 +196,21 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\Items\Placeable\BlockItem.cpp">
       <Filter>Source\Items\Placeable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Animation\Animation.cpp">
+      <Filter>Source\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Animation\Bone.cpp">
+      <Filter>Source\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Animation\Slot.cpp">
+      <Filter>Source\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Animation\Atlas.cpp">
+      <Filter>Source\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Animation\Extension.cpp">
+      <Filter>Source\Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -506,6 +512,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Items\Placeable\BlockItem.h">
       <Filter>Source\Items\Placeable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Animation\Atlas.h">
+      <Filter>Source\Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

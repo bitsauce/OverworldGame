@@ -72,6 +72,7 @@ void Bow::update(Pawn *pawn, const float delta)
 			}
 		}
 		pawn->getHumanoid().clearAttachment(Humanoid::HAND_RIGHT);
+		pawn->getHumanoid().setAppearance(Humanoid::HEAD, "Head_Evil");
 	}
 	else if(m_charging)
 	{
@@ -86,6 +87,7 @@ void Bow::update(Pawn *pawn, const float delta)
 		RegionAttachment *attachment = pawn->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "Right_Hand_Equip", "Bow");
 		attachment->setPosition(-3.5f, 0.0f);
 		attachment->setRotation(0.0f);
+		pawn->getHumanoid().setAppearance(Humanoid::HEAD, "Default_Head");
 	}
 }
 

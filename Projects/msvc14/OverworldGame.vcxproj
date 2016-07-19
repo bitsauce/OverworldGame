@@ -93,12 +93,14 @@
     <ResourceCompile Include="resources.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\Animation\animation.cpp" />
+    <ClCompile Include="..\..\Source\Animation\Animation.cpp" />
+    <ClCompile Include="..\..\Source\Animation\Atlas.cpp" />
     <ClCompile Include="..\..\Source\Animation\AtlasAttachmentLoader.cpp" />
+    <ClCompile Include="..\..\Source\Animation\Extension.cpp" />
     <ClCompile Include="..\..\Source\Animation\RegionAttachment.cpp" />
-    <ClCompile Include="..\..\Source\Animation\bone.cpp" />
+    <ClCompile Include="..\..\Source\Animation\Bone.cpp" />
     <ClCompile Include="..\..\Source\Animation\Skeleton.cpp" />
-    <ClCompile Include="..\..\Source\Animation\slot.cpp" />
+    <ClCompile Include="..\..\Source\Animation\Slot.cpp" />
     <ClCompile Include="..\..\Source\Apparel\ApparelData.cpp" />
     <ClCompile Include="..\..\Source\BlockEntities\BlockEntity.cpp" />
     <ClCompile Include="..\..\Source\BlockEntities\BlockEntityData.cpp" />
@@ -165,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\animation\Animation.h" />
+    <ClInclude Include="..\..\Source\Animation\Atlas.h" />
     <ClInclude Include="..\..\Source\Animation\AtlasAttachmentLoader.h" />
     <ClInclude Include="..\..\Source\Animation\RegionAttachment.h" />
     <ClInclude Include="..\..\source\animation\Bone.h" />

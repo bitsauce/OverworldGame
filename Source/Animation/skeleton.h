@@ -7,6 +7,7 @@
 class Animation;
 class Slot;
 class Bone;
+class SpineAtlas;
 
 class Skeleton
 {
@@ -25,22 +26,19 @@ public:
 	bool getFlipX() const;
 	void setFlipY(const bool flip);
 	bool getFlipY() const;
-	Resource<Texture2D> getTexture() const;
-	TextureRegion getTextureRegion(const string &name) const;
+	SpineAtlas *getAtlas() const;
 
 	void draw(GraphicsContext *gfxContext);
 
 private:
 	spSkeleton *m_self;
 	spSkeletonData *m_data;
-	spAtlas* m_atlas;
 	float *m_worldVertices;
+
+	SpineAtlas* m_atlas;
 	map<string, Animation*> m_animations;
 	map<string, Slot*> m_slots;
 	map<string, Bone*> m_bones;
-
-public:
-	spAtlas* m_apparelAtlas;
 };
 
 #endif // SKELETON_H

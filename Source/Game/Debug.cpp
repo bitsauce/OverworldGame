@@ -134,6 +134,12 @@ void Debug::debugFunction(KeyEvent *e)
 			}
 			else
 			{
+				// If we hold SHIFT, we move the player to the camera position
+				if((e->getModifiers() & KeyEvent::SHIFT) != 0)
+				{
+					m_world->getLocalPlayer()->setPosition(camera->getCenter(0.0f));
+				}
+
 				// Attach camera to local player
 				camera->setTargetEntity(m_world->getLocalPlayer());
 			}

@@ -2,50 +2,19 @@
 #include "Animation.h"
 #include "Slot.h"
 #include "Bone.h"
+#include "Atlas.h"
 #include <spine/extension.h>
 
 #ifndef SPINE_MESH_VERTEX_COUNT_MAX
 #define SPINE_MESH_VERTEX_COUNT_MAX 1000
 #endif
 
-void _spAtlasPage_createTexture(spAtlasPage* self, const char* path)
-{
-	Resource<Texture2D> *texture = new Resource<Texture2D>(new Texture2D(Pixmap(path)));
-	if(texture)
-	{
-		self->rendererObject = texture;
-		self->width = (*texture)->getWidth();
-		self->height = (*texture)->getHeight();
-	}
-}
-
-void _spAtlasPage_disposeTexture(spAtlasPage* self)
-{
-	if(self->rendererObject)
-	{
-		delete ((Resource<Texture2D>*)self->rendererObject);
-	}
-}
-
-char* _spUtil_readFile(const char* path, int* length)
-{
-	string content;
-	char *data = 0;
-	if(FileSystem::ReadFile(path, content))
-	{
-		*length = content.size();
-		data = MALLOC(char, *length);
-		memcpy(data, content.c_str(), *length);
-	}
-	return data;
-}
-
 Skeleton::Skeleton(const string &jsonFile, const string &atlasFile, const float scale) :
 	m_data(nullptr),
 	m_atlas(nullptr)
 {
-	m_atlas = spAtlas_createFromFile(atlasFile.c_str(), 0);
-	spSkeletonJson *json = spSkeletonJson_create(m_atlas);
+	m_atlas = new SpineAtlas(atlasFile.c_str());
+	spSkeletonJson *json = spSkeletonJson_create(m_atlas->m_self);
 	json->scale = scale;
 
 	m_data = spSkeletonJson_readSkeletonDataFile(json, jsonFile.c_str());
@@ -58,7 +27,7 @@ Skeleton::Skeleton(const string &jsonFile, const string &atlasFile, const float 
 	LOG("Default skin name '%s'", m_data->defaultSkin->name);
 	spSkeletonJson_dispose(json);
 
-	m_worldVertices = MALLOC(float, SPINE_MESH_VERTEX_COUNT_MAX);
+	m_worldVertices = new float[SPINE_MESH_VERTEX_COUNT_MAX];
 	m_self = spSkeleton_create(m_data);
 
 	// Load animations
@@ -81,8 +50,6 @@ Skeleton::Skeleton(const string &jsonFile, const string &atlasFile, const float 
 		spBone *bone = m_self->bones[i];
 		m_bones[bone->data->name] = new Bone(bone);
 	}
-
-	m_apparelAtlas = spAtlas_createFromFile("Sprites/Characters/Images/Apparel/Apparel.atlas", 0);
 }
 
 Skeleton::~Skeleton()
@@ -96,9 +63,10 @@ Skeleton::~Skeleton()
 	for(map<string, Bone*>::iterator itr = m_bones.begin(); itr != m_bones.end(); ++itr) {
 		delete itr->second;
 	}
-	spAtlas_dispose(m_atlas);
+	delete m_atlas;
 	spSkeleton_dispose(m_self);
 	spSkeletonData_dispose(m_data);
+	delete[] m_worldVertices;
 }
 
 Animation *Skeleton::findAnimation(const string &name)
@@ -147,23 +115,9 @@ bool Skeleton::getFlipY() const
 	return m_self->flipY != 0;
 }
 
-Resource<Texture2D> Skeleton::getTexture() const
+SpineAtlas *Skeleton::getAtlas() const
 {
-	return *(Resource<Texture2D>*)m_atlas->pages->rendererObject;
-}
-
-TextureRegion Skeleton::getTextureRegion(const string &name) const
-{
-	spAtlasRegion *region = m_atlas->regions;
-	while(region)
-	{
-		if(string(region->name) == name)
-		{
-			return TextureRegion(region->u, 1.f - region->v2, region->u2, 1.f - region->v);
-		}
-		region = region->next;
-	}
-	return TextureRegion();
+	return m_atlas;
 }
 
 void Skeleton::draw(GraphicsContext *context)

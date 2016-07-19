@@ -20,6 +20,6 @@ Player::~Player()
 void Player::onDraw(DrawEvent *e)
 {
 	SpriteBatch *spriteBatch = (SpriteBatch*)e->getUserData();
-	m_font->draw(spriteBatch, getPosition() - Vector2F(16, 48), m_name);
+	//m_font->draw(spriteBatch, getPosition() - Vector2F(16, 48), m_name);
 	Pawn::onDraw(e);
 }

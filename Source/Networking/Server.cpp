@@ -132,7 +132,7 @@ void Server::onTick(TickEvent *e)
 					player->getStorage()->addItem(ItemData::getByName("iron_pickaxe_item")->getID());
 					player->getStorage()->addItem(ItemData::getByName("iron_axe_item")->getID());
 					player->getStorage()->addItem(ItemData::getByName("bow_item")->getID());
-					player->getStorage()->addItem(ItemData::getByName("crafting_bench_item")->getID());
+					//player->getStorage()->addItem(ItemData::getByName("crafting_bench_item")->getID());
 					player->getStorage()->addItem(ItemData::getByName("torch_item")->getID(), 255);
 					player->getStorage()->addItem(ItemData::getByName("arrow_item")->getID(), 255);
 				}

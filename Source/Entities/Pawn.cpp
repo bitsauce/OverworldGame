@@ -44,9 +44,6 @@ Pawn::Pawn(World *world, const EntityID id) :
 
 	// Add to player list
 	m_world->m_pawns.push_back(this);
-
-	m_humanoid.setAppearanceTexture(Humanoid::ARM_LEFT, Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Left_Arm"));
-	m_humanoid.setAppearanceTexture(Humanoid::ARM_RIGHT, Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Characters/Images/Right_Arm"));
 }
 
 Pawn::~Pawn()

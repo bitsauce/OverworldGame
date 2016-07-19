@@ -12,7 +12,7 @@ Default_Head
   index: -1
 Default_Hips
   rotate: false
-  xy: 138, 24
+  xy: 154, 16
   size: 11, 6
   orig: 11, 6
   offset: 0, 0
@@ -25,22 +25,22 @@ Default_Left_Arm
   offset: 0, 0
   index: -1
 Default_Left_Leg
-  rotate: true
-  xy: 82, 2
+  rotate: false
+  xy: 144, 14
   size: 8, 16
   orig: 8, 16
   offset: 0, 0
   index: -1
 Default_Left_Shoulder
   rotate: false
-  xy: 63, 3
+  xy: 154, 24
   size: 17, 6
   orig: 17, 6
   offset: 0, 0
   index: -1
 Default_Left_Thigh
-  rotate: true
-  xy: 100, 2
+  rotate: false
+  xy: 184, 19
   size: 8, 11
   orig: 8, 11
   offset: 0, 0
@@ -54,7 +54,7 @@ Default_Right_Arm
   index: -1
 Default_Right_Leg
   rotate: false
-  xy: 116, 14
+  xy: 133, 14
   size: 9, 16
   orig: 9, 16
   offset: 0, 0
@@ -68,7 +68,7 @@ Default_Right_Shoulder
   index: -1
 Default_Right_Thigh
   rotate: false
-  xy: 127, 19
+  xy: 173, 19
   size: 9, 11
   orig: 9, 11
   offset: 0, 0
@@ -80,9 +80,16 @@ Default_Torso
   orig: 17, 19
   offset: 0, 0
   index: -1
-Head_Less
+Head_Evil
   rotate: false
   xy: 99, 12
+  size: 15, 18
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
+Head_Less
+  rotate: false
+  xy: 116, 12
   size: 15, 18
   orig: 15, 18
   offset: 0, 0

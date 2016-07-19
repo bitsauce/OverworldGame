@@ -10,6 +10,7 @@ class Animation;
 class DynamicEntity;
 class AtlasAttachmentLoader;
 class RegionAttachment;
+class SpineAtlas;
 
 class Humanoid
 {
@@ -27,13 +28,18 @@ public:
 		THIGH_RIGHT,
 		SHOULDER_LEFT,
 		SHOULDER_RIGHT,
-		NECK,
 		HIPS,
 		LEG_LEFT,
 		LEG_RIGHT,
 		HAND_LEFT,
 		HAND_RIGHT,
 		BODY_PART_COUNT
+	};
+
+	enum AttachmentSlots
+	{
+		RIGHT_HAND,
+		LEFT_HAND
 	};
 
 	enum Anim
@@ -65,7 +71,7 @@ public:
 	void onTick(TickEvent *e);
 	void draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha);
 
-	void setAppearanceTexture(const BodyPart part, const Resource<Texture2D> texture);
+	void setAppearance(const BodyPart part, const string &name);
 	RegionAttachment *setAttachment(const BodyPart part, const string &name, const string &path);
 	void clearAttachment(const BodyPart part);
 
@@ -99,6 +105,7 @@ private:
 	AtlasAttachmentLoader *m_equipmentAttachmentLoader;
 
 	// List of textures of this characters appearance
+	SpineAtlas *m_appearanceAtlas;
 	string m_appearance[BODY_PART_COUNT];
 };
 

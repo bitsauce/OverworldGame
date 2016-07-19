@@ -7,6 +7,7 @@
 #include "Animation/Slot.h"
 #include "Animation/RegionAttachment.h"
 #include "Animation/AtlasAttachmentLoader.h"
+#include "Animation/Atlas.h"
 
 #include "DynamicEntity.h"
 
@@ -25,7 +26,7 @@ Humanoid::Humanoid() :
 {
 	// Load skeleton data
 	m_skeleton = new Skeleton("Sprites/Characters/Skeleton.json", "Sprites/Characters/Skeleton.atlas", 1.0f);
-	m_skeleton->getTexture()->setFiltering(Texture2D::LINEAR);
+	m_skeleton->getAtlas()->getTexture()->setFiltering(Texture2D::LINEAR);
 
 	// Setup spine animations
 	m_animationStateData = new AnimationStateData(m_skeleton);
@@ -48,7 +49,7 @@ Humanoid::Humanoid() :
 	m_preAnimationState->setLooping(true);
 
 	// Create render target
-	m_skeletonRenderTarget = new RenderTarget2D(m_skeleton->getTexture());
+	m_skeletonRenderTarget = new RenderTarget2D(m_skeleton->getAtlas()->getTexture());
 
 	// Set render array to false
 	for(uint i = 0; i < BODY_PART_COUNT; ++i)
@@ -57,7 +58,7 @@ Humanoid::Humanoid() :
 	}
 
 	// Set default appearance
-	m_appearance[HEAD] = "Head_Less";
+	m_appearance[HEAD] = "Default_Head";
 	m_appearance[ARM_LEFT] = "Default_Left_Arm";
 	m_appearance[ARM_RIGHT] = "Default_Right_Arm";
 	m_appearance[TORSO] = "Default_Torso";
@@ -68,9 +69,10 @@ Humanoid::Humanoid() :
 	m_appearance[HIPS] = "Default_Hips";
 	m_appearance[LEG_LEFT] = "Default_Left_Leg";
 	m_appearance[LEG_RIGHT] = "Default_Right_Leg";
+	m_appearance[HAND_RIGHT] = "Head_Less"; // TODO: Should not be here
+	m_appearance[HAND_LEFT] = "Head_Less";
 
-	m_renderPart[HEAD] = true;
-
+	m_appearanceAtlas = new SpineAtlas("Sprites/Characters/Images/Apparel/Apparel.atlas");
 	m_equipmentAttachmentLoader = new AtlasAttachmentLoader("Sprites/Characters/Images/Equipment/Equipment.atlas");
 }
 
@@ -84,7 +86,6 @@ string Humanoid::getBodyPartName(const BodyPart part)
 	switch(part)
 	{
 	case HEAD:				return "Head";
-	case NECK:				return "Neck";
 	case TORSO:				return "Torso";
 	case HIPS:				return "Hips";
 	case THIGH_LEFT:		return "Left_Thigh";
@@ -236,22 +237,22 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 		if(m_renderPart[i])
 		{
 			GraphicsContext *context = spriteBatch->getGraphicsContext();
-			Resource<Texture2D> skeletonAtlas = m_skeleton->getTexture();
+			Resource<Texture2D> skeletonAtlas = m_skeleton->getAtlas()->getTexture();
 
 			context->setRenderTarget(m_skeletonRenderTarget);
 
 			// Get body part region
-			TextureRegion region = m_skeleton->getTextureRegion(getBodyPartName((BodyPart) i));
+			TextureRegion region = m_skeleton->getAtlas()->findRegion(getBodyPartName((BodyPart) i))->getTextureRegion();
 			uint x0 = region.uv0.x * skeletonAtlas->getWidth(), y0 = region.uv0.y * skeletonAtlas->getHeight(),
 				x1 = region.uv1.x * skeletonAtlas->getWidth(), y1 = region.uv1.y * skeletonAtlas->getHeight();
 
 			// Draw apparel to the region
 			context->disable(GraphicsContext::BLEND);
 
-			spAtlasRegion *tt = spAtlas_findRegion(m_skeleton->m_apparelAtlas, m_appearance[i].c_str());
+			SpineAtlasRegion *tt = m_appearanceAtlas->findRegion(m_appearance[i].c_str());
 
-			context->setTexture(*(Resource<Texture2D>*)m_skeleton->m_apparelAtlas->pages->rendererObject);
-			context->drawRectangle(x0, skeletonAtlas->getHeight() - y1, x1 - x0, y1 - y0, Color(255), TextureRegion(tt->u, tt->v, tt->u2, tt->v2));
+			context->setTexture(m_appearanceAtlas->getTexture());
+			context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color(255), tt->getTextureRegion());
 
 			// Reset context
 			context->enable(GraphicsContext::BLEND);
@@ -271,28 +272,37 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 	gfxContext->setTransformationMatrix(Matrix4());
 }
 
-void Humanoid::setAppearanceTexture(const BodyPart part, const Resource<Texture2D> texture)
+void Humanoid::setAppearance(const BodyPart part, const string &name)
 {
-	// Set attachemnts
-	/*if(texture)
+	// Set appearance image name
+	SpineAtlasRegion *atlasRegion = m_appearanceAtlas->findRegion(name);
+	if(atlasRegion)
 	{
-		TextureRegion region = m_skeleton->getTextureRegion(getBodyPartName(part));
+		TextureRegion bodyPartRegion = m_skeleton->getAtlas()->findRegion(getBodyPartName(part))->getTextureRegion();
+		Resource<Texture2D> skeletonAtlasTexture = m_skeleton->getAtlas()->getTexture();
+		uint bodyPartWidth = (bodyPartRegion.uv1.x - bodyPartRegion.uv0.x) * skeletonAtlasTexture->getWidth();
+		uint bodyPartHeight = (bodyPartRegion.uv1.y - bodyPartRegion.uv0.y) * skeletonAtlasTexture->getHeight();
 
-		Resource<Texture2D> skeletonAtlas = m_skeleton->getTexture();
-		uint x0 = region.uv0.x * skeletonAtlas->getWidth(), y0 = region.uv0.y * skeletonAtlas->getHeight(),
-			x1 = region.uv1.x * skeletonAtlas->getWidth(), y1 = region.uv1.y * skeletonAtlas->getHeight();
+		TextureRegion appearanceRegion = atlasRegion->getTextureRegion();
+		Resource<Texture2D> appearanceAtlasTexture = m_appearanceAtlas->getTexture();
+		uint appearanceWidth = (appearanceRegion.uv1.x - appearanceRegion.uv0.x) * appearanceAtlasTexture->getWidth();
+		uint appearanceHeight = (appearanceRegion.uv1.y - appearanceRegion.uv0.y) * appearanceAtlasTexture->getHeight();
 
-		if((x1 - x0) == texture->getWidth() && (y1 - y0) == texture->getHeight())
+		// TODO: (Maybe) Make a system where this is unnecessary (for instance, have all of the same body part in one atlas)
+		if(appearanceWidth == bodyPartWidth && appearanceHeight == bodyPartHeight)
 		{
-			m_appearance[part] = texture;
+			m_appearance[part] = name;
 			m_renderPart[part] = true;
 		}
 		else
 		{
-			LOG("Appearance texture and body part region size needs to be the same.");
+			LOG("Appearance image and body part region size needs to match");
 		}
 	}
-	*/
+	else
+	{
+		LOG("Appearance image with name '%s' not found", name.c_str());
+	}
 }
 
 RegionAttachment *Humanoid::setAttachment(const BodyPart part, const string &name, const string &path)
