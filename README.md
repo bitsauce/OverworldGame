@@ -4,9 +4,7 @@ Overworld is a 2D tile based sandbox game. Runs on the [SuperSauce Engine](https
 # Screenshots
 #### Latest changes:
 **_2016-19-07 - Can change player appearance_**
-![Appearance changing](https://i.imgur.com/yjPfDsc.gif)
-
-<blockquote class="imgur-embed-pub" lang="en" data-id="yjPfDsc"><a href="//imgur.com/yjPfDsc">View post on imgur.com</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+![Appearance changing](http://i.imgur.com/O8PXZHY.gif)
 
 **_2016-27-06 - New stone texture_**
 ![New stone texture](https://cloud.githubusercontent.com/assets/3323853/16382123/c9c214ac-3c7f-11e6-98b6-7139915265c8.png "New stone texture")
