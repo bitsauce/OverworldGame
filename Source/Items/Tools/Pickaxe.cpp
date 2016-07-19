@@ -25,14 +25,14 @@ Pickaxe::Pickaxe(OverworldGame *game, const ItemDataDesc *desc) :
 
 void Pickaxe::equip(Pawn *player)
 {
-	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "Right_Hand_Equip", "Pickaxe_Iron");
+	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::RIGHT_HAND, "Right_Hand_Equip", "Pickaxe_Iron");
 	attachment->setPosition(0.8f, 12.7f);
 	attachment->setRotation(405.0f);
 }
 
 void Pickaxe::unequip(Pawn *player)
 {
-	player->getHumanoid().clearAttachment(Humanoid::HAND_RIGHT);
+	player->getHumanoid().clearAttachment(Humanoid::RIGHT_HAND);
 }
 
 void Pickaxe::update(Pawn *pawn, const float delta)

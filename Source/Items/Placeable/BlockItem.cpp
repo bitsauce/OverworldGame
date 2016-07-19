@@ -51,7 +51,7 @@ BlockItem::BlockItem(OverworldGame *game, const ItemDataDesc *desc) :
 
 void BlockItem::equip(Pawn *player)
 {
-	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "Right_Hand_Equip", m_blockData->getName());
+	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::RIGHT_ARM, "Right_Hand_Equip", m_blockData->getName());
 	attachment->setPosition(0.8f, 12.7f);
 	attachment->setRotation(405.0f);
 	attachment->setSize(24, 24);
@@ -59,7 +59,7 @@ void BlockItem::equip(Pawn *player)
 
 void BlockItem::unequip(Pawn *player)
 {
-	player->getHumanoid().clearAttachment(Humanoid::HAND_RIGHT);
+	player->getHumanoid().clearAttachment(Humanoid::RIGHT_HAND);
 }
 
 void BlockItem::use(Pawn *pawn, const float delta)

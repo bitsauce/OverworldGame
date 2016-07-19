@@ -144,7 +144,7 @@ void Camera::onTick(TickEvent *e)
 {
 	if(!m_tagetEntity)
 	{
-		float acc = (m_input->getKeyState(SAUCE_KEY_LSHIFT) ? 256.0f : /*256.0f*/0.1f) * e->getDelta();
+		float acc = (m_input->getKeyState(SAUCE_KEY_LSHIFT) ? 256.0f : 512.0f) * e->getDelta();
 
 		m_prevPosition = m_position;
 

@@ -30,12 +30,12 @@ Humanoid::Humanoid() :
 
 	// Setup spine animations
 	m_animationStateData = new AnimationStateData(m_skeleton);
-	m_animationStateData->setMix("idle", "walk", 0.2f);
-	m_animationStateData->setMix("walk", "idle", 0.5f);
-	m_animationStateData->setMix("jump", "idle", 0.1f);
-	m_animationStateData->setMix("walk", "jump", 0.1f);
-	m_animationStateData->setMix("jump", "idle", 0.1f);
-	m_animationStateData->setMix("idle", "jump", 0.2f);
+	m_animationStateData->setMix("Idle", "Walk", 0.2f);
+	m_animationStateData->setMix("Walk", "Idle", 0.5f);
+	m_animationStateData->setMix("Jump", "Idle", 0.1f);
+	m_animationStateData->setMix("Walk", "Jump", 0.1f);
+	m_animationStateData->setMix("Jump", "Idle", 0.1f);
+	m_animationStateData->setMix("Idle", "Jump", 0.2f);
 	
 	// Create spine animation states
 	m_mainAnimationState = new AnimationState(m_animationStateData);
@@ -52,25 +52,37 @@ Humanoid::Humanoid() :
 	m_skeletonRenderTarget = new RenderTarget2D(m_skeleton->getAtlas()->getTexture());
 
 	// Set render array to false
-	for(uint i = 0; i < BODY_PART_COUNT; ++i)
+	for(uint i = 0; i < SLOT_COUNT; ++i)
 	{
 		m_renderPart[i] = false;
 	}
 
 	// Set default appearance
 	m_appearance[HEAD] = "Default_Head";
-	m_appearance[ARM_LEFT] = "Default_Left_Arm";
-	m_appearance[ARM_RIGHT] = "Default_Right_Arm";
+	m_appearance[LEFT_ARM] = "Default_Left_Arm";
+	m_appearance[RIGHT_ARM] = "Default_Right_Arm";
 	m_appearance[TORSO] = "Default_Torso";
-	m_appearance[THIGH_LEFT] = "Default_Left_Thigh";
-	m_appearance[THIGH_RIGHT] = "Default_Right_Thigh";
-	m_appearance[SHOULDER_LEFT] = "Default_Left_Shoulder";
-	m_appearance[SHOULDER_RIGHT] = "Default_Right_Shoulder";
+	m_appearance[LEFT_THIGH] = "Default_Left_Thigh";
+	m_appearance[RIGHT_THIGH] = "Default_Right_Thigh";
+	m_appearance[LEFT_SHOULDER] = "Default_Left_Shoulder";
+	m_appearance[RIGHT_SHOULDER] = "Default_Right_Shoulder";
 	m_appearance[HIPS] = "Default_Hips";
-	m_appearance[LEG_LEFT] = "Default_Left_Leg";
-	m_appearance[LEG_RIGHT] = "Default_Right_Leg";
-	m_appearance[HAND_RIGHT] = "Head_Less"; // TODO: Should not be here
-	m_appearance[HAND_LEFT] = "Head_Less";
+	m_appearance[LEFT_LEG] = "Default_Left_Leg";
+	m_appearance[RIGHT_LEG] = "Default_Right_Leg";
+
+	// Create slots map
+	for(int i = 0; i < SLOT_COUNT; i++)
+	{
+		HumanoidSlot slot = (HumanoidSlot) i;
+		m_slots[slot] = m_skeleton->findSlot(getSlotName(slot));
+	}
+
+	// Create animation map
+	for(int i = 0; i < ANIM_COUNT; i++)
+	{
+		HumanoidAnim anim = (HumanoidAnim) i;
+		m_animations[anim] = m_skeleton->findAnimation(getAnimName(anim));
+	}
 
 	m_appearanceAtlas = new SpineAtlas("Sprites/Characters/Images/Apparel/Apparel.atlas");
 	m_equipmentAttachmentLoader = new AtlasAttachmentLoader("Sprites/Characters/Images/Equipment/Equipment.atlas");
@@ -81,52 +93,55 @@ Humanoid::~Humanoid()
 	delete m_skeletonRenderTarget;
 }
 
-string Humanoid::getBodyPartName(const BodyPart part)
+string Humanoid::getSlotName(const HumanoidSlot slot)
 {
-	switch(part)
+	switch(slot)
 	{
-	case HEAD:				return "Head";
-	case TORSO:				return "Torso";
-	case HIPS:				return "Hips";
-	case THIGH_LEFT:		return "Left_Thigh";
-	case THIGH_RIGHT:		return "Right_Thigh";
-	case SHOULDER_RIGHT:	return "Right_Shoulder";
-	case SHOULDER_LEFT:		return "Left_Shoulder";
-	case ARM_RIGHT:			return "Right_Arm";
-	case ARM_LEFT:			return "Left_Arm";
-	case LEG_RIGHT:			return "Right_Leg";
-	case LEG_LEFT:			return "Left_Leg";
-	case HAND_RIGHT:		return "Right_Hand";
-	case HAND_LEFT:			return "Left_Hand";
-	default:				return "null";
+		case HIPS: return "Hips";
+		case LEFT_THIGH: return "Left_Thigh";
+		case RIGHT_THIGH: return "Right_Thigh";
+		case LEFT_LEG: return "Left_Leg";
+		case RIGHT_LEG: return "Right_Leg";
+		case TORSO: return "Torso";
+		case EYES: return "Eyes";
+		case HAIR: return "Hair";
+		case HEAD: return "Head";
+		case LEFT_SHOULDER: return "Left_Shoulder";
+		case RIGHT_SHOULDER: return "Right_Shoulder";
+		case LEFT_ARM: return "Left_Arm";
+		case RIGHT_ARM: return "Right_Arm";
+		case LEFT_HAND: return "Left_Hand";
+		case RIGHT_HAND: return "Right_Hand";
 	}
+	return "";
 }
 
-Animation *Humanoid::getAnimation(const Anim anim)
+string Humanoid::getAnimName(const HumanoidAnim slot)
 {
-	string animName = "default";
-	switch(anim)
+	switch(slot)
 	{
-	case ANIM_NULL: return nullptr;
-	case ANIM_DEFAULT: animName = "default"; break;
-	case ANIM_IDLE: animName = "idle"; break;
-	case ANIM_JUMP: animName = "jump"; break;
-	case ANIM_WALK: animName = "walk"; break;
-	case ANIM_WALL_SLIDE: animName = "wall-slide"; break;
-	case ANIM_MINE: animName = "mine"; break;
-	case ANIM_ARROW_AIM_UP: animName = "arrow_aim_up"; break;
-	case ANIM_ARROW_AIM_FW: animName = "arrow_aim_fw"; break;
-	case ANIM_ARROW_AIM_DW: animName = "arrow_aim_dw"; break;
-	case ANIM_HOLD_TORCH: animName = "Hold_Torch"; break;
+		case ANIM_NULL: return "";
+		case ANIM_DEFAULT: return "Default";
+		case ANIM_IDLE: return "Idle";
+		case ANIM_JUMP: return "Jump";
+		case ANIM_WALK: return "Walk";
+		case ANIM_WALL_SLIDE: return "Wall_Slide";
+		case ANIM_MINE: return "Mine";
+		case ANIM_ARROW_AIM_UP: return "Bow_Aim_Up";
+		case ANIM_ARROW_AIM_FW: return "Bow_Aim_Forward";
+		case ANIM_ARROW_AIM_DW: return "Bow_Aim_Down";
+		case ANIM_ROLL_FORWARD: return "Roll_Forward";
+		case ANIM_SWORD_ATTACH_LIGHT: return "Sword_Attack_Light";
+		case ANIM_HOLD_TORCH: return "Hold_Torch";
 	}
-	return m_skeleton->findAnimation(animName);
+	return "";
 }
 
 // ANIMATIONS
-void Humanoid::setPreAnimation(const Anim anim)
+void Humanoid::setPreAnimation(const HumanoidAnim anim)
 {
-	// Set pre animation
-	Animation *animations = getAnimation(anim);
+	// Set pre-animation
+	Animation *animations = m_animations[anim];
 	if(m_preAnimation != animations)
 	{
 		if(animations != nullptr)
@@ -138,10 +153,10 @@ void Humanoid::setPreAnimation(const Anim anim)
 	}
 }
 
-void Humanoid::setMainAnimation(const Anim anim)
+void Humanoid::setMainAnimation(const HumanoidAnim anim)
 {
 	// Set main animation
-	Animation *animations = getAnimation(anim);
+	Animation *animations = m_animations[anim];
 	if(m_mainAnimation != animations)
 	{
 		if(animations != nullptr)
@@ -153,10 +168,10 @@ void Humanoid::setMainAnimation(const Anim anim)
 	}
 }
 
-void Humanoid::setPostAnimation(const Anim anim)
+void Humanoid::setPostAnimation(const HumanoidAnim anim)
 {
 	// Set post animation
-	Animation *animation = getAnimation(anim);
+	Animation *animation = m_animations[anim];
 	if(m_postAnimation != animation)
 	{
 		if(animation != nullptr)
@@ -169,10 +184,10 @@ void Humanoid::setPostAnimation(const Anim anim)
 	}
 }
 
-void Humanoid::setPostBlendAnimations(const Anim anim1, const Anim anim2, const float alpha)
+void Humanoid::setPostBlendAnimations(const HumanoidAnim anim1, const HumanoidAnim anim2, const float alpha)
 {
-	Animation *animation1 = getAnimation(anim1);
-	Animation *animation2 = getAnimation(anim2);
+	Animation *animation1 = m_animations[anim1];
+	Animation *animation2 = m_animations[anim2];
 	if(m_postAnimation != animation1 || m_postAnimationMix != animation2)
 	{
 		if(m_postAnimation != animation1 && m_postAnimationMix != animation2)
@@ -231,7 +246,7 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 		}
 	}
 
-	for(uint i = 0; i < BODY_PART_COUNT; ++i)
+	for(uint i = 0; i < SLOT_COUNT; ++i)
 	{
 		// Do we need to re-render body part?
 		if(m_renderPart[i])
@@ -242,7 +257,7 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 			context->setRenderTarget(m_skeletonRenderTarget);
 
 			// Get body part region
-			TextureRegion region = m_skeleton->getAtlas()->findRegion(getBodyPartName((BodyPart) i))->getTextureRegion();
+			TextureRegion region = m_skeleton->getAtlas()->findRegion(getSlotName((HumanoidSlot) i))->getTextureRegion();
 			uint x0 = region.uv0.x * skeletonAtlas->getWidth(), y0 = region.uv0.y * skeletonAtlas->getHeight(),
 				x1 = region.uv1.x * skeletonAtlas->getWidth(), y1 = region.uv1.y * skeletonAtlas->getHeight();
 
@@ -272,13 +287,13 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 	gfxContext->setTransformationMatrix(Matrix4());
 }
 
-void Humanoid::setAppearance(const BodyPart part, const string &name)
+void Humanoid::setAppearance(const HumanoidSlot slot, const string &name)
 {
 	// Set appearance image name
 	SpineAtlasRegion *atlasRegion = m_appearanceAtlas->findRegion(name);
 	if(atlasRegion)
 	{
-		TextureRegion bodyPartRegion = m_skeleton->getAtlas()->findRegion(getBodyPartName(part))->getTextureRegion();
+		TextureRegion bodyPartRegion = m_skeleton->getAtlas()->findRegion(getSlotName(slot))->getTextureRegion();
 		Resource<Texture2D> skeletonAtlasTexture = m_skeleton->getAtlas()->getTexture();
 		uint bodyPartWidth = (bodyPartRegion.uv1.x - bodyPartRegion.uv0.x) * skeletonAtlasTexture->getWidth();
 		uint bodyPartHeight = (bodyPartRegion.uv1.y - bodyPartRegion.uv0.y) * skeletonAtlasTexture->getHeight();
@@ -291,8 +306,8 @@ void Humanoid::setAppearance(const BodyPart part, const string &name)
 		// TODO: (Maybe) Make a system where this is unnecessary (for instance, have all of the same body part in one atlas)
 		if(appearanceWidth == bodyPartWidth && appearanceHeight == bodyPartHeight)
 		{
-			m_appearance[part] = name;
-			m_renderPart[part] = true;
+			m_appearance[slot] = name;
+			m_renderPart[slot] = true;
 		}
 		else
 		{
@@ -305,25 +320,17 @@ void Humanoid::setAppearance(const BodyPart part, const string &name)
 	}
 }
 
-RegionAttachment *Humanoid::setAttachment(const BodyPart part, const string &name, const string &path)
+RegionAttachment *Humanoid::setAttachment(const HumanoidSlot slot, const string &name, const string &path)
 {
 	RegionAttachment *attachment = m_equipmentAttachmentLoader->newAttachment(name.c_str(), path.c_str());
 	if(attachment)
 	{
-		Slot *slot = m_skeleton->findSlot(getBodyPartName(part));
-		if(slot)
-		{
-			slot->setAttachment(attachment);
-		}
+		m_slots[slot]->setAttachment(attachment);
 	}
 	return attachment;
 }
 
-void Humanoid::clearAttachment(const BodyPart part)
+void Humanoid::clearAttachment(const HumanoidSlot slot)
 {
-	Slot* slot = m_skeleton->findSlot(getBodyPartName(part));
-	if(slot)
-	{
-		slot->setAttachment(0);
-	}
+	m_slots[slot]->setAttachment(0);
 }

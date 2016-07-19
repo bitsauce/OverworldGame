@@ -27,14 +27,14 @@ Axe::Axe(OverworldGame *game, const ItemDataDesc *desc) :
 
 void Axe::equip(Pawn *player)
 {
-	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "Right_Hand_Equip", "Axe_Iron");
+	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::RIGHT_HAND, "Right_Hand_Equip", "Axe_Iron");
 	attachment->setPosition(0.8f, 12.7f);
 	attachment->setRotation(405.0f);
 }
 
 void Axe::unequip(Pawn *player)
 {
-	player->getHumanoid().clearAttachment(Humanoid::HAND_RIGHT);
+	player->getHumanoid().clearAttachment(Humanoid::RIGHT_HAND);
 }
 
 void Axe::update(Pawn *pawn, const float delta)

@@ -11,6 +11,7 @@ class DynamicEntity;
 class AtlasAttachmentLoader;
 class RegionAttachment;
 class SpineAtlas;
+class Slot;
 
 class Humanoid
 {
@@ -18,31 +19,27 @@ public:
 	Humanoid();
 	~Humanoid();
 
-	enum BodyPart
+	enum HumanoidSlot
 	{
-		HEAD,
-		ARM_LEFT,
-		ARM_RIGHT,
-		TORSO,
-		THIGH_LEFT,
-		THIGH_RIGHT,
-		SHOULDER_LEFT,
-		SHOULDER_RIGHT,
 		HIPS,
-		LEG_LEFT,
-		LEG_RIGHT,
-		HAND_LEFT,
-		HAND_RIGHT,
-		BODY_PART_COUNT
-	};
-
-	enum AttachmentSlots
-	{
+		LEFT_THIGH,
+		RIGHT_THIGH,
+		LEFT_LEG,
+		RIGHT_LEG,
+		TORSO,
+		EYES,
+		HAIR,
+		HEAD,
+		LEFT_SHOULDER,
+		RIGHT_SHOULDER,
+		LEFT_ARM,
+		RIGHT_ARM,
+		LEFT_HAND,
 		RIGHT_HAND,
-		LEFT_HAND
+		SLOT_COUNT
 	};
 
-	enum Anim
+	enum HumanoidAnim
 	{
 		ANIM_NULL,
 		ANIM_DEFAULT,
@@ -54,16 +51,18 @@ public:
 		ANIM_ARROW_AIM_UP,
 		ANIM_ARROW_AIM_FW,
 		ANIM_ARROW_AIM_DW,
+		ANIM_ROLL_FORWARD,
+		ANIM_SWORD_ATTACH_LIGHT,
 		ANIM_HOLD_TORCH,
 		ANIM_COUNT
 	};
 	
-	void setPreAnimation(const Anim anim);
+	void setPreAnimation(const HumanoidAnim anim);
 	AnimationState *getPreAnimationState() const { return m_preAnimationState; }
-	void setMainAnimation(const Anim anim);
+	void setMainAnimation(const HumanoidAnim anim);
 	AnimationState *getMainAnimationState() const { return m_mainAnimationState; }
-	void setPostAnimation(const Anim anim);
-	void setPostBlendAnimations(const Anim anim1, const Anim anim2, const float alpha);
+	void setPostAnimation(const HumanoidAnim anim);
+	void setPostBlendAnimations(const HumanoidAnim anim1, const HumanoidAnim anim2, const float alpha);
 	AnimationState *getPostAnimationState() const { return m_postAnimationState; }
 
 	Skeleton *getSkeleton() { return m_skeleton; }
@@ -71,13 +70,18 @@ public:
 	void onTick(TickEvent *e);
 	void draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha);
 
-	void setAppearance(const BodyPart part, const string &name);
-	RegionAttachment *setAttachment(const BodyPart part, const string &name, const string &path);
-	void clearAttachment(const BodyPart part);
+	void setAppearance(const HumanoidSlot slot, const string &name);
+	RegionAttachment *setAttachment(const HumanoidSlot slot, const string &newAttachmentName, const string &attachmentPath);
+	void clearAttachment(const HumanoidSlot slot);
 
 private:
-	string getBodyPartName(const BodyPart part);
-	Animation *getAnimation(const Anim anim);
+	string getSlotName(const HumanoidSlot slot);
+	string getAnimName(const HumanoidAnim anim);
+
+	// Skeleton data
+	RenderTarget2D *m_skeletonRenderTarget;
+	map<HumanoidSlot, Slot*> m_slots;
+	map<HumanoidAnim, Animation*> m_animations;
 
 	// Skeletal animations
 	Skeleton *m_skeleton;
@@ -99,14 +103,13 @@ private:
 	float m_prevPostAnimationTime;
 	float m_postAnimationTime;
 
-	RenderTarget2D *m_skeletonRenderTarget;
-	bool m_renderPart[BODY_PART_COUNT];
-
+	// Equipment loading
 	AtlasAttachmentLoader *m_equipmentAttachmentLoader;
 
-	// List of textures of this characters appearance
+	// Appearance rendering
+	bool m_renderPart[SLOT_COUNT];
+	string m_appearance[SLOT_COUNT];
 	SpineAtlas *m_appearanceAtlas;
-	string m_appearance[BODY_PART_COUNT];
 };
 
 #endif // HUMANOID_H

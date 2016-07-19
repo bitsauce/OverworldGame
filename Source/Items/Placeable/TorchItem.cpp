@@ -18,7 +18,7 @@ void TorchItem::equip(Pawn *player)
 	player->m_pointLight->setColor(Color(216, 206, 64, 255));
 
 	// Equip "Torch" attachment
-	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "Right_Hand_Equip", "Torch");
+	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::RIGHT_HAND, "Right_Hand_Equip", "Torch");
 	attachment->setPosition(0.0f, 7.7f);
 	attachment->setRotation(0.0f);
 }
@@ -33,5 +33,5 @@ void TorchItem::unequip(Pawn *player)
 	player->m_pointLight->setColor(Color(127));
 
 	// Clear "Torch" attachment
-	player->getHumanoid().clearAttachment(Humanoid::HAND_RIGHT);
+	player->getHumanoid().clearAttachment(Humanoid::RIGHT_HAND);
 }

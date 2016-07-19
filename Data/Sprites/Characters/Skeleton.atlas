@@ -3,16 +3,30 @@ Skeleton.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+Eyes
+  rotate: false
+  xy: 63, 4
+  size: 22, 26
+  orig: 22, 26
+  offset: 0, 0
+  index: -1
+Hair
+  rotate: false
+  xy: 87, 4
+  size: 22, 26
+  orig: 22, 26
+  offset: 0, 0
+  index: -1
 Head
   rotate: false
-  xy: 82, 12
-  size: 15, 18
-  orig: 15, 18
+  xy: 111, 4
+  size: 22, 26
+  orig: 22, 26
   offset: 0, 0
   index: -1
 Hips
   rotate: false
-  xy: 120, 16
+  xy: 175, 16
   size: 11, 6
   orig: 11, 6
   offset: 0, 0
@@ -26,21 +40,21 @@ Left_Arm
   index: -1
 Left_Leg
   rotate: false
-  xy: 110, 14
+  xy: 165, 14
   size: 8, 16
   orig: 8, 16
   offset: 0, 0
   index: -1
 Left_Shoulder
   rotate: false
-  xy: 120, 24
+  xy: 175, 24
   size: 17, 6
   orig: 17, 6
   offset: 0, 0
   index: -1
 Left_Thigh
   rotate: false
-  xy: 150, 19
+  xy: 205, 19
   size: 8, 11
   orig: 8, 11
   offset: 0, 0
@@ -54,7 +68,7 @@ Right_Arm
   index: -1
 Right_Leg
   rotate: false
-  xy: 99, 14
+  xy: 154, 14
   size: 9, 16
   orig: 9, 16
   offset: 0, 0
@@ -68,14 +82,14 @@ Right_Shoulder
   index: -1
 Right_Thigh
   rotate: false
-  xy: 139, 19
+  xy: 194, 19
   size: 9, 11
   orig: 9, 11
   offset: 0, 0
   index: -1
 Torso
   rotate: false
-  xy: 63, 11
+  xy: 135, 11
   size: 17, 19
   orig: 17, 19
   offset: 0, 0

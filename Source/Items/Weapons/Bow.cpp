@@ -24,14 +24,14 @@ Bow::Bow(OverworldGame *game, const ItemDataDesc *desc) :
 
 void Bow::equip(Pawn *player)
 {
-	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "Right_Hand_Equip", "Bow");
+	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::RIGHT_HAND, "Right_Hand_Equip", "Bow");
 	attachment->setPosition(-3.5f, 0.0f);
 	attachment->setRotation(0.0f);
 }
 
 void Bow::unequip(Pawn *player)
 {
-	player->getHumanoid().clearAttachment(Humanoid::HAND_RIGHT);
+	player->getHumanoid().clearAttachment(Humanoid::RIGHT_HAND);
 }
 
 void Bow::update(Pawn *pawn, const float delta)
@@ -71,7 +71,7 @@ void Bow::update(Pawn *pawn, const float delta)
 				pawn->getHumanoid().setPostBlendAnimations(Humanoid::ANIM_ARROW_AIM_FW, Humanoid::ANIM_ARROW_AIM_UP, alpha);
 			}
 		}
-		pawn->getHumanoid().clearAttachment(Humanoid::HAND_RIGHT);
+		pawn->getHumanoid().clearAttachment(Humanoid::RIGHT_HAND);
 		pawn->getHumanoid().setAppearance(Humanoid::HEAD, "Head_Evil");
 	}
 	else if(m_charging)
@@ -84,7 +84,7 @@ void Bow::update(Pawn *pawn, const float delta)
 		m_charging = false;
 		pawn->getHumanoid().setPostBlendAnimations(Humanoid::ANIM_NULL, Humanoid::ANIM_NULL, 0.0f);
 
-		RegionAttachment *attachment = pawn->getHumanoid().setAttachment(Humanoid::HAND_RIGHT, "Right_Hand_Equip", "Bow");
+		RegionAttachment *attachment = pawn->getHumanoid().setAttachment(Humanoid::RIGHT_HAND, "Right_Hand_Equip", "Bow");
 		attachment->setPosition(-3.5f, 0.0f);
 		attachment->setRotation(0.0f);
 		pawn->getHumanoid().setAppearance(Humanoid::HEAD, "Default_Head");
@@ -100,7 +100,7 @@ void Bow::draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha)
 
 		Skeleton *skeleton = pawn->getHumanoid().getSkeleton();
 
-		float angle = skeleton->findBone("lhand")->getWorldRotation();
+		float angle = skeleton->findBone("Left_Hand")->getWorldRotation();
 		if(skeleton->getFlipX())
 		{
 			m_sprite.setScaleX(-1.0f);
@@ -111,7 +111,7 @@ void Bow::draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha)
 			angle *= -1;
 		}
 
-		Vector2F pos = skeleton->getPosition() + skeleton->findBone("lhand")->getWorldPosition();
+		Vector2F pos = skeleton->getPosition() + skeleton->findBone("Left_Hand")->getWorldPosition();
 		m_sprite.setPosition(pos);
 		m_sprite.setOrigin(m_sprite.getSize() * 0.5f);
 		m_sprite.setRotation(angle);
