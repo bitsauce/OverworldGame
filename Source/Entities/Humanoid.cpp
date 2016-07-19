@@ -51,24 +51,23 @@ Humanoid::Humanoid() :
 	// Create render target
 	m_skeletonRenderTarget = new RenderTarget2D(m_skeleton->getAtlas()->getTexture());
 
-	// Set render array to false
-	for(uint i = 0; i < SLOT_COUNT; ++i)
-	{
-		m_renderPart[i] = false;
-	}
+	/*
 
-	// Set default appearance
-	m_appearance[HEAD] = "Default_Head";
-	m_appearance[LEFT_ARM] = "Default_Left_Arm";
-	m_appearance[RIGHT_ARM] = "Default_Right_Arm";
-	m_appearance[TORSO] = "Default_Torso";
-	m_appearance[LEFT_THIGH] = "Default_Left_Thigh";
-	m_appearance[RIGHT_THIGH] = "Default_Right_Thigh";
-	m_appearance[LEFT_SHOULDER] = "Default_Left_Shoulder";
-	m_appearance[RIGHT_SHOULDER] = "Default_Right_Shoulder";
-	m_appearance[HIPS] = "Default_Hips";
-	m_appearance[LEFT_LEG] = "Default_Left_Leg";
-	m_appearance[RIGHT_LEG] = "Default_Right_Leg";
+	HIPS,
+	LEFT_THIGH,
+	RIGHT_THIGH,
+	LEFT_LEG,
+	RIGHT_LEG,
+	TORSO,
+	EYES,
+	HAIR,
+	HEAD,
+	LEFT_SHOULDER,
+	RIGHT_SHOULDER,
+	LEFT_ARM,
+	RIGHT_ARM,
+	LEFT_HAND,
+	RIGHT_HAND,*/
 
 	// Create slots map
 	for(int i = 0; i < SLOT_COUNT; i++)
@@ -82,6 +81,19 @@ Humanoid::Humanoid() :
 	{
 		HumanoidAnim anim = (HumanoidAnim) i;
 		m_animations[anim] = m_skeleton->findAnimation(getAnimName(anim));
+	}
+
+	// Set render array to false
+	for(uint i = 0; i < SLOT_COUNT; ++i)
+	{
+		m_renderPart[i] = true;
+	}
+
+	// Set default appearance
+	for(uint i = 0; i < SLOT_COUNT; ++i)
+	{
+		HumanoidSlot slot = (HumanoidSlot) i;
+		m_appearance[slot] = "Default_" + getSlotName(slot);
 	}
 
 	m_appearanceAtlas = new SpineAtlas("Sprites/Characters/Images/Apparel/Apparel.atlas");
@@ -103,6 +115,7 @@ string Humanoid::getSlotName(const HumanoidSlot slot)
 		case LEFT_LEG: return "Left_Leg";
 		case RIGHT_LEG: return "Right_Leg";
 		case TORSO: return "Torso";
+		case MOUTH: return "Mouth";
 		case EYES: return "Eyes";
 		case HAIR: return "Hair";
 		case HEAD: return "Head";
@@ -248,33 +261,33 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 
 	for(uint i = 0; i < SLOT_COUNT; ++i)
 	{
-		// Do we need to re-render body part?
+		// Do we want to draw over this slot?
 		if(m_renderPart[i])
 		{
 			GraphicsContext *context = spriteBatch->getGraphicsContext();
-			Resource<Texture2D> skeletonAtlas = m_skeleton->getAtlas()->getTexture();
 
-			context->setRenderTarget(m_skeletonRenderTarget);
+			// Get skeleton and apparel atlas region
+			SpineAtlasRegion *skeletonAtlasRegion = m_skeleton->getAtlas()->findRegion(getSlotName((HumanoidSlot) i));
+			SpineAtlasRegion *apparelAtlasRegion = m_appearanceAtlas->findRegion(m_appearance[i].c_str());
+			if(skeletonAtlasRegion && apparelAtlasRegion)
+			{
+				// Calculate pixel coordinates for the slot we want to draw over
+				Resource<Texture2D> skeletonAtlas = m_skeleton->getAtlas()->getTexture();
+				TextureRegion skeletonTextureRegion = skeletonAtlasRegion->getTextureRegion();
+				uint x0 = skeletonTextureRegion.uv0.x * skeletonAtlas->getWidth(), y0 = skeletonTextureRegion.uv0.y * skeletonAtlas->getHeight(),
+					x1 = skeletonTextureRegion.uv1.x * skeletonAtlas->getWidth(), y1 = skeletonTextureRegion.uv1.y * skeletonAtlas->getHeight();
 
-			// Get body part region
-			TextureRegion region = m_skeleton->getAtlas()->findRegion(getSlotName((HumanoidSlot) i))->getTextureRegion();
-			uint x0 = region.uv0.x * skeletonAtlas->getWidth(), y0 = region.uv0.y * skeletonAtlas->getHeight(),
-				x1 = region.uv1.x * skeletonAtlas->getWidth(), y1 = region.uv1.y * skeletonAtlas->getHeight();
+				// Draw the apparel over the slot in the skeleton render target
+				context->setRenderTarget(m_skeletonRenderTarget);
+				context->disable(GraphicsContext::BLEND);
+				context->setTexture(m_appearanceAtlas->getTexture());
+				context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color(255), apparelAtlasRegion->getTextureRegion());
+				context->setTexture(0);
+				context->enable(GraphicsContext::BLEND);
+				context->setRenderTarget(0);
+			}
 
-			// Draw apparel to the region
-			context->disable(GraphicsContext::BLEND);
-
-			SpineAtlasRegion *tt = m_appearanceAtlas->findRegion(m_appearance[i].c_str());
-
-			context->setTexture(m_appearanceAtlas->getTexture());
-			context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color(255), tt->getTextureRegion());
-
-			// Reset context
-			context->enable(GraphicsContext::BLEND);
-			context->setTexture(0);
-			context->setRenderTarget(0);
-
-			// Don't need to render again
+			// Don't render again
 			m_renderPart[i] = false;
 		}
 	}

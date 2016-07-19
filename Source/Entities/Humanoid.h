@@ -28,6 +28,7 @@ public:
 		RIGHT_LEG,
 		TORSO,
 		EYES,
+		MOUTH,
 		HAIR,
 		HEAD,
 		LEFT_SHOULDER,
