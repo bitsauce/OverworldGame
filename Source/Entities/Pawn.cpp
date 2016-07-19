@@ -277,27 +277,29 @@ void Pawn::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 		// TODO: Verify using some time detla between this and previous packet
 		/*if(getVelocity().length() * delta_time < (getPosition() - Vector2F(x, y)).length())
 		{
-			// Invalid position, lets not accept the values we we're sent (do nothing?)
+			// Invalid position, lets not accept the values we we're sent
+			// Send back a packet containing the server-side object state
+			// to all clients
 
 		}
 		else
 		{*/
-			// Lets move the player to their new position
-			setPosition(position);
-			setVelocity(velocity);
+			// Lets move the player to their new (verified) position
+			//moveTo(position); // TODO: These should be here, however they break position interpolation for the local client
+			//setVelocity(velocity);
 		//}
 	}
 	else
 	{
 		// Recieved player update packet from server, apply it
-		float x; bitStream->Read(x);
-		float y; bitStream->Read(y);
-		setPosition(x, y);
-		bitStream->Read(x);
-		bitStream->Read(y);
-		setVelocityX(x);
-		setVelocityY(y);
+		Vector2F position, velocity;
+		bitStream->Read(position.x);
+		bitStream->Read(position.y);
+		bitStream->Read(velocity.x);
+		bitStream->Read(velocity.y);
 		bitStream->Read(m_equipedItem);
+		moveTo(position);
+		setVelocity(velocity);
 	}
 }
 
