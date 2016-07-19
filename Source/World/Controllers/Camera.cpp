@@ -20,9 +20,58 @@ Vector2I Camera::getCenter(const float alpha) const
 	return math::lerp(m_prevPosition, m_position, alpha) + m_size * 0.5f;
 }
 
+
+#define AVOID_DELTA 0.01f
+
+float avoidZeroPointFive(const float f)
+{
+	float base;
+	if(f >= 0.0f)
+	{
+		float fract = modf(f, &base);
+		if(fract > (0.5f - AVOID_DELTA) && fract <= 0.5f)
+		{
+			base += (0.5f - AVOID_DELTA);
+		}
+		else if(fract < (0.5f + AVOID_DELTA) && fract >= 0.5f)
+		{
+			base += (0.5f + AVOID_DELTA);
+		}
+		else
+		{
+			base += fract;
+		}
+	}
+	else
+	{
+		float fract = -modf(f, &base);
+		if(fract > (0.5f - AVOID_DELTA) && fract <= 0.5f)
+		{
+			base -= (0.5f - AVOID_DELTA);
+		}
+		else if(fract < (0.5f + AVOID_DELTA) && fract >= 0.5f)
+		{
+			base -= (0.5f + AVOID_DELTA);
+		}
+		else
+		{
+			base -= fract;
+		}
+	}
+	return base;
+}
+
+Vector2F avoidZeroPointFive(const Vector2F &pos)
+{
+	Vector2F out;
+	out.x = avoidZeroPointFive(pos.x);
+	out.y = avoidZeroPointFive(pos.y);
+	return out;
+}
+
 Matrix4 Camera::getTransformationMatrix(const float alpha) const
 {
-	Vector2F pos = math::lerp(m_prevPosition, m_position, alpha);
+	Vector2F pos = avoidZeroPointFive(math::lerp(m_prevPosition, m_position, alpha));
 
 	Matrix4 mat;
 	mat.translate(-pos.x, -pos.y, 0.0f);
@@ -48,7 +97,7 @@ Vector2I Camera::getPosition() const
 
 Vector2F Camera::getDrawPosition(const float alpha) const
 {
-	return math::lerp(m_prevPosition, m_position, alpha);
+	return avoidZeroPointFive(math::lerp(m_prevPosition, m_position, alpha));
 }
 
 Vector2I Camera::getInputPosition() const
@@ -95,7 +144,7 @@ void Camera::onTick(TickEvent *e)
 {
 	if(!m_tagetEntity)
 	{
-		float acc = (m_input->getKeyState(SAUCE_KEY_LCTRL) ? 32.0f : 256.0f) * e->getDelta();
+		float acc = (m_input->getKeyState(SAUCE_KEY_LSHIFT) ? 256.0f : /*256.0f*/0.1f) * e->getDelta();
 
 		m_prevPosition = m_position;
 

@@ -48,6 +48,7 @@ private:
 	void testclouds(Chat*, vector<string>);
 	void setres(Chat*, vector<string>);
 	void connect(Chat*, vector<string>);
+	void move(Chat*, vector<string>);
 
 	OverworldGame *m_game;
 

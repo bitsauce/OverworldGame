@@ -19,6 +19,7 @@ Commander::Commander(OverworldGame *game) :
 	m_commands.push_back(Command("testclouds", "2", "<height> <offset>", bind(&Commander::testclouds, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("setres", "2", "<w> <h>", bind(&Commander::setres, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("connect", "1|2", "<ip> [port]", bind(&Commander::connect, this, placeholders::_1, placeholders::_2)));
+	m_commands.push_back(Command("move", "2", "<x> <y>", bind(&Commander::move, this, placeholders::_1, placeholders::_2)));
 }
 
 Commander::~Commander()
@@ -167,4 +168,12 @@ void Commander::connect(Chat *, vector<string> args)
 	// Push game state
 	m_game->popState();
 	m_game->pushState(state);
+}
+
+void Commander::move(Chat *, vector<string> args)
+{
+	if(args.size() == 2)
+	{
+		m_game->getWorld()->getCamera()->lookAt(Vector2F(util::strToFloat(args[0]), util::strToFloat(args[1])));
+	}
 }
