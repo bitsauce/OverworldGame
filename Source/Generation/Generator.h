@@ -3,7 +3,6 @@
 
 #include "Config.h"
 #include "Constants.h"
-#include "Noise/Simplex.h"
 #include <unordered_set>
 #include "Blocks/Block.h"
 

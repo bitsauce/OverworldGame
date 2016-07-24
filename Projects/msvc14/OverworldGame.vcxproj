@@ -151,7 +151,6 @@
     <ClCompile Include="..\..\Source\Networking\Conneciton.cpp" />
     <ClCompile Include="..\..\Source\Networking\NetworkObject.cpp" />
     <ClCompile Include="..\..\Source\Networking\Server.cpp" />
-    <ClCompile Include="..\..\Source\Noise\Simplex.cpp" />
     <ClCompile Include="..\..\Source\World\Controllers\Background.cpp" />
     <ClCompile Include="..\..\Source\World\Controllers\Camera.cpp" />
     <ClCompile Include="..\..\Source\World\Controllers\Lighting.cpp" />
@@ -228,7 +227,6 @@
     <ClInclude Include="..\..\source\Networking\Connection.h" />
     <ClInclude Include="..\..\source\Networking\NetworkObject.h" />
     <ClInclude Include="..\..\Source\Networking\Server.h" />
-    <ClInclude Include="..\..\source\Noise\Simplex.h" />
     <ClInclude Include="..\..\Source\Strings.h" />
     <ClInclude Include="..\..\Source\World\Controllers\Background.h" />
     <ClInclude Include="..\..\Source\World\Controllers\Camera.h" />

@@ -49,6 +49,8 @@ private:
 	void setres(Chat*, vector<string>);
 	void connect(Chat*, vector<string>);
 	void move(Chat*, vector<string>);
+	void setAppearance(Chat*, vector<string>);
+	void setAppearanceColor(Chat*, vector<string>, const string &which);
 
 	OverworldGame *m_game;
 

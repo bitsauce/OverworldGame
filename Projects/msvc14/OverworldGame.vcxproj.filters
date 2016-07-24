@@ -17,9 +17,6 @@
     <ClCompile Include="..\..\Source\BlockEntities\BlockEntity.cpp">
       <Filter>Source\BlockEntities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Noise\Simplex.cpp">
-      <Filter>Source\Noise</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Game\Debug.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
@@ -220,9 +217,6 @@
     <Filter Include="Source">
       <UniqueIdentifier>{aa76d9fe-881d-4fc6-84f8-886f580bdf6d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Noise">
-      <UniqueIdentifier>{dc4c3fe4-09e5-417a-a2dd-12ea31f47404}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Game">
       <UniqueIdentifier>{18bc6b9a-571d-4fa2-8cc2-faf75c39f783}</UniqueIdentifier>
     </Filter>
@@ -291,9 +285,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\source\Noise\Simplex.h">
-      <Filter>Source\Noise</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Constants.h">
       <Filter>Source</Filter>
     </ClInclude>

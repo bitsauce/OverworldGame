@@ -71,9 +71,21 @@ public:
 	void onTick(TickEvent *e);
 	void draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha);
 
-	void setAppearance(const HumanoidSlot slot, const string &name);
+	bool setAppearance(const HumanoidSlot slot, const string &name);
 	RegionAttachment *setAttachment(const HumanoidSlot slot, const string &newAttachmentName, const string &attachmentPath);
 	void clearAttachment(const HumanoidSlot slot);
+
+	void setSkinColor(const Color &color)
+	{
+		m_skinColor = color;
+		m_renderPart[HEAD] = true;
+	}
+
+	void setHairColor(const Color &color)
+	{
+		m_hairColor = color;
+		m_renderPart[HAIR] = true;
+	}
 
 private:
 	string getSlotName(const HumanoidSlot slot);
@@ -109,8 +121,11 @@ private:
 
 	// Appearance rendering
 	bool m_renderPart[SLOT_COUNT];
-	string m_appearance[SLOT_COUNT];
+	string m_appearanceName[SLOT_COUNT];
 	SpineAtlas *m_appearanceAtlas;
+
+	// Colors...
+	Color m_skinColor, m_eyeColor, m_hairColor, m_lipColor;
 };
 
 #endif // HUMANOID_H

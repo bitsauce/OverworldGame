@@ -51,24 +51,6 @@ Humanoid::Humanoid() :
 	// Create render target
 	m_skeletonRenderTarget = new RenderTarget2D(m_skeleton->getAtlas()->getTexture());
 
-	/*
-
-	HIPS,
-	LEFT_THIGH,
-	RIGHT_THIGH,
-	LEFT_LEG,
-	RIGHT_LEG,
-	TORSO,
-	EYES,
-	HAIR,
-	HEAD,
-	LEFT_SHOULDER,
-	RIGHT_SHOULDER,
-	LEFT_ARM,
-	RIGHT_ARM,
-	LEFT_HAND,
-	RIGHT_HAND,*/
-
 	// Create slots map
 	for(int i = 0; i < SLOT_COUNT; i++)
 	{
@@ -93,10 +75,15 @@ Humanoid::Humanoid() :
 	for(uint i = 0; i < SLOT_COUNT; ++i)
 	{
 		HumanoidSlot slot = (HumanoidSlot) i;
-		m_appearance[slot] = "Default_" + getSlotName(slot);
+		m_appearanceName[slot] = getSlotName(slot) + "_Default";
 	}
 
-	m_appearanceAtlas = new SpineAtlas("Sprites/Characters/Images/Apparel/Apparel.atlas");
+	m_hairColor = Color(220, 160, 85, 255);
+	m_skinColor = Color(255, 210, 155, 255);
+	//m_eyeColor = ;
+	//m_lipColor = ;
+
+	m_appearanceAtlas = new SpineAtlas("Sprites/Characters/Images/Appearance/Appearance.atlas");
 	m_equipmentAttachmentLoader = new AtlasAttachmentLoader("Sprites/Characters/Images/Equipment/Equipment.atlas");
 }
 
@@ -268,7 +255,7 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 
 			// Get skeleton and apparel atlas region
 			SpineAtlasRegion *skeletonAtlasRegion = m_skeleton->getAtlas()->findRegion(getSlotName((HumanoidSlot) i));
-			SpineAtlasRegion *apparelAtlasRegion = m_appearanceAtlas->findRegion(m_appearance[i].c_str());
+			SpineAtlasRegion *apparelAtlasRegion = m_appearanceAtlas->findRegion(m_appearanceName[i].c_str());
 			if(skeletonAtlasRegion && apparelAtlasRegion)
 			{
 				// Calculate pixel coordinates for the slot we want to draw over
@@ -277,11 +264,15 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 				uint x0 = skeletonTextureRegion.uv0.x * skeletonAtlas->getWidth(), y0 = skeletonTextureRegion.uv0.y * skeletonAtlas->getHeight(),
 					x1 = skeletonTextureRegion.uv1.x * skeletonAtlas->getWidth(), y1 = skeletonTextureRegion.uv1.y * skeletonAtlas->getHeight();
 
+				Color color(255);
+				if(i == HEAD) color = m_skinColor;
+				else if(i == HAIR) color = m_hairColor;
+
 				// Draw the apparel over the slot in the skeleton render target
 				context->setRenderTarget(m_skeletonRenderTarget);
 				context->disable(GraphicsContext::BLEND);
 				context->setTexture(m_appearanceAtlas->getTexture());
-				context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color(255), apparelAtlasRegion->getTextureRegion());
+				context->drawRectangle(x0, y0, x1 - x0, y1 - y0, color, apparelAtlasRegion->getTextureRegion());
 				context->setTexture(0);
 				context->enable(GraphicsContext::BLEND);
 				context->setRenderTarget(0);
@@ -300,37 +291,20 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 	gfxContext->setTransformationMatrix(Matrix4());
 }
 
-void Humanoid::setAppearance(const HumanoidSlot slot, const string &name)
+bool Humanoid::setAppearance(const HumanoidSlot slot, const string &appearanceName)
 {
 	// Set appearance image name
+	const string name = getSlotName(slot) + "_" + appearanceName;
 	SpineAtlasRegion *atlasRegion = m_appearanceAtlas->findRegion(name);
 	if(atlasRegion)
 	{
-		TextureRegion bodyPartRegion = m_skeleton->getAtlas()->findRegion(getSlotName(slot))->getTextureRegion();
-		Resource<Texture2D> skeletonAtlasTexture = m_skeleton->getAtlas()->getTexture();
-		uint bodyPartWidth = (bodyPartRegion.uv1.x - bodyPartRegion.uv0.x) * skeletonAtlasTexture->getWidth();
-		uint bodyPartHeight = (bodyPartRegion.uv1.y - bodyPartRegion.uv0.y) * skeletonAtlasTexture->getHeight();
-
-		TextureRegion appearanceRegion = atlasRegion->getTextureRegion();
-		Resource<Texture2D> appearanceAtlasTexture = m_appearanceAtlas->getTexture();
-		uint appearanceWidth = (appearanceRegion.uv1.x - appearanceRegion.uv0.x) * appearanceAtlasTexture->getWidth();
-		uint appearanceHeight = (appearanceRegion.uv1.y - appearanceRegion.uv0.y) * appearanceAtlasTexture->getHeight();
-
-		// TODO: (Maybe) Make a system where this is unnecessary (for instance, have all of the same body part in one atlas)
-		if(appearanceWidth == bodyPartWidth && appearanceHeight == bodyPartHeight)
-		{
-			m_appearance[slot] = name;
-			m_renderPart[slot] = true;
-		}
-		else
-		{
-			LOG("Appearance image and body part region size needs to match");
-		}
+		m_appearanceName[slot] = name;
+		m_renderPart[slot] = true;
+		return true;
 	}
-	else
-	{
-		LOG("Appearance image with name '%s' not found", name.c_str());
-	}
+	
+	LOG("Appearance image with name '%s' not found", name.c_str());
+	return false;
 }
 
 RegionAttachment *Humanoid::setAttachment(const HumanoidSlot slot, const string &name, const string &path)
