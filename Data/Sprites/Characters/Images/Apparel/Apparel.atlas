@@ -3,37 +3,107 @@ Apparel.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-Left_Arm_Default
+Default_Hips
   rotate: false
-  xy: 60, 8
-  size: 28, 21
-  orig: 28, 21
+  xy: 213, 16
+  size: 19, 14
+  orig: 19, 14
   offset: 0, 0
   index: -1
-Left_Leg_Default
+Default_Left_Arm
   rotate: false
-  xy: 109, 5
+  xy: 173, 17
+  size: 21, 13
+  orig: 21, 13
+  offset: 0, 0
+  index: -1
+Default_Left_Leg
+  rotate: false
+  xy: 137, 6
   size: 16, 24
   orig: 16, 24
   offset: 0, 0
   index: -1
-Right_Arm_Default
+Default_Left_Shoulder
   rotate: false
-  xy: 29, 8
+  xy: 234, 17
+  size: 19, 13
+  orig: 19, 13
+  offset: 0, 0
+  index: -1
+Default_Left_Thigh
+  rotate: false
+  xy: 196, 11
+  size: 15, 19
+  orig: 15, 19
+  offset: 0, 0
+  index: -1
+Default_Right_Arm
+  rotate: false
+  xy: 56, 9
   size: 29, 21
   orig: 29, 21
   offset: 0, 0
   index: -1
-Right_Leg_Default
+Default_Right_Leg
   rotate: false
-  xy: 90, 5
+  xy: 118, 6
   size: 17, 24
   orig: 17, 24
   offset: 0, 0
   index: -1
-Torso_Default
+Default_Right_Shoulder
   rotate: false
-  xy: 2, 2
+  xy: 234, 2
+  size: 19, 13
+  orig: 19, 13
+  offset: 0, 0
+  index: -1
+Default_Right_Thigh
+  rotate: false
+  xy: 155, 11
+  size: 16, 19
+  orig: 16, 19
+  offset: 0, 0
+  index: -1
+Default_Torso
+  rotate: false
+  xy: 2, 3
+  size: 25, 27
+  orig: 25, 27
+  offset: 0, 0
+  index: -1
+Iron_Armor_Left_Arm
+  rotate: false
+  xy: 173, 2
+  size: 21, 13
+  orig: 21, 13
+  offset: 0, 0
+  index: -1
+Iron_Armor_Left_Shoulder
+  rotate: false
+  xy: 255, 17
+  size: 19, 13
+  orig: 19, 13
+  offset: 0, 0
+  index: -1
+Iron_Armor_Right_Arm
+  rotate: false
+  xy: 87, 9
+  size: 29, 21
+  orig: 29, 21
+  offset: 0, 0
+  index: -1
+Iron_Armor_Right_Shoulder
+  rotate: false
+  xy: 255, 2
+  size: 19, 13
+  orig: 19, 13
+  offset: 0, 0
+  index: -1
+Iron_Armor_Torso
+  rotate: false
+  xy: 29, 3
   size: 25, 27
   orig: 25, 27
   offset: 0, 0

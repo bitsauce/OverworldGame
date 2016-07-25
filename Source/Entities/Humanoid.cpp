@@ -78,7 +78,7 @@ Humanoid::Humanoid() :
 		m_appearanceName[slot] = getSlotName(slot) + "_Default";
 		m_appearanceColor[slot] = 0;
 
-		m_apparelName[slot] = getSlotName(slot) + "_Default";
+		m_apparelName[slot] = "Default_" + getSlotName(slot);
 	}
 
 	m_hairColor = Color(220, 160, 85, 255);
@@ -297,7 +297,7 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 				}
 				else if(i == MOUTH)
 				{
-					// Eyes needs to be drawn using a special color mask shader
+					// Mouth needs to be drawn using a special color mask shader
 					Vector4F colors[3];
 					colors[0] = Vector4F(m_lipColor.getR(), m_lipColor.getG(), m_lipColor.getB(), m_lipColor.getA()) / 255.0f;
 					colors[1] = Vector4F(255, 255, 255, 255) / 255.0f;
@@ -309,7 +309,7 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 					context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color(255), appearanceAtlasRegion->getTextureRegion());
 					context->setShader(0);
 				}
-					else
+				else
 				{
 					context->setTexture(m_appearanceAtlas->getTexture());
 					context->drawRectangle(x0, y0, x1 - x0, y1 - y0, m_appearanceColor[i] ? *m_appearanceColor[i] : Color(255), appearanceAtlasRegion->getTextureRegion());
@@ -320,13 +320,9 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 				if(apparelAtlasRegion)
 				{
 					// Draw the apparel over the slot in the skeleton render target
-					// This blend mode lets us draw a premultipled texture over another into the render target
-					context->setBlendState(BlendState(BlendState::BLEND_SRC_ALPHA, BlendState::BLEND_ONE_MINUS_SRC_ALPHA, BlendState::BLEND_ONE, BlendState::BLEND_ONE));
 					context->setTexture(m_apparelAtlas->getTexture());
 					context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color(255), apparelAtlasRegion->getTextureRegion());
 				}
-
-				context->setBlendState(BlendState::PRESET_ALPHA_BLEND);
 				context->setTexture(0);
 				context->setRenderTarget(0);
 			}
@@ -378,8 +374,8 @@ void Humanoid::clearAttachment(const HumanoidSlot slot)
 bool Humanoid::setApparel(const HumanoidSlot slot, const string &apparelName)
 {
 	// Set appearance image name
-	const string name = getSlotName(slot) + "_" + apparelName;
-	SpineAtlasRegion *atlasRegion = m_apparelAtlas->findRegion(name);
+	const string name = apparelName + "_" + getSlotName(slot);
+	SpineAtlasRegion *atlasRegion = m_apparelAtlas->findRegion(name); // TODO: Optimization: can store the atlasRegion itself instead of a string for the name
 	if(atlasRegion)
 	{
 		m_apparelName[slot] = name;
