@@ -76,15 +76,29 @@ Humanoid::Humanoid() :
 	{
 		HumanoidSlot slot = (HumanoidSlot) i;
 		m_appearanceName[slot] = getSlotName(slot) + "_Default";
+		m_appearanceColor[slot] = 0;
+
+		m_apparelName[slot] = getSlotName(slot) + "_Default";
 	}
 
 	m_hairColor = Color(220, 160, 85, 255);
 	m_skinColor = Color(255, 210, 155, 255);
-	//m_eyeColor = ;
-	//m_lipColor = ;
+	m_eyeColor = Color(220, 160, 85, 255);
+	m_lipColor = Color(215, 170, 135, 255);
+
+	m_appearanceColor[HEAD] = &m_skinColor;
+	m_appearanceColor[LEFT_LEG] = &m_skinColor;
+	m_appearanceColor[RIGHT_LEG] = &m_skinColor;
+	m_appearanceColor[LEFT_ARM] = &m_skinColor;
+	m_appearanceColor[RIGHT_ARM] = &m_skinColor;
+	m_appearanceColor[TORSO] = &m_skinColor;
+	m_appearanceColor[HAIR] = &m_hairColor;
 
 	m_appearanceAtlas = new SpineAtlas("Sprites/Characters/Images/Appearance/Appearance.atlas");
+	m_apparelAtlas = new SpineAtlas("Sprites/Characters/Images/Apparel/Apparel.atlas");
 	m_equipmentAttachmentLoader = new AtlasAttachmentLoader("Sprites/Characters/Images/Equipment/Equipment.atlas");
+
+	m_colorMaskShader = Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/Color_Mask");
 }
 
 Humanoid::~Humanoid()
@@ -255,8 +269,8 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 
 			// Get skeleton and apparel atlas region
 			SpineAtlasRegion *skeletonAtlasRegion = m_skeleton->getAtlas()->findRegion(getSlotName((HumanoidSlot) i));
-			SpineAtlasRegion *apparelAtlasRegion = m_appearanceAtlas->findRegion(m_appearanceName[i].c_str());
-			if(skeletonAtlasRegion && apparelAtlasRegion)
+			SpineAtlasRegion *appearanceAtlasRegion = m_appearanceAtlas->findRegion(m_appearanceName[i].c_str());
+			if(skeletonAtlasRegion && appearanceAtlasRegion)
 			{
 				// Calculate pixel coordinates for the slot we want to draw over
 				Resource<Texture2D> skeletonAtlas = m_skeleton->getAtlas()->getTexture();
@@ -264,17 +278,56 @@ void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float a
 				uint x0 = skeletonTextureRegion.uv0.x * skeletonAtlas->getWidth(), y0 = skeletonTextureRegion.uv0.y * skeletonAtlas->getHeight(),
 					x1 = skeletonTextureRegion.uv1.x * skeletonAtlas->getWidth(), y1 = skeletonTextureRegion.uv1.y * skeletonAtlas->getHeight();
 
-				Color color(255);
-				if(i == HEAD) color = m_skinColor;
-				else if(i == HAIR) color = m_hairColor;
-
-				// Draw the apparel over the slot in the skeleton render target
+				// Draw the appearance over the slot in the skeleton render target
 				context->setRenderTarget(m_skeletonRenderTarget);
 				context->disable(GraphicsContext::BLEND);
-				context->setTexture(m_appearanceAtlas->getTexture());
-				context->drawRectangle(x0, y0, x1 - x0, y1 - y0, color, apparelAtlasRegion->getTextureRegion());
-				context->setTexture(0);
+				if(i == EYES)
+				{
+					// Eyes needs to be drawn using a special color mask shader
+					Vector4F colors[3];
+					colors[0] = Vector4F(m_hairColor.getR(), m_hairColor.getG(), m_hairColor.getB(), m_hairColor.getA()) / 255.0f;
+					colors[1] = Vector4F(255, 255, 255, 255) / 255.0f;
+					colors[2] = Vector4F(m_eyeColor.getR(), m_eyeColor.getG(), m_eyeColor.getB(), m_eyeColor.getA()) / 255.0f;
+					m_colorMaskShader->setUniform4f("u_Colors", (float*)colors);
+					m_colorMaskShader->setSampler2D("u_Texture", m_appearanceAtlas->getTexture());
+
+					context->setShader(m_colorMaskShader);
+					context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color(255), appearanceAtlasRegion->getTextureRegion());
+					context->setShader(0);
+				}
+				else if(i == MOUTH)
+				{
+					// Eyes needs to be drawn using a special color mask shader
+					Vector4F colors[3];
+					colors[0] = Vector4F(m_lipColor.getR(), m_lipColor.getG(), m_lipColor.getB(), m_lipColor.getA()) / 255.0f;
+					colors[1] = Vector4F(255, 255, 255, 255) / 255.0f;
+					colors[2] = Vector4F(255, 255, 255, 255) / 255.0f;
+					m_colorMaskShader->setUniform4f("u_Colors", (float*) colors);
+					m_colorMaskShader->setSampler2D("u_Texture", m_appearanceAtlas->getTexture());
+
+					context->setShader(m_colorMaskShader);
+					context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color(255), appearanceAtlasRegion->getTextureRegion());
+					context->setShader(0);
+				}
+					else
+				{
+					context->setTexture(m_appearanceAtlas->getTexture());
+					context->drawRectangle(x0, y0, x1 - x0, y1 - y0, m_appearanceColor[i] ? *m_appearanceColor[i] : Color(255), appearanceAtlasRegion->getTextureRegion());
+				}
 				context->enable(GraphicsContext::BLEND);
+
+				SpineAtlasRegion *apparelAtlasRegion = m_apparelAtlas->findRegion(m_apparelName[i].c_str());
+				if(apparelAtlasRegion)
+				{
+					// Draw the apparel over the slot in the skeleton render target
+					// This blend mode lets us draw a premultipled texture over another into the render target
+					context->setBlendState(BlendState(BlendState::BLEND_SRC_ALPHA, BlendState::BLEND_ONE_MINUS_SRC_ALPHA, BlendState::BLEND_ONE, BlendState::BLEND_ONE));
+					context->setTexture(m_apparelAtlas->getTexture());
+					context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color(255), apparelAtlasRegion->getTextureRegion());
+				}
+
+				context->setBlendState(BlendState::PRESET_ALPHA_BLEND);
+				context->setTexture(0);
 				context->setRenderTarget(0);
 			}
 
@@ -320,4 +373,20 @@ RegionAttachment *Humanoid::setAttachment(const HumanoidSlot slot, const string 
 void Humanoid::clearAttachment(const HumanoidSlot slot)
 {
 	m_slots[slot]->setAttachment(0);
+}
+
+bool Humanoid::setApparel(const HumanoidSlot slot, const string &apparelName)
+{
+	// Set appearance image name
+	const string name = getSlotName(slot) + "_" + apparelName;
+	SpineAtlasRegion *atlasRegion = m_apparelAtlas->findRegion(name);
+	if(atlasRegion)
+	{
+		m_apparelName[slot] = name;
+		m_renderPart[slot] = true;
+		return true;
+	}
+
+	LOG("Apparel image with name '%s' not found", name.c_str());
+	return false;
 }

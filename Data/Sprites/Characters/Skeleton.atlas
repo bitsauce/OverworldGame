@@ -5,99 +5,99 @@ filter: Nearest,Nearest
 repeat: none
 Eyes
   rotate: false
-  xy: 63, 4
+  xy: 90, 4
   size: 22, 26
   orig: 22, 26
   offset: 0, 0
   index: -1
 Hair
   rotate: false
-  xy: 87, 4
+  xy: 114, 4
   size: 22, 26
   orig: 22, 26
   offset: 0, 0
   index: -1
 Head
   rotate: false
-  xy: 111, 4
+  xy: 138, 4
   size: 22, 26
   orig: 22, 26
   offset: 0, 0
   index: -1
 Hips
   rotate: false
-  xy: 199, 16
-  size: 11, 6
-  orig: 11, 6
+  xy: 258, 16
+  size: 19, 14
+  orig: 19, 14
   offset: 0, 0
   index: -1
 Left_Arm
   rotate: false
-  xy: 33, 9
+  xy: 60, 9
   size: 28, 21
   orig: 28, 21
   offset: 0, 0
   index: -1
 Left_Leg
   rotate: false
-  xy: 189, 14
-  size: 8, 16
-  orig: 8, 16
+  xy: 205, 6
+  size: 16, 24
+  orig: 16, 24
   offset: 0, 0
   index: -1
 Left_Shoulder
   rotate: false
-  xy: 199, 24
-  size: 17, 6
-  orig: 17, 6
+  xy: 279, 2
+  size: 17, 13
+  orig: 17, 13
   offset: 0, 0
   index: -1
 Left_Thigh
   rotate: false
-  xy: 229, 19
-  size: 8, 11
-  orig: 8, 11
+  xy: 241, 11
+  size: 15, 19
+  orig: 15, 19
   offset: 0, 0
   index: -1
 Mouth
   rotate: false
-  xy: 135, 4
+  xy: 162, 4
   size: 22, 26
   orig: 22, 26
   offset: 0, 0
   index: -1
 Right_Arm
   rotate: false
-  xy: 2, 9
+  xy: 29, 9
   size: 29, 21
   orig: 29, 21
   offset: 0, 0
   index: -1
 Right_Leg
   rotate: false
-  xy: 178, 14
-  size: 9, 16
-  orig: 9, 16
+  xy: 186, 6
+  size: 17, 24
+  orig: 17, 24
   offset: 0, 0
   index: -1
 Right_Shoulder
   rotate: false
-  xy: 2, 2
-  size: 11, 5
-  orig: 11, 5
+  xy: 279, 17
+  size: 19, 13
+  orig: 19, 13
   offset: 0, 0
   index: -1
 Right_Thigh
   rotate: false
-  xy: 218, 19
-  size: 9, 11
-  orig: 9, 11
+  xy: 223, 11
+  size: 16, 19
+  orig: 16, 19
   offset: 0, 0
   index: -1
 Torso
   rotate: false
-  xy: 159, 11
-  size: 17, 19
-  orig: 17, 19
+  xy: 2, 3
+  size: 25, 27
+  orig: 25, 27
   offset: 0, 0
   index: -1

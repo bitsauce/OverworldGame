@@ -129,6 +129,7 @@ void Skeleton::draw(GraphicsContext *context)
 	Vertex *vertices = new Vertex[4 * m_self->slotCount];
 	uint *indices = new uint[6 * m_self->slotCount];
 	Resource<Texture2D> texture = 0; int startIndex = 0;
+	context->setBlendState(BlendState::PRESET_PREMULTIPLIED_ALPHA);
 	for(int i = 0; i < m_self->slotCount; i++)
 	{
 		spSlot *slot = m_self->drawOrder[i];
@@ -237,6 +238,7 @@ void Skeleton::draw(GraphicsContext *context)
 	context->setTexture(texture);
 	context->drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, vertices + startIndex * 4, 4 * (m_self->slotCount - startIndex), indices + startIndex * 6, 6 * (m_self->slotCount - startIndex));
 	context->setTexture(0);
+	context->setBlendState(BlendState::PRESET_ALPHA_BLEND);
 
 	delete[] vertices;
 }

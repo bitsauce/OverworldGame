@@ -23,6 +23,8 @@ Commander::Commander(OverworldGame *game) :
 	m_commands.push_back(Command("setAppearance", "0|2", "<slot> <name>", bind(&Commander::setAppearance, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("setSkinColor", "3", "<R> <G> <B>", bind(&Commander::setAppearanceColor, this, placeholders::_1, placeholders::_2, "Skin")));
 	m_commands.push_back(Command("setHairColor", "3", "<R> <G> <B>", bind(&Commander::setAppearanceColor, this, placeholders::_1, placeholders::_2, "Hair")));
+	m_commands.push_back(Command("setEyeColor", "3", "<R> <G> <B>", bind(&Commander::setAppearanceColor, this, placeholders::_1, placeholders::_2, "Eyes")));
+	m_commands.push_back(Command("setLipColor", "3", "<R> <G> <B>", bind(&Commander::setAppearanceColor, this, placeholders::_1, placeholders::_2, "Lips")));
 }
 
 Commander::~Commander()
@@ -189,6 +191,7 @@ Humanoid::HumanoidSlot getSlotByName(const string &name)
 	if(name == "Eyes") return Humanoid::EYES;
 	if(name == "Hair") return Humanoid::HAIR;
 	if(name == "Head") return Humanoid::HEAD;
+	if(name == "Mouth") return Humanoid::MOUTH;
 	if(name == "Left_Shoulder") return Humanoid::LEFT_SHOULDER;
 	if(name == "Right_Shoulder") return Humanoid::RIGHT_SHOULDER;
 	if(name == "Left_Arm") return Humanoid::LEFT_ARM;
@@ -240,6 +243,14 @@ void Commander::setAppearanceColor(Chat *, vector<string> args, const string &wh
 			else if(which == "Hair")
 			{
 				player->getHumanoid().setHairColor(color);
+			}
+			else if(which == "Eyes")
+			{
+				player->getHumanoid().setEyeColor(color);
+			}
+			else if(which == "Lips")
+			{
+				player->getHumanoid().setLipColor(color);
 			}
 		}
 	}

@@ -265,6 +265,8 @@
     <None Include="..\..\Data\Shaders\Pointlight_Dynamic.vert" />
     <None Include="..\..\Data\Shaders\RadialLighting.frag" />
     <None Include="..\..\Data\Shaders\RadialLighting.vert" />
+    <None Include="..\..\Data\Shaders\Color_Mask.frag" />
+    <None Include="..\..\Data\Shaders\Color_Mask.vert" />
     <None Include="..\..\Data\Shaders\Shadow_Map.frag" />
     <None Include="..\..\Data\Shaders\Shadow_Map.vert" />
     <None Include="..\..\Data\Shaders\Shadow_Render.frag" />

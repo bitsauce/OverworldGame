@@ -601,5 +601,11 @@
     <None Include="..\..\Data\Shaders\Generation.vert">
       <Filter>Data\Shaders</Filter>
     </None>
+    <None Include="..\..\Data\Shaders\Color_Mask.frag">
+      <Filter>Data\Shaders</Filter>
+    </None>
+    <None Include="..\..\Data\Shaders\Color_Mask.vert">
+      <Filter>Data\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

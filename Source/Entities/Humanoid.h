@@ -75,16 +75,36 @@ public:
 	RegionAttachment *setAttachment(const HumanoidSlot slot, const string &newAttachmentName, const string &attachmentPath);
 	void clearAttachment(const HumanoidSlot slot);
 
+	bool setApparel(const HumanoidSlot slot, const string &name);
+
 	void setSkinColor(const Color &color)
 	{
 		m_skinColor = color;
 		m_renderPart[HEAD] = true;
+		m_renderPart[LEFT_LEG] = true;
+		m_renderPart[RIGHT_LEG] = true;
+		m_renderPart[LEFT_ARM] = true;
+		m_renderPart[RIGHT_ARM] = true;
+		m_renderPart[TORSO] = true;
 	}
 
 	void setHairColor(const Color &color)
 	{
 		m_hairColor = color;
 		m_renderPart[HAIR] = true;
+		m_renderPart[EYES] = true;
+	}
+
+	void setEyeColor(const Color &color)
+	{
+		m_eyeColor = color;
+		m_renderPart[EYES] = true;
+	}
+
+	void setLipColor(const Color &color)
+	{
+		m_lipColor = color;
+		m_renderPart[MOUTH] = true;
 	}
 
 private:
@@ -122,10 +142,17 @@ private:
 	// Appearance rendering
 	bool m_renderPart[SLOT_COUNT];
 	string m_appearanceName[SLOT_COUNT];
+	Color *m_appearanceColor[SLOT_COUNT];
 	SpineAtlas *m_appearanceAtlas;
+
+	string m_apparelName[SLOT_COUNT];
+	//Color *m_apparelColor[SLOT_COUNT];
+	SpineAtlas *m_apparelAtlas;
 
 	// Colors...
 	Color m_skinColor, m_eyeColor, m_hairColor, m_lipColor;
+
+	Resource<Shader> m_colorMaskShader;
 };
 
 #endif // HUMANOID_H
