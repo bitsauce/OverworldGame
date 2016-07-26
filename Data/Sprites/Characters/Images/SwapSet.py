@@ -2,6 +2,6 @@ from shutil import copyfile
 import glob
 
 name = input("Set name: ").strip();
-files = glob.glob("Default_*");
+files = glob.glob("Apparel/" + name + "_*.png");
 for file in files:
-	copyfile(file, name + "_" + file[8:]);
+	copyfile(file, file[9+len(name):]);

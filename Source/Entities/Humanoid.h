@@ -11,6 +11,7 @@ class DynamicEntity;
 class AtlasAttachmentLoader;
 class RegionAttachment;
 class SpineAtlas;
+class SpineAtlasRegion;
 class Slot;
 
 class Humanoid
@@ -19,7 +20,7 @@ public:
 	Humanoid();
 	~Humanoid();
 
-	enum HumanoidSlot
+	enum BodySlot
 	{
 		HIPS,
 		LEFT_THIGH,
@@ -27,10 +28,10 @@ public:
 		LEFT_LEG,
 		RIGHT_LEG,
 		TORSO,
-		EYES,
-		MOUTH,
-		HAIR,
 		HEAD,
+		HAIR, // /HEADWEAR
+		MOUTH,
+		EYES,
 		LEFT_SHOULDER,
 		RIGHT_SHOULDER,
 		LEFT_ARM,
@@ -40,7 +41,7 @@ public:
 		SLOT_COUNT
 	};
 
-	enum HumanoidAnim
+	enum Anim
 	{
 		ANIM_NULL,
 		ANIM_DEFAULT,
@@ -58,12 +59,12 @@ public:
 		ANIM_COUNT
 	};
 	
-	void setPreAnimation(const HumanoidAnim anim);
+	void setPreAnimation(const Anim anim);
 	AnimationState *getPreAnimationState() const { return m_preAnimationState; }
-	void setMainAnimation(const HumanoidAnim anim);
+	void setMainAnimation(const Anim anim);
 	AnimationState *getMainAnimationState() const { return m_mainAnimationState; }
-	void setPostAnimation(const HumanoidAnim anim);
-	void setPostBlendAnimations(const HumanoidAnim anim1, const HumanoidAnim anim2, const float alpha);
+	void setPostAnimation(const Anim anim);
+	void setPostBlendAnimations(const Anim anim1, const Anim anim2, const float alpha);
 	AnimationState *getPostAnimationState() const { return m_postAnimationState; }
 
 	Skeleton *getSkeleton() { return m_skeleton; }
@@ -71,50 +72,49 @@ public:
 	void onTick(TickEvent *e);
 	void draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha);
 
-	bool setAppearance(const HumanoidSlot slot, const string &name);
-	RegionAttachment *setAttachment(const HumanoidSlot slot, const string &newAttachmentName, const string &attachmentPath);
-	void clearAttachment(const HumanoidSlot slot);
+	bool setAppearance(const BodySlot slot, const uint layer, const string &name);
 
-	bool setApparel(const HumanoidSlot slot, const string &name);
+	RegionAttachment *setAttachment(const BodySlot slot, const string &newAttachmentName, const string &attachmentPath);
+	void clearAttachment(const BodySlot slot);
 
 	void setSkinColor(const Color &color)
 	{
 		m_skinColor = color;
-		m_renderPart[HEAD] = true;
-		m_renderPart[LEFT_LEG] = true;
-		m_renderPart[RIGHT_LEG] = true;
-		m_renderPart[LEFT_ARM] = true;
-		m_renderPart[RIGHT_ARM] = true;
-		m_renderPart[TORSO] = true;
+		m_renderSlot[HEAD] = true;
+		m_renderSlot[LEFT_LEG] = true;
+		m_renderSlot[RIGHT_LEG] = true;
+		m_renderSlot[LEFT_ARM] = true;
+		m_renderSlot[RIGHT_ARM] = true;
+		m_renderSlot[TORSO] = true;
 	}
 
 	void setHairColor(const Color &color)
 	{
 		m_hairColor = color;
-		m_renderPart[HAIR] = true;
-		m_renderPart[EYES] = true;
+		m_renderSlot[HAIR] = true;
+		m_renderSlot[EYES] = true;
 	}
 
 	void setEyeColor(const Color &color)
 	{
 		m_eyeColor = color;
-		m_renderPart[EYES] = true;
+		m_renderSlot[EYES] = true;
 	}
 
 	void setLipColor(const Color &color)
 	{
 		m_lipColor = color;
-		m_renderPart[MOUTH] = true;
+		m_renderSlot[MOUTH] = true;
 	}
 
 private:
-	string getSlotName(const HumanoidSlot slot);
-	string getAnimName(const HumanoidAnim anim);
+	string getSlotName(const BodySlot slot);
+	string getAnimName(const Anim anim);
 
 	// Skeleton data
 	RenderTarget2D *m_skeletonRenderTarget;
-	map<HumanoidSlot, Slot*> m_slots;
-	map<HumanoidAnim, Animation*> m_animations;
+	map<BodySlot, Slot*> m_slots;
+	map<Anim, Animation*> m_animations;
 
 	// Skeletal animations
 	Skeleton *m_skeleton;
@@ -140,18 +140,16 @@ private:
 	AtlasAttachmentLoader *m_equipmentAttachmentLoader;
 
 	// Appearance rendering
-	bool m_renderPart[SLOT_COUNT];
-	string m_appearanceName[SLOT_COUNT];
-	Color *m_appearanceColor[SLOT_COUNT];
+	bool m_renderSlot[SLOT_COUNT];
+	vector<SpineAtlasRegion*> m_appearanceRegion[SLOT_COUNT];
 	SpineAtlas *m_appearanceAtlas;
 
-	string m_apparelName[SLOT_COUNT];
-	//Color *m_apparelColor[SLOT_COUNT];
-	SpineAtlas *m_apparelAtlas;
+	bool m_overrideHair;
 
-	// Colors...
+	// Colors
 	Color m_skinColor, m_eyeColor, m_hairColor, m_lipColor;
 
+	// Color mask shader
 	Resource<Shader> m_colorMaskShader;
 };
 

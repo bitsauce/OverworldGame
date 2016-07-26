@@ -21,7 +21,7 @@ Commander::Commander(OverworldGame *game) :
 	m_commands.push_back(Command("connect", "1|2", "<ip> [port]", bind(&Commander::connect, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("move", "2", "<x> <y>", bind(&Commander::move, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("setAppearance", "0|2", "<slot> <name>", bind(&Commander::setAppearance, this, placeholders::_1, placeholders::_2)));
-	m_commands.push_back(Command("setApparel", "0|2", "<slot> <name>", bind(&Commander::setApparel, this, placeholders::_1, placeholders::_2)));
+	m_commands.push_back(Command("setApparel", "2", "<slot> <name>", bind(&Commander::setApparel, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("setSkinColor", "3", "<R> <G> <B>", bind(&Commander::setAppearanceColor, this, placeholders::_1, placeholders::_2, "Skin")));
 	m_commands.push_back(Command("setHairColor", "3", "<R> <G> <B>", bind(&Commander::setAppearanceColor, this, placeholders::_1, placeholders::_2, "Hair")));
 	m_commands.push_back(Command("setEyeColor", "3", "<R> <G> <B>", bind(&Commander::setAppearanceColor, this, placeholders::_1, placeholders::_2, "Eyes")));
@@ -181,7 +181,7 @@ void Commander::move(Chat *, vector<string> args)
 	}
 }
 
-Humanoid::HumanoidSlot getSlotByName(const string &name)
+Humanoid::BodySlot getSlotByName(const string &name)
 {
 	if(name == "Hips") return Humanoid::HIPS;
 	if(name == "Left_Thigh") return Humanoid::LEFT_THIGH;
@@ -191,8 +191,8 @@ Humanoid::HumanoidSlot getSlotByName(const string &name)
 	if(name == "Torso") return Humanoid::TORSO;
 	if(name == "Eyes") return Humanoid::EYES;
 	if(name == "Hair") return Humanoid::HAIR;
-	if(name == "Head") return Humanoid::HEAD;
 	if(name == "Mouth") return Humanoid::MOUTH;
+	if(name == "Head") return Humanoid::HEAD;
 	if(name == "Left_Shoulder") return Humanoid::LEFT_SHOULDER;
 	if(name == "Right_Shoulder") return Humanoid::RIGHT_SHOULDER;
 	if(name == "Left_Arm") return Humanoid::LEFT_ARM;
@@ -213,10 +213,10 @@ void Commander::setAppearance(Chat *chat, vector<string> args)
 		Player *player = m_game->getWorld()->getLocalPlayer();
 		if(player)
 		{
-			Humanoid::HumanoidSlot slot = getSlotByName(args[0]);
+			Humanoid::BodySlot slot = getSlotByName(args[0]);
 			if(slot != Humanoid::SLOT_COUNT)
 			{
-				if(!player->getHumanoid().setAppearance(slot, args[1]))
+				if(!player->getHumanoid().setAppearance(slot, 0, args[1]))
 				{
 					chat->insertMessage("Invalid appearance name '" + args[1] + "'");
 				}
@@ -236,28 +236,31 @@ void Commander::setApparel(Chat *chat, vector<string> args)
 		Player *player = m_game->getWorld()->getLocalPlayer();
 		if(player)
 		{
-			Humanoid::HumanoidSlot slot = getSlotByName(args[0]);
-			if(slot != Humanoid::SLOT_COUNT)
+			if(args[0] == "*")
 			{
-				if(!player->getHumanoid().setApparel(slot, args[1]))
+				Player *player = m_game->getWorld()->getLocalPlayer();
+				if(player)
 				{
-					chat->insertMessage("Invalid apperal name '" + args[1] + "'");
+					for(int i = 0; i < Humanoid::SLOT_COUNT; i++)
+					{
+						player->getHumanoid().setAppearance((Humanoid::BodySlot)i, 1, args[1]);
+					}
 				}
 			}
 			else
 			{
-				chat->insertMessage("Invalid slot '" + args[0] + "'");
-			}
-		}
-	}
-	else
-	{
-		Player *player = m_game->getWorld()->getLocalPlayer();
-		if(player)
-		{
-			for(int i = 0; i < Humanoid::SLOT_COUNT; i++)
-			{
-				player->getHumanoid().setApparel((Humanoid::HumanoidSlot)i, "Iron_Armor");
+				Humanoid::BodySlot slot = getSlotByName(args[0]);
+				if(slot != Humanoid::SLOT_COUNT)
+				{
+					if(!player->getHumanoid().setAppearance(slot, 1, args[1]))
+					{
+						chat->insertMessage("Invalid apperal name '" + args[1] + "'");
+					}
+				}
+				else
+				{
+					chat->insertMessage("Invalid slot '" + args[0] + "'");
+				}
 			}
 		}
 	}

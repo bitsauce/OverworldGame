@@ -33,6 +33,11 @@ Resource<Texture2D> SpineAtlas::getTexture() const
 	return *(Resource<Texture2D>*)m_self->pages->rendererObject;
 }
 
+SpineAtlasRegion::SpineAtlasRegion() :
+	m_self(spAtlasRegion_create())
+{
+}
+
 SpineAtlasRegion::SpineAtlasRegion(spAtlasRegion *atlasRegion) :
 	m_self(atlasRegion)
 {

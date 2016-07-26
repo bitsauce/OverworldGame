@@ -72,8 +72,8 @@ void Bow::update(Pawn *pawn, const float delta)
 			}
 		}
 		pawn->getHumanoid().clearAttachment(Humanoid::RIGHT_HAND);
-		pawn->getHumanoid().setAppearance(Humanoid::EYES, "Angry");
-		pawn->getHumanoid().setAppearance(Humanoid::MOUTH, "Angry");
+		pawn->getHumanoid().setAppearance(Humanoid::HEAD, Humanoid::EYES, "Angry");
+		pawn->getHumanoid().setAppearance(Humanoid::HEAD, Humanoid::MOUTH, "Angry");
 	}
 	else if(m_charging)
 	{
@@ -88,8 +88,8 @@ void Bow::update(Pawn *pawn, const float delta)
 		RegionAttachment *attachment = pawn->getHumanoid().setAttachment(Humanoid::RIGHT_HAND, "Right_Hand_Equip", "Bow");
 		attachment->setPosition(-3.5f, 0.0f);
 		attachment->setRotation(0.0f);
-		pawn->getHumanoid().setAppearance(Humanoid::EYES, "Default");
-		pawn->getHumanoid().setAppearance(Humanoid::MOUTH, "Default");
+		pawn->getHumanoid().setAppearance(Humanoid::HEAD, Humanoid::EYES, "Default");
+		pawn->getHumanoid().setAppearance(Humanoid::HEAD, Humanoid::MOUTH, "Default");
 	}
 }
 

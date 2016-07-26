@@ -10,6 +10,7 @@ private:
 	SpineAtlasRegion(spAtlasRegion *atlasRegion);
 
 public:
+	SpineAtlasRegion();
 	TextureRegion getTextureRegion() const;
 
 private:
