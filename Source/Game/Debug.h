@@ -9,6 +9,7 @@ class World;
 class CommandLine;
 class Pointlight;
 class BlockData;
+class ColorPicker;
 
 class Debug : public SceneObject
 {
@@ -17,6 +18,8 @@ public:
 
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
+	void onMouseEvent(MouseEvent *e);
+
 	void toggle();
 
 	void nextBlock(KeyEvent *e);
@@ -25,7 +28,7 @@ public:
 	void randomizeLight(KeyEvent *e);
 	void placeLight(KeyEvent *e);
 
-	void setVariable(const string &name, const string &value);
+	void addVariable(const string &name, const string &value);
 
 	void debugFunction(KeyEvent *e);
 
@@ -37,12 +40,20 @@ private:
 	bool m_enabled;
 	bool m_debugChunkLoader;
 	bool m_debugLighting;
-	bool m_blockPainterEnabled;
+	
+	enum DebugMode
+	{
+		DEBUG_MODE_DEFAULT,
+		BLOCK_PAINTER,
+		LIGHT_PAINTER
+	};
+	DebugMode m_debugMode;
 
 	Resource<Texture2D> m_blockPainterTexture;
+	ColorPicker *m_colorPicker;
 
 	// Debug variables
-	map<string, string> m_variables;
+	list<pair<string, string>> m_variables;
 
 	// Game pointer
 	OverworldGame *m_game;

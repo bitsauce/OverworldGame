@@ -11,8 +11,8 @@ public:
 
 	void onWindowSizeChanged(WindowEvent *e);
 
-	Vector2I getDrawPosition();
-	Vector2I getDrawSize();
+	Vector2I getDrawPosition() const;
+	Vector2I getDrawSize() const;
 
 private:
 	Window *m_window;

@@ -201,8 +201,6 @@ void OverworldGame::onDraw(DrawEvent *e)
 		m_takeScreenshot = false;
 	}
 
-	m_debug->setVariable("FPS", util::intToStr((int) getFPS()));
-
 	m_spriteBatch->begin();
 
 	SceneObject::onDraw(e);

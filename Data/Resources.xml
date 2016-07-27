@@ -178,10 +178,13 @@
 		<name>Sprites/Inventory/ItemSlotSelected</name>
 		<path>Sprites/Inventory/ItemSlotSelected.png</path>
 	</texture>
-
 	<texture>
 		<name>Sprites/BlockEntities/LightSources/Torch</name>
 		<path>Sprites/BlockEntities/LightSources/Torch.png</path>
+	</texture>
+	<texture>
+		<name>Sprites/Gui/Color_Picker_Ring</name>
+		<path>Sprites/Gui/Color_Picker_Ring.png</path>
 	</texture>
 	
 	<!-- Shaders -->
@@ -250,5 +253,10 @@
 		<name>Shaders/Color_Mask</name>
 		<vertexFilePath>Shaders/Color_Mask.vert</vertexFilePath>
 		<fragmentFilePath>Shaders/Color_Mask.frag</fragmentFilePath>
+	</shader>
+	<shader>
+		<name>Shaders/Color_Wheel</name>
+		<vertexFilePath>Shaders/Color_Wheel.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/Color_Wheel.frag</fragmentFilePath>
 	</shader>
 </resources>

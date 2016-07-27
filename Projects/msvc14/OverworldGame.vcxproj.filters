@@ -209,6 +209,9 @@
     <ClCompile Include="..\..\Source\Animation\Extension.cpp">
       <Filter>Source\Animation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\ColorPicker.cpp">
+      <Filter>Source\Gui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -507,6 +510,9 @@
     <ClInclude Include="..\..\Source\Animation\Atlas.h">
       <Filter>Source\Animation</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Gui\ColorPicker.h">
+      <Filter>Source\Gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\Data\Resources.xml">
@@ -605,6 +611,12 @@
       <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Data\Shaders\Color_Mask.vert">
+      <Filter>Data\Shaders</Filter>
+    </None>
+    <None Include="..\..\Data\Shaders\Color_Wheel.frag">
+      <Filter>Data\Shaders</Filter>
+    </None>
+    <None Include="..\..\Data\Shaders\Color_Wheel.vert">
       <Filter>Data\Shaders</Filter>
     </None>
   </ItemGroup>

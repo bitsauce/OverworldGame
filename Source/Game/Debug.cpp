@@ -11,6 +11,7 @@
 #include "Game/States/GameState.h"
 #include "Game/Game.h"
 #include "Gui/GameOverlay/GameOverlay.h"
+#include "Gui/ColorPicker.h"
 
 #define DEBUG_FUNCTIONS_STRING \
 	"F1: Toggle debug\n" \
@@ -19,7 +20,7 @@
 	"F4: Toggle block painter\n" \
 	"F5: Show chunk loader info\n" \
 	"F6: Show lighting info\n" \
-	"F7: Set time\n" \
+	"F7: Toggle light painter\n" \
 	"F8: Spawn menu\n" \
 	"F9: [No function]\n" \
 	"F10: Detach/attach camera\n" \
@@ -33,11 +34,15 @@ Debug::Debug(OverworldGame *game) :
 	m_enabled(false),
 	m_debugChunkLoader(false),
 	m_debugLighting(false),
-	m_blockPainterEnabled(false),
+	m_debugMode(DEBUG_MODE_DEFAULT),
 	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Debug")),
 	m_blockPainterTexture(new Texture2D()),
+	m_colorPicker(0),
 	m_activePointlight(0)
 {
+	// Make default block not the empty block
+	m_block++;
+
 	// Set font color
 	m_font->setColor(Color(255, 255, 255, 255));
 }
@@ -72,7 +77,7 @@ void Debug::debugFunction(KeyEvent *e)
 		// Toggle block painter
 		case SAUCE_KEY_F4:
 		{
-			m_blockPainterEnabled = !m_blockPainterEnabled;
+			m_debugMode = m_debugMode != BLOCK_PAINTER ? BLOCK_PAINTER : DEBUG_MODE_DEFAULT;
 		}
 		break;
 
@@ -88,18 +93,24 @@ void Debug::debugFunction(KeyEvent *e)
 		case SAUCE_KEY_F6:
 		{
 			m_debugLighting = !m_debugLighting;
-			if(!m_debugLighting)
+		}
+		break;
+
+		case SAUCE_KEY_F7:
+		{
+			m_debugMode = m_debugMode != LIGHT_PAINTER ? LIGHT_PAINTER : DEBUG_MODE_DEFAULT;
+			if(m_debugMode == LIGHT_PAINTER)
+			{
+				m_colorPicker = new ColorPicker(m_game->getCanvas());
+				m_colorPicker->setOrigin(0.0f, 1.0f);
+				m_colorPicker->setAnchor(0.05f, 0.95f);
+				m_colorPicker->setSize(Vector2F(128.0f) / m_game->getCanvas()->getDrawSize());
+			}
+			else
 			{
 				delete m_activePointlight;
 				m_activePointlight = 0;
 			}
-		}
-		break;
-
-		// Set time
-		case SAUCE_KEY_F7:
-		{
-			m_world->getTimeOfDay()->setTime(m_world->getTimeOfDay()->getTime() + (m_game->getInputManager()->getKeyState(SAUCE_KEY_LSHIFT) ? -100 : 100));
 		}
 		break;
 
@@ -170,21 +181,36 @@ void Debug::onTick(TickEvent *e)
 {
 	if(!m_enabled) return;
 
-	if(m_blockPainterEnabled)
+	switch(m_debugMode)
 	{
-		// Block painting
-		WorldLayer layer = WORLD_LAYER_MIDDLE;
-		if(m_game->getInputManager()->getKeyState(SAUCE_KEY_LSHIFT)) layer = WORLD_LAYER_FRONT;
-		if(m_game->getInputManager()->getKeyState(SAUCE_KEY_LCTRL)) layer = WORLD_LAYER_BACK;
-		if(m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) || m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_RIGHT))
+		case BLOCK_PAINTER:
 		{
-			m_world->getTerrain()->setBlockAt(
-				(int) floor(m_world->getCamera()->getInputPosition().x / BLOCK_PXF),
-				(int) floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF),
-				layer,
-				m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) ? m_block->second : 0,
-				true);
+			// Block painting
+			WorldLayer layer = WORLD_LAYER_MIDDLE;
+			if(m_game->getInputManager()->getKeyState(SAUCE_KEY_LSHIFT)) layer = WORLD_LAYER_FRONT;
+			if(m_game->getInputManager()->getKeyState(SAUCE_KEY_LCTRL)) layer = WORLD_LAYER_BACK;
+			if(m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) || m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_RIGHT))
+			{
+				m_world->getTerrain()->setBlockAt(
+					(int) floor(m_world->getCamera()->getInputPosition().x / BLOCK_PXF),
+					(int) floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF),
+					layer,
+					m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) ? m_block->second : 0,
+					true);
+			}
 		}
+		break;
+
+		case LIGHT_PAINTER:
+		{
+			// Update active pointlight
+			if(m_activePointlight)
+			{
+				//m_activePointlight->setPosition(Vector2F(m_world->getCamera()->getInputPosition()) / BLOCK_PXF);
+				m_activePointlight->setColor(m_colorPicker->getSelectedColor());
+			}
+		}
+		break;
 	}
 }
 
@@ -200,17 +226,19 @@ void Debug::onDraw(DrawEvent *e)
 	Vector2I center = m_world->getCamera()->getCenter(e->getAlpha());
 	Vector2F inputPosition = m_world->getCamera()->getInputPosition();
 
+	addVariable("FPS", util::intToStr((int) m_game->getFPS()));
+
 	// Set debug variables
-	setVariable("Chunks", util::intToStr(m_world->getTerrain()->getChunkManager()->m_chunks.size()) + " / " + util::intToStr(m_world->getTerrain()->getChunkManager()->m_optimalChunkCount));
+	addVariable("Chunks", util::intToStr(m_world->getTerrain()->getChunkManager()->m_chunks.size()) + " / " + util::intToStr(m_world->getTerrain()->getChunkManager()->m_optimalChunkCount));
 	
 	{
 		const int chunkX = (int) floor(inputPosition.x / CHUNK_PXF);
 		const int chunkY = (int) floor(inputPosition.y / CHUNK_PXF);
-		setVariable("Chunk Under Cursor", util::intToStr(chunkX) + ", " + util::intToStr(chunkY));
+		addVariable("Chunk Under Cursor", util::intToStr(chunkX) + ", " + util::intToStr(chunkY));
 	}
 
-	setVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
-	setVariable("Zoom", util::intToStr(int(m_world->getCamera()->getZoomLevel() * 100)) + "%");
+	addVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
+	addVariable("Zoom", util::intToStr(int(m_world->getCamera()->getZoomLevel() * 100)) + "%");
 	{
 		const BlockData *blocks[WORLD_LAYER_COUNT];
 		const int blockX = (int) floor(inputPosition.x / BLOCK_PXF);
@@ -232,13 +260,13 @@ void Debug::onDraw(DrawEvent *e)
 			if(blocks[WORLD_LAYER_FRONT]->getID() != 0) { ss << "Front: " << blocks[WORLD_LAYER_FRONT]->getName() << " "; }
 			ss << "at " << blockX << ", " << blockY;
 		}
-		setVariable("Blocks Under Cursor", ss.str());
+		addVariable("Blocks Under Cursor", ss.str());
 	}
 	
 	{
 		BlockEntity *blockEntity = m_world->getTerrain()->getBlockEntityAt((int) floor(inputPosition.x / BLOCK_PXF), (int) floor(inputPosition.y / BLOCK_PXF), WORLD_LAYER_MIDDLE);
 		const string name = blockEntity ? blockEntity->getData()->getName() : "NULL";
-		setVariable("Block Entity Under Cursor", name + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
+		addVariable("Block Entity Under Cursor", name + " at " + util::intToStr((int) floor(inputPosition.x / BLOCK_PXF)) + ", " + util::intToStr((int) floor(inputPosition.y / BLOCK_PXF)));
 	}
 
 	string hourStr, minStr;
@@ -248,34 +276,47 @@ void Debug::onDraw(DrawEvent *e)
 		int min = m_world->getTimeOfDay()->getMinute();
 		minStr = min < 10 ? ("0" + util::intToStr(min)) : util::intToStr(min);
 	}
-	setVariable("Time", hourStr + ":" + minStr);
+	addVariable("Time", hourStr + ":" + minStr);
 
 	if(m_game->getWorld()->getLocalPlayer())
 	{
 		Player *player = m_game->getWorld()->getLocalPlayer();
 		Controller *controller = player->getController();
-		setVariable("Velocity", player->getVelocity().toString());
-		setVariable("Move dir", util::intToStr(controller->getInputState(Controller::INPUT_MOVE_RIGHT) - controller->getInputState(Controller::INPUT_MOVE_LEFT)));
-		setVariable("Running", util::intToStr(controller->getInputState(Controller::INPUT_RUN)));
+		addVariable("Velocity", player->getVelocity().toString());
+		addVariable("Move dir", util::intToStr(controller->getInputState(Controller::INPUT_MOVE_RIGHT) - controller->getInputState(Controller::INPUT_MOVE_LEFT)));
+		addVariable("Running", util::intToStr(controller->getInputState(Controller::INPUT_RUN)));
 	}
 
 	// Draw top-left debug info
 	string drawString;
-	for(map<string, string>::iterator itr = m_variables.begin(); itr != m_variables.end(); ++itr)
+	for(list<pair<string, string>>::iterator itr = m_variables.begin(); itr != m_variables.end(); ++itr)
 	{
 		drawString += itr->first + ": " + itr->second + "\n";
 	}
 	m_font->draw(spriteBatch, Vector2F(0.0f), drawString);
-
 	m_font->draw(spriteBatch, Vector2F((float) context->getWidth(), 0.0f), DEBUG_FUNCTIONS_STRING, FONT_ALIGN_RIGHT);
+	m_variables.clear();
 
 	// Block painter
-	if(m_blockPainterEnabled)
+	switch(m_debugMode)
 	{
-		m_blockPainterTexture->updatePixmap(m_block->second->getPixmap());
-		spriteBatch->drawText(Vector2F(5.0f, context->getHeight() - 48.0f), "Current block:   (" + util::intToStr(m_block->second->getID()) + ")\n" + "Current layer: " + (m_game->getInputManager()->getKeyState(SAUCE_KEY_LCTRL) ? "BACK" : (m_game->getInputManager()->getKeyState(SAUCE_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font.get());
-		Sprite blockSprite(m_blockPainterTexture, RectF(m_font->getStringWidth("Current block:"), context->getHeight() - 60.0f, 32.0f, 32.0f), Vector2F(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 1.0f / 3.0f, 1.0f, 1.0f));
-		spriteBatch->drawSprite(blockSprite);
+		case BLOCK_PAINTER:
+		{
+			m_blockPainterTexture->updatePixmap(m_block->second->getPixmap());
+			spriteBatch->drawText(Vector2F(5.0f, context->getHeight() - 48.0f), "Current block:   (" + util::intToStr(m_block->second->getID()) + ")\n" + "Current layer: " + (m_game->getInputManager()->getKeyState(SAUCE_KEY_LCTRL) ? "BACK" : (m_game->getInputManager()->getKeyState(SAUCE_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font.get());
+			Sprite blockSprite(m_blockPainterTexture, RectF(m_font->getStringWidth("Current block:"), context->getHeight() - 60.0f, 32.0f, 32.0f), Vector2F(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 1.0f / 3.0f, 1.0f, 1.0f));
+			spriteBatch->drawSprite(blockSprite);
+		}
+		break;
+
+		case LIGHT_PAINTER:
+		{
+			/*m_colorWheelShader->setUniform1f("u_Value", 0.0f);
+			context->setShader(m_colorWheelShader);
+			context->drawRectangle(16.0f, context->getHeight() - 128.0f - 16.0f, 128.0f, 128.0f);
+			context->setShader(0);*/
+		}
+		break;
 	}
 
 	// Draw block grid
@@ -361,20 +402,17 @@ void Debug::onDraw(DrawEvent *e)
 	}
 
 	// Debug lighting
-	if(m_debugLighting)
+	if(m_debugMode == LIGHT_PAINTER)
 	{
-		// Move active pointlight
-		if(m_activePointlight)
-		{
-			m_activePointlight->setPosition(Vector2F(m_world->getCamera()->getInputPosition()) / BLOCK_PXF);
-		}
-
 		// Show light sources
 		for(list<LightSource*>::iterator itr = m_world->getLighting()->m_lightSources.begin(); itr != m_world->getLighting()->m_lightSources.end(); ++itr)
 		{
 			context->drawCircle((*itr)->getPosition() * BLOCK_PXF, BLOCK_PX / 2 - 1, 12, math::lerp(Color(243, 230, 188, 255), (*itr)->getColor(), 0.75f));
 		}
+	}
 
+	if(m_debugLighting)
+	{
 		// Show lighting passes
 		context->setTransformationMatrix(Matrix4());
 		context->disable(GraphicsContext::BLEND);
@@ -387,6 +425,51 @@ void Debug::onDraw(DrawEvent *e)
 	}
 }
 
+void Debug::onMouseEvent(MouseEvent *e)
+{
+	switch(m_debugMode)
+	{
+		case LIGHT_PAINTER:
+		{
+			if(m_colorPicker->getDrawRect().contains(e->getPosition()))
+			{
+				break;
+			}
+
+			switch(e->getType())
+			{
+				case MouseEvent::DOWN:
+				{
+					if(e->getButton() == SAUCE_MOUSE_BUTTON_LEFT)
+					{
+						m_activePointlight = new Pointlight(m_world, LightSource::DYNAMIC, m_world->getCamera()->getInputPosition() / BLOCK_PXF, 0.0f, Color(255));
+					}
+				}
+				break;
+
+				case MouseEvent::MOVE:
+				{
+					if(m_activePointlight)
+					{
+						m_activePointlight->setRadius((m_activePointlight->getPosition() - m_game->getWorld()->getCamera()->getInputPosition() / BLOCK_PXF).length());
+					}
+				}
+				break;
+
+				case MouseEvent::UP:
+				{
+					if(e->getButton() == SAUCE_MOUSE_BUTTON_LEFT)
+					{
+						m_activePointlight = 0;
+					}
+				}
+				break;
+			}
+		}
+		break;
+	}
+}
+
 void Debug::toggle()
 {
 	m_enabled = !m_enabled;
@@ -396,7 +479,8 @@ void Debug::nextBlock(KeyEvent *e)
 {
 	if(m_enabled && e->getType() == KeyEvent::DOWN)
 	{
-		if(m_block++ == BlockData::s_idToData.cend())
+		m_block++;
+		if(m_block == BlockData::s_idToData.cend())
 		{
 			m_block = BlockData::s_idToData.cbegin();
 		}
@@ -417,7 +501,7 @@ void Debug::prevBlock(KeyEvent *e)
 
 void Debug::randomizeLight(KeyEvent *e)
 {
-	if(m_enabled && m_debugLighting && e->getType() == KeyEvent::DOWN)
+	if(m_enabled && m_debugMode == LIGHT_PAINTER && e->getType() == KeyEvent::DOWN)
 	{
 		if(m_activePointlight == 0)
 		{
@@ -431,13 +515,13 @@ void Debug::randomizeLight(KeyEvent *e)
 
 void Debug::placeLight(KeyEvent *e)
 {
-	if(m_enabled && m_debugLighting && e->getType() == KeyEvent::DOWN)
+	if(m_enabled && m_debugMode == LIGHT_PAINTER && e->getType() == KeyEvent::DOWN)
 	{
 		m_activePointlight = 0;
 	}
 }
 
-void Debug::setVariable(const string &name, const string &value)
+void Debug::addVariable(const string &name, const string &value)
 {
-	m_variables[name] = value;
+	m_variables.push_back(make_pair(name, value));
 }

@@ -26,6 +26,7 @@ Commander::Commander(OverworldGame *game) :
 	m_commands.push_back(Command("setHairColor", "3", "<R> <G> <B>", bind(&Commander::setAppearanceColor, this, placeholders::_1, placeholders::_2, "Hair")));
 	m_commands.push_back(Command("setEyeColor", "3", "<R> <G> <B>", bind(&Commander::setAppearanceColor, this, placeholders::_1, placeholders::_2, "Eyes")));
 	m_commands.push_back(Command("setLipColor", "3", "<R> <G> <B>", bind(&Commander::setAppearanceColor, this, placeholders::_1, placeholders::_2, "Lips")));
+	m_commands.push_back(Command("setTime", "1", "<time>", bind(&Commander::setTime, this, placeholders::_1, placeholders::_2)));
 }
 
 Commander::~Commander()
@@ -292,4 +293,9 @@ void Commander::setAppearanceColor(Chat *, vector<string> args, const string &wh
 			}
 		}
 	}
+}
+
+void Commander::setTime(Chat *, vector<string> args)
+{
+	m_game->getWorld()->getTimeOfDay()->setTime(util::strToFloat(args[0]));
 }

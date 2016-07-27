@@ -46,7 +46,7 @@ void Canvas::onWindowSizeChanged(WindowEvent *e)
 	UiObject::onWindowSizeChanged(e);
 }
 
-Vector2I Canvas::getDrawPosition()
+Vector2I Canvas::getDrawPosition() const
 {
 	Vector2F parentPos = Vector2F();
 	Vector2F parentSize = m_window->getSize();
@@ -58,7 +58,7 @@ Vector2I Canvas::getDrawPosition()
 	return parentPos + pos;
 }
 
-Vector2I Canvas::getDrawSize()
+Vector2I Canvas::getDrawSize() const
 {
 	return getSize();
 }

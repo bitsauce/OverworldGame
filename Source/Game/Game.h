@@ -47,6 +47,11 @@ public:
 		return m_commander;
 	}
 
+	Canvas *getCanvas() const
+	{
+		return m_canvas;
+	}
+
 	void pushState(GameState *state);
 	void popState();
 	GameState *peekState(int level = 0);
