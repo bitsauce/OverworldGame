@@ -108,6 +108,11 @@ void main()
 	{
 		blockIDs[0] = BLOCK_DIRT_BACK;
 	}
+	else // DEBUG
+	{
+		blockIDs[0] = BLOCK_DIRT_BACK;
+	}
+
 
 	float freq = fractalNoise2D(4, 0.1 * f * blockPos / u_Resolution);
 	if(abs(fractalNoise2D(4, 10.0 * f * blockPos / u_Resolution) - 0.5) < 0.1 * freq * clamp(-distanceToGround / 70.0, 0.0, 1.0)) blockIDs[1] = BLOCK_EMPTY;

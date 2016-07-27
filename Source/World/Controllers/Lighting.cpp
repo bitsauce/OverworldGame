@@ -95,23 +95,28 @@ void Lighting::onDraw(DrawEvent *e)
 
 void Lighting::drawLight(LightSource *light, RenderTarget2D *dest, GraphicsContext *context)
 {
-	context->disable(GraphicsContext::BLEND);
-
 	ChunkManager *chunkManager = m_world->getTerrain()->getChunkManager();
-	float radius = light->getRadius() * BLOCK_PXF;
-	Vector2F position = light->getPosition() * BLOCK_PXF - m_world->getCamera()->getPosition();
+	Vector2F lightStart = light->getPosition() - Vector2F(light->getRadius() * 0.5f);
+	Vector2F lightEnd = light->getPosition() + Vector2F(light->getRadius() * 0.5f);
 
+	ChunkManager::ChunkArea area = chunkManager->getLoadingArea();
+	TextureRegion textureRegion(
+		lightStart.x / (area.getWidth() * CHUNK_BLOCKSF),
+		lightStart.y / (area.getHeight() * CHUNK_BLOCKSF),
+		lightEnd.x / (area.getWidth() * CHUNK_BLOCKSF),
+		lightEnd.y / (area.getHeight() * CHUNK_BLOCKSF)
+		);
+	
 	// Draw occluders to render target
 	context->setRenderTarget(m_occludersRenderTarget);
-	context->clear(GraphicsContext::COLOR_BUFFER);
-	context->setTexture(chunkManager->m_shadowCasterRenderTarget->getTexture());
-	context->drawRectangle(((Vector2F(radius * 0.5f) - position) / radius) * m_lightMapSize, chunkManager->m_shadowCasterRenderTarget->getTexture()->getSize() * m_lightMapSize / radius);
+	context->disable(GraphicsContext::BLEND);
+	context->setTexture(chunkManager->m_blocksRenderTarget->getTexture());
+	context->drawRectangle(0,0, m_lightMapSize, m_lightMapSize, Color(255), textureRegion);
 
-	// Create 1D shadow map
+	// Create 2D shadow map
 	context->setRenderTarget(m_shadowMapRenderTarget);
 	context->setShader(m_shadowMapShader);
 	m_shadowMapShader->setUniform2f("u_Resolution", m_lightMapSize, m_lightMapSize);
-	m_shadowMapShader->setUniform1f("u_Scale", 1.0f);
 	m_shadowMapShader->setSampler2D("u_Texture", m_occludersRenderTarget->getTexture());
 	context->drawRectangle(0.0f, 0.0f, m_lightMapSize, m_shadowMapRenderTarget->getHeight());
 
@@ -125,7 +130,10 @@ void Lighting::drawLight(LightSource *light, RenderTarget2D *dest, GraphicsConte
 	m_shadowRenderShader->setUniform3f("u_Color", color.getR() / 255.0f, color.getG() / 255.0f, color.getB() / 255.0f);
 	m_shadowRenderShader->setSampler2D("u_Texture", m_shadowMapRenderTarget->getTexture());
 	m_shadowRenderShader->setSampler2D("u_OccluderTexture", m_occludersRenderTarget->getTexture());
-	context->drawRectangle(position - Vector2F(radius * 0.5f), Vector2F(radius));
+
+	float blockRadius = light->getRadius() * BLOCK_PXF;
+	Vector2F cameraRelativePosition = light->getPosition() * BLOCK_PXF - m_world->getCamera()->getPosition();
+	context->drawRectangle(cameraRelativePosition - Vector2F(blockRadius * 0.5f), Vector2F(blockRadius));
 
 	// Reset
 	context->setBlendState(BlendState::PRESET_ALPHA_BLEND);
@@ -143,7 +151,9 @@ void Lighting::setLightMapResolution(const int size)
 	delete m_shadowsRenderTarget;
 
 	m_occludersRenderTarget = new RenderTarget2D(size, size);
-	m_shadowMapRenderTarget = new RenderTarget2D(size, 1);
+	m_occludersRenderTarget->getTexture()->setFiltering(Texture2D::LINEAR);
+	m_shadowMapRenderTarget = new RenderTarget2D(size, size);
+	m_shadowMapRenderTarget->getTexture()->setFiltering(Texture2D::LINEAR);
 	m_shadowsRenderTarget = new RenderTarget2D(viewSize.x, viewSize.y);
 	m_shadowMapRenderTarget->getTexture()->setWrapping(Texture2D::REPEAT);
 

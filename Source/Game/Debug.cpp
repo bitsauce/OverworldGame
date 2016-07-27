@@ -382,7 +382,7 @@ void Debug::onDraw(DrawEvent *e)
 		context->setTexture(m_world->getLighting()->m_lightingPass0->getTexture()); context->drawRectangle(0.0f, 128.0f * 1, 256.0f, 128.0f);
 		context->setTexture(m_world->getLighting()->m_lightingPass2->getTexture()); context->drawRectangle(0.0f, 128.0f * 2, 256.0f, 128.0f);
 		context->setTexture(m_world->getLighting()->m_shadowsRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 3, 256.0f, 128.0f);
-		context->setTexture(m_world->getTerrain()->getChunkManager()->m_shadowCasterRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 4, 256.0f, 128.0f);
+		context->setTexture(m_world->getLighting()->m_shadowMapRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 4, 256.0f, 128.0f);
 		context->enable(GraphicsContext::BLEND);
 	}
 }

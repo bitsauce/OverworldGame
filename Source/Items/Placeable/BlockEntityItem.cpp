@@ -45,7 +45,7 @@ void BlockEntityItem::use(Pawn *pawn, const float delta)
 		player->getCurrentItem()->dec();
 	}*/
 
-	if(m_game->getWorld()->getTerrain()->createBlockEntityAt(blockPos.x, blockPos.y, m_blockEntityID))
+	if(m_game->getWorld()->getTerrain()->createBlockEntityAt(blockPos.x, blockPos.y, BLOCK_ENTITY_TORCH))//m_blockEntityID))
 	{
 		pawn->getCurrentItem()->dec();
 	}

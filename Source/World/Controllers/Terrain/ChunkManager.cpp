@@ -576,14 +576,6 @@ void ChunkManager::updateViewSize(int width, int height)
 	lighting->m_lightingPass2->getTexture()->setFiltering(Texture2D::LINEAR);
 	lighting->m_lightingPass2->getTexture()->setWrapping(Texture2D::REPEAT);
 
-	//lighting->m_dynamicLightingRenderTarget = new RenderTarget2D(width, height);
-	//lighting->m_dynamicLightingRenderTarget->getTexture()->setFiltering(Texture2D::LINEAR);
-	//lighting->m_dynamicLightingRenderTarget->getTexture()->setWrapping(Texture2D::REPEAT);
-	
-	m_shadowCasterRenderTarget = new RenderTarget2D(width, height);
-	m_shadowCasterRenderTarget->getTexture()->setFiltering(Texture2D::LINEAR);
-	m_shadowCasterRenderTarget->getTexture()->setWrapping(Texture2D::REPEAT);
-
 	// Set shader uniforms
 	m_tileSortShader->setSampler2D("u_BlockGrid", m_blocksRenderTarget->getTexture());
 

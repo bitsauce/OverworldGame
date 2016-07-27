@@ -125,8 +125,6 @@ private:
 	Resource<Shader> m_blurHShader;
 	Resource<Shader> m_blurVShader;
 
-	RenderTarget2D *m_shadowCasterRenderTarget;
-
 	int m_lightRadius;
 	bool m_enabled;
 	bool m_redrawLighting;
