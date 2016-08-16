@@ -12,7 +12,7 @@ GameOverlay::GameOverlay(OverworldGame *game, UiObject *parent, GraphicsContext 
 	m_player(nullptr),
 	m_craftingEnabled(false),
 	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Inventory")),
-	m_hidden(false)
+	m_active(true)
 {
 	setPosition(Vector2F(0.0f, 0.0f));
 	setSize(Vector2F(1.0f, 1.0f));

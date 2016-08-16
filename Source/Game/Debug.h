@@ -8,6 +8,7 @@ class OverworldGame;
 class World;
 class CommandLine;
 class Pointlight;
+class LightSource;
 class BlockData;
 class ColorPicker;
 
@@ -33,7 +34,6 @@ public:
 	void debugFunction(KeyEvent *e);
 
 	bool isEnabled() { return m_enabled; }
-	Resource<Font> m_font;
 
 private:
 	// Enabled flag
@@ -53,6 +53,7 @@ private:
 	ColorPicker *m_colorPicker;
 
 	// Debug variables
+	Resource<Font> m_font;
 	list<pair<string, string>> m_variables;
 
 	// Game pointer
@@ -65,8 +66,13 @@ private:
 	// Random
 	Random m_random;
 
-	// Pointlight
-	Pointlight *m_activePointlight;
+	// Light painter
+	Resource<Shader> m_drawCircleShader;
+	Pointlight *m_newPointLight;
+	LightSource *m_selectedLight;
+	bool m_lmbState;
+	uint m_moveCount;
+	Vector2F m_lightDragOffset;
 };
 
 #endif // DEBUG_H

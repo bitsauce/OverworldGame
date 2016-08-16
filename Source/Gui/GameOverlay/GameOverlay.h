@@ -41,7 +41,7 @@ public:
 	// Ui
 	bool isHovered() const;
 
-	bool m_hidden;
+	bool m_active;
 
 private:
 	OverworldGame *m_game;

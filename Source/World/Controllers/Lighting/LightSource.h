@@ -11,15 +11,15 @@ public:
 	// Virtual draw
 	//virtual void draw(SpriteBatch *spriteBatch) = 0;
 
-	// Source position
+	// Position
 	void setPosition(const Vector2F &position);
 	Vector2F getPosition() const;
 
-	// Source color
+	// Color
 	void setColor(const Color &color);
 	Color getColor() const;
 
-	// Pointlight radius
+	// Radius
 	void setRadius(const float radius);
 	float getRadius() const;
 

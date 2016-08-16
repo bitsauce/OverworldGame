@@ -36,9 +36,13 @@ Debug::Debug(OverworldGame *game) :
 	m_debugLighting(false),
 	m_debugMode(DEBUG_MODE_DEFAULT),
 	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Debug")),
+	m_drawCircleShader(Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/Draw_Circle")),
 	m_blockPainterTexture(new Texture2D()),
 	m_colorPicker(0),
-	m_activePointlight(0)
+	m_newPointLight(0),
+	m_selectedLight(0),
+	m_lmbState(false),
+	m_moveCount(0)
 {
 	// Make default block not the empty block
 	m_block++;
@@ -70,7 +74,7 @@ void Debug::debugFunction(KeyEvent *e)
 		// Toggle overlay
 		case SAUCE_KEY_F3:
 		{
-			m_game->getGameOverlay()->m_hidden = !m_game->getGameOverlay()->m_hidden;
+			m_game->getGameOverlay()->m_active = !m_game->getGameOverlay()->m_active;
 		}
 		break;
 
@@ -101,6 +105,7 @@ void Debug::debugFunction(KeyEvent *e)
 			m_debugMode = m_debugMode != LIGHT_PAINTER ? LIGHT_PAINTER : DEBUG_MODE_DEFAULT;
 			if(m_debugMode == LIGHT_PAINTER)
 			{
+				m_game->getGameOverlay()->m_active = false;
 				m_colorPicker = new ColorPicker(m_game->getCanvas());
 				m_colorPicker->setOrigin(0.0f, 1.0f);
 				m_colorPicker->setAnchor(0.05f, 0.95f);
@@ -108,8 +113,8 @@ void Debug::debugFunction(KeyEvent *e)
 			}
 			else
 			{
-				delete m_activePointlight;
-				m_activePointlight = 0;
+				m_game->getGameOverlay()->m_active = true;
+				delete m_colorPicker;
 			}
 		}
 		break;
@@ -204,10 +209,9 @@ void Debug::onTick(TickEvent *e)
 		case LIGHT_PAINTER:
 		{
 			// Update active pointlight
-			if(m_activePointlight)
+			if(m_selectedLight)
 			{
-				//m_activePointlight->setPosition(Vector2F(m_world->getCamera()->getInputPosition()) / BLOCK_PXF);
-				m_activePointlight->setColor(m_colorPicker->getSelectedColor());
+				m_selectedLight->setColor(m_colorPicker->getSelectedColor());
 			}
 		}
 		break;
@@ -407,7 +411,11 @@ void Debug::onDraw(DrawEvent *e)
 		// Show light sources
 		for(list<LightSource*>::iterator itr = m_world->getLighting()->m_lightSources.begin(); itr != m_world->getLighting()->m_lightSources.end(); ++itr)
 		{
-			context->drawCircle((*itr)->getPosition() * BLOCK_PXF, BLOCK_PX / 2 - 1, 12, math::lerp(Color(243, 230, 188, 255), (*itr)->getColor(), 0.75f));
+			LightSource *light = *itr;
+			context->setShader(m_drawCircleShader);
+			m_drawCircleShader->setUniformColor("u_Color", light->getColor());
+			m_drawCircleShader->setUniform1ui("u_DrawOutline", light == m_selectedLight);
+			context->drawRectangle((light->getPosition() - Vector2F(light->getRadius())) * BLOCK_PXF, Vector2F(light->getRadius() * 2.0f) * BLOCK_PXF);
 		}
 	}
 
@@ -440,18 +448,47 @@ void Debug::onMouseEvent(MouseEvent *e)
 			{
 				case MouseEvent::DOWN:
 				{
+					// Check for left mouse button
 					if(e->getButton() == SAUCE_MOUSE_BUTTON_LEFT)
 					{
-						m_activePointlight = new Pointlight(m_world, LightSource::DYNAMIC, m_world->getCamera()->getInputPosition() / BLOCK_PXF, 0.0f, Color(255));
+						// Select a light source
+						for(list<LightSource*>::iterator itr = m_world->getLighting()->m_lightSources.begin(); itr != m_world->getLighting()->m_lightSources.end(); ++itr)
+						{
+							LightSource *light = *itr;
+							if(RectF(light->getPosition() - Vector2F(light->getRadius()), Vector2F(light->getRadius() * 2.0f)).contains(Vector2F(m_game->getWorld()->getCamera()->getInputPosition() / BLOCK_PXF)))
+							{
+								m_selectedLight = light;
+								m_colorPicker->setSelectedColor(m_selectedLight->getColor());
+								m_moveCount = 0;
+								m_lightDragOffset = m_selectedLight->getPosition() - Vector2F(m_game->getWorld()->getCamera()->getInputPosition() / BLOCK_PXF);
+								break;
+							}
+							m_selectedLight = 0;
+						}
+						m_lmbState = true;
+					}
+					else if(e->getButton() == SAUCE_MOUSE_BUTTON_RIGHT)
+					{
+						// Create new point light
+						m_selectedLight = m_newPointLight = new Pointlight(m_world, LightSource::DYNAMIC, Vector2F(m_world->getCamera()->getInputPosition() / BLOCK_PXF), 0.0f, m_colorPicker->getSelectedColor());
 					}
 				}
 				break;
 
 				case MouseEvent::MOVE:
 				{
-					if(m_activePointlight)
+					if(m_newPointLight)
 					{
-						m_activePointlight->setRadius((m_activePointlight->getPosition() - m_game->getWorld()->getCamera()->getInputPosition() / BLOCK_PXF).length());
+						// Set new light radius
+						m_newPointLight->setRadius((m_newPointLight->getPosition() - Vector2F(m_game->getWorld()->getCamera()->getInputPosition()) / BLOCK_PXF).length());
+					}
+					else if(m_lmbState && m_selectedLight)
+					{
+						// Drag-move selected light
+						if(m_moveCount++ > 2)
+						{
+							m_selectedLight->setPosition(Vector2F(m_game->getWorld()->getCamera()->getInputPosition()) / BLOCK_PXF + m_lightDragOffset);
+						}
 					}
 				}
 				break;
@@ -460,7 +497,22 @@ void Debug::onMouseEvent(MouseEvent *e)
 				{
 					if(e->getButton() == SAUCE_MOUSE_BUTTON_LEFT)
 					{
-						m_activePointlight = 0;
+						m_lmbState = false;
+					}
+					else if(e->getButton() == SAUCE_MOUSE_BUTTON_RIGHT)
+					{
+						m_newPointLight = 0;
+					}
+				}
+				break;
+
+				case MouseEvent::WHEEL:
+				{
+					// Change selected light radius
+					if(m_selectedLight)
+					{
+						float newRadius = m_selectedLight->getRadius() + (e->getWheelY() > 0 ? 1.0f : -1.0f);
+						m_selectedLight->setRadius(max(newRadius, 0.0f));
 					}
 				}
 				break;
@@ -503,13 +555,13 @@ void Debug::randomizeLight(KeyEvent *e)
 {
 	if(m_enabled && m_debugMode == LIGHT_PAINTER && e->getType() == KeyEvent::DOWN)
 	{
-		if(m_activePointlight == 0)
+		if(m_newPointLight == 0)
 		{
-			m_activePointlight = new Pointlight(m_world, LightSource::DYNAMIC, m_world->getCamera()->getInputPosition() / BLOCK_PXF, 0, Color());
+			m_newPointLight = new Pointlight(m_world, LightSource::DYNAMIC, m_world->getCamera()->getInputPosition() / BLOCK_PXF, 0, Color());
 		}
 		Random random;
-		m_activePointlight->setColor(Color(random.nextInt(255), random.nextInt(255), random.nextInt(255), 255));
-		m_activePointlight->setRadius(random.nextInt(10, 100));
+		m_newPointLight->setColor(Color(random.nextInt(255), random.nextInt(255), random.nextInt(255), 255));
+		m_newPointLight->setRadius(random.nextInt(10, 100));
 	}
 }
 
@@ -517,7 +569,7 @@ void Debug::placeLight(KeyEvent *e)
 {
 	if(m_enabled && m_debugMode == LIGHT_PAINTER && e->getType() == KeyEvent::DOWN)
 	{
-		m_activePointlight = 0;
+		m_newPointLight = 0;
 	}
 }
 

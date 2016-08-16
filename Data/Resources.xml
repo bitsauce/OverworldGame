@@ -186,6 +186,10 @@
 		<name>Sprites/Gui/Color_Picker_Ring</name>
 		<path>Sprites/Gui/Color_Picker_Ring.png</path>
 	</texture>
+	<texture>
+		<name>Sprites/Gui/Color_Wheel</name>
+		<path>Sprites/Gui/Color_Wheel.png</path>
+	</texture>
 	
 	<!-- Shaders -->
 	<shader>
@@ -258,5 +262,10 @@
 		<name>Shaders/Color_Wheel</name>
 		<vertexFilePath>Shaders/Color_Wheel.vert</vertexFilePath>
 		<fragmentFilePath>Shaders/Color_Wheel.frag</fragmentFilePath>
+	</shader>
+	<shader>
+		<name>Shaders/Draw_Circle</name>
+		<vertexFilePath>Shaders/Draw_Circle.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/Draw_Circle.frag</fragmentFilePath>
 	</shader>
 </resources>

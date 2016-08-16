@@ -32,7 +32,7 @@ void HealthManaStatus::onTick(TickEvent *e)
 
 void HealthManaStatus::onDraw(DrawEvent *e)
 {
-	if(!m_gameOverlay->getPlayer() || m_gameOverlay->m_hidden) return;
+	if(!m_gameOverlay->getPlayer() || !m_gameOverlay->m_active) return;
 
 	Vector2F position = getPosition();
 	Vector2F size = getSize();

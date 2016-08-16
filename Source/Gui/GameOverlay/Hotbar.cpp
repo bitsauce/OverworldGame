@@ -40,6 +40,8 @@ Hotbar::~Hotbar()
 
 void Hotbar::onTick(TickEvent *e)
 {
+	if(!m_gameOverlay->m_active) return;
+
 	if(m_mouseWheel != 0)
 	{
 		Player *player = m_gameOverlay->getPlayer();
@@ -54,7 +56,7 @@ void Hotbar::onTick(TickEvent *e)
 void Hotbar::onDraw(DrawEvent *e)
 {
 	Player *player = m_gameOverlay->getPlayer();
-	if(!player || m_gameOverlay->m_hidden) return;
+	if(!player || !m_gameOverlay->m_active) return;
 
 	// Get size and position
 	Vector2F position = getDrawPosition();
@@ -98,16 +100,20 @@ void Hotbar::setSelectedSlot(KeyEvent *e, const uint slot)
 
 void Hotbar::onMouseWheel(MouseEvent *e)
 {
+	if(!m_gameOverlay->m_active) return;
 	m_mouseWheel = e->getWheelY();
 }
 
 void Hotbar::onMouseMove(MouseEvent *e)
 {
+	if(!m_gameOverlay->m_active) return;
 	m_mousePosition = e->getPosition();
 }
 
 void Hotbar::onMouseDown(MouseEvent *e)
 {
+	if(!m_gameOverlay->m_active) return;
+
 	const MouseButton button = e->getButton();
 	if(button == SAUCE_MOUSE_BUTTON_LEFT || button == SAUCE_MOUSE_BUTTON_RIGHT)
 	{

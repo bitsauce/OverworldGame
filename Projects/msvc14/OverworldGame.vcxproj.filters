@@ -29,9 +29,6 @@
     <ClCompile Include="..\..\Source\World\Controllers\Camera.cpp">
       <Filter>Source\World\Controllers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\World\Controllers\Terrain.cpp">
-      <Filter>Source\World\Controllers</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\World\Controllers\TimeOfDay.cpp">
       <Filter>Source\World\Controllers</Filter>
     </ClCompile>
@@ -52,9 +49,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\Generation\Generator.cpp">
       <Filter>Source\Generation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\World\Controllers\Lighting.cpp">
-      <Filter>Source\World\Controllers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\World\Controllers\Terrain\BlockDrawer.cpp">
       <Filter>Source\World\Controllers\Terrain</Filter>
@@ -211,6 +205,12 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\Gui\ColorPicker.cpp">
       <Filter>Source\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Controllers\Lighting\Lighting.cpp">
+      <Filter>Source\World\Controllers\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\World\Controllers\Terrain\Terrain.cpp">
+      <Filter>Source\World\Controllers\Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -414,14 +414,8 @@
     <ClInclude Include="..\..\Source\World\Controllers\Camera.h">
       <Filter>Source\World\Controllers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\World\Controllers\Terrain.h">
-      <Filter>Source\World\Controllers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\World\Controllers\TimeOfDay.h">
       <Filter>Source\World\Controllers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\World\World.h">
-      <Filter>Source\World</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\World\Controllers\Terrain\Chunk.h">
       <Filter>Source\World\Controllers\Terrain</Filter>
@@ -437,9 +431,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Generation\Generator.h">
       <Filter>Source\Generation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\World\Controllers\Lighting.h">
-      <Filter>Source\World\Controllers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\World\Controllers\Terrain\BlockDrawer.h">
       <Filter>Source\World\Controllers\Terrain</Filter>
@@ -512,6 +503,24 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Gui\ColorPicker.h">
       <Filter>Source\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting\Lighting.h">
+      <Filter>Source\World\Controllers\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain.h">
+      <Filter>Source\World\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain\Terrain.h">
+      <Filter>Source\World\Controllers\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\World.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting.h">
+      <Filter>Source\World\Controllers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -617,6 +626,12 @@
       <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Data\Shaders\Color_Wheel.vert">
+      <Filter>Data\Shaders</Filter>
+    </None>
+    <None Include="..\..\Data\Shaders\Draw_Circle.frag">
+      <Filter>Data\Shaders</Filter>
+    </None>
+    <None Include="..\..\Data\Shaders\Draw_Circle.vert">
       <Filter>Data\Shaders</Filter>
     </None>
   </ItemGroup>
