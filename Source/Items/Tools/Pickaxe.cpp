@@ -11,8 +11,8 @@
 Pickaxe::Pickaxe(OverworldGame *game, const ItemDataDesc *desc) :
 	ItemData(desc),
 	m_game(game),
-	m_cracksSprite(game->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Pickaxes/Mining_Cracks")),
-	m_sprite(game->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Pickaxes/IronPickaxe")),
+	m_cracksSprite(Resource<Texture2D>("Sprites/Items/Tools/Pickaxes/Mining_Cracks")),
+	m_sprite(Resource<Texture2D>("Sprites/Items/Tools/Pickaxes/IronPickaxe")),
 	m_cracksAnimation(1, 4),
 	m_drawCracks(false),
 	m_prevBlockPosition(0, 0),

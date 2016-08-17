@@ -18,7 +18,7 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 
 	// Initialize blocks
 	m_blocks = new ChunkBlock[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
-	m_blockTexture = Resource<Texture2D>(new Texture2D(CHUNK_BLOCKS, CHUNK_BLOCKS));
+	m_blockTexture = shared_ptr<Texture2D>(new Texture2D(CHUNK_BLOCKS, CHUNK_BLOCKS));
 
 	uchar data[4] = { 0 };
 	Random rand;
@@ -31,7 +31,7 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 			pixmap.setPixel(x, y, &data);
 		}
 	}
-	m_timeOffsetTexture = Resource<Texture2D>(new Texture2D(pixmap));
+	m_timeOffsetTexture = shared_ptr<Texture2D>(new Texture2D(pixmap));
 }
 
 void Chunk::load(int chunkX, int chunkY, ChunkBlock *blocks)

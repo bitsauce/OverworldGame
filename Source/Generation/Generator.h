@@ -33,7 +33,7 @@ private:
 	const BlockData *m_blockData[BLOCK_COUNT];
 
 	GraphicsContext *m_graphicsContext;
-	Resource<RenderTarget2D> m_renderTarget;
+	shared_ptr<RenderTarget2D> m_renderTarget;
 	Resource<Shader> m_generationShader;
 };
 

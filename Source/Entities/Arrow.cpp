@@ -4,7 +4,7 @@
 Arrow::Arrow(Pawn *owner, World *world, const Vector2F &pos, const Vector2F &dir, const float speed) :
 	Entity(world, ENTITY_ARROW),
 	m_owner(owner),
-	m_sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Items/Weapons/Arrow")),
+	m_sprite(Resource<Texture2D>("Sprites/Items/Weapons/Arrow")),
 	m_hitState(false),
 	m_deleteTime(0.0f),
 	m_moveToAlpha(0.0f)

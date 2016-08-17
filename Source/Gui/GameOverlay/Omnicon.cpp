@@ -6,7 +6,7 @@ Omnicon::Omnicon(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(gameOverlay),
 	m_visible(false),
 	m_gameOverlay(gameOverlay),
-	m_bookSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Gui/GameOverlay/Omnicon"))
+	m_bookSprite(Resource<Texture2D>("Sprites/Gui/GameOverlay/Omnicon"))
 {
 	m_bookSprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 	m_bookSprite.setDepth(0.f);

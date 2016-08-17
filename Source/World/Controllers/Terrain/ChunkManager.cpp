@@ -43,10 +43,10 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 	m_circleLoadIndex(0),
 	m_reattachAllChunks(true),
 	m_blockLightingRenderTarget(nullptr),
-	m_directionalLightingShader(Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/DirectionalLighting")),
-	m_radialLightingShader(Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/RadialLighting")),
-	m_blurHShader(Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/BlurH")),
-	m_blurVShader(Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/BlurV")),
+	m_directionalLightingShader(Resource<Shader>("Shaders/DirectionalLighting")),
+	m_radialLightingShader(Resource<Shader>("Shaders/RadialLighting")),
+	m_blurHShader(Resource<Shader>("Shaders/BlurH")),
+	m_blurVShader(Resource<Shader>("Shaders/BlurV")),
 	m_time(0.0f)
 {
 	// Setup vertex format
@@ -55,15 +55,15 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 	vertexFormat.set(VERTEX_TEX_COORD, 2);
 
 	// Load tile map shaders
-	m_tileSortShader = Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/TileSort");
+	m_tileSortShader = Resource<Shader>("Shaders/TileSort");
 	m_tileSortShader->bindFragLocation(0, "out_BlockData");
 	m_tileSortShader->bindFragLocation(1, "out_QuadData");
 	m_tileSortShader->link();
 
-	m_tileMapShader = Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/TileMap");
+	m_tileMapShader = Resource<Shader>("Shaders/TileMap");
 
 	// Setup block entity shader
-	m_blockEntityShader = Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/BlockEntitiesDraw");
+	m_blockEntityShader = Resource<Shader>("Shaders/BlockEntitiesDraw");
 	m_blockEntityShader->setSampler2D("u_TextureAtlas", BlockEntityData::getTextureAtlas()->getTexture());
 	m_blockEntityShader->setSampler2D("u_BlockEntityData", BlockEntityData::getDataTexture());
 

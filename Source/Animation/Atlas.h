@@ -26,7 +26,7 @@ public:
 
 	SpineAtlasRegion *findRegion(const string &name);
 
-	Resource<Texture2D> getTexture() const;
+	shared_ptr<Texture2D> getTexture() const;
 
 private:
 	spAtlas *m_self;

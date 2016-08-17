@@ -10,7 +10,7 @@ Chat::Chat(OverworldGame *game, GraphicsContext *context, GameOverlay *gameOverl
 	m_active(false),
 	m_chatInput(context, this),
 	m_fadeTime(0.0f),
-	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Chat")),
+	m_font(Resource<Font>("Fonts/Chat")),
 	m_redrawText(true),
 	m_textSpriteBatch(context),
 	m_messages(100),

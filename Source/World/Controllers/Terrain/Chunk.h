@@ -78,13 +78,13 @@ private:
 
 public: // TODO: private
 	// Block entity time
-	Resource<Texture2D> m_timeOffsetTexture;
+	shared_ptr<Texture2D> m_timeOffsetTexture;
 
 	// Chunk manager
 	ChunkManager *m_chunkManager;
 
 	// Block texture
-	Resource<Texture2D> m_blockTexture;
+	shared_ptr<Texture2D> m_blockTexture;
 
 	// Flags
 	bool m_modified;

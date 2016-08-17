@@ -2,8 +2,8 @@
 
 ColorPicker::ColorPicker(UiObject *parent) :
 	UiObject(parent),
-	m_ringSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Gui/Color_Picker_Ring")),
-	m_colorWheelTexture(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Gui/Color_Wheel")),
+	m_ringSprite(Resource<Texture2D>("Sprites/Gui/Color_Picker_Ring")),
+	m_colorWheelTexture(Resource<Texture2D>("Sprites/Gui/Color_Wheel")),
 	m_ringLocation(Vector2F(0.0f)),
 	m_renderTarget(0),
 	m_leftMouseButton(false),

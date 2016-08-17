@@ -103,7 +103,7 @@ public:
 		return s_textureAtlas;
 	}
 
-	static const Resource<Texture2D> getDataTexture()
+	static const shared_ptr<Texture2D> getDataTexture()
 	{
 		return s_dataTexture;
 	}
@@ -125,5 +125,5 @@ private:
 	// Static data
 	static vector<BlockEntityData*> s_data;
 	static TextureAtlas *s_textureAtlas;
-	static Resource<Texture2D> s_dataTexture;
+	static shared_ptr<Texture2D> s_dataTexture;
 };

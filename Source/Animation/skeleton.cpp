@@ -128,7 +128,7 @@ void Skeleton::draw(GraphicsContext *context)
 	// Draw vertices
 	Vertex *vertices = new Vertex[4 * m_self->slotCount];
 	uint *indices = new uint[6 * m_self->slotCount];
-	Resource<Texture2D> texture = 0; int startIndex = 0;
+	shared_ptr<Texture2D> texture = 0; int startIndex = 0;
 	context->setBlendState(BlendState::PRESET_PREMULTIPLIED_ALPHA);
 	for(int i = 0; i < m_self->slotCount; i++)
 	{
@@ -141,10 +141,10 @@ void Skeleton::draw(GraphicsContext *context)
 
 		if(attachment->type == SP_ATTACHMENT_REGION)
 		{
-			Resource<Texture2D> prevTexture = texture;
+			shared_ptr<Texture2D> prevTexture = texture;
 
 			spRegionAttachment* regionAttachment = SUB_CAST(spRegionAttachment, attachment);
-			texture = *(Resource<Texture2D>*)((spAtlasRegion*)regionAttachment->rendererObject)->page->rendererObject;
+			texture = *(shared_ptr<Texture2D>*)((spAtlasRegion*)regionAttachment->rendererObject)->page->rendererObject;
 			spRegionAttachment_computeWorldVertices(regionAttachment, slot->skeleton->x, slot->skeleton->y, slot->bone, m_worldVertices);
 
 			if(prevTexture != texture)

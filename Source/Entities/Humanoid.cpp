@@ -69,7 +69,7 @@ Humanoid::Humanoid() :
 	m_appearanceAtlas = new SpineAtlas("Sprites/Characters/Images/Appearance/Appearance.atlas");
 	m_equipmentAttachmentLoader = new AtlasAttachmentLoader("Sprites/Characters/Images/Equipment/Equipment.atlas");
 
-	m_colorMaskShader = Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/Color_Mask");
+	m_colorMaskShader = Resource<Shader>("Shaders/Color_Mask");
 
 	// Set render array to false
 	for(uint i = 0; i < SLOT_COUNT; ++i)
@@ -263,7 +263,7 @@ void Humanoid::draw(Entity *body, SpriteBatch *spriteBatch, const float alpha)
 			if(skeletonAtlasRegion)
 			{
 				// Calculate pixel coordinates for the slot we want to draw over
-				Resource<Texture2D> skeletonAtlas = m_skeleton->getAtlas()->getTexture();
+				shared_ptr<Texture2D> skeletonAtlas = m_skeleton->getAtlas()->getTexture();
 				TextureRegion skeletonTextureRegion = skeletonAtlasRegion->getTextureRegion();
 				uint x0 = skeletonTextureRegion.uv0.x * skeletonAtlas->getWidth(), y0 = skeletonTextureRegion.uv0.y * skeletonAtlas->getHeight(),
 					x1 = skeletonTextureRegion.uv1.x * skeletonAtlas->getWidth(), y1 = skeletonTextureRegion.uv1.y * skeletonAtlas->getHeight();

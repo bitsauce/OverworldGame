@@ -21,8 +21,8 @@ Background::Background(World *world, Window *window) :
 	m_wind(5.0f),
 	m_cloudHeight(0.0f),
 	m_cloudOffset(500.0f),
-	m_sun(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Sun")),
-	m_moon(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Moon"))
+	m_sun(Resource<Texture2D>("Sprites/Backgrounds/Sun")),
+	m_moon(Resource<Texture2D>("Sprites/Backgrounds/Moon"))
 {
 	m_sun.setSize(m_sun.getTexture()->getSize());
 	m_moon.setSize(m_moon.getTexture()->getSize());
@@ -39,9 +39,9 @@ Background::Background(World *world, Window *window) :
 	}
 	sort(m_clouds.begin(), m_clouds.end(), CloudSort());
 
-	m_layers.push_back(new Layer(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Layer/0")), 0.5f, -1080.0f));
-	m_layers.push_back(new Layer(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Layer/1")), 0.25f));
-	m_layers.push_back(new Layer(Sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Layer/2")), 0.125f, -100.0f));
+	m_layers.push_back(new Layer(Sprite(Resource<Texture2D>("Sprites/Backgrounds/Layer/0")), 0.5f, -1080.0f));
+	m_layers.push_back(new Layer(Sprite(Resource<Texture2D>("Sprites/Backgrounds/Layer/1")), 0.25f));
+	m_layers.push_back(new Layer(Sprite(Resource<Texture2D>("Sprites/Backgrounds/Layer/2")), 0.125f, -100.0f));
 }
 
 Background::~Background()
@@ -188,7 +188,7 @@ Cloud::Cloud(Random &rand, Background *background) :
 
 void Cloud::setImage(const int num)
 {
-	m_sprite.setTexture(m_game->getResourceManager()->get<Texture2D>("Sprites/Backgrounds/Clouds/" + util::intToStr(num)));
+	m_sprite.setTexture(Resource<Texture2D>("Sprites/Backgrounds/Clouds/" + util::intToStr(num)));
 }
 
 void Cloud::setDepth(const float depth)

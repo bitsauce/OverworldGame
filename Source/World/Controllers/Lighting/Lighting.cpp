@@ -13,9 +13,8 @@ Lighting::Lighting(World *world) :
 	m_shadowMapRenderTarget(0),
 	m_shadowsRenderTarget(0)
 {
-	ResourceManager *resourceManager = Game::GetInstance()->getResourceManager();
-	m_shadowMapShader = resourceManager->get<Shader>("Shaders/Shadow_Map");
-	m_shadowRenderShader = resourceManager->get<Shader>("Shaders/Shadow_Render");
+	m_shadowMapShader = Resource<Shader>("Shaders/Shadow_Map");
+	m_shadowRenderShader = Resource<Shader>("Shaders/Shadow_Render");
 
 	setLightMapResolution(512);
 }

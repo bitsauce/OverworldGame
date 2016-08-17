@@ -8,9 +8,9 @@
 Inventory::Inventory(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(gameOverlay),
 	m_gameOverlay(gameOverlay),
-	m_itemSlotSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Inventory/ItemSlot")),
-	m_backgroundSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Inventory/Inventory")),
-	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Inventory")),
+	m_itemSlotSprite(Resource<Texture2D>("Sprites/Inventory/ItemSlot")),
+	m_backgroundSprite(Resource<Texture2D>("Sprites/Inventory/Inventory")),
+	m_font(Resource<Font>("Fonts/Inventory")),
 	m_fadeInAlpha(0.0f),
 	m_animationTime(0.0f),
 	m_animationDuration(0.5f),

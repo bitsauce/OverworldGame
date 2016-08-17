@@ -7,7 +7,7 @@
 
 vector<BlockEntityData*> BlockEntityData::s_data(BLOCK_ENTITY_COUNT);
 TextureAtlas *BlockEntityData::s_textureAtlas;
-Resource<Texture2D> BlockEntityData::s_dataTexture = nullptr;
+shared_ptr<Texture2D> BlockEntityData::s_dataTexture = nullptr;
 
 struct BlockEntityDescriptor
 {
@@ -82,7 +82,7 @@ void BlockEntityData::init()
 
 		blockDataPixmap.setPixel(i, 0, pixelData);
 	}
-	s_dataTexture = Resource<Texture2D>(new Texture2D(blockDataPixmap));
+	s_dataTexture = shared_ptr<Texture2D>(new Texture2D(blockDataPixmap));
 	s_dataTexture->setFiltering(Texture2D::NEAREST);
 }
 

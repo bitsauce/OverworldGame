@@ -4,7 +4,7 @@ LineEdit::LineEdit(GraphicsContext *gfx, UiObject *parent) :
 	UiObject(parent),
 	m_cursorTime(0.0f),
 	m_offsetX(0.0f),
-	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Chat")),
+	m_font(Resource<Font>("Fonts/Chat")),
 	m_renderTarget(0),
 	m_dirty(true),
 	m_spriteBatch(gfx, 100),

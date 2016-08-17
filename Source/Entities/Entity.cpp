@@ -14,10 +14,11 @@ Entity::Entity(World *world, const EntityID id) :
 	m_rotation(45.0f),
 	m_gravityScale(1.0f),
 	m_allowRotation(false),
-	m_contact(0)
+	m_contact(0),
+	m_lastChunkPosition(0, 0)
 {
 	m_world->addEntity(this);
-	m_world->getTerrain()->getChunkManager()->getChunkAt(0, 0, true)->m_entities.push_back(this);
+	m_world->getTerrain()->getChunkManager()->getChunkAt(m_lastChunkPosition.x, m_lastChunkPosition.y, true)->m_entities.push_back(this);
 }
 
 Entity::~Entity()
@@ -28,12 +29,11 @@ Entity::~Entity()
 		camera->setTargetEntity(nullptr);
 	}
 	m_world->removeEntity(this);
+	m_world->getTerrain()->getChunkManager()->getChunkAt(m_lastChunkPosition.x, m_lastChunkPosition.y, true)->m_entities.remove(this);
 }
 
 void Entity::onTick(TickEvent *e)
 {
-	Vector2I oldChunkPosition = math::floor(m_position / Vector2F(CHUNK_PXF));
-
 	m_lastContact = m_contact;
 	m_lastPosition = m_position;
 	m_contact = 0;
@@ -151,24 +151,24 @@ void Entity::onTick(TickEvent *e)
 		}
 	}
 
-	Vector2I newChunkPosition = math::floor(m_position / Vector2F(CHUNK_PXF));
-	if(newChunkPosition != oldChunkPosition)
+	Vector2I chunkPosition = math::floor(m_position / Vector2F(CHUNK_PXF));
+	if(chunkPosition != m_lastChunkPosition)
 	{
-		m_world->getTerrain()->getChunkManager()->getChunkAt(oldChunkPosition.x, oldChunkPosition.y, true)->m_entities.remove(this);
-		m_world->getTerrain()->getChunkManager()->getChunkAt(newChunkPosition.x, newChunkPosition.y, true)->m_entities.push_back(this);
+		m_world->getTerrain()->getChunkManager()->getChunkAt(m_lastChunkPosition.x, m_lastChunkPosition.y, true)->m_entities.remove(this);
+		m_world->getTerrain()->getChunkManager()->getChunkAt(chunkPosition.x, chunkPosition.y, true)->m_entities.push_back(this);
+		m_lastChunkPosition = chunkPosition;
 	}
 }
 
 void Entity::setPosition(const Vector2F & pos)
 {
-	Vector2I oldChunkPosition = math::floor(m_position / Vector2F(CHUNK_PXF));
-	Vector2I newChunkPosition = math::floor(pos / Vector2F(CHUNK_PXF));
-
-	if(newChunkPosition != oldChunkPosition)
-	{
-		m_world->getTerrain()->getChunkManager()->getChunkAt(oldChunkPosition.x, oldChunkPosition.y, true)->m_entities.remove(this);
-		m_world->getTerrain()->getChunkManager()->getChunkAt(newChunkPosition.x, newChunkPosition.y, true)->m_entities.push_back(this);
-	}
-
 	m_lastPosition = m_position = pos;
+
+	Vector2I chunkPosition = math::floor(m_position / Vector2F(CHUNK_PXF));
+	if(chunkPosition != m_lastChunkPosition)
+	{
+		m_world->getTerrain()->getChunkManager()->getChunkAt(m_lastChunkPosition.x, m_lastChunkPosition.y, true)->m_entities.remove(this);
+		m_world->getTerrain()->getChunkManager()->getChunkAt(chunkPosition.x, chunkPosition.y, true)->m_entities.push_back(this);
+		m_lastChunkPosition = chunkPosition;
+	}
 }

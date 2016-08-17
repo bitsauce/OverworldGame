@@ -15,7 +15,7 @@ ItemData::ItemData(const ItemDataDesc *itemDataDesc) :
 	m_name(itemDataDesc->name),
 	m_desc(itemDataDesc->desc),
 	m_maxStack(itemDataDesc->maxStack),
-	m_iconTexture(Game::GetInstance()->getResourceManager()->get<Texture2D>(itemDataDesc->icon))
+	m_iconTexture(Resource<Texture2D>(itemDataDesc->icon))
 {
 }
 

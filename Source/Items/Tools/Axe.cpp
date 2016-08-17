@@ -13,10 +13,10 @@
 Axe::Axe(OverworldGame *game, const ItemDataDesc *desc) :
 	ItemData(desc),
 	m_game(game),
-	m_cracksSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Pickaxes/Mining_Cracks")),
+	m_cracksSprite(Resource<Texture2D>("Sprites/Items/Tools/Pickaxes/Mining_Cracks")),
 	m_cracksAnimation(1, 4),
 	m_drawCracks(false),
-	m_sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Items/Tools/Axes/IronAxe")),
+	m_sprite(Resource<Texture2D>("Sprites/Items/Tools/Axes/IronAxe")),
 	m_prevBlockPosition(0, 0),
 	m_mineCounter(0.0f),
 	m_mineTime(1.0f)

@@ -10,6 +10,7 @@ class Pointlight;
 
 class DebugPointlight : public Entity
 {
+	friend class Debug;
 public:
 	DebugPointlight(World *world);
 	~DebugPointlight();
@@ -28,4 +29,6 @@ public:
 
 private:
 	Pointlight *m_pointlight;
+
+	static list<DebugPointlight*> s_pointlights;
 };

@@ -36,8 +36,8 @@ Debug::Debug(OverworldGame *game) :
 	m_debugChunkLoader(false),
 	m_debugLighting(false),
 	m_debugMode(DEBUG_MODE_DEFAULT),
-	m_font(Game::GetInstance()->getResourceManager()->get<Font>("Fonts/Debug")),
-	m_drawCircleShader(Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/Draw_Circle")),
+	m_font(Resource<Font>("Fonts/Debug")),
+	m_drawCircleShader(Resource<Shader>("Shaders/Draw_Circle")),
 	m_blockPainterTexture(new Texture2D()),
 	m_colorPicker(0),
 	m_newPointlight(0),
@@ -402,14 +402,15 @@ void Debug::onDraw(DrawEvent *e)
 	if(m_debugMode == LIGHT_PAINTER)
 	{
 		// Show light sources
-		for(list<LightSource*>::iterator itr = m_world->getLighting()->m_lightSources.begin(); itr != m_world->getLighting()->m_lightSources.end(); ++itr)
+		for(list<DebugPointlight*>::iterator itr = DebugPointlight::s_pointlights.begin(); itr != DebugPointlight::s_pointlights.end(); ++itr)
 		{
-			LightSource *light = *itr;
+			LightSource *light = (*itr)->getPointlight();
 			context->setShader(m_drawCircleShader);
 			m_drawCircleShader->setUniformColor("u_Color", light->getColor());
 			m_drawCircleShader->setUniform1ui("u_DrawOutline", m_selectedLight && light == m_selectedLight->getPointlight());
 			context->drawRectangle((light->getPosition() - Vector2F(light->getRadius())) * BLOCK_PXF, Vector2F(light->getRadius() * 2.0f) * BLOCK_PXF);
 		}
+		context->setShader(0);
 	}
 
 	if(m_debugLighting)
@@ -423,6 +424,15 @@ void Debug::onDraw(DrawEvent *e)
 		context->setTexture(m_world->getLighting()->m_shadowsRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 3, 256.0f, 128.0f);
 		context->setTexture(m_world->getLighting()->m_shadowMapRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 4, 256.0f, 128.0f);
 		context->enable(GraphicsContext::BLEND);
+	}
+
+	if(m_debugLighting || m_debugMode == LIGHT_PAINTER)
+	{
+		for(list<LightSource*>::iterator itr = m_world->getLighting()->m_lightSources.begin(); itr != m_world->getLighting()->m_lightSources.end(); ++itr)
+		{
+			LightSource *light = *itr;
+			context->drawCircle(light->getPosition() * BLOCK_PXF, 5.0f, 12, light->getColor());
+		}
 	}
 }
 
@@ -445,7 +455,7 @@ void Debug::onMouseEvent(MouseEvent *e)
 					if(e->getButton() == SAUCE_MOUSE_BUTTON_LEFT)
 					{
 						// Select a light source
-						for(list<DebugPointlight*>::iterator itr = m_pointlights.begin(); itr != m_pointlights.end(); ++itr)
+						for(list<DebugPointlight*>::iterator itr = DebugPointlight::s_pointlights.begin(); itr != DebugPointlight::s_pointlights.end(); ++itr)
 						{
 							DebugPointlight *lightEntity = *itr;
 							LightSource *light = lightEntity->getPointlight();
@@ -468,7 +478,6 @@ void Debug::onMouseEvent(MouseEvent *e)
 						m_newPointlight->setPosition(Vector2F(m_world->getCamera()->getInputPosition()));
 						m_newPointlight->getPointlight()->setColor(m_colorPicker->getSelectedColor());
 						m_selectedLight = m_newPointlight;
-						m_pointlights.push_back(m_newPointlight);
 					}
 				}
 				break;
@@ -515,6 +524,25 @@ void Debug::onMouseEvent(MouseEvent *e)
 					}
 				}
 				break;
+			}
+		}
+		break;
+	}
+}
+
+void Debug::onKeyEvent(KeyEvent *e)
+{
+	switch(m_debugMode)
+	{
+		case LIGHT_PAINTER:
+		{
+			if(e->getType() == KeyEvent::DOWN)
+			{
+				if(m_selectedLight && e->getKeycode() == SAUCE_KEY_DELETE)
+				{
+					delete m_selectedLight;
+					m_selectedLight = 0;
+				}
 			}
 		}
 		break;

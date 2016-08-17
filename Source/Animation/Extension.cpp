@@ -4,7 +4,7 @@
 
 void _spAtlasPage_createTexture(spAtlasPage* self, const char* path)
 {
-	Resource<Texture2D> *texture = new Resource<Texture2D>(new Texture2D(Pixmap(path)));
+	shared_ptr<Texture2D> *texture = new shared_ptr<Texture2D>(new Texture2D(Pixmap(path)));
 	if(texture)
 	{
 		self->rendererObject = texture;
@@ -17,7 +17,7 @@ void _spAtlasPage_disposeTexture(spAtlasPage* self)
 {
 	if(self->rendererObject)
 	{
-		delete ((Resource<Texture2D>*)self->rendererObject);
+		delete ((shared_ptr<Texture2D>*)self->rendererObject);
 	}
 }
 

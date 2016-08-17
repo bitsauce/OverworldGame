@@ -229,6 +229,7 @@ private:
 	Vector2F m_position;
 	Vector2F m_lastPosition;
 	Vector2F m_size;
+	Vector2I m_lastChunkPosition;
 	float m_rotation;
 	float m_gravityScale;
 	uint m_contact, m_lastContact;

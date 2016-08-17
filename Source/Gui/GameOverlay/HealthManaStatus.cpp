@@ -7,8 +7,8 @@
 HealthManaStatus::HealthManaStatus(Scene *scene, GameOverlay *gameOverlay) :
 	UiObject(gameOverlay),
 	m_gameOverlay(gameOverlay),
-	m_heartSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Gui/GameOverlay/Heart")),
-	m_manaSprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Gui/GameOverlay/Mana")),
+	m_heartSprite(Resource<Texture2D>("Sprites/Gui/GameOverlay/Heart")),
+	m_manaSprite(Resource<Texture2D>("Sprites/Gui/GameOverlay/Mana")),
 	m_heartTime(0.0f)
 {
 	m_heartSprite.setSize(Vector2F(32.0f));

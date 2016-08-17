@@ -11,8 +11,8 @@
 Bow::Bow(OverworldGame *game, const ItemDataDesc *desc) :
 	ItemData(desc),
 	m_game(game),
-	m_attachTexture(game->getResourceManager()->get<Texture2D>("Sprites/Items/Weapons/WoodenBow")),
-	m_sprite(game->getResourceManager()->get<Texture2D>("Sprites/Items/Weapons/WoodenBowAnim")),
+	m_attachTexture(Resource<Texture2D>("Sprites/Items/Weapons/WoodenBow")),
+	m_sprite(Resource<Texture2D>("Sprites/Items/Weapons/WoodenBowAnim")),
 	m_charging(false),
 	m_chargeTime(0.0f),
 	m_chargeAnim(1, 4)

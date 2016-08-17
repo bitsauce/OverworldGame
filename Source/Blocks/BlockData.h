@@ -30,7 +30,7 @@ public:
 		return s_textureAtlas;
 	}
 
-	static Resource<Texture2D> getDataTexture()
+	static shared_ptr<Texture2D> getDataTexture()
 	{
 		return s_dataTexture;
 	}
@@ -47,7 +47,7 @@ private:
 	static map<BlockID, BlockData*> s_idToData;
 	static map<string, BlockData*> s_nameToData;
 	static TextureAtlas *s_textureAtlas;
-	static Resource<Texture2D> s_dataTexture;
+	static shared_ptr<Texture2D> s_dataTexture;
 };
 
 #endif // BLOCK_DATA_H

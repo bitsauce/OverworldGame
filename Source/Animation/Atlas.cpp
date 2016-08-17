@@ -28,9 +28,9 @@ SpineAtlasRegion *SpineAtlas::findRegion(const string &name)
 	return m_regions.find(name) != m_regions.end() ? m_regions[name] : nullptr;
 }
 
-Resource<Texture2D> SpineAtlas::getTexture() const
+shared_ptr<Texture2D> SpineAtlas::getTexture() const
 {
-	return *(Resource<Texture2D>*)m_self->pages->rendererObject;
+	return *(shared_ptr<Texture2D>*)m_self->pages->rendererObject;
 }
 
 SpineAtlasRegion::SpineAtlasRegion() :

@@ -3,14 +3,19 @@
 #include "Game/Game.h"
 #include "World/Controllers/Lighting.h"
 
+list<DebugPointlight*> DebugPointlight::s_pointlights;
+
 DebugPointlight::DebugPointlight(World *world) :
 	Entity(world, ENTITY_DEBUG_POINTLIGHT),
 	m_pointlight(new Pointlight(world, LightSource::DYNAMIC, Vector2F(0.0f), 0.0f, Color()))
 {
+	s_pointlights.push_back(this);
 }
 
 DebugPointlight::~DebugPointlight()
 {
+	delete m_pointlight;
+	s_pointlights.remove(this);
 }
 
 void DebugPointlight::onTick(TickEvent *e)

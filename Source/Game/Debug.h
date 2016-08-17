@@ -21,6 +21,7 @@ public:
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
 	void onMouseEvent(MouseEvent *e);
+	void onKeyEvent(KeyEvent *e);
 
 	void toggle();
 
@@ -47,7 +48,7 @@ private:
 	};
 	DebugMode m_debugMode;
 
-	Resource<Texture2D> m_blockPainterTexture;
+	shared_ptr<Texture2D> m_blockPainterTexture;
 	ColorPicker *m_colorPicker;
 
 	// Debug variables
@@ -68,7 +69,6 @@ private:
 	Resource<Shader> m_drawCircleShader;
 	DebugPointlight *m_newPointlight;
 	DebugPointlight *m_selectedLight;
-	list<DebugPointlight*> m_pointlights;
 	bool m_lmbState;
 	uint m_moveCount;
 	Vector2F m_lightDragOffset;

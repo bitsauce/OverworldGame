@@ -4,7 +4,7 @@
 map<BlockID, BlockData*> BlockData::s_idToData;
 map<string, BlockData*> BlockData::s_nameToData;
 TextureAtlas *BlockData::s_textureAtlas = nullptr;
-Resource<Texture2D> BlockData::s_dataTexture = nullptr;
+shared_ptr<Texture2D> BlockData::s_dataTexture = nullptr;
 
 BlockData *BlockData::get(const BlockID id)
 {
@@ -141,7 +141,7 @@ void BlockData::init()
 
 		blockDataPixmap.setPixel(blockData->id, 0, pixelData);
 	}
-	s_dataTexture = Resource<Texture2D>(new Texture2D(blockDataPixmap));
+	s_dataTexture = shared_ptr<Texture2D>(new Texture2D(blockDataPixmap));
 	s_dataTexture->setFiltering(Texture2D::NEAREST);
 }
 
