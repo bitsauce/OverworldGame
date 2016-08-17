@@ -3,9 +3,9 @@
 
 #include "Config.h"
 #include "Game/Game.h"
-#include "DynamicEntity.h"
+#include "Entity.h"
 
-class ItemDrop : public DynamicEntity
+class ItemDrop : public Entity
 {
 public:
 	ItemDrop(World *world, const ItemID item, const int amount = 1);
@@ -13,7 +13,7 @@ public:
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
 
-	static DynamicEntity *Factory(World * world)
+	static Entity *Factory(World * world)
 	{
 		return new ItemDrop(world, ITEM_NONE, 1);
 	}

@@ -85,7 +85,7 @@ void Camera::lookAt(Vector2F worldPoint)
 	m_position = worldPoint;
 }
 
-void Camera::setTargetEntity(DynamicEntity * target)
+void Camera::setTargetEntity(Entity * target)
 {
 	m_tagetEntity = target;
 }

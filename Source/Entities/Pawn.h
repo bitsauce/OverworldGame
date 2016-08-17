@@ -4,7 +4,7 @@
 #include "Config.h"
 #include "Game/Storage.h"
 #include "Humanoid.h"
-#include "DynamicEntity.h"
+#include "Entity.h"
 #include "Controller.h"
 
 class Camera;
@@ -35,7 +35,7 @@ private:
 	const uint m_height;
 };
 
-class Pawn : public DynamicEntity
+class Pawn : public Entity
 {
 public:
 	Pawn(World *world, const EntityID id);

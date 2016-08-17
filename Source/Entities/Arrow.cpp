@@ -2,7 +2,7 @@
 #include "Game/RayCast.h"
 
 Arrow::Arrow(Pawn *owner, World *world, const Vector2F &pos, const Vector2F &dir, const float speed) :
-	DynamicEntity(world, ENTITY_ARROW),
+	Entity(world, ENTITY_ARROW),
 	m_owner(owner),
 	m_sprite(Game::GetInstance()->getResourceManager()->get<Texture2D>("Sprites/Items/Weapons/Arrow")),
 	m_hitState(false),
@@ -83,7 +83,7 @@ void Arrow::onTick(TickEvent *e)
 	if(m_hitState == 0)
 	{
 		m_prevVelocity = getVelocity();
-		DynamicEntity::onTick(e);
+		Entity::onTick(e);
 
 		// Ray cast
 		Vector2F aabb[4];

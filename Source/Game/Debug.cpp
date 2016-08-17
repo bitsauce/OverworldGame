@@ -8,6 +8,7 @@
 #include "BlockEntities/BlockEntityData.h"
 #include "Networking/Server.h"
 #include "Entities/Mobs/Zombie.h"
+#include "Entities/DebugLight.h"
 #include "Game/States/GameState.h"
 #include "Game/Game.h"
 #include "Gui/GameOverlay/GameOverlay.h"
@@ -39,7 +40,7 @@ Debug::Debug(OverworldGame *game) :
 	m_drawCircleShader(Game::GetInstance()->getResourceManager()->get<Shader>("Shaders/Draw_Circle")),
 	m_blockPainterTexture(new Texture2D()),
 	m_colorPicker(0),
-	m_newPointLight(0),
+	m_newPointlight(0),
 	m_selectedLight(0),
 	m_lmbState(false),
 	m_moveCount(0)
@@ -122,15 +123,6 @@ void Debug::debugFunction(KeyEvent *e)
 		// Show spawn menu
 		case SAUCE_KEY_F8:
 		{
-			// Spawn light
-			new Pointlight(m_world, LightSource::STATIC, math::floor(Vector2F(m_world->getCamera()->getInputPosition()) / BLOCK_PXF) + Vector2F(0.5f, 0.5f), 20, Color((uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), (uchar) m_random.nextInt(255), 255));
-			// Spawn zombie
-
-			// Create zombie
-			/*RakNet::BitStream bitStream;
-			bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
-			bitStream.Write(ENTITY_ZOMBIE);
-			((Server*)Connection::getInstance())->getRakPeer()->SendLoopback((const char*) bitStream.GetData(), bitStream.GetNumberOfBytesUsed());*/
 		}
 		break;
 
@@ -211,7 +203,7 @@ void Debug::onTick(TickEvent *e)
 			// Update active pointlight
 			if(m_selectedLight)
 			{
-				m_selectedLight->setColor(m_colorPicker->getSelectedColor());
+				m_selectedLight->getPointlight()->setColor(m_colorPicker->getSelectedColor());
 			}
 		}
 		break;
@@ -239,6 +231,7 @@ void Debug::onDraw(DrawEvent *e)
 		const int chunkX = (int) floor(inputPosition.x / CHUNK_PXF);
 		const int chunkY = (int) floor(inputPosition.y / CHUNK_PXF);
 		addVariable("Chunk Under Cursor", util::intToStr(chunkX) + ", " + util::intToStr(chunkY));
+		addVariable("# Entities in Chunk Under Cursor", util::intToStr(m_world->getTerrain()->getChunkManager()->getChunkAt(chunkX, chunkY, true)->m_entities.size()));
 	}
 
 	addVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
@@ -414,7 +407,7 @@ void Debug::onDraw(DrawEvent *e)
 			LightSource *light = *itr;
 			context->setShader(m_drawCircleShader);
 			m_drawCircleShader->setUniformColor("u_Color", light->getColor());
-			m_drawCircleShader->setUniform1ui("u_DrawOutline", light == m_selectedLight);
+			m_drawCircleShader->setUniform1ui("u_DrawOutline", m_selectedLight && light == m_selectedLight->getPointlight());
 			context->drawRectangle((light->getPosition() - Vector2F(light->getRadius())) * BLOCK_PXF, Vector2F(light->getRadius() * 2.0f) * BLOCK_PXF);
 		}
 	}
@@ -452,15 +445,16 @@ void Debug::onMouseEvent(MouseEvent *e)
 					if(e->getButton() == SAUCE_MOUSE_BUTTON_LEFT)
 					{
 						// Select a light source
-						for(list<LightSource*>::iterator itr = m_world->getLighting()->m_lightSources.begin(); itr != m_world->getLighting()->m_lightSources.end(); ++itr)
+						for(list<DebugPointlight*>::iterator itr = m_pointlights.begin(); itr != m_pointlights.end(); ++itr)
 						{
-							LightSource *light = *itr;
+							DebugPointlight *lightEntity = *itr;
+							LightSource *light = lightEntity->getPointlight();
 							if(RectF(light->getPosition() - Vector2F(light->getRadius()), Vector2F(light->getRadius() * 2.0f)).contains(Vector2F(m_game->getWorld()->getCamera()->getInputPosition() / BLOCK_PXF)))
 							{
-								m_selectedLight = light;
-								m_colorPicker->setSelectedColor(m_selectedLight->getColor());
+								m_selectedLight = lightEntity;
+								m_colorPicker->setSelectedColor(m_selectedLight->getPointlight()->getColor());
 								m_moveCount = 0;
-								m_lightDragOffset = m_selectedLight->getPosition() - Vector2F(m_game->getWorld()->getCamera()->getInputPosition() / BLOCK_PXF);
+								m_lightDragOffset = m_selectedLight->getPosition() - m_game->getWorld()->getCamera()->getInputPosition();
 								break;
 							}
 							m_selectedLight = 0;
@@ -470,24 +464,29 @@ void Debug::onMouseEvent(MouseEvent *e)
 					else if(e->getButton() == SAUCE_MOUSE_BUTTON_RIGHT)
 					{
 						// Create new point light
-						m_selectedLight = m_newPointLight = new Pointlight(m_world, LightSource::DYNAMIC, Vector2F(m_world->getCamera()->getInputPosition() / BLOCK_PXF), 0.0f, m_colorPicker->getSelectedColor());
+						m_newPointlight = new DebugPointlight(m_world);
+						m_newPointlight->setPosition(Vector2F(m_world->getCamera()->getInputPosition()));
+						m_newPointlight->getPointlight()->setColor(m_colorPicker->getSelectedColor());
+						m_selectedLight = m_newPointlight;
+						m_pointlights.push_back(m_newPointlight);
 					}
 				}
 				break;
 
 				case MouseEvent::MOVE:
 				{
-					if(m_newPointLight)
+					if(m_newPointlight)
 					{
 						// Set new light radius
-						m_newPointLight->setRadius((m_newPointLight->getPosition() - Vector2F(m_game->getWorld()->getCamera()->getInputPosition()) / BLOCK_PXF).length());
+						Pointlight *pointlight = m_newPointlight->getPointlight();
+						pointlight->setRadius((pointlight->getPosition() - Vector2F(m_game->getWorld()->getCamera()->getInputPosition()) / BLOCK_PXF).length());
 					}
 					else if(m_lmbState && m_selectedLight)
 					{
 						// Drag-move selected light
 						if(m_moveCount++ > 2)
 						{
-							m_selectedLight->setPosition(Vector2F(m_game->getWorld()->getCamera()->getInputPosition()) / BLOCK_PXF + m_lightDragOffset);
+							m_selectedLight->setPosition(Vector2F(m_game->getWorld()->getCamera()->getInputPosition()) + m_lightDragOffset);
 						}
 					}
 				}
@@ -501,7 +500,7 @@ void Debug::onMouseEvent(MouseEvent *e)
 					}
 					else if(e->getButton() == SAUCE_MOUSE_BUTTON_RIGHT)
 					{
-						m_newPointLight = 0;
+						m_newPointlight = 0;
 					}
 				}
 				break;
@@ -511,8 +510,8 @@ void Debug::onMouseEvent(MouseEvent *e)
 					// Change selected light radius
 					if(m_selectedLight)
 					{
-						float newRadius = m_selectedLight->getRadius() + (e->getWheelY() > 0 ? 1.0f : -1.0f);
-						m_selectedLight->setRadius(max(newRadius, 0.0f));
+						float newRadius = m_selectedLight->getPointlight()->getRadius() + (e->getWheelY() > 0 ? 1.0f : -1.0f);
+						m_selectedLight->getPointlight()->setRadius(max(newRadius, 0.0f));
 					}
 				}
 				break;
@@ -548,28 +547,6 @@ void Debug::prevBlock(KeyEvent *e)
 			m_block = BlockData::s_idToData.cend();
 		}
 		m_block--;
-	}
-}
-
-void Debug::randomizeLight(KeyEvent *e)
-{
-	if(m_enabled && m_debugMode == LIGHT_PAINTER && e->getType() == KeyEvent::DOWN)
-	{
-		if(m_newPointLight == 0)
-		{
-			m_newPointLight = new Pointlight(m_world, LightSource::DYNAMIC, m_world->getCamera()->getInputPosition() / BLOCK_PXF, 0, Color());
-		}
-		Random random;
-		m_newPointLight->setColor(Color(random.nextInt(255), random.nextInt(255), random.nextInt(255), 255));
-		m_newPointLight->setRadius(random.nextInt(10, 100));
-	}
-}
-
-void Debug::placeLight(KeyEvent *e)
-{
-	if(m_enabled && m_debugMode == LIGHT_PAINTER && e->getType() == KeyEvent::DOWN)
-	{
-		m_newPointLight = 0;
 	}
 }
 

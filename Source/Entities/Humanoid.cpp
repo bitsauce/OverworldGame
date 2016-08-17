@@ -9,7 +9,7 @@
 #include "Animation/AtlasAttachmentLoader.h"
 #include "Animation/Atlas.h"
 
-#include "DynamicEntity.h"
+#include "Entity.h"
 
 Humanoid::Humanoid() :
 	m_preAnimation(nullptr),
@@ -224,7 +224,7 @@ void Humanoid::onTick(TickEvent *e)
 	}
 }
 
-void Humanoid::draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha)
+void Humanoid::draw(Entity *body, SpriteBatch *spriteBatch, const float alpha)
 {
 	// Update all animations
 	if(m_preAnimation)

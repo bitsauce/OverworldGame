@@ -1,10 +1,10 @@
 #pragma once
 
-#include "DynamicEntity.h"
+#include "Entity.h"
 #include "Game/Game.h"
 #include "Pawn.h"
 
-class Arrow : public DynamicEntity
+class Arrow : public Entity
 {
 public:
 
@@ -13,7 +13,7 @@ public:
 	bool plotTest(int x, int y);
 	void onTick(TickEvent *e);
 
-	static DynamicEntity *Factory(World * world)
+	static Arrow *Factory(World *world)
 	{
 		return new Arrow(0, world, Vector2F(), Vector2F(), 20.0f);
 	}

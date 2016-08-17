@@ -16,9 +16,10 @@
 #include "Gui/Canvas.h"
 
 Pawn::Pawn(World *world, const EntityID id) :
-	DynamicEntity(world, id),
+	Entity(world, id),
 	m_camera(world->getCamera()),
 	m_terrain(world->getTerrain()),
+	m_controller(0),
 	m_jumpTimer(1.0f),
 	m_canJump(false),
 	m_maxHealth(12),
@@ -87,6 +88,7 @@ void Pawn::activateThing(int action)
 
 void Pawn::onTick(TickEvent *e)
 {
+	if(!m_controller) return;
 	m_controller->update();
 
 	// Jumping
@@ -156,7 +158,7 @@ void Pawn::onTick(TickEvent *e)
 	}
 
 	// Update physics
-	DynamicEntity::onTick(e);
+	Entity::onTick(e);
 	
 	// Set animations
 	m_humanoid.getMainAnimationState()->setTimeScale(math::abs(getVelocity().x) * 0.1f);

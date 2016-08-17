@@ -8,6 +8,7 @@ class OverworldGame;
 class World;
 class CommandLine;
 class Pointlight;
+class DebugPointlight;
 class LightSource;
 class BlockData;
 class ColorPicker;
@@ -25,9 +26,6 @@ public:
 
 	void nextBlock(KeyEvent *e);
 	void prevBlock(KeyEvent *e);
-
-	void randomizeLight(KeyEvent *e);
-	void placeLight(KeyEvent *e);
 
 	void addVariable(const string &name, const string &value);
 
@@ -68,8 +66,9 @@ private:
 
 	// Light painter
 	Resource<Shader> m_drawCircleShader;
-	Pointlight *m_newPointLight;
-	LightSource *m_selectedLight;
+	DebugPointlight *m_newPointlight;
+	DebugPointlight *m_selectedLight;
+	list<DebugPointlight*> m_pointlights;
 	bool m_lmbState;
 	uint m_moveCount;
 	Vector2F m_lightDragOffset;

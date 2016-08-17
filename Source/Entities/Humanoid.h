@@ -7,12 +7,12 @@ class Skeleton;
 class AnimationStateData;
 class AnimationState;
 class Animation;
-class DynamicEntity;
 class AtlasAttachmentLoader;
 class RegionAttachment;
 class SpineAtlas;
 class SpineAtlasRegion;
 class Slot;
+class Entity;
 
 class Humanoid
 {
@@ -70,7 +70,7 @@ public:
 	Skeleton *getSkeleton() { return m_skeleton; }
 
 	void onTick(TickEvent *e);
-	void draw(DynamicEntity *body, SpriteBatch *spriteBatch, const float alpha);
+	void draw(Entity *body, SpriteBatch *spriteBatch, const float alpha);
 
 	bool setAppearance(const BodySlot slot, const uint layer, const string &name);
 

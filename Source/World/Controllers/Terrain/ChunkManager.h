@@ -66,7 +66,10 @@ private:
 	void saveBlockData(FileWriter &file, ChunkBlock *blockData);
 	void loadBlockData(FileReader &file, ChunkBlock *blockData);
 
-	void saveEntities(FileWriter &file, list<BlockEntity*> entities);
+	//void saveBlockEntities(FileWriter &file, list<BlockEntity*> entities);
+	//void loadBlockEntities(FileReader &file);
+
+	void saveEntities(FileWriter &file, list<Entity*> entities);
 	void loadEntities(FileReader &file);
 
 	bool freeInactiveChunk();

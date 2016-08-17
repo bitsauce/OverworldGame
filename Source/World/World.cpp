@@ -2,7 +2,7 @@
 #include "Constants.h"
 
 #include "Entities/EntityData.h"
-#include "Entities/DynamicEntity.h"
+#include "Entities/Entity.h"
 #include "Entities/Pawn.h"
 
 #include "BlockEntities/BlockEntity.h"
@@ -66,6 +66,7 @@ void World::create(const string &name)
 
 void World::save()
 {
+	m_terrain->getChunkManager()->clear();
 }
 
 bool World::load(const string &name)

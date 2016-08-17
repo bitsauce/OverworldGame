@@ -4,7 +4,7 @@
 #include "Config.h"
 #include "../Pawn.h"
 #include "../Humanoid.h"
-#include "../DynamicEntity.h"
+#include "../Entity.h"
 
 class OverworldGame;
 
@@ -16,7 +16,7 @@ public:
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
 
-	static DynamicEntity *Factory(World *world)
+	static Zombie *Factory(World *world)
 	{
 		return new Zombie(world);
 	}

@@ -56,9 +56,6 @@
     <ClCompile Include="..\..\Source\Entities\Controller.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Entities\DynamicEntity.cpp">
-      <Filter>Source\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Entities\Humanoid.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
@@ -211,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\World\Controllers\Terrain\Terrain.cpp">
       <Filter>Source\World\Controllers\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\DebugLight.cpp">
+      <Filter>Source\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -444,9 +444,6 @@
     <ClInclude Include="..\..\Source\Entities\Controller.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\DynamicEntity.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Entities\Humanoid.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
@@ -521,6 +518,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\World\Controllers\Lighting.h">
       <Filter>Source\World\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\DebugLight.h">
+      <Filter>Source\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

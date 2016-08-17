@@ -82,7 +82,7 @@ void Commander::spawn(Chat *chat, vector<string> args)
 		return;
 	}
 
-	DynamicEntity *entity = (DynamicEntity*) data->create(m_game->getWorld());
+	Entity *entity = (Entity*) data->create(m_game->getWorld());
 	entity->setPosition(m_game->getWorld()->getLocalPlayer()->getPosition());
 
 	chat->insertMessage(args[0] + " spawned");

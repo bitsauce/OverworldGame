@@ -170,8 +170,8 @@ void OverworldGame::initKeybindings()
 	inputContext->getKeybind("debug_func_12")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
 	inputContext->getKeybind("next_block")->setFunction(bind(&Debug::nextBlock, m_debug, placeholders::_1));
 	inputContext->getKeybind("prev_block")->setFunction(bind(&Debug::prevBlock, m_debug, placeholders::_1));
-	inputContext->getKeybind("place_light")->setFunction(bind(&Debug::placeLight, m_debug, placeholders::_1));
-	inputContext->getKeybind("randomize_light")->setFunction(bind(&Debug::randomizeLight, m_debug, placeholders::_1));
+	//inputContext->getKeybind("place_light")->setFunction(bind(&Debug::placeLight, m_debug, placeholders::_1));
+	//inputContext->getKeybind("randomize_light")->setFunction(bind(&Debug::randomizeLight, m_debug, placeholders::_1));
 
 	getInputManager()->setContext(inputContext);
 

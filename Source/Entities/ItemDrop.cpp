@@ -5,7 +5,7 @@
 #include "Items/ItemData.h"
 
 ItemDrop::ItemDrop(World *world, const ItemID item, const int amount) :
-	DynamicEntity(world, ENTITY_ITEM_DROP),
+	Entity(world, ENTITY_ITEM_DROP),
 	m_itemID(item),
 	m_amount(amount),
 	m_noPickupTime(1.0f), // No pickup for 1 s
@@ -46,7 +46,7 @@ void ItemDrop::onTick(TickEvent *e)
 	m_prevHoverTime = m_hoverTime;
 	m_hoverTime += 5.0f * e->getDelta();
 
-	DynamicEntity::onTick(e);
+	Entity::onTick(e);
 }
 
 void ItemDrop::onDraw(DrawEvent *e)

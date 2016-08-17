@@ -2,6 +2,7 @@
 #include "Arrow.h"
 #include "Player.h"
 #include "ItemDrop.h"
+#include "DebugLight.h"
 #include "Mobs/Zombie.h"
 
 //#include "RedCurrantBush.h"
@@ -17,4 +18,6 @@ void EntityData::init(Game *)
 
 	s_data[ENTITY_ZOMBIE] = new EntityData(ENTITY_ZOMBIE, "Zombie", WORLD_LAYER_MIDDLE, Zombie::Factory);
 	s_data[ENTITY_ITEM_DROP] = new EntityData(ENTITY_ITEM_DROP, "ItemDrop", WORLD_LAYER_MIDDLE, ItemDrop::Factory);
+
+	s_data[ENTITY_DEBUG_POINTLIGHT] = new EntityData(ENTITY_DEBUG_POINTLIGHT, "Debug_Pointlight", WORLD_LAYER_MIDDLE, DebugPointlight::Factory);
 }

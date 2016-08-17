@@ -3,7 +3,7 @@
 #include "Config.h"
 #include "Controller.h"
 #include "Networking/NetworkObject.h"
-#include "DynamicEntity.h"
+#include "Entity.h"
 
 class OverworldGame;
 

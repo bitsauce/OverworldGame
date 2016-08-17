@@ -133,7 +133,33 @@ void ChunkManager::loadBlockData(FileReader &file, ChunkBlock *blockData)
 	}
 }
 
-void ChunkManager::saveEntities(FileWriter &file, list<BlockEntity*> entities)
+void ChunkManager::saveEntities(FileWriter &file, list<Entity*> entities)
+{
+	// Write entity data
+	file << (int) entities.size() << endl;
+	for(Entity *entity : entities)
+	{
+		file << entity->getData()->getID() << endl;
+		entity->onSaveData(file);
+	}
+}
+
+void ChunkManager::loadEntities(FileReader &file)
+{
+	// Read entity data
+	int numEntities;
+	file >> numEntities;
+	for(int i = 0; i < numEntities; ++i)
+	{
+		int id;
+		file >> id;
+		if(id == ENTITY_PLAYER) continue;
+		Entity *entity = EntityData::get((EntityID) id)->create(m_world);
+		entity->onLoadData(file);
+	}
+}
+
+/*void ChunkManager::saveEntities(FileWriter &file, list<BlockEntity*> entities)
 {
 	// Write entity data
 	file << (int) entities.size() << endl;
@@ -159,7 +185,7 @@ void ChunkManager::loadEntities(FileReader &file)
 		m_world->getTerrain()->createBlockEntityAt(x, y, (BlockEntityID) id);
 		//BlockEntityData::get((BlockEntityID) id)->create(m_world, x, y);
 	}
-}
+}*/
 
 bool ChunkManager::freeInactiveChunk()
 {
@@ -190,7 +216,7 @@ void ChunkManager::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 	{
 		// Save chunk data
 		saveBlockData(file, chunk->m_blocks);
-		saveEntities(file, chunk->m_blockEntities);
+		saveEntities(file, chunk->m_entities);
 	}
 	else
 	{

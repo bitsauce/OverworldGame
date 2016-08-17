@@ -73,6 +73,9 @@ private:
 	// List of light sources that affect this chunk
 	//list<LightSource*> m_lightSources;
 
+	friend class Entity;
+	list<Entity*> m_entities;
+
 public: // TODO: private
 	// Block entity time
 	Resource<Texture2D> m_timeOffsetTexture;

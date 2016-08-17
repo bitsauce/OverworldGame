@@ -10,7 +10,7 @@ public:
 	Player(const string &name, OverworldGame *game, const bool local);
 	~Player();
 
-	static DynamicEntity *Factory(World*)
+	static Entity *Factory(World*)
 	{
 		return new Player("NULL", (OverworldGame*) Game::GetInstance(), false);
 	}

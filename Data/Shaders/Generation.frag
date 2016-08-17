@@ -110,7 +110,7 @@ void main()
 	}
 	else // DEBUG
 	{
-		blockIDs[0] = BLOCK_DIRT_BACK;
+		//blockIDs[0] = BLOCK_DIRT_BACK;
 	}
 
 

@@ -112,7 +112,7 @@
     <ClCompile Include="..\..\Source\Entities\AIController.cpp" />
     <ClCompile Include="..\..\Source\Entities\Arrow.cpp" />
     <ClCompile Include="..\..\Source\Entities\Controller.cpp" />
-    <ClCompile Include="..\..\Source\Entities\DynamicEntity.cpp" />
+    <ClCompile Include="..\..\Source\Entities\DebugLight.cpp" />
     <ClCompile Include="..\..\Source\Entities\Entity.cpp" />
     <ClCompile Include="..\..\Source\Entities\EntityData.cpp" />
     <ClCompile Include="..\..\Source\Entities\Humanoid.cpp" />
@@ -186,7 +186,7 @@
     <ClInclude Include="..\..\Source\Entities\AIController.h" />
     <ClInclude Include="..\..\Source\Entities\Arrow.h" />
     <ClInclude Include="..\..\Source\Entities\Controller.h" />
-    <ClInclude Include="..\..\Source\Entities\DynamicEntity.h" />
+    <ClInclude Include="..\..\Source\Entities\DebugLight.h" />
     <ClInclude Include="..\..\Source\Entities\Entity.h" />
     <ClInclude Include="..\..\Source\Entities\EntityData.h" />
     <ClInclude Include="..\..\Source\Entities\Humanoid.h" />

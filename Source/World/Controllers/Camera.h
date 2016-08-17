@@ -3,7 +3,7 @@
 
 #include "Config.h"
 
-class DynamicEntity;
+class Entity;
 class World;
 
 class Camera : public SceneObject
@@ -16,8 +16,8 @@ public:
 	void lookAt(Vector2F worldPoint);
 
 	// Entity to follow
-	void setTargetEntity(DynamicEntity *target);
-	DynamicEntity *getTargetEntity() const { return m_tagetEntity; }
+	void setTargetEntity(Entity *target);
+	Entity *getTargetEntity() const { return m_tagetEntity; }
 	
 	// Get current model-view matrix
 	Matrix4 getTransformationMatrix(const float alpha) const;
@@ -79,7 +79,7 @@ private:
 	float m_zoomLevel;
 
 	// Target entity
-	DynamicEntity *m_tagetEntity;
+	Entity *m_tagetEntity;
 };
 
 #endif // CAMERA_H
