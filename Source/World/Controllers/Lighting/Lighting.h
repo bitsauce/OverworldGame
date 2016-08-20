@@ -21,12 +21,11 @@ public:
 
 	// DRAWING
 	void onDraw(DrawEvent *e);
-
 private:
 	World *m_world;
 
 	bool m_enabled;
-	bool m_redraw;
+	bool m_redrawStaticLighting;
 
 	RenderTarget2D *m_lightingPass0;
 	RenderTarget2D *m_lightingPass1;
@@ -38,6 +37,12 @@ private:
 	Resource<Shader> m_shadowMapShader;
 	Resource<Shader> m_shadowRenderShader;
 
+	RenderTarget2D *m_blockLightingRenderTarget;
+	Resource<Shader> m_directionalLightingShader;
+	Resource<Shader> m_radialLightingShader;
+	Resource<Shader> m_blurHShader;
+	Resource<Shader> m_blurVShader;
+
 	int m_lightMapSize;
 
 	list<LightSource*> m_lightSources;
@@ -46,6 +51,10 @@ private:
 	void removeLightSource(LightSource *lightSource);
 
 	void setLightMapResolution(const int size);
+	void updateViewSize(int width, int height);
+
+	void redrawStaticLighting(GraphicsContext *context);
+
 	void drawLight(LightSource *light, RenderTarget2D *dest, GraphicsContext *context);
 };
 

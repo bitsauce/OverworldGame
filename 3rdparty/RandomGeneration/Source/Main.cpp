@@ -16,7 +16,7 @@ using namespace sauce;
 class RandomGeneration : public Game
 {
 	Resource<Shader> m_noiseShader, m_drawBlocksShader;
-	Resource<RenderTarget2D> m_renderTarget;
+	RenderTarget2D *m_renderTarget;
 	Resource<Font> m_font;
 	float m_time, m_scale;
 	bool m_showNoise;
@@ -36,12 +36,12 @@ public:
 	{
 		getWindow()->setSize(720, 720);
 
-		m_noiseShader = getResourceManager()->get<Shader>("Generation");
-		m_font = getResourceManager()->get<Font>("Font");
-		m_renderTarget = Resource<RenderTarget2D>(new RenderTarget2D(WIDTH, HEIGHT));
+		m_noiseShader = Resource<Shader>("Generation");
+		m_font = Resource<Font>("Font");
+		m_renderTarget = new RenderTarget2D(WIDTH, HEIGHT);
 		m_spriteBatch = new SpriteBatch(getWindow()->getGraphicsContext());
 
-		m_drawBlocksShader = getResourceManager()->get<Shader>("Draw_Blocks");
+		m_drawBlocksShader = Resource<Shader>("Draw_Blocks");
 
 		Vector4F blockColors[6];
 		blockColors[BLOCK_EMPTY] = Vector4F(0.78, 0.97, 0.96, 1.0);
@@ -116,7 +116,7 @@ public:
 		m_noiseShader->setUniform1ui("u_Seed", m_seed);
 		m_noiseShader->setUniform1f("u_CliffingDelta", m_cliffingDelta);
 
-		context->setRenderTarget(m_renderTarget.get());
+		context->setRenderTarget(m_renderTarget);
 		context->disable(GraphicsContext::BLEND);
 		context->setShader(m_noiseShader);
 		context->drawRectangle(0, 0, WIDTH, HEIGHT);

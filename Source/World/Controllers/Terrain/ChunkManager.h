@@ -12,8 +12,8 @@ class ChunkGenerator;
 
 class ChunkManager : public SceneObject
 {
-	friend class Debug;
 	friend class Lighting;
+	friend class Debug;
 	friend class BlockDrawer;
 public:
 	ChunkManager(World *world, Window *window);
@@ -60,6 +60,11 @@ public:
 	void onDraw(DrawEvent *e);
 	void onWindowSizeChanged(WindowEvent *e);
 
+	RenderTarget2D *getBlocksRenderTarget() const
+	{
+		return m_blocksRenderTarget;
+	}
+
 private:
 	Chunk *loadChunkAt(const int chunkX, const int chunkY);
 	
@@ -78,7 +83,6 @@ private:
 	void updateViewSize(int width, int height);
 
 	void reattachChunk(Chunk *chunk, GraphicsContext *context);
-	void redrawLighting(GraphicsContext *context);
 
 	// Manager classes
 	bool m_applyZoom;
@@ -120,13 +124,6 @@ private:
 	// Global render target
 	RenderTarget2D *m_blocksRenderTarget;
 	RenderTarget2D *m_sortedBlocksRenderTarget[WORLD_LAYER_COUNT];
-
-	// Lighting
-	RenderTarget2D *m_blockLightingRenderTarget;
-	Resource<Shader> m_directionalLightingShader;
-	Resource<Shader> m_radialLightingShader;
-	Resource<Shader> m_blurHShader;
-	Resource<Shader> m_blurVShader;
 
 	int m_lightRadius;
 	bool m_enabled;

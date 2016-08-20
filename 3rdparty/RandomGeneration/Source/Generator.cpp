@@ -7,7 +7,7 @@ Generator::Generator(Game *game) :
 	m_seed(0),
 	m_cliffingDelta(70.0f)
 {
-	m_noiseShader = m_Resource<Shader>("Generation");
+	m_noiseShader = Resource<Shader>("Generation");
 }
 
 void Generator::draw(DrawEvent *e, RenderTarget2D *rt)
