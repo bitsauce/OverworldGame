@@ -64,9 +64,9 @@ void OverworldGame::onStart(GameEvent *e)
 	m_gameOverlay = new GameOverlay(this, m_canvas, graphicsContext);
 
 	// Load world "Debug", or create it if it doesn't exists
-	if(!m_world->load("Debug"))
+	if(!m_world->load("DebugLighting"))
 	{
-		m_world->create("Debug");
+		m_world->create("DebugLighting");
 	}
 	
 	LOG("Hosting local server on port '45556'...");

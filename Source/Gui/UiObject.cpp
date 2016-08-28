@@ -19,6 +19,10 @@ UiObject::UiObject(UiObject *parent) :
 
 UiObject::~UiObject()
 {
+	if(m_parent)
+	{
+		m_parent->removeChild(this);
+	}
 }
 
 bool UiObject::isFocused() const

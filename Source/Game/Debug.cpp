@@ -155,6 +155,7 @@ void Debug::debugFunction(KeyEvent *e)
 
 		case SAUCE_KEY_F11:
 		{
+			break;
 			ChunkManager::ChunkArea area = m_world->getTerrain()->getChunkManager()->getActiveArea();
 			for(int y = area.y0 * CHUNK_BLOCKS; y <= area.y1 * CHUNK_BLOCKS; ++y)
 			{
@@ -191,7 +192,7 @@ void Debug::onTick(TickEvent *e)
 					(int) floor(m_world->getCamera()->getInputPosition().x / BLOCK_PXF),
 					(int) floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF),
 					layer,
-					m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) ? m_block->second : 0,
+					m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) ? m_block->second : BlockData::get(0),
 					true);
 			}
 		}

@@ -1,7 +1,6 @@
 in vec2 v_TexCoord;
 out vec4 out_FragColor;
 
-uniform bool u_ShowNoise;
 uniform vec2 u_Position;
 uniform vec2 u_Resolution;
 uniform uint u_Seed;
@@ -93,7 +92,7 @@ void main()
 	uvec3 blockIDs = uvec3(BLOCK_EMPTY);
 	if(distanceToGround < -20)
 	{
-		blockIDs[1] = BLOCK_STONE;
+		blockIDs[1] = BLOCK_DIRT;//STONE;
 	}
 	else if(distanceToGround < 0)
 	{
@@ -117,16 +116,17 @@ void main()
 	float freq = fractalNoise2D(4, 0.1 * f * blockPos / u_Resolution);
 	if(abs(fractalNoise2D(4, 10.0 * f * blockPos / u_Resolution) - 0.5) < 0.1 * freq * clamp(-distanceToGround / 70.0, 0.0, 1.0)) blockIDs[1] = BLOCK_EMPTY;
 
-	// Set block color
-	if(u_ShowNoise)
+	/*if(blockPos.y > (sin(blockPos.x * 0.05) + 1.0) * 10.0)
 	{
-		out_FragColor = vec4(vec3(distanceToGround / (HEIGHT_MIN - HEIGHT_MAX)), 1.0);
+		blockIDs[0] = BLOCK_DIRT_BACK;
+		blockIDs[1] = BLOCK_DIRT;
 	}
-	else 
+	else
 	{
-		out_FragColor = vec4(float(blockIDs[0]) / 255.5, float(blockIDs[1]) / 255.5, float(blockIDs[2]) / 255.5, 0.0);//mix(mix(blockBack, block, block.a), BLOCK_EMPTY, block.a == vec4(0.0) && blockBack.a == vec4(0.0));
-	}
+		blockIDs[0] = BLOCK_DIRT_BACK;
+		blockIDs[1] = BLOCK_EMPTY;
+	}*/
 
-	//out_FragColor *= smoothstep(0.0, 5.0, abs(blockPos.y - HEIGHT_MAX));
-	//out_FragColor *= smoothstep(0.0, 5.0, abs(blockPos.y - HEIGHT_MIN));
+	// Set block color
+	out_FragColor = vec4(float(blockIDs[0]) / 255.5, float(blockIDs[1]) / 255.5, float(blockIDs[2]) / 255.5, 0.0);
 }
