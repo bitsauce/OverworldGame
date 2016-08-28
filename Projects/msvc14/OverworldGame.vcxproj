@@ -260,8 +260,8 @@
     <None Include="..\..\Data\Shaders\BlurV.vert" />
     <None Include="..\..\Data\Shaders\Color_Wheel.frag" />
     <None Include="..\..\Data\Shaders\Color_Wheel.vert" />
-    <None Include="..\..\Data\Shaders\DirectionalLighting.frag" />
-    <None Include="..\..\Data\Shaders\DirectionalLighting.vert" />
+    <None Include="..\..\Data\Shaders\Init_Block_Lighting.frag" />
+    <None Include="..\..\Data\Shaders\Init_Block_Lighting.vert" />
     <None Include="..\..\Data\Shaders\Draw_Circle.frag" />
     <None Include="..\..\Data\Shaders\Draw_Circle.vert" />
     <None Include="..\..\Data\Shaders\Generation.frag" />

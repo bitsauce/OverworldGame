@@ -418,11 +418,10 @@ void Debug::onDraw(DrawEvent *e)
 		// Show lighting passes
 		context->setTransformationMatrix(Matrix4());
 		context->disable(GraphicsContext::BLEND);
-		context->setTexture(m_world->getLighting()->m_blockLightingRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 0, 256.0f, 128.0f);
-		context->setTexture(m_world->getLighting()->m_lightingPass0->getTexture()); context->drawRectangle(0.0f, 128.0f * 1, 256.0f, 128.0f);
-		context->setTexture(m_world->getLighting()->m_lightingPass2->getTexture()); context->drawRectangle(0.0f, 128.0f * 2, 256.0f, 128.0f);
-		context->setTexture(m_world->getLighting()->m_shadowsRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 3, 256.0f, 128.0f);
-		context->setTexture(m_world->getLighting()->m_shadowMapRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 4, 256.0f, 128.0f);
+		context->setTexture(m_world->getLighting()->m_staticLightingRenderTarget->getTexture()); context->drawRectangle(0.0f, 128.0f * 0, 256.0f, 128.0f); m_font->draw(spriteBatch, 0.0f, 128.0f * 0, "Blocks");
+		context->setTexture(m_world->getLighting()->m_lightingPass0->getTexture()); context->drawRectangle(0.0f, 128.0f * 1, 256.0f, 128.0f); m_font->draw(spriteBatch, 0.0f, 128.0f * 1, "Pass 0");
+		context->setTexture(m_world->getLighting()->m_lightingPass1->getTexture()); context->drawRectangle(0.0f, 128.0f * 2, 256.0f, 128.0f); m_font->draw(spriteBatch, 0.0f, 128.0f * 2, "Pass 1");
+		context->setTexture(m_world->getLighting()->m_lightingPass2->getTexture()); context->drawRectangle(0.0f, 128.0f * 3, 256.0f, 128.0f); m_font->draw(spriteBatch, 0.0f, 128.0f * 3, "Pass 2");
 		context->enable(GraphicsContext::BLEND);
 	}
 

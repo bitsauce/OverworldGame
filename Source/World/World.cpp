@@ -26,7 +26,6 @@ World::World(Game *game) :
 	m_background = new Background(this, game->getWindow());
 	addChildLast(m_background);
 
-	m_lighting = new Lighting(this);
 	m_terrain = new Terrain(this, game->getWindow());
 	addChildLast(m_terrain);
 
@@ -39,6 +38,7 @@ World::World(Game *game) :
 		addChildLast(m_entityLayers[i]);
 	}
 
+	m_lighting = new Lighting(this, game->getWindow());
 	addChildLast(m_lighting);
 }
 

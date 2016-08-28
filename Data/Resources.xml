@@ -193,9 +193,9 @@
 	
 	<!-- Shaders -->
 	<shader>
-		<name>Shaders/DirectionalLighting</name>
-		<vertexFilePath>Shaders/DirectionalLighting.vert</vertexFilePath>
-		<fragmentFilePath>Shaders/DirectionalLighting.frag</fragmentFilePath>
+		<name>Shaders/Init_Block_Lighting</name>
+		<vertexFilePath>Shaders/Init_Block_Lighting.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/Init_Block_Lighting.frag</fragmentFilePath>
 	</shader>
 	<shader>
 		<name>Shaders/RadialLighting</name>

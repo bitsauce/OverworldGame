@@ -16,11 +16,12 @@ class Lighting : public SceneObject
 	friend class LightSource;
 public:
 	// CONSTRUCTOR
-	Lighting(World *world);
+	Lighting(World *world, Window *window);
 	~Lighting();
 
 	// DRAWING
 	void onDraw(DrawEvent *e);
+	void onWindowSizeChanged(WindowEvent *e);
 private:
 	World *m_world;
 
@@ -37,8 +38,8 @@ private:
 	Resource<Shader> m_shadowMapShader;
 	Resource<Shader> m_shadowRenderShader;
 
-	RenderTarget2D *m_blockLightingRenderTarget;
-	Resource<Shader> m_directionalLightingShader;
+	RenderTarget2D *m_staticLightingRenderTarget;
+	Resource<Shader> m_initBlockLightingShader;
 	Resource<Shader> m_radialLightingShader;
 	Resource<Shader> m_blurHShader;
 	Resource<Shader> m_blurVShader;

@@ -2,10 +2,6 @@ in vec2 v_TexCoord;
 out vec4 out_FragColor;
 
 uniform sampler2D u_Texture;
-uniform float u_OffsetY;
-uniform float u_Direction;
-uniform float u_Width;
-uniform float u_Height;
 
 /*void main()
 {
@@ -24,6 +20,5 @@ uniform float u_Height;
 
 void main()
 {
-	float sum = texture(u_Texture, v_TexCoord).a;
-	out_FragColor = vec4(vec3(sum), 1.0);
+	out_FragColor = vec4(vec3(texture(u_Texture, v_TexCoord).a), 1.0);
 }

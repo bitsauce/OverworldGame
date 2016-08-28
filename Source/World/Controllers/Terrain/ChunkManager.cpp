@@ -536,7 +536,7 @@ void ChunkManager::updateViewSize(int width, int height)
 	int loadAreaHeight = (int) (floor(height * 0.5f / CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
 
 	// Set optimal chunk count
-	setOptimalChunkCount(loadAreaWidth * loadAreaHeight * 2);
+	setOptimalChunkCount(loadAreaWidth * loadAreaHeight * 2); // 15x13
 
 	// Create circle load pattern
 	priority_queue<Vector2I, vector<Vector2I>, VectorComparator> minHeap;

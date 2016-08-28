@@ -55,6 +55,10 @@ public:
 
 	ChunkArea getLoadingArea() const;
 	ChunkArea getActiveArea() const;
+	uint getLoadAreaRadius() const
+	{
+		return m_loadAreaRadius;
+	}
 
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
@@ -101,7 +105,7 @@ private:
 	bool m_reattachAllChunks;
 
 	// Loading area radius
-	uint m_loadAreaRadius;
+	const uint m_loadAreaRadius;
 
 	// Chunk pool
 	vector<Chunk*> m_chunkPool;

@@ -550,12 +550,6 @@
     <None Include="..\..\Data\Shaders\BlurV.vert">
       <Filter>Data\Shaders</Filter>
     </None>
-    <None Include="..\..\Data\Shaders\DirectionalLighting.frag">
-      <Filter>Data\Shaders</Filter>
-    </None>
-    <None Include="..\..\Data\Shaders\DirectionalLighting.vert">
-      <Filter>Data\Shaders</Filter>
-    </None>
     <None Include="..\..\Data\Shaders\GodRays.frag">
       <Filter>Data\Shaders</Filter>
     </None>
@@ -632,6 +626,12 @@
       <Filter>Data\Shaders</Filter>
     </None>
     <None Include="..\..\Data\Shaders\Draw_Circle.vert">
+      <Filter>Data\Shaders</Filter>
+    </None>
+    <None Include="..\..\Data\Shaders\Init_Block_Lighting.frag">
+      <Filter>Data\Shaders</Filter>
+    </None>
+    <None Include="..\..\Data\Shaders\Init_Block_Lighting.vert">
       <Filter>Data\Shaders</Filter>
     </None>
   </ItemGroup>

@@ -1,10 +1,11 @@
 in vec2 v_TexCoord;
+in vec4 v_Color;
 out vec4 out_FragColor;
 
 uniform sampler2D u_LightMap;
 uniform vec2 u_LightTexCoord;
 uniform vec2 u_Radius;
-uniform vec3 u_Color;
+//uniform vec3 u_Color;
 uniform int u_Iterations;
 
 void main()
@@ -14,5 +15,5 @@ void main()
 	{
 		sum *= 1U - min(1U, uint(texture(u_LightMap, u_LightTexCoord + mix(v_TexCoord * 2.0 - vec2(1.0), vec2(0.0), i) * u_Radius)[1] * 255.5));
 	}
-	out_FragColor = vec4(u_Color * sum, 1.0);
+	out_FragColor = v_Color * sum;
 }
