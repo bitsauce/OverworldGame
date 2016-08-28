@@ -28,35 +28,24 @@ private:
 	bool m_enabled;
 	bool m_redrawStaticLighting;
 
-	RenderTarget2D *m_lightingPass0;
-	RenderTarget2D *m_lightingPass1;
-	RenderTarget2D *m_lightingPass2;
-	RenderTarget2D* m_occludersRenderTarget;
-	RenderTarget2D* m_shadowMapRenderTarget;
-	RenderTarget2D* m_shadowsRenderTarget;
-
-	Resource<Shader> m_shadowMapShader;
-	Resource<Shader> m_shadowRenderShader;
-
 	RenderTarget2D *m_staticLightingRenderTarget;
+	RenderTarget2D *m_dynamicLightingRenderTarget;
+	RenderTarget2D *m_dynamicLightingBlurH;
+	RenderTarget2D *m_dynamicLightingBlurV;
+
 	Resource<Shader> m_initBlockLightingShader;
 	Resource<Shader> m_radialLightingShader;
 	Resource<Shader> m_blurHShader;
 	Resource<Shader> m_blurVShader;
-
-	int m_lightMapSize;
 
 	list<LightSource*> m_lightSources;
 
 	void addLightSource(LightSource *lightSource);
 	void removeLightSource(LightSource *lightSource);
 
-	void setLightMapResolution(const int size);
 	void updateViewSize(int width, int height);
 
-	void redrawStaticLighting(GraphicsContext *context);
-
-	void drawLight(LightSource *light, RenderTarget2D *dest, GraphicsContext *context);
+	void drawLightSources(LightSource::Type type, GraphicsContext *context);
 };
 
 #endif // LIGHTING_H
