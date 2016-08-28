@@ -38,13 +38,13 @@ private:
 	// Enabled flag
 	bool m_enabled;
 	bool m_debugChunkLoader;
-	bool m_debugLighting;
 	
 	enum DebugMode
 	{
 		DEBUG_MODE_DEFAULT,
-		BLOCK_PAINTER,
-		LIGHT_PAINTER
+		DEBUG_MODE_BLOCK_PAINTER,
+		DEBUG_MODE_LIGHT,
+		DEBUG_MODE_LIGHT_PAINTER
 	};
 	DebugMode m_debugMode;
 
