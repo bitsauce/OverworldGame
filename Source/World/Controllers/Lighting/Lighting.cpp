@@ -91,7 +91,7 @@ void Lighting::onDraw(DrawEvent *e)
 	context->setBlendState(BlendState::PRESET_ALPHA_BLEND);
 }
 
-void Lighting::drawLightSources(LightSource::Type type, GraphicsContext *context)
+void Lighting::drawLightSources(LightSource::Mobility mobility, GraphicsContext *context)
 {
 	ChunkManager::ChunkArea loadingArea = m_world->getTerrain()->getChunkManager()->getLoadingArea();
 	const float width = loadingArea.getWidth() * CHUNK_BLOCKSF, height = loadingArea.getHeight() * CHUNK_BLOCKSF;
@@ -102,7 +102,7 @@ void Lighting::drawLightSources(LightSource::Type type, GraphicsContext *context
 	context->setBlendState(BlendState::PRESET_ADDITIVE);
 	for(LightSource *light : m_lightSources)
 	{
-		if(light->getType() == type)
+		if(light->getMobility() == mobility)
 		{
 			m_radialLightingShader->setUniform2f("u_Radius", light->getRadius() / width, light->getRadius() / height);
 			int xc = math::floor(light->getPosition().x / width), yc = math::floor(light->getPosition().y / height),

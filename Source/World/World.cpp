@@ -10,12 +10,13 @@
 #include "Game/Debug.h"
 #include "Generation/Generator.h"
 
+#include "Game/Game.h"
+#include "Gui/GameOverlay/GameOverlay.h"
+
 World::World(Game *game) :
 	m_worldPath(""),
 	m_worldFile(nullptr)
 {
-	Pointlight::s_vertices = new Vertex[POINTLIGHT_SEGMENTS + 2];
-
 	// Load world content
 	m_timeOfDay = new TimeOfDay(this);
 	addChildLast(m_timeOfDay);
@@ -103,9 +104,6 @@ bool World::load(const string &name)
 	}
 	return true;
 }
-
-#include "Game/Game.h"
-#include "Gui/GameOverlay/GameOverlay.h"
 
 void World::clear()
 {

@@ -212,6 +212,9 @@
     <ClCompile Include="..\..\Source\Entities\DebugLight.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\World\Controllers\Lighting\Spotlight.cpp">
+      <Filter>Source\World\Controllers\Lighting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -521,6 +524,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Entities\DebugLight.h">
       <Filter>Source\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting\Spotlight.h">
+      <Filter>Source\World\Controllers\Lighting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

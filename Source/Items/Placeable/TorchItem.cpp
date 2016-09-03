@@ -14,8 +14,8 @@ void TorchItem::equip(Pawn *player)
 	player->getHumanoid().setPostAnimation(Humanoid::ANIM_HOLD_TORCH);
 
 	// Change the player ambient light
-	player->m_pointLight->setRadius(34.0f);
-	player->m_pointLight->setColor(Color(255, 175, 25, 255));
+	player->m_pointlight->setRadius(34.0f);
+	player->m_pointlight->setColor(Color(255, 175, 25, 255));
 
 	// Equip "Torch" attachment
 	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::RIGHT_HAND, "Right_Hand_Equip", "Torch");
@@ -29,8 +29,8 @@ void TorchItem::unequip(Pawn *player)
 	player->getHumanoid().setPostAnimation(Humanoid::ANIM_NULL);
 
 	// Reset player ambient light
-	player->m_pointLight->setRadius(5.0f);
-	player->m_pointLight->setColor(Color(255));
+	player->m_pointlight->setRadius(5.0f);
+	player->m_pointlight->setColor(Color(255));
 
 	// Clear "Torch" attachment
 	player->getHumanoid().clearAttachment(Humanoid::RIGHT_HAND);

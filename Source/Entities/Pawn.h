@@ -114,7 +114,7 @@ protected:
 
 	bool m_lmbPressed;
 public:
-	class Pointlight *m_pointLight;
+	class Pointlight *m_pointlight;
 };
 
 #endif // PAWN_H

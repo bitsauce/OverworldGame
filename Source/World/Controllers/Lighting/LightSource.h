@@ -23,22 +23,33 @@ public:
 	void setRadius(const float radius);
 	float getRadius() const;
 
-	enum Type
+	enum Mobility
 	{
 		STATIC,
 		DYNAMIC
 	};
 
+	enum Type
+	{
+		POINTLIGHT,
+		SPOTLIGHT
+	};
+
+	void setMobility(const Mobility m) { m_mobility = m; }
+	Mobility getMobility() const { return m_mobility; }
 	Type getType() const { return m_type; }
 
 protected:
-	LightSource(World *world, Type type, Vector2F position, float radius, Color color);
+	LightSource(World *world, const Type type);
 	virtual ~LightSource();
+
+	void onModified();
 
 	World *m_world;
 	Vector2F m_position;
 	float m_radius;
 	Color m_color;
+	Mobility m_mobility;
 	const Type m_type;
 };
 

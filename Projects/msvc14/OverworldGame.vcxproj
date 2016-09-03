@@ -157,6 +157,7 @@
     <ClCompile Include="..\..\Source\World\Controllers\Lighting\Lighting.cpp" />
     <ClCompile Include="..\..\Source\World\Controllers\Lighting\LightSource.cpp" />
     <ClCompile Include="..\..\Source\World\Controllers\Lighting\Pointlight.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Lighting\Spotlight.cpp" />
     <ClCompile Include="..\..\Source\World\Controllers\Terrain\BlockDrawer.cpp" />
     <ClCompile Include="..\..\Source\World\Controllers\Terrain\Chunk.cpp" />
     <ClCompile Include="..\..\Source\World\Controllers\Terrain\ChunkManager.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="..\..\Source\World\Controllers\Lighting\Lighting.h" />
     <ClInclude Include="..\..\Source\World\Controllers\Lighting\LightSource.h" />
     <ClInclude Include="..\..\Source\World\Controllers\Lighting\Pointlight.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting\Spotlight.h" />
     <ClInclude Include="..\..\Source\World\Controllers\Terrain.h" />
     <ClInclude Include="..\..\Source\World\Controllers\Terrain\BlockDrawer.h" />
     <ClInclude Include="..\..\Source\World\Controllers\Terrain\Chunk.h" />

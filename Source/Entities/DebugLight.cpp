@@ -7,8 +7,12 @@ list<DebugPointlight*> DebugPointlight::s_pointlights;
 
 DebugPointlight::DebugPointlight(World *world) :
 	Entity(world, ENTITY_DEBUG_POINTLIGHT),
-	m_pointlight(new Pointlight(world, LightSource::DYNAMIC, Vector2F(0.0f), 0.0f, Color()))
+	m_pointlight(new Pointlight(world))
 {
+	m_pointlight->setMobility(LightSource::DYNAMIC);
+	m_pointlight->setRadius(0.0f);
+	m_pointlight->setColor(Color(255));
+
 	s_pointlights.push_back(this);
 }
 

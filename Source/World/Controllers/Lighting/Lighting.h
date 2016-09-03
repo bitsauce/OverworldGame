@@ -45,7 +45,7 @@ private:
 
 	void updateViewSize(int width, int height);
 
-	void drawLightSources(LightSource::Type type, GraphicsContext *context);
+	void drawLightSources(LightSource::Mobility mobility, GraphicsContext *context);
 };
 
 #endif // LIGHTING_H

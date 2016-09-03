@@ -1,8 +1,9 @@
-#include "Pointlight.h"
+#include "Spotlight.h"
 #include "World/World.h"
 
-Pointlight::Pointlight(World *world) :
-	LightSource(world, POINTLIGHT)
+Spotlight::Spotlight(World *world) :
+	LightSource(world, SPOTLIGHT),
+	m_coneAngle(30.0f)
 {
 	/*int x0 = math::floor((position.x - radius) / CHUNK_BLOCKSF), y0 = math::floor((position.y - radius) / CHUNK_BLOCKSF),
 		x1 = math::floor((position.x + radius) / CHUNK_BLOCKSF), y1 = math::floor((position.y + radius) / CHUNK_BLOCKSF);
@@ -15,4 +16,15 @@ Pointlight::Pointlight(World *world) :
 			//chunk->m_lightSources.push_back(this);
 		}
 	}*/
+}
+
+void Spotlight::setConeAngle(const float f)
+{
+	m_coneAngle = f;
+	onModified();
+}
+
+float Spotlight::getConeAngle() const
+{
+	return m_coneAngle;
 }
