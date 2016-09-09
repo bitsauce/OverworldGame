@@ -272,8 +272,6 @@
     <None Include="..\..\Data\Shaders\GodRays.vert" />
     <None Include="..\..\Data\Shaders\Outline.frag" />
     <None Include="..\..\Data\Shaders\Outline.vert" />
-    <None Include="..\..\Data\Shaders\Pointlight_Dynamic.frag" />
-    <None Include="..\..\Data\Shaders\Pointlight_Dynamic.vert" />
     <None Include="..\..\Data\Shaders\RadialLighting.frag" />
     <None Include="..\..\Data\Shaders\RadialLighting.vert" />
     <None Include="..\..\Data\Shaders\Color_Mask.frag" />

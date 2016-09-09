@@ -36,10 +36,17 @@ Pawn::Pawn(World *world, const EntityID id) :
 	m_maxSpeed(7.5f),
 	m_friction(0.85f)
 {
-	m_pointlight = new Pointlight(world);
+	/*m_pointlight = new Pointlight(world);
 	m_pointlight->setMobility(LightSource::DYNAMIC);
 	m_pointlight->setRadius(5.0f);
-	m_pointlight->setColor(Color(255));
+	m_pointlight->setColor(Color(255));*/
+
+
+	m_spotlight = new Spotlight(world);
+	m_spotlight->setMobility(LightSource::DYNAMIC);
+	m_spotlight->setRadius(5.0f);
+	m_spotlight->setColor(Color(255));
+	m_spotlight->setConeAngle(PI / 4.0f);
 
 	// Set body size
 	setSize(24, 48);
@@ -247,7 +254,9 @@ void Pawn::onTick(TickEvent *e)
 
 void Pawn::onDraw(DrawEvent *e)
 {
-	m_pointlight->setPosition(math::lerp(getLastPosition() + getSize() * 0.5f, getPosition() + getSize() * 0.5f, e->getAlpha()) / BLOCK_PXF);
+	//m_pointlight->setPosition(math::lerp(getLastPosition() + getSize() * 0.5f, getPosition() + getSize() * 0.5f, e->getAlpha()) / BLOCK_PXF);
+	m_spotlight->setPosition(math::lerp(getLastPosition() + getSize() * 0.5f, getPosition() + getSize() * 0.5f, e->getAlpha()) / BLOCK_PXF);
+	m_spotlight->setDirection((Vector2F(m_world->getCamera()->getInputPosition()) - getCenter()).angle());
 
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
 	m_humanoid.draw(this, spriteBatch, e->getAlpha());

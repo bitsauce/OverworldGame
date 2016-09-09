@@ -592,12 +592,6 @@
     <None Include="..\..\Data\Shaders\BlockEntitiesDraw.vert">
       <Filter>Data\Shaders</Filter>
     </None>
-    <None Include="..\..\Data\Shaders\Pointlight_Dynamic.frag">
-      <Filter>Data\Shaders</Filter>
-    </None>
-    <None Include="..\..\Data\Shaders\Pointlight_Dynamic.vert">
-      <Filter>Data\Shaders</Filter>
-    </None>
     <None Include="..\..\Data\Shaders\Shadow_Map.vert">
       <Filter>Data\Shaders</Filter>
     </None>

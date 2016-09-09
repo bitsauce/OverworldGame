@@ -98,25 +98,79 @@ void Lighting::drawLightSources(LightSource::Mobility mobility, GraphicsContext 
 	
 	// Draw static light sources to static lighting render-target
 	context->enable(GraphicsContext::BLEND);
-	context->setShader(m_radialLightingShader);
 	context->setBlendState(BlendState::PRESET_ADDITIVE);
+	context->setShader(0);
 	for(LightSource *light : m_lightSources)
 	{
 		if(light->getMobility() == mobility)
 		{
-			m_radialLightingShader->setUniform2f("u_Radius", light->getRadius() / width, light->getRadius() / height);
-			int xc = math::floor(light->getPosition().x / width), yc = math::floor(light->getPosition().y / height),
-				x0 = math::floor((light->getPosition().x - light->getRadius()) / width), y0 = math::floor((light->getPosition().y - light->getRadius()) / height),
-				x1 = math::floor((light->getPosition().x + light->getRadius()) / width), y1 = math::floor((light->getPosition().y + light->getRadius()) / height);
-			for(int y = y0; y <= y1; y++)
+			if(light->getType() == LightSource::POINTLIGHT)
 			{
-				for(int x = x0; x <= x1; x++)
+				context->setShader(m_radialLightingShader);
+				m_radialLightingShader->setUniform2f("u_Radius", light->getRadius() / width, light->getRadius() / height);
+				int xc = math::floor(light->getPosition().x / width), yc = math::floor(light->getPosition().y / height),
+					x0 = math::floor((light->getPosition().x - light->getRadius()) / width), y0 = math::floor((light->getPosition().y - light->getRadius()) / height),
+					x1 = math::floor((light->getPosition().x + light->getRadius()) / width), y1 = math::floor((light->getPosition().y + light->getRadius()) / height);
+				for(int y = y0; y <= y1; y++)
 				{
-					// Draw light when on border
-					const Vector2F lightPos = light->getPosition(); float intpart;
-					const Vector2F drawPos = Vector2F(math::mod(lightPos.x, width) + (xc - x) * width + modf(lightPos.x, &intpart), math::mod(lightPos.y, height) + (yc - y) * height + modf(lightPos.y, &intpart));
-					m_radialLightingShader->setUniform2f("u_LightTexCoord", drawPos.x / width, drawPos.y / height);
-					context->drawCircleGradient(drawPos, light->getRadius(), light->getRadius() * 1.5f, light->getColor(), Color(0, 0, 0, 0));
+					for(int x = x0; x <= x1; x++)
+					{
+						// Draw light when on border
+						const Vector2F lightPos = light->getPosition(); float intpart;
+						const Vector2F drawPos = Vector2F(math::mod(lightPos.x, width) + (xc - x) * width + modf(lightPos.x, &intpart), math::mod(lightPos.y, height) + (yc - y) * height + modf(lightPos.y, &intpart));
+						m_radialLightingShader->setUniform2f("u_LightTexCoord", drawPos.x / width, drawPos.y / height);
+
+						// Apply transformation and draw circle gradient
+						Matrix4 mat;
+						mat.scale(light->getRadius());
+						mat.translate(drawPos.x, drawPos.y, 0.0);
+						context->pushMatrix(mat);
+						context->drawCircleGradient(0.0f, 0.0f, 1.0f, light->getRadius() * 1.5f, light->getColor(), Color(0, 0, 0, 0));
+						context->popMatrix();
+					}
+				}
+			}
+			else
+			{
+				m_radialLightingShader->setUniform2f("u_Radius", light->getRadius() / width, light->getRadius() / height);
+				int xc = math::floor(light->getPosition().x / width), yc = math::floor(light->getPosition().y / height),
+					x0 = math::floor((light->getPosition().x - light->getRadius()) / width), y0 = math::floor((light->getPosition().y - light->getRadius()) / height),
+					x1 = math::floor((light->getPosition().x + light->getRadius()) / width), y1 = math::floor((light->getPosition().y + light->getRadius()) / height);
+				for(int y = y0; y <= y1; y++)
+				{
+					for(int x = x0; x <= x1; x++)
+					{
+						// Draw light when on border
+						const Vector2F lightPos = light->getPosition(); float intpart;
+						const Vector2F drawPos = Vector2F(math::mod(lightPos.x, width) + (xc - x) * width + modf(lightPos.x, &intpart), math::mod(lightPos.y, height) + (yc - y) * height + modf(lightPos.y, &intpart));
+						m_radialLightingShader->setUniform2f("u_LightTexCoord", drawPos.x / width, drawPos.y / height);
+
+						Spotlight *spotlight = (Spotlight*) light;
+
+						Vertex *vertices = context->getVertices(5);
+
+						vertices[0].set2f(VERTEX_POSITION, 0.0f, 0.0f);
+						vertices[0].set4ub(VERTEX_COLOR, 255, 255, 255, 255);
+
+						float f2 = spotlight->getDirection() - spotlight->getConeAngle();
+						float f3 = spotlight->getDirection() + spotlight->getConeAngle();
+						vertices[2].set2f(VERTEX_POSITION, cos(f2), sin(f2));
+						vertices[2].set4ub(VERTEX_COLOR, 0, 0, 0, 0);
+						vertices[3].set2f(VERTEX_POSITION, cos(f3), sin(f3));
+						vertices[3].set4ub(VERTEX_COLOR, 0, 0, 0, 0);
+
+						vertices[1].set2f(VERTEX_POSITION, cos(spotlight->getDirection() + PI) * 0.5f, sin(spotlight->getDirection() + PI) * 0.5f);
+						vertices[1].set4ub(VERTEX_COLOR, 0, 0, 0, 0);
+						vertices[4].set2f(VERTEX_POSITION, cos(spotlight->getDirection() + PI) * 0.5f, sin(spotlight->getDirection() + PI) * 0.5f);
+						vertices[4].set4ub(VERTEX_COLOR, 0, 0, 0, 0);
+
+						Matrix4 mat;
+						mat.scale(light->getRadius());
+						mat.translate(drawPos.x, drawPos.y, 0.0);
+						context->pushMatrix(mat);
+						context->drawPrimitives(GraphicsContext::PRIMITIVE_TRIANGLE_FAN, &vertices[0], 5);
+						context->popMatrix();
+					}
 				}
 			}
 		}

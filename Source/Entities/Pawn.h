@@ -13,6 +13,8 @@ class ItemData;
 class Connection;
 class OverworldGame;
 class GameOverlay;
+class Pointlight;
+class Spotlight;
 
 class Bag
 {
@@ -114,7 +116,8 @@ protected:
 
 	bool m_lmbPressed;
 public:
-	class Pointlight *m_pointlight;
+	//Pointlight *m_pointlight;
+	Spotlight *m_spotlight;
 };
 
 #endif // PAWN_H

@@ -3,7 +3,8 @@
 
 Spotlight::Spotlight(World *world) :
 	LightSource(world, SPOTLIGHT),
-	m_coneAngle(30.0f)
+	m_coneAngle(30.0f),
+	m_direction(0.0f)
 {
 	/*int x0 = math::floor((position.x - radius) / CHUNK_BLOCKSF), y0 = math::floor((position.y - radius) / CHUNK_BLOCKSF),
 		x1 = math::floor((position.x + radius) / CHUNK_BLOCKSF), y1 = math::floor((position.y + radius) / CHUNK_BLOCKSF);
@@ -27,4 +28,15 @@ void Spotlight::setConeAngle(const float f)
 float Spotlight::getConeAngle() const
 {
 	return m_coneAngle;
+}
+
+void Spotlight::setDirection(const float f)
+{
+	m_direction = f;
+	onModified();
+}
+
+float Spotlight::getDirection() const
+{
+	return m_direction;
 }

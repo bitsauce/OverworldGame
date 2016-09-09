@@ -12,6 +12,10 @@ public:
 	void setConeAngle(const float f);
 	float getConeAngle() const;
 
+	void setDirection(const float f);
+	float getDirection() const;
+
 private:
 	float m_coneAngle;
+	float m_direction;
 };

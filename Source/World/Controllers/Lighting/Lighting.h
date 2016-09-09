@@ -5,6 +5,7 @@
 
 #include "LightSource.h"
 #include "Pointlight.h"
+#include "Spotlight.h"
 
 class Terrain;
 class World;
