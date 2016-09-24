@@ -1,0 +1,11 @@
+<resources>
+	<font>
+		<name>Font</name>
+		<path>Font/Font.fnt</path>
+	</font>
+	<shader>
+		<name>Shader/Water_Tick</name>
+		<fragmentFilePath>Shader/Water_Tick.frag</fragmentFilePath>
+		<vertexFilePath>Shader/Water_Tick.vert</vertexFilePath>
+	</shader>
+</resources>
