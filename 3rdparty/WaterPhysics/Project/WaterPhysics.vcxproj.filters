@@ -15,14 +15,20 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Data\Shaders\Water_Tick.frag">
-      <Filter>Data\Shader</Filter>
-    </None>
-    <None Include="..\Data\Shaders\Water_Tick.vert">
-      <Filter>Data\Shader</Filter>
-    </None>
     <None Include="..\Data\Font\Font.fnt">
       <Filter>Data\Font</Filter>
+    </None>
+    <None Include="..\Data\Shader\Water_Tick.frag">
+      <Filter>Data\Shader</Filter>
+    </None>
+    <None Include="..\Data\Shader\Water_Tick.vert">
+      <Filter>Data\Shader</Filter>
+    </None>
+    <None Include="..\Data\Shader\Water_Visualization.vert">
+      <Filter>Data\Shader</Filter>
+    </None>
+    <None Include="..\Data\Shader\Water_Visualization.frag">
+      <Filter>Data\Shader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

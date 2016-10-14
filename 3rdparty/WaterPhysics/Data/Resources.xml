@@ -8,4 +8,9 @@
 		<fragmentFilePath>Shader/Water_Tick.frag</fragmentFilePath>
 		<vertexFilePath>Shader/Water_Tick.vert</vertexFilePath>
 	</shader>
+	<shader>
+		<name>Shader/Water_Visualization</name>
+		<fragmentFilePath>Shader/Water_Visualization.frag</fragmentFilePath>
+		<vertexFilePath>Shader/Water_Visualization.vert</vertexFilePath>
+	</shader>
 </resources>

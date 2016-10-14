@@ -92,8 +92,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Data\Font\Font.fnt" />
-    <None Include="..\Data\Shaders\Water_Tick.frag" />
-    <None Include="..\Data\Shaders\Water_Tick.vert" />
+    <None Include="..\Data\Shader\Water_Tick.frag" />
+    <None Include="..\Data\Shader\Water_Tick.vert" />
+    <None Include="..\Data\Shader\Water_Visualization.frag" />
+    <None Include="..\Data\Shader\Water_Visualization.vert" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Data\Resources.xml" />
