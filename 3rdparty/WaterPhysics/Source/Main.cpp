@@ -10,6 +10,7 @@ class WaterPhysicsGame : public Game
 	shared_ptr<Texture2D> m_waterTextureBuffers[2];
 
 	GraphicsContext *m_graphicsContext;
+	int m_tick = 0;
 
 public:
 	WaterPhysicsGame() :
@@ -26,12 +27,12 @@ public:
 
 		for(int i = 0; i < 2; i++)
 		{
-			m_waterTextureBuffers[i] = shared_ptr<Texture2D>(new Texture2D(80, 45));
+			m_waterTextureBuffers[i] = shared_ptr<Texture2D>(new Texture2D(80, 45, 0, PixelFormat(PixelFormat::RGBA, PixelFormat::FLOAT)));
 			m_waterTextureBuffers[i]->setWrapping(Texture2D::REPEAT);
 		}
 
-		uchar pixel[4] = { 63, 0, 0, 255 };
-		m_waterTextureBuffers[0]->updatePixmap(40, 0, Pixmap(1, 1, pixel));
+		//uchar pixel[4] = { 255, 0, 0, 255 };
+		//m_waterTextureBuffers[0]->updatePixmap(40, 0, Pixmap(1, 1, pixel));
 
 		m_currentWaterTextureIndex = 0;
 		m_graphicsContext->disable(GraphicsContext::BLEND);
@@ -46,9 +47,11 @@ public:
 
 	void onTick(TickEvent *e)
 	{
+		//if(++m_tick % 5) return;
+
 		if(getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT))
 		{
-			uchar pixel[4] = { 63, 0, 0, 255 };
+			uchar pixel[4] = { 255, 0, 0, 255 };
 			m_waterTextureBuffers[m_currentWaterTextureIndex]->updatePixmap(40, 0, Pixmap(1, 1, pixel));
 		}
 
