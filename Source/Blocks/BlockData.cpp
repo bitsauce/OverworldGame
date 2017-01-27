@@ -1,4 +1,5 @@
 #include "BlockData.h"
+#include "Items/ItemData.h"
 #include "World/World.h"
 
 map<BlockID, BlockData*> BlockData::s_idToData;
@@ -30,7 +31,7 @@ struct BlockDataDesc
 {
 	const BlockID id;
 	const string name;
-	const string imagePath;
+	const map<uint, string> images;
 	const string itemName;
 	const float opacity;
 	const uint frameCount;
@@ -70,9 +71,29 @@ void BlockData::init()
 			tinyxml2::XMLElement *frames = blockNode->FirstChildElement("frames");
 			tinyxml2::XMLElement *solid = blockNode->FirstChildElement("solid");
 
-			if(id && name && image && item && opacity && frames)
+			map<uint, string> images;
+			if(!image)
 			{
-				BlockDataDesc desc = { util::strToInt(id->GetText()), name->GetText(), image->GetText(), item->GetText(), util::strToFloat(opacity->GetText()), (uint)util::strToInt(frames->GetText()), solid == 0 };
+				tinyxml2::XMLElement *image = blockNode->FirstChildElement("images");
+				if(image)
+				{
+					image = image->FirstChildElement();
+					while(image)
+					{
+						uint id = util::strToInt(image->Attribute("id"));
+						images[id] = image->GetText();
+						image = image->NextSiblingElement();
+					}
+				}
+			}
+			else
+			{
+				images[0] = image->GetText();
+			}
+
+			if(id && name && images.size() && item && opacity && frames)
+			{
+				BlockDataDesc desc = { util::strToInt(id->GetText()), name->GetText(), images, item->GetText(), util::strToFloat(opacity->GetText()), (uint)util::strToInt(frames->GetText()), solid == 0 };
 				blockDataDesc.push_back(desc);
 			}
 			else
@@ -112,13 +133,13 @@ void BlockData::init()
 		BlockDataDesc *blockData = &blockDataDesc[i];
 
 		// Create block data object
-		Pixmap pixmap(blockData->imagePath, true);
+		Pixmap pixmap(blockData->images.at(0), true);
 		s_nameToData[blockData->name] = s_idToData[blockData->id] = new BlockData(blockData->id, blockData->name, pixmap, blockData->itemName, blockData->opacity, blockData->solid);
 		s_textureAtlas->add(util::intToStr(blockData->id), pixmap);
 
 		// Store meta data
 		pixelData[0] = blockData->frameCount;
-		pixelData[1] = 0;
+		pixelData[1] = blockData->images.size() > 1;
 		pixelData[2] = 0;
 		pixelData[3] = 0;
 		blockDataPixmap.setPixel(blockData->id, 1, pixelData);
@@ -154,8 +175,6 @@ BlockData::BlockData(const BlockID id, const string &name, const Pixmap &pixmap,
 	m_solid(solid)
 {
 }
-
-#include "Items/ItemData.h"
 
 ItemData *BlockData::getItem() const
 {

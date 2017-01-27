@@ -16,14 +16,13 @@
 #include "Gui/GameOverlay/GameOverlay.h"
 
 OverworldGame::OverworldGame() :
-	Game("Overworld"),
+	Game("Overworld", SAUCE_EXPORT_LOG | SAUCE_RUN_IN_BACKGROUND | SAUCE_WINDOW_RESIZABLE),
 	m_world(nullptr),
 	m_takeScreenshot(false),
 	m_gameOverlay(nullptr),
 	m_debug(nullptr),
 	m_commander(nullptr)
 {
-	setFlags(SAUCE_EXPORT_LOG | SAUCE_RUN_IN_BACKGROUND);
 }
 
 void OverworldGame::onStart(GameEvent *e)

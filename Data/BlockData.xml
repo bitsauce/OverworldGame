@@ -56,4 +56,15 @@
 		<opacity>1.0</opacity>
 		<frames>1</frames>
 	</b>
+	<b>
+		<id>7</id>
+		<name>Debug_Block</name>
+		<images>
+			<image id="0">Sprites/Blocks/Debug_Block.png</image>
+			<image id="1">Sprites/Blocks/Debug_Block_2.png</image>
+		</images>
+		<item>stone_block_item</item>
+		<opacity>1.0</opacity>
+		<frames>1</frames>
+	</b>
 </blocks>
