@@ -61,6 +61,7 @@ private:
 
 	// Paint block
 	map<BlockID, BlockData*>::const_iterator m_block;
+	char m_blockSubId;
 
 	// Random
 	Random m_random;

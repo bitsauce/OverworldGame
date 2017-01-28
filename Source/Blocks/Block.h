@@ -11,6 +11,7 @@ class ChunkBlock
 public:
 	ChunkBlock() :
 		m_blockData(0),
+		m_blockSubID(0),
 		m_blockEntity(0)
 	{
 	}
@@ -25,6 +26,11 @@ public:
 		m_blockData = data;
 	}
 
+	void setBlockSubID(const uint subID)
+	{
+		m_blockSubID = subID;
+	}
+
 	const BlockData *getBlockData() const
 	{
 		return m_blockData;
@@ -33,6 +39,11 @@ public:
 	BlockEntity *getBlockEntity() const
 	{
 		return m_blockEntity;
+	}
+
+	uint getBlockSubID() const
+	{
+		return m_blockSubID;
 	}
 
 	operator BlockEntity* () const
@@ -52,5 +63,6 @@ public:
 
 private:
 	const BlockData *m_blockData;
+	uint m_blockSubID;
 	BlockEntity *m_blockEntity;
 };

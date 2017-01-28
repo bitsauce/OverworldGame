@@ -32,6 +32,7 @@ Debug::Debug(OverworldGame *game) :
 	m_game(game),
 	m_world(game->getWorld()),
 	m_block(BlockData::s_idToData.cbegin()),
+	m_blockSubId(0),
 	m_enabled(false),
 	m_debugChunkLoader(false),
 	m_debugMode(DEBUG_MODE_DEFAULT),
@@ -193,6 +194,7 @@ void Debug::onTick(TickEvent *e)
 					(int) floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF),
 					layer,
 					m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) ? m_block->second : BlockData::get(0),
+					m_blockSubId,
 					true);
 			}
 		}
@@ -315,7 +317,7 @@ void Debug::onDraw(DrawEvent *e)
 	{
 		case DEBUG_MODE_BLOCK_PAINTER:
 		{
-			m_blockPainterTexture->updatePixmap(m_block->second->getPixmap());
+			m_blockPainterTexture->updatePixmap(*m_block->second->getPixmap(m_blockSubId));
 			spriteBatch->drawText(Vector2F(5.0f, context->getHeight() - 48.0f), "Current block:   (" + util::intToStr(m_block->second->getID()) + ")\n" + "Current layer: " + (m_game->getInputManager()->getKeyState(SAUCE_KEY_LCTRL) ? "BACK" : (m_game->getInputManager()->getKeyState(SAUCE_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font.get());
 			Sprite blockSprite(m_blockPainterTexture, RectF(m_font->getStringWidth("Current block:"), context->getHeight() - 60.0f, 32.0f, 32.0f), Vector2F(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 1.0f / 3.0f, 1.0f, 1.0f));
 			spriteBatch->drawSprite(blockSprite);
@@ -565,10 +567,17 @@ void Debug::nextBlock(KeyEvent *e)
 {
 	if(m_enabled && e->getType() == KeyEvent::DOWN)
 	{
-		m_block++;
-		if(m_block == BlockData::s_idToData.cend())
+		if((e->getModifiers() & KeyEvent::CTRL) == 0)
 		{
-			m_block = BlockData::s_idToData.cbegin();
+			m_block++;
+			if(m_block == BlockData::s_idToData.cend())
+			{
+				m_block = BlockData::s_idToData.cbegin();
+			}
+		}
+		else
+		{
+			if(++m_blockSubId == 16) m_blockSubId = 0;
 		}
 	}
 }
@@ -577,11 +586,18 @@ void Debug::prevBlock(KeyEvent *e)
 {
 	if(m_enabled && e->getType() == KeyEvent::DOWN)
 	{
-		if(m_block == BlockData::s_idToData.cbegin())
+		if((e->getModifiers() & KeyEvent::CTRL) == 0)
 		{
-			m_block = BlockData::s_idToData.cend();
+			if(m_block == BlockData::s_idToData.cbegin())
+			{
+				m_block = BlockData::s_idToData.cend();
+			}
+			m_block--;
 		}
-		m_block--;
+		else
+		{
+			if(--m_blockSubId < 0) m_blockSubId = 15;
+		}
 	}
 }
 

@@ -31,7 +31,7 @@ struct BlockDataDesc
 {
 	const BlockID id;
 	const string name;
-	const map<uint, string> images;
+	const map<uint, Pixmap*> pixmaps;
 	const string itemName;
 	const float opacity;
 	const uint frameCount;
@@ -71,7 +71,7 @@ void BlockData::init()
 			tinyxml2::XMLElement *frames = blockNode->FirstChildElement("frames");
 			tinyxml2::XMLElement *solid = blockNode->FirstChildElement("solid");
 
-			map<uint, string> images;
+			map<uint, Pixmap*> images;
 			if(!image)
 			{
 				tinyxml2::XMLElement *image = blockNode->FirstChildElement("images");
@@ -81,19 +81,19 @@ void BlockData::init()
 					while(image)
 					{
 						uint id = util::strToInt(image->Attribute("id"));
-						images[id] = image->GetText();
+						images[id] = new Pixmap(image->GetText(), true);
 						image = image->NextSiblingElement();
 					}
 				}
 			}
 			else
 			{
-				images[0] = image->GetText();
+				images[0] = new Pixmap(image->GetText(), true);
 			}
 
 			if(id && name && images.size() && item && opacity && frames)
 			{
-				BlockDataDesc desc = { util::strToInt(id->GetText()), name->GetText(), images, item->GetText(), util::strToFloat(opacity->GetText()), (uint)util::strToInt(frames->GetText()), solid == 0 };
+				BlockDataDesc desc = { (BlockID) util::strToInt(id->GetText()), name->GetText(), images, item->GetText(), util::strToFloat(opacity->GetText()), (uint)util::strToInt(frames->GetText()), solid == 0 };
 				blockDataDesc.push_back(desc);
 			}
 			else
@@ -125,7 +125,7 @@ void BlockData::init()
 	s_textureAtlas = new TextureAtlas();
 
 	// Block data pixmap
-	Pixmap blockDataPixmap(blockDataDesc.size(), 2);
+	Pixmap blockDataPixmap(blockDataDesc.size(), 16+1);
 	uchar pixelData[4];
 
 	for(int i = 0; i < blockDataDesc.size(); i++)
@@ -133,16 +133,18 @@ void BlockData::init()
 		BlockDataDesc *blockData = &blockDataDesc[i];
 
 		// Create block data object
-		Pixmap pixmap(blockData->images.at(0), true);
-		s_nameToData[blockData->name] = s_idToData[blockData->id] = new BlockData(blockData->id, blockData->name, pixmap, blockData->itemName, blockData->opacity, blockData->solid);
-		s_textureAtlas->add(util::intToStr(blockData->id), pixmap);
+		s_nameToData[blockData->name] = s_idToData[blockData->id] = new BlockData(blockData->id, blockData->name, blockData->pixmaps, blockData->itemName, blockData->opacity, blockData->solid);
+		for(map<uint, Pixmap*>::const_iterator itr = blockData->pixmaps.cbegin(); itr != blockData->pixmaps.cend(); itr++)
+		{
+			s_textureAtlas->add(util::intToStr(blockData->id) + ":" + util::intToStr(itr->first), *itr->second);
+		}
 
 		// Store meta data
 		pixelData[0] = blockData->frameCount;
-		pixelData[1] = blockData->images.size() > 1;
+		pixelData[1] = 0;
 		pixelData[2] = 0;
 		pixelData[3] = 0;
-		blockDataPixmap.setPixel(blockData->id, 1, pixelData);
+		blockDataPixmap.setPixel(blockData->id, 0, pixelData);
 	}
 
 	s_textureAtlas->create();
@@ -152,24 +154,29 @@ void BlockData::init()
 	{
 		BlockDataDesc *blockData = &blockDataDesc[i];
 
-		Vector2I pos = s_textureAtlas->get(util::intToStr(blockData->id)).uv0 * s_textureAtlas->getTexture()->getSize();
+		uint j = 0;
+		for(map<uint, Pixmap*>::const_iterator itr = blockData->pixmaps.cbegin(); itr != blockData->pixmaps.cend(); itr++)
+		{
+			Vector2I pos = s_textureAtlas->get(util::intToStr(blockData->id) + ":" + util::intToStr(j)).uv0 * s_textureAtlas->getTexture()->getSize();
 
-		pixelData[0] = uchar(pos.x & 0xFF);
-		pixelData[1] = uchar((pos.x >> 8) & 0xFF);
+			pixelData[0] = uchar(pos.x & 0xFF);
+			pixelData[1] = uchar((pos.x >> 8) & 0xFF);
 
-		pixelData[2] = uchar(pos.y & 0xFF);
-		pixelData[3] = uchar((pos.y >> 8) & 0xFF);
+			pixelData[2] = uchar(pos.y & 0xFF);
+			pixelData[3] = uchar((pos.y >> 8) & 0xFF);
 
-		blockDataPixmap.setPixel(blockData->id, 0, pixelData);
+			blockDataPixmap.setPixel(blockData->id, j + 1, pixelData);
+			j++;
+		}
 	}
 	s_dataTexture = shared_ptr<Texture2D>(new Texture2D(blockDataPixmap));
 	s_dataTexture->setFiltering(Texture2D::NEAREST);
 }
 
-BlockData::BlockData(const BlockID id, const string &name, const Pixmap &pixmap, const string &itemName, const float opacity, const bool solid) :
+BlockData::BlockData(const BlockID id, const string &name, const map<uint, Pixmap*> pixmaps, const string &itemName, const float opacity, const bool solid) :
 	m_name(name),
 	m_id(id),
-	m_pixmap(pixmap),
+	m_pixmaps(pixmaps),
 	m_itemName(itemName),
 	m_opacity(opacity),
 	m_solid(solid)
@@ -179,4 +186,14 @@ BlockData::BlockData(const BlockID id, const string &name, const Pixmap &pixmap,
 ItemData *BlockData::getItem() const
 {
 	return ItemData::getByName(m_itemName);
+}
+
+const Pixmap *BlockData::getPixmap(const uint subId) const
+{
+	map<uint, Pixmap*>::const_iterator itr;
+	if((itr = m_pixmaps.find(subId)) != m_pixmaps.end())
+	{
+		return itr->second;
+	}
+	return m_pixmaps.at(0);
 }

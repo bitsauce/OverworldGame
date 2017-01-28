@@ -3,6 +3,8 @@
 
 #include "Config.h"
 
+#define BLOCK_CONCAT_ID(BLOCKID, SUBBLOCKID) ((BLOCKID & 0x0FFFFFFF) | (SUBBLOCKID << 28))
+
 class ItemData;
 
 class BlockData
@@ -10,13 +12,13 @@ class BlockData
 	friend class Debug;
 public:
 	// Constructor
-	BlockData(const BlockID id, const string &name, const Pixmap &pixmap, const string &item, const float opacity, const bool solid);
+	BlockData(const BlockID id, const string &name, const map<uint, Pixmap*> pixmaps, const string &item, const float opacity, const bool solid);
 	
 	// Getters
 	BlockID getID() const { return m_id; }
 	string getName() const { return m_name; }
 	ItemData *getItem() const;
-	Pixmap getPixmap() const { return m_pixmap; }
+	const Pixmap *getPixmap(const uint subId) const;
 	float getOpacity() const { return m_opacity; }
 	bool isSolid() const { return m_solid; }
 
@@ -39,7 +41,7 @@ private:
 	const string m_name;
 	const BlockID m_id;
 	const string m_itemName;
-	const Pixmap m_pixmap;
+	const map<uint, Pixmap*> m_pixmaps;
 	const float m_opacity;
 	const bool m_solid;
 

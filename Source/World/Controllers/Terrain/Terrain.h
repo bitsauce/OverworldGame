@@ -23,7 +23,7 @@ public:
 	 * \param block The block ID
 	 * \param replace If true, the function will replace whatever is at the given position.
 	 */
-	bool setBlockAt(const int x, const int y, const WorldLayer layer, const BlockData *block, const bool replace = false);
+	bool setBlockAt(const int x, const int y, const WorldLayer layer, const BlockData *blockData, const uint subID, const bool replace = false);
 	
 	/**
 	 * \brief Returns the block ID at global position \p x, \p y.

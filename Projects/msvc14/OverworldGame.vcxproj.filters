@@ -396,9 +396,6 @@
     <ClInclude Include="..\..\Source\gui\GameOverlay\GameOverlay.h">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Game\Commander.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\BlockEntities\BlockEntityData.h">
       <Filter>Source\BlockEntities</Filter>
     </ClInclude>
@@ -527,6 +524,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\World\Controllers\Lighting\Spotlight.h">
       <Filter>Source\World\Controllers\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\Commander.h">
+      <Filter>Source\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

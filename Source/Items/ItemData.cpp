@@ -78,7 +78,7 @@ void ItemData::init(OverworldGame *game)
 					}
 				}
 
-				ItemDataDesc itemDesc = { util::strToInt(id->GetText()), name->GetText(), invName->GetText(), desc->GetText(), type->GetText(), icon->GetText(), (uint)util::strToInt(maxStack->GetText()), userDataMap };
+				ItemDataDesc itemDesc = { (ItemID) util::strToInt(id->GetText()), name->GetText(), invName->GetText(), desc->GetText(), type->GetText(), icon->GetText(), (uint)util::strToInt(maxStack->GetText()), userDataMap };
 				itemDataDescs.push_back(itemDesc);
 			}
 			else

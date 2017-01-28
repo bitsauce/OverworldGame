@@ -62,8 +62,9 @@ void Chunk::load(int chunkX, int chunkY, ChunkBlock *blocks)
 			float shadow = 1.0f;
 			for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 			{
-				const BlockData *data = m_blocks[BLOCK_INDEX(x, y, z)].getBlockData();
-				pixel[z] = (uchar) data->getID();
+				ChunkBlock &block = m_blocks[BLOCK_INDEX(x, y, z)];
+				const BlockData *data = block.getBlockData();
+				pixel[z] = (uchar) data->getID() * 16 + block.getBlockSubID();
 				shadow -= data->getOpacity();
 			}
 			pixel[3] = uchar(255 * max(shadow, 0.0f));
@@ -166,8 +167,9 @@ bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const B
 		float shadow = 1.0f;
 		for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 		{
-			const BlockData *data = m_blocks[BLOCK_INDEX(x, y, z)].getBlockData();
-			pixel[z] = (uchar) data->getID();
+			ChunkBlock &block = m_blocks[BLOCK_INDEX(x, y, z)];
+			const BlockData *data = block.getBlockData();
+			pixel[z] = (uchar) data->getID() * 16 + block.getBlockSubID(); // TODO: Use int textures to avoid overflow
 			shadow -= data->getOpacity();
 		}
 		pixel[3] = (uchar) (255 * max(shadow, 0.0f));
@@ -183,7 +185,7 @@ const BlockData *Chunk::getBlockAt(const int x, const int y, const WorldLayer la
 	return m_blocks[BLOCK_INDEX(x, y, layer)].getBlockData();
 }
 
-ChunkBlock Chunk::getChunkBlockAt(const int x, const int y, const WorldLayer layer) const
+ChunkBlock &Chunk::getChunkBlockAt(const int x, const int y, const WorldLayer layer) const
 {
 	return m_blocks[BLOCK_INDEX(x, y, layer)];
 }

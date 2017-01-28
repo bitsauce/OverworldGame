@@ -39,7 +39,7 @@ private:
 
 	bool setBlockAt(const int x, const int y, const WorldLayer layer, const BlockData *block);
 	const BlockData *getBlockAt(const int x, const int y, const WorldLayer layer) const;
-	ChunkBlock getChunkBlockAt(const int x, const int y, const WorldLayer layer) const;
+	ChunkBlock &getChunkBlockAt(const int x, const int y, const WorldLayer layer) const;
 
 	void addBlockEntity(BlockEntity *blockEntity);
 	bool removeBlockEntity(BlockEntity *blockEntity);

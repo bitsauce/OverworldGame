@@ -23,7 +23,7 @@ Terrain::~Terrain()
 }
 
 // BLOCKS
-bool Terrain::setBlockAt(const int x, const int y, const WorldLayer layer, const BlockData *blockData, const bool replace)
+bool Terrain::setBlockAt(const int x, const int y, const WorldLayer layer, const BlockData *blockData, const uint subID, const bool replace)
 {
 	/*if(Connection::getInstance()->isServer())
 	{
@@ -47,16 +47,18 @@ bool Terrain::setBlockAt(const int x, const int y, const WorldLayer layer, const
 	}*/
 
 	Chunk *chunk = m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF), true);
-	const ChunkBlock block = chunk->getChunkBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
+	/*const */ChunkBlock &block = chunk->getChunkBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
 
 	if(!replace)
 	{
 		// Check if we can place a block here
-		if(block.getBlockData() != 0 || (layer == WORLD_LAYER_MIDDLE && block.getBlockEntity()))
+		if(blockData->getID() != 0 || (layer == WORLD_LAYER_MIDDLE && block.getBlockEntity()))
 		{
 			return false;
 		}
 	}
+
+	block.setBlockSubID(subID);
 
 	return chunk->setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer, blockData);
 }
@@ -76,7 +78,7 @@ bool Terrain::isBlockAt(const int x, const int y, const WorldLayer layer)
 bool Terrain::removeBlockAt(const int x, const int y, const WorldLayer layer, const bool createItem)
 {
 	const BlockData *block = getBlockAt(x, y, layer);
-	if(setBlockAt(x, y, layer, BlockData::get(0), true))
+	if(setBlockAt(x, y, layer, BlockData::get(0),  0, true))
 	{
 		if(createItem)
 		{

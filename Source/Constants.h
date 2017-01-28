@@ -83,7 +83,7 @@ enum EntityID
  * \brief	Block IDs.
  */
 
-typedef int BlockID;
+typedef unsigned int BlockID;
 
 /**
  * \enum	BlockEntityID
@@ -107,7 +107,7 @@ enum BlockEntityID
  * \brief	Item IDs.
  */
 
-typedef int ItemID;
+typedef unsigned int ItemID;
 #define ITEM_NONE 0
 
 /**
