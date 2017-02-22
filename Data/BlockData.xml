@@ -1,4 +1,5 @@
 <blocks>
+	<!-- GENERAL -->
 	<b>
 		<id>0</id>
 		<name>Empty_Block</name>
@@ -8,6 +9,7 @@
 		<frames>1</frames>
 		<solid>0</solid>
 	</b>
+	
 	<b>
 		<id>1</id>
 		<name>Grass_Block</name>
@@ -25,6 +27,14 @@
 		<frames>1</frames>
 	</b>
 	<b>
+		<id>3</id>
+		<name>Stone_Block</name>
+		<image>Sprites/Blocks/Stone.png</image>
+		<item>stone_block_item</item>
+		<opacity>1.0</opacity>
+		<frames>1</frames>
+	</b>
+	<b>
 		<id>4</id>
 		<name>Dirt_Backdrop</name>
 		<image>Sprites/Blocks/DirtBack.png</image>
@@ -32,28 +42,23 @@
 		<opacity>1.0</opacity>
 		<frames>1</frames>
 	</b>
+
+	<!-- OAK -->
 	<b>
 		<id>5</id>
 		<name>Oak_Wood_Block</name>
 		<image>Sprites/Blocks/OakWood.png</image>
 		<item>oak_block_item</item>
-		<opacity>1.0</opacity>
+		<opacity>0.1</opacity>
 		<frames>1</frames>
 	</b>
+	
 	<b>
 		<id>6</id>
 		<name>Oak_Leaves_Block</name>
 		<image>Sprites/Blocks/OakLeaves.png</image>
 		<item>oak_leaves_block_item</item>
-		<opacity>1.0</opacity>
-		<frames>1</frames>
-	</b>
-	<b>
-		<id>3</id>
-		<name>Stone_Block</name>
-		<image>Sprites/Blocks/Stone.png</image>
-		<item>stone_block_item</item>
-		<opacity>1.0</opacity>
+		<opacity>0.1</opacity>
 		<frames>1</frames>
 	</b>
 </blocks>
