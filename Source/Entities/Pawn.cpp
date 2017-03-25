@@ -39,13 +39,13 @@ Pawn::Pawn(World *world, const EntityID id) :
 	/*m_pointlight = new Pointlight(world);
 	m_pointlight->setMobility(LightSource::DYNAMIC);
 	m_pointlight->setRadius(5.0f);
-	m_pointlight->setColor(Color(255));*/
+	m_pointlight->setColor(Color::White);*/
 
 
 	m_spotlight = new Spotlight(world);
 	m_spotlight->setMobility(LightSource::DYNAMIC);
 	m_spotlight->setRadius(5.0f);
-	m_spotlight->setColor(Color(255));
+	m_spotlight->setColor(Color::White);
 	m_spotlight->setConeAngle(PI / 4.0f);
 
 	// Set body size

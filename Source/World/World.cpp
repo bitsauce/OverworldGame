@@ -122,7 +122,7 @@ void World::clear()
 	}
 	m_entities.clear();
 
-	((OverworldGame*) Game::GetInstance())->getGameOverlay()->setPlayer(0);
+	((OverworldGame*) Game::Get())->getGameOverlay()->setPlayer(0);
 
 	for(uint i = 0; i < WORLD_LAYER_COUNT; ++i)
 	{
@@ -207,7 +207,7 @@ void EntityLayer::onDraw(DrawEvent *e)
 	SpriteBatch::State state;
 	state.transformationMatix = m_world->getCamera()->getTransformationMatrix(e->getAlpha());
 
-	spriteBatch->begin(state);
+	spriteBatch->begin(e->getGraphicsContext(), state);
 
 	SceneObject::onDraw(e);
 }

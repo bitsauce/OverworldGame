@@ -224,7 +224,7 @@ void Humanoid::onTick(TickEvent *e)
 	}
 }
 
-void Humanoid::draw(Entity *body, SpriteBatch *spriteBatch, const float alpha)
+void Humanoid::draw(Entity *body, GraphicsContext* context, SpriteBatch *spriteBatch, const float alpha)
 {
 	// Update all animations
 	if(m_preAnimation)
@@ -255,7 +255,6 @@ void Humanoid::draw(Entity *body, SpriteBatch *spriteBatch, const float alpha)
 		// Do we want to draw over this slot?
 		if(m_renderSlot[i])
 		{
-			GraphicsContext *context = spriteBatch->getGraphicsContext();
 			context->setRenderTarget(m_skeletonRenderTarget);
 			context->setTexture(m_appearanceAtlas->getTexture());
 
@@ -290,7 +289,7 @@ void Humanoid::draw(Entity *body, SpriteBatch *spriteBatch, const float alpha)
 								m_colorMaskShader->setSampler2D("u_Texture", m_appearanceAtlas->getTexture());
 
 								context->setShader(m_colorMaskShader);
-								context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color(255), appearanceAtlasRegion->getTextureRegion());
+								context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color::White, appearanceAtlasRegion->getTextureRegion());
 								context->setShader(0);
 							}
 							break;
@@ -306,7 +305,7 @@ void Humanoid::draw(Entity *body, SpriteBatch *spriteBatch, const float alpha)
 								m_colorMaskShader->setSampler2D("u_Texture", m_appearanceAtlas->getTexture());
 
 								context->setShader(m_colorMaskShader);
-								context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color(255), appearanceAtlasRegion->getTextureRegion());
+								context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color::White, appearanceAtlasRegion->getTextureRegion());
 								context->setShader(0);
 							}
 							break;
@@ -317,7 +316,7 @@ void Humanoid::draw(Entity *body, SpriteBatch *spriteBatch, const float alpha)
 								{
 									if(m_overrideHair)
 									{
-										context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color(0, 0, 0, 0));
+										context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color::Black);
 									}
 									else
 									{
@@ -326,14 +325,14 @@ void Humanoid::draw(Entity *body, SpriteBatch *spriteBatch, const float alpha)
 								}
 								else
 								{
-									context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color(255), appearanceAtlasRegion->getTextureRegion());
+									context->drawRectangle(x0, y0, x1 - x0, y1 - y0, Color::White, appearanceAtlasRegion->getTextureRegion());
 								}
 							}
 							break;
 
 							default:
 							{
-								context->drawRectangle(x0, y0, x1 - x0, y1 - y0, j == 0 ? m_skinColor : Color(255), appearanceAtlasRegion->getTextureRegion());
+								context->drawRectangle(x0, y0, x1 - x0, y1 - y0, j == 0 ? m_skinColor : Color::White, appearanceAtlasRegion->getTextureRegion());
 							}
 							break;
 						}
@@ -352,10 +351,9 @@ void Humanoid::draw(Entity *body, SpriteBatch *spriteBatch, const float alpha)
 
 	// Draw skeleton
 	m_skeleton->setPosition(body->getDrawPosition(alpha) + Vector2F(body->getSize().x * 0.5f, 48.0f));
-	GraphicsContext *gfxContext = spriteBatch->getGraphicsContext();
-	gfxContext->setTransformationMatrix(spriteBatch->getState().transformationMatix);
-	m_skeleton->draw(gfxContext);
-	gfxContext->setTransformationMatrix(Matrix4());
+	context->setTransformationMatrix(spriteBatch->getState().transformationMatix);
+	m_skeleton->draw(context);
+	context->setTransformationMatrix(Matrix4());
 }
 
 bool Humanoid::setAppearance(const BodySlot slot, const uint layer, const string &appearanceName)

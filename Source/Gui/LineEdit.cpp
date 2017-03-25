@@ -7,7 +7,7 @@ LineEdit::LineEdit(GraphicsContext *gfx, UiObject *parent) :
 	m_font(Resource<Font>("Fonts/Chat")),
 	m_renderTarget(0),
 	m_dirty(true),
-	m_spriteBatch(gfx, 100),
+	m_spriteBatch(100),
 	m_wordBegin(0),
 	m_wordEnd(0)
 {
@@ -98,7 +98,7 @@ void LineEdit::onDraw(DrawEvent *e)
 
 		// Draw and clip the text using scissoring rectangle
 		g->enableScissor(0, 0, w, h);
-		m_spriteBatch.begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState(BlendState::BLEND_SRC_ALPHA, BlendState::BLEND_ONE_MINUS_SRC_ALPHA, BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA)));
+		m_spriteBatch.begin(g, SpriteBatch::State(SpriteBatch::DEFERRED, BlendState(BlendState::BLEND_SRC_ALPHA, BlendState::BLEND_ONE_MINUS_SRC_ALPHA, BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA)));
 		m_font->draw(&m_spriteBatch, textOffset.x + dx, textOffset.y, visibleText);
 		m_spriteBatch.end();
 		g->disableScissor();

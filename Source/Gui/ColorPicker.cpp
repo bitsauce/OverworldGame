@@ -50,7 +50,7 @@ void ColorPicker::setSelectedColor(const Color &color)
 
 Color ColorPicker::getSelectedColor() const
 {
-	return Color(m_selectedColor, m_selectedAlpha);
+	return Color(m_selectedColor.getR(), m_selectedColor.getG(), m_selectedColor.getB(), m_selectedAlpha);
 }
 
 void ColorPicker::onTick(TickEvent *e)

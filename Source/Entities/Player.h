@@ -12,7 +12,7 @@ public:
 
 	static Entity *Factory(World*)
 	{
-		return new Player("NULL", (OverworldGame*) Game::GetInstance(), false);
+		return new Player("NULL", (OverworldGame*) Game::Get(), false);
 	}
 
 	string getName() const

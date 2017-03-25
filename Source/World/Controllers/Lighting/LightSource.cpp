@@ -6,7 +6,7 @@ LightSource::LightSource(World *world, const Type type) :
 	m_type(type),
 	m_position(Vector2F(0.0f)),
 	m_radius(10.0f),
-	m_color(Color(255)),
+	m_color(Color::White),
 	m_mobility(DYNAMIC)
 {
 	m_world->getLighting()->addLightSource(this);

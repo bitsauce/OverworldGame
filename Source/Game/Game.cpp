@@ -30,7 +30,7 @@ void OverworldGame::onStart(GameEvent *e)
 	GraphicsContext *graphicsContext = getWindow()->getGraphicsContext();
 
 	// Setup sprite batch
-	m_spriteBatch = new SpriteBatch(graphicsContext);
+	m_spriteBatch = new SpriteBatch();
 
 	//if(Config::isFullscreenEnabled())
 	//{
@@ -200,7 +200,7 @@ void OverworldGame::onDraw(DrawEvent *e)
 		m_takeScreenshot = false;
 	}
 
-	m_spriteBatch->begin();
+	m_spriteBatch->begin(graphicsContext);
 
 	SceneObject::onDraw(e);
 

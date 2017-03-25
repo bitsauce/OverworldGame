@@ -30,7 +30,7 @@ void TorchItem::unequip(Pawn *player)
 
 	// Reset player ambient light
 	player->m_spotlight->setRadius(5.0f);
-	player->m_spotlight->setColor(Color(255));
+	player->m_spotlight->setColor(Color::White);
 
 	// Clear "Torch" attachment
 	player->getHumanoid().clearAttachment(Humanoid::RIGHT_HAND);

@@ -176,7 +176,7 @@ void Background::onDraw(DrawEvent *e)
 }
 
 Cloud::Cloud(Random &rand, Background *background) :
-	m_game((OverworldGame*) Game::GetInstance()),
+	m_game((OverworldGame*) Game::Get()),
 	m_background(background),
 	m_rand(rand)
 {

@@ -614,7 +614,7 @@ void ChunkManager::reattachChunk(Chunk *chunk, GraphicsContext *context)
 			context->drawRectangle(
 				math::mod(chunk->getX(), m_loadingArea.getWidth())  * CHUNK_BLOCKSF,
 				math::mod(chunk->getY(), m_loadingArea.getHeight()) * CHUNK_BLOCKSF,
-				CHUNK_BLOCKSF, CHUNK_BLOCKSF, Color(255), textureRegion
+				CHUNK_BLOCKSF, CHUNK_BLOCKSF, Color::White, textureRegion
 				);
 		}
 		chunk->m_sorted = true;

@@ -70,7 +70,7 @@ public:
 	Skeleton *getSkeleton() { return m_skeleton; }
 
 	void onTick(TickEvent *e);
-	void draw(Entity *body, SpriteBatch *spriteBatch, const float alpha);
+	void draw(Entity *body, GraphicsContext *context, SpriteBatch *spriteBatch, const float alpha);
 
 	bool setAppearance(const BodySlot slot, const uint layer, const string &name);
 

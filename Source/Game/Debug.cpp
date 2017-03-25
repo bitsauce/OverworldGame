@@ -217,7 +217,7 @@ void Debug::onDraw(DrawEvent *e)
 	GraphicsContext *context = e->getGraphicsContext();
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
 	spriteBatch->end();
-	spriteBatch->begin();
+	spriteBatch->begin(context);
 
 	// Set FPS output
 	addVariable("FPS", util::intToStr((int) m_game->getFPS()));

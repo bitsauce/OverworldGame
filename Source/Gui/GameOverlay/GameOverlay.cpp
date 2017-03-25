@@ -55,7 +55,7 @@ void GameOverlay::onDraw(DrawEvent *e)
 	
 	SpriteBatch *spriteBatch = (SpriteBatch*)e->getUserData();
 	spriteBatch->end();
-	spriteBatch->begin(SpriteBatch::State());
+	spriteBatch->begin(e->getGraphicsContext(), SpriteBatch::State());
 
 	UiObject::onDraw(e);
 

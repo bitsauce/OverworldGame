@@ -12,7 +12,7 @@ Chat::Chat(OverworldGame *game, GraphicsContext *context, GameOverlay *gameOverl
 	m_fadeTime(0.0f),
 	m_font(Resource<Font>("Fonts/Chat")),
 	m_redrawText(true),
-	m_textSpriteBatch(context),
+	m_textSpriteBatch(),
 	m_messages(100),
 	m_chatLinePos(0),
 	m_inputHistoryIndex(0)
@@ -137,7 +137,7 @@ void Chat::onDraw(DrawEvent *e)
 		}
 
 		// Draw text to render target
-		m_textSpriteBatch.begin(SpriteBatch::State(SpriteBatch::DEFERRED, BlendState(BlendState::BLEND_ONE, BlendState::BLEND_ONE)));
+		m_textSpriteBatch.begin(context, SpriteBatch::State(SpriteBatch::DEFERRED, BlendState(BlendState::BLEND_ONE, BlendState::BLEND_ONE)));
 		m_font->drawBox(&m_textSpriteBatch, Vector2F(5.0f), size.x - 10.0f, chatStr, 0, FONT_ALIGN_JUSTIFY);
 		m_textSpriteBatch.end();
 

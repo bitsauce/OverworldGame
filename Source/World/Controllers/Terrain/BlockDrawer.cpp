@@ -33,7 +33,7 @@ void BlockDrawer::onDraw(DrawEvent *e)
 		v0 = area.y0 / (float) area.getHeight(),
 		u1 = u0 + 1.0f,
 		v1 = v0 + 1.0f;
-	graphicsContext->drawRectangle(area.x0 * CHUNK_PXF, area.y0 * CHUNK_PXF, area.getWidth() * CHUNK_PXF, area.getHeight() * CHUNK_PXF, Color(255), TextureRegion(u0, v0, u1, v1));
+	graphicsContext->drawRectangle(area.x0 * CHUNK_PXF, area.y0 * CHUNK_PXF, area.getWidth() * CHUNK_PXF, area.getHeight() * CHUNK_PXF, Color::White, TextureRegion(u0, v0, u1, v1));
 
 	graphicsContext->setShader(0);
 	graphicsContext->setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));

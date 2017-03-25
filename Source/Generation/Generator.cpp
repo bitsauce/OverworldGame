@@ -8,7 +8,7 @@
 
 ChunkGenerator::ChunkGenerator(const uint seed) :
 	m_seed(seed),
-	m_graphicsContext(Game::GetInstance()->getWindow()->getGraphicsContext())
+	m_graphicsContext(Game::Get()->getWindow()->getGraphicsContext())
 {
 	//m_random.setSeed(seed);
 

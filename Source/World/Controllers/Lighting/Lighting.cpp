@@ -52,7 +52,7 @@ void Lighting::onDraw(DrawEvent *e)
 
 	// Clear dynamic lighting
 	context->setRenderTarget(m_dynamicLightingRenderTarget);
-	context->drawRectangle(0.0f, 0.0f, width, height, Color(0, 0, 0, 0));
+	context->drawRectangle(0.0f, 0.0f, width, height, Color::Black);
 
 	// Draw dynamic light sources
 	drawLightSources(LightSource::DYNAMIC, context);
@@ -87,7 +87,7 @@ void Lighting::onDraw(DrawEvent *e)
 		u1 = u0 + 1.0f,
 		v1 = v0 + 1.0f;
 
-	context->drawRectangle(loadingArea.x0 * CHUNK_PXF, loadingArea.y0 * CHUNK_PXF, loadingArea.getWidth() * CHUNK_PXF, loadingArea.getHeight() * CHUNK_PXF, Color(255), TextureRegion(u0, v0, u1, v1));
+	context->drawRectangle(loadingArea.x0 * CHUNK_PXF, loadingArea.y0 * CHUNK_PXF, loadingArea.getWidth() * CHUNK_PXF, loadingArea.getHeight() * CHUNK_PXF, Color::White, TextureRegion(u0, v0, u1, v1));
 	context->setBlendState(BlendState::PRESET_ALPHA_BLEND);
 }
 
@@ -125,7 +125,7 @@ void Lighting::drawLightSources(LightSource::Mobility mobility, GraphicsContext 
 						mat.scale(light->getRadius());
 						mat.translate(drawPos.x, drawPos.y, 0.0);
 						context->pushMatrix(mat);
-						context->drawCircleGradient(0.0f, 0.0f, 1.0f, light->getRadius() * 1.5f, light->getColor(), Color(0, 0, 0, 0));
+						context->drawCircleGradient(0.0f, 0.0f, 1.0f, light->getRadius() * 1.5f, light->getColor(), Color::Black);
 						context->popMatrix();
 					}
 				}

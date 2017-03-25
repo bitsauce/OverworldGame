@@ -11,7 +11,7 @@ DebugPointlight::DebugPointlight(World *world) :
 {
 	m_pointlight->setMobility(LightSource::DYNAMIC);
 	m_pointlight->setRadius(0.0f);
-	m_pointlight->setColor(Color(255));
+	m_pointlight->setColor(Color::White);
 
 	s_pointlights.push_back(this);
 }
