@@ -259,7 +259,7 @@ void Pawn::onDraw(DrawEvent *e)
 	m_spotlight->setDirection((Vector2F(m_world->getCamera()->getInputPosition()) - getCenter()).angle());
 
 	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
-	m_humanoid.draw(this, spriteBatch, e->getAlpha());
+	m_humanoid.draw(this, e->getGraphicsContext(), spriteBatch, e->getAlpha());
 	ItemData *item = ItemData::get(getCurrentItem()->getItem());
 	if(item)
 	{

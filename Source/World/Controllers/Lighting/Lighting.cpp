@@ -89,6 +89,8 @@ void Lighting::onDraw(DrawEvent *e)
 
 	context->drawRectangle(loadingArea.x0 * CHUNK_PXF, loadingArea.y0 * CHUNK_PXF, loadingArea.getWidth() * CHUNK_PXF, loadingArea.getHeight() * CHUNK_PXF, Color::White, TextureRegion(u0, v0, u1, v1));
 	context->setBlendState(BlendState::PRESET_ALPHA_BLEND);
+	context->setShader(0);
+	context->setTexture(0);
 }
 
 void Lighting::drawLightSources(LightSource::Mobility mobility, GraphicsContext *context)

@@ -17,7 +17,7 @@ World::World(Game *game) :
 	m_worldPath(""),
 	m_worldFile(nullptr)
 {
-	// Load world content
+	// Load controllers
 	m_timeOfDay = new TimeOfDay(this);
 	addChildLast(m_timeOfDay);
 

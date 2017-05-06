@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}</ProjectGuid>
+    <RootNamespace>overworld_game</RootNamespace>
+    <ProjectName>OverworldGame</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)..\..\Binaries\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)..\..\Binaries\$(Platform)\$(Configuration)\</OutDir>
+    <TargetName>$(ProjectName) Debug</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level1</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>
+      </SDLCheck>
+      <AdditionalIncludeDirectories>..\..\Source\;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\Sauce-Engine\include;..\..\..\Sauce-Engine\3rdparty\SDL\include;..\..\..\Sauce-Engine\3rdparty\SDL_image;..\..\..\Sauce-Engine\3rdparty\SDL_mixer</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SAUCE_DEBUG;SAUCE_IMPORT;_ITERATOR_DEBUG_LEVEL=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\3rdparty\spine\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>..\..\3rdparty\RakNet\Lib\RakNet_VS2008_DLL_Debug_Win32.lib;..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\SauceEngine.lib;ws2_32.lib;spined.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(SolutionDir)..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level1</WarningLevel>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>
+      </SDLCheck>
+      <AdditionalIncludeDirectories>..\..\Source\;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\Sauce-Engine\include;..\..\..\Sauce-Engine\3rdparty\SDL\include;..\..\..\Sauce-Engine\3rdparty\SDL_image;..\..\..\Sauce-Engine\3rdparty\SDL_mixer</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <PreprocessorDefinitions>SAUCE_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>..\..\3rdparty\RakNet\Lib\RakNet_VS2008_DLL_Release_Win32.lib;..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\SauceEngine.lib;ws2_32.lib;spine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\3rdparty\spine\lib</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(SolutionDir)..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\Animation\Animation.cpp" />
+    <ClCompile Include="..\..\Source\Animation\Atlas.cpp" />
+    <ClCompile Include="..\..\Source\Animation\AtlasAttachmentLoader.cpp" />
+    <ClCompile Include="..\..\Source\Animation\Extension.cpp" />
+    <ClCompile Include="..\..\Source\Animation\RegionAttachment.cpp" />
+    <ClCompile Include="..\..\Source\Animation\Bone.cpp" />
+    <ClCompile Include="..\..\Source\Animation\Skeleton.cpp" />
+    <ClCompile Include="..\..\Source\Animation\Slot.cpp" />
+    <ClCompile Include="..\..\Source\Apparel\ApparelData.cpp" />
+    <ClCompile Include="..\..\Source\BlockEntities\BlockEntity.cpp" />
+    <ClCompile Include="..\..\Source\BlockEntities\BlockEntityData.cpp" />
+    <ClCompile Include="..\..\Source\BlockEntities\Bush.cpp" />
+    <ClCompile Include="..\..\Source\BlockEntities\Pot.cpp" />
+    <ClCompile Include="..\..\Source\BlockEntities\Torch.cpp" />
+    <ClCompile Include="..\..\Source\Blocks\Block.cpp" />
+    <ClCompile Include="..\..\Source\Blocks\BlockData.cpp" />
+    <ClCompile Include="..\..\Source\Entities\AIController.cpp" />
+    <ClCompile Include="..\..\Source\Entities\Arrow.cpp" />
+    <ClCompile Include="..\..\Source\Entities\Controller.cpp" />
+    <ClCompile Include="..\..\Source\Entities\DebugLight.cpp" />
+    <ClCompile Include="..\..\Source\Entities\Entity.cpp" />
+    <ClCompile Include="..\..\Source\Entities\EntityData.cpp" />
+    <ClCompile Include="..\..\Source\Entities\Humanoid.cpp" />
+    <ClCompile Include="..\..\Source\Entities\ItemDrop.cpp" />
+    <ClCompile Include="..\..\Source\Entities\Mobs\Zombie.cpp" />
+    <ClCompile Include="..\..\Source\Entities\Pawn.cpp" />
+    <ClCompile Include="..\..\Source\Entities\Player.cpp" />
+    <ClCompile Include="..\..\Source\Entities\PlayerController.cpp" />
+    <ClCompile Include="..\..\Source\Game\Commander.cpp" />
+    <ClCompile Include="..\..\Source\Game\Debug.cpp" />
+    <ClCompile Include="..\..\Source\Game\Game.cpp" />
+    <ClCompile Include="..\..\Source\Game\RayCast.cpp" />
+    <ClCompile Include="..\..\Source\Game\States\GameState.cpp" />
+    <ClCompile Include="..\..\Source\Game\States\InGameState.cpp" />
+    <ClCompile Include="..\..\Source\Game\Storage.cpp" />
+    <ClCompile Include="..\..\Source\Generation\Generator.cpp" />
+    <ClCompile Include="..\..\Source\Gui\Canvas.cpp" />
+    <ClCompile Include="..\..\Source\Gui\ColorPicker.cpp" />
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Chat.cpp" />
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Crafting.cpp" />
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\GameOverlay.cpp" />
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\HealthManaStatus.cpp" />
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Hotbar.cpp" />
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Inventory.cpp" />
+    <ClCompile Include="..\..\Source\Gui\GameOverlay\Omnicon.cpp" />
+    <ClCompile Include="..\..\Source\Gui\LineEdit.cpp" />
+    <ClCompile Include="..\..\Source\Gui\UiObject.cpp" />
+    <ClCompile Include="..\..\Source\Items\ItemData.cpp" />
+    <ClCompile Include="..\..\Source\Items\Placeable\BlockEntityItem.cpp" />
+    <ClCompile Include="..\..\Source\Items\Placeable\BlockItem.cpp" />
+    <ClCompile Include="..\..\Source\Items\Placeable\TorchItem.cpp" />
+    <ClCompile Include="..\..\Source\Items\Tools\Axe.cpp" />
+    <ClCompile Include="..\..\Source\Items\Tools\Pickaxe.cpp" />
+    <ClCompile Include="..\..\Source\Items\Weapons\Ammo.cpp" />
+    <ClCompile Include="..\..\Source\Items\Weapons\Bow.cpp" />
+    <ClCompile Include="..\..\Source\Networking\Client.cpp" />
+    <ClCompile Include="..\..\Source\Networking\Conneciton.cpp" />
+    <ClCompile Include="..\..\Source\Networking\NetworkObject.cpp" />
+    <ClCompile Include="..\..\Source\Networking\Server.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Background.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Camera.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Lighting\Lighting.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Lighting\LightSource.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Lighting\Pointlight.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Lighting\Spotlight.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Terrain\BlockDrawer.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Terrain\Chunk.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Terrain\ChunkManager.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\Terrain\Terrain.cpp" />
+    <ClCompile Include="..\..\Source\World\Controllers\TimeOfDay.cpp" />
+    <ClCompile Include="..\..\Source\World\World.cpp" />
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\source\animation\Animation.h" />
+    <ClInclude Include="..\..\Source\Animation\Atlas.h" />
+    <ClInclude Include="..\..\Source\Animation\AtlasAttachmentLoader.h" />
+    <ClInclude Include="..\..\Source\Animation\RegionAttachment.h" />
+    <ClInclude Include="..\..\source\animation\Bone.h" />
+    <ClInclude Include="..\..\source\animation\Skeleton.h" />
+    <ClInclude Include="..\..\source\animation\Slot.h" />
+    <ClInclude Include="..\..\Source\Apparel\ApparelData.h" />
+    <ClInclude Include="..\..\Source\BlockEntities\BlockEntity.h" />
+    <ClInclude Include="..\..\Source\BlockEntities\BlockEntityData.h" />
+    <ClInclude Include="..\..\Source\BlockEntities\Bush.h" />
+    <ClInclude Include="..\..\Source\BlockEntities\Pot.h" />
+    <ClInclude Include="..\..\Source\BlockEntities\Torch.h" />
+    <ClInclude Include="..\..\Source\Blocks\Block.h" />
+    <ClInclude Include="..\..\source\Blocks\BlockData.h" />
+    <ClInclude Include="..\..\source\Config.h" />
+    <ClInclude Include="..\..\source\Constants.h" />
+    <ClInclude Include="..\..\Source\Entities\AIController.h" />
+    <ClInclude Include="..\..\Source\Entities\Arrow.h" />
+    <ClInclude Include="..\..\Source\Entities\Controller.h" />
+    <ClInclude Include="..\..\Source\Entities\DebugLight.h" />
+    <ClInclude Include="..\..\Source\Entities\Entity.h" />
+    <ClInclude Include="..\..\Source\Entities\EntityData.h" />
+    <ClInclude Include="..\..\Source\Entities\Humanoid.h" />
+    <ClInclude Include="..\..\Source\Entities\ItemDrop.h" />
+    <ClInclude Include="..\..\Source\Entities\Mobs\Zombie.h" />
+    <ClInclude Include="..\..\Source\Entities\Pawn.h" />
+    <ClInclude Include="..\..\Source\Entities\Player.h" />
+    <ClInclude Include="..\..\Source\Entities\PlayerController.h" />
+    <ClInclude Include="..\..\Source\Game\Commander.h" />
+    <ClInclude Include="..\..\Source\Game\Debug.h" />
+    <ClInclude Include="..\..\Source\Game\Game.h" />
+    <ClInclude Include="..\..\Source\Game\States\GameState.h" />
+    <ClInclude Include="..\..\Source\Game\States\InGameState.h" />
+    <ClInclude Include="..\..\source\Game\Storage.h" />
+    <ClInclude Include="..\..\source\Game\RayCast.h" />
+    <ClInclude Include="..\..\Source\Game\Scene.h" />
+    <ClInclude Include="..\..\Source\Generation\Generator.h" />
+    <ClInclude Include="..\..\source\gui\Button.h" />
+    <ClInclude Include="..\..\source\gui\Canvas.h" />
+    <ClInclude Include="..\..\Source\Gui\ColorPicker.h" />
+    <ClInclude Include="..\..\Source\gui\GameOverlay\Chat.h" />
+    <ClInclude Include="..\..\Source\Gui\GameOverlay\Crafting.h" />
+    <ClInclude Include="..\..\Source\gui\GameOverlay\GameOverlay.h" />
+    <ClInclude Include="..\..\source\gui\GameOverlay\HealthManaStatus.h" />
+    <ClInclude Include="..\..\source\gui\GameOverlay\Hotbar.h" />
+    <ClInclude Include="..\..\Source\Gui\GameOverlay\Inventory.h" />
+    <ClInclude Include="..\..\Source\Gui\GameOverlay\Omnicon.h" />
+    <ClInclude Include="..\..\source\gui\LineEdit.h" />
+    <ClInclude Include="..\..\Source\Gui\UiEvents.h" />
+    <ClInclude Include="..\..\source\gui\UiObject.h" />
+    <ClInclude Include="..\..\source\items\ItemData.h" />
+    <ClInclude Include="..\..\Source\Items\Placeable\BlockEntityItem.h" />
+    <ClInclude Include="..\..\Source\Items\Placeable\BlockItem.h" />
+    <ClInclude Include="..\..\Source\Items\Placeable\TorchItem.h" />
+    <ClInclude Include="..\..\Source\Items\Tools\Axe.h" />
+    <ClInclude Include="..\..\source\Items\Tools\Pickaxe.h" />
+    <ClInclude Include="..\..\Source\Items\Weapons\Ammo.h" />
+    <ClInclude Include="..\..\source\Items\Weapons\Bow.h" />
+    <ClInclude Include="..\..\Source\Networking\Client.h" />
+    <ClInclude Include="..\..\source\Networking\Connection.h" />
+    <ClInclude Include="..\..\source\Networking\NetworkObject.h" />
+    <ClInclude Include="..\..\Source\Networking\Server.h" />
+    <ClInclude Include="..\..\Source\Strings.h" />
+    <ClInclude Include="..\..\Source\World.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Background.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Camera.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting\Lighting.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting\LightSource.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting\Pointlight.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Lighting\Spotlight.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain\BlockDrawer.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain\Chunk.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain\ChunkManager.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\Terrain\Terrain.h" />
+    <ClInclude Include="..\..\Source\World\Controllers\TimeOfDay.h" />
+    <ClInclude Include="..\..\Source\World\World.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\Data\BlockData.xml" />
+    <Xml Include="..\..\Data\InputConfig.xml" />
+    <Xml Include="..\..\Data\ItemData.xml" />
+    <Xml Include="..\..\Data\Resources.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Data\Shaders\BlockEntitiesDraw.frag" />
+    <None Include="..\..\Data\Shaders\BlockEntitiesDraw.vert" />
+    <None Include="..\..\Data\Shaders\BlurH.frag" />
+    <None Include="..\..\Data\Shaders\BlurH.vert" />
+    <None Include="..\..\Data\Shaders\BlurV.frag" />
+    <None Include="..\..\Data\Shaders\BlurV.vert" />
+    <None Include="..\..\Data\Shaders\Color_Wheel.frag" />
+    <None Include="..\..\Data\Shaders\Color_Wheel.vert" />
+    <None Include="..\..\Data\Shaders\Init_Block_Lighting.frag" />
+    <None Include="..\..\Data\Shaders\Init_Block_Lighting.vert" />
+    <None Include="..\..\Data\Shaders\Draw_Circle.frag" />
+    <None Include="..\..\Data\Shaders\Draw_Circle.vert" />
+    <None Include="..\..\Data\Shaders\Generation.frag" />
+    <None Include="..\..\Data\Shaders\Generation.vert" />
+    <None Include="..\..\Data\Shaders\GodRays.frag" />
+    <None Include="..\..\Data\Shaders\GodRays.vert" />
+    <None Include="..\..\Data\Shaders\Outline.frag" />
+    <None Include="..\..\Data\Shaders\Outline.vert" />
+    <None Include="..\..\Data\Shaders\RadialLighting.frag" />
+    <None Include="..\..\Data\Shaders\RadialLighting.vert" />
+    <None Include="..\..\Data\Shaders\Color_Mask.frag" />
+    <None Include="..\..\Data\Shaders\Color_Mask.vert" />
+    <None Include="..\..\Data\Shaders\Shadow_Map.frag" />
+    <None Include="..\..\Data\Shaders\Shadow_Map.vert" />
+    <None Include="..\..\Data\Shaders\Shadow_Render.frag" />
+    <None Include="..\..\Data\Shaders\Shadow_Render.vert" />
+    <None Include="..\..\Data\Shaders\TileMap.frag" />
+    <None Include="..\..\Data\Shaders\TileMap.vert" />
+    <None Include="..\..\Data\Shaders\TileSort.frag" />
+    <None Include="..\..\Data\Shaders\TileSort.vert" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
