@@ -67,6 +67,8 @@ float fractalNoise2D(int octaves, vec2 pos)
 #define HEIGHT_MIN 720
 #define HEIGHT_MAX 0
 
+const float SCALE = 1.0f / 720.0f;
+
 #define BLOCK_EMPTY 0U
 #define BLOCK_GRASS 1U
 #define BLOCK_DIRT 2U
@@ -77,22 +79,24 @@ float fractalNoise2D(int octaves, vec2 pos)
 void main()
 {
 	vec2 blockPos = floor(v_TexCoord * u_Resolution + u_Position);
-	float f = u_Resolution.x / 720.0; // TODO: f can be integrated into u_Resolution (by u_Resolution /= f)
 
 	// Get noise value
-	float height = /*baseHeight +*/ mix(HEIGHT_MAX, HEIGHT_MIN - u_CliffingDelta, fractalNoise1D(4, 5.0 * f * blockPos.x / u_Resolution.x));
+	float height = mix(HEIGHT_MAX, HEIGHT_MIN - u_CliffingDelta, fractalNoise1D(4, 5.0 * blockPos.x * SCALE));
 
 	// Get distance to ground
 	float distanceToGround = height - blockPos.y;
 
 	// Create cliffs/overhangs
-	distanceToGround += fractalNoise2D(4, 20.0 * f * blockPos / u_Resolution) * u_CliffingDelta;
+	distanceToGround += fractalNoise2D(3, 20.0 * blockPos * SCALE) * u_CliffingDelta;
 
 	// Get block id
 	uvec3 blockIDs = uvec3(BLOCK_EMPTY);
 	if(distanceToGround < -20)
 	{
 		blockIDs[1] = BLOCK_DIRT;//STONE;
+	}
+	else if(floor(distanceToGround) == 0) {
+		blockIDs[1] = BLOCK_STONE;
 	}
 	else if(distanceToGround < 0)
 	{
@@ -113,19 +117,8 @@ void main()
 	}
 
 
-	float freq = fractalNoise2D(4, 0.1 * f * blockPos / u_Resolution);
-	if(abs(fractalNoise2D(4, 10.0 * f * blockPos / u_Resolution) - 0.5) < 0.1 * freq * clamp(-distanceToGround / 70.0, 0.0, 1.0)) blockIDs[1] = BLOCK_EMPTY;
-
-	/*if(blockPos.y > (sin(blockPos.x * 0.05) + 1.0) * 10.0)
-	{
-		blockIDs[0] = BLOCK_DIRT_BACK;
-		blockIDs[1] = BLOCK_DIRT;
-	}
-	else
-	{
-		blockIDs[0] = BLOCK_DIRT_BACK;
-		blockIDs[1] = BLOCK_EMPTY;
-	}*/
+	float freq = fractalNoise2D(4, 0.1 * blockPos * SCALE);
+	if(abs(fractalNoise2D(4, 10.0 * blockPos * SCALE) - 0.5) < 0.1 * freq * clamp(-distanceToGround / 70.0, 0.0, 1.0)) blockIDs[1] = BLOCK_EMPTY;
 
 	// Set block color
 	out_FragColor = vec4(float(blockIDs[0]) / 255.5, float(blockIDs[1]) / 255.5, float(blockIDs[2]) / 255.5, 0.0);

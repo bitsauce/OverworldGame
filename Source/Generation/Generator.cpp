@@ -3,8 +3,9 @@
 //#include "Grassland.h"
 #include "Game/RayCast.h"
 
-//#include "Structure.h"
-//#include "Structures/OakTree.h"
+#include "Formations/OakForest.h"
+
+const float CLIFFING_DELTA = 70.0f;
 
 ChunkGenerator::ChunkGenerator(const uint seed) :
 	m_seed(seed),
@@ -15,46 +16,39 @@ ChunkGenerator::ChunkGenerator(const uint seed) :
 	m_generationShader = Resource<Shader>("Shaders/Generation");
 	m_generationShader->setUniform1i("u_ShowNoise", false);
 	m_generationShader->setUniform2f("u_Resolution", CHUNK_BLOCKS, CHUNK_BLOCKS);
-	m_generationShader->setUniform1ui("u_Seed", seed % 1000);
-	m_generationShader->setUniform1f("u_CliffingDelta", 70.0f);
+	m_generationShader->setUniform1ui("u_Seed", seed % 1000); // NOTE TO SELF: This is not the right way - here we can only get 1000 different worlds.
+															  // u_Seed should change the hash function in the shader instead
+	m_generationShader->setUniform1f("u_CliffingDelta", CLIFFING_DELTA);
 
-	m_renderTarget = shared_ptr<RenderTarget2D>(new RenderTarget2D(CHUNK_BLOCKS, CHUNK_BLOCKS));
+	m_renderTarget = new RenderTarget2D(CHUNK_BLOCKS, CHUNK_BLOCKS);
+	m_heightRenderTarget = new RenderTarget2D(CHUNK_BLOCKS, 1);
 
 	m_blockData[BLOCK_EMPTY] = BlockData::get("Empty_Block");
 	m_blockData[BLOCK_GRASS] = BlockData::get("Grass_Block");
 	m_blockData[BLOCK_DIRT_BACK] = BlockData::get("Dirt_Backdrop");
 	m_blockData[BLOCK_STONE] = BlockData::get("Stone_Block");
+
+	// Add formations to list
+	m_formations.push_back(new OakForest);
 }
 
 void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, ChunkBlock *blocks)
 {
-	// Load structures
-	//loadStructures(chunkX, chunkY);
+	// Generate blocks for this chunk using GPU
+	m_graphicsContext->pushState();
 
-	// Load structures?
-	// TODO: Not sure this should be here, but it cant be in WorldGenerator::getChunkBlocks either because
-	// the chunk has to be loaded when we know that all the structures that will affect this chunk are generated.
-	//BlockID *structureBlocks = m_chunkStructures[CHUNK_KEY(chunkX, chunkY)];
+	// Setup graphics context
+	m_graphicsContext->setRenderTarget(m_renderTarget);
+	m_graphicsContext->disable(GraphicsContext::BLEND);
 
+	// Set generation offset
 	m_generationShader->setUniform2f("u_Position", chunkX * CHUNK_BLOCKS, chunkY * CHUNK_BLOCKS);
-	m_graphicsContext->setRenderTarget(m_renderTarget.get());
-
-	bool wasEnabled = m_graphicsContext->isEnabled(GraphicsContext::BLEND);
-	if(wasEnabled)
-	{
-		m_graphicsContext->disable(GraphicsContext::BLEND);
-	}
-
 	m_graphicsContext->setShader(m_generationShader);
+
+	// Draw generated blocks to render target
 	m_graphicsContext->drawRectangle(0, 0, CHUNK_BLOCKSF, CHUNK_BLOCKSF);
-	m_graphicsContext->setShader(0);
-	m_graphicsContext->setRenderTarget(0);
 
-	if(wasEnabled)
-	{
-		m_graphicsContext->enable(GraphicsContext::BLEND);
-	}
-
+	// Write result (render target pixel values) to chunk blocks
 	Pixmap pixmap = m_renderTarget->getTexture()->getPixmap();
 	uchar pixel[4];
 	for(int y = 0; y < CHUNK_BLOCKS; ++y)
@@ -66,6 +60,30 @@ void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, ChunkBlo
 			{
 				blocks[BLOCK_INDEX(x, y, z)].setBlockData(BlockData::get(pixel[z]));
 			}
+		}
+	}
+
+	m_graphicsContext->popState();
+
+	// Iterate all types of formations
+	for(Formation *formation : m_formations)
+	{
+		// Get formation relative coordinates for this chunk
+		const int formX = int(math::floor(float(chunkX) / formation->getWidth()));
+		const int formY = int(math::floor(float(chunkY) / formation->getHeight()));
+
+		// If this formation exists in this chunk
+		if(formation->existsAt(formX, formY))
+		{
+			// If the formation is not generated at this position
+			if(!formation->isGeneratedAt(formX, formY))
+			{
+				// Generate it
+				formation->generateFormationBlocks(formX, formY);
+			}
+
+			// Get formation blocks for this chunk
+			formation->getChunkBlocks(formX, formY, chunkX % formation->getWidth(), chunkY % formation->getHeight(), blocks);
 		}
 	}
 }

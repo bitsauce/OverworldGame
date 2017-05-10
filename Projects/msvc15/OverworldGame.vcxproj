@@ -63,7 +63,8 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"</Command>
+      <Command>copy "$(SolutionDir)..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"
+rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -128,6 +129,8 @@
     <ClCompile Include="..\..\Source\Game\States\GameState.cpp" />
     <ClCompile Include="..\..\Source\Game\States\InGameState.cpp" />
     <ClCompile Include="..\..\Source\Game\Storage.cpp" />
+    <ClCompile Include="..\..\Source\Generation\Formations\OakForest.cpp" />
+    <ClCompile Include="..\..\Source\Generation\Formations\Formation.cpp" />
     <ClCompile Include="..\..\Source\Generation\Generator.cpp" />
     <ClCompile Include="..\..\Source\Gui\Canvas.cpp" />
     <ClCompile Include="..\..\Source\Gui\ColorPicker.cpp" />
@@ -204,6 +207,8 @@
     <ClInclude Include="..\..\source\Game\Storage.h" />
     <ClInclude Include="..\..\source\Game\RayCast.h" />
     <ClInclude Include="..\..\Source\Game\Scene.h" />
+    <ClInclude Include="..\..\Source\Generation\Formations\OakForest.h" />
+    <ClInclude Include="..\..\Source\Generation\Formations\Formation.h" />
     <ClInclude Include="..\..\Source\Generation\Generator.h" />
     <ClInclude Include="..\..\source\gui\Button.h" />
     <ClInclude Include="..\..\source\gui\Canvas.h" />

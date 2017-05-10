@@ -1,4 +1,4 @@
-#include "OakTree.h"
+#include "OakForest.h"
 
 struct LeafPoint
 {
@@ -26,7 +26,7 @@ struct Branch
 	float chance;
 };
 
-void OakTree::place(WorldGenerator *worldGenerator)
+/*void OakForest::generate(const int x, const int y)
 {
 	Random rand = worldGenerator->getRandom();
 	rand.setSeed(rand.getSeed() + m_x);
@@ -70,7 +70,7 @@ void OakTree::place(WorldGenerator *worldGenerator)
 			else
 			{
                 chance2 += 0.05f;
-			}*/
+			}* /
 			
 			while(!branches.empty())
             {
@@ -113,4 +113,15 @@ void OakTree::place(WorldGenerator *worldGenerator)
             }
         }
     }
+}*/
+
+void OakForest::generate(const int formX, const int formY, BlockID *blocks)
+{
+	for(int y = 0; y < getHeight() * CHUNK_BLOCKS; y++)
+	{
+		for(int x = 0; x < getWidth() * CHUNK_BLOCKS; x++)
+		{
+			blocks[y * (getHeight() * CHUNK_BLOCKS) + x] = 5;
+		}
+	}
 }
