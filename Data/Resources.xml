@@ -254,6 +254,11 @@
 		<fragmentFilePath>Shaders/Generation.frag</fragmentFilePath>
 	</shader>
 	<shader>
+		<name>Shaders/Generation/GroundHeight</name>
+		<vertexFilePath>Shaders/GroundHeight.vert</vertexFilePath>
+		<fragmentFilePath>Shaders/GroundHeight.frag</fragmentFilePath>
+	</shader>
+	<shader>
 		<name>Shaders/Color_Mask</name>
 		<vertexFilePath>Shaders/Color_Mask.vert</vertexFilePath>
 		<fragmentFilePath>Shaders/Color_Mask.frag</fragmentFilePath>

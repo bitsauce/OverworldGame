@@ -2,10 +2,15 @@
 
 #include "Formation.h"
 
+class ChunkGenerator;
+
 class OakForest : public Formation
 {
 public:
-	OakForest() : Formation(1, 1) { }
+	OakForest(ChunkGenerator *gen) : Formation(1, 23), m_generator(gen) { }
 
-	void generate(const int formX, const int formY, BlockID *blocks);
+	void generate(const int formX, const int formY, list<FormationElement*> &elements);
+
+private:
+	ChunkGenerator *m_generator;
 };

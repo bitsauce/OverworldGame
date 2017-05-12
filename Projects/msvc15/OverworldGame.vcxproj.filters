@@ -661,5 +661,11 @@
     <None Include="..\..\Data\Shaders\Init_Block_Lighting.vert">
       <Filter>Data\Shaders\Lighting</Filter>
     </None>
+    <None Include="..\..\Data\Shaders\GroundHeight.vert">
+      <Filter>Data\Shaders\Generation</Filter>
+    </None>
+    <None Include="..\..\Data\Shaders\GroundHeight.frag">
+      <Filter>Data\Shaders\Generation</Filter>
+    </None>
   </ItemGroup>
 </Project>

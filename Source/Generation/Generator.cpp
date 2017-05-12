@@ -20,8 +20,13 @@ ChunkGenerator::ChunkGenerator(const uint seed) :
 															  // u_Seed should change the hash function in the shader instead
 	m_generationShader->setUniform1f("u_CliffingDelta", CLIFFING_DELTA);
 
+	m_groundHeightShader = Resource<Shader>("Shaders/Generation/GroundHeight");
+	m_groundHeightShader->setUniform1ui("u_Seed", seed % 1000);
+	m_groundHeightShader->setUniform1f("u_ResolutionX", CHUNK_BLOCKS);
+	m_groundHeightShader->setUniform1f("u_CliffingDelta", CLIFFING_DELTA);
+
 	m_renderTarget = new RenderTarget2D(CHUNK_BLOCKS, CHUNK_BLOCKS);
-	m_heightRenderTarget = new RenderTarget2D(CHUNK_BLOCKS, 1);
+	m_groundHeightRenderTarget = new RenderTarget2D(CHUNK_BLOCKS, 1, 1, PixelFormat(PixelFormat::R, PixelFormat::INT));
 
 	m_blockData[BLOCK_EMPTY] = BlockData::get("Empty_Block");
 	m_blockData[BLOCK_GRASS] = BlockData::get("Grass_Block");
@@ -29,11 +34,20 @@ ChunkGenerator::ChunkGenerator(const uint seed) :
 	m_blockData[BLOCK_STONE] = BlockData::get("Stone_Block");
 
 	// Add formations to list
-	m_formations.push_back(new OakForest);
+	m_formations.push_back(new OakForest(this));
 }
 
 void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, ChunkBlock *blocks)
 {
+	// Check if ground height is not generated for this chunk
+	{
+		unordered_map<int, int*>::const_iterator itr = m_groundHeight.find(chunkX);
+		if(itr == m_groundHeight.end())
+		{
+			generateGroundHeight(chunkX);
+		}
+	}
+
 	// Generate blocks for this chunk using GPU
 	m_graphicsContext->pushState();
 
@@ -43,10 +57,11 @@ void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, ChunkBlo
 
 	// Set generation offset
 	m_generationShader->setUniform2f("u_Position", chunkX * CHUNK_BLOCKS, chunkY * CHUNK_BLOCKS);
+	m_generationShader->setUniform1iv("u_GroundHeight", 32, m_groundHeight[chunkX]);
 	m_graphicsContext->setShader(m_generationShader);
 
 	// Draw generated blocks to render target
-	m_graphicsContext->drawRectangle(0, 0, CHUNK_BLOCKSF, CHUNK_BLOCKSF);
+	m_graphicsContext->drawRectangle(0, 0, CHUNK_BLOCKS, CHUNK_BLOCKS);
 
 	// Write result (render target pixel values) to chunk blocks
 	Pixmap pixmap = m_renderTarget->getTexture()->getPixmap();
@@ -72,18 +87,56 @@ void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, ChunkBlo
 		const int formX = int(math::floor(float(chunkX) / formation->getWidth()));
 		const int formY = int(math::floor(float(chunkY) / formation->getHeight()));
 
-		// If this formation exists in this chunk
-		if(formation->existsAt(formX, formY))
+		// If the formation at this position is not generated
+		if(!formation->isGeneratedAt(formX, formY))
 		{
-			// If the formation is not generated at this position
-			if(!formation->isGeneratedAt(formX, formY))
-			{
-				// Generate it
-				formation->generateFormationBlocks(formX, formY);
-			}
-
-			// Get formation blocks for this chunk
-			formation->getChunkBlocks(formX, formY, chunkX % formation->getWidth(), chunkY % formation->getHeight(), blocks);
+			// Generate it
+			formation->generate(formX, formY);
 		}
+
+		// Get formation blocks for this chunk
+		formation->getChunkBlocks(chunkX, chunkY, blocks);
 	}
 }
+
+int ChunkGenerator::getGroundHeight(const int x)
+{
+	const int chunkX = math::floor(x / CHUNK_BLOCKSF);
+	unordered_map<int, int*>::const_iterator itr = m_groundHeight.find(chunkX);
+	if(itr == m_groundHeight.end())
+	{
+		generateGroundHeight(chunkX);
+	}
+	return itr->second[math::mod(x, CHUNK_BLOCKS)];
+}
+
+void ChunkGenerator::generateGroundHeight(const int chunkX)
+{
+	// Generate ground height for this chunk using GPU
+	m_graphicsContext->pushState();
+
+	// Setup graphics context
+	m_graphicsContext->setRenderTarget(m_groundHeightRenderTarget);
+	m_graphicsContext->disable(GraphicsContext::BLEND);
+
+	// Set generation offset
+	m_groundHeightShader->setUniform1f("u_PositionX", chunkX * CHUNK_BLOCKS);
+	m_graphicsContext->setShader(m_groundHeightShader);
+
+	// Draw ground height values to render target
+	m_graphicsContext->drawRectangle(0, 0, CHUNK_BLOCKS, 1);
+
+	// Write ground height to map
+	int *groundHeight = new int[CHUNK_BLOCKS];
+	Pixmap pixmap = m_groundHeightRenderTarget->getTexture()->getPixmap();
+	int value;
+	for(int x = 0; x < CHUNK_BLOCKS; ++x)
+	{
+		pixmap.getPixel(x, 0, &value);
+		groundHeight[x] = value;
+	}
+	m_groundHeight[chunkX] = groundHeight;
+
+	m_graphicsContext->popState();
+}
+

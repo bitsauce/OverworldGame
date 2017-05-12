@@ -267,6 +267,8 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <None Include="..\..\Data\Shaders\BlurV.vert" />
     <None Include="..\..\Data\Shaders\Color_Wheel.frag" />
     <None Include="..\..\Data\Shaders\Color_Wheel.vert" />
+    <None Include="..\..\Data\Shaders\GroundHeight.frag" />
+    <None Include="..\..\Data\Shaders\GroundHeight.vert" />
     <None Include="..\..\Data\Shaders\Init_Block_Lighting.frag" />
     <None Include="..\..\Data\Shaders\Init_Block_Lighting.vert" />
     <None Include="..\..\Data\Shaders\Draw_Circle.frag" />

@@ -1,14 +1,12 @@
 in vec2 v_TexCoord;
-out vec4 out_FragColor;
+out int out_FragColor;
 
 #define CHUNK_BLOCKS 32
 
-uniform vec2 u_Position;
-uniform vec2 u_Resolution;
+uniform float u_PositionX;
+uniform float u_ResolutionX;
 uniform uint u_Seed;
-uniform float u_Time;
 uniform float u_CliffingDelta;
-uniform int u_GroundHeight[CHUNK_BLOCKS];
 
 int hash(int x)
 {
@@ -69,54 +67,13 @@ float fractalNoise2D(int octaves, vec2 pos)
 
 const float HEIGHT_MIN = 23 * CHUNK_BLOCKS;
 const float HEIGHT_MAX = 0;
-
 const float SCALE = 1.0f / 1000.0f;
-
-#define BLOCK_EMPTY 0U
-#define BLOCK_GRASS 1U
-#define BLOCK_DIRT 2U
-#define BLOCK_DIRT_BACK 4U
-#define BLOCK_STONE 3U
-//#define BLOCK_STONE_BACK 5U
 
 void main()
 {
-	vec2 blockPos = floor(v_TexCoord * u_Resolution + u_Position);
+	// Block position
+	float blockPosX = floor(v_TexCoord.x * u_ResolutionX + u_PositionX);
 
-	// Get noise value
-	//float height = mix(HEIGHT_MAX, HEIGHT_MIN - u_CliffingDelta, fractalNoise1D(4, 5.0 * blockPos.x * SCALE));
-
-	// Get distance to ground
-	float distanceToGround = float(u_GroundHeight[int(blockPos.x - u_Position.x)]) - blockPos.y;
-
-	// Create cliffs/overhangs
-	//distanceToGround += fractalNoise2D(3, 20.0 * blockPos * SCALE) * u_CliffingDelta;
-
-	// Get block id
-	// Foreground blocks
-	uvec3 blockIDs = uvec3(BLOCK_EMPTY);
-	if(distanceToGround < -20)
-	{
-		blockIDs[1] = BLOCK_DIRT;//STONE;
-	}
-	else if(distanceToGround < 0)
-	{
-		blockIDs[1] = BLOCK_DIRT;
-	}
-
-	// Background blocks
-	if(distanceToGround < -25)
-	{
-		blockIDs[0] = BLOCK_DIRT_BACK;//BLOCK_STONE_BACK;
-	}
-	else if(distanceToGround < -5)
-	{
-		blockIDs[0] = BLOCK_DIRT_BACK;
-	}
-
-	float freq = fractalNoise2D(4, 0.1 * blockPos * SCALE);
-	if(abs(fractalNoise2D(4, 10.0 * blockPos * SCALE) - 0.5) < 0.1 * freq * clamp(-distanceToGround / 70.0, 0.0, 1.0)) blockIDs[1] = BLOCK_EMPTY;
-
-	// Set block color
-	out_FragColor = vec4(float(blockIDs[0]) / 255.5, float(blockIDs[1]) / 255.5, float(blockIDs[2]) / 255.5, 0.0);
+	// Write ground height
+	out_FragColor = int(mix(HEIGHT_MAX, HEIGHT_MIN - u_CliffingDelta, fractalNoise1D(4, 5.0 * blockPosX * SCALE)));
 }

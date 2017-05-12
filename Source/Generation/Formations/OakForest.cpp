@@ -1,4 +1,5 @@
 #include "OakForest.h"
+#include "Generation/Generator.h"
 
 struct LeafPoint
 {
@@ -115,13 +116,29 @@ struct Branch
     }
 }*/
 
-void OakForest::generate(const int formX, const int formY, BlockID *blocks)
+void OakForest::generate(const int formX, const int formY, list<FormationElement*> &elements)
 {
-	for(int y = 0; y < getHeight() * CHUNK_BLOCKS; y++)
+	// TODO: Create a XORHash class which takes a seed.
+	if(formY != 0 || util::xorhash_prob(formX) > 0.5)
+		return;
+
+	const int w = getWidth(), h = getHeight();
+	for(int x = 0; x < w * CHUNK_BLOCKS; x++)
 	{
-		for(int x = 0; x < getWidth() * CHUNK_BLOCKS; x++)
+		if(util::xorhash_prob(formX * w + x) < 0.1)
 		{
-			blocks[y * (getHeight() * CHUNK_BLOCKS) + x] = 5;
+			// NOTE TO SELF: Formation elements might benefit from being generated only when needed.
+			// That is, load the blocks of a formation element when a chunk the formation element overlaps is loaded
+
+			int blockX = formX * w * CHUNK_BLOCKS + x;
+
+			FormationElement *elem = new FormationElement(blockX, m_generator->getGroundHeight(blockX) - 15 + 1, 1/*tree_width*/, 15/*tree_height*/);
+			// Generate tree from the ground here
+			for(int y = 0; y < 15; y++)
+			{
+				elem->m_blocks[y * elem->m_w + 0] = 5;
+			}
+			elements.push_back(elem);
 		}
 	}
 }
