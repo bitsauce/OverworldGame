@@ -1,5 +1,4 @@
-#ifndef STATIC_ENTITY_H
-#define STATIC_ENTITY_H
+#pragma once
 
 #include "Config.h"
 #include "Constants.h"
@@ -10,14 +9,14 @@
 		return new classname(world, x, y, data); \
 	}
 
-class ChunkBlock;
+class Block;
 class World;
 class BlockEntityData;
 
 class NeighborChangedEvent
 {
 public:
-	NeighborChangedEvent(const int dx, const int dy, const ChunkBlock *oldBlock, const ChunkBlock *newBlock) :
+	NeighborChangedEvent(const int dx, const int dy, const Block *oldBlock, const Block *newBlock) :
 		m_dx(dx),
 		m_dy(dy),
 		m_oldBlock(oldBlock),
@@ -35,20 +34,20 @@ public:
 		return m_dy;
 	}
 
-	const ChunkBlock *getOldBlock() const
+	const Block *getOldBlock() const
 	{
 		return m_oldBlock;
 	}
 
-	const ChunkBlock *getNewBlock() const
+	const Block *getNewBlock() const
 	{
 		return m_newBlock;
 	}
 
 private:
 	const int m_dx, m_dy;
-	const ChunkBlock *m_oldBlock;
-	const ChunkBlock *m_newBlock;
+	const Block *m_oldBlock;
+	const Block *m_newBlock;
 };
 
 class BlockEntity
@@ -108,5 +107,3 @@ private:
 protected:
 	World * const m_world;
 };
-
-#endif // STATIC_ENTITY_H

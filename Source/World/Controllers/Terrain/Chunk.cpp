@@ -17,7 +17,7 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 	m_attached = m_sorted = m_modified = false; // Not modified
 
 	// Initialize blocks
-	m_blocks = new ChunkBlock[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
+	m_blocks = new Block[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
 	m_blockTexture = shared_ptr<Texture2D>(new Texture2D(CHUNK_BLOCKS, CHUNK_BLOCKS));
 
 	uchar data[4] = { 0 };
@@ -34,7 +34,7 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 	m_timeOffsetTexture = shared_ptr<Texture2D>(new Texture2D(pixmap));
 }
 
-void Chunk::load(int chunkX, int chunkY, ChunkBlock *blocks)
+void Chunk::load(int chunkX, int chunkY, Block *blocks)
 {
 	// Set position
 	m_x = chunkX;
@@ -117,7 +117,7 @@ void Chunk::unload()
 bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const BlockData *newBlock)
 {
 	// Check if we need to do anything
-	const ChunkBlock block = m_blocks[BLOCK_INDEX(x, y, layer)];
+	const Block block = m_blocks[BLOCK_INDEX(x, y, layer)];
 	if(block != newBlock)
 	{
 		if(m_neighborChunks[0] && x == 0 && y == 0)                               { m_neighborChunks[0]->m_sorted = m_neighborChunks[0]->m_attached = false; }
@@ -137,7 +137,7 @@ bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const B
 		set<BlockEntity*> neighbourBlockEntities;
 		for(int i = 0; i < 8; i++)
 		{
-			const ChunkBlock *neighborBlock = getNeighborBlock(x + DIR_X[i], y + DIR_Y[i], layer);
+			const Block *neighborBlock = getNeighborBlock(x + DIR_X[i], y + DIR_Y[i], layer);
 			if(neighborBlock && neighborBlock->getBlockEntity())
 			{
 				neighbourBlockEntities.insert(neighborBlock->getBlockEntity());
@@ -178,12 +178,12 @@ bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const B
 	return false; // Nothing changed
 }
 
-const BlockData *Chunk::getBlockAt(const int x, const int y, const WorldLayer layer) const
+const BlockData *Chunk::getBlockDataAt(const int x, const int y, const WorldLayer layer) const
 {
 	return m_blocks[BLOCK_INDEX(x, y, layer)].getBlockData();
 }
 
-ChunkBlock Chunk::getChunkBlockAt(const int x, const int y, const WorldLayer layer) const
+Block Chunk::getBlockAt(const int x, const int y, const WorldLayer layer) const
 {
 	return m_blocks[BLOCK_INDEX(x, y, layer)];
 }
@@ -280,7 +280,7 @@ void Chunk::drawBlockEntities(GraphicsContext *context)
 	context->drawIndexedPrimitives(GraphicsContext::PRIMITIVE_TRIANGLES, &m_blockEntityVBO, &m_blockEntityIBO);
 }
 
-ChunkBlock *Chunk::getNeighborBlock(const int x, const int y, const WorldLayer layer) const
+Block *Chunk::getNeighborBlock(const int x, const int y, const WorldLayer layer) const
 {
 	uchar dir = 0;
 	if(x < 0) dir |= 0b1000;

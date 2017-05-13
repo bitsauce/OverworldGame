@@ -47,7 +47,7 @@ bool Terrain::setBlockAt(const int x, const int y, const WorldLayer layer, const
 	}*/
 
 	Chunk *chunk = m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF), true);
-	const ChunkBlock block = chunk->getChunkBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
+	const Block block = chunk->getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
 
 	if(!replace)
 	{

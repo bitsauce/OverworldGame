@@ -37,7 +37,7 @@ ChunkGenerator::ChunkGenerator(const uint seed) :
 	m_formations.push_back(new OakForest(this));
 }
 
-void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, ChunkBlock *blocks)
+void ChunkGenerator::getBlocks(const int chunkX, const int chunkY, Block *blocks)
 {
 	// Check if ground height is not generated for this chunk
 	{
@@ -73,7 +73,7 @@ void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, ChunkBlo
 			pixmap.getPixel(x, y, pixel);
 			for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
 			{
-				blocks[BLOCK_INDEX(x, y, z)].setBlockData(BlockData::get(pixel[z]));
+				blocks[BLOCK_INDEX(x, y, z)].setBlockDataByID(pixel[z]);
 			}
 		}
 	}
@@ -95,7 +95,7 @@ void ChunkGenerator::getChunkBlocks(const int chunkX, const int chunkY, ChunkBlo
 		}
 
 		// Get formation blocks for this chunk
-		formation->getChunkBlocks(chunkX, chunkY, blocks);
+		formation->getBlocks(chunkX, chunkY, blocks);
 	}
 }
 

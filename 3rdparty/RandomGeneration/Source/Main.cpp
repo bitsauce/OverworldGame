@@ -39,7 +39,7 @@ public:
 		m_noiseShader = Resource<Shader>("Generation");
 		m_font = Resource<Font>("Font");
 		m_renderTarget = new RenderTarget2D(WIDTH, HEIGHT);
-		m_spriteBatch = new SpriteBatch(getWindow()->getGraphicsContext());
+		m_spriteBatch = new SpriteBatch();
 
 		m_drawBlocksShader = Resource<Shader>("Draw_Blocks");
 
@@ -128,8 +128,8 @@ public:
 		context->setShader(0);
 		context->enable(GraphicsContext::BLEND);
 
-		m_spriteBatch->begin();
-		m_font->setColor(Color(255));
+		m_spriteBatch->begin(context);
+		m_font->setColor(Color::White);
 
 		stringstream ss;
 		ss << "FPS: " << getFPS() << endl;

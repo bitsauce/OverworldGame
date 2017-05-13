@@ -6,10 +6,10 @@
 #include "BlockEntities/BlockEntity.h"
 #include "BlockEntities/BlockEntityData.h"
 
-class ChunkBlock
+class Block
 {
 public:
-	ChunkBlock() :
+	Block() :
 		m_blockData(0),
 		m_blockEntity(0)
 	{
@@ -23,6 +23,11 @@ public:
 	void setBlockData(const BlockData *data)
 	{
 		m_blockData = data;
+	}
+
+	void setBlockDataByID(const BlockID id)
+	{
+		m_blockData = BlockData::get(id);
 	}
 
 	const BlockData *getBlockData() const

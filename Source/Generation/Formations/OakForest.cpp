@@ -132,12 +132,26 @@ void OakForest::generate(const int formX, const int formY, list<FormationElement
 
 			int blockX = formX * w * CHUNK_BLOCKS + x;
 
-			FormationElement *elem = new FormationElement(blockX, m_generator->getGroundHeight(blockX) - 15 + 1, 1/*tree_width*/, 15/*tree_height*/);
+			FormationElement *elem = new FormationElement(blockX, m_generator->getGroundHeight(blockX));
 			// Generate tree from the ground here
 			for(int y = 0; y < 15; y++)
 			{
-				elem->m_blocks[y * elem->m_w + 0] = 5;
+				elem->setBlockAt(0, -y, WORLD_LAYER_BACK, 5);
 			}
+
+			for(int cy = -8; cy <= 8; cy++)
+			{
+				for(int cx = -8; cx <= 8; cx++)
+				{
+					if(sqrt(cx*cx + cy*cy) < 8)
+					{
+						elem->setBlockAt(cx, cy - 15, WORLD_LAYER_FRONT, 6);
+					}
+				}
+			}
+
+			elem->setBlockEntityAt(0, 0, WORLD_LAYER_MIDDLE, BlockEntityData::getByName("Bush"));
+
 			elements.push_back(elem);
 		}
 	}

@@ -42,6 +42,7 @@ enum PacketID
 #define SUPER_CHUNK_PXF float(SUPER_CHUNK_PX)
 
 #define BLOCK_INDEX(x, y, z) (x) + (CHUNK_BLOCKS) * ((y) + (CHUNK_BLOCKS) * (z))
+#define BLOCK_INDEX_W_H(x, y, z, w, h) (x) + (w) * ((y) + (h) * (z))
 
 #define CHUNK_KEY(X, Y) (((X) & 0x0000FFFF) | (((Y) << 16) & 0xFFFF0000))
 

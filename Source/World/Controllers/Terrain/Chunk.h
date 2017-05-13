@@ -26,7 +26,7 @@ private:
 	 * \param chunkY The global chunk y-coordinate
 	 * \param blocks Array of blocks to load into the chunk
 	 */
-	void load(int chunkX, int chunkY, ChunkBlock *blocks);
+	void load(int chunkX, int chunkY, Block *blocks);
 
 	void unload();
 	
@@ -38,8 +38,8 @@ private:
 	int getY() const { return m_y; }
 
 	bool setBlockAt(const int x, const int y, const WorldLayer layer, const BlockData *block);
-	const BlockData *getBlockAt(const int x, const int y, const WorldLayer layer) const;
-	ChunkBlock getChunkBlockAt(const int x, const int y, const WorldLayer layer) const;
+	const BlockData *getBlockDataAt(const int x, const int y, const WorldLayer layer) const;
+	Block getBlockAt(const int x, const int y, const WorldLayer layer) const;
 
 	void addBlockEntity(BlockEntity *blockEntity);
 	bool removeBlockEntity(BlockEntity *blockEntity);
@@ -57,11 +57,11 @@ private:
 private:
 	Chunk(const Chunk &) { }
 
-	ChunkBlock *getNeighborBlock(const int x, const int y, const WorldLayer layer) const;
+	Block *getNeighborBlock(const int x, const int y, const WorldLayer layer) const;
 
 	// Chunk
 	int m_x, m_y;
-	ChunkBlock *m_blocks;
+	Block *m_blocks;
 	list<BlockEntity*> m_blockEntities;
 	Chunk *m_neighborChunks[8];
 

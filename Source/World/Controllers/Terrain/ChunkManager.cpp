@@ -87,7 +87,7 @@ void ChunkManager::clear()
 }
 
 // SERIALIZATION
-void ChunkManager::saveBlockData(FileWriter &file, ChunkBlock *blockData)
+void ChunkManager::saveBlockData(FileWriter &file, Block *blockData)
 {
 	// Write blocks to stream
 	BlockID currentBlock = blockData[0].getBlockData()->getID();
@@ -111,7 +111,7 @@ void ChunkManager::saveBlockData(FileWriter &file, ChunkBlock *blockData)
 	file << length << endl;
 }
 
-void ChunkManager::loadBlockData(FileReader &file, ChunkBlock *blockData)
+void ChunkManager::loadBlockData(FileReader &file, Block *blockData)
 {
 	// Read blocks from stream
 	int pos = 0;
@@ -122,7 +122,7 @@ void ChunkManager::loadBlockData(FileReader &file, ChunkBlock *blockData)
 		file >> length;
 		for(int i = 0; i < length; ++i)
 		{
-			blockData[pos + i].setBlockData(BlockData::get(blockID));
+			blockData[pos + i].setBlockDataByID(blockID);
 		}
 		pos += length;
 	}
@@ -295,7 +295,7 @@ Chunk *ChunkManager::loadChunkAt(const int chunkX, const int chunkY)
 	}
 
 	// Get block data
-	ChunkBlock blocks[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
+	Block blocks[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
 	if(file)
 	{
 		LOG("Loading chunk [%i, %i]...", chunkX, chunkY);
@@ -306,7 +306,7 @@ Chunk *ChunkManager::loadChunkAt(const int chunkX, const int chunkY)
 	else
 	{
 		// Generate block data
-		m_generator->getChunkBlocks(chunkX, chunkY, blocks);
+		m_generator->getBlocks(chunkX, chunkY, blocks);
 	}
 
 	// Initialize chunk

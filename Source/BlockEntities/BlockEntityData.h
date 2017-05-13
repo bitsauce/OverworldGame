@@ -53,7 +53,7 @@ public:
 		return 0;
 	}
 
-	BlockEntity *create(World *world, const int x, const int y)
+	BlockEntity *create(World *world, const int x, const int y) const
 	{
 		if(!m_factory)
 		{
