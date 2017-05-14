@@ -5,11 +5,12 @@
 #include "Blocks/Block.h"
 
 class FormationElement;
+class ChunkGenerator;
 
 class Formation
 {
 public:
-	Formation(const int width, const int height);
+	Formation(ChunkGenerator *gen, const int width, const int height);
 	~Formation();
 	
 	int getWidth() const { return m_width; }
@@ -22,6 +23,7 @@ public:
 
 protected:
 	virtual void generate(const int formX, const int formY, list<FormationElement*> &elements) = 0;
+	XORHash m_xorhash;
 
 private:
 	const int m_width, m_height;
@@ -43,22 +45,31 @@ public:
 	{
 	}
 
-	void setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID id)
+	enum ReplacePolicy
 	{
-		// Expand bounding box
-		if(x < 0) m_x1 = min(m_x1, m_originX + x);
-		else m_x2 = max(m_x2, m_originX + x);
-		if(y < 0) m_y1 = min(m_y1, m_originY + y);
-		else m_y2 = max(m_y2, m_originY + y);
+		REPLACE_ALWAYS,
+		REPLACE_IF_EMPTY
+	};
 
-		// Set block at position
-		m_blocks[CHUNK_KEY(m_originX + x, m_originY + y)][layer].setBlockDataByID(id);
-	}
-
-	void setBlockEntityAt(const int x, const int y, const WorldLayer layer, const BlockEntityData *data);
+	void setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID id, const ReplacePolicy replace = REPLACE_ALWAYS);
+	void setBlockEntityAt(const int x, const int y, const WorldLayer layer, const BlockEntityID blockEntityID);
 
 private:
+	struct Block
+	{
+		Block() :
+			blockID(0),
+			blockEntityID(BlockEntityID(0)),
+			replace(REPLACE_IF_EMPTY)
+		{
+		}
+
+		BlockID blockID;
+		BlockEntityID blockEntityID;
+		ReplacePolicy replace;
+	};
+
 	const int m_originX, m_originY;
 	int m_x1, m_y1, m_x2, m_y2;
-	unordered_map<uint, Block[WORLD_LAYER_COUNT]> m_blocks;
+	unordered_map<uint32_t, Block[WORLD_LAYER_COUNT]> m_blocks;
 };

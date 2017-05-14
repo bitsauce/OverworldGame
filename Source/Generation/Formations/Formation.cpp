@@ -2,9 +2,10 @@
 
 #include "Game/Game.h"
 
-Formation::Formation(const int width, const int height) :
+Formation::Formation(ChunkGenerator *gen, const int width, const int height) :
 	m_width(width),
-	m_height(height)
+	m_height(height),
+	m_xorhash(gen->getSeed())
 {
 }
 
@@ -51,13 +52,18 @@ void Formation::getBlocks(const int chunkX, const int chunkY, Block *blocks)
 		{
 			for(int x = x1; x <= x2; x++)
 			{
-				unordered_map<uint, Block[WORLD_LAYER_COUNT]>::const_iterator itr = elem->m_blocks.find(CHUNK_KEY(x, y));
+				unordered_map<uint32_t, FormationElement::Block[WORLD_LAYER_COUNT]>::const_iterator itr = elem->m_blocks.find(CHUNK_KEY(x, y));
 				if(itr != elem->m_blocks.end())
 				{
-					for(int z = 0; z < WORLD_LAYER_COUNT; z++)
+					for(int layer = 0; layer < WORLD_LAYER_COUNT; layer++)
 					{
-						if(itr->second[z].getBlockData())
-						blocks[BLOCK_INDEX(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), z)] = itr->second[z];
+						const FormationElement::Block &block = itr->second[layer];
+						Block &blockToReplace = blocks[BLOCK_INDEX(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer)];
+						if(block.replace == FormationElement::REPLACE_ALWAYS || (block.replace == FormationElement::REPLACE_IF_EMPTY && blockToReplace.isEmpty()))
+						{
+							blockToReplace.setBlockDataByID(block.blockID);
+						}
+						//blockToReplace.setBlockEntity(block.blockEntityID);
 					}
 				}
 			}
@@ -66,7 +72,7 @@ void Formation::getBlocks(const int chunkX, const int chunkY, Block *blocks)
 	m_chunkToElementListMap.erase(CHUNK_KEY(chunkX, chunkY)); // NOTE: FormationElements which are no longer needed should be deleted. Memory leak!
 }
 
-void FormationElement::setBlockEntityAt(const int x, const int y, const WorldLayer layer, const BlockEntityData * data)
+void FormationElement::setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID id, const ReplacePolicy replace)
 {
 	// Expand bounding box
 	if(x < 0) m_x1 = min(m_x1, m_originX + x);
@@ -75,5 +81,19 @@ void FormationElement::setBlockEntityAt(const int x, const int y, const WorldLay
 	else m_y2 = max(m_y2, m_originY + y);
 
 	// Set block at position
-	m_blocks[CHUNK_KEY(m_originX + x, m_originY + y)][layer].setBlockEntity(data->create(((OverworldGame*) Game::Get())->getWorld(), m_originX + x, m_originY + y));
+	Block &block = m_blocks[CHUNK_KEY(m_originX + x, m_originY + y)][layer];
+	block.blockID = id;
+	block.replace = replace;
+}
+
+void FormationElement::setBlockEntityAt(const int x, const int y, const WorldLayer layer, const BlockEntityID blockEntityID)
+{
+	// Expand bounding box
+	if(x < 0) m_x1 = min(m_x1, m_originX + x);
+	else m_x2 = max(m_x2, m_originX + x);
+	if(y < 0) m_y1 = min(m_y1, m_originY + y);
+	else m_y2 = max(m_y2, m_originY + y);
+
+	// Set block at position
+	m_blocks[CHUNK_KEY(m_originX + x, m_originY + y)][layer].blockEntityID = blockEntityID;
 }

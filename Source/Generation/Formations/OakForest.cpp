@@ -119,13 +119,13 @@ struct Branch
 void OakForest::generate(const int formX, const int formY, list<FormationElement*> &elements)
 {
 	// TODO: Create a XORHash class which takes a seed.
-	if(formY != 0 || util::xorhash_prob(formX) > 0.5)
+	if(formY != 0 || m_xorhash.prob(formX) > 0.5)
 		return;
 
 	const int w = getWidth(), h = getHeight();
 	for(int x = 0; x < w * CHUNK_BLOCKS; x++)
 	{
-		if(util::xorhash_prob(formX * w + x) < 0.1)
+		if(m_xorhash.prob(formX * w + x) < 0.1)
 		{
 			// NOTE TO SELF: Formation elements might benefit from being generated only when needed.
 			// That is, load the blocks of a formation element when a chunk the formation element overlaps is loaded
@@ -150,7 +150,7 @@ void OakForest::generate(const int formX, const int formY, list<FormationElement
 				}
 			}
 
-			elem->setBlockEntityAt(0, 0, WORLD_LAYER_MIDDLE, BlockEntityData::getByName("Bush"));
+			elem->setBlockEntityAt(0, 0, WORLD_LAYER_MIDDLE, BlockEntityData::getByName("Bush")->getID());
 
 			elements.push_back(elem);
 		}
