@@ -14,7 +14,7 @@
     <ProjectGuid>{7F4BAC8A-5B6C-4120-B1B4-8772C5022352}</ProjectGuid>
     <RootNamespace>deferredlighting</RootNamespace>
     <ProjectName>RandomGeneration</ProjectName>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

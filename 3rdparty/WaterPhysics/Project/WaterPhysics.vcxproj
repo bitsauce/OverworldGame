@@ -14,7 +14,7 @@
     <ProjectGuid>{7A44F0BC-017A-4954-AC15-4B357471983C}</ProjectGuid>
     <RootNamespace>deferredlighting</RootNamespace>
     <ProjectName>WaterPhysics</ProjectName>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
