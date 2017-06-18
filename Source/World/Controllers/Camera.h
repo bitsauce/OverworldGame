@@ -29,8 +29,8 @@ public:
 	void setZoomLevel(const float zoomLevel);
 	float getZoomLevel() const;
 
-	void zoomIn(KeyEvent *e);
-	void zoomOut(KeyEvent *e);
+	void zoomIn(InputEvent *e);
+	void zoomOut(InputEvent *e);
 
 	// Position
 	void setPosition(const Vector2F &positon)

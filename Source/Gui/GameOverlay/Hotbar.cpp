@@ -92,7 +92,7 @@ void Hotbar::onDraw(DrawEvent *e)
 	}
 }
 
-void Hotbar::setSelectedSlot(KeyEvent *e, const uint slot)
+void Hotbar::setSelectedSlot(InputEvent *e, const uint slot)
 {
 	if(e->getType() != KeyEvent::DOWN) return;
 	m_gameOverlay->getPlayer()->setSelectedSlot(slot);

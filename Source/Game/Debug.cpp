@@ -51,8 +51,9 @@ Debug::Debug(OverworldGame *game) :
 	m_font->setColor(Color(255, 255, 255, 255));
 }
 
-void Debug::debugFunction(KeyEvent *e)
+void Debug::debugFunction(InputEvent *_e)
 {
+	KeyEvent *e = static_cast<KeyEvent*>(_e);
 	// Debug functions only called when debug enabled
 	if(e->getType() != KeyEvent::DOWN || (!m_enabled && e->getKeycode() != SAUCE_KEY_F1))
 	{
@@ -561,7 +562,7 @@ void Debug::toggle()
 	m_enabled = !m_enabled;
 }
 
-void Debug::nextBlock(KeyEvent *e)
+void Debug::nextBlock(InputEvent *e)
 {
 	if(m_enabled && e->getType() == KeyEvent::DOWN)
 	{
@@ -573,7 +574,7 @@ void Debug::nextBlock(KeyEvent *e)
 	}
 }
 
-void Debug::prevBlock(KeyEvent *e)
+void Debug::prevBlock(InputEvent *e)
 {
 	if(m_enabled && e->getType() == KeyEvent::DOWN)
 	{

@@ -124,7 +124,7 @@ float Camera::getZoomLevel() const
 	return m_zoomLevel;
 }
 
-void Camera::zoomIn(KeyEvent *e)
+void Camera::zoomIn(InputEvent *e)
 {
 	if(e->getType() == KeyEvent::DOWN)
 	{
@@ -132,7 +132,7 @@ void Camera::zoomIn(KeyEvent *e)
 	}
 }
 
-void Camera::zoomOut(KeyEvent *e)
+void Camera::zoomOut(InputEvent *e)
 {
 	if(e->getType() == KeyEvent::DOWN)
 	{

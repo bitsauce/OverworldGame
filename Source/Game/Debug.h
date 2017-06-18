@@ -25,12 +25,12 @@ public:
 
 	void toggle();
 
-	void nextBlock(KeyEvent *e);
-	void prevBlock(KeyEvent *e);
+	void nextBlock(InputEvent *e);
+	void prevBlock(InputEvent *e);
 
 	void addVariable(const string &name, const string &value);
 
-	void debugFunction(KeyEvent *e);
+	void debugFunction(InputEvent *e);
 
 	bool isEnabled() { return m_enabled; }
 

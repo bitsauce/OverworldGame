@@ -56,7 +56,7 @@ public:
 	void popState();
 	GameState *peekState(int level = 0);
 
-	void takeScreenshot(KeyEvent *e)
+	void takeScreenshot(InputEvent *e)
 	{
 		if(e->getType() != KeyEvent::DOWN) return;
 		m_takeScreenshot = true;

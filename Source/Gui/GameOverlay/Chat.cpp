@@ -29,7 +29,7 @@ Chat::Chat(OverworldGame *game, GraphicsContext *context, GameOverlay *gameOverl
 	m_font->setColor(Color(255, 255, 255, 255));
 }
 
-void Chat::toggle(KeyEvent *e)
+void Chat::toggle(InputEvent *e)
 {
 	if(e->getType() != KeyEvent::DOWN) return;
 
@@ -47,7 +47,7 @@ void Chat::toggle(KeyEvent *e)
 	}
 }
 
-void Chat::sendMessage(KeyEvent *e)
+void Chat::sendMessage(InputEvent *e)
 {
 	if(!m_active || e->getType() != KeyEvent::DOWN) return;
 
@@ -70,7 +70,7 @@ void Chat::sendMessage(KeyEvent *e)
 	toggle(e);
 }
 
-void Chat::nextMessage(KeyEvent *e)
+void Chat::nextMessage(InputEvent *e)
 {
 	if(e->getType() != KeyEvent::DOWN) return;
 	if(m_inputHistoryIndex + 1 < m_inputHistory.size())
@@ -79,7 +79,7 @@ void Chat::nextMessage(KeyEvent *e)
 	}
 }
 
-void Chat::prevMessage(KeyEvent *e)
+void Chat::prevMessage(InputEvent *e)
 {
 	if(e->getType() != KeyEvent::DOWN) return;
 	if(m_inputHistoryIndex - 1 >= 0)

@@ -26,21 +26,21 @@ PlayerController::~PlayerController()
 	{
 		InputManager *input = m_game->getInputManager();
 		InputContext *inputContext = input->getContextByName("game");
-		//inputContext->getKeybind("activate_thing")->setFunction(function<void(KeyEvent*)>());
-		inputContext->getKeybind("move_left")->setFunction(function<void(KeyEvent*)>());
-		inputContext->getKeybind("move_right")->setFunction(function<void(KeyEvent*)>());
-		inputContext->getKeybind("jump")->setFunction(function<void(KeyEvent*)>());
-		inputContext->getKeybind("run")->setFunction(function<void(KeyEvent*)>());
-		inputContext->getKeybind("use_item")->setFunction(function<void(KeyEvent*)>());
+		//inputContext->getKeybind("activate_thing")->setFunction(function<void(InputEvent*)>());
+		inputContext->getKeybind("move_left")->setFunction(function<void(InputEvent*)>());
+		inputContext->getKeybind("move_right")->setFunction(function<void(InputEvent*)>());
+		inputContext->getKeybind("jump")->setFunction(function<void(InputEvent*)>());
+		inputContext->getKeybind("run")->setFunction(function<void(InputEvent*)>());
+		inputContext->getKeybind("use_item")->setFunction(function<void(InputEvent*)>());
 	}
 }
 
-void PlayerController::updateUseItemState(KeyEvent *e)
+void PlayerController::updateUseItemState(InputEvent *e)
 {
 	m_inputState[INPUT_USE_ITEM] = e->getType() != KeyEvent::UP && !m_game->getGameOverlay()->isHovered();
 }
 
-void PlayerController::updateInputState(KeyEvent *e, int type)
+void PlayerController::updateInputState(InputEvent *e, int type)
 {
 	m_inputState[type] = e->getType() != KeyEvent::UP;
 }

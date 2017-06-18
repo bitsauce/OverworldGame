@@ -16,6 +16,6 @@ public:
 private:
 	OverworldGame *m_game;
 
-	void updateInputState(KeyEvent *e, int type);
-	void updateUseItemState(KeyEvent *e);
+	void updateInputState(InputEvent *e, int type);
+	void updateUseItemState(InputEvent *e);
 };

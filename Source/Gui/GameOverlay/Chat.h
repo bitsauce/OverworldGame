@@ -14,10 +14,10 @@ public:
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
 
-	void toggle(KeyEvent *e);
-	void sendMessage(KeyEvent *e);
-	void nextMessage(KeyEvent *e);
-	void prevMessage(KeyEvent *e);
+	void toggle(InputEvent *e);
+	void sendMessage(InputEvent *e);
+	void nextMessage(InputEvent *e);
+	void prevMessage(InputEvent *e);
 	void insertMessage(const string &message);
 
 private:
