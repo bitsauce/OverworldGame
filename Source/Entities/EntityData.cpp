@@ -4,6 +4,7 @@
 #include "ItemDrop.h"
 #include "DebugLight.h"
 #include "Mobs/Zombie.h"
+#include "Stick.h"
 
 //#include "RedCurrantBush.h"
 //#include "CraftingBench.h"
@@ -20,4 +21,6 @@ void EntityData::init(Game *)
 	s_data[ENTITY_ITEM_DROP] = new EntityData(ENTITY_ITEM_DROP, "ItemDrop", WORLD_LAYER_MIDDLE, ItemDrop::Factory);
 
 	s_data[ENTITY_DEBUG_POINTLIGHT] = new EntityData(ENTITY_DEBUG_POINTLIGHT, "Debug_Pointlight", WORLD_LAYER_MIDDLE, DebugPointlight::Factory);
+
+	s_data[ENTITY_STICK] = new EntityData(ENTITY_STICK, "Stick", WORLD_LAYER_MIDDLE, Stick::Factory);
 }

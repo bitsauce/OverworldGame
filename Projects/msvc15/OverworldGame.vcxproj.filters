@@ -224,6 +224,9 @@
     <ClCompile Include="..\..\Source\BlockEntities\Stick.cpp">
       <Filter>Source\BlockEntities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Entities\Stick.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -560,6 +563,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\BlockEntities\Stick.h">
       <Filter>Source\BlockEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Entities\Stick.h">
+      <Filter>Source\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -107,7 +107,7 @@ int ChunkGenerator::getGroundHeight(const int x)
 	{
 		generateGroundHeight(chunkX);
 	}
-	return itr->second[math::mod(x, CHUNK_BLOCKS)];
+	return m_groundHeight[chunkX][math::mod(x, CHUNK_BLOCKS)];
 }
 
 void ChunkGenerator::generateGroundHeight(const int chunkX)

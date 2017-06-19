@@ -145,7 +145,7 @@ void LineEdit::onDraw(DrawEvent *e)
 void LineEdit::onResize(ResizeEvent *e)
 {
 	delete m_renderTarget;
-	m_renderTarget = new RenderTarget2D(e->getWidth(), e->getHeight());
+	m_renderTarget = new RenderTarget2D(math::maximum(1, e->getWidth()), math::maximum(1, e->getHeight()));
 	m_dirty = true;
 }
 

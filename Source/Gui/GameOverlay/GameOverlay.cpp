@@ -22,7 +22,7 @@ GameOverlay::GameOverlay(OverworldGame *game, UiObject *parent, GraphicsContext 
 	m_omnicon = new Omnicon(scene, this);
 	m_inventory = new Inventory(scene, this);
 	m_crafting = new Crafting(scene, this);*/
-	m_chat = 0;// new Chat(game, context, this);
+	m_chat = new Chat(game, context, this);
 }
 
 GameOverlay::~GameOverlay()
