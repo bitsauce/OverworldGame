@@ -162,7 +162,7 @@ void Debug::debugFunction(InputEvent *_e)
 			{
 				for(int x = area.x0 * CHUNK_BLOCKS; x <= area.x1 * CHUNK_BLOCKS; ++x)
 				{
-					BlockEntityData::get(BLOCK_ENTITY_TORCH)->create(m_world, x, y);
+					BlockEntityData::get(BLOCK_ENTITY_TORCH)->create(x, y);
 				}
 			}
 		}

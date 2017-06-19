@@ -118,7 +118,7 @@ bool Chunk::setBlockAt(const int x, const int y, const WorldLayer layer, const B
 {
 	// Check if we need to do anything
 	const Block block = m_blocks[BLOCK_INDEX(x, y, layer)];
-	if(block != newBlock)
+	if(block.getBlockData() != newBlock)
 	{
 		if(m_neighborChunks[0] && x == 0 && y == 0)                               { m_neighborChunks[0]->m_sorted = m_neighborChunks[0]->m_attached = false; }
 		if(m_neighborChunks[1] && y == 0)                                         { m_neighborChunks[1]->m_sorted = m_neighborChunks[1]->m_attached = false; }

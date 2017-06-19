@@ -52,20 +52,20 @@ public:
 	};
 
 	void setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID id, const ReplacePolicy replace = REPLACE_ALWAYS);
-	void setBlockEntityAt(const int x, const int y, const WorldLayer layer, const BlockEntityID blockEntityID);
+	void setBlockEntityAt(const int x, const int y, const WorldLayer layer, BlockEntity *blockEntityID);
 
 private:
 	struct Block
 	{
 		Block() :
 			blockID(0),
-			blockEntityID(BlockEntityID(0)),
+			blockEntity(0),
 			replace(REPLACE_IF_EMPTY)
 		{
 		}
 
 		BlockID blockID;
-		BlockEntityID blockEntityID;
+		BlockEntity *blockEntity;
 		ReplacePolicy replace;
 	};
 

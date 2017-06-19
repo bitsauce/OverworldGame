@@ -113,6 +113,7 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <ClCompile Include="..\..\Source\BlockEntities\BlockEntityData.cpp" />
     <ClCompile Include="..\..\Source\BlockEntities\Bush.cpp" />
     <ClCompile Include="..\..\Source\BlockEntities\Pot.cpp" />
+    <ClCompile Include="..\..\Source\BlockEntities\Stick.cpp" />
     <ClCompile Include="..\..\Source\BlockEntities\Torch.cpp" />
     <ClCompile Include="..\..\Source\Blocks\Block.cpp" />
     <ClCompile Include="..\..\Source\Blocks\BlockData.cpp" />
@@ -188,6 +189,7 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <ClInclude Include="..\..\Source\BlockEntities\BlockEntityData.h" />
     <ClInclude Include="..\..\Source\BlockEntities\Bush.h" />
     <ClInclude Include="..\..\Source\BlockEntities\Pot.h" />
+    <ClInclude Include="..\..\Source\BlockEntities\Stick.h" />
     <ClInclude Include="..\..\Source\BlockEntities\Torch.h" />
     <ClInclude Include="..\..\Source\Blocks\Block.h" />
     <ClInclude Include="..\..\source\Blocks\BlockData.h" />

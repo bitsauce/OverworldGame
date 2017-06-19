@@ -63,7 +63,7 @@ bool Terrain::setBlockAt(const int x, const int y, const WorldLayer layer, const
 
 const BlockData *Terrain::getBlockAt(const int x, const int y, const WorldLayer layer)
 {
-	return m_chunkManager->getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF), true)->getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
+	return m_chunkManager->getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF), true)->getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer).getBlockData();
 }
 
 bool Terrain::isBlockAt(const int x, const int y, const WorldLayer layer)
@@ -122,7 +122,7 @@ BlockEntity *Terrain::createBlockEntityAt(const int x, const int y, const BlockE
 		return 0;
 	}
 
-	BlockEntity *blockEntity = data->create(m_world, x, y);
+	BlockEntity *blockEntity = data->create(x, y);
 
 	// Set block entity in all the positions it occupies
 	for(int y1 = y; y1 < y + data->getHeight(); y1++)

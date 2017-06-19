@@ -1,10 +1,11 @@
+#include "Game/Game.h"
 #include "BlockEntity.h"
 #include "World/World.h"
 
-BlockEntity::BlockEntity(World *world, const int x, const int y, const BlockEntityData *data) :
+BlockEntity::BlockEntity(const int x, const int y, const BlockEntityData *data) :
 	m_position(x, y),
 	m_data(data),
-	m_world(world)
+	m_world(dynamic_cast<OverworldGame*>(Game::Get())->getWorld())
 {
 }
 

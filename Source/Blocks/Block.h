@@ -15,45 +15,15 @@ public:
 	{
 	}
 
-	void setBlockEntity(BlockEntity *entity)
-	{
-		m_blockEntity = entity;
-	}
+	void setBlockEntity(BlockEntity *entity);
+	void setBlockData(const BlockData *data);
 
-	void setBlockData(const BlockData *data)
-	{
-		m_blockData = data;
-	}
+	void setBlockDataByID(const BlockID id);
 
-	void setBlockDataByID(const BlockID id)
-	{
-		m_blockData = BlockData::get(id);
-	}
+	const BlockData *getBlockData() const;
+	BlockEntity *getBlockEntity() const;
 
-	const BlockData *getBlockData() const
-	{
-		return m_blockData;
-	}
-
-	BlockEntity *getBlockEntity() const
-	{
-		return m_blockEntity;
-	}
-
-	operator BlockEntity* () const
-	{
-		return m_blockEntity;
-	}
-
-	operator const BlockData* () const
-	{
-		return m_blockData;
-	}
-
-	bool isEmpty() const
-	{
-		return m_blockData == 0 && m_blockEntity == 0;
-	}
+	bool isEmpty() const;
 
 private:
 	const BlockData *m_blockData;

@@ -9,7 +9,7 @@ class LightSource;
 
 // TODO: This class needs better encapsulation.
 // While the friend class solution works, it is not pretty.
-// Ideally, I want the user to only be able to manipulate the chunks through the Terrain class
+// Idealy, I want the user to only be able to manipulate the chunks through the Terrain class
 class Chunk
 {
 	friend class Terrain;

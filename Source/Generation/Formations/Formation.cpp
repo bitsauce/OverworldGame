@@ -86,7 +86,7 @@ void FormationElement::setBlockAt(const int x, const int y, const WorldLayer lay
 	block.replace = replace;
 }
 
-void FormationElement::setBlockEntityAt(const int x, const int y, const WorldLayer layer, const BlockEntityID blockEntityID)
+void FormationElement::setBlockEntityAt(const int x, const int y, const WorldLayer layer, BlockEntity *blockEntity)
 {
 	// Expand bounding box
 	if(x < 0) m_x1 = min(m_x1, m_originX + x);
@@ -95,5 +95,5 @@ void FormationElement::setBlockEntityAt(const int x, const int y, const WorldLay
 	else m_y2 = max(m_y2, m_originY + y);
 
 	// Set block at position
-	m_blocks[CHUNK_KEY(m_originX + x, m_originY + y)][layer].blockEntityID = blockEntityID;
+	m_blocks[CHUNK_KEY(m_originX + x, m_originY + y)][layer].blockEntity = blockEntity;
 }

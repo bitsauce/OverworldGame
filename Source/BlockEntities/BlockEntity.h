@@ -53,7 +53,7 @@ private:
 class BlockEntity
 {
 public:
-	BlockEntity(World *world, const int x, const int y, const BlockEntityData *data);
+	BlockEntity(const int x, const int y, const BlockEntityData *data);
 	~BlockEntity();
 
 	//virtual void onTick(const float dt);

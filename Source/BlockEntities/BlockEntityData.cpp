@@ -1,6 +1,7 @@
 #include "Constants.h"
 #include "BlockEntityData.h"
 
+#include "Stick.h"
 #include "Torch.h"
 #include "Bush.h"
 #include "Pot.h"
@@ -20,10 +21,10 @@ struct BlockEntityDescriptor
 	const uint animationSpeed; // 0 = 0%, 255 = Every tick
 	const WorldLayer layer;
 	const uint placement;
-	const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> factory;
+	const function<BlockEntity*(const int, const int, const BlockEntityData*)> factory;
 };
 
-BlockEntity* dummy(World*, const int, const int, const BlockEntityData*)
+BlockEntity* dummy(const int, const int, const BlockEntityData*)
 {
 	return 0;
 }
@@ -31,10 +32,11 @@ BlockEntity* dummy(World*, const int, const int, const BlockEntityData*)
 static BlockEntityDescriptor g_blockEntityData[] = {
 	{ BLOCK_ENTITY_NULL, "NULL", "Sprites/Blocks/Empty.png", 1, 1, 1, 0, WORLD_LAYER_MIDDLE, true, dummy },
 
-	{ BLOCK_ENTITY_TORCH, "Torch", "Sprites/BlockEntities/LightSources/Torch_anim_2.png", 1, 1, 3, 0, WORLD_LAYER_MIDDLE, NEED_WALL | NEED_FLOOR | NEED_BACK_BLOCK, Torch::Factory },
-	{ BLOCK_ENTITY_BUSH, "Bush", "Sprites/BlockEntities/Vegetation/RedCurrantBush.png", 4, 2, 2, 0, WORLD_LAYER_MIDDLE, NEED_FLOOR, Bush::Factory },
-	{ BLOCK_ENTITY_POT, "Pot", "Sprites/BlockEntities/Furniture/Pot.png", 2, 2, 1, 0, WORLD_LAYER_MIDDLE, NEED_FLOOR, Pot::Factory },
-	{ BLOCK_ENTITY_BEEHIVE, "Beehive", "Sprites/BlockEntities/Beehive.png", 2, 2, 1, 0, WORLD_LAYER_BACK, NEED_ROOF, Beehive::Factory },
+	//{ BLOCK_ENTITY_TORCH, "Stick", "Sprites/BlockEntities/Stick.png", 1, 1, 1, 0, WORLD_LAYER_MIDDLE, NEED_FLOOR, Stick::Factory },
+	//{ BLOCK_ENTITY_TORCH, "Torch", "Sprites/BlockEntities/LightSources/Torch_anim_2.png", 1, 1, 3, 0, WORLD_LAYER_MIDDLE, NEED_WALL | NEED_FLOOR | NEED_BACK_BLOCK, Torch::Factory },
+	//{ BLOCK_ENTITY_BUSH, "Bush", "Sprites/BlockEntities/Vegetation/RedCurrantBush.png", 4, 2, 2, 0, WORLD_LAYER_MIDDLE, NEED_FLOOR, Bush::Factory },
+	//{ BLOCK_ENTITY_POT, "Pot", "Sprites/BlockEntities/Furniture/Pot.png", 2, 2, 1, 0, WORLD_LAYER_MIDDLE, NEED_FLOOR, Pot::Factory },
+	//{ BLOCK_ENTITY_BEEHIVE, "Beehive", "Sprites/BlockEntities/Beehive.png", 2, 2, 1, 0, WORLD_LAYER_BACK, NEED_ROOF, Beehive::Factory },
 
 	{ BLOCK_ENTITY_COUNT, "", "", 0, 0, 0, 0, (WorldLayer)0, false, dummy }
 };

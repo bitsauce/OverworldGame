@@ -19,7 +19,7 @@ class BlockEntityData
 {
 	friend class OverworldGame;
 public:
-	BlockEntityData(const BlockEntityID id, const string &name, const Pixmap &pixmap, const int width, const int height, const uint frameCount, const WorldLayer layer, const uint placement, const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> factory) :
+	BlockEntityData(const BlockEntityID id, const string &name, const Pixmap &pixmap, const int width, const int height, const uint frameCount, const WorldLayer layer, const uint placement, const function<BlockEntity*(const int, const int, const BlockEntityData*)> factory) :
 		m_pixmap(pixmap),
 		m_id(id),
 		m_name(name),
@@ -53,13 +53,19 @@ public:
 		return 0;
 	}
 
-	BlockEntity *create(World *world, const int x, const int y) const
+	static BlockEntity *createByName(const string &name, const int x, const int y)
+	{
+		BlockEntityData *entityData = getByName(name);
+		return entityData ? entityData->create(x, y) : 0;
+	}
+
+	BlockEntity *create(const int x, const int y) const
 	{
 		if(!m_factory)
 		{
 			THROW("Entity (id=%i) has no factory", getID());
 		}
-		return m_factory(world, x, y, this);
+		return m_factory(x, y, this);
 	}
 
 
@@ -118,7 +124,7 @@ private:
 	const uint m_frameCount;
 	const WorldLayer m_layer;
 	const uint m_placement;
-	const function<BlockEntity*(World*, const int, const int, const BlockEntityData*)> m_factory;
+	const function<BlockEntity*(const int, const int, const BlockEntityData*)> m_factory;
 
 	static void init();
 

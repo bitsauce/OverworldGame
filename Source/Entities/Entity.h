@@ -19,48 +19,20 @@ public:
 	virtual void onSaveData(FileWriter &f) {}
 	virtual void onLoadData(FileReader &f) {}
 
-	const EntityData *getData() const
-	{
-		return m_data;
-	}
+	const EntityData *getData() const { return m_data; }
 
 	/* Position functions */
 	void setPosition(const Vector2F &pos);
+	void setPosition(const float x, const float y) { setPosition(Vector2F(x, y)); }
 
-	void setPosition(const float x, const float y)
-	{
-		setPosition(Vector2F(x, y));
-	}
+	void setX(const float x) { setPosition(x, getY()); }
+	void setY(const float y) { setPosition(getX(), y); }
 
-	void setX(const float x)
-	{
-		setPosition(x, getY());
-	}
+	float getX() const { return getPosition().x; }
+	float getY() const { return getPosition().y; }
 
-	void setY(const float y)
-	{
-		setPosition(getX(), y);
-	}
-
-	float getX() const
-	{
-		return getPosition().x;
-	}
-
-	float getY() const
-	{
-		return getPosition().y;
-	}
-
-	Vector2F getPosition() const
-	{
-		return m_position;
-	}
-
-	Vector2F getLastPosition() const
-	{
-		return m_lastPosition;
-	}
+	Vector2F getPosition() const { return m_position; }
+	Vector2F getLastPosition() const { return m_lastPosition; }
 
 	void moveTo(const Vector2F &pos)
 	{

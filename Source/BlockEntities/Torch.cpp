@@ -1,7 +1,7 @@
 #include "Torch.h"
 
 Torch::Torch(World *world, int x, int y, const BlockEntityData *data) :
-	BlockEntity(world, x, y, data),
+	BlockEntity(x, y, data),
 	m_pointlight(world)
 {
 	m_pointlight.setMobility(LightSource::STATIC);
