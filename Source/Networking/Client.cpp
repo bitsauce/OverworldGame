@@ -69,13 +69,15 @@ void Client::onTick(TickEvent *e)
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
-				char *playerName = new char[512]; bitStream.Read(playerName);
+				char *playerName = new char[MAX_USERNAME_LENGTH]; bitStream.Read(playerName);
 				RakNet::RakNetGUID guid; bitStream.Read(guid);
 				RakNet::NetworkID playerNetworkID; bitStream.Read(playerNetworkID);
 				RakNet::NetworkID controllerNetworkID; bitStream.Read(controllerNetworkID);
 
 				// Create player
-				Player *player = new Player("BitsauceClient", m_game, true);
+				Json::Value attributes;
+				attributes["name"] = playerName;
+				Player *player = new Player(attributes);
 				player->SetNetworkIDManager(&m_networkIDManager);
 				player->SetNetworkID(playerNetworkID);
 				player->unpack(&bitStream, this);
@@ -106,10 +108,10 @@ void Client::onTick(TickEvent *e)
 
 				switch(entityID)
 				{
-					case ENTITY_PLAYER:
+					case 1:
 					{
 						// Create player
-						Player *player = new Player("", m_game, false);
+						Player *player = new Player(Json::Value());
 						player->SetNetworkIDManager(&m_networkIDManager);
 						player->SetNetworkID(networkID);
 						player->setController(new PlayerController(m_game, false));

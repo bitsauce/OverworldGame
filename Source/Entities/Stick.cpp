@@ -1,7 +1,7 @@
 #include "Stick.h"
 #include "Game/RayCast.h"
 
-Stick::Stick(Pawn *owner, World *world, const Vector2F &pos, const Vector2F &dir, const float speed) :
+/*Stick::Stick(Pawn *owner, World *world, const Vector2F &pos, const Vector2F &dir, const float speed) :
 	Entity(world, ENTITY_STICK),
 	m_owner(owner),
 	m_sprite(Resource<Texture2D>("Sprites/Items/Weapons/Arrow")),
@@ -30,4 +30,4 @@ void Stick::onDraw(DrawEvent *e)
 
 void Stick::onTick(TickEvent *e)
 {
-}
+}*/

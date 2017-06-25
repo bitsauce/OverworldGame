@@ -17,6 +17,8 @@ enum PacketID
 
 #define DEFAULT_PORT 45557
 
+#define MAX_USERNAME_LENGTH 20
+
 #define CHAT_FADE_TIME 10.0f
 #define CHAT_WIDTH 400
 #define CHAT_HEIGHT 250
@@ -64,20 +66,7 @@ enum GameStateID
  * \brief	Entity IDs.
  */
 
-enum EntityID
-{
-	ENTITY_NULL,
-
-	ENTITY_ARROW,
-	ENTITY_PLAYER,
-	ENTITY_ITEM_DROP,
-	ENTITY_ZOMBIE,
-	ENTITY_TORCH,
-	ENTITY_DEBUG_POINTLIGHT,
-	ENTITY_STICK,
-
-	ENTITY_COUNT
-};
+typedef int EntityID;
 
 /**
  * \enum	BlockID

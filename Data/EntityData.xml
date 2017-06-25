@@ -1,0 +1,18 @@
+<entities>
+	<!-- GENERAL -->
+	<e>
+		<id>1</id>
+		<name>Player</name>
+    <layer>middle</layer>
+	</e>
+  <e>
+    <id>2</id>
+    <name>Arrow</name>
+    <layer>back</layer>
+  </e>
+  <e>
+    <id>3</id>
+    <name>ItemDrop</name>
+    <layer>middle</layer>
+  </e>
+</entities>

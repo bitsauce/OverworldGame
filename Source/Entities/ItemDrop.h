@@ -8,18 +8,18 @@
 class ItemDrop : public Entity
 {
 public:
-	ItemDrop(World *world, const ItemID item, const int amount = 1);
+	ItemDrop(const Json::Value &attributes);
 
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
 
-	static Entity *Factory(World * world)
+	static Entity *Factory(const Json::Value &attributes)
 	{
-		return new ItemDrop(world, ITEM_NONE, 1);
+		return new ItemDrop(attributes);
 	}
 
 private:
-	const ItemID m_itemID;
+	ItemID m_itemID;
 	int m_amount;
 	float m_noPickupTime;
 	float m_dragDistance;

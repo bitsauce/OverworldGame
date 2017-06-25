@@ -38,7 +38,7 @@ public:
 	Commander(OverworldGame *game);
 	~Commander();
 
-	void execute(const string &command);
+	void execute(string command);
 
 private:
 	void spawn(Chat*, vector<string>);

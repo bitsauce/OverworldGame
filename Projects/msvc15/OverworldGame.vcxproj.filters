@@ -227,6 +227,9 @@
     <ClCompile Include="..\..\Source\Entities\Stick.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\json\jsoncpp.cpp">
+      <Filter>Source\json</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -315,6 +318,9 @@
     </Filter>
     <Filter Include="Source\Generation\Formations">
       <UniqueIdentifier>{1c3cb884-b1a7-422e-9a11-03673ede7a5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\json">
+      <UniqueIdentifier>{824b1655-22a1-41d4-baaa-2e4c172511ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -567,6 +573,12 @@
     <ClInclude Include="..\..\Source\Entities\Stick.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\json\json.h">
+      <Filter>Source\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\json\json-forwards.h">
+      <Filter>Source\json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\Data\Resources.xml">
@@ -579,6 +591,9 @@
       <Filter>Data</Filter>
     </Xml>
     <Xml Include="..\..\Data\ItemData.xml">
+      <Filter>Data</Filter>
+    </Xml>
+    <Xml Include="..\..\Data\EntityData.xml">
       <Filter>Data</Filter>
     </Xml>
   </ItemGroup>

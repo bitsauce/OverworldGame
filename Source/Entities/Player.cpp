@@ -1,14 +1,13 @@
 #include "Constants.h"
 #include "Player.h"
 #include "PlayerController.h"
+#include "Entities/EntityData.h"
 
-Player::Player(const string &name, OverworldGame *game, const bool local) :
-	Pawn(game->getWorld(), ENTITY_PLAYER),
-	m_name(name),
+Player::Player(const Json::Value &attributes) :
+	Pawn("Player", attributes),
 	m_font(Resource<Font>("Fonts/Debug"))
 {
-	// Create player controller
-	//setController(new PlayerController(game, local));
+	m_name = attributes.get("name", "<UNKNOWN>").asString();
 }
 
 Player::~Player()
@@ -20,6 +19,6 @@ Player::~Player()
 void Player::onDraw(DrawEvent *e)
 {
 	SpriteBatch *spriteBatch = (SpriteBatch*)e->getUserData();
-	//m_font->draw(spriteBatch, getPosition() - Vector2F(16, 48), m_name);
+	m_font->draw(spriteBatch, getDrawPosition(e->getAlpha()) - Vector2F(16, 48), m_name);
 	Pawn::onDraw(e);
 }

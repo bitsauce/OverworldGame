@@ -2,10 +2,11 @@
 #include "EntityData.h"
 #include "Constants.h"
 #include "World/World.h"
+#include "Game/Game.h"
 
-Entity::Entity(World *world, const EntityID id) :
-	m_world(world),
-	m_data(EntityData::get(id)),
+Entity::Entity(const string &entityName, const Json::Value &attributes) :
+	m_world(dynamic_cast<OverworldGame*>(Game::Get())->getWorld()),
+	m_data(EntityData::GetByName(entityName)),
 	m_acceleration(0.0f, 0.0f),
 	m_velocity(0.0f, 0.0f),
 	m_position(0.0f, 0.0f),
@@ -17,6 +18,19 @@ Entity::Entity(World *world, const EntityID id) :
 	m_contact(0),
 	m_lastChunkPosition(0, 0)
 {
+	// { "position": { "x": 200, "y": 200} }
+	if(attributes.isMember("position"))
+	{
+		const Json::Value &position = attributes["position"];
+		if(position.isMember("x")) m_position.x = position["x"].asFloat();
+		if(position.isMember("y")) m_position.y = position["y"].asFloat();
+	}
+
+	if(!m_data)
+	{
+		THROW("Could not create entity '%s' (no entity data)", entityName.c_str());
+	}
+
 	m_world->addEntity(this);
 	m_world->getTerrain()->getChunkManager()->getChunkAt(m_lastChunkPosition.x, m_lastChunkPosition.y, true)->m_entities.push_back(this);
 }

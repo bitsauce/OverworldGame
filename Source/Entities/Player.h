@@ -7,12 +7,12 @@
 class Player : public Pawn
 {
 public:
-	Player(const string &name, OverworldGame *game, const bool local);
+	Player(const Json::Value &attributes);
 	~Player();
 
-	static Entity *Factory(World*)
+	static Entity *Factory(const Json::Value &attributes)
 	{
-		return new Player("NULL", (OverworldGame*) Game::Get(), false);
+		return new Player(attributes);
 	}
 
 	string getName() const
@@ -20,12 +20,10 @@ public:
 		return m_name;
 	}
 
-
 	virtual void onDraw(DrawEvent *e);
 
 private:
-	const string m_name;
-
+	string m_name;
 	Resource<Font> m_font;
 };
 

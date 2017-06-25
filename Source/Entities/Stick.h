@@ -4,7 +4,7 @@
 #include "Game/Game.h"
 #include "Pawn.h"
 
-class Stick : public Entity
+/*class Stick : public Entity
 {
 public:
 	Stick(Pawn *owner, World *world, const Vector2F &pos, const Vector2F &dir, const float speed);
@@ -23,4 +23,4 @@ private:
 	uint m_hitState;
 	float m_deleteTime;
 	float m_moveToAlpha;
-};
+};*/

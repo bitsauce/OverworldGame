@@ -3,17 +3,23 @@
 #include "Player.h"
 #include "World/World.h"
 #include "Items/ItemData.h"
+#include "Entities/EntityData.h"
 
-ItemDrop::ItemDrop(World *world, const ItemID item, const int amount) :
-	Entity(world, ENTITY_ITEM_DROP),
-	m_itemID(item),
-	m_amount(amount),
+ItemDrop::ItemDrop(const Json::Value &attributes) :
+	Entity("ItemDrop", attributes),
 	m_noPickupTime(1.0f), // No pickup for 1 s
 	m_dragDistance(16.0f * BLOCK_PXF),
 	m_pickupDistance(16.0f),
 	m_hoverTime(0.0f),
 	m_prevHoverTime(0.0f)
 {
+	if(attributes.isMember("item"))
+	{
+		const Json::Value &item = attributes["item"];
+		m_itemID = item.get("id", ITEM_NONE).asInt();
+		m_amount = item.get("amount", 1).asInt();
+	}
+
 	setGravityScale(0.1f);
 	setSize(Vector2F(16.0f));
 }

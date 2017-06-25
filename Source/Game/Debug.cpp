@@ -482,10 +482,10 @@ void Debug::onMouseEvent(MouseEvent *e)
 					else if(e->getButton() == SAUCE_MOUSE_BUTTON_RIGHT)
 					{
 						// Create new point light
-						m_newPointlight = new DebugPointlight(m_world);
+						/*m_newPointlight = new DebugPointlight(m_world);
 						m_newPointlight->setPosition(Vector2F(m_world->getCamera()->getInputPosition()));
 						m_newPointlight->getPointlight()->setColor(m_colorPicker->getSelectedColor());
-						m_selectedLight = m_newPointlight;
+						m_selectedLight = m_newPointlight;*/
 					}
 				}
 				break;

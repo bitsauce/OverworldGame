@@ -3,40 +3,55 @@
 #include "Config.h"
 #include "Constants.h"
 
-class World;
 class Entity;
+
+typedef function<Entity*(const Json::Value&)> EntityFactory;
 
 class EntityData
 {
 	friend class OverworldGame;
 public:
-	EntityData(const EntityID id, const string &name, const WorldLayer layer, const function<Entity*(World*)> factory) :
+	EntityData(const EntityID id, const string &name, const WorldLayer layer, const EntityFactory factory) :
 		m_id(id),
 		m_name(name),
 		m_layer(layer),
 		m_factory(factory)
 	{
+		if(!m_factory) THROW("Cannot create EntityData for %s. Missing factory function", name.c_str());
 	}
 
-	static EntityData *get(const EntityID id)
+	static EntityData *Get(const EntityID id)
 	{
-		if(!s_data[id])
+		map<EntityID, EntityData*>::iterator itr = s_idToData.find(id);
+		if(itr != s_idToData.end())
 		{
-			THROW("Entity (id=%i) has no EntityData", id);
-		}
-		return s_data[id];
-	}
-
-	static EntityData *getByName(const string &name)
-	{
-		for(int i = 0; i < ENTITY_COUNT; ++i)
-		{
-			if(s_data[i] && s_data[i]->m_name == name)
-			{
-				return s_data[i];
-			}
+			return itr->second;
 		}
 		return 0;
+	}
+
+	static EntityData *GetByName(const string &name)
+	{
+		map<string, EntityData*>::iterator itr = s_nameToData.find(name);
+		if(itr != s_nameToData.end())
+		{
+			return itr->second;
+		}
+		return 0;
+	}
+
+	static Entity *Create(const EntityID id, const Json::Value &attributes)
+	{
+		EntityData *data = Get(id);
+		if(!data) THROW("Cannot create entity with id=%i. No entity with that ID exists", id);
+		return data->m_factory(attributes);
+	}
+
+	static Entity *CreateByName(const string &name, const Json::Value &attributes)
+	{
+		EntityData *data = GetByName(name);
+		if(!data) THROW("Cannot create entity '%s'. No entity with that name exists", name.c_str());
+		return data->m_factory(attributes);
 	}
 
 	EntityID getID() const
@@ -54,21 +69,13 @@ public:
 		return m_layer;
 	}
 
-	Entity *create(World *world)
-	{
-		if(!m_factory)
-		{
-			THROW("Entity (id=%i) has no factory", getID());
-		}
-		return m_factory(world);
-	}
-
 private:
 	const EntityID m_id;
 	const string m_name;
 	const WorldLayer m_layer;
-	const function<Entity*(World*)> m_factory;
+	const EntityFactory m_factory;
 
 	static void init(Game *game);
-	static vector<EntityData*> s_data;
+	static map<string, EntityData*> s_nameToData;
+	static map<EntityID, EntityData*> s_idToData;
 };

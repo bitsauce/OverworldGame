@@ -148,8 +148,8 @@ void ChunkManager::loadEntities(FileReader &file)
 	{
 		int id;
 		file >> id;
-		if(id == ENTITY_PLAYER) continue;
-		Entity *entity = EntityData::get((EntityID) id)->create(m_world);
+		if(id == /*ENTITY_PLAYER*/1) continue;
+		Entity *entity = EntityData::Create(id, Json::Value());
 		entity->onLoadData(file);
 	}
 }

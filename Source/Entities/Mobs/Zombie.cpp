@@ -4,7 +4,7 @@
 #include "Entities/AIController.h"
 #include "Constants.h"
 
-Zombie::Zombie(World *world) :
+/*Zombie::Zombie(World *world) :
 	Pawn(world, ENTITY_ZOMBIE)
 {
 	setController(new AIController(world));
@@ -19,4 +19,4 @@ void Zombie::onTick(TickEvent *e)
 void Zombie::onDraw(DrawEvent *e)
 {
 	Pawn::onDraw(e);
-}
+}*/

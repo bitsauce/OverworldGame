@@ -11,7 +11,7 @@
 Commander::Commander(OverworldGame *game) :
 	m_game(game)
 {
-	m_commands.push_back(Command("spawn", "1", "<EntityName> [x] [y] [dataTag]", bind(&Commander::spawn, this, placeholders::_1, placeholders::_2)));
+	m_commands.push_back(Command("spawn", "1|2", "<EntityName> [attributes]", bind(&Commander::spawn, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("place", "1|3", "<BlockEntityName> [x] [y] [dataTag]", bind(&Commander::place, this, placeholders::_1, placeholders::_2)));
 	//m_commands.push_back(Command("setblock", "3", "<BlockName> <x> <y>", bind(&Commander::setBlock, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("give", "1|2|3", "<ItemName> [amount] [player]", bind(&Commander::give, this, placeholders::_1, placeholders::_2)));
@@ -33,14 +33,45 @@ Commander::~Commander()
 {
 }
 
-void Commander::execute(const string &cmdString)
+void Commander::execute(string command)
 {
 	// Get chat
 	Chat *chat = m_game->getGameOverlay()->getChat();
 
 	// Split the command
-	vector<string> cmdSplitString = util::splitString(cmdString, " ");
-	if(cmdSplitString[0].empty()) // Empty command
+	vector<string> cmdSplitString;
+	string cmdBuffer;
+	int bracketCount = 0;
+	for(int i = 0; i < command.size(); i++)
+	{
+		if(command[i] == ' ' && bracketCount == 0)
+		{
+			if(!cmdBuffer.empty())
+			{
+				cmdSplitString.push_back(cmdBuffer);
+				cmdBuffer.clear();
+				continue;
+			}
+		}
+		else if(command[i] == '{')
+		{
+			bracketCount++;
+		}
+		else if(command[i] == '}')
+		{
+			bracketCount--;
+		}
+		cmdBuffer += command[i];
+	}
+
+	// Append last command arg
+	if(!cmdBuffer.empty())
+	{
+		cmdSplitString.push_back(cmdBuffer);
+	}
+
+	// Empty command. Print help
+	if(cmdSplitString[0].empty())
 	{
 		chat->insertMessage("Type /help for more info.");
 		return;
@@ -75,16 +106,26 @@ void Commander::execute(const string &cmdString)
 
 void Commander::spawn(Chat *chat, vector<string> args)
 {
-	EntityData *data = EntityData::getByName(args[0]);
-	if(!data)
+	// Make sure the there exists an entity with the given name
+	if(EntityData::GetByName(args[0]) == 0)
 	{
 		chat->insertMessage("No entity named '" + args[0] + "'");
 		return;
 	}
 
-	Entity *entity = (Entity*) data->create(m_game->getWorld());
+	// Parse JSON attributes
+	Json::Value attributes;
+	if(args.size() == 2)
+	{
+		Json::Reader reader;
+		reader.parse(args[1], attributes);
+	}
+
+	// Create entity by name
+	Entity *entity = EntityData::CreateByName(args[0], attributes);
 	entity->setPosition(m_game->getWorld()->getLocalPlayer()->getPosition());
 
+	// Insert chat message
 	chat->insertMessage(args[0] + " spawned");
 }
 

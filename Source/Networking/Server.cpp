@@ -79,13 +79,17 @@ void Server::onTick(TickEvent *e)
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
-				char *playerName = new char[512];
+				char *playerName = new char[MAX_USERNAME_LENGTH];
 				bitStream.Read(playerName);
 
+				// If the GUID of the client sending the packet is the same as the server,
+				// the client is playing on a server locally
 				bool local = getGUID() == packet->guid;
 
 				// Create player
-				Player *player = new Player(playerName, m_game, local);
+				Json::Value attributes;
+				attributes["name"] = playerName;
+				Player *player = new Player(attributes);
 
 				// Create player controller
 				PlayerController *playerController = new PlayerController(m_game, local);
@@ -154,7 +158,7 @@ void Server::onTick(TickEvent *e)
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
-				char *playerName = new char[512];
+				char *playerName = new char[MAX_USERNAME_LENGTH];
 				bitStream.Read(playerName);
 
 				savePlayer(m_players[packet->guid]);
@@ -189,12 +193,12 @@ void Server::onTick(TickEvent *e)
 
 				switch(entity)
 				{
-					case ENTITY_ZOMBIE:
+					/*case ENTITY_ZOMBIE:
 					{
 						Zombie *zombie = new Zombie(m_game->getWorld());
 						zombie->setPosition(m_players.begin()->second->getPosition());
 						netObj = zombie;
-					}
+					}*/
 				}
 
 				{

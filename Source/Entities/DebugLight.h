@@ -12,7 +12,7 @@ class DebugPointlight : public Entity
 {
 	friend class Debug;
 public:
-	DebugPointlight(World *world);
+	DebugPointlight(const Json::Value &attributes);
 	~DebugPointlight();
 
 	void onTick(TickEvent *e);
@@ -22,9 +22,9 @@ public:
 
 	Pointlight *getPointlight() const;
 
-	static Entity *Factory(World *world)
+	static Entity *Factory(const Json::Value &attributes)
 	{
-		return new DebugPointlight(world);
+		return new DebugPointlight(attributes);
 	}
 
 private:

@@ -159,6 +159,7 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <ClCompile Include="..\..\Source\Items\Tools\Pickaxe.cpp" />
     <ClCompile Include="..\..\Source\Items\Weapons\Ammo.cpp" />
     <ClCompile Include="..\..\Source\Items\Weapons\Bow.cpp" />
+    <ClCompile Include="..\..\Source\json\jsoncpp.cpp" />
     <ClCompile Include="..\..\Source\Networking\Client.cpp" />
     <ClCompile Include="..\..\Source\Networking\Conneciton.cpp" />
     <ClCompile Include="..\..\Source\Networking\NetworkObject.cpp" />
@@ -241,6 +242,8 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <ClInclude Include="..\..\source\Items\Tools\Pickaxe.h" />
     <ClInclude Include="..\..\Source\Items\Weapons\Ammo.h" />
     <ClInclude Include="..\..\source\Items\Weapons\Bow.h" />
+    <ClInclude Include="..\..\Source\json\json-forwards.h" />
+    <ClInclude Include="..\..\Source\json\json.h" />
     <ClInclude Include="..\..\Source\Networking\Client.h" />
     <ClInclude Include="..\..\source\Networking\Connection.h" />
     <ClInclude Include="..\..\source\Networking\NetworkObject.h" />
@@ -264,6 +267,9 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\Data\BlockData.xml" />
+    <Xml Include="..\..\Data\EntityData.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\..\Data\InputConfig.xml" />
     <Xml Include="..\..\Data\ItemData.xml" />
     <Xml Include="..\..\Data\Resources.xml" />

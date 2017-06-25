@@ -40,7 +40,7 @@ private:
 class Pawn : public Entity
 {
 public:
-	Pawn(World *world, const EntityID id);
+	Pawn(const string &entityName, const Json::Value &attributes);
 	virtual ~Pawn();
 
 	void setController(Controller *controller);

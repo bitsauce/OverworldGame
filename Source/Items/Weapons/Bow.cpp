@@ -36,39 +36,34 @@ void Bow::unequip(Pawn *player)
 
 void Bow::update(Pawn *pawn, const float delta)
 {
-	Vector2F dir = m_game->getWorld()->getCamera()->getInputPosition() - pawn->getCenter();
+	const Vector2F aimCenter = pawn->getCenter() - Vector2F(0.0f, 12.0f);
+	const Vector2F dir = Vector2F(m_game->getWorld()->getCamera()->getInputPosition() - aimCenter).normalized();
 	if(pawn->getController()->getInputState(Controller::INPUT_USE_ITEM))
 	{
 		m_charging = true;
 		m_chargeTime += delta * 3;
 		if(dir.x > 0.0f)
 		{
-			float alpha;
 			pawn->getHumanoid().getSkeleton()->setFlipX(false);
 			if(dir.y > 0.0f)
 			{
-				alpha = dir.angle() / (PI / 2);
-				pawn->getHumanoid().setPostBlendAnimations(Humanoid::ANIM_ARROW_AIM_FW, Humanoid::ANIM_ARROW_AIM_DW, alpha);
+				pawn->getHumanoid().setPostBlendAnimations(Humanoid::ANIM_ARROW_AIM_FW, Humanoid::ANIM_ARROW_AIM_DW, dir.angle() / (PI / 2));
 			}
 			else
 			{
-				alpha = -dir.angle() / (PI / 2);
-				pawn->getHumanoid().setPostBlendAnimations(Humanoid::ANIM_ARROW_AIM_FW, Humanoid::ANIM_ARROW_AIM_UP, alpha);
+				pawn->getHumanoid().setPostBlendAnimations(Humanoid::ANIM_ARROW_AIM_FW, Humanoid::ANIM_ARROW_AIM_UP, -dir.angle() / (PI / 2));
 			}
 		}
 		else
 		{
-			float alpha;
 			pawn->getHumanoid().getSkeleton()->setFlipX(true);
 			if(dir.y > 0.0f)
 			{
-				alpha = 1.0f - (dir.angle() - (PI / 2)) / (PI / 2);
-				pawn->getHumanoid().setPostBlendAnimations(Humanoid::ANIM_ARROW_AIM_FW, Humanoid::ANIM_ARROW_AIM_DW, alpha);
+				pawn->getHumanoid().setPostBlendAnimations(Humanoid::ANIM_ARROW_AIM_FW, Humanoid::ANIM_ARROW_AIM_DW, 2.0f - dir.angle() / (PI / 2));
 			}
 			else
 			{
-				alpha = 1.0f - (-dir.angle() - (PI / 2)) / (PI / 2);
-				pawn->getHumanoid().setPostBlendAnimations(Humanoid::ANIM_ARROW_AIM_FW, Humanoid::ANIM_ARROW_AIM_UP, alpha);
+				pawn->getHumanoid().setPostBlendAnimations(Humanoid::ANIM_ARROW_AIM_FW, Humanoid::ANIM_ARROW_AIM_UP, 2.0f + dir.angle() / (PI / 2));
 			}
 		}
 		pawn->getHumanoid().clearAttachment(Humanoid::RIGHT_HAND);
@@ -79,7 +74,12 @@ void Bow::update(Pawn *pawn, const float delta)
 	{
 		if(pawn->getStorage()->removeItem(ItemData::getByName("arrow_item")->getID()) == 0)
 		{
-			new Arrow(pawn, m_game->getWorld(), pawn->getCenter(), dir, 45.0f * min(m_chargeTime, 1.0f));
+			Json::Value attributes;
+			attributes["angle"] = dir.angle();
+			attributes["speed"] = 45.0f * min(m_chargeTime, 1.0f);
+			attributes["position"]["x"] = aimCenter.x;
+			attributes["position"]["y"] = aimCenter.y;
+			new Arrow(attributes);
 		}
 		m_chargeTime = 0.0f;
 		m_charging = false;

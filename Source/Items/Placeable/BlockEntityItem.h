@@ -1,9 +1,8 @@
 #ifndef BLOCK_ENTITY_ITEM_H
 #define BLOCK_ENTITY_ITEM_H
 
+#include "Constants.h"
 #include "Items/ItemData.h"
-
-enum EntityID;
 
 class BlockEntityItem : public ItemData
 {

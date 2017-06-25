@@ -15,10 +15,10 @@
 
 #include "Gui/Canvas.h"
 
-Pawn::Pawn(World *world, const EntityID id) :
-	Entity(world, id),
-	m_camera(world->getCamera()),
-	m_terrain(world->getTerrain()),
+Pawn::Pawn(const string &entityName, const Json::Value &attributes) :
+	Entity(entityName, attributes),
+	m_camera(m_world->getCamera()),
+	m_terrain(m_world->getTerrain()),
 	m_controller(0),
 	m_jumpTimer(1.0f),
 	m_canJump(false),
@@ -42,7 +42,7 @@ Pawn::Pawn(World *world, const EntityID id) :
 	m_pointlight->setColor(Color::White);*/
 
 
-	m_spotlight = new Spotlight(world);
+	m_spotlight = new Spotlight(m_world);
 	m_spotlight->setMobility(LightSource::DYNAMIC);
 	m_spotlight->setRadius(5.0f);
 	m_spotlight->setColor(Color::White);
@@ -265,7 +265,6 @@ void Pawn::onDraw(DrawEvent *e)
 	{
 		item->draw(this, spriteBatch, e->getAlpha());
 	}
-
 }
 
 void Pawn::pack(RakNet::BitStream *bitStream, const Connection *conn)

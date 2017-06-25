@@ -80,7 +80,7 @@ bool Terrain::removeBlockAt(const int x, const int y, const WorldLayer layer, co
 	{
 		if(createItem)
 		{
-			ItemDrop *itemDrop = new ItemDrop(m_world, block->getItem()->getID());
+			ItemDrop *itemDrop = new ItemDrop(block->getItem()->getID());
 			itemDrop->setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
 		}
 		return true;

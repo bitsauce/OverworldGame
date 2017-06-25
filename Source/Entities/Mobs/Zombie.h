@@ -8,7 +8,7 @@
 
 class OverworldGame;
 
-class Zombie : public Pawn
+/*class Zombie : public Pawn
 {
 public:
 	Zombie(World *world);
@@ -21,6 +21,6 @@ public:
 		return new Zombie(world);
 	}
 private:
-};
+};*/
 
 #endif // ZOMBIE_H
