@@ -1,6 +1,6 @@
 #include "Constants.h"
 #include "Player.h"
-#include "PlayerController.h"
+#include "Networking/Controller.h"
 #include "Entities/EntityData.h"
 
 Player::Player(const Json::Value &attributes) :
@@ -12,8 +12,6 @@ Player::Player(const Json::Value &attributes) :
 
 Player::~Player()
 {
-	// Delete controller
-	delete m_controller;
 }
 
 void Player::onDraw(DrawEvent *e)

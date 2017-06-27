@@ -120,10 +120,17 @@ void Commander::spawn(Chat *chat, vector<string> args)
 		Json::Reader reader;
 		reader.parse(args[1], attributes);
 	}
+	
+	// If no position is provided, spawn object at player position
+	if(!attributes.isMember("position"))
+	{
+		Vector2F playerPos = m_game->getWorld()->getLocalPlayer()->getPosition();
+		attributes["position"]["x"] = playerPos.x;
+		attributes["position"]["y"] = playerPos.y;
+	}
 
 	// Create entity by name
 	Entity *entity = EntityData::CreateByName(args[0], attributes);
-	entity->setPosition(m_game->getWorld()->getLocalPlayer()->getPosition());
 
 	// Insert chat message
 	chat->insertMessage(args[0] + " spawned");

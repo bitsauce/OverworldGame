@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Config.h"
-#include "Controller.h"
-#include "Networking/NetworkObject.h"
 #include "Entity.h"
 
 class OverworldGame;

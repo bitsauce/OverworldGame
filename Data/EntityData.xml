@@ -15,4 +15,9 @@
     <name>ItemDrop</name>
     <layer>middle</layer>
   </e>
+  <e>
+    <id>4</id>
+    <name>Stick</name>
+    <layer>middle</layer>
+  </e>
 </entities>

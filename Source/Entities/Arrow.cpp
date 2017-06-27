@@ -2,9 +2,8 @@
 #include "Game/RayCast.h"
 #include "Entities/EntityData.h"
 
-Arrow::Arrow(const Json::Value &attributes/*, const string &owner, const Vector2F &pos, const Vector2F &dir, const float speed*/) :
+Arrow::Arrow(const Json::Value &attributes) :
 	Entity("Arrow", attributes),
-	//m_owner(owner),
 	m_sprite(Resource<Texture2D>("Sprites/Items/Weapons/Arrow")),
 	m_hitState(false),
 	m_deleteTime(0.0f),
@@ -14,6 +13,7 @@ Arrow::Arrow(const Json::Value &attributes/*, const string &owner, const Vector2
 	m_sprite.getTexture()->setFiltering(Texture2D::LINEAR);
 	m_sprite.setRegion(TextureRegion(), true);
 	m_sprite.setOrigin(m_sprite.getSize() * 0.5f);
+	m_sprite.setPosition(getPosition());
 
 	// Set angle, velocity and gravity scale
 	Vector2F dir(1.0f, 0.0f); dir.rotate(attributes.get("angle", 0.0f).asFloat());

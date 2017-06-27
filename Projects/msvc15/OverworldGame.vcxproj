@@ -119,7 +119,6 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <ClCompile Include="..\..\Source\Blocks\BlockData.cpp" />
     <ClCompile Include="..\..\Source\Entities\AIController.cpp" />
     <ClCompile Include="..\..\Source\Entities\Arrow.cpp" />
-    <ClCompile Include="..\..\Source\Entities\Controller.cpp" />
     <ClCompile Include="..\..\Source\Entities\DebugLight.cpp" />
     <ClCompile Include="..\..\Source\Entities\Entity.cpp" />
     <ClCompile Include="..\..\Source\Entities\EntityData.cpp" />
@@ -128,7 +127,6 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <ClCompile Include="..\..\Source\Entities\Mobs\Zombie.cpp" />
     <ClCompile Include="..\..\Source\Entities\Pawn.cpp" />
     <ClCompile Include="..\..\Source\Entities\Player.cpp" />
-    <ClCompile Include="..\..\Source\Entities\PlayerController.cpp" />
     <ClCompile Include="..\..\Source\Entities\Stick.cpp" />
     <ClCompile Include="..\..\Source\Game\Commander.cpp" />
     <ClCompile Include="..\..\Source\Game\Debug.cpp" />
@@ -162,7 +160,9 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <ClCompile Include="..\..\Source\json\jsoncpp.cpp" />
     <ClCompile Include="..\..\Source\Networking\Client.cpp" />
     <ClCompile Include="..\..\Source\Networking\Conneciton.cpp" />
+    <ClCompile Include="..\..\Source\Networking\Controller.cpp" />
     <ClCompile Include="..\..\Source\Networking\NetworkObject.cpp" />
+    <ClCompile Include="..\..\Source\Networking\PlayerController.cpp" />
     <ClCompile Include="..\..\Source\Networking\Server.cpp" />
     <ClCompile Include="..\..\Source\World\Controllers\Background.cpp" />
     <ClCompile Include="..\..\Source\World\Controllers\Camera.cpp" />
@@ -199,7 +199,6 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <ClInclude Include="..\..\source\Constants.h" />
     <ClInclude Include="..\..\Source\Entities\AIController.h" />
     <ClInclude Include="..\..\Source\Entities\Arrow.h" />
-    <ClInclude Include="..\..\Source\Entities\Controller.h" />
     <ClInclude Include="..\..\Source\Entities\DebugLight.h" />
     <ClInclude Include="..\..\Source\Entities\Entity.h" />
     <ClInclude Include="..\..\Source\Entities\EntityData.h" />
@@ -208,7 +207,6 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <ClInclude Include="..\..\Source\Entities\Mobs\Zombie.h" />
     <ClInclude Include="..\..\Source\Entities\Pawn.h" />
     <ClInclude Include="..\..\Source\Entities\Player.h" />
-    <ClInclude Include="..\..\Source\Entities\PlayerController.h" />
     <ClInclude Include="..\..\Source\Entities\Stick.h" />
     <ClInclude Include="..\..\Source\Game\Commander.h" />
     <ClInclude Include="..\..\Source\Game\Debug.h" />
@@ -246,7 +244,9 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <ClInclude Include="..\..\Source\json\json.h" />
     <ClInclude Include="..\..\Source\Networking\Client.h" />
     <ClInclude Include="..\..\source\Networking\Connection.h" />
+    <ClInclude Include="..\..\Source\Networking\Controller.h" />
     <ClInclude Include="..\..\source\Networking\NetworkObject.h" />
+    <ClInclude Include="..\..\Source\Networking\PlayerController.h" />
     <ClInclude Include="..\..\Source\Networking\Server.h" />
     <ClInclude Include="..\..\Source\Strings.h" />
     <ClInclude Include="..\..\Source\World.h" />

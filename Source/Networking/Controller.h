@@ -2,7 +2,7 @@
 
 #include "Config.h"
 #include "Networking/NetworkObject.h"
-#include "Entity.h"
+#include "Entities/Entity.h"
 
 class Pawn;
 

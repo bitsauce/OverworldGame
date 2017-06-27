@@ -53,9 +53,6 @@
     <ClCompile Include="..\..\Source\World\Controllers\Terrain\BlockDrawer.cpp">
       <Filter>Source\World\Controllers\Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Entities\Controller.cpp">
-      <Filter>Source\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Entities\Humanoid.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
@@ -63,9 +60,6 @@
       <Filter>Source\Entities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Entities\Player.cpp">
-      <Filter>Source\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Entities\PlayerController.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Animation\Skeleton.cpp">
@@ -229,6 +223,12 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\json\jsoncpp.cpp">
       <Filter>Source\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Networking\PlayerController.cpp">
+      <Filter>Source\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Networking\Controller.cpp">
+      <Filter>Source\Networking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -477,9 +477,6 @@
     <ClInclude Include="..\..\Source\Entities\Arrow.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\Controller.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Entities\Humanoid.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
@@ -490,9 +487,6 @@
       <Filter>Source\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Entities\Player.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Entities\PlayerController.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Entities\Mobs\Zombie.h">
@@ -578,6 +572,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\json\json-forwards.h">
       <Filter>Source\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Networking\Controller.h">
+      <Filter>Source\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Networking\PlayerController.h">
+      <Filter>Source\Networking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

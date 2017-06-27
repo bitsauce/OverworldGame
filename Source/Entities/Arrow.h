@@ -18,7 +18,6 @@ public:
 	}
 
 private:
-	//Pawn *m_owner;
 	Sprite m_sprite;
 	Vector2F m_prevVelocity;
 	uint m_hitState;

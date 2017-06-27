@@ -166,6 +166,12 @@
 		<path>Sprites/Items/Weapons/Arrow.png</path>
 	</texture>
 
+
+  <texture>
+    <name>Sprites/Items/Stick</name>
+    <path>Sprites/Items/Stick.png</path>
+  </texture>
+
 	<texture>
 		<name>Sprites/Inventory/Hotbar</name>
 		<path>Sprites/Inventory/Hotbar.png</path>

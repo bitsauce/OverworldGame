@@ -5,7 +5,7 @@
 #include "Game/Storage.h"
 #include "Humanoid.h"
 #include "Entity.h"
-#include "Controller.h"
+#include "Networking/Controller.h"
 
 class Camera;
 class Terrain;

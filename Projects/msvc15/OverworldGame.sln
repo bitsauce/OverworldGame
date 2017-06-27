@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "spine", "..\..\3rdparty\spine\project\spine.vcxproj", "{5D74934A-7512-45EE-8402-7B95D3642E85}"
 EndProject
@@ -14,6 +14,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OverworldGame", "OverworldG
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RandomGeneration", "..\..\3rdparty\RandomGeneration\Project\RandomNoiseGPU.vcxproj", "{7F4BAC8A-5B6C-4120-B1B4-8772C5022352}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F3F25B49-2C6B-4FF0-98FB-47695DF70B8A} = {F3F25B49-2C6B-4FF0-98FB-47695DF70B8A}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WaterPhysics", "..\..\3rdparty\WaterPhysics\Project\WaterPhysics.vcxproj", "{7A44F0BC-017A-4954-AC15-4B357471983C}"
 EndProject

@@ -15,7 +15,7 @@
 #include "World/World.h"
 
 #include "Entities/Player.h"
-#include "Entities/PlayerController.h"
+#include "PlayerController.h"
 
 #include "Gui/GameOverlay/GameOverlay.h"
 

@@ -18,7 +18,7 @@ Entity::Entity(const string &entityName, const Json::Value &attributes) :
 	m_contact(0),
 	m_lastChunkPosition(0, 0)
 {
-	// { "position": { "x": 200, "y": 200} }
+	// JSON format: { "position": { "x": float, "y": float} }
 	if(attributes.isMember("position"))
 	{
 		const Json::Value &position = attributes["position"];

@@ -60,6 +60,7 @@ Pawn::Pawn(const string &entityName, const Json::Value &attributes) :
 
 Pawn::~Pawn()
 {
+	delete m_controller;
 }
 
 void Pawn::setController(Controller *controller)
