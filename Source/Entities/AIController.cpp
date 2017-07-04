@@ -20,7 +20,7 @@ void AIController::update()
 	for(Pawn *pawn : m_world->getPawns())
 	{
 		if(pawn == m_pawn) continue;
-		if(!closestPawn || (pawn->getCenter() - m_pawn->getCenter()).magnitude() < (closestPawn->getCenter() - m_pawn->getCenter()).magnitude())
+		if(!closestPawn || (pawn->getCenter() - m_pawn->getCenter()).length() < (closestPawn->getCenter() - m_pawn->getCenter()).length())
 		{
 			closestPawn = pawn;
 		}

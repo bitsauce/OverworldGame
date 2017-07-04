@@ -525,7 +525,7 @@ struct VectorComparator
 {
 	bool operator() (const Vector2I &v0, const Vector2I &v1)
 	{
-		return v0.magnitude() > v1.magnitude();
+		return v0.length() > v1.length();
 	}
 };
 

@@ -169,7 +169,7 @@ void Camera::onTick(TickEvent *e)
 		}
 
 		m_velocity *= 0.75f;
-		if(m_velocity.magnitude() > 64.0f)
+		if(m_velocity.length() > 64.0f)
 		{
 			m_velocity = m_velocity.normalized() * 64.0f;
 		}

@@ -215,9 +215,6 @@
     <ClCompile Include="..\..\Source\Generation\Formations\OakForest.cpp">
       <Filter>Source\Generation\Formations</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\BlockEntities\Stick.cpp">
-      <Filter>Source\BlockEntities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Entities\Stick.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
@@ -560,9 +557,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Generation\Formations\OakForest.h">
       <Filter>Source\Generation\Formations</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\BlockEntities\Stick.h">
-      <Filter>Source\BlockEntities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Entities\Stick.h">
       <Filter>Source\Entities</Filter>

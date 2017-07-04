@@ -41,7 +41,7 @@ void ItemDrop::onTick(TickEvent *e)
 					return;
 				}
 			}
-			else if(deltaPosition.magnitude() <= m_dragDistance)
+			else if(deltaPosition.length() <= m_dragDistance)
 			{
 				applyImpulse(deltaPosition.normalized());
 			}

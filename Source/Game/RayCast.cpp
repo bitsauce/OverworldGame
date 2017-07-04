@@ -43,7 +43,7 @@ bool RayCast::trace(const Vector2I p0, const Vector2I p1)
 		}
 			
 		// Check if we have reached the end
-		if((x0 == x1 && y0 == y1) || (m_range > 0.0f && (Vector2F(x0, y0) - Vector2F(p0)).magnitude() > m_range))
+		if((x0 == x1 && y0 == y1) || (m_range > 0.0f && (Vector2F(x0, y0) - Vector2F(p0)).length() > m_range))
 		{
 			break;
 		}	
