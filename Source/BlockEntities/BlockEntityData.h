@@ -6,6 +6,8 @@
 
 class World;
 
+typedef function<BlockEntity*(const Json::Value&)> BlockEntityFactory;
+
 enum PlacementRule
 {
 	NEED_FLOOR = 1 << 1,

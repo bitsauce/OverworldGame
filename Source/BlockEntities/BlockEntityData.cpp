@@ -10,39 +10,22 @@ vector<BlockEntityData*> BlockEntityData::s_data(BLOCK_ENTITY_COUNT);
 TextureAtlas *BlockEntityData::s_textureAtlas;
 shared_ptr<Texture2D> BlockEntityData::s_dataTexture = nullptr;
 
-struct BlockEntityDescriptor
+const BlockEntityFactory getFactory(const string &entityName)
 {
-	const BlockEntityID id;
-	const string name;
-	const string texturePath;
-	const int width;
-	const int height;
-	const uint frameCount;
-	const uint animationSpeed; // 0 = 0%, 255 = Every tick
-	const WorldLayer layer;
-	const uint placement;
-	const function<BlockEntity*(const int, const int, const BlockEntityData*)> factory;
-};
-
-BlockEntity* dummy(const int, const int, const BlockEntityData*)
-{
+	if (entityName == "Torch") return Torch::Factory;
 	return 0;
 }
 
-static BlockEntityDescriptor g_blockEntityData[] = {
-	{ BLOCK_ENTITY_NULL, "NULL", "Sprites/Blocks/Empty.png", 1, 1, 1, 0, WORLD_LAYER_MIDDLE, true, dummy },
-
-	//{ BLOCK_ENTITY_TORCH, "Stick", "Sprites/BlockEntities/Stick.png", 1, 1, 1, 0, WORLD_LAYER_MIDDLE, NEED_FLOOR, Stick::Factory },
-	//{ BLOCK_ENTITY_TORCH, "Torch", "Sprites/BlockEntities/LightSources/Torch_anim_2.png", 1, 1, 3, 0, WORLD_LAYER_MIDDLE, NEED_WALL | NEED_FLOOR | NEED_BACK_BLOCK, Torch::Factory },
-	//{ BLOCK_ENTITY_BUSH, "Bush", "Sprites/BlockEntities/Vegetation/RedCurrantBush.png", 4, 2, 2, 0, WORLD_LAYER_MIDDLE, NEED_FLOOR, Bush::Factory },
-	//{ BLOCK_ENTITY_POT, "Pot", "Sprites/BlockEntities/Furniture/Pot.png", 2, 2, 1, 0, WORLD_LAYER_MIDDLE, NEED_FLOOR, Pot::Factory },
-	//{ BLOCK_ENTITY_BEEHIVE, "Beehive", "Sprites/BlockEntities/Beehive.png", 2, 2, 1, 0, WORLD_LAYER_BACK, NEED_ROOF, Beehive::Factory },
-
-	{ BLOCK_ENTITY_COUNT, "", "", 0, 0, 0, 0, (WorldLayer)0, false, dummy }
-};
-
 void BlockEntityData::init()
 {
+	LOG("Loading block entity data...");
+
+	// Load block entity data from file
+	if (!util::fileExists("BlockEntityData.json"))
+	{
+		THROW("EntityData.xml is missing!");
+	}
+
 	// Block entity data pixmap
 	Pixmap blockDataPixmap(BLOCK_ENTITY_COUNT, 2);
 	uchar pixelData[4];
@@ -50,10 +33,29 @@ void BlockEntityData::init()
 	// Create block entity texture atlas
 	s_textureAtlas = new TextureAtlas();
 
+	// Read block entity JSON data
+	Json::Value blockEntitiesJSON;
+	{
+		Json::Reader reader;
+		ifstream blockEntityDataFile("BlockEntityData.json");
+		reader.parse(blockEntityDataFile, blockEntitiesJSON);
+	}
+
 	// Load block entity data
+	for (int i = 0; i < blockEntitiesJSON.size(); i++)
+	{
+		Json::Value &blockEntityJSON = blockEntitiesJSON[i];
+		const int id = blockEntityJSON.get("id", -1).asInt();
+		const string vboGroup = blockEntityJSON.get("vboGroup", "").asString();
+		const string texture = blockEntityJSON.get("texture", "").asString();
+		const string placementRules = blockEntityJSON.get("placementRules", "").asString();
+		
+		new BlockEntityData(id, blockEntityJSON.asString(), );
+	}
+	
 	BlockEntityDescriptor *data = &g_blockEntityData[0];
 	vector<Pixmap> pixmaps(BLOCK_ENTITY_COUNT);
-	while(data->id != BLOCK_ENTITY_COUNT)
+	while (data->id != BLOCK_ENTITY_COUNT)
 	{
 		// Create block entity data objects
 		Pixmap pixmap(data->texturePath);
@@ -71,7 +73,7 @@ void BlockEntityData::init()
 	}
 
 	// Fill block entity UV data
-	for(uint i = 0; i < BLOCK_ENTITY_COUNT; ++i)
+	for (uint i = 0; i < BLOCK_ENTITY_COUNT; ++i)
 	{
 		// TODO: Old code
 		Vector2I pos = s_textureAtlas->get(util::intToStr(i)).uv0 * s_textureAtlas->getTexture()->getSize();

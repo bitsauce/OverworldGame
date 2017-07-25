@@ -1,8 +1,8 @@
 #include "Torch.h"
 
-Torch::Torch(World *world, int x, int y, const BlockEntityData *data) :
-	BlockEntity(x, y, data),
-	m_pointlight(world)
+Torch::Torch(const Json::Value &attributes) :
+	BlockEntity(0, 0, 0),
+	m_pointlight(0)
 {
 	m_pointlight.setMobility(LightSource::STATIC);
 	m_pointlight.setPosition(Vector2F(x, y) + Vector2F(0.5f, 0.5f));

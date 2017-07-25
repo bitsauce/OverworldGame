@@ -20,14 +20,6 @@ struct EntityDataDesc
 	const EntityFactory factory;
 };
 
-const WorldLayer getLayerFromString(const string &layerName)
-{
-	if(layerName == "back") return WORLD_LAYER_BACK;
-	if(layerName == "middle") return WORLD_LAYER_MIDDLE;
-	if(layerName == "front") return WORLD_LAYER_FRONT;
-	return WORLD_LAYER_BACK;
-}
-
 const EntityFactory getFactory(const string &entityName)
 {
 	if(entityName == "Player") return Player::Factory;

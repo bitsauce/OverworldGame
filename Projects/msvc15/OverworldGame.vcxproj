@@ -265,6 +265,7 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\Data\BlockData.xml" />
+    <Xml Include="..\..\Data\BlockEntityData.json" />
     <Xml Include="..\..\Data\EntityData.xml">
       <SubType>Designer</SubType>
     </Xml>

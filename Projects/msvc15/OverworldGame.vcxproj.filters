@@ -590,6 +590,9 @@
     <Xml Include="..\..\Data\EntityData.xml">
       <Filter>Data</Filter>
     </Xml>
+    <Xml Include="..\..\Data\BlockEntityData.json">
+      <Filter>Data</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Data\Shaders\TileMap.frag">

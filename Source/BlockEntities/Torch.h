@@ -8,12 +8,12 @@ class BlockEntityData;
 class Torch : public BlockEntity
 {
 public:
-	static BlockEntity *Factory(World * world, const int x, const int y, const BlockEntityData *data) { return new Torch(world, x, y, data); }
+	static BlockEntity *Factory(const Json::Value &attributes) { return new Torch(attributes); }
 
 	void onNeighbourChanged(NeighborChangedEvent *e);
 
 private:
-	Torch(World * world, int x, int y, const BlockEntityData *data);
+	Torch(const Json::Value &attributes);
 
 	void updateBaseFrame();
 
