@@ -29,6 +29,14 @@ const EntityFactory getFactory(const string &entityName)
 	return 0;
 }
 
+const WorldLayer getLayerFromString(const string &layerName)
+{
+	if (layerName == "back") return WORLD_LAYER_BACK;
+	if (layerName == "middle") return WORLD_LAYER_MIDDLE;
+	if (layerName == "front") return WORLD_LAYER_FRONT;
+	return WORLD_LAYER_BACK;
+}
+
 void EntityData::init(Game *)
 {
 	LOG("Loading entity data...");

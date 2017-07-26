@@ -38,22 +38,34 @@ void BlockEntityData::init()
 	{
 		Json::Reader reader;
 		ifstream blockEntityDataFile("BlockEntityData.json");
-		reader.parse(blockEntityDataFile, blockEntitiesJSON);
+		if(blockEntityDataFile.is_open())
+		{
+			if(!reader.parse(blockEntityDataFile, blockEntitiesJSON))
+			{
+				THROW("Error parsing BlockEntityData.json!");
+			}
+		}
+		else
+		{
+			THROW("Error opening BlockEntityData.json!");
+		}
 	}
 
 	// Load block entity data
-	for (int i = 0; i < blockEntitiesJSON.size(); i++)
+	for(auto &blockEntityJSON : blockEntitiesJSON)
 	{
-		Json::Value &blockEntityJSON = blockEntitiesJSON[i];
 		const int id = blockEntityJSON.get("id", -1).asInt();
 		const string vboGroup = blockEntityJSON.get("vboGroup", "").asString();
 		const string texture = blockEntityJSON.get("texture", "").asString();
-		const string placementRules = blockEntityJSON.get("placementRules", "").asString();
+		for(auto &rule : blockEntityJSON["placementRules"])
+		{
+			LOG("%s", rule.asString().c_str());
+		}
 		
-		new BlockEntityData(id, blockEntityJSON.asString(), );
+		//new BlockEntityData(id, blockEntityJSON);
 	}
 	
-	BlockEntityDescriptor *data = &g_blockEntityData[0];
+	/*BlockEntityDescriptor *data = &g_blockEntityData[0];
 	vector<Pixmap> pixmaps(BLOCK_ENTITY_COUNT);
 	while (data->id != BLOCK_ENTITY_COUNT)
 	{
@@ -87,7 +99,7 @@ void BlockEntityData::init()
 		blockDataPixmap.setPixel(i, 0, pixelData);
 	}
 	s_dataTexture = shared_ptr<Texture2D>(new Texture2D(blockDataPixmap));
-	s_dataTexture->setFiltering(Texture2D::NEAREST);
+	s_dataTexture->setFiltering(Texture2D::NEAREST);*/
 }
 
 bool BlockEntityData::isValidPlacement(const int x, const int y, Terrain *terrain, BlockEntity *ignoreThis) const

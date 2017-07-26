@@ -5,7 +5,7 @@ Torch::Torch(const Json::Value &attributes) :
 	m_pointlight(0)
 {
 	m_pointlight.setMobility(LightSource::STATIC);
-	m_pointlight.setPosition(Vector2F(x, y) + Vector2F(0.5f, 0.5f));
+	m_pointlight.setPosition(/*Vector2F(x, y) +*/ Vector2F(0.5f, 0.5f));
 	m_pointlight.setRadius(10.0f);
 	m_pointlight.setColor(Color(255, 190, 90, 255));
 

@@ -7,14 +7,6 @@ class Entity;
 
 typedef function<Entity*(const Json::Value&)> EntityFactory;
 
-const WorldLayer getLayerFromString(const string &layerName)
-{
-	if (layerName == "back") return WORLD_LAYER_BACK;
-	if (layerName == "middle") return WORLD_LAYER_MIDDLE;
-	if (layerName == "front") return WORLD_LAYER_FRONT;
-	return WORLD_LAYER_BACK;
-}
-
 class EntityData
 {
 	friend class OverworldGame;
