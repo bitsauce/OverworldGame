@@ -162,7 +162,7 @@ void Commander::place(Chat *, vector<string> args)
 {
 	if(args.size() == 1)
 	{
-		BlockEntityData *data = BlockEntityData::getByName(args[0]);
+		BlockEntityData *data = BlockEntityData::GetByName(args[0]);
 		if(data)
 		{
 			Vector2F blockPos = math::floor(m_game->getWorld()->getLocalPlayer()->getCenter() / BLOCK_PXF);
@@ -171,7 +171,7 @@ void Commander::place(Chat *, vector<string> args)
 	}
 	else if(args.size() == 3)
 	{
-		BlockEntityData *data = BlockEntityData::getByName(args[0]);
+		BlockEntityData *data = BlockEntityData::GetByName(args[0]);
 		if(data)
 		{
 			m_game->getWorld()->getTerrain()->createBlockEntityAt(util::strToInt(args[1]), util::strToInt(args[2]), data->getID(), true);

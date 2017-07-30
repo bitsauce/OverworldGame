@@ -1,11 +1,11 @@
 #include "Torch.h"
 
 Torch::Torch(const Json::Value &attributes) :
-	BlockEntity(0, 0, 0),
-	m_pointlight(0)
+	BlockEntity(attributes),
+	m_pointlight(dynamic_cast<OverworldGame*>(Game::Get())->getWorld())
 {
 	m_pointlight.setMobility(LightSource::STATIC);
-	m_pointlight.setPosition(/*Vector2F(x, y) +*/ Vector2F(0.5f, 0.5f));
+	m_pointlight.setPosition(getPosition() + Vector2F(0.5f, 0.5f));
 	m_pointlight.setRadius(10.0f);
 	m_pointlight.setColor(Color(255, 190, 90, 255));
 

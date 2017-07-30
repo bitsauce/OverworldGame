@@ -6,13 +6,14 @@
 #include "Bush.h"
 #include "Pot.h"
 
-vector<BlockEntityData*> BlockEntityData::s_data(BLOCK_ENTITY_COUNT);
+map<string, BlockEntityData*> BlockEntityData::s_nameToData;
+map<EntityID, BlockEntityData*> BlockEntityData::s_idToData;
 TextureAtlas *BlockEntityData::s_textureAtlas;
 shared_ptr<Texture2D> BlockEntityData::s_dataTexture = nullptr;
 
 const BlockEntityFactory getFactory(const string &entityName)
 {
-	if (entityName == "Torch") return Torch::Factory;
+	if (entityName == "torch") return Torch::Factory;
 	return 0;
 }
 
@@ -27,8 +28,8 @@ void BlockEntityData::init()
 	}
 
 	// Block entity data pixmap
-	Pixmap blockDataPixmap(BLOCK_ENTITY_COUNT, 2);
-	uchar pixelData[4];
+	//Pixmap blockDataPixmap(BLOCK_ENTITY_COUNT, 2);
+	//uchar pixelData[4];
 
 	// Create block entity texture atlas
 	s_textureAtlas = new TextureAtlas();
@@ -52,17 +53,28 @@ void BlockEntityData::init()
 	}
 
 	// Load block entity data
-	for(auto &blockEntityJSON : blockEntitiesJSON)
+	for(Json::Value::const_iterator itr = blockEntitiesJSON.begin(); itr != blockEntitiesJSON.end(); itr++)
 	{
-		const int id = blockEntityJSON.get("id", -1).asInt();
+		const Json::Value &blockEntityJSON = *itr;
+		const string name = itr.key().asString();
+		const BlockEntityID id = blockEntityJSON.get("id", -1).asInt();
+		const int width = blockEntityJSON.get("width", -1).asInt();
+		const int height = blockEntityJSON.get("height", -1).asInt();
 		const string vboGroup = blockEntityJSON.get("vboGroup", "").asString();
 		const string texture = blockEntityJSON.get("texture", "").asString();
+		const BlockEntityFactory factory = getFactory(name);
+		uint placementRule = 0;
 		for(auto &rule : blockEntityJSON["placementRules"])
 		{
-			LOG("%s", rule.asString().c_str());
+			const string ruleName = rule.asString();
+			if(ruleName == "wall")            placementRule |= NEED_WALL;
+			else if(ruleName == "floor")      placementRule |= NEED_FLOOR;
+			else if(ruleName == "background") placementRule |= NEED_BACK_BLOCK;
+			else if(ruleName == "roof")       placementRule |= NEED_ROOF;
 		}
 		
-		//new BlockEntityData(id, blockEntityJSON);
+		Pixmap pixmap(texture, true);
+		s_nameToData[name] = s_idToData[id] = new BlockEntityData(id, name, pixmap, width, height, 1, WORLD_LAYER_MIDDLE, placementRule, factory);
 	}
 	
 	/*BlockEntityDescriptor *data = &g_blockEntityData[0];

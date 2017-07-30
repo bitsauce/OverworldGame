@@ -82,15 +82,7 @@ typedef int BlockID;
  * \brief	BlockEntity IDs.
  */
 
-enum BlockEntityID
-{
-	BLOCK_ENTITY_NULL,
-	BLOCK_ENTITY_TORCH,
-	BLOCK_ENTITY_BUSH,
-	BLOCK_ENTITY_POT,
-	BLOCK_ENTITY_BEEHIVE,
-	BLOCK_ENTITY_COUNT
-};
+typedef int BlockEntityID;
 
 /**
  * \enum	ItemID

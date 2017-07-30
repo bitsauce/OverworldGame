@@ -90,7 +90,7 @@ bool Terrain::removeBlockAt(const int x, const int y, const WorldLayer layer, co
 
 BlockEntity *Terrain::createBlockEntityAt(const int x, const int y, const BlockEntityID blockEntityID, const bool replace)
 {
-	BlockEntityData *data = BlockEntityData::get(blockEntityID);
+	BlockEntityData *data = BlockEntityData::Get(blockEntityID);
 	if(!data) return 0;
 
 	if(replace)
@@ -122,7 +122,9 @@ BlockEntity *Terrain::createBlockEntityAt(const int x, const int y, const BlockE
 		return 0;
 	}
 
-	BlockEntity *blockEntity = data->create(x, y);
+	Json::Value v; v["x"] = x; v["y"] = y;
+
+	BlockEntity *blockEntity = data->Create(blockEntityID, v);
 
 	// Set block entity in all the positions it occupies
 	for(int y1 = y; y1 < y + data->getHeight(); y1++)

@@ -1,6 +1,8 @@
 {
   "torch": {
     "id": 1,
+    "width": 1,
+    "height": 1,
     "vboGroup": "static",
     "texture": "Sprites/BlockEntities/LightSources/Torch_anim_2.png",
     "placementRules": [ "wall", "floor", "background" ]

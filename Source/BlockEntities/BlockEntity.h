@@ -53,7 +53,7 @@ private:
 class BlockEntity
 {
 public:
-	BlockEntity(const int x, const int y, const BlockEntityData *data);
+	BlockEntity(const Json::Value &attributes);
 	~BlockEntity();
 
 	//virtual void onTick(const float dt);

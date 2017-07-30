@@ -23,35 +23,31 @@ public:
 	static EntityData *Get(const EntityID id)
 	{
 		map<EntityID, EntityData*>::iterator itr = s_idToData.find(id);
-		if(itr != s_idToData.end())
+		if(itr == s_idToData.end())
 		{
-			return itr->second;
+			THROW("Could not find entity with id=%i", id);
 		}
-		return 0;
+		return itr->second;
 	}
 
 	static EntityData *GetByName(const string &name)
 	{
 		map<string, EntityData*>::iterator itr = s_nameToData.find(name);
-		if(itr != s_nameToData.end())
+		if(itr == s_nameToData.end())
 		{
-			return itr->second;
+			THROW("Could not find entity with name=%s", name.c_str());
 		}
-		return 0;
+		return itr->second;
 	}
 
 	static Entity *Create(const EntityID id, const Json::Value &attributes)
 	{
-		EntityData *data = Get(id);
-		if(!data) THROW("Cannot create entity with id=%i. No entity with that ID exists", id);
-		return data->m_factory(attributes);
+		return Get(id)->m_factory(attributes);
 	}
 
 	static Entity *CreateByName(const string &name, const Json::Value &attributes)
 	{
-		EntityData *data = GetByName(name);
-		if(!data) THROW("Cannot create entity '%s'. No entity with that name exists", name.c_str());
-		return data->m_factory(attributes);
+		return GetByName(name)->m_factory(attributes);
 	}
 
 	EntityID getID() const

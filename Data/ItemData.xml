@@ -104,6 +104,9 @@
 		<type>torch</type>
 		<icon>Sprites/ItemIcons/Torch</icon>
 		<maxStack>255</maxStack>
+    <userData>
+      <blockEntity>torch</blockEntity>
+    </userData>
 	</i>
 	<i>
 		<id>10</id>

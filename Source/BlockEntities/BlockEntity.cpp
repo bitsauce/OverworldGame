@@ -2,9 +2,9 @@
 #include "BlockEntity.h"
 #include "World/World.h"
 
-BlockEntity::BlockEntity(const int x, const int y, const BlockEntityData *data) :
-	m_position(x, y),
-	m_data(data),
+BlockEntity::BlockEntity(const Json::Value &attributes) :
+	m_position(attributes["x"].asInt(), attributes["y"].asInt()),
+	m_data(reinterpret_cast<BlockEntityData*>(attributes["data_ptr"].asInt())),
 	m_world(dynamic_cast<OverworldGame*>(Game::Get())->getWorld())
 {
 }

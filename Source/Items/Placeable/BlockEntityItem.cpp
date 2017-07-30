@@ -8,19 +8,10 @@ BlockEntityItem::BlockEntityItem(OverworldGame *game, const ItemDataDesc *desc) 
 	ItemData(desc),
 	m_game(game)
 {
-	/*if(desc->userData.find("blockEntity") != desc->userData.end())
+	if(desc->userData.find("blockEntity") != desc->userData.end())
 	{
-		const string blockName = desc->userData.at("block");
-		m_blockEntityID = BlockData::getByName(blockName);
-		if(!m_blockData)
-		{
-			LOG("Block item 'block' (says: %s) could not be found", blockName);
-		}
+		m_blockEntityID = BlockEntityData::GetByName(desc->userData.at("blockEntity"))->getID();
 	}
-	else
-	{
-		LOG("Block item '%s' missing 'block' data", desc->name);
-	}*/
 }
 
 void BlockEntityItem::equip(Pawn *pawn)
@@ -39,13 +30,7 @@ void BlockEntityItem::use(Pawn *pawn, const float delta)
 	Vector2I blockPos = math::floor(Vector2F(m_game->getWorld()->getCamera()->getInputPosition()) / BLOCK_PXF);
 
 	// Set block if not occupied
-	/*if(m_game->getWorld()->getTerrain()->setThingAt(blockPos.x, blockPos.y, m_entityID))
-	{
-		// Remove item from player inventory
-		player->getCurrentItem()->dec();
-	}*/
-
-	if(m_game->getWorld()->getTerrain()->createBlockEntityAt(blockPos.x, blockPos.y, BLOCK_ENTITY_TORCH))//m_blockEntityID))
+	if(m_game->getWorld()->getTerrain()->createBlockEntityAt(blockPos.x, blockPos.y, m_blockEntityID))
 	{
 		pawn->getCurrentItem()->dec();
 	}

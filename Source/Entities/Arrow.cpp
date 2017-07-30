@@ -69,7 +69,7 @@ bool Arrow::plotTest(int x, int y)
 
 	// Remove destructable block entities
 	BlockEntity *blockEntity = m_world->getTerrain()->getBlockEntityAt(floor(x / BLOCK_PXF), floor(y / BLOCK_PXF), WORLD_LAYER_MIDDLE);
-	if(blockEntity && blockEntity->getData()->getID() == BLOCK_ENTITY_POT)
+	if(blockEntity && blockEntity->getData()->getName() == "pot")
 	{
 		m_world->getTerrain()->removeBlockEntityAt(blockEntity->getX(), blockEntity->getY(), WORLD_LAYER_MIDDLE);
 		return true;
