@@ -137,7 +137,7 @@ private:
 
 	// Static data
 	static map<string, BlockEntityData*> s_nameToData;
-	static map<EntityID, BlockEntityData*> s_idToData;
+	static map<BlockEntityID, BlockEntityData*> s_idToData;
 	static TextureAtlas *s_textureAtlas;
 	static shared_ptr<Texture2D> s_dataTexture;
 };

@@ -27,13 +27,6 @@ void BlockEntityData::init()
 		THROW("EntityData.xml is missing!");
 	}
 
-	// Block entity data pixmap
-	//Pixmap blockDataPixmap(BLOCK_ENTITY_COUNT, 2);
-	//uchar pixelData[4];
-
-	// Create block entity texture atlas
-	s_textureAtlas = new TextureAtlas();
-
 	// Read block entity JSON data
 	Json::Value blockEntitiesJSON;
 	{
@@ -51,6 +44,10 @@ void BlockEntityData::init()
 			THROW("Error opening BlockEntityData.json!");
 		}
 	}
+
+	// Create block entity texture atlas
+	s_textureAtlas = new TextureAtlas();
+	uint blockEntityCount = 0;
 
 	// Load block entity data
 	for(Json::Value::const_iterator itr = blockEntitiesJSON.begin(); itr != blockEntitiesJSON.end(); itr++)
@@ -74,44 +71,39 @@ void BlockEntityData::init()
 		}
 		
 		Pixmap pixmap(texture, true);
+		assert(s_idToData.find(id) == s_idToData.end());
+		assert(s_nameToData.find(name) == s_nameToData.end());
 		s_nameToData[name] = s_idToData[id] = new BlockEntityData(id, name, pixmap, width, height, 1, WORLD_LAYER_MIDDLE, placementRule, factory);
+		s_textureAtlas->add(util::intToStr(id), pixmap);
+		blockEntityCount++;
 	}
-	
-	/*BlockEntityDescriptor *data = &g_blockEntityData[0];
-	vector<Pixmap> pixmaps(BLOCK_ENTITY_COUNT);
-	while (data->id != BLOCK_ENTITY_COUNT)
+
+	// Generate texture atlas
+	s_textureAtlas->create();
+
+	// Block entity data pixmap
+	Pixmap blockDataPixmap(blockEntityCount + 1, 2);
+	uchar pixelData[4];
+	for(map<BlockEntityID, BlockEntityData*>::const_iterator itr = s_idToData.begin(); itr != s_idToData.end(); itr++)
 	{
 		// Create block entity data objects
-		Pixmap pixmap(data->texturePath);
-		s_data[data->id] = new BlockEntityData(data->id, data->name, pixmap, data->width, data->height, data->frameCount, data->layer, data->placement, data->factory);
-		s_textureAtlas->add(util::intToStr(data->id), pixmap);
+		BlockEntityData *data = itr->second;
+		pixelData[0] = data->m_width * BLOCK_PXF;
+		pixelData[1] = data->m_height * BLOCK_PXF;
+		pixelData[2] = data->m_frameCount;
+		pixelData[3] = 127;
+		blockDataPixmap.setPixel(itr->first, 1, pixelData);
 
-		pixelData[0] = data->width * BLOCK_PXF;
-		pixelData[1] = data->height * BLOCK_PXF;
-		pixelData[2] = data->frameCount;
-		pixelData[3] = data->animationSpeed;
-		blockDataPixmap.setPixel(data->id, 1, pixelData);
-
-		// Next block entity
-		data++;
-	}
-
-	// Fill block entity UV data
-	for (uint i = 0; i < BLOCK_ENTITY_COUNT; ++i)
-	{
-		// TODO: Old code
-		Vector2I pos = s_textureAtlas->get(util::intToStr(i)).uv0 * s_textureAtlas->getTexture()->getSize();
-
+		// Write UV data to texture
+		Vector2I pos = s_textureAtlas->get(util::intToStr(itr->first)).uv0 * s_textureAtlas->getTexture()->getSize();
 		pixelData[0] = uchar(pos.x & 0xFF);
 		pixelData[1] = uchar((pos.x >> 8) & 0xFF);
-
 		pixelData[2] = uchar(pos.y & 0xFF);
 		pixelData[3] = uchar((pos.y >> 8) & 0xFF);
-
-		blockDataPixmap.setPixel(i, 0, pixelData);
+		blockDataPixmap.setPixel(itr->first, 0, pixelData);
 	}
 	s_dataTexture = shared_ptr<Texture2D>(new Texture2D(blockDataPixmap));
-	s_dataTexture->setFiltering(Texture2D::NEAREST);*/
+	s_dataTexture->setFiltering(Texture2D::NEAREST);
 }
 
 bool BlockEntityData::isValidPlacement(const int x, const int y, Terrain *terrain, BlockEntity *ignoreThis) const
