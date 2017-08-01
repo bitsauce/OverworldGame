@@ -26,10 +26,10 @@ const float QUAD_UVS[40] =
 	8,  40,
 	16, 40,
 	24, 40,
-	 0,  0,
-	 8,  0,
-	 0,  8,
-	 8,  8
+	0,  0,
+	8,  0,
+	0,  8,
+	8,  8
 };
 
 ChunkManager::ChunkManager(World *world, Window *window) :
@@ -131,7 +131,7 @@ void ChunkManager::loadBlockData(FileReader &file, Block *blockData)
 void ChunkManager::saveEntities(FileWriter &file, list<Entity*> entities)
 {
 	// Write entity data
-	file << (int) entities.size() << endl;
+	file << (int)entities.size() << endl;
 	for(Entity *entity : entities)
 	{
 		file << entity->getData()->getID() << endl;
@@ -154,10 +154,10 @@ void ChunkManager::loadEntities(FileReader &file)
 	}
 }
 
-/*void ChunkManager::saveEntities(FileWriter &file, list<BlockEntity*> entities)
+void ChunkManager::saveBlockEntities(FileWriter &file, list<BlockEntity*> entities)
 {
 	// Write entity data
-	file << (int) entities.size() << endl;
+	file << (int)entities.size() << endl;
 	for(BlockEntity *entity : entities)
 	{
 		file << entity->getData()->getID() << endl;
@@ -166,7 +166,7 @@ void ChunkManager::loadEntities(FileReader &file)
 	}
 }
 
-void ChunkManager::loadEntities(FileReader &file)
+void ChunkManager::loadBlockEntities(FileReader &file)
 {
 	// Read entity data
 	int numEntities;
@@ -177,10 +177,12 @@ void ChunkManager::loadEntities(FileReader &file)
 		file >> id;
 		file >> x;
 		file >> y;
-		m_world->getTerrain()->createBlockEntityAt(x, y, (BlockEntityID) id);
-		//BlockEntityData::get((BlockEntityID) id)->create(m_world, x, y);
+		m_world->getTerrain()->createBlockEntityAt(x, y, (BlockEntityID)id);
+		//Json::Value v; v["x"] = x; v["y"] = y;
+		//BlockEntityData::Create((BlockEntityID)id, v);
+
 	}
-}*/
+}
 
 bool ChunkManager::freeInactiveChunk()
 {
@@ -211,6 +213,7 @@ void ChunkManager::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 	{
 		// Save chunk data
 		saveBlockData(file, chunk->m_blocks);
+		saveBlockEntities(file, chunk->m_blockEntities);
 		saveEntities(file, chunk->m_entities);
 	}
 	else
@@ -315,6 +318,7 @@ Chunk *ChunkManager::loadChunkAt(const int chunkX, const int chunkY)
 	// Load entities if any
 	if(file)
 	{
+		loadBlockEntities(*file);
 		loadEntities(*file);
 		delete file;
 	}
@@ -353,10 +357,10 @@ void ChunkManager::onDraw(DrawEvent *e)
 	Vector2F size = m_applyZoom ? m_camera->getSize() : m_window->getSize();
 
 	// Get active area
-	m_activeArea.x0 = (int) floor(center.x / CHUNK_PXF) - (int) floor(size.x * 0.5f / CHUNK_PXF) - 1;
-	m_activeArea.y0 = (int) floor(center.y / CHUNK_PXF) - (int) floor(size.y * 0.5f / CHUNK_PXF) - 1;
-	m_activeArea.x1 = (int) floor(center.x / CHUNK_PXF) + (int) floor(size.x * 0.5f / CHUNK_PXF) + 1;
-	m_activeArea.y1 = (int) floor(center.y / CHUNK_PXF) + (int) floor(size.y * 0.5f / CHUNK_PXF) + 1;
+	m_activeArea.x0 = (int)floor(center.x / CHUNK_PXF) - (int)floor(size.x * 0.5f / CHUNK_PXF) - 1;
+	m_activeArea.y0 = (int)floor(center.y / CHUNK_PXF) - (int)floor(size.y * 0.5f / CHUNK_PXF) - 1;
+	m_activeArea.x1 = (int)floor(center.x / CHUNK_PXF) + (int)floor(size.x * 0.5f / CHUNK_PXF) + 1;
+	m_activeArea.y1 = (int)floor(center.y / CHUNK_PXF) + (int)floor(size.y * 0.5f / CHUNK_PXF) + 1;
 
 	// Get loading area
 	m_loadingArea.x0 = m_activeArea.x0 - m_loadAreaRadius;
@@ -468,7 +472,7 @@ void ChunkManager::onDraw(DrawEvent *e)
 		m_chunkPositions[m_chunkPositionIndex++ % 4] = Vector2I(m_loadingArea.x0, m_loadingArea.x1);
 		m_circleLoadIndex = 0; // Reset iterator
 
-		// Store previous position
+							   // Store previous position
 		m_prevLoadingArea = m_loadingArea;
 	}
 
@@ -494,7 +498,7 @@ void ChunkManager::onDraw(DrawEvent *e)
 		for(int i = 0; i < 10; ++i)
 		{
 			// Get next chunk in the circular load pattern
-			Vector2I centerChunkPosition((int) floor(center.x / CHUNK_PXF), (int) floor(center.y / CHUNK_PXF));
+			Vector2I centerChunkPosition((int)floor(center.x / CHUNK_PXF), (int)floor(center.y / CHUNK_PXF));
 			Chunk *chunk = getChunkAt(centerChunkPosition.x + m_circleLoadPattern[m_circleLoadIndex].x, centerChunkPosition.y + m_circleLoadPattern[m_circleLoadIndex].y, true);
 
 			// Increase load pattern index by 1
@@ -532,17 +536,17 @@ struct VectorComparator
 void ChunkManager::updateViewSize(int width, int height)
 {
 	// Calculate load area size
-	int loadAreaWidth = (int) (floor(width * 0.5f / CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
-	int loadAreaHeight = (int) (floor(height * 0.5f / CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
+	int loadAreaWidth = (int)(floor(width * 0.5f / CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
+	int loadAreaHeight = (int)(floor(height * 0.5f / CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
 
 	// Set optimal chunk count
 	setOptimalChunkCount(loadAreaWidth * loadAreaHeight * 2); // 15x13
 
-	// Create circle load pattern
+															  // Create circle load pattern
 	priority_queue<Vector2I, vector<Vector2I>, VectorComparator> minHeap;
-	for(int y = (int) -floor((loadAreaHeight - 2) * 0.5f); y <= (int) floor((loadAreaHeight - 2) * 0.5f); ++y)
+	for(int y = (int)-floor((loadAreaHeight - 2) * 0.5f); y <= (int)floor((loadAreaHeight - 2) * 0.5f); ++y)
 	{
-		for(int x = (int) -floor((loadAreaWidth - 2) * 0.5f); x <= (int) floor((loadAreaWidth - 2) * 0.5f); ++x)
+		for(int x = (int)-floor((loadAreaWidth - 2) * 0.5f); x <= (int)floor((loadAreaWidth - 2) * 0.5f); ++x)
 		{
 			minHeap.push(Vector2I(x, y));
 		}
@@ -570,7 +574,7 @@ void ChunkManager::updateViewSize(int width, int height)
 
 	// Set shader uniforms
 	m_tileSortShader->setSampler2D("u_BlockGrid", m_blocksRenderTarget->getTexture());
-	
+
 	// Redraw blocks
 	m_reattachAllChunks = true;
 }
@@ -594,7 +598,7 @@ void ChunkManager::reattachChunk(Chunk *chunk, GraphicsContext *context)
 			}
 		}
 	}
-	
+
 	// Sort blocks
 	if(!chunk->isSorted())
 	{
@@ -609,13 +613,13 @@ void ChunkManager::reattachChunk(Chunk *chunk, GraphicsContext *context)
 				float(chunk->getY()) / float(m_loadingArea.getHeight()),
 				float(chunk->getX() + 1) / float(m_loadingArea.getWidth()),
 				float(chunk->getY() + 1) / float(m_loadingArea.getHeight())
-				);
+			);
 
 			context->drawRectangle(
 				math::mod(chunk->getX(), m_loadingArea.getWidth())  * CHUNK_BLOCKSF,
 				math::mod(chunk->getY(), m_loadingArea.getHeight()) * CHUNK_BLOCKSF,
 				CHUNK_BLOCKSF, CHUNK_BLOCKSF, Color::White, textureRegion
-				);
+			);
 		}
 		chunk->m_sorted = true;
 	}

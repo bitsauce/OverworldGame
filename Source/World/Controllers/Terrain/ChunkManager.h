@@ -75,8 +75,8 @@ private:
 	void saveBlockData(FileWriter &file, Block *blockData);
 	void loadBlockData(FileReader &file, Block *blockData);
 
-	//void saveBlockEntities(FileWriter &file, list<BlockEntity*> entities);
-	//void loadBlockEntities(FileReader &file);
+	void saveBlockEntities(FileWriter &file, list<BlockEntity*> entities);
+	void loadBlockEntities(FileReader &file);
 
 	void saveEntities(FileWriter &file, list<Entity*> entities);
 	void loadEntities(FileReader &file);

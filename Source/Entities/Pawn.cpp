@@ -177,12 +177,12 @@ void Pawn::onTick(TickEvent *e)
 	if(isLastContact(SOUTH))
 	{
 		m_humanoid.getMainAnimationState()->setLooping(true);
-		if(getVelocity().x >= 0.1f)
+		if(m_controller->getInputState(Controller::INPUT_MOVE_RIGHT))
 		{
 			m_humanoid.setMainAnimation(Humanoid::ANIM_WALK);
 			m_humanoid.getSkeleton()->setFlipX(false);
 		}
-		else if(getVelocity().x <= -0.1f)
+		else if(m_controller->getInputState(Controller::INPUT_MOVE_LEFT))
 		{
 			m_humanoid.setMainAnimation(Humanoid::ANIM_WALK);
 			m_humanoid.getSkeleton()->setFlipX(true);
