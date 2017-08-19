@@ -177,9 +177,7 @@ void ChunkManager::loadBlockEntities(FileReader &file)
 		file >> id;
 		file >> x;
 		file >> y;
-		m_world->getTerrain()->createBlockEntityAt(x, y, (BlockEntityID)id);
-		//Json::Value v; v["x"] = x; v["y"] = y;
-		//BlockEntityData::Create((BlockEntityID)id, v);
+		m_world->getTerrain()->createBlockEntityAt(x, y, BlockEntityData::Get(id));
 
 	}
 }
@@ -347,7 +345,7 @@ void ChunkManager::onTick(TickEvent *e)
 	m_tileMapShader->setUniform1f("u_Time", m_time);
 	m_time += e->getDelta();
 
-	m_blockEntityShader->setUniform1f("u_Time", m_time);
+	m_blockEntityShader->setUniform1f("u_Time", m_time * 30);
 }
 
 void ChunkManager::onDraw(DrawEvent *e)

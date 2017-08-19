@@ -28,7 +28,7 @@ void Torch::updateBaseFrame()
 			frame = 1;
 		}
 	}
-	terrain->setBlockEntityFrameAt(getX(), getY(), WORLD_LAYER_MIDDLE, frame);
+	terrain->setBlockEntityUVAt(getX(), getY(), WORLD_LAYER_MIDDLE, Vector2F(frame * m_data->getFrameColumns() * BLOCK_PXF, 0.0f));
 }
 
 void Torch::onNeighbourChanged(NeighborChangedEvent *e)

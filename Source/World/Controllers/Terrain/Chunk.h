@@ -19,6 +19,7 @@ class Chunk
 	friend class Pointlight;
 private:
 	Chunk(ChunkManager *chunkManager);
+	Chunk(const Chunk &) = delete;
 
 	/**
 	 * \brief Loads \p blocks into the chunk at \p x, \p y
@@ -28,12 +29,17 @@ private:
 	 */
 	void load(int chunkX, int chunkY, Block *blocks);
 
+	/**
+	 * \brief Unloads the chunk, deleting all block entities it holds
+	 *        and updating the neighbour pointers of it's neighbours.
+	 */
 	void unload();
-	
+
+public:
 	bool isAttached() const { return m_attached; }
 	bool isSorted() const { return m_sorted; }
 	bool isModified() const { return m_modified; }
-	
+
 	int getX() const { return m_x; }
 	int getY() const { return m_y; }
 
@@ -45,7 +51,7 @@ private:
 	bool removeBlockEntity(BlockEntity *blockEntity);
 	void setBlockEntityAt(const int x, const int y, const WorldLayer layer, BlockEntity *blockEntity);
 	BlockEntity *getBlockEntityAt(const int x, const int y, const WorldLayer layer) const;
-	bool setBlockEntityFrameAt(const int x, const int y, const WorldLayer layer, const uint frame);
+	bool setBlockEntityUVAt(const int x, const int y, const WorldLayer layer, const Vector2I &uvOffset);
 
 	bool isEmptyAt(const int x, const int y, const WorldLayer layer) const;
 
@@ -55,8 +61,6 @@ private:
 	void drawBlockEntities(GraphicsContext *context);
 
 private:
-	Chunk(const Chunk &) { }
-
 	Block *getNeighborBlock(const int x, const int y, const WorldLayer layer) const;
 
 	// Chunk
@@ -78,7 +82,7 @@ private:
 
 public: // TODO: private
 	// Block entity time
-	shared_ptr<Texture2D> m_timeOffsetTexture;
+	shared_ptr<Texture2D> m_blockEntitiesOffsetUVsTexture;
 
 	// Chunk manager
 	ChunkManager *m_chunkManager;

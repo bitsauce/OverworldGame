@@ -102,8 +102,8 @@ public:
 
 private:
 	const Vector2I m_position;
-	const BlockEntityData *m_data;
 	
 protected:
+	const BlockEntityData * const m_data;
 	World * const m_world;
 };

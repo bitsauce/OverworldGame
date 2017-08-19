@@ -3,6 +3,7 @@
 
 #include "Constants.h"
 #include "Items/ItemData.h"
+#include "BlockEntities/BlockEntityData.h"
 
 class BlockEntityItem : public ItemData
 {
@@ -15,9 +16,8 @@ public:
 	virtual void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:
-	OverworldGame * m_game;
-	
-	BlockEntityID m_blockEntityID;
+	OverworldGame *m_game;
+	BlockEntityData *m_blockEntityData;
 };
 
 #endif // BLOCK_ENTITY_ITEM_H

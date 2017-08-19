@@ -166,7 +166,7 @@ void Commander::place(Chat *, vector<string> args)
 		if(data)
 		{
 			Vector2F blockPos = math::floor(m_game->getWorld()->getLocalPlayer()->getCenter() / BLOCK_PXF);
-			m_game->getWorld()->getTerrain()->createBlockEntityAt(blockPos.x, blockPos.y, data->getID(), true);
+			m_game->getWorld()->getTerrain()->createBlockEntityAt(blockPos.x, blockPos.y, data, true);
 		}
 	}
 	else if(args.size() == 3)
@@ -174,7 +174,7 @@ void Commander::place(Chat *, vector<string> args)
 		BlockEntityData *data = BlockEntityData::GetByName(args[0]);
 		if(data)
 		{
-			m_game->getWorld()->getTerrain()->createBlockEntityAt(util::strToInt(args[1]), util::strToInt(args[2]), data->getID(), true);
+			m_game->getWorld()->getTerrain()->createBlockEntityAt(util::strToInt(args[1]), util::strToInt(args[2]), data, true);
 		}
 	}
 }

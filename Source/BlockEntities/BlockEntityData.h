@@ -20,14 +20,16 @@ enum PlacementRule
 class BlockEntityData
 {
 	friend class OverworldGame;
+	friend class Terrain;
 public:
-	BlockEntityData(const BlockEntityID id, const string &name, const Pixmap &pixmap, const int width, const int height, const uint frameCount, const WorldLayer layer, const uint placement, const BlockEntityFactory &factory) :
+	BlockEntityData(const BlockEntityID id, const string &name, const Pixmap &pixmap, const int width, const int height, const uint frameColumns, const uint frameRows, const WorldLayer layer, const uint placement, const BlockEntityFactory &factory) :
 		m_pixmap(pixmap),
 		m_id(id),
 		m_name(name),
 		m_width(width),
 		m_height(height),
-		m_frameCount(frameCount),
+		m_frameColumns(frameColumns),
+		m_frameRows(frameRows),
 		m_layer(layer),
 		m_placement(placement),
 		m_factory(factory)
@@ -36,7 +38,8 @@ public:
 		assert(m_id >= 0);
 		assert(m_width >= 0);
 		assert(m_height >= 0);
-		assert(m_frameCount >= 0);
+		assert(m_frameColumns >= 0);
+		assert(m_frameRows >= 0);
 		assert(m_layer >= 0);
 		assert(m_placement != 0);
 		assert(m_factory);
@@ -60,20 +63,6 @@ public:
 			THROW("Could not find block entity with name=%s", name.c_str());
 		}
 		return itr->second;
-	}
-
-	static BlockEntity *Create(const BlockEntityID id, Json::Value attributes)
-	{
-		BlockEntityData *blockEntityData = Get(id);
-		attributes["data_ptr"] = reinterpret_cast<int>(blockEntityData);
-		return blockEntityData->m_factory(attributes);
-	}
-
-	static BlockEntity *CreateByName(const string &name, Json::Value attributes)
-	{
-		BlockEntityData *blockEntityData = GetByName(name);
-		attributes["data_ptr"] = reinterpret_cast<int>(blockEntityData);
-		return GetByName(name)->m_factory(attributes);
 	}
 
 	const BlockEntityID getID() const
@@ -121,6 +110,16 @@ public:
 		return s_dataTexture;
 	}
 
+	uint getFrameColumns() const
+	{
+		return m_frameColumns;
+	}
+
+	uint getFrameRows() const
+	{
+		return m_frameRows;
+	}
+
 	bool isValidPlacement(const int x, const int y, class Terrain *terrain, BlockEntity *ignoreThis) const;
 
 private:
@@ -128,7 +127,8 @@ private:
 	const string m_name;
 	const Pixmap m_pixmap;
 	const int m_width, m_height;
-	const uint m_frameCount;
+	const uint m_frameColumns;
+	const uint m_frameRows;
 	const WorldLayer m_layer;
 	const uint m_placement;
 	const BlockEntityFactory m_factory;

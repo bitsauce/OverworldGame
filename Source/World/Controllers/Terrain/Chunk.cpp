@@ -31,7 +31,7 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 			pixmap.setPixel(x, y, &data);
 		}
 	}
-	m_timeOffsetTexture = shared_ptr<Texture2D>(new Texture2D(pixmap));
+	m_blockEntitiesOffsetUVsTexture = shared_ptr<Texture2D>(new Texture2D(pixmap));
 }
 
 void Chunk::load(int chunkX, int chunkY, Block *blocks)
@@ -74,11 +74,13 @@ void Chunk::load(int chunkX, int chunkY, Block *blocks)
 	// Setup neighbour chunks
 	for(int i = 0; i < 8; i++)
 	{
-		Chunk *chunk = m_chunkManager->getChunkAt(m_x + DIR_X[i], m_y + DIR_Y[i], false);
-		m_neighborChunks[i] = chunk;
-		if(chunk)
+		// Get neighbour chunk without generating it
+		// If it exists we update the neighbourhood relationship for both chunks
+		Chunk *neighbourChunk = m_chunkManager->getChunkAt(m_x + DIR_X[i], m_y + DIR_Y[i], false);
+		m_neighborChunks[i] = neighbourChunk;
+		if(neighbourChunk)
 		{
-			chunk->m_neighborChunks[OPPOSITE_INDEX[i]] = this;
+			neighbourChunk->m_neighborChunks[OPPOSITE_INDEX[i]] = this;
 		}
 	}
 
@@ -97,13 +99,13 @@ void Chunk::load(int chunkX, int chunkY, Block *blocks)
 
 void Chunk::unload()
 {
-	// Notify neighbour chunks
+	// Update neighbour chunks
 	for(int i = 0; i < 8; i++)
 	{
-		Chunk *chunk = m_chunkManager->getChunkAt(m_x + DIR_X[i], m_y + DIR_Y[i], false);
-		if(chunk)
+		Chunk *neighbourChunk = m_chunkManager->getChunkAt(m_x + DIR_X[i], m_y + DIR_Y[i], false);
+		if(neighbourChunk)
 		{
-			chunk->m_neighborChunks[OPPOSITE_INDEX[i]] = 0;
+			neighbourChunk->m_neighborChunks[OPPOSITE_INDEX[i]] = 0;
 		}
 	}
 
@@ -232,12 +234,14 @@ BlockEntity *Chunk::getBlockEntityAt(const int x, const int y, const WorldLayer 
 	return m_blocks[BLOCK_INDEX(x, y, layer)].getBlockEntity();
 }
 
-bool Chunk::setBlockEntityFrameAt(const int x, const int y, const WorldLayer layer, const uint frame)
+bool Chunk::setBlockEntityUVAt(const int x, const int y, const WorldLayer layer, const Vector2I &uvOffset)
 {
 	uchar data[4];
-	data[0] = frame;
-	data[1] = data[2] = data[3] = 0;
-	m_timeOffsetTexture->updatePixmap(x, y, Pixmap(1, 1, data));
+	data[0] = uchar(uvOffset.x & 0xFF);
+	data[1] = uchar((uvOffset.x >> 8) & 0xFF);
+	data[2] = uchar(uvOffset.y & 0xFF);
+	data[3] = uchar((uvOffset.y >> 8) & 0xFF);
+	m_blockEntitiesOffsetUVsTexture->updatePixmap(x, y, Pixmap(1, 1, data));
 	return true;
 }
 

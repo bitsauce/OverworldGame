@@ -162,8 +162,7 @@ void Debug::debugFunction(InputEvent *_e)
 			{
 				for(int x = area.x0 * CHUNK_BLOCKS; x <= area.x1 * CHUNK_BLOCKS; ++x)
 				{
-					Json::Value v; v["x"] = x; v["y"] = y;
-					BlockEntityData::CreateByName("torch", v);
+					m_world->getTerrain()->createBlockEntityAt(x, y, BlockEntityData::GetByName("torch"), true);
 				}
 			}
 		}

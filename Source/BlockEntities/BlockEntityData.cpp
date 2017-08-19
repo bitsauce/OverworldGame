@@ -61,7 +61,7 @@ void BlockEntityData::init()
 		const string texture = blockEntityJSON.get("texture", "").asString();
 		const BlockEntityFactory factory = getFactory(name);
 		uint placementRule = 0;
-		for(auto &rule : blockEntityJSON["placementRules"])
+		for(Json::Value rule : blockEntityJSON["placementRules"])
 		{
 			const string ruleName = rule.asString();
 			if(ruleName == "wall")            placementRule |= NEED_WALL;
@@ -69,11 +69,18 @@ void BlockEntityData::init()
 			else if(ruleName == "background") placementRule |= NEED_BACK_BLOCK;
 			else if(ruleName == "roof")       placementRule |= NEED_ROOF;
 		}
+		Json::Value animation = blockEntityJSON["animation"];
+		uint frameColumns = 1, frameRows = 1;
+		if(!animation.empty())
+		{
+			frameColumns = animation.get("frameColumns", 1).asInt();
+			frameRows = animation.get("frameRows", 1).asInt();
+		}
 		
 		Pixmap pixmap(texture, true);
 		assert(s_idToData.find(id) == s_idToData.end());
 		assert(s_nameToData.find(name) == s_nameToData.end());
-		s_nameToData[name] = s_idToData[id] = new BlockEntityData(id, name, pixmap, width, height, 1, WORLD_LAYER_MIDDLE, placementRule, factory);
+		s_nameToData[name] = s_idToData[id] = new BlockEntityData(id, name, pixmap, width, height, frameColumns, frameRows, WORLD_LAYER_MIDDLE, placementRule, factory);
 		s_textureAtlas->add(util::intToStr(id), pixmap);
 		blockEntityCount++;
 	}
@@ -90,8 +97,8 @@ void BlockEntityData::init()
 		BlockEntityData *data = itr->second;
 		pixelData[0] = data->m_width * BLOCK_PXF;
 		pixelData[1] = data->m_height * BLOCK_PXF;
-		pixelData[2] = data->m_frameCount;
-		pixelData[3] = 127;
+		pixelData[2] = data->m_frameColumns;
+		pixelData[3] = data->m_frameRows;
 		blockDataPixmap.setPixel(itr->first, 1, pixelData);
 
 		// Write UV data to texture

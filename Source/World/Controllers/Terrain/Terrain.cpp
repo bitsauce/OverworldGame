@@ -9,6 +9,7 @@
 #include "Entities/EntityData.h"
 #include "BlockEntities/BlockEntity.h"
 #include "BlockEntities/BlockEntityData.h"
+#include "Items/ItemData.h"
 
 Terrain::Terrain(World *world, Window *window) :
 	m_world(world)
@@ -71,8 +72,6 @@ bool Terrain::isBlockAt(const int x, const int y, const WorldLayer layer)
 	return getBlockAt(x, y, layer)->isSolid();
 }
 
-#include "Items/ItemData.h"
-
 bool Terrain::removeBlockAt(const int x, const int y, const WorldLayer layer, const bool createItem)
 {
 	const BlockData *block = getBlockAt(x, y, layer);
@@ -88,50 +87,48 @@ bool Terrain::removeBlockAt(const int x, const int y, const WorldLayer layer, co
 	return false;
 }
 
-BlockEntity *Terrain::createBlockEntityAt(const int x, const int y, const BlockEntityID blockEntityID, const bool replace)
+BlockEntity *Terrain::createBlockEntityAt(const int x, const int y, const BlockEntityData *blockEntityData, const bool replace)
 {
-	BlockEntityData *data = BlockEntityData::Get(blockEntityID);
-	if(!data) return 0;
-
 	if(replace)
 	{
-		// Make sure block and block entites are removed
-		for(int y1 = y; y1 < y + data->getHeight(); y1++)
+		// Remove blocks and block entities before placing block entity
+		for(int y1 = y; y1 < y + blockEntityData->m_height; y1++)
 		{
-			for(int x1 = x; x1 < x + data->getWidth(); x1++)
+			for(int x1 = x; x1 < x + blockEntityData->m_width; x1++)
 			{
+				// Remove block entity at this position
 				Chunk *chunk = m_chunkManager->getChunkAt((int) floor(x1 / CHUNK_BLOCKSF), (int) floor(y1 / CHUNK_BLOCKSF), true);
-
-				BlockEntity *blockEntity = chunk->getBlockEntityAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), data->getLayer());
+				BlockEntity *blockEntity = chunk->getBlockEntityAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), blockEntityData->m_layer);
 				if(blockEntity)
 				{
 					m_chunkManager->getChunkAt((int) floor(blockEntity->getX() / CHUNK_BLOCKSF), (int) floor(blockEntity->getY() / CHUNK_BLOCKSF), true)->removeBlockEntity(blockEntity);
 				}
 
-				if(data->getLayer() == WORLD_LAYER_MIDDLE)
-				{
-					chunk->setBlockAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), data->getLayer(), 0);
-				}
+				// Remove block at this position
+				chunk->setBlockAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), blockEntityData->m_layer, 0);
 			}
 		}
 	}
 
 	// Check if we can place the block entity here
-	if(!data->isValidPlacement(x, y, this, 0))
+	if(!blockEntityData->isValidPlacement(x, y, this, 0))
 	{
-		return 0;
+		return false;
 	}
 
-	Json::Value v; v["x"] = x; v["y"] = y;
-
-	BlockEntity *blockEntity = data->Create(blockEntityID, v);
+	// Create block entity using factory function
+	Json::Value attributes;
+	attributes["x"] = x;
+	attributes["y"] = y;
+	attributes["data_ptr"] = reinterpret_cast<int>(blockEntityData);
+	BlockEntity *blockEntity = blockEntityData->m_factory(attributes);
 
 	// Set block entity in all the positions it occupies
-	for(int y1 = y; y1 < y + data->getHeight(); y1++)
+	for(int y1 = y; y1 < y + blockEntityData->m_height; y1++)
 	{
-		for(int x1 = x; x1 < x + data->getWidth(); x1++)
+		for(int x1 = x; x1 < x + blockEntityData->m_width; x1++)
 		{
-			m_chunkManager->getChunkAt((int) floor(x1 / CHUNK_BLOCKSF), (int) floor(y1 / CHUNK_BLOCKSF), true)->setBlockEntityAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), data->getLayer(), blockEntity);
+			m_chunkManager->getChunkAt((int) floor(x1 / CHUNK_BLOCKSF), (int) floor(y1 / CHUNK_BLOCKSF), true)->setBlockEntityAt(math::mod(x1, CHUNK_BLOCKS), math::mod(y1, CHUNK_BLOCKS), blockEntityData->m_layer, blockEntity);
 		}
 	}
 	m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF), true)->addBlockEntity(blockEntity);
@@ -145,7 +142,7 @@ BlockEntity *Terrain::getBlockEntityAt(const int x, const int y, const WorldLaye
 
 bool Terrain::isBlockEntityAt(const int x, const int y, const WorldLayer layer)
 {
-	return getBlockEntityAt(x, y ,layer) != 0;
+	return getBlockEntityAt(x, y, layer) != 0;
 }
 
 bool Terrain::removeBlockEntityAt(const int x, const int y, const WorldLayer layer, const bool createItem)
@@ -163,9 +160,9 @@ bool Terrain::removeBlockEntityAt(const int x, const int y, const WorldLayer lay
 	return false;
 }
 
-bool Terrain::setBlockEntityFrameAt(const int x, const int y, const WorldLayer layer, const uint frame)
+bool Terrain::setBlockEntityUVAt(const int x, const int y, const WorldLayer layer, const Vector2F &uv)
 {
-	return m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF), true)->setBlockEntityFrameAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer, frame);
+	return m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF), true)->setBlockEntityUVAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer, uv);
 }
 
 bool Terrain::isEmptyAt(const int x, const int y, const WorldLayer layer)

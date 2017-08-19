@@ -10,7 +10,7 @@ BlockEntityItem::BlockEntityItem(OverworldGame *game, const ItemDataDesc *desc) 
 {
 	if(desc->userData.find("blockEntity") != desc->userData.end())
 	{
-		m_blockEntityID = BlockEntityData::GetByName(desc->userData.at("blockEntity"))->getID();
+		m_blockEntityData = BlockEntityData::GetByName(desc->userData.at("blockEntity"));
 	}
 }
 
@@ -30,7 +30,7 @@ void BlockEntityItem::use(Pawn *pawn, const float delta)
 	Vector2I blockPos = math::floor(Vector2F(m_game->getWorld()->getCamera()->getInputPosition()) / BLOCK_PXF);
 
 	// Set block if not occupied
-	if(m_game->getWorld()->getTerrain()->createBlockEntityAt(blockPos.x, blockPos.y, m_blockEntityID))
+	if(m_game->getWorld()->getTerrain()->createBlockEntityAt(blockPos.x, blockPos.y, m_blockEntityData))
 	{
 		pawn->getCurrentItem()->dec();
 	}

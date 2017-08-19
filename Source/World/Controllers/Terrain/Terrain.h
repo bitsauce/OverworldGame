@@ -51,8 +51,14 @@ public:
 	 */
 	bool removeBlockAt(const int x, const int y, const WorldLayer layer, const bool createItem = true);
 
-
-	BlockEntity *createBlockEntityAt(const int x, const int y, const BlockEntityID blockEntity, const bool replace = false);
+	/**
+	 * \brief Creates a block entity at the global position \p x, \p y.
+	 * \param x Global x position (in blocks)
+	 * \param y Global y position (in blocks)
+	 * \param blockEntity The block ID
+	 * \param replace If true, the function will replace whatever is at the given position.
+	 */
+	BlockEntity *createBlockEntityAt(const int x, const int y, const BlockEntityData *blockEntityData, const bool replace = false);
 
 	BlockEntity *getBlockEntityAt(const int x, const int y, const WorldLayer layer);
 
@@ -60,7 +66,7 @@ public:
 
 	bool removeBlockEntityAt(const int x, const int y, const WorldLayer layer, const bool createItem = true);
 
-	bool setBlockEntityFrameAt(const int x, const int y, const WorldLayer layer, const uint frame);
+	bool setBlockEntityUVAt(const int x, const int y, const WorldLayer layer, const Vector2F &uv);
 
 
 	bool isEmptyAt(const int x, const int y, const WorldLayer layer = WORLD_LAYER_MIDDLE);
