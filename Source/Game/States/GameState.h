@@ -8,28 +8,24 @@ class Canvas;
 
 class GameState : public SceneObject
 {
-	friend class OverworldGame;
+	friend class Overworld;
 protected:
 	GameState(const GameStateID id, const bool transparent);
 
-	virtual void onEnter() { }
-	virtual void onLeave() { }
+	virtual void onTransitionBegin() { }
 
-	//void processInput();
-	//void draw();
-	
+	virtual void onDraw(DrawEvent *e);
+	virtual void onWindowSizeChanged(WindowEvent *e);
+
 public:
-
 	GameStateID getID() const { return m_id; }
 	bool isTransparent() const { return m_transparent; }
-	//Scene *getScene() { return m_scene; }
+	RenderTarget2D *getRenderTarget() const { return m_renderTarget; }
 
 private:
 	const GameStateID m_id;
 	const bool m_transparent;
-
-protected:
-	Canvas *m_canvas;
+	RenderTarget2D *m_renderTarget;
 };
 
 #endif // GAME_STATE_H

@@ -1,7 +1,7 @@
 #ifndef CRAFTING_H
 #define CRAFTING_H
 
-#include "Gui/UiObject.h"
+#include "Gui/Gui.h"
 #include "Game/Storage.h"
 
 class GameOverlay;

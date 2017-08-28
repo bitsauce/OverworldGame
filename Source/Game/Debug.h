@@ -4,7 +4,7 @@
 #include "Config.h"
 
 class Lighting;
-class OverworldGame;
+class Overworld;
 class World;
 class CommandLine;
 class Pointlight;
@@ -16,7 +16,7 @@ class ColorPicker;
 class Debug : public SceneObject
 {
 public:
-	Debug(OverworldGame *game);
+	Debug(Overworld *game);
 
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
@@ -56,7 +56,7 @@ private:
 	list<pair<string, string>> m_variables;
 
 	// Game pointer
-	OverworldGame *m_game;
+	Overworld *m_game;
 	World *m_world;
 
 	// Paint block

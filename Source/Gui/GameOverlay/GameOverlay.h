@@ -2,7 +2,7 @@
 #define GAME_OVERLAY_H
 
 #include "Config.h"
-#include "Gui/UiObject.h"
+#include "Gui/UiObjects/UiObject.h"
 #include "Game/Storage.h"
 #include "Hotbar.h"
 #include "Inventory.h"
@@ -11,13 +11,13 @@
 #include "Crafting.h"
 #include "Chat.h"
 
-class OverworldGame;
+class Overworld;
 class Player;
 
 class GameOverlay : public UiObject
 {
 public:
-	GameOverlay(OverworldGame *game, UiObject *parent, GraphicsContext *graphicsContext);
+	GameOverlay(Overworld *game, UiObject *parent, GraphicsContext *graphicsContext);
 	~GameOverlay();
 
 	void onTick(TickEvent *e);
@@ -30,7 +30,7 @@ public:
 	HealthManaStatus *getHealthManaStatus() const { return m_healthManaStatus; }
 	Omnicon *getOmnicon() const { return m_omnicon; }
 	Inventory *getInventory() const { return m_inventory; }
-	Chat * getChat() const { return m_chat; }
+	Chat *getChat() const { return m_chat; }
 
 	// Crafting overlay
 	void toggleCrafting();
@@ -44,7 +44,7 @@ public:
 	bool m_active;
 
 private:
-	OverworldGame *m_game;
+	Overworld *m_game;
 	Player *m_player;
 	Hotbar *m_hotbar;
 	HealthManaStatus *m_healthManaStatus;

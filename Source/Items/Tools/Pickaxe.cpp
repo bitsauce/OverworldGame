@@ -8,7 +8,7 @@
 #include "Entities/ItemDrop.h"
 #include "Game/Game.h"
 
-Pickaxe::Pickaxe(OverworldGame *game, const ItemDataDesc *desc) :
+Pickaxe::Pickaxe(Overworld *game, const ItemDataDesc *desc) :
 	ItemData(desc),
 	m_game(game),
 	m_cracksSprite(Resource<Texture2D>("Sprites/Items/Tools/Pickaxes/Mining_Cracks")),
@@ -38,12 +38,12 @@ void Pickaxe::unequip(Pawn *player)
 void Pickaxe::update(Pawn *pawn, const float delta)
 {
 	// Get block input position
-	Vector2I position = m_game->getWorld()->getCamera()->getInputPosition();
+	Vector2I position = m_game->getClient()->getWorld()->getCamera()->getInputPosition();
 	position.x = (int) floor(position.x / BLOCK_PXF);
 	position.y = (int) floor(position.y / BLOCK_PXF);
 
 	if(pawn->getController()->getInputState(Controller::INPUT_USE_ITEM) && // Do we have user input and...
-		m_game->getWorld()->getTerrain()->isBlockAt(position.x, position.y, WORLD_LAYER_MIDDLE)) // ... is there a block at this position?
+		m_game->getClient()->getWorld()->getTerrain()->isBlockAt(position.x, position.y, WORLD_LAYER_MIDDLE)) // ... is there a block at this position?
 	{
 		// Reset timer if block position have changed
 		if(position != m_prevBlockPosition)
@@ -58,7 +58,7 @@ void Pickaxe::update(Pawn *pawn, const float delta)
 		m_mineCounter -= delta;
 		if(m_mineCounter <= 0.0f)
 		{
-			m_game->getWorld()->getTerrain()->removeBlockAt(position.x, position.y, WORLD_LAYER_MIDDLE);
+			m_game->getClient()->getWorld()->getTerrain()->removeBlockAt(position.x, position.y, WORLD_LAYER_MIDDLE);
 		}
 		else
 		{
@@ -69,12 +69,12 @@ void Pickaxe::update(Pawn *pawn, const float delta)
 		}
 
 		// Set mining animation
-		m_game->getWorld()->getLocalPlayer()->getHumanoid().setPostAnimation(Humanoid::ANIM_MINE);
+		m_game->getClient()->getWorld()->getLocalPlayer()->getHumanoid().setPostAnimation(Humanoid::ANIM_MINE);
 	}
 	else
 	{
 		m_mineCounter = m_mineTime; // Reset the counter
-		m_game->getWorld()->getLocalPlayer()->getHumanoid().setPostAnimation(Humanoid::ANIM_NULL); // Reset animations
+		m_game->getClient()->getWorld()->getLocalPlayer()->getHumanoid().setPostAnimation(Humanoid::ANIM_NULL); // Reset animations
 		m_drawCracks = false; // Don't draw cracks
 	}
 }

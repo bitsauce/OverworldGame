@@ -4,8 +4,9 @@
 #include "World/World.h"
 #include "Game/Game.h"
 
-Entity::Entity(const string &entityName, const Json::Value &attributes) :
-	m_world(dynamic_cast<OverworldGame*>(Game::Get())->getWorld()),
+Entity::Entity(World *world, const string &entityName, const Json::Value &attributes) :
+	NetworkObject(Overworld::Get()->getServer()),
+	m_world(world),
 	m_data(EntityData::GetByName(entityName)),
 	m_acceleration(0.0f, 0.0f),
 	m_velocity(0.0f, 0.0f),
@@ -18,6 +19,11 @@ Entity::Entity(const string &entityName, const Json::Value &attributes) :
 	m_contact(0),
 	m_lastChunkPosition(0, 0)
 {
+	if(!m_data)
+	{
+		THROW("Could not create entity '%s' (no entity data)", entityName.c_str());
+	}
+
 	// JSON format: { "position": { "x": float, "y": float} }
 	if(attributes.isMember("position"))
 	{
@@ -26,11 +32,7 @@ Entity::Entity(const string &entityName, const Json::Value &attributes) :
 		if(position.isMember("y")) m_position.y = position["y"].asFloat();
 	}
 
-	if(!m_data)
-	{
-		THROW("Could not create entity '%s' (no entity data)", entityName.c_str());
-	}
-
+	m_lastChunkPosition = math::floor(m_position / CHUNK_PXF);
 	m_world->addEntity(this);
 	m_world->getTerrain()->getChunkManager()->getChunkAt(m_lastChunkPosition.x, m_lastChunkPosition.y, true)->m_entities.push_back(this);
 }

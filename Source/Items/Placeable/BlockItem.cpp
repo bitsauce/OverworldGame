@@ -13,7 +13,7 @@ WorldLayer toWorldLayer(const string &layer)
 	return WORLD_LAYER_MIDDLE;
 }
 
-BlockItem::BlockItem(OverworldGame *game, const ItemDataDesc *desc) :
+BlockItem::BlockItem(Overworld *game, const ItemDataDesc *desc) :
 	ItemData(desc),
 	m_game(game)
 {
@@ -51,7 +51,7 @@ BlockItem::BlockItem(OverworldGame *game, const ItemDataDesc *desc) :
 
 void BlockItem::equip(Pawn *player)
 {
-	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::RIGHT_ARM, "Right_Hand_Equip", m_blockData->getName());
+	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::RIGHT_HAND, "Right_Hand_Equip", m_blockData->getName());
 	attachment->setPosition(0.8f, 12.7f);
 	attachment->setRotation(405.0f);
 	attachment->setSize(24, 24);
@@ -65,12 +65,12 @@ void BlockItem::unequip(Pawn *player)
 void BlockItem::use(Pawn *pawn, const float delta)
 {
 	// Get block input position
-	Vector2I blockPos = m_game->getWorld()->getCamera()->getInputPosition();
+	Vector2I blockPos = m_game->getClient()->getWorld()->getCamera()->getInputPosition();
 	blockPos.x = (int) floor(blockPos.x/BLOCK_PXF);
 	blockPos.y = (int) floor(blockPos.y/BLOCK_PXF);
 
 	// Set block if not occupied
-	if(m_game->getWorld()->getTerrain()->setBlockAt(blockPos.x, blockPos.y, m_layer, m_blockData))
+	if(m_game->getClient()->getWorld()->getTerrain()->setBlockAt(blockPos.x, blockPos.y, m_layer, m_blockData))
 	{
 		// Remove item from player inventory
 		pawn->getCurrentItem()->dec();

@@ -2,7 +2,7 @@
 
 #include "Config.h"
 
-class OverworldGame;
+class Overworld;
 class Chat;
 
 class Commander
@@ -35,7 +35,7 @@ public:
 		const function<void(Chat*, vector<string>)> function;
 	};
 
-	Commander(OverworldGame *game);
+	Commander(Overworld *game);
 	~Commander();
 
 	void execute(string command);
@@ -47,7 +47,6 @@ private:
 	void setGravity(Chat*, vector<string>);
 	void testclouds(Chat*, vector<string>);
 	void setres(Chat*, vector<string>);
-	void connect(Chat*, vector<string>);
 	void move(Chat*, vector<string>);
 
 	void setAppearance(Chat*, vector<string>);
@@ -56,7 +55,7 @@ private:
 
 	void setTime(Chat*, vector<string>);
 
-	OverworldGame *m_game;
+	Overworld *m_game;
 
 	list<Command> m_commands;
 };

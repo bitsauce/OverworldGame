@@ -9,6 +9,6 @@ extern "C" {
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 {
 	// Create game object
-	OverworldGame game;
+	Overworld game;
 	return game.run();
 }

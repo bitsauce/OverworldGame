@@ -19,7 +19,7 @@ enum PlacementRule
 
 class BlockEntityData
 {
-	friend class OverworldGame;
+	friend class Overworld;
 	friend class Terrain;
 public:
 	BlockEntityData(const BlockEntityID id, const string &name, const Pixmap &pixmap, const int width, const int height, const uint frameColumns, const uint frameRows, const WorldLayer layer, const uint placement, const BlockEntityFactory &factory) :

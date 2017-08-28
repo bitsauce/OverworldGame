@@ -7,14 +7,14 @@
 class Pickaxe : public ItemData
 {
 public:
-	Pickaxe(OverworldGame * game, const ItemDataDesc *desc);
+	Pickaxe(Overworld * game, const ItemDataDesc *desc);
 	void equip(Pawn *player);
 	void unequip(Pawn *player);
 	void update(Pawn *player, const float delta);
 	void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:
-	OverworldGame * m_game;
+	Overworld * m_game;
 
 	Sprite m_sprite;
 

@@ -31,7 +31,7 @@ ItemData *ItemData::getByName(const string &name)
 	return 0;
 }
 
-void ItemData::init(OverworldGame *game)
+void ItemData::init(Overworld *game)
 {
 	LOG("Loading item data...");
 

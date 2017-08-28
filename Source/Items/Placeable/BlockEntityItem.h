@@ -8,7 +8,7 @@
 class BlockEntityItem : public ItemData
 {
 public:
-	BlockEntityItem(OverworldGame *game, const ItemDataDesc *desc);
+	BlockEntityItem(Overworld *game, const ItemDataDesc *desc);
 
 	virtual void equip(Pawn *player);
 	virtual void unequip(Pawn *player);
@@ -16,7 +16,7 @@ public:
 	virtual void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:
-	OverworldGame *m_game;
+	Overworld *m_game;
 	BlockEntityData *m_blockEntityData;
 };
 

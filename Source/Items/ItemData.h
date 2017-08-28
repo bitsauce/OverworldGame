@@ -21,7 +21,7 @@ struct ItemDataDesc
 
 class ItemData
 {
-	friend class OverworldGame;
+	friend class Overworld;
 public:
 	ItemData(const ItemDataDesc *);
 	
@@ -48,7 +48,7 @@ private:
 	Resource<Texture2D> m_iconTexture;
 	//map<string, string> m_userData;
 
-	static void init(OverworldGame *game);
+	static void init(Overworld *game);
 	static map<ItemID, ItemData*> s_data;
 };
 

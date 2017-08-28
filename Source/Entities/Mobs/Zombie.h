@@ -6,7 +6,7 @@
 #include "../Humanoid.h"
 #include "../Entity.h"
 
-class OverworldGame;
+class Overworld;
 
 /*class Zombie : public Pawn
 {

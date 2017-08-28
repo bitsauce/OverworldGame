@@ -11,12 +11,10 @@
 #include "Animation/Bone.h"
 #include "Game/Game.h"
 #include "Game/States/GameState.h"
-#include "Game/Scene.h"
+#include "Gui/Gui.h"
 
-#include "Gui/Canvas.h"
-
-Pawn::Pawn(const string &entityName, const Json::Value &attributes) :
-	Entity(entityName, attributes),
+Pawn::Pawn(World *world, const string &entityName, const Json::Value &attributes) :
+	Entity(world, entityName, attributes),
 	m_camera(m_world->getCamera()),
 	m_terrain(m_world->getTerrain()),
 	m_controller(0),
@@ -27,8 +25,8 @@ Pawn::Pawn(const string &entityName, const Json::Value &attributes) :
 	m_lmbPressed(false),
 	m_storage(10),
 	m_bag(new Bag(20, 5)),
-	m_prevItem(ITEM_NONE),
-	m_equipedItem(ITEM_NONE),
+	m_prevItemID(ITEM_NONE),
+	m_equipedItemID(ITEM_NONE),
 	m_selectedSlot(0),
 	m_jumpForce(20.0f),
 	m_jumpEase(1.5f),
@@ -72,7 +70,6 @@ void Pawn::setController(Controller *controller)
 void Pawn::setSelectedSlot(const int slot)
 {
 	m_selectedSlot = slot;
-	m_equipedItem = getCurrentItem()->getItem();
 }
 
 Storage::Slot *Pawn::getCurrentItem()
@@ -219,18 +216,18 @@ void Pawn::onTick(TickEvent *e)
 	}
 
 	// Item swaped?
-	ItemID currentItem = m_equipedItem;
-	if(m_prevItem != currentItem)
+	ItemID currentItemID = m_equipedItemID;
+	if(m_prevItemID != currentItemID)
 	{
-		ItemData *item = ItemData::get(m_prevItem);
+		ItemData *item = ItemData::get(m_prevItemID);
 		if(item) item->unequip(this);
-		item = ItemData::get(currentItem);
+		item = ItemData::get(currentItemID);
 		if(item) item->equip(this);
-		m_prevItem = currentItem;
+		m_prevItemID = currentItemID;
 	}
 
 	// Use current item
-	ItemData *item = ItemData::get(currentItem);
+	ItemData *item = ItemData::get(currentItemID);
 	if(item)
 	{
 		if(m_controller->getInputState(Controller::INPUT_USE_ITEM))
@@ -274,7 +271,7 @@ void Pawn::pack(RakNet::BitStream *bitStream, const Connection *conn)
 	bitStream->Write(getPosition().y);
 	bitStream->Write(getVelocity().x);
 	bitStream->Write(getVelocity().y);
-	bitStream->Write(m_equipedItem);
+	bitStream->Write(getCurrentItem()->getItem());
 }
 
 void Pawn::unpack(RakNet::BitStream *bitStream, const Connection *conn)
@@ -287,7 +284,7 @@ void Pawn::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 		bitStream->Read(position.y);
 		bitStream->Read(velocity.x);
 		bitStream->Read(velocity.y);
-		bitStream->Read(m_equipedItem);
+		bitStream->Read(m_equipedItemID);
 
 		// TODO: Verify using some time detla between this and previous packet
 		/*if(getVelocity().length() * delta_time < (getPosition() - Vector2F(x, y)).length())
@@ -312,7 +309,7 @@ void Pawn::unpack(RakNet::BitStream *bitStream, const Connection *conn)
 		bitStream->Read(position.y);
 		bitStream->Read(velocity.x);
 		bitStream->Read(velocity.y);
-		bitStream->Read(m_equipedItem);
+		bitStream->Read(m_equipedItemID);
 		moveTo(position);
 		setVelocity(velocity);
 	}

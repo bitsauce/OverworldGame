@@ -5,15 +5,15 @@
 
 enum
 {
-	EVENT_TYPE_CLICK_BEGIN = EVENT_CUSTOM,
-	EVENT_TYPE_CLICK_DRAG,
-	EVENT_TYPE_CLICK_DONE,
-	EVENT_TYPE_CLICK_CANCELED,
-	EVENT_TYPE_HOVER_ENTER,
-	EVENT_TYPE_HOVER_LEAVE,
-	EVENT_TYPE_FOCUS_GAINED,
-	EVENT_TYPE_FOCUS_LOST,
-	EVENT_TYPE_RESIZE
+	EVENT_GUI_CLICK_BEGIN = EVENT_CUSTOM,
+	EVENT_GUI_CLICK_DRAG,
+	EVENT_GUI_CLICK_DONE,
+	EVENT_GUI_CLICK_CANCELED,
+	EVENT_GUI_HOVER_ENTER,
+	EVENT_GUI_HOVER_LEAVE,
+	EVENT_GUI_FOCUS_GAINED,
+	EVENT_GUI_FOCUS_LOST,
+	EVENT_GUI_RESIZE
 };
 
 class ClickEvent : public Event
@@ -21,10 +21,10 @@ class ClickEvent : public Event
 public:
 	enum ClickEventType
 	{
-		BEGIN = EVENT_TYPE_CLICK_BEGIN,
-		DRAG = EVENT_TYPE_CLICK_DRAG,
-		DONE = EVENT_TYPE_CLICK_DONE,
-		CANCELED = EVENT_TYPE_CLICK_CANCELED
+		BEGIN = EVENT_GUI_CLICK_BEGIN,
+		DRAG = EVENT_GUI_CLICK_DRAG,
+		DONE = EVENT_GUI_CLICK_DONE,
+		CANCELED = EVENT_GUI_CLICK_CANCELED
 	};
 
 	ClickEvent(ClickEventType type, int clickCount, MouseEvent *mouseEvent) :
@@ -54,8 +54,8 @@ class HoverEvent : public Event
 public:
 	enum HoverEventType
 	{
-		ENTER = EVENT_TYPE_HOVER_ENTER,
-		LEAVE = EVENT_TYPE_HOVER_LEAVE
+		ENTER = EVENT_GUI_HOVER_ENTER,
+		LEAVE = EVENT_GUI_HOVER_LEAVE
 	};
 
 	HoverEvent(HoverEventType type, MouseEvent *mouseEvent) :
@@ -78,8 +78,8 @@ class FocusEvent : public Event
 public:
 	enum FocusEventType
 	{
-		GAINED = EVENT_TYPE_FOCUS_GAINED,
-		LOST = EVENT_TYPE_FOCUS_LOST
+		GAINED = EVENT_GUI_FOCUS_GAINED,
+		LOST = EVENT_GUI_FOCUS_LOST
 	};
 
 	FocusEvent(FocusEventType type) :
@@ -88,19 +88,16 @@ public:
 	}
 
 private:
-
+	
 };
+
+class UiObject;
 
 class ResizeEvent : public Event
 {
 public:
-
-	ResizeEvent(const uint width, const uint height) :
-		Event(EVENT_TYPE_RESIZE),
-		m_width(width),
-		m_height(height)
-	{
-	}
+	ResizeEvent(UiObject *uiObject);
+	~ResizeEvent();
 
 	uint getWidth() const
 	{
@@ -113,6 +110,7 @@ public:
 	}
 
 private:
+	UiObject *const m_uiObject;
 	const uint m_width, m_height;
 };
 

@@ -17,6 +17,8 @@ class Chunk
 	friend class BlockDrawer;
 	friend class Debug;
 	friend class Pointlight;
+	friend class Client;
+	friend class Server;
 private:
 	Chunk(ChunkManager *chunkManager);
 	Chunk(const Chunk &) = delete;

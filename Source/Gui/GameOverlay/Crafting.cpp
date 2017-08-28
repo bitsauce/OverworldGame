@@ -1,5 +1,6 @@
 #include "Crafting.h"
-#include "Gui/GameOverlay/GameOverlay.h"
+#include "Gui/Gui.h"
+#include "GameOverlay.h"
 #include "Game/Game.h"
 #include "Items/ItemData.h"
 

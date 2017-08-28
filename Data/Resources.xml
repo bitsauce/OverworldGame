@@ -16,6 +16,10 @@
 		<name>Fonts/Chat</name>
 		<path>Fonts/DebugFont.fnt</path>
 	</font>
+  <font>
+    <name>Fonts/MenuFont</name>
+    <path>Fonts/MenuFont.fnt</path>
+  </font>
 	
 	<!-- Textures -->
 	<texture>
@@ -185,10 +189,6 @@
 		<path>Sprites/Inventory/ItemSlotSelected.png</path>
 	</texture>
 	<texture>
-		<name>Sprites/BlockEntities/LightSources/Torch</name>
-		<path>Sprites/BlockEntities/LightSources/Torch.png</path>
-	</texture>
-	<texture>
 		<name>Sprites/Gui/Color_Picker_Ring</name>
 		<path>Sprites/Gui/Color_Picker_Ring.png</path>
 	</texture>
@@ -196,6 +196,35 @@
 		<name>Sprites/Gui/Color_Wheel</name>
 		<path>Sprites/Gui/Color_Wheel.png</path>
 	</texture>
+  
+  <!--Button-->
+  <texture>
+    <name>Gui/ButtonActive</name>
+    <path>Sprites/Gui/Button_Active.png</path>
+    <premultiplyAlpha>true</premultiplyAlpha>
+  </texture>
+  <texture>
+    <name>Gui/ButtonHover</name>
+    <path>Sprites/Gui/Button_Hover.png</path>
+    <premultiplyAlpha>true</premultiplyAlpha>
+  </texture>
+  <texture>
+    <name>Gui/ButtonInactive</name>
+    <path>Sprites/Gui/Button_Inactive.png</path>
+    <premultiplyAlpha>true</premultiplyAlpha>
+  </texture>
+
+  <!--LineEdit-->
+  <texture>
+    <name>Gui/Input_Active</name>
+    <path>Sprites/Gui/Input_Active.png</path>
+    <premultiplyAlpha>true</premultiplyAlpha>
+  </texture>
+  <texture>
+    <name>Gui/Input_Inactive</name>
+    <path>Sprites/Gui/Input_Inactive.png</path>
+    <premultiplyAlpha>true</premultiplyAlpha>
+  </texture>
 	
 	<!-- Shaders -->
 	<shader>

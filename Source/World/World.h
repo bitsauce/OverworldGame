@@ -25,9 +25,9 @@ class World : public SceneObject
 {
 	friend class Server;
 	friend class Client;
-	friend class Pawn; // TODO: ???
+	friend class Pawn;
 public:
-	World(Game *game);
+	World(Connection *conn);
 
 	void create(const string &name);
 	bool load(const string &name);
@@ -95,7 +95,14 @@ public:
 		return m_seed;
 	}
 
+	Connection *getConnection() const
+	{
+		return m_connection;
+	}
+
 private:
+	Connection *m_connection;
+
 	uint m_seed;
 
 	Terrain *m_terrain;

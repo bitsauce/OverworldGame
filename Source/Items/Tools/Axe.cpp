@@ -10,7 +10,7 @@
 #include "Game/Game.h"
 #include "Blocks/BlockData.h"
 
-Axe::Axe(OverworldGame *game, const ItemDataDesc *desc) :
+Axe::Axe(Overworld *game, const ItemDataDesc *desc) :
 	ItemData(desc),
 	m_game(game),
 	m_cracksSprite(Resource<Texture2D>("Sprites/Items/Tools/Pickaxes/Mining_Cracks")),
@@ -40,11 +40,11 @@ void Axe::unequip(Pawn *player)
 void Axe::update(Pawn *pawn, const float delta)
 {
 	// Get block input position
-	Vector2I position = m_game->getWorld()->getCamera()->getInputPosition();
+	Vector2I position = m_game->getClient()->getWorld()->getCamera()->getInputPosition();
 	position.x = (int) floor(position.x / BLOCK_PXF);
 	position.y = (int) floor(position.y / BLOCK_PXF);
 
-	Terrain *terrain = m_game->getWorld()->getTerrain();
+	Terrain *terrain = m_game->getClient()->getWorld()->getTerrain();
 	if(pawn->getController()->getInputState(Controller::INPUT_USE_ITEM) && // Do we have user input and...
 		terrain->isBlockAt(position.x, position.y, WORLD_LAYER_BACK)) // ... is there a block at this position?
 	{
@@ -86,12 +86,12 @@ void Axe::update(Pawn *pawn, const float delta)
 		}
 
 		// Set mining animation
-		m_game->getWorld()->getLocalPlayer()->getHumanoid().setPostAnimation(Humanoid::ANIM_MINE);
+		m_game->getClient()->getWorld()->getLocalPlayer()->getHumanoid().setPostAnimation(Humanoid::ANIM_MINE);
 	}
 	else
 	{
 		m_mineCounter = m_mineTime; // Reset the counter
-		m_game->getWorld()->getLocalPlayer()->getHumanoid().setPostAnimation(Humanoid::ANIM_NULL); // Reset animations
+		m_game->getClient()->getWorld()->getLocalPlayer()->getHumanoid().setPostAnimation(Humanoid::ANIM_NULL); // Reset animations
 		m_drawCracks = false; // Don't draw cracks
 	}
 }
@@ -107,7 +107,7 @@ void Axe::draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha)
 
 /*void Axe::makeTreeFall(const int x, const int y)
 {
-	Terrain *terrain = m_game->getWorld()->getTerrain();
+	Terrain *terrain = m_game->getClient()->getWorld()->getTerrain();
 	if(terrain->getBlockAt(x, y, WORLD_LAYER_BACK) != BLOCK_OAK_WOOD) return;
 
 	list<pair<int, int>> nodes;
@@ -149,7 +149,7 @@ void Axe::draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha)
 }
 void Axe::makeLeavesFall(const int x, const int y)
 {
-	Terrain *terrain = m_game->getWorld()->getTerrain();
+	Terrain *terrain = m_game->getClient()->getWorld()->getTerrain();
 
 	if(terrain->getBlockAt(x, y, WORLD_LAYER_FRONT) != BLOCK_OAK_LEAVES) return;
 

@@ -9,7 +9,7 @@ class Connection;
 class NetworkObject : public RakNet::NetworkIDObject
 {
 public:
-	NetworkObject();
+	NetworkObject(Connection *conn);
 	~NetworkObject();
 	
 	// TODO: pack -> onPack, unpack -> onUnpack
@@ -19,6 +19,7 @@ public:
 	//bool isLocal() const;
 	bool m_local;
 private:
+	Connection *m_connection;
 	//RakNet::RakNetGUID m_origin;
 };
 

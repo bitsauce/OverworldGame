@@ -13,10 +13,14 @@
 #include "Game/Game.h"
 #include "Gui/GameOverlay/GameOverlay.h"
 
-World::World(Game *game) :
+World::World(Connection *conn) :
 	m_worldPath(""),
-	m_worldFile(nullptr)
+	m_worldFile(nullptr),
+	m_localPlayer(nullptr),
+	m_connection(conn)
 {
+	Overworld *game = Overworld::Get();
+
 	// Load controllers
 	m_timeOfDay = new TimeOfDay(this);
 	addChildLast(m_timeOfDay);
@@ -82,20 +86,6 @@ bool World::load(const string &name)
 		m_worldFile = new IniFile(worldFile);
 
 		m_seed = util::strToInt(m_worldFile->getValue("world", "seed"));
-
-		/*FileSystemIterator itr(m_worldPath + "/Objects", "*.obj", FileSystemIterator::FILES);
-		while(itr.hasNext())
-		{
-		FileReader file(itr.next());
-
-		int id;
-		file >> id;
-
-		switch(id)
-		{
-		case ENTITY_ITEM_DROP: new ItemDrop(this, file); break;
-		}
-		}*/
 	}
 	else
 	{
@@ -122,7 +112,7 @@ void World::clear()
 	}
 	m_entities.clear();
 
-	((OverworldGame*) Game::Get())->getGameOverlay()->setPlayer(0);
+	((Overworld*) Game::Get())->getGameOverlay()->setPlayer(0);
 
 	for(uint i = 0; i < WORLD_LAYER_COUNT; ++i)
 	{

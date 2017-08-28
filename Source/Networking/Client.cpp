@@ -17,22 +17,41 @@
 #include "Entities/Player.h"
 #include "PlayerController.h"
 
+#include "Gui/Gui.h"
 #include "Gui/GameOverlay/GameOverlay.h"
 
-Client::Client(OverworldGame *game, const string &ip, const ushort port) :
+Client::Client(Overworld *game) :
 	Connection(false),
-	m_game(game)
+	m_game(game),
+	m_joinFinalized(false)
 {
+}
+
+Client::ErrorCode Client::join(const string &playerName, const string &ip, const ushort port)
+{
+	// Setup connection
+	LOG("Connecting to server %s:%i", ip.c_str(), port);
+
 	RakNet::SocketDescriptor socketDescriptor;
-	assert(m_rakPeer->Startup(1, &socketDescriptor, 1) == RakNet::RAKNET_STARTED);
-	assert(m_rakPeer->Connect(ip.c_str(), port, 0, 0) == RakNet::CONNECTION_ATTEMPT_STARTED);
+	if(m_rakPeer->Startup(1, &socketDescriptor, 1) != RakNet::RAKNET_STARTED) return COULD_NOT_SETUP_SOCKET;
+	if(m_rakPeer->Connect(ip.c_str(), port, 0, 0) != RakNet::CONNECTION_ATTEMPT_STARTED) return COULD_NOT_CONNECT;
 
 	m_rakPeer->SetTimeoutTime(600000, RakNet::UNASSIGNED_SYSTEM_ADDRESS); // For debugging purposes
+
+	// TODO: Receive own player position and load chunks in the client's active region
+	//       Then, receive all other entities
+	m_playerName = playerName;
+
+	// Load world from the server
+	LOG("Receiving world data");
+	m_world = new World(this);
+
+	return SUCCESS;
 }
 
 void Client::onTick(TickEvent *e)
 {
-	for(NetworkObject *object : m_networkObjects)
+	/*for(NetworkObject *object : m_networkObjects)
 	{
 		if(object->m_local)
 		{
@@ -46,21 +65,22 @@ void Client::onTick(TickEvent *e)
 				sendPacket(&bitStream);
 			}
 		}
-	}
+	}*/
 
 	for(RakNet::Packet *packet = m_rakPeer->Receive(); packet; m_rakPeer->DeallocatePacket(packet), packet = m_rakPeer->Receive())
 	{
 		switch(packet->data[0])
 		{
-			case ID_SET_BLOCK:
+			case ID_CONNECTION_REQUEST_ACCEPTED:
 			{
-				RakNet::BitStream bitStream(packet->data, packet->length, false);
-				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
-				int x; bitStream.Read(x);
-				int y; bitStream.Read(y);
-				BlockID blockID; bitStream.Read(blockID);
-				WorldLayer layer; bitStream.Read(layer);
-				m_game->getWorld()->getTerrain()->setBlockAt(x, y, layer, BlockData::get(blockID), true);
+				LOG("Connection request accepted by server %s with GUID %s", packet->systemAddress.ToString(true), packet->guid.ToString());
+
+				// Attempting to join as client
+				LOG("Attempting to join as '%s'", m_playerName.c_str());
+				RakNet::BitStream bitStream;
+				bitStream.Write((RakNet::MessageID) ID_PLAYER_JOIN);
+				bitStream.Write(m_playerName.c_str());
+				sendPacket(&bitStream);
 			}
 			break;
 
@@ -77,7 +97,7 @@ void Client::onTick(TickEvent *e)
 				// Create player
 				Json::Value attributes;
 				attributes["name"] = playerName;
-				Player *player = new Player(attributes);
+				Player *player = new Player(m_world, attributes);
 				player->SetNetworkIDManager(&m_networkIDManager);
 				player->SetNetworkID(playerNetworkID);
 				player->unpack(&bitStream, this);
@@ -92,8 +112,57 @@ void Client::onTick(TickEvent *e)
 				playerController->m_local = true;
 
 				m_game->getGameOverlay()->setPlayer(player);
-				m_game->getWorld()->getCamera()->setTargetEntity(player);
-				m_game->getWorld()->m_localPlayer = player;
+				m_world->getCamera()->setTargetEntity(player);
+				m_world->m_localPlayer = player;
+
+				// Request chunks
+				ChunkManager *chunkManager = m_world->getTerrain()->getChunkManager();
+				chunkManager->updateLoadingAndActiveArea(player->getPosition());
+				ChunkManager::ChunkArea activeArea = chunkManager->getActiveArea();
+				int chunksRequested = 0;
+				for(int y = activeArea.y0 - 1; y <= activeArea.y1 + 1; y++)
+				{
+					for(int x = activeArea.x0 - 1; x <= activeArea.x1 + 1; x++)
+					{
+						chunkManager->getChunkAt(x, y, true);
+						chunksRequested++;
+					}
+				}
+				LOG("Requested %i chunks", chunksRequested);
+
+				{
+					RakNet::BitStream bitStream;
+					bitStream.Write((RakNet::MessageID) ID_PLAYER_JOIN_FINALIZE);
+					sendPacket(&bitStream);
+				}
+			}
+			break;
+
+			case ID_REQUEST_CHUNK:
+			{
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
+
+				// Read chunk data
+				int chunkX, chunkY;
+				bitStream.Read(chunkX);
+				bitStream.Read(chunkY);
+
+				Block blocks[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
+				bitStream.ReadAlignedBytes((uchar*)&blocks, CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT * sizeof(Block));
+
+				// Load chunk
+				m_world->getTerrain()->getChunkManager()->getChunkAt(chunkX, chunkY, false)->load(chunkX, chunkY, blocks);
+
+				LOG("Chunk [%i, %i] received", chunkX, chunkY);
+			}
+			break;
+
+			case ID_PLAYER_JOIN_FINALIZE:
+			{
+				m_joinFinalized = true;
+
+				LOG("Join finalized!");
 			}
 			break;
 
@@ -111,13 +180,25 @@ void Client::onTick(TickEvent *e)
 					case 1:
 					{
 						// Create player
-						Player *player = new Player(Json::Value());
+						Player *player = new Player(m_world, Json::Value());
 						player->SetNetworkIDManager(&m_networkIDManager);
 						player->SetNetworkID(networkID);
 						player->setController(new PlayerController(m_game, false));
 					}
 					break;
 				}
+			}
+			break;
+
+			case ID_SET_BLOCK:
+			{
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
+				int x; bitStream.Read(x);
+				int y; bitStream.Read(y);
+				BlockID blockID; bitStream.Read(blockID);
+				WorldLayer layer; bitStream.Read(layer);
+				m_world->getTerrain()->setBlockAt(x, y, layer, BlockData::get(blockID), true);
 			}
 			break;
 
@@ -135,20 +216,8 @@ void Client::onTick(TickEvent *e)
 			}
 			break;
 
-			case ID_CONNECTION_REQUEST_ACCEPTED:
-			{
-				m_game->getWorld()->clear();
-
-				// Connection accepted, join as player
-				RakNet::BitStream bitStream;
-				bitStream.Write((RakNet::MessageID) ID_PLAYER_JOIN);
-				bitStream.Write("BitsauceClient");
-				sendPacket(&bitStream);
-			}
-			break;
-
 			default:
-				LOG("Received packet type %s", RakNet::PacketLogger::BaseIDTOString(packet->data[0]));
+				LOG("Received unknown packet type %s", RakNet::PacketLogger::BaseIDTOString(packet->data[0]));
 				break;
 		}
 	}

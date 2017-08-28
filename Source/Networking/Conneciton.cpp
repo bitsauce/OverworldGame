@@ -1,8 +1,6 @@
 #include "Connection.h"
 #include "NetworkObject.h"
 
-Connection *Connection::s_instance;
-
 void Connection::addNetworkObject(NetworkObject *object)
 {
 	object->SetNetworkIDManager(&m_networkIDManager);

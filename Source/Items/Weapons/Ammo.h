@@ -3,7 +3,7 @@
 
 #include "Items/ItemData.h"
 
-class OverworldGame;
+class Overworld;
 
 class Ammo : public ItemData
 {

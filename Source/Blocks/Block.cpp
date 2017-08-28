@@ -17,7 +17,7 @@ void Block::setBlockDataByID(const BlockID id)
 
 const BlockData *Block::getBlockData() const
 {
-	return m_blockData;
+	return m_blockData ? m_blockData : BlockData::get(0);
 }
 
 BlockEntity *Block::getBlockEntity() const

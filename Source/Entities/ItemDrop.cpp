@@ -6,7 +6,7 @@
 #include "Entities/EntityData.h"
 
 ItemDrop::ItemDrop(const Json::Value &attributes) :
-	Entity("ItemDrop", attributes),
+	Entity(0, "ItemDrop", attributes),
 	m_noPickupTime(1.0f), // No pickup for 1 s
 	m_dragDistance(16.0f * BLOCK_PXF),
 	m_pickupDistance(16.0f),

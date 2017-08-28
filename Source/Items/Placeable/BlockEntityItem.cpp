@@ -4,7 +4,7 @@
 #include "Game/Game.h"
 #include "BlockEntities/BlockEntityData.h"
 
-BlockEntityItem::BlockEntityItem(OverworldGame *game, const ItemDataDesc *desc) :
+BlockEntityItem::BlockEntityItem(Overworld *game, const ItemDataDesc *desc) :
 	ItemData(desc),
 	m_game(game)
 {
@@ -27,10 +27,10 @@ void BlockEntityItem::unequip(Pawn *pawn)
 void BlockEntityItem::use(Pawn *pawn, const float delta)
 {
 	// Get block input position
-	Vector2I blockPos = math::floor(Vector2F(m_game->getWorld()->getCamera()->getInputPosition()) / BLOCK_PXF);
+	Vector2I blockPos = math::floor(Vector2F(m_game->getClient()->getWorld()->getCamera()->getInputPosition()) / BLOCK_PXF);
 
 	// Set block if not occupied
-	if(m_game->getWorld()->getTerrain()->createBlockEntityAt(blockPos.x, blockPos.y, m_blockEntityData))
+	if(m_game->getClient()->getWorld()->getTerrain()->createBlockEntityAt(blockPos.x, blockPos.y, m_blockEntityData))
 	{
 		pawn->getCurrentItem()->dec();
 	}
@@ -39,7 +39,7 @@ void BlockEntityItem::use(Pawn *pawn, const float delta)
 void BlockEntityItem::draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha)
 {
 	// Get block input position
-	/*Vector2i blockPos = m_game->getWorld()->getCamera()->getInputPosition();
+	/*Vector2i blockPos = m_game->getClient()->getWorld()->getCamera()->getInputPosition();
 	blockPos.x = (int)floor(blockPos.x/BLOCK_PXF);
 	blockPos.y = (int)floor(blockPos.y/BLOCK_PXF);
 

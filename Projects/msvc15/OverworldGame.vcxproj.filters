@@ -98,12 +98,6 @@
     <ClCompile Include="..\..\Source\Game\States\GameState.cpp">
       <Filter>Source\Game\States</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Gui\Canvas.cpp">
-      <Filter>Source\Gui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Gui\UiObject.cpp">
-      <Filter>Source\Gui</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Gui\GameOverlay\GameOverlay.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClCompile>
@@ -124,9 +118,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\Gui\GameOverlay\Omnicon.cpp">
       <Filter>Source\Gui\GameOverlay</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Gui\LineEdit.cpp">
-      <Filter>Source\Gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Items\Weapons\Bow.cpp">
       <Filter>Source\Items\Weapons</Filter>
@@ -194,9 +185,6 @@
     <ClCompile Include="..\..\Source\Animation\Extension.cpp">
       <Filter>Source\Animation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Gui\ColorPicker.cpp">
-      <Filter>Source\Gui</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\World\Controllers\Lighting\Lighting.cpp">
       <Filter>Source\World\Controllers\Lighting</Filter>
     </ClCompile>
@@ -226,6 +214,39 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\Networking\Controller.cpp">
       <Filter>Source\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game\States\TestMenu.cpp">
+      <Filter>Source\Game\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\UiObjects\AspectRatioContainer.cpp">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\UiObjects\Button.cpp">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\UiObjects\Canvas.cpp">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\UiObjects\Label.cpp">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\UiObjects\LineEdit.cpp">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\UiObjects\Slider.cpp">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\UiObjects\UiObject.cpp">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\Gui.cpp">
+      <Filter>Source\Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Gui\UiObjects\GradientBackground.cpp">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game\States\DialogBoxState.cpp">
+      <Filter>Source\Game\States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -319,22 +340,13 @@
     <Filter Include="Source\json">
       <UniqueIdentifier>{824b1655-22a1-41d4-baaa-2e4c172511ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Gui\UiObjects">
+      <UniqueIdentifier>{9b17559a-ee85-4ba5-b35e-0a0913a1c29a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\Constants.h">
       <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\gui\Button.h">
-      <Filter>Source\Gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\gui\Canvas.h">
-      <Filter>Source\Gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\gui\LineEdit.h">
-      <Filter>Source\Gui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\gui\UiObject.h">
-      <Filter>Source\Gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\animation\Animation.h">
       <Filter>Source\Animation</Filter>
@@ -391,9 +403,6 @@
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Game\Game.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Game\Scene.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Game\Debug.h">
@@ -495,9 +504,6 @@
     <ClInclude Include="..\..\Source\Game\States\InGameState.h">
       <Filter>Source\Game\States</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Gui\UiEvents.h">
-      <Filter>Source\Gui</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Blocks\Block.h">
       <Filter>Source\Blocks</Filter>
     </ClInclude>
@@ -524,9 +530,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Animation\Atlas.h">
       <Filter>Source\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Gui\ColorPicker.h">
-      <Filter>Source\Gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\World.h">
       <Filter>Source</Filter>
@@ -572,6 +575,42 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Networking\PlayerController.h">
       <Filter>Source\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\States\TestMenu.h">
+      <Filter>Source\Game\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Gui\UiObjects\AspectRatioContainer.h">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Gui\UiObjects\Button.h">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Gui\UiObjects\Canvas.h">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Gui\UiObjects\Label.h">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Gui\UiObjects\LineEdit.h">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Gui\UiObjects\Slider.h">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Gui\UiObjects\UiObject.h">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Gui\Gui.h">
+      <Filter>Source\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Gui\UiEvents.h">
+      <Filter>Source\Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Gui\UiObjects\GradientBackground.h">
+      <Filter>Source\Gui\UiObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\States\DialogBoxState.h">
+      <Filter>Source\Game\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

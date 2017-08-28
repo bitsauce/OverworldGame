@@ -11,7 +11,7 @@ class BlockData;
 class BlockItem : public ItemData
 {
 public:
-	BlockItem(OverworldGame *game, const ItemDataDesc *desc);
+	BlockItem(Overworld *game, const ItemDataDesc *desc);
 
 	void equip(Pawn *player);
 	void unequip(Pawn *player);
@@ -19,7 +19,7 @@ public:
 	void draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha);
 
 private:
-	OverworldGame *const m_game;
+	Overworld *const m_game;
 	WorldLayer m_layer;
 	BlockData *m_blockData;
 };

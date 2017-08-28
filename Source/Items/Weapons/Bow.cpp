@@ -8,7 +8,7 @@
 #include "Animation/Bone.h"
 #include "Animation/RegionAttachment.h"
 
-Bow::Bow(OverworldGame *game, const ItemDataDesc *desc) :
+Bow::Bow(Overworld *game, const ItemDataDesc *desc) :
 	ItemData(desc),
 	m_game(game),
 	m_attachTexture(Resource<Texture2D>("Sprites/Items/Weapons/WoodenBow")),
@@ -37,7 +37,7 @@ void Bow::unequip(Pawn *player)
 void Bow::update(Pawn *pawn, const float delta)
 {
 	const Vector2F aimCenter = pawn->getCenter() - Vector2F(0.0f, 12.0f);
-	const Vector2F dir = Vector2F(m_game->getWorld()->getCamera()->getInputPosition() - aimCenter).normalized();
+	const Vector2F dir = Vector2F(m_game->getClient()->getWorld()->getCamera()->getInputPosition() - aimCenter).normalized();
 	if(pawn->getController()->getInputState(Controller::INPUT_USE_ITEM))
 	{
 		m_charging = true;

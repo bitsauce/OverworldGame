@@ -9,7 +9,7 @@ typedef function<Entity*(const Json::Value&)> EntityFactory;
 
 class EntityData
 {
-	friend class OverworldGame;
+	friend class Overworld;
 public:
 	EntityData(const EntityID id, const string &name, const WorldLayer layer, const EntityFactory factory) :
 		m_id(id),

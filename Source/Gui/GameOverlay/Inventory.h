@@ -1,7 +1,7 @@
 #ifndef INVENTORY_H
 #define INVENTORY_H
 
-#include "Gui/UiObject.h"
+#include "Gui/UiObjects/UiObject.h"
 #include "Game/Storage.h"
 
 class GameOverlay;

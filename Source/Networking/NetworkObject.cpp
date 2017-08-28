@@ -3,15 +3,16 @@
 #include "Server.h"
 #include "Client.h"
 
-NetworkObject::NetworkObject() :
-	m_local(false)
+NetworkObject::NetworkObject(Connection *conn) :
+	m_local(false),
+	m_connection(conn)
 {
-	Connection::getInstance()->addNetworkObject(this);
+	m_connection->addNetworkObject(this);
 }
 
 NetworkObject::~NetworkObject()
 {
-	Connection::getInstance()->removeNetworkObject(this);
+	m_connection->removeNetworkObject(this);
 }
 
 /*bool NetworkObject::isLocal() const

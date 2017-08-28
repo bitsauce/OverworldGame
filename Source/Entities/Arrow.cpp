@@ -3,7 +3,7 @@
 #include "Entities/EntityData.h"
 
 Arrow::Arrow(const Json::Value &attributes) :
-	Entity("Arrow", attributes),
+	Entity(0, "Arrow", attributes),
 	m_sprite(Resource<Texture2D>("Sprites/Items/Weapons/Arrow")),
 	m_hitState(false),
 	m_deleteTime(0.0f),

@@ -3,7 +3,7 @@
 #include "Gui/GameOverlay/GameOverlay.h"
 #include "Game/Game.h"
 
-PlayerController::PlayerController(OverworldGame *game, const bool local) :
+PlayerController::PlayerController(Overworld *game, const bool local) :
 	m_game(game)
 {
 	// If player is local, do extra stuff

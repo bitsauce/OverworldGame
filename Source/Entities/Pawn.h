@@ -11,7 +11,7 @@ class Camera;
 class Terrain;
 class ItemData;
 class Connection;
-class OverworldGame;
+class Overworld;
 class GameOverlay;
 class Pointlight;
 class Spotlight;
@@ -40,7 +40,7 @@ private:
 class Pawn : public Entity
 {
 public:
-	Pawn(const string &entityName, const Json::Value &attributes);
+	Pawn(World *world, const string &entityName, const Json::Value &attributes);
 	virtual ~Pawn();
 
 	void setController(Controller *controller);
@@ -93,7 +93,7 @@ protected:
 	int m_selectedSlot;
 
 	// Equiped item
-	ItemID m_prevItem, m_equipedItem;
+	ItemID m_prevItemID, m_equipedItemID;
 
 	// Pawn health
 	int m_maxHealth;

@@ -21,25 +21,44 @@
 #include "Gui/GameOverlay/GameOverlay.h"
 #include "Items/ItemData.h"
 
-Server::Server(OverworldGame *game, const ushort port) :
+Server::Server(Overworld *game) :
 	Connection(true),
 	m_game(game)
 {
+}
+
+Server::ErrorCode Server::host(const string &worldName, const ushort port)
+{
+	// Setup sockets
+	LOG("Attempting to host server on port %i...", port);
+
 	RakNet::SocketDescriptor socketDescriptor(port, 0);
 	if(m_rakPeer->Startup(2, &socketDescriptor, 1) != RakNet::RAKNET_STARTED)
 	{
-		LOG("Could not host server on port '%i' (port may be in use), hosting local server on port 0 instead", port);
+		LOG("Could not host server on port %i (port may be in use). Hosting local server on port 0 instead", port);
 		socketDescriptor.port = 0;
-		assert(m_rakPeer->Startup(2, &socketDescriptor, 1) == RakNet::RAKNET_STARTED);
+		if(m_rakPeer->Startup(2, &socketDescriptor, 1) != RakNet::RAKNET_STARTED) return COULD_NOT_SETUP_SOCKET;
 	}
 	m_rakPeer->SetMaximumIncomingConnections(2);
 
-	m_rakPeer->SetTimeoutTime(600000, RakNet::UNASSIGNED_SYSTEM_ADDRESS); // For debugging
+	LOG("Server was successfully hosted");
+	m_rakPeer->SetTimeoutTime(600000, RakNet::UNASSIGNED_SYSTEM_ADDRESS); // For debugging purposes
+
+	// Create and load world
+	LOG("Loading world '%s'", worldName.c_str());
+	m_world = new World(this);
+	if(!m_world->load(worldName))
+	{
+		LOG("World '%s' does not exist. Creating world", worldName.c_str());
+		m_world->create(worldName);
+	}
+
+	return SUCCESS;
 }
 
 void Server::onTick(TickEvent *e)
 {
-	m_isServer = false;
+	/*m_isServer = false;
 	for(NetworkObject *object : m_networkObjects)
 	{
 		if(object->m_local)
@@ -51,7 +70,7 @@ void Server::onTick(TickEvent *e)
 			m_rakPeer->SendLoopback((const char*) bitStream.GetData(), bitStream.GetNumberOfBytesUsed());
 		}
 	}
-	m_isServer = true;
+	m_isServer = true;*/
 
 	for(RakNet::Packet *packet = m_rakPeer->Receive(); packet; m_rakPeer->DeallocatePacket(packet), packet = m_rakPeer->Receive())
 	{
@@ -60,17 +79,6 @@ void Server::onTick(TickEvent *e)
 			case ID_NEW_INCOMING_CONNECTION:
 			{
 				LOG("Client connected from %s with GUID %s", packet->systemAddress.ToString(true), packet->guid.ToString());
-
-				// Send entities???
-				for(Entity *entity : m_networkEntities)
-				{
-					RakNet::BitStream bitStream;
-					bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
-					bitStream.Write(entity->getData()->getID());
-					bitStream.Write(entity->GetNetworkID());
-					bitStream.Write(m_rakPeer->GetMyGUID()/*entity->GetGUID()*/);
-					sendPacket(&bitStream);
-				}
 			}
 			break;
 
@@ -82,6 +90,8 @@ void Server::onTick(TickEvent *e)
 				char *playerName = new char[MAX_USERNAME_LENGTH];
 				bitStream.Read(playerName);
 
+				LOG("Player '%s' is joining...", playerName);
+
 				// If the GUID of the client sending the packet is the same as the server,
 				// the client is playing on a server locally
 				bool local = getGUID() == packet->guid;
@@ -89,7 +99,7 @@ void Server::onTick(TickEvent *e)
 				// Create player
 				Json::Value attributes;
 				attributes["name"] = playerName;
-				Player *player = new Player(attributes);
+				Player *player = new Player(m_world, attributes);
 
 				// Create player controller
 				PlayerController *playerController = new PlayerController(m_game, local);
@@ -101,8 +111,8 @@ void Server::onTick(TickEvent *e)
 				if(local)
 				{
 					m_game->getGameOverlay()->setPlayer(player);
-					m_game->getWorld()->getCamera()->setTargetEntity(player);
-					m_game->getWorld()->m_localPlayer = player;
+					m_world->getCamera()->setTargetEntity(player);
+					m_world->m_localPlayer = player;
 				}
 
 				// Add to network objects
@@ -110,7 +120,7 @@ void Server::onTick(TickEvent *e)
 
 				m_networkEntities.push_back(player);
 
-				string playerFilePath = m_game->getWorld()->getWorldPath() + "/Players/" + playerName + ".obj";
+				string playerFilePath = m_world->getWorldPath() + "/Players/" + playerName + ".obj";
 				if(util::fileExists(playerFilePath))
 				{
 					LOG("Loading player '%s'...", playerName);
@@ -128,7 +138,7 @@ void Server::onTick(TickEvent *e)
 					{
 						const int x = rand() % 1024 - 512;
 						int y = 0;
-						while(!m_game->getWorld()->getTerrain()->isBlockAt(x, y, WORLD_LAYER_MIDDLE)) y++;
+						while(!m_world->getTerrain()->isBlockAt(x, y, WORLD_LAYER_MIDDLE)) y++;
 						player->setPosition(x * BLOCK_PXF, y * BLOCK_PXF - player->getHeight());
 					}
 
@@ -148,6 +158,31 @@ void Server::onTick(TickEvent *e)
 					bitStream.Write(player->GetNetworkID());
 					bitStream.Write(playerController->GetNetworkID());
 					player->pack(&bitStream, this);
+					sendPacket(&bitStream);
+				}
+			}
+			break;
+
+			case ID_PLAYER_JOIN_FINALIZE:
+			{
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				sendPacket(&bitStream);
+			}
+			break;
+
+			case ID_REQUEST_CHUNK:
+			{
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
+
+				int chunkX, chunkY;
+				bitStream.Read(chunkX);
+				bitStream.Read(chunkY);
+				Chunk *chunk = m_world->getTerrain()->getChunkManager()->getChunkAt(chunkX, chunkY, true);
+
+				{
+					RakNet::BitStream bitStream(packet->data, packet->length, true);
+					bitStream.WriteAlignedBytes((uchar*)chunk->m_blocks, CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT * sizeof(Block));
 					sendPacket(&bitStream);
 				}
 			}
@@ -176,7 +211,7 @@ void Server::onTick(TickEvent *e)
 				int y; bitStream.Read(y);
 				BlockID blockID; bitStream.Read(blockID);
 				WorldLayer layer; bitStream.Read(layer);
-				m_game->getWorld()->getTerrain()->setBlockAt(x, y, layer, BlockData::get(blockID), true);
+				m_world->getTerrain()->setBlockAt(x, y, layer, BlockData::get(blockID), true);
 			}
 			break;
 
@@ -195,7 +230,7 @@ void Server::onTick(TickEvent *e)
 				{
 					/*case ENTITY_ZOMBIE:
 					{
-						Zombie *zombie = new Zombie(m_game->getWorld());
+						Zombie *zombie = new Zombie(m_world);
 						zombie->setPosition(m_players.begin()->second->getPosition());
 						netObj = zombie;
 					}*/
@@ -249,7 +284,9 @@ void Server::save()
 {
 	LOG("Saving server...");
 
-	m_game->getWorld()->getTerrain()->getChunkManager()->clear();
+	if(m_world) m_world->save();
+
+	m_world->getTerrain()->getChunkManager()->clear();
 
 	// Save all players
 	for(map<RakNet::RakNetGUID, Player*>::iterator itr = m_players.begin(); itr != m_players.end(); ++itr)
@@ -269,7 +306,7 @@ void Server::save()
 
 void Server::savePlayer(Player *player)
 {
-	string playerFilePath = m_game->getWorld()->getWorldPath() + "/Players/" + player->getName() + ".obj";
+	string playerFilePath = m_world->getWorldPath() + "/Players/" + player->getName() + ".obj";
 	FileWriter file(playerFilePath);
 	player->createSaveData(file);
 	file.close();

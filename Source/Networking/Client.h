@@ -9,18 +9,31 @@ namespace RakNet {
 	class BitStream;
 }
 
-class OverworldGame;
+class Overworld;
 
 class Client : public Connection
 {
 public:
-	Client(OverworldGame * game, const string &ip, const ushort port);
+	enum ErrorCode
+	{
+		SUCCESS,
+		COULD_NOT_SETUP_SOCKET,
+		COULD_NOT_CONNECT
+	};
+
+	Client(Overworld *game);
+
+	ErrorCode join(const string &playerName, const string &ip, const ushort port);
 
 	void onTick(TickEvent *e);
 	void sendPacket(RakNet::BitStream *bitStream);
 
+	bool isJoinFinalized() const { return m_joinFinalized; }
+
 private:
-	OverworldGame * m_game;
+	Overworld *m_game;
+	string m_playerName;
+	bool m_joinFinalized;
 };
 
 #endif // CLIENT_H

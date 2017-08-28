@@ -176,7 +176,7 @@ void Background::onDraw(DrawEvent *e)
 }
 
 Cloud::Cloud(Random &rand, Background *background) :
-	m_game((OverworldGame*) Game::Get()),
+	m_game((Overworld*) Game::Get()),
 	m_background(background),
 	m_rand(rand)
 {
@@ -215,7 +215,7 @@ void Cloud::onTick(TickEvent *e)
 	m_position.x += m_background->getWind() * m_depth * e->getDelta();
 
 	// Adjust Y
-	m_position.y = m_background->getCloudHeight() - (m_game->getWorld()->getCamera()->getY() + m_background->getCloudOffset()) * m_depth * 0.05f;
+	m_position.y = m_background->getCloudHeight() - (m_game->getClient()->getWorld()->getCamera()->getY() + m_background->getCloudOffset()) * m_depth * 0.05f;
 }
 
 void Cloud::onDraw(DrawEvent *e)

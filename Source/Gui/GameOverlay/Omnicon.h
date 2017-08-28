@@ -2,7 +2,7 @@
 #define OMNICON_H
 
 #include "Config.h"
-#include "Gui/UiObject.h"
+#include "Gui/UiObjects/UiObject.h"
 
 class GameOverlay;
 

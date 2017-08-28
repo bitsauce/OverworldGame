@@ -8,15 +8,24 @@ namespace RakNet {
 	class BitStream;
 }
 
-class OverworldGame;
+class Overworld;
 class Player;
 
 class Server : public Connection
 {
 public:
-	Server(OverworldGame * game, const ushort port);
+	enum ErrorCode
+	{
+		SUCCESS,
+		COULD_NOT_SETUP_SOCKET
+	};
+
+	Server(Overworld *game);
+
+	ErrorCode host(const string &worldName, const ushort port);
 
 	void onTick(TickEvent *e);
+	//void onDraw() { NO! }
 
 	void sendPacket(RakNet::BitStream *bitStream);
 	void save();
@@ -24,7 +33,7 @@ public:
 private:
 	void savePlayer(Player *player);
 
-	OverworldGame * m_game;
+	Overworld * m_game;
 	map<RakNet::RakNetGUID, Player*> m_players;
 };
 

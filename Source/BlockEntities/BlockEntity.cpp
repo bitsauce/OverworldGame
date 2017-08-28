@@ -5,7 +5,7 @@
 BlockEntity::BlockEntity(const Json::Value &attributes) :
 	m_position(attributes["x"].asInt(), attributes["y"].asInt()),
 	m_data(reinterpret_cast<BlockEntityData*>(attributes["data_ptr"].asInt())),
-	m_world(dynamic_cast<OverworldGame*>(Game::Get())->getWorld())
+	m_world(dynamic_cast<Overworld*>(Game::Get())->getClient()->getWorld())
 {
 }
 

@@ -2,12 +2,12 @@
 #define UI_OBJECT_H
 
 #include "Config.h"
-#include "UiEvents.h"
+#include "Gui/UiEvents.h"
 
 class UiObject : public SceneObject
 {
 public:
-	UiObject(UiObject *parent);
+	UiObject(UiObject *parent, const bool relative = true);
 	virtual ~UiObject();
 
 	// Mouse hover
@@ -18,14 +18,7 @@ public:
 	virtual void onFocus(FocusEvent*) { }
 	bool isFocused() const;
 
-	/**
-	 * \fn	void UiObject::setFocused(const bool focused);
-	 *
-	 * \brief	Make active.
-	 *
-	 * \param	focused	The focused.
-	 */
-
+	// Set focused
 	void setFocused(const bool focused);
 
 	// Click event
@@ -33,19 +26,7 @@ public:
 	bool isPressed() const;
 
 	// Resize event
-	virtual void onResize(ResizeEvent *e)
-	{
-		for(SceneObject *child : getChildren())
-		{
-			UiObject *uiChild = dynamic_cast<UiObject*>(child);
-			if(uiChild)
-			{
-				Vector2I size = uiChild->getDrawSize();
-				ResizeEvent e(size.x, size.y);
-				uiChild->onResize(&e);
-			}
-		}
-	}
+	virtual void onResize(ResizeEvent *e);
 
 	// Set/get position
 	void setPosition(const Vector2F &position);
@@ -65,6 +46,10 @@ public:
 	void setRect(const RectF &rect);
 	RectF getRect() const;
 
+	float getAspectRatio() const;
+
+	UiObject *getParent() const { return m_parent; }
+
 	/**
 	 * \fn	void UiObject::setAnchor(const float x, const float y);
 	 *
@@ -78,11 +63,9 @@ public:
 	void setAnchor(const Vector2F &anchor);
 	Vector2F getAnchor() const;
 
-	virtual Vector2I getDrawPosition() const;
-	virtual Vector2I getDrawSize() const;
+	Vector2I getDrawPosition() const;
+	Vector2I getDrawSize() const;
 	RectI getDrawRect() const;
-
-	virtual void onDraw(DrawEvent *e);
 
 	/**
 	 * \fn	virtual void UiObject::onMouseEvent(MouseEvent *e);
@@ -93,13 +76,20 @@ public:
 	 */
 
 	virtual void onMouseEvent(MouseEvent *e);
-	
+
+protected:
+	void updateDrawRect();
+
 private:
 	/** \brief	The parent UiObject. */
-	UiObject * const m_parent;
+	UiObject *const m_parent;
 
 	/** \brief	Rectangle of the ui element in relative coordinates [0, 1]. */
 	RectF m_rect;
+	const bool m_relative;
+
+	/** \brief	Rectangle of the ui element in screen coordinates. */
+	RectI m_drawRect;
 
 	/** \brief	The click timer. */
 	SimpleTimer m_clickTimer;
@@ -121,6 +111,9 @@ private:
 
 	/** \brief	true if ui object has focus. */
 	bool m_focused;
+
+	friend class ResizeEvent;
+	bool m_beingResized;
 };
 
 #endif // UI_OBJECT_H

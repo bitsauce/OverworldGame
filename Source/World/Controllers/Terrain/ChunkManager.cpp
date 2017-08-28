@@ -39,9 +39,8 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 	m_generator(new ChunkGenerator(world->getSeed())),
 	m_world(world),
 	m_chunkPositionIndex(0),
-	m_loadAreaRadius(5),
+	m_loadAreaRadius(0),//(5),
 	m_circleLoadIndex(0),
-	m_reattachAllChunks(true),
 	m_time(0.0f)
 {
 	// Setup vertex format
@@ -76,6 +75,24 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 
 	// Update size of textures and such
 	updateViewSize(window->getWidth(), window->getHeight());
+}
+
+void ChunkManager::updateLoadingAndActiveArea(const Vector2F &center)
+{
+	// Update active chunk area
+	Vector2F size = m_applyZoom ? m_camera->getSize() : m_window->getSize();
+
+	// Get active area
+	m_activeArea.x0 = (int)floor(center.x / CHUNK_PXF) - (int)floor(size.x * 0.5f / CHUNK_PXF) - 1;
+	m_activeArea.y0 = (int)floor(center.y / CHUNK_PXF) - (int)floor(size.y * 0.5f / CHUNK_PXF) - 1;
+	m_activeArea.x1 = (int)floor(center.x / CHUNK_PXF) + (int)floor(size.x * 0.5f / CHUNK_PXF) + 1;
+	m_activeArea.y1 = (int)floor(center.y / CHUNK_PXF) + (int)floor(size.y * 0.5f / CHUNK_PXF) + 1;
+
+	// Get loading area
+	m_loadingArea.x0 = m_activeArea.x0 - m_loadAreaRadius;
+	m_loadingArea.y0 = m_activeArea.y0 - m_loadAreaRadius;
+	m_loadingArea.x1 = m_activeArea.x1 + m_loadAreaRadius;
+	m_loadingArea.y1 = m_activeArea.y1 + m_loadAreaRadius;
 }
 
 void ChunkManager::clear()
@@ -228,17 +245,10 @@ void ChunkManager::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 
 void ChunkManager::setOptimalChunkCount(const uint optimalChunkCount)
 {
-	// Clear old chunks
-	for(uint i = 0; i < m_chunkPool.size(); ++i)
-	{
-		delete m_chunkPool[i];
-	}
-
 	// Create new chunks
-	m_chunkPool.resize(uint(optimalChunkCount * 1.1f));
-	for(uint i = 0; i < m_chunkPool.size(); ++i)
+	for(uint i = m_chunkPool.size(); i < optimalChunkCount; ++i)
 	{
-		m_chunkPool[i] = new Chunk(this);
+		m_chunkPool.push_back(new Chunk(this));
 	}
 
 	// Set optimal chunk count
@@ -247,13 +257,36 @@ void ChunkManager::setOptimalChunkCount(const uint optimalChunkCount)
 
 Chunk *ChunkManager::getChunkAt(const int chunkX, const int chunkY, const bool loadChunk)
 {
-	uint key = CHUNK_KEY(chunkX, chunkY);
+	const uint key = CHUNK_KEY(chunkX, chunkY);
+
+	// If the chunk doesn't exist, or hasn't been requested before
 	if(m_chunks.find(key) == m_chunks.end())
 	{
+		// ... and we want to load new chunks
 		if(loadChunk)
 		{
-			// Load block data for this chunk
-			return loadChunkAt(chunkX, chunkY);
+			Connection *conn = m_world->getConnection();
+			if(conn->isClient())
+			{
+				// As a client, we request the chunk form the server
+				RakNet::BitStream bitStream;
+				bitStream.Write((RakNet::MessageID)ID_REQUEST_CHUNK);
+				bitStream.Write(chunkX);
+				bitStream.Write(chunkY);
+				conn->sendPacket(&bitStream);
+
+				// Create temporary chunk to fill with block data from the server
+				Chunk *chunk = popChunkFromPool();
+				chunk->m_x = chunkX; chunk->m_y = chunkY;
+				m_chunks[key] = chunk;
+
+				LOG("Requesting chunk [%i, %i]", chunkX, chunkY);
+			}
+			else
+			{
+				// As a server, we load block data for this chunk
+				return loadChunkAt(chunkX, chunkY);
+			}
 		}
 		else
 		{
@@ -265,19 +298,10 @@ Chunk *ChunkManager::getChunkAt(const int chunkX, const int chunkY, const bool l
 
 Chunk *ChunkManager::loadChunkAt(const int chunkX, const int chunkY)
 {
-	// Do we have any available chunks?
-	if(m_chunkPool.empty())
-	{
-		// This makes sure there is an available chunk in the pool
-		if(!freeInactiveChunk())
-		{
-			THROW("Unable to free inactive chunk");
-		}
-	}
+	m_generatedChunks++;
 
 	// Grab a chunk from the pool
-	Chunk *chunk = m_chunkPool.back();
-	m_chunkPool.pop_back();
+	Chunk *chunk = popChunkFromPool();
 
 	// Get chunk file path
 	const uint key = CHUNK_KEY(chunkX, chunkY);
@@ -324,6 +348,27 @@ Chunk *ChunkManager::loadChunkAt(const int chunkX, const int chunkY)
 	return chunk;
 }
 
+int misses = 0;
+
+Chunk *ChunkManager::popChunkFromPool()
+{
+	// Do we have any available chunks?
+	if(m_chunkPool.empty())
+	{
+		// Create a new chunk instead
+		misses++;
+		LOG("Chunk misses: %i", misses);
+		return new Chunk(this);
+	}
+
+	LOG("Chunks left in the pool: %i", m_chunkPool.size()-1);
+
+	// Grab a chunk from the pool
+	Chunk *chunk = m_chunkPool.back();
+	m_chunkPool.pop_back();
+	return chunk;
+}
+
 bool ChunkManager::isChunkLoadedAt(const int chunkX, const int chunkY) const
 {
 	return m_chunks.find(CHUNK_KEY(chunkX, chunkY)) != m_chunks.end();
@@ -337,6 +382,11 @@ ChunkManager::ChunkArea ChunkManager::getLoadingArea() const
 ChunkManager::ChunkArea ChunkManager::getActiveArea() const
 {
 	return m_activeArea;
+}
+
+uint ChunkManager::getLoadAreaRadius() const
+{
+	return m_loadAreaRadius;
 }
 
 void ChunkManager::onTick(TickEvent *e)
@@ -376,33 +426,8 @@ void ChunkManager::onDraw(DrawEvent *e)
 	GraphicsContext *context = e->getGraphicsContext();
 	context->disable(GraphicsContext::BLEND);
 	context->setTransformationMatrix(Matrix4());
-
-	// This should be called when a new area is entered
-	if(m_reattachAllChunks)
-	{
-		// Detach chunks
-		for(int y = m_loadingArea.y0 + 1; y <= m_loadingArea.y1 - 1; ++y)
-		{
-			for(int x = m_loadingArea.x0 + 1; x <= m_loadingArea.x1 - 1; ++x)
-			{
-				getChunkAt(x, y, true)->detach();
-			}
-		}
-
-		// Attach chunks
-		for(int y = m_loadingArea.y0 + 1; y <= m_loadingArea.y1 - 1; ++y)
-		{
-			for(int x = m_loadingArea.x0 + 1; x <= m_loadingArea.x1 - 1; ++x)
-			{
-				reattachChunk(getChunkAt(x, y, true), context);
-			}
-		}
-
-		// Set state variables
-		m_prevLoadingArea = m_loadingArea;
-		m_reattachAllChunks = false;
-	}
-	else if(m_loadingArea != m_prevLoadingArea)
+	
+	if(m_loadingArea != m_prevLoadingArea)
 	{
 		// Get chunks left
 		int x0, x1, y0, y1;
@@ -470,7 +495,7 @@ void ChunkManager::onDraw(DrawEvent *e)
 		m_chunkPositions[m_chunkPositionIndex++ % 4] = Vector2I(m_loadingArea.x0, m_loadingArea.x1);
 		m_circleLoadIndex = 0; // Reset iterator
 
-							   // Store previous position
+		// Store previous position
 		m_prevLoadingArea = m_loadingArea;
 	}
 
@@ -534,17 +559,19 @@ struct VectorComparator
 void ChunkManager::updateViewSize(int width, int height)
 {
 	// Calculate load area size
-	int loadAreaWidth = (int)(floor(width * 0.5f / CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
-	int loadAreaHeight = (int)(floor(height * 0.5f / CHUNK_PXF) * 2 + 3) + m_loadAreaRadius * 2;
+	m_activeArea.width = (int)(floor(width * 0.5f / CHUNK_PXF) * 2 + 3);
+	m_activeArea.height = (int)(floor(height * 0.5f / CHUNK_PXF) * 2 + 3);
+	m_loadingArea.width = m_activeArea.width + m_loadAreaRadius * 2;
+	m_loadingArea.height = m_activeArea.height + m_loadAreaRadius * 2;
 
 	// Set optimal chunk count
-	setOptimalChunkCount(loadAreaWidth * loadAreaHeight * 2); // 15x13
+	setOptimalChunkCount((m_loadingArea.width + 2) * (m_loadingArea.height + 2) * 2); // 15x13
 
-															  // Create circle load pattern
+	// Create circle load pattern
 	priority_queue<Vector2I, vector<Vector2I>, VectorComparator> minHeap;
-	for(int y = (int)-floor((loadAreaHeight - 2) * 0.5f); y <= (int)floor((loadAreaHeight - 2) * 0.5f); ++y)
+	for(int y = (int)-floor((m_loadingArea.height - 2) * 0.5f); y <= (int)floor((m_loadingArea.height - 2) * 0.5f); ++y)
 	{
-		for(int x = (int)-floor((loadAreaWidth - 2) * 0.5f); x <= (int)floor((loadAreaWidth - 2) * 0.5f); ++x)
+		for(int x = (int)-floor((m_loadingArea.width - 2) * 0.5f); x <= (int)floor((m_loadingArea.width - 2) * 0.5f); ++x)
 		{
 			minHeap.push(Vector2I(x, y));
 		}
@@ -560,21 +587,18 @@ void ChunkManager::updateViewSize(int width, int height)
 	for(int i = 0; i < WORLD_LAYER_COUNT; ++i)
 	{
 		delete m_sortedBlocksRenderTarget[i];
-		m_sortedBlocksRenderTarget[i] = new RenderTarget2D(loadAreaWidth * CHUNK_BLOCKS, loadAreaHeight * CHUNK_BLOCKS, 2, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
+		m_sortedBlocksRenderTarget[i] = new RenderTarget2D(m_loadingArea.width * CHUNK_BLOCKS, m_loadingArea.height * CHUNK_BLOCKS, 2, PixelFormat(PixelFormat::RGBA, PixelFormat::UNSIGNED_INT));
 		m_sortedBlocksRenderTarget[i]->getTexture(0)->setWrapping(Texture2D::REPEAT);
 		m_sortedBlocksRenderTarget[i]->getTexture(1)->setWrapping(Texture2D::REPEAT);
 	}
 
 	delete m_blocksRenderTarget;
-	m_blocksRenderTarget = new RenderTarget2D(loadAreaWidth * CHUNK_BLOCKS, loadAreaHeight * CHUNK_BLOCKS);
+	m_blocksRenderTarget = new RenderTarget2D(m_loadingArea.width * CHUNK_BLOCKS, m_loadingArea.height * CHUNK_BLOCKS);
 	m_blocksRenderTarget->getTexture()->setWrapping(Texture2D::REPEAT);
 	m_blocksRenderTarget->getTexture()->setFiltering(Texture2D::NEAREST);
 
 	// Set shader uniforms
 	m_tileSortShader->setSampler2D("u_BlockGrid", m_blocksRenderTarget->getTexture());
-
-	// Redraw blocks
-	m_reattachAllChunks = true;
 }
 
 void ChunkManager::reattachChunk(Chunk *chunk, GraphicsContext *context)

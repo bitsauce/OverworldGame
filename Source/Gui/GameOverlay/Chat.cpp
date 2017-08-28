@@ -4,11 +4,11 @@
 #include "Game/Game.h"
 #include "Entities/Player.h"
 
-Chat::Chat(OverworldGame *game, GraphicsContext *context, GameOverlay *gameOverlay) :
+Chat::Chat(Overworld *game, GraphicsContext *context, GameOverlay *gameOverlay) :
 	UiObject(gameOverlay),
 	m_game(game),
 	m_active(false),
-	m_chatInput(context, this),
+	m_chatInput(this, CHAT_WIDTH, CHAT_HEIGHT),
 	m_fadeTime(0.0f),
 	m_font(Resource<Font>("Fonts/Chat")),
 	m_redrawText(true),
@@ -60,7 +60,7 @@ void Chat::sendMessage(InputEvent *e)
 		}
 		else
 		{
-			insertMessage(m_game->getWorld()->getLocalPlayer()->getName() + ": " + chatStr);
+			insertMessage(m_game->getClient()->getWorld()->getLocalPlayer()->getName() + ": " + chatStr);
 		}
 		m_redrawText = true;
 		m_inputHistory.push_back(chatStr);

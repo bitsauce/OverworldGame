@@ -2,7 +2,7 @@
 #include "Game/RayCast.h"
 
 Stick::Stick(const Json::Value &attributes) :
-	Entity("Stick", attributes),
+	Entity(0, "Stick", attributes),
 	m_sprite(Resource<Texture2D>("Sprites/Items/Stick")),
 	m_hitState(false),
 	m_deleteTime(0.0f),

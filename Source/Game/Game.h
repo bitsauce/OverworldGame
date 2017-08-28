@@ -1,14 +1,12 @@
-#ifndef GAME_MANAGER_H
-#define GAME_MANAGER_H
+#pragma once
 
 #include "Config.h"
 #include "Constants.h"
 
-#include "Scene.h"
 #include "Debug.h"
 #include "Commander.h"
 
-#include "Gui/Canvas.h"
+#include "Gui/Gui.h"
 #include "World/World.h"
 #include "Networking/Client.h"
 #include "Networking/Server.h"
@@ -17,24 +15,21 @@
 class GameOverlay;
 class GameState;
 
-class OverworldGame : public Game
+class Overworld : public Game
 {
 public:
-	OverworldGame();
+	Overworld();
 
 	void onStart(GameEvent *e);
 	void onEnd(GameEvent *e);
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
 
+	void onEvent(Event *e);
+
 	Debug *getDebug() const
 	{
 		return m_debug;
-	}
-
-	World *getWorld() const
-	{
-		return m_world;
 	}
 
 	GameOverlay *getGameOverlay() const
@@ -47,13 +42,18 @@ public:
 		return m_commander;
 	}
 
-	Canvas *getCanvas() const
+	Server *getServer() const
 	{
-		return m_canvas;
+		return m_server;
+	}
+
+	Client *getClient() const
+	{
+		return m_client;
 	}
 
 	void pushState(GameState *state);
-	void popState();
+	bool popState();
 	GameState *peekState(int level = 0);
 
 	void takeScreenshot(InputEvent *e)
@@ -68,23 +68,29 @@ public:
 		Window::setFullScreen(!Window::getFullScreen());
 	}*/
 
+	static Overworld *Get() { return s_this; }
+
 private:
 	void initKeybindings();
 
 	bool m_takeScreenshot;
 
 	// Game modules
-	Canvas *m_canvas;
 	Commander *m_commander;
 	Debug *m_debug;
-	World *m_world;
 	GameOverlay *m_gameOverlay;
 	SpriteBatch *m_spriteBatch;
 
-	//list<GameState*> m_states;
+	// Game state stack
+	list<GameState*> m_states;
 
-	//Server *m_server;
-	//Client *m_client;
+	// Transition variables
+	float m_transitionTime;
+	int m_transitionDirection;
+	const float m_fadeTime;
+
+	Server *m_server;
+	Client *m_client;
+
+	static Overworld *s_this;
 };
-
-#endif // GAME_MANAGER_H

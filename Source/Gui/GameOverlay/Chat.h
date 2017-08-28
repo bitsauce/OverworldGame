@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Gui/LineEdit.h"
+#include "Gui/Gui.h"
 
-class OverworldGame;
+class Overworld;
 class GameOverlay;
 class Commander;
 
 class Chat : public UiObject
 {
 public:
-	Chat(OverworldGame *game, GraphicsContext *context, GameOverlay *gameOverlay);
+	Chat(Overworld *game, GraphicsContext *context, GameOverlay *gameOverlay);
 
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
@@ -21,7 +21,7 @@ public:
 	void insertMessage(const string &message);
 
 private:
-	OverworldGame *m_game;
+	Overworld *m_game;
 
 	Resource<Font> m_font;
 

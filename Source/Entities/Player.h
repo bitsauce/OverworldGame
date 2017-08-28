@@ -7,12 +7,12 @@
 class Player : public Pawn
 {
 public:
-	Player(const Json::Value &attributes);
+	Player(World *world, const Json::Value &attributes);
 	~Player();
 
 	static Entity *Factory(const Json::Value &attributes)
 	{
-		return new Player(attributes);
+		return new Player(0, attributes);
 	}
 
 	string getName() const

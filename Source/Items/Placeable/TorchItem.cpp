@@ -3,7 +3,7 @@
 #include "Animation/RegionAttachment.h"
 #include "World/World.h"
 
-TorchItem::TorchItem(OverworldGame *game, const ItemDataDesc *desc) :
+TorchItem::TorchItem(Overworld *game, const ItemDataDesc *desc) :
 	BlockEntityItem(game, desc)
 {
 }

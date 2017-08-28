@@ -48,12 +48,12 @@ bool Terrain::setBlockAt(const int x, const int y, const WorldLayer layer, const
 	}*/
 
 	Chunk *chunk = m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF), true);
-	const Block block = chunk->getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
 
 	if(!replace)
 	{
 		// Check if we can place a block here
-		if(block.getBlockData() != 0 || (layer == WORLD_LAYER_MIDDLE && block.getBlockEntity()))
+		const Block block = chunk->getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
+		if(block.getBlockData()->getID() != 0 || (layer == WORLD_LAYER_MIDDLE && block.getBlockEntity()))
 		{
 			return false;
 		}
@@ -79,7 +79,9 @@ bool Terrain::removeBlockAt(const int x, const int y, const WorldLayer layer, co
 	{
 		if(createItem)
 		{
-			ItemDrop *itemDrop = new ItemDrop(block->getItem()->getID());
+			Json::Value props;
+			props["item"]["id"] = block->getItem()->getID();
+			ItemDrop *itemDrop = new ItemDrop(props);
 			itemDrop->setPosition(x * BLOCK_PXF, y * BLOCK_PXF);
 		}
 		return true;

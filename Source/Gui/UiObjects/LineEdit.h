@@ -15,7 +15,7 @@ class LineEdit : public UiObject
 {
 	friend class Cursor;
 public:
-	LineEdit(GraphicsContext *gfx, UiObject *parent);
+	LineEdit(UiObject *parent, const uint width, const uint height);
 	~LineEdit();
 
 	/**
@@ -47,6 +47,26 @@ public:
 	 */
 
 	void setAcceptFunc(function<void()> func);
+
+	/**
+	 * \fn	void LineEdit::setTextColor(const Color &color);
+	 *
+	 * \brief	Sets text color.
+	 *
+	 * \param	color	The text color.
+	 */
+
+	void setTextColor(const Color &color);
+
+	/**
+	 * \fn	void LineEdit::setDefaultText(const string &def);
+	 *
+	 * \brief	Sets the string which is show when the line edit is empty.
+	 *
+	 * \param	def	The default string.
+	 */
+
+	void setDefaultText(const string &def);
 
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
@@ -91,7 +111,7 @@ public:
 			}
 
 			// Update text offsets
-			m_lineEdit->m_dirty = true;
+			m_lineEdit->m_dirtyTextGraphics = true;
 		}
 
 		void setLength(const int length)
@@ -139,17 +159,21 @@ protected:
 
 	// Visualization
 	SpriteBatch m_spriteBatch;
+	Resource<Texture2D> m_textureActive, m_textureInactive;
 	RenderTarget2D *m_renderTarget;
+	RenderTarget2D *m_renderTargetText;
 	Resource<Font> m_font;
+	Color m_color;
 
 	// Data
 	SimpleTimer m_textTimer;
 	list<TextState*> m_states;
 	list<TextState*>::iterator m_undoItr;
+	string m_defaultText;
 	int m_wordBegin, m_wordEnd;
 	float m_cursorTime;
 	float m_offsetX;
-	bool m_dirty;
+	bool m_dirtyGraphics, m_dirtyTextGraphics;
 	function<void()> m_acceptFunc;
 };
 

@@ -3,7 +3,7 @@
 #include "Config.h"
 #include "Entity.h"
 
-class OverworldGame;
+class Overworld;
 class Pointlight;
 
 class DebugPointlight : public Entity

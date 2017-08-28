@@ -2,7 +2,7 @@
 
 Torch::Torch(const Json::Value &attributes) :
 	BlockEntity(attributes),
-	m_pointlight(dynamic_cast<OverworldGame*>(Game::Get())->getWorld())
+	m_pointlight(dynamic_cast<Overworld*>(Game::Get())->getClient()->getWorld())
 {
 	m_pointlight.setMobility(LightSource::STATIC);
 	m_pointlight.setPosition(getPosition() + Vector2F(0.5f, 0.5f));

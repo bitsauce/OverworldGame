@@ -4,7 +4,7 @@
     "width": 1,
     "height": 1,
     "vboGroup": "static",
-    "texture": "Sprites/BlockEntities/LightSources/Torch_Anim.png",
+    "texture": "Sprites/BlockEntities/LightSources/Torch.png",
     "placementRules": [ "wall", "floor", "background" ],
     "animation": {
       "frameColumns": 3,

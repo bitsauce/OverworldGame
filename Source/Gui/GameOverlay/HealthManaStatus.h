@@ -2,7 +2,7 @@
 #define HEALTH_MANA_STATUS
 
 #include "Config.h"
-#include "Gui/UiObject.h"
+#include "Gui/UiObjects/UiObject.h"
 
 class GameOverlay;
 class Canvas;

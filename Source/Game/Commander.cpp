@@ -4,11 +4,12 @@
 #include "Entities/Player.h"
 #include "Entities/EntityData.h"
 #include "Items/ItemData.h"
+#include "Gui/Gui.h"
 #include "Gui/GameOverlay/GameOverlay.h"
 #include "Game/States/InGameState.h"
 #include "Networking/Client.h"
 
-Commander::Commander(OverworldGame *game) :
+Commander::Commander(Overworld *game) :
 	m_game(game)
 {
 	m_commands.push_back(Command("spawn", "1|2", "<EntityName> [attributes]", bind(&Commander::spawn, this, placeholders::_1, placeholders::_2)));
@@ -18,7 +19,6 @@ Commander::Commander(OverworldGame *game) :
 	m_commands.push_back(Command("testphysics", "6", "<gravity> <jumpforce> <jumpease> <movespeed> <maxspeed> <friction>", bind(&Commander::setGravity, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("testclouds", "2", "<height> <offset>", bind(&Commander::testclouds, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("setres", "2", "<w> <h>", bind(&Commander::setres, this, placeholders::_1, placeholders::_2)));
-	m_commands.push_back(Command("connect", "1|2", "<ip> [port]", bind(&Commander::connect, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("move", "2", "<x> <y>", bind(&Commander::move, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("setAppearance", "0|2", "<slot> <name>", bind(&Commander::setAppearance, this, placeholders::_1, placeholders::_2)));
 	m_commands.push_back(Command("setApparel", "2", "<slot> <name>", bind(&Commander::setApparel, this, placeholders::_1, placeholders::_2)));
@@ -124,7 +124,7 @@ void Commander::spawn(Chat *chat, vector<string> args)
 	// If no position is provided, spawn object at player position
 	if(!attributes.isMember("position"))
 	{
-		Vector2F playerPos = m_game->getWorld()->getLocalPlayer()->getPosition();
+		Vector2F playerPos = m_game->getClient()->getWorld()->getLocalPlayer()->getPosition();
 		attributes["position"]["x"] = playerPos.x;
 		attributes["position"]["y"] = playerPos.y;
 	}
@@ -147,13 +147,13 @@ void Commander::give(Chat *chat, vector<string> args)
 
 	if(args.size() == 1)
 	{
-		m_game->getWorld()->getLocalPlayer()->getStorage()->addItem(data->getID());
+		m_game->getClient()->getWorld()->getLocalPlayer()->getStorage()->addItem(data->getID());
 		chat->insertMessage(args[0] + " given");
 	}
 	else
 	{
 		int amt = util::strToInt(args[1]);
-		m_game->getWorld()->getLocalPlayer()->getStorage()->addItem(data->getID(), amt);
+		m_game->getClient()->getWorld()->getLocalPlayer()->getStorage()->addItem(data->getID(), amt);
 		chat->insertMessage(args[1] + " " + args[0] + " given");
 	}
 }
@@ -165,8 +165,8 @@ void Commander::place(Chat *, vector<string> args)
 		BlockEntityData *data = BlockEntityData::GetByName(args[0]);
 		if(data)
 		{
-			Vector2F blockPos = math::floor(m_game->getWorld()->getLocalPlayer()->getCenter() / BLOCK_PXF);
-			m_game->getWorld()->getTerrain()->createBlockEntityAt(blockPos.x, blockPos.y, data, true);
+			Vector2F blockPos = math::floor(m_game->getClient()->getWorld()->getLocalPlayer()->getCenter() / BLOCK_PXF);
+			m_game->getClient()->getWorld()->getTerrain()->createBlockEntityAt(blockPos.x, blockPos.y, data, true);
 		}
 	}
 	else if(args.size() == 3)
@@ -174,7 +174,7 @@ void Commander::place(Chat *, vector<string> args)
 		BlockEntityData *data = BlockEntityData::GetByName(args[0]);
 		if(data)
 		{
-			m_game->getWorld()->getTerrain()->createBlockEntityAt(util::strToInt(args[1]), util::strToInt(args[2]), data, true);
+			m_game->getClient()->getWorld()->getTerrain()->createBlockEntityAt(util::strToInt(args[1]), util::strToInt(args[2]), data, true);
 		}
 	}
 }
@@ -182,7 +182,7 @@ void Commander::place(Chat *, vector<string> args)
 void Commander::setGravity(Chat *, vector<string> args)
 {
 	// <gravity> <jumpforce> <jumpease> <movespeed> <maxspeed> <friction>
-	Pawn *player = m_game->getWorld()->getLocalPlayer();
+	Pawn *player = m_game->getClient()->getWorld()->getLocalPlayer();
 	player->setGravityScale(util::strToFloat(args[0]));
 	player->m_jumpForce = util::strToFloat(args[1]);
 	player->m_jumpEase = util::strToFloat(args[2]);
@@ -193,7 +193,7 @@ void Commander::setGravity(Chat *, vector<string> args)
 
 void Commander::testclouds(Chat*, vector<string> args)
 {
-	Background *background = m_game->getWorld()->getBackground();
+	Background *background = m_game->getClient()->getWorld()->getBackground();
 	background->m_cloudHeight = util::strToFloat(args[0]);
 	background->m_cloudOffset = util::strToFloat(args[1]);
 }
@@ -203,30 +203,11 @@ void Commander::setres(Chat *, vector<string> args)
 	m_game->getWindow()->setSize(util::strToFloat(args[0]), util::strToFloat(args[1]));
 }
 
-void Commander::connect(Chat *, vector<string> args)
-{
-	ushort port = 45556;
-	if(args.size() == 2)
-	{
-		port = util::strToInt(args[1]);
-	}
-
-	// Create client object
-	Client *client = new Client(m_game, args[0], port);
-
-	// Create game state
-	InGameState *state = new InGameState(m_game, client);
-
-	// Push game state
-	m_game->popState();
-	m_game->pushState(state);
-}
-
 void Commander::move(Chat *, vector<string> args)
 {
 	if(args.size() == 2)
 	{
-		m_game->getWorld()->getCamera()->lookAt(Vector2F(util::strToFloat(args[0]), util::strToFloat(args[1])));
+		m_game->getClient()->getWorld()->getCamera()->lookAt(Vector2F(util::strToFloat(args[0]), util::strToFloat(args[1])));
 	}
 }
 
@@ -259,7 +240,7 @@ void Commander::setAppearance(Chat *chat, vector<string> args)
 	}
 	else if(args.size() == 2)
 	{
-		Player *player = m_game->getWorld()->getLocalPlayer();
+		Player *player = m_game->getClient()->getWorld()->getLocalPlayer();
 		if(player)
 		{
 			Humanoid::BodySlot slot = getSlotByName(args[0]);
@@ -282,12 +263,12 @@ void Commander::setApparel(Chat *chat, vector<string> args)
 {
 	if(args.size() == 2)
 	{
-		Player *player = m_game->getWorld()->getLocalPlayer();
+		Player *player = m_game->getClient()->getWorld()->getLocalPlayer();
 		if(player)
 		{
 			if(args[0] == "*")
 			{
-				Player *player = m_game->getWorld()->getLocalPlayer();
+				Player *player = m_game->getClient()->getWorld()->getLocalPlayer();
 				if(player)
 				{
 					for(int i = 0; i < Humanoid::SLOT_COUNT; i++)
@@ -319,7 +300,7 @@ void Commander::setAppearanceColor(Chat *, vector<string> args, const string &wh
 {
 	if(args.size() == 3)
 	{
-		Player *player = m_game->getWorld()->getLocalPlayer();
+		Player *player = m_game->getClient()->getWorld()->getLocalPlayer();
 		if(player)
 		{
 			Color color(util::strToInt(args[0]), util::strToInt(args[1]), util::strToInt(args[2]), 255);
@@ -345,5 +326,5 @@ void Commander::setAppearanceColor(Chat *, vector<string> args, const string &wh
 
 void Commander::setTime(Chat *, vector<string> args)
 {
-	m_game->getWorld()->getTimeOfDay()->setTime(util::strToFloat(args[0]));
+	m_game->getClient()->getWorld()->getTimeOfDay()->setTime(util::strToFloat(args[0]));
 }

@@ -6,7 +6,7 @@
 list<DebugPointlight*> DebugPointlight::s_pointlights;
 
 DebugPointlight::DebugPointlight(const Json::Value &attributes) :
-	Entity("Debug/Pointlight", attributes),
+	Entity(0, "Debug/Pointlight", attributes),
 	m_pointlight(new Pointlight(m_world))
 {
 	m_pointlight->setMobility(LightSource::DYNAMIC);

@@ -6,7 +6,7 @@
 #include "Entities/Player.h"
 #include "Entities/ItemDrop.h"
 
-GameOverlay::GameOverlay(OverworldGame *game, UiObject *parent, GraphicsContext *context) :
+GameOverlay::GameOverlay(Overworld *game, UiObject *parent, GraphicsContext *context) :
 	UiObject(parent),
 	m_game(game),
 	m_player(nullptr),
@@ -22,7 +22,7 @@ GameOverlay::GameOverlay(OverworldGame *game, UiObject *parent, GraphicsContext 
 	m_omnicon = new Omnicon(scene, this);
 	m_inventory = new Inventory(scene, this);
 	m_crafting = new Crafting(scene, this);*/
-	m_chat = new Chat(game, context, this);
+	//m_chat = new Chat(game, context, this);
 }
 
 GameOverlay::~GameOverlay()
@@ -42,9 +42,9 @@ void GameOverlay::onTick(TickEvent *e)
 	/*Storage::Slot *heldItem = m_player->getHeldItem();
 	if(!heldItem->isEmpty() && !isHovered() && m_game->getInputManager()->getKeyState(MOUSE_BUTTON_RIGHT))
 	{
-		ItemDrop *itemDrop = new ItemDrop(m_game->getWorld(), heldItem->getItem(), heldItem->getAmount());
+		ItemDrop *itemDrop = new ItemDrop(m_game->getClient()->getWorld(), heldItem->getItem(), heldItem->getAmount());
 		itemDrop->setPosition(m_player->getCenter() - Vector2F(0.0f, 20.0f));
-		itemDrop->applyImpulse(Vector2F(m_game->getWorld()->getCamera()->getInputPosition() - m_player->getCenter()).normalized() * 4.0f);
+		itemDrop->applyImpulse(Vector2F(m_game->getClient()->getWorld()->getCamera()->getInputPosition() - m_player->getCenter()).normalized() * 4.0f);
 		heldItem->set(ITEM_NONE, 0);
 	}*/
 }

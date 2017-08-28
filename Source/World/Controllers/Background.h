@@ -7,7 +7,7 @@ class Camera;
 class TimeOfDay;
 class World;
 class Cloud;
-class OverworldGame;
+class Overworld;
 
 class Background : public SceneObject
 {
@@ -80,7 +80,7 @@ public:
 private:
 	Random &m_rand;
 	Background *m_background;
-	OverworldGame *m_game;
+	Overworld *m_game;
 	Sprite m_sprite;
 	Vector2F m_position, m_prevPosition;
 	float m_depth;

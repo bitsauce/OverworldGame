@@ -14,16 +14,17 @@
 
 class NetworkObject;
 class Entity;
+class World;
 
 class Connection : public SceneObject
 {
 	friend class NetworkObject;
 public:
 	Connection(const bool isServer) :
-		m_isServer(isServer)
+		m_isServer(isServer),
+		m_world(0)
 	{
 		m_rakPeer = RakNet::RakPeerInterface::GetInstance(); 
-		s_instance = this;
 	}
 
 	bool isServer() const { return m_isServer; }
@@ -31,7 +32,9 @@ public:
 	RakNet::RakNetGUID getGUID() const { return m_rakPeer->GetMyGUID(); }
 	RakNet::RakPeerInterface *getRakPeer() const { return m_rakPeer; }
 
-	static Connection *getInstance() { return s_instance; }
+	World *getWorld() const { return m_world; }
+
+	virtual void sendPacket(RakNet::BitStream *bitStream) = 0;
 
 protected:
 	bool m_isServer;
@@ -39,7 +42,8 @@ protected:
 	RakNet::NetworkIDManager m_networkIDManager;
 	list<NetworkObject*> m_networkObjects;
 	list<Entity*> m_networkEntities;
-	static Connection *s_instance;
+	
+	World *m_world;
 
 protected:
 	void addNetworkObject(NetworkObject *object);

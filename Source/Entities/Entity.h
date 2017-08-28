@@ -10,7 +10,7 @@ class EntityData;
 class Entity : public SceneObject, public NetworkObject
 {
 public:
-	Entity(const string &entityName, const Json::Value &attributes);
+	Entity(World *world, const string &entityName, const Json::Value &attributes);
 	virtual ~Entity();
 
 	virtual void onTick(TickEvent *e);

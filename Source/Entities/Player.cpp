@@ -3,8 +3,8 @@
 #include "Networking/Controller.h"
 #include "Entities/EntityData.h"
 
-Player::Player(const Json::Value &attributes) :
-	Pawn("Player", attributes),
+Player::Player(World *world, const Json::Value &attributes) :
+	Pawn(world, "Player", attributes),
 	m_font(Resource<Font>("Fonts/Debug"))
 {
 	m_name = attributes.get("name", "<UNKNOWN>").asString();

@@ -6,7 +6,7 @@
 class Axe : public ItemData
 {
 public:
-	Axe(OverworldGame *game, const ItemDataDesc *desc);
+	Axe(Overworld *game, const ItemDataDesc *desc);
 
 	void equip(Pawn *player);
 	void unequip(Pawn *player);
@@ -17,7 +17,7 @@ public:
 	void makeLeavesFall(const int x, const int y);
 
 private:
-	OverworldGame * m_game;
+	Overworld * m_game;
 
 	Sprite m_sprite;
 

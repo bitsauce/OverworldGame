@@ -1,7 +1,9 @@
 #include "Controller.h"
 #include "Networking/Connection.h"
+#include "Game/Game.h"
 
-Controller::Controller()
+Controller::Controller() :
+	NetworkObject(Overworld::Get()->getServer())
 {
 	// Set input states to false
 	for(uint i = 0; i < INPUT_COUNT; ++i)

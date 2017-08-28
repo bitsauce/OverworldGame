@@ -3,16 +3,16 @@
 #include "Config.h"
 #include "Controller.h"
 
-class OverworldGame;
+class Overworld;
 
 class PlayerController : public Controller
 {
 public:
-	PlayerController(OverworldGame *game, const bool local);
+	PlayerController(Overworld *game, const bool local);
 	~PlayerController();
 
 private:
-	OverworldGame *m_game;
+	Overworld *m_game;
 
 	void updateInputState(InputEvent *e, int type);
 	void updateUseItemState(InputEvent *e);

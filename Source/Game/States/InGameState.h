@@ -3,8 +3,7 @@
 
 #include "Config.h"
 #include "GameState.h"
-#include "Game/Scene.h"
-#include "Gui/Canvas.h"
+#include "Gui/Gui.h"
 
 class World;
 class Connection;
@@ -12,16 +11,12 @@ class Connection;
 class InGameState : public GameState
 {
 public:
-	InGameState(OverworldGame *game, Connection *connection);
+	InGameState(Overworld *game, World *world);
 
-	void onEnter();
-	void onLeave();
-	void onTick(TickEvent *e);
-	void onDraw(DrawEvent *e);
+	void onTransitionBegin();
 
 private:
 	World *m_world;
-	Connection *m_connection;
 };
 
 #endif // IN_GAME_STATE_H

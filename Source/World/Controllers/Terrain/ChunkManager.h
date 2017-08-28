@@ -18,6 +18,8 @@ class ChunkManager : public SceneObject
 public:
 	ChunkManager(World *world, Window *window);
 
+	void updateLoadingAndActiveArea(const Vector2F &center);
+
 	void clear();
 
 	Chunk *getChunkAt(const int chunkX, const int chunkY, const bool loadChunk);
@@ -51,14 +53,12 @@ public:
 
 		int x0, y0;
 		int x1, y1;
+		int width, height;
 	};
 
 	ChunkArea getLoadingArea() const;
 	ChunkArea getActiveArea() const;
-	uint getLoadAreaRadius() const
-	{
-		return m_loadAreaRadius;
-	}
+	uint getLoadAreaRadius() const;
 
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
@@ -69,8 +69,11 @@ public:
 		return m_blocksRenderTarget;
 	}
 
+	uint m_generatedChunks = 0;
+
 private:
 	Chunk *loadChunkAt(const int chunkX, const int chunkY);
+	Chunk *popChunkFromPool();
 	
 	void saveBlockData(FileWriter &file, Block *blockData);
 	void loadBlockData(FileReader &file, Block *blockData);
@@ -102,13 +105,12 @@ private:
 	ChunkArea m_activeArea;
 	ChunkArea m_loadingArea;
 	ChunkArea m_prevLoadingArea;
-	bool m_reattachAllChunks;
 
 	// Loading area radius
 	const uint m_loadAreaRadius;
 
 	// Chunk pool
-	vector<Chunk*> m_chunkPool;
+	list<Chunk*> m_chunkPool;
 	uint m_optimalChunkCount;
 
 	// Chunk positions

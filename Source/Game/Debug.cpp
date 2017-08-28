@@ -11,8 +11,8 @@
 #include "Entities/DebugLight.h"
 #include "Game/States/GameState.h"
 #include "Game/Game.h"
+#include "Gui/Gui.h"
 #include "Gui/GameOverlay/GameOverlay.h"
-#include "Gui/ColorPicker.h"
 
 #define DEBUG_FUNCTIONS_STRING \
 	"F1: Toggle debug\n" \
@@ -28,9 +28,9 @@
 	"F11: Stress-test block entitites\n" \
 	"F12: [No function]"
 
-Debug::Debug(OverworldGame *game) :
+Debug::Debug(Overworld *game) :
 	m_game(game),
-	m_world(game->getWorld()),
+	m_world(game->getClient()->getWorld()),
 	m_block(BlockData::s_idToData.cbegin()),
 	m_enabled(false),
 	m_debugChunkLoader(false),
@@ -107,10 +107,10 @@ void Debug::debugFunction(InputEvent *_e)
 			if(m_debugMode == DEBUG_MODE_LIGHT_PAINTER)
 			{
 				m_game->getGameOverlay()->m_active = false;
-				m_colorPicker = new ColorPicker(m_game->getCanvas());
+				/*m_colorPicker = new ColorPicker(m_game->getCanvas());
 				m_colorPicker->setOrigin(0.0f, 1.0f);
 				m_colorPicker->setAnchor(0.05f, 0.95f);
-				m_colorPicker->setSize(Vector2F(128.0f) / m_game->getCanvas()->getDrawSize());
+				m_colorPicker->setSize(Vector2F(128.0f) / m_game->getCanvas()->getDrawSize());*/
 			}
 			else
 			{
@@ -204,7 +204,7 @@ void Debug::onTick(TickEvent *e)
 			// Update active pointlight
 			if(m_selectedLight)
 			{
-				m_selectedLight->getPointlight()->setColor(m_colorPicker->getSelectedColor());
+				//m_selectedLight->getPointlight()->setColor(m_colorPicker->getSelectedColor());
 			}
 		}
 		break;
@@ -289,9 +289,9 @@ void Debug::onDraw(DrawEvent *e)
 			}
 			addVariable("Time", hourStr + ":" + minStr);
 
-			if(m_game->getWorld()->getLocalPlayer())
+			if(m_game->getClient()->getWorld()->getLocalPlayer())
 			{
-				Player *player = m_game->getWorld()->getLocalPlayer();
+				Player *player = m_game->getClient()->getWorld()->getLocalPlayer();
 				Controller *controller = player->getController();
 				addVariable("Velocity", player->getVelocity().toString());
 				addVariable("Move dir", util::intToStr(controller->getInputState(Controller::INPUT_MOVE_RIGHT) - controller->getInputState(Controller::INPUT_MOVE_LEFT)));
@@ -450,10 +450,10 @@ void Debug::onMouseEvent(MouseEvent *e)
 	{
 		case DEBUG_MODE_LIGHT_PAINTER:
 		{
-			if(m_colorPicker->getDrawRect().contains(e->getPosition()))
+			/*if(m_colorPicker->getDrawRect().contains(e->getPosition()))
 			{
 				break;
-			}
+			}*/
 
 			switch(e->getType())
 			{
@@ -467,12 +467,12 @@ void Debug::onMouseEvent(MouseEvent *e)
 						{
 							DebugPointlight *lightEntity = *itr;
 							LightSource *light = lightEntity->getPointlight();
-							if(RectF(light->getPosition() - Vector2F(light->getRadius()), Vector2F(light->getRadius() * 2.0f)).contains(Vector2F(m_game->getWorld()->getCamera()->getInputPosition() / BLOCK_PXF)))
+							if(RectF(light->getPosition() - Vector2F(light->getRadius()), Vector2F(light->getRadius() * 2.0f)).contains(Vector2F(m_game->getClient()->getWorld()->getCamera()->getInputPosition() / BLOCK_PXF)))
 							{
 								m_selectedLight = lightEntity;
-								m_colorPicker->setSelectedColor(m_selectedLight->getPointlight()->getColor());
+								//m_colorPicker->setSelectedColor(m_selectedLight->getPointlight()->getColor());
 								m_moveCount = 0;
-								m_lightDragOffset = m_selectedLight->getPosition() - m_game->getWorld()->getCamera()->getInputPosition();
+								m_lightDragOffset = m_selectedLight->getPosition() - m_game->getClient()->getWorld()->getCamera()->getInputPosition();
 								break;
 							}
 							m_selectedLight = 0;
@@ -496,14 +496,14 @@ void Debug::onMouseEvent(MouseEvent *e)
 					{
 						// Set new light radius
 						Pointlight *pointlight = m_newPointlight->getPointlight();
-						pointlight->setRadius((pointlight->getPosition() - Vector2F(m_game->getWorld()->getCamera()->getInputPosition()) / BLOCK_PXF).length());
+						pointlight->setRadius((pointlight->getPosition() - Vector2F(m_game->getClient()->getWorld()->getCamera()->getInputPosition()) / BLOCK_PXF).length());
 					}
 					else if(m_lmbState && m_selectedLight)
 					{
 						// Drag-move selected light
 						if(m_moveCount++ > 2)
 						{
-							m_selectedLight->setPosition(Vector2F(m_game->getWorld()->getCamera()->getInputPosition()) + m_lightDragOffset);
+							m_selectedLight->setPosition(Vector2F(m_game->getClient()->getWorld()->getCamera()->getInputPosition()) + m_lightDragOffset);
 						}
 					}
 				}
