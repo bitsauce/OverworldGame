@@ -133,7 +133,10 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <ClCompile Include="..\..\Source\Game\RayCast.cpp" />
     <ClCompile Include="..\..\Source\Game\States\DialogBoxState.cpp" />
     <ClCompile Include="..\..\Source\Game\States\GameState.cpp" />
+    <ClCompile Include="..\..\Source\Game\States\HostAndPlayLoading.cpp" />
+    <ClCompile Include="..\..\Source\Game\States\InGameDebug.cpp" />
     <ClCompile Include="..\..\Source\Game\States\InGameState.cpp" />
+    <ClCompile Include="..\..\Source\Game\States\JoinLoading.cpp" />
     <ClCompile Include="..\..\Source\Game\States\TestMenu.cpp" />
     <ClCompile Include="..\..\Source\Game\Storage.cpp" />
     <ClCompile Include="..\..\Source\Generation\Formations\OakForest.cpp" />
@@ -218,7 +221,10 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <ClInclude Include="..\..\Source\Game\Game.h" />
     <ClInclude Include="..\..\Source\Game\States\DialogBoxState.h" />
     <ClInclude Include="..\..\Source\Game\States\GameState.h" />
+    <ClInclude Include="..\..\Source\Game\States\HostAndPlayLoading.h" />
+    <ClInclude Include="..\..\Source\Game\States\InGameDebug.h" />
     <ClInclude Include="..\..\Source\Game\States\InGameState.h" />
+    <ClInclude Include="..\..\Source\Game\States\JoinLoading.h" />
     <ClInclude Include="..\..\Source\Game\States\TestMenu.h" />
     <ClInclude Include="..\..\source\Game\Storage.h" />
     <ClInclude Include="..\..\source\Game\RayCast.h" />

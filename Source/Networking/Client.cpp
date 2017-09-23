@@ -23,7 +23,8 @@
 Client::Client(Overworld *game) :
 	Connection(false),
 	m_game(game),
-	m_joinFinalized(false)
+	m_joinFinalized(false),
+	m_joinProgress(0.0f)
 {
 }
 
@@ -38,13 +39,18 @@ Client::ErrorCode Client::join(const string &playerName, const string &ip, const
 
 	m_rakPeer->SetTimeoutTime(600000, RakNet::UNASSIGNED_SYSTEM_ADDRESS); // For debugging purposes
 
-	// TODO: Receive own player position and load chunks in the client's active region
-	//       Then, receive all other entities
 	m_playerName = playerName;
 
 	// Load world from the server
 	LOG("Receiving world data");
 	m_world = new World(this);
+
+	// Reset join progress
+	ChunkManager *chunkManager = m_world->getTerrain()->getChunkManager();
+	chunkManager->updateLoadingAndActiveArea(Vector2F(0.0f));
+	ChunkManager::ChunkArea activeArea = chunkManager->getActiveArea();
+	m_joinProgress = 0;
+	m_joinNumSteps = 2 + activeArea.getWidth() * activeArea.getHeight();
 
 	return SUCCESS;
 }
@@ -81,6 +87,8 @@ void Client::onTick(TickEvent *e)
 				bitStream.Write((RakNet::MessageID) ID_PLAYER_JOIN);
 				bitStream.Write(m_playerName.c_str());
 				sendPacket(&bitStream);
+
+				m_joinProgress++;
 			}
 			break;
 
@@ -101,6 +109,7 @@ void Client::onTick(TickEvent *e)
 				player->SetNetworkIDManager(&m_networkIDManager);
 				player->SetNetworkID(playerNetworkID);
 				player->unpack(&bitStream, this);
+				player->setPosition(player->getPosition()); // Make sure lastPosition == position
 
 				// Create player controller
 				PlayerController *playerController = new PlayerController(m_game, true);
@@ -111,7 +120,7 @@ void Client::onTick(TickEvent *e)
 				player->m_local = true;
 				playerController->m_local = true;
 
-				m_game->getGameOverlay()->setPlayer(player);
+				//m_game->getGameOverlay()->setPlayer(player);
 				m_world->getCamera()->setTargetEntity(player);
 				m_world->m_localPlayer = player;
 
@@ -119,22 +128,22 @@ void Client::onTick(TickEvent *e)
 				ChunkManager *chunkManager = m_world->getTerrain()->getChunkManager();
 				chunkManager->updateLoadingAndActiveArea(player->getPosition());
 				ChunkManager::ChunkArea activeArea = chunkManager->getActiveArea();
-				int chunksRequested = 0;
-				for(int y = activeArea.y0 - 1; y <= activeArea.y1 + 1; y++)
+				for(int y = activeArea.y0; y <= activeArea.y1; y++)
 				{
-					for(int x = activeArea.x0 - 1; x <= activeArea.x1 + 1; x++)
+					for(int x = activeArea.x0; x <= activeArea.x1; x++)
 					{
 						chunkManager->getChunkAt(x, y, true);
-						chunksRequested++;
 					}
 				}
-				LOG("Requested %i chunks", chunksRequested);
+				LOG("Requested %i chunks", activeArea.getWidth() * activeArea.getHeight());
 
 				{
 					RakNet::BitStream bitStream;
 					bitStream.Write((RakNet::MessageID) ID_PLAYER_JOIN_FINALIZE);
 					sendPacket(&bitStream);
 				}
+
+				m_joinProgress++;
 			}
 			break;
 
@@ -155,14 +164,24 @@ void Client::onTick(TickEvent *e)
 				m_world->getTerrain()->getChunkManager()->getChunkAt(chunkX, chunkY, false)->load(chunkX, chunkY, blocks);
 
 				LOG("Chunk [%i, %i] received", chunkX, chunkY);
+
+				m_joinProgress++;
 			}
 			break;
 
 			case ID_PLAYER_JOIN_FINALIZE:
 			{
-				m_joinFinalized = true;
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
-				LOG("Join finalized!");
+				RakNet::RakNetGUID guid;
+				bitStream.Read(guid);
+
+				if(guid == getGUID())
+				{
+					m_joinFinalized = true;
+					LOG("Join finalized!");
+				}
 			}
 			break;
 

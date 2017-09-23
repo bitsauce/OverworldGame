@@ -13,7 +13,7 @@ class World;
 class Lighting : public SceneObject
 {
 	friend class ChunkManager;
-	friend class Debug;
+	friend class InGameDebug;
 	friend class LightSource;
 public:
 	// CONSTRUCTOR

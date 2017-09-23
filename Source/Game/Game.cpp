@@ -19,7 +19,7 @@ Overworld *Overworld::s_this = 0;
 
 // TODO:
 // [x] Fix it so that the game doesn't load chunks around 0, 0 at the start
-// [ ] Loading screen
+// [x] Loading screen
 // [ ] Work on separating the client and server
 //     [ ] ChunkManager
 // [ ] Fix it so that the "in-game" game state can be drawn to a render target
@@ -28,8 +28,6 @@ Overworld *Overworld::s_this = 0;
 Overworld::Overworld() :
 	Game("Overworld", SAUCE_EXPORT_LOG | SAUCE_RUN_IN_BACKGROUND | SAUCE_WINDOW_RESIZABLE),
 	m_takeScreenshot(false),
-	m_gameOverlay(nullptr),
-	m_debug(nullptr),
 	m_commander(nullptr),
 	m_fadeTime(0.5f),
 	m_transitionTime(0.0f),
@@ -65,14 +63,6 @@ void Overworld::onStart(GameEvent *e)
 	m_client = new Client(this);
 	m_server = new Server(this);
 
-	// Create debug object
-	m_debug = new Debug(this);
-	addChildLast(m_debug);
-
-	// Create game overlay
-	Canvas *canvas = new Canvas(getWindow());
-	m_gameOverlay = new GameOverlay(this, canvas, graphicsContext);
-
 	// Go to test menu
 	pushState(new TestMenu(this));
 
@@ -84,7 +74,6 @@ void Overworld::onEnd(GameEvent *e)
 {
 	// Save the world as we're exiting
 	if(m_server) m_server->save();
-	delete m_debug;
 	delete m_commander;
 }
 
@@ -119,12 +108,11 @@ bool Overworld::popState()
 	return true;
 }
 
-GameState *Overworld::peekState(int level)
+GameState *Overworld::peekState(int level) const
 {
-	if(getChildren().empty()) return 0;
-	list<SceneObject*>::iterator itr = getChildren().begin();
+	list<GameState*>::const_iterator itr = m_states.begin();
 	advance(itr, level);
-	return (GameState*) *itr;
+	return *itr;
 }
 
 void Overworld::initKeybindings()
@@ -141,48 +129,9 @@ void Overworld::initKeybindings()
 
 	InputContext *inputContext = getInputManager()->getContextByName("game");
 
-	//inputContext->getKeybind("camera_zoom_in")->setFunction(bind(&Camera::zoomIn, m_world->getCamera(), placeholders::_1));
-	//inputContext->getKeybind("camera_zoom_out")->setFunction(bind(&Camera::zoomOut, m_world->getCamera(), placeholders::_1));
-
-	inputContext->getKeybind("show_chat")->setFunction(bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1));
-
 	inputContext->getKeybind("take_screen_shot")->setFunction(bind(&Overworld::takeScreenshot, this, placeholders::_1));
 
-	inputContext->getKeybind("hotbar_select_0")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 0));
-	inputContext->getKeybind("hotbar_select_1")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 1));
-	inputContext->getKeybind("hotbar_select_2")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 2));
-	inputContext->getKeybind("hotbar_select_3")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 3));
-	inputContext->getKeybind("hotbar_select_4")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 4));
-	inputContext->getKeybind("hotbar_select_5")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 5));
-	inputContext->getKeybind("hotbar_select_6")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 6));
-	inputContext->getKeybind("hotbar_select_7")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 7));
-	inputContext->getKeybind("hotbar_select_8")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 8));
-	inputContext->getKeybind("hotbar_select_9")->setFunction(bind(&Hotbar::setSelectedSlot, m_gameOverlay->getHotbar(), placeholders::_1, 9));
-
-	inputContext->getKeybind("debug_func_1")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
-	inputContext->getKeybind("debug_func_2")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
-	inputContext->getKeybind("debug_func_3")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
-	inputContext->getKeybind("debug_func_4")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
-	inputContext->getKeybind("debug_func_5")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
-	inputContext->getKeybind("debug_func_6")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
-	inputContext->getKeybind("debug_func_7")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
-	inputContext->getKeybind("debug_func_8")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
-	inputContext->getKeybind("debug_func_9")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
-	inputContext->getKeybind("debug_func_10")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
-	inputContext->getKeybind("debug_func_11")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
-	inputContext->getKeybind("debug_func_12")->setFunction(bind(&Debug::debugFunction, m_debug, placeholders::_1));
-	inputContext->getKeybind("next_block")->setFunction(bind(&Debug::nextBlock, m_debug, placeholders::_1));
-	inputContext->getKeybind("prev_block")->setFunction(bind(&Debug::prevBlock, m_debug, placeholders::_1));
-	//inputContext->getKeybind("place_light")->setFunction(bind(&Debug::placeLight, m_debug, placeholders::_1));
-	//inputContext->getKeybind("randomize_light")->setFunction(bind(&Debug::randomizeLight, m_debug, placeholders::_1));
-
 	getInputManager()->setContext(inputContext);
-
-	inputContext = getInputManager()->getContextByName("chat");
-	inputContext->getKeybind("send_message")->setFunction(bind(&Chat::sendMessage, m_gameOverlay->getChat(), placeholders::_1));
-	inputContext->getKeybind("next_message")->setFunction(bind(&Chat::nextMessage, m_gameOverlay->getChat(), placeholders::_1));
-	inputContext->getKeybind("prev_message")->setFunction(bind(&Chat::prevMessage, m_gameOverlay->getChat(), placeholders::_1));
-	inputContext->getKeybind("escape_chat")->setFunction(bind(&Chat::toggle, m_gameOverlay->getChat(), placeholders::_1));
 }
 
 void Overworld::onTick(TickEvent *e)
@@ -232,10 +181,10 @@ void Overworld::onDraw(DrawEvent *e)
 		float alpha = itr == m_states.begin() ? (m_transitionDirection == -1 ? max(m_transitionTime / m_fadeTime, 0.0f) : min(1.f - (m_transitionTime / m_fadeTime), 1.0f)) : 1.0f;
 
 		// Draw canvas
-		Vector2I canvasSize = getWindow()->getSize();//gameState->getSize();
+		/*Vector2I canvasSize = getWindow()->getSize();//gameState->getSize();
 		graphicsContext->setTexture(gameState->getRenderTarget()->getTexture());
 		graphicsContext->drawRectangle(0, 0, canvasSize.x, canvasSize.y, Color(255, 255, 255, 255 * alpha));
-		graphicsContext->setTexture(0);
+		graphicsContext->setTexture(0);*/
 
 		if(itr == m_states.begin())
 		{
@@ -243,6 +192,8 @@ void Overworld::onDraw(DrawEvent *e)
 		}
 		itr--;
 	}
+
+	SceneObject::onDraw(e);
 
 	m_spriteBatch->end();
 }
@@ -278,4 +229,11 @@ void Overworld::onEvent(Event *e)
 		}
 	}
 	SceneObject::onEvent(e);
+}
+
+GameOverlay * Overworld::getGameOverlay() const
+{
+	InGameState *inGameState = dynamic_cast<InGameState*>(peekState());
+	if(inGameState) return inGameState->getGameOverlay();
+	return 0;
 }

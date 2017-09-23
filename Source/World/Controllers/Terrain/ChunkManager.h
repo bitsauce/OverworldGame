@@ -13,7 +13,7 @@ class ChunkGenerator;
 class ChunkManager : public SceneObject
 {
 	friend class Lighting;
-	friend class Debug;
+	friend class InGameDebug;
 	friend class BlockDrawer;
 public:
 	ChunkManager(World *world, Window *window);
@@ -106,7 +106,7 @@ private:
 	ChunkArea m_loadingArea;
 	ChunkArea m_prevLoadingArea;
 
-	// Loading area radius
+	// Loading area radius (should be greater than 0)
 	const uint m_loadAreaRadius;
 
 	// Chunk pool

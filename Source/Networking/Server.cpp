@@ -158,15 +158,17 @@ void Server::onTick(TickEvent *e)
 					bitStream.Write(player->GetNetworkID());
 					bitStream.Write(playerController->GetNetworkID());
 					player->pack(&bitStream, this);
-					sendPacket(&bitStream);
+					assert(m_rakPeer->Send(&bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
 				}
 			}
 			break;
 
 			case ID_PLAYER_JOIN_FINALIZE:
 			{
-				RakNet::BitStream bitStream(packet->data, packet->length, false);
-				sendPacket(&bitStream);
+				// Inform all players that a new player has finalized joining
+				RakNet::BitStream bitStream(packet->data, packet->length, true);
+				bitStream.Write(packet->guid);
+				assert(m_rakPeer->Send(&bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
 			}
 			break;
 
@@ -181,9 +183,12 @@ void Server::onTick(TickEvent *e)
 				Chunk *chunk = m_world->getTerrain()->getChunkManager()->getChunkAt(chunkX, chunkY, true);
 
 				{
+					// OKAY. The problem is sending pointers. Let's not.
+					// TODO: Rewrite the chunks to use raw integer values and send those instead
+					// (or create a serialize function, for example)
 					RakNet::BitStream bitStream(packet->data, packet->length, true);
 					bitStream.WriteAlignedBytes((uchar*)chunk->m_blocks, CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT * sizeof(Block));
-					sendPacket(&bitStream);
+					assert(m_rakPeer->Send(&bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, false) != 0);
 				}
 			}
 			break;
@@ -273,11 +278,6 @@ void Server::onTick(TickEvent *e)
 				break;
 		}
 	}
-}
-
-void Server::sendPacket(RakNet::BitStream *bitStream)
-{
-	assert(m_rakPeer->Send(bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
 }
 
 void Server::save()

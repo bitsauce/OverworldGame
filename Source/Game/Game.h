@@ -27,15 +27,7 @@ public:
 
 	void onEvent(Event *e);
 
-	Debug *getDebug() const
-	{
-		return m_debug;
-	}
-
-	GameOverlay *getGameOverlay() const
-	{
-		return m_gameOverlay;
-	}
+	GameOverlay *getGameOverlay() const;
 
 	Commander *getCommander() const
 	{
@@ -54,7 +46,7 @@ public:
 
 	void pushState(GameState *state);
 	bool popState();
-	GameState *peekState(int level = 0);
+	GameState *peekState(int level = 0) const;
 
 	void takeScreenshot(InputEvent *e)
 	{
@@ -77,8 +69,6 @@ private:
 
 	// Game modules
 	Commander *m_commander;
-	Debug *m_debug;
-	GameOverlay *m_gameOverlay;
 	SpriteBatch *m_spriteBatch;
 
 	// Game state stack

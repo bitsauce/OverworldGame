@@ -2,7 +2,7 @@
 
 Label::Label(UiObject *parent) :
 	UiObject(parent),
-	m_font(Resource<Font>("Font")),
+	m_font(Resource<Font>("Fonts/MenuFont")),
 	m_text(""),
 	m_spriteBatch()
 {

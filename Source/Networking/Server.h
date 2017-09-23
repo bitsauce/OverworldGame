@@ -27,7 +27,6 @@ public:
 	void onTick(TickEvent *e);
 	//void onDraw() { NO! }
 
-	void sendPacket(RakNet::BitStream *bitStream);
 	void save();
 
 private:

@@ -8,7 +8,7 @@ class Pointlight;
 
 class DebugPointlight : public Entity
 {
-	friend class Debug;
+	friend class InGameDebug;
 public:
 	DebugPointlight(const Json::Value &attributes);
 	~DebugPointlight();

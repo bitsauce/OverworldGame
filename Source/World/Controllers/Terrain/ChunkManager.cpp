@@ -39,7 +39,7 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 	m_generator(new ChunkGenerator(world->getSeed())),
 	m_world(world),
 	m_chunkPositionIndex(0),
-	m_loadAreaRadius(0),//(5),
+	m_loadAreaRadius(5),
 	m_circleLoadIndex(0),
 	m_time(0.0f)
 {
@@ -330,6 +330,8 @@ Chunk *ChunkManager::loadChunkAt(const int chunkX, const int chunkY)
 	}
 	else
 	{
+		LOG("Generating chunk [%i, %i]", chunkX, chunkY);
+
 		// Generate block data
 		m_generator->getBlocks(chunkX, chunkY, blocks);
 	}
@@ -599,6 +601,19 @@ void ChunkManager::updateViewSize(int width, int height)
 
 	// Set shader uniforms
 	m_tileSortShader->setSampler2D("u_BlockGrid", m_blocksRenderTarget->getTexture());
+
+	// Detach chunks
+	for(int y = m_loadingArea.y0 + 1; y <= m_loadingArea.y1 - 1; ++y)
+	{
+		for(int x = m_loadingArea.x0 + 1; x <= m_loadingArea.x1 - 1; ++x)
+		{
+			Chunk *chunk = getChunkAt(x, y, false);
+			if(chunk && chunk->isAttached())
+			{
+				chunk->detach();
+			}
+		}
+	}
 }
 
 void ChunkManager::reattachChunk(Chunk *chunk, GraphicsContext *context)

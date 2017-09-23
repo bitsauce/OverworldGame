@@ -29,11 +29,14 @@ public:
 	void sendPacket(RakNet::BitStream *bitStream);
 
 	bool isJoinFinalized() const { return m_joinFinalized; }
+	float getJoinProgress() const { return (float)m_joinProgress / m_joinNumSteps; }
 
 private:
 	Overworld *m_game;
 	string m_playerName;
 	bool m_joinFinalized;
+	int m_joinProgress;
+	int m_joinNumSteps;
 };
 
 #endif // CLIENT_H

@@ -15,7 +15,7 @@ class Chunk
 	friend class Terrain;
 	friend class ChunkManager;
 	friend class BlockDrawer;
-	friend class Debug;
+	friend class InGameDebug;
 	friend class Pointlight;
 	friend class Client;
 	friend class Server;

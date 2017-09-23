@@ -7,7 +7,7 @@ class ItemData;
 
 class BlockData
 {
-	friend class Debug;
+	friend class InGameDebug;
 public:
 	// Constructor
 	BlockData(const BlockID id, const string &name, const Pixmap &pixmap, const string &item, const float opacity, const bool solid);

@@ -29,4 +29,5 @@ void GameState::onWindowSizeChanged(WindowEvent *e)
 		delete m_renderTarget;
 		m_renderTarget = new RenderTarget2D(e->getWidth(), e->getHeight());
 	}
+	SceneObject::onWindowSizeChanged(e);
 }

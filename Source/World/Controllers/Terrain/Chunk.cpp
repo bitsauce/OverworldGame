@@ -92,9 +92,6 @@ void Chunk::load(int chunkX, int chunkY, Block *blocks)
 
 	// Generate block entity buffers
 	m_generateBlockEntityBuffers = true;
-
-	// Chunk generated
-	LOG("Chunk [%i, %i] generated", m_x, m_y);
 }
 
 void Chunk::unload()

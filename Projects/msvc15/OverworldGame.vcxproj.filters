@@ -248,6 +248,15 @@
     <ClCompile Include="..\..\Source\Game\States\DialogBoxState.cpp">
       <Filter>Source\Game\States</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Game\States\InGameDebug.cpp">
+      <Filter>Source\Game\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game\States\HostAndPlayLoading.cpp">
+      <Filter>Source\Game\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Game\States\JoinLoading.cpp">
+      <Filter>Source\Game\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
@@ -610,6 +619,15 @@
       <Filter>Source\Gui\UiObjects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Game\States\DialogBoxState.h">
+      <Filter>Source\Game\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\States\InGameDebug.h">
+      <Filter>Source\Game\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\States\HostAndPlayLoading.h">
+      <Filter>Source\Game\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game\States\JoinLoading.h">
       <Filter>Source\Game\States</Filter>
     </ClInclude>
   </ItemGroup>
