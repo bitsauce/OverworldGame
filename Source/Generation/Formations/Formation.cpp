@@ -39,7 +39,7 @@ void Formation::generate(const int formX, const int formY)
 	m_generated.insert(CHUNK_KEY(formX, formY));
 }
 
-void Formation::getBlocks(const int chunkX, const int chunkY, Block *blocks)
+void Formation::getBlocks(const int chunkX, const int chunkY, BlockID *blocks)
 {
 	list<FormationElement*> elements = m_chunkToElementListMap[CHUNK_KEY(chunkX, chunkY)];
 	for(FormationElement *elem : elements)
@@ -58,10 +58,10 @@ void Formation::getBlocks(const int chunkX, const int chunkY, Block *blocks)
 					for(int layer = 0; layer < WORLD_LAYER_COUNT; layer++)
 					{
 						const FormationElement::Block &block = itr->second[layer];
-						Block &blockToReplace = blocks[BLOCK_INDEX(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer)];
-						if(block.replace == FormationElement::REPLACE_ALWAYS || (block.replace == FormationElement::REPLACE_IF_EMPTY && blockToReplace.isEmpty()))
+						BlockID &blockToReplace = blocks[BLOCK_INDEX(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer)];
+						if(block.replace == FormationElement::REPLACE_ALWAYS || (block.replace == FormationElement::REPLACE_IF_EMPTY && blockToReplace == 0))
 						{
-							blockToReplace.setBlockDataByID(block.blockID);
+							blockToReplace = block.blockID;
 						}
 						//blockToReplace.setBlockEntity(block.blockEntityID);
 					}

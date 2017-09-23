@@ -19,7 +19,7 @@ public:
 	bool isGeneratedAt(const int formX, const int formY) const;
 
 	void generate(const int formX, const int formY);
-	void getBlocks(const int chunkX, const int chunkY, Block *blocks);
+	void getBlocks(const int chunkX, const int chunkY, BlockID *blocks);
 
 protected:
 	virtual void generate(const int formX, const int formY, list<FormationElement*> &elements) = 0;

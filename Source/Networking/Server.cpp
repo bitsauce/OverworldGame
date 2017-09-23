@@ -183,11 +183,8 @@ void Server::onTick(TickEvent *e)
 				Chunk *chunk = m_world->getTerrain()->getChunkManager()->getChunkAt(chunkX, chunkY, true);
 
 				{
-					// OKAY. The problem is sending pointers. Let's not.
-					// TODO: Rewrite the chunks to use raw integer values and send those instead
-					// (or create a serialize function, for example)
 					RakNet::BitStream bitStream(packet->data, packet->length, true);
-					bitStream.WriteAlignedBytes((uchar*)chunk->m_blocks, CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT * sizeof(Block));
+					bitStream.WriteAlignedBytes((uchar*)chunk->m_blocks, CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT * sizeof(BlockID));
 					assert(m_rakPeer->Send(&bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, false) != 0);
 				}
 			}

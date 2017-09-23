@@ -12,7 +12,7 @@ public:
 
 	uint getSeed() const { return m_seed; }
 
-	void getBlocks(const int chunkX, const int chunkY, Block *blocks);
+	void getBlocks(const int chunkX, const int chunkY, BlockID *blocks);
 	int getGroundHeight(const int x);
 
 	//void setBlockAt(const int x, const int y, const WorldLayer z, const BlockID block);

@@ -75,8 +75,8 @@ private:
 	Chunk *loadChunkAt(const int chunkX, const int chunkY);
 	Chunk *popChunkFromPool();
 	
-	void saveBlockData(FileWriter &file, Block *blockData);
-	void loadBlockData(FileReader &file, Block *blockData);
+	void saveBlockData(FileWriter &file, BlockID *blockData);
+	void loadBlockData(FileReader &file, BlockID *blockData);
 
 	void saveBlockEntities(FileWriter &file, list<BlockEntity*> entities);
 	void loadBlockEntities(FileReader &file);

@@ -32,6 +32,8 @@ public:
 	 * \param layer The world layer
 	 * \return The block ID
 	 */
+	//const BlockData *getBlockAt(const int x, const int y, const WorldLayer layer, const BlockEntity **blockEntity = nullptr);
+
 	const BlockData *getBlockAt(const int x, const int y, const WorldLayer layer);
 	
 	/**

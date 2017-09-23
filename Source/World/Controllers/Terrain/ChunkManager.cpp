@@ -104,14 +104,14 @@ void ChunkManager::clear()
 }
 
 // SERIALIZATION
-void ChunkManager::saveBlockData(FileWriter &file, Block *blockData)
+void ChunkManager::saveBlockData(FileWriter &file, BlockID *blockData)
 {
 	// Write blocks to stream
-	BlockID currentBlock = blockData[0].getBlockData()->getID();
+	BlockID currentBlock = blockData[0];
 	int length = 1;
 	for(int i = 1; i < CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT; ++i)
 	{
-		BlockID block = blockData[i].getBlockData()->getID();
+		BlockID block = blockData[i];
 		if(block == currentBlock)
 		{
 			length++;
@@ -128,7 +128,7 @@ void ChunkManager::saveBlockData(FileWriter &file, Block *blockData)
 	file << length << endl;
 }
 
-void ChunkManager::loadBlockData(FileReader &file, Block *blockData)
+void ChunkManager::loadBlockData(FileReader &file, BlockID *blockData)
 {
 	// Read blocks from stream
 	int pos = 0;
@@ -139,7 +139,7 @@ void ChunkManager::loadBlockData(FileReader &file, Block *blockData)
 		file >> length;
 		for(int i = 0; i < length; ++i)
 		{
-			blockData[pos + i].setBlockDataByID(blockID);
+			blockData[pos + i] = blockID;
 		}
 		pos += length;
 	}
@@ -228,7 +228,7 @@ void ChunkManager::freeChunk(unordered_map<uint, Chunk*>::iterator itr)
 	{
 		// Save chunk data
 		saveBlockData(file, chunk->m_blocks);
-		saveBlockEntities(file, chunk->m_blockEntities);
+		saveBlockEntities(file, chunk->m_blockEntityList);
 		saveEntities(file, chunk->m_entities);
 	}
 	else
@@ -296,6 +296,8 @@ Chunk *ChunkManager::getChunkAt(const int chunkX, const int chunkY, const bool l
 	return m_chunks[key];
 }
 
+BlockID chunkLoadingBlocksBuffer[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
+
 Chunk *ChunkManager::loadChunkAt(const int chunkX, const int chunkY)
 {
 	m_generatedChunks++;
@@ -320,24 +322,23 @@ Chunk *ChunkManager::loadChunkAt(const int chunkX, const int chunkY)
 	}
 
 	// Get block data
-	Block blocks[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
 	if(file)
 	{
-		LOG("Loading chunk [%i, %i]...", chunkX, chunkY);
+		LOG("Loading chunk [%i, %i] from file...", chunkX, chunkY);
 
 		// Load chunk from file
-		loadBlockData(*file, blocks);
+		loadBlockData(*file, chunkLoadingBlocksBuffer);
 	}
 	else
 	{
 		LOG("Generating chunk [%i, %i]", chunkX, chunkY);
 
 		// Generate block data
-		m_generator->getBlocks(chunkX, chunkY, blocks);
+		m_generator->getBlocks(chunkX, chunkY, chunkLoadingBlocksBuffer);
 	}
 
 	// Initialize chunk
-	(m_chunks[key] = chunk)->load(chunkX, chunkY, blocks);
+	(m_chunks[key] = chunk)->load(chunkX, chunkY, chunkLoadingBlocksBuffer);
 
 	// Load entities if any
 	if(file)

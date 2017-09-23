@@ -1,9 +1,9 @@
-#ifndef SERVER_H
-#define SERVER_H
+#pragma once
 
 #include "Connection.h"
 
-namespace RakNet {
+namespace RakNet
+{
 	class RakPeerInterface;
 	class BitStream;
 }
@@ -35,5 +35,3 @@ private:
 	Overworld * m_game;
 	map<RakNet::RakNetGUID, Player*> m_players;
 };
-
-#endif // SERVER_H

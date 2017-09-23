@@ -72,7 +72,7 @@ void BlockData::init()
 
 			if(id && name && image && item && opacity && frames)
 			{
-				BlockDataDesc desc = { util::strToInt(id->GetText()), name->GetText(), image->GetText(), item->GetText(), util::strToFloat(opacity->GetText()), (uint)util::strToInt(frames->GetText()), solid == 0 };
+				BlockDataDesc desc = { (BlockID)util::strToInt(id->GetText()), name->GetText(), image->GetText(), item->GetText(), util::strToFloat(opacity->GetText()), (uint)util::strToInt(frames->GetText()), solid == 0 };
 				blockDataDesc.push_back(desc);
 			}
 			else

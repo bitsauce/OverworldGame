@@ -34,7 +34,7 @@ public:
 
 	World *getWorld() const { return m_world; }
 
-	virtual void sendPacket(RakNet::BitStream *bitStream) = 0;
+	virtual void sendPacket(RakNet::BitStream *bitStream) { LOG("SEND PACKET?????"); }
 
 protected:
 	bool m_isServer;

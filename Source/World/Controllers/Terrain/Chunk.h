@@ -29,7 +29,7 @@ private:
 	 * \param chunkY The global chunk y-coordinate
 	 * \param blocks Array of blocks to load into the chunk
 	 */
-	void load(int chunkX, int chunkY, Block *blocks);
+	void load(int chunkX, int chunkY, BlockID *blocks);
 
 	/**
 	 * \brief Unloads the chunk, deleting all block entities it holds
@@ -45,9 +45,9 @@ public:
 	int getX() const { return m_x; }
 	int getY() const { return m_y; }
 
-	bool setBlockAt(const int x, const int y, const WorldLayer layer, const BlockData *block);
+	bool setBlockAt(const int x, const int y, const WorldLayer layer, const BlockID block);
 	const BlockData *getBlockDataAt(const int x, const int y, const WorldLayer layer) const;
-	Block getBlockAt(const int x, const int y, const WorldLayer layer) const;
+	BlockID getBlockAt(const int x, const int y, const WorldLayer layer) const;
 
 	void addBlockEntity(BlockEntity *blockEntity);
 	bool removeBlockEntity(BlockEntity *blockEntity);
@@ -63,12 +63,13 @@ public:
 	void drawBlockEntities(GraphicsContext *context);
 
 private:
-	Block *getNeighborBlock(const int x, const int y, const WorldLayer layer) const;
+	tuple<BlockID, BlockEntity*> getNeighborBlock(const int x, const int y, const WorldLayer layer) const;
 
 	// Chunk
 	int m_x, m_y;
-	Block *m_blocks;
-	list<BlockEntity*> m_blockEntities;
+	BlockID *m_blocks;
+	BlockEntity **m_blockEntities;
+	list<BlockEntity*> m_blockEntityList;
 	Chunk *m_neighborChunks[8];
 
 	// Block entity VBO

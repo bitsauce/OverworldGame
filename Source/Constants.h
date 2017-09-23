@@ -75,7 +75,7 @@ typedef int EntityID;
  * \brief	Block IDs.
  */
 
-typedef int BlockID;
+typedef short BlockID;
 
 /**
  * \enum	BlockEntityID

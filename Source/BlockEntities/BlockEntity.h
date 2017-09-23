@@ -16,7 +16,7 @@ class BlockEntityData;
 class NeighborChangedEvent
 {
 public:
-	NeighborChangedEvent(const int dx, const int dy, const Block *oldBlock, const Block *newBlock) :
+	NeighborChangedEvent(const int dx, const int dy, const BlockID oldBlock, const BlockID newBlock) :
 		m_dx(dx),
 		m_dy(dy),
 		m_oldBlock(oldBlock),
@@ -34,20 +34,20 @@ public:
 		return m_dy;
 	}
 
-	const Block *getOldBlock() const
+	BlockID getOldBlock() const
 	{
 		return m_oldBlock;
 	}
 
-	const Block *getNewBlock() const
+	BlockID getNewBlock() const
 	{
 		return m_newBlock;
 	}
 
 private:
 	const int m_dx, m_dy;
-	const Block *m_oldBlock;
-	const Block *m_newBlock;
+	const BlockID m_oldBlock;
+	const BlockID m_newBlock;
 };
 
 class BlockEntity

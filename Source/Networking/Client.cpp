@@ -157,8 +157,8 @@ void Client::onTick(TickEvent *e)
 				bitStream.Read(chunkX);
 				bitStream.Read(chunkY);
 
-				Block blocks[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
-				bitStream.ReadAlignedBytes((uchar*)&blocks, CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT * sizeof(Block));
+				BlockID blocks[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
+				bitStream.ReadAlignedBytes((uchar*)&blocks, CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT * sizeof(BlockID));
 
 				// Load chunk
 				m_world->getTerrain()->getChunkManager()->getChunkAt(chunkX, chunkY, false)->load(chunkX, chunkY, blocks);

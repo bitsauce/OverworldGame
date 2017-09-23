@@ -52,19 +52,20 @@ bool Terrain::setBlockAt(const int x, const int y, const WorldLayer layer, const
 	if(!replace)
 	{
 		// Check if we can place a block here
-		const Block block = chunk->getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
-		if(block.getBlockData()->getID() != 0 || (layer == WORLD_LAYER_MIDDLE && block.getBlockEntity()))
+		const BlockID block = chunk->getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
+		const BlockEntity *blockEntity = chunk->getBlockEntityAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
+		if(block != 0 || (layer == WORLD_LAYER_MIDDLE && blockEntity))
 		{
 			return false;
 		}
 	}
 
-	return chunk->setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer, blockData);
+	return chunk->setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer, blockData->getID());
 }
 
 const BlockData *Terrain::getBlockAt(const int x, const int y, const WorldLayer layer)
 {
-	return m_chunkManager->getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF), true)->getBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer).getBlockData();
+	return m_chunkManager->getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF), true)->getBlockDataAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer);
 }
 
 bool Terrain::isBlockAt(const int x, const int y, const WorldLayer layer)
