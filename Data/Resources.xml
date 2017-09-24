@@ -196,6 +196,11 @@
 		<name>Sprites/Gui/Color_Wheel</name>
 		<path>Sprites/Gui/Color_Wheel.png</path>
 	</texture>
+
+  <texture>
+    <name>Sprites/Debug/InputIcons</name>
+    <path>Sprites/Gui/InputIcons.png</path>
+  </texture>
   
   <!--Button-->
   <texture>

@@ -6,13 +6,12 @@
 
 class Pawn;
 
-class Controller : public NetworkObject
+class Controller// : public NetworkObject
 {
+	friend class Server;
+	friend class Client;
 public:
 	Controller();
-
-	void pack(RakNet::BitStream *bitStream, const Connection *conn);
-	void unpack(RakNet::BitStream *bitStream, const Connection *conn);
 
 	enum
 	{
@@ -21,12 +20,13 @@ public:
 		INPUT_JUMP,
 		INPUT_RUN,
 		INPUT_USE_ITEM,
+		INPUT_RMB,
 		INPUT_COUNT
 	};
 
-	bool getInputState(int type) const
+	bool getInputState(uint type) const
 	{
-		return m_inputState[type];
+		return (m_inputState & (1 << type)) != 0;
 	}
 
 	void setPawn(Pawn *pawn)
@@ -38,6 +38,6 @@ public:
 
 protected:
 	Pawn *m_pawn;
-	bool m_inputState[INPUT_COUNT];
+	uint m_inputState;
 	void setInputState(const bool state, int type);
 };

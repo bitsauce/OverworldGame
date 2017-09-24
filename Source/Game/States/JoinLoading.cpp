@@ -50,9 +50,7 @@ JoinLoading::JoinLoading(Overworld *game, const string &ip) :
 void JoinLoading::onTick(TickEvent *e)
 {
 	Overworld *game = dynamic_cast<Overworld*>(Game::Get());
-	Server *server = game->getServer();
 	Client *client = game->getClient();
-	server->onEvent(e);
 	client->onEvent(e);
 	m_loadingBar->m_progress = client->getJoinProgress();
 	GameState::onTick(e);

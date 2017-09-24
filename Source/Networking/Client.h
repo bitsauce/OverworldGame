@@ -9,6 +9,7 @@ namespace RakNet {
 	class BitStream;
 }
 
+class Player;
 class Overworld;
 
 class Client : public Connection
@@ -37,6 +38,8 @@ private:
 	bool m_joinFinalized;
 	int m_joinProgress;
 	int m_joinNumSteps;
+
+	map<RakNet::RakNetGUID, Player*> m_players;
 };
 
 #endif // CLIENT_H

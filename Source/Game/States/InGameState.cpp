@@ -14,8 +14,8 @@ InGameState::InGameState(Overworld *game, World *world) :
 
 	addChildLast(m_gameOverlay);
 	addChildLast(m_world);
-	if(game->getServer()) addChildLast(game->getServer());
-	if(game->getClient()) addChildLast(game->getClient());
+	if(game->getServer()->getWorld()) addChildLast(game->getServer());
+	if(game->getClient()->getWorld()) addChildLast(game->getClient());
 
 	// Create debugger object
 	m_debug = new InGameDebug(this);

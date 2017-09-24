@@ -17,9 +17,6 @@
     <ClCompile Include="..\..\Source\BlockEntities\BlockEntity.cpp">
       <Filter>Source\BlockEntities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Game\Debug.cpp">
-      <Filter>Source\Game</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\BlockEntities\BlockEntityData.cpp">
       <Filter>Source\BlockEntities</Filter>
     </ClCompile>
@@ -412,9 +409,6 @@
       <Filter>Source\Gui\GameOverlay</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Game\Game.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Game\Debug.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Gui\GameOverlay\Inventory.h">

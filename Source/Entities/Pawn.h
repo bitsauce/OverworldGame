@@ -61,8 +61,8 @@ public:
 	virtual void onTick(TickEvent *e);
 	virtual void onDraw(DrawEvent *e);
 
-	void pack(RakNet::BitStream *bitStream, const Connection *conn);
-	void unpack(RakNet::BitStream *bitStream, const Connection *conn);
+	void packData(RakNet::BitStream *bitStream, const Connection *conn);
+	bool unpackData(RakNet::BitStream *bitStream, const Connection *conn);
 
 	void createSaveData(FileWriter &saveData);
 	void loadSaveData(FileReader &saveData);

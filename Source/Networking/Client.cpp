@@ -57,22 +57,29 @@ Client::ErrorCode Client::join(const string &playerName, const string &ip, const
 
 void Client::onTick(TickEvent *e)
 {
-	/*for(NetworkObject *object : m_networkObjects)
+	// Send input state
+	if(m_joinFinalized)
 	{
-		if(object->m_local)
+		RakNet::BitStream bitStream;
+		bitStream.Write((RakNet::MessageID) ID_SEND_INPUT_STATE);
+		bitStream.Write(m_world->m_localPlayer->getController()->m_inputState);
+		sendPacket(&bitStream);
+	}
+
+	// Send corrections for client-side objects to server
+	for(NetworkObject *object : m_networkObjects)
+	{
+		if(object->m_originGUID == getGUID())
 		{
 			RakNet::BitStream bitStream;
-			bitStream.Write((RakNet::MessageID)ID_NETWORK_OBJECT_UPDATE);
+			bitStream.Write((RakNet::MessageID) ID_NETWORK_OBJECT_UPDATE);
 			bitStream.Write(object->GetNetworkID());
-			uint bitsBefore = bitStream.GetNumberOfBitsUsed();
-			object->pack(&bitStream, this);
-			if(bitsBefore < bitStream.GetNumberOfBitsUsed())
-			{
-				sendPacket(&bitStream);
-			}
+			object->packData(&bitStream, this);
+			sendPacket(&bitStream);
 		}
-	}*/
+	}
 
+	// Process incomming packets
 	for(RakNet::Packet *packet = m_rakPeer->Receive(); packet; m_rakPeer->DeallocatePacket(packet), packet = m_rakPeer->Receive())
 	{
 		switch(packet->data[0])
@@ -97,53 +104,67 @@ void Client::onTick(TickEvent *e)
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
+				// Read packet data
 				char *playerName = new char[MAX_USERNAME_LENGTH]; bitStream.Read(playerName);
-				RakNet::RakNetGUID guid; bitStream.Read(guid);
+				RakNet::RakNetGUID playerGUID; bitStream.Read(playerGUID);
 				RakNet::NetworkID playerNetworkID; bitStream.Read(playerNetworkID);
-				RakNet::NetworkID controllerNetworkID; bitStream.Read(controllerNetworkID);
+				bool isLocalPlayer = playerGUID == getGUID();
+
+				Vector2F position, velocity;
+				bitStream.Read(position.x);
+				bitStream.Read(position.y);
+				bitStream.Read(velocity.x);
+				bitStream.Read(velocity.y);
 
 				// Create player
 				Json::Value attributes;
 				attributes["name"] = playerName;
+				attributes["local"] = isLocalPlayer;
+
 				Player *player = new Player(m_world, attributes);
 				player->SetNetworkIDManager(&m_networkIDManager);
 				player->SetNetworkID(playerNetworkID);
-				player->unpack(&bitStream, this);
-				player->setPosition(player->getPosition()); // Make sure lastPosition == position
+				//player->unpackData(&bitStream, this);
+				player->setPosition(position); // Make sure lastPosition == position
+				player->setVelocity(velocity);
 
 				// Create player controller
-				PlayerController *playerController = new PlayerController(m_game, true);
-				playerController->SetNetworkIDManager(&m_networkIDManager);
-				playerController->SetNetworkID(controllerNetworkID);
+				PlayerController *playerController = new PlayerController(m_game, isLocalPlayer);
 				player->setController(playerController);
 
-				player->m_local = true;
-				playerController->m_local = true;
+				// Add to client-side network objects
+				m_networkObjects.push_back(player);
+				player->m_originGUID = playerGUID;
 
-				//m_game->getGameOverlay()->setPlayer(player);
-				m_world->getCamera()->setTargetEntity(player);
-				m_world->m_localPlayer = player;
-
-				// Request chunks
-				ChunkManager *chunkManager = m_world->getTerrain()->getChunkManager();
-				chunkManager->updateLoadingAndActiveArea(player->getPosition());
-				ChunkManager::ChunkArea activeArea = chunkManager->getActiveArea();
-				for(int y = activeArea.y0; y <= activeArea.y1; y++)
+				if(isLocalPlayer)
 				{
-					for(int x = activeArea.x0; x <= activeArea.x1; x++)
+					//m_game->getGameOverlay()->setPlayer(player);
+					m_world->getCamera()->setTargetEntity(player);
+					m_world->m_localPlayer = player;
+
+					// Request chunks
+					ChunkManager *chunkManager = m_world->getTerrain()->getChunkManager();
+					chunkManager->updateLoadingAndActiveArea(player->getPosition());
+					ChunkManager::ChunkArea activeArea = chunkManager->getActiveArea();
+					for(int y = activeArea.y0; y <= activeArea.y1; y++)
 					{
-						chunkManager->getChunkAt(x, y, true);
+						for(int x = activeArea.x0; x <= activeArea.x1; x++)
+						{
+							chunkManager->getChunkAt(x, y, true);
+						}
 					}
-				}
-				LOG("Requested %i chunks", activeArea.getWidth() * activeArea.getHeight());
+					LOG("Requested %i chunks", activeArea.getWidth() * activeArea.getHeight());
 
-				{
-					RakNet::BitStream bitStream;
-					bitStream.Write((RakNet::MessageID) ID_PLAYER_JOIN_FINALIZE);
-					sendPacket(&bitStream);
+					{
+						RakNet::BitStream bitStream;
+						bitStream.Write((RakNet::MessageID) ID_PLAYER_JOIN_FINALIZE);
+						sendPacket(&bitStream);
+					}
+
+					m_joinProgress++;
 				}
 
-				m_joinProgress++;
+				m_players[playerGUID] = player;
 			}
 			break;
 
@@ -230,7 +251,24 @@ void Client::onTick(TickEvent *e)
 				NetworkObject *object = m_networkIDManager.GET_OBJECT_FROM_ID<NetworkObject*>(id);
 				if(object)
 				{
-					object->unpack(&bitStream, this);
+					object->unpackData(&bitStream, this);
+				}
+			}
+			break;
+
+			case ID_SEND_INPUT_STATE:
+			{
+				if(!m_joinFinalized) break;
+
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
+				RakNet::RakNetGUID playerGuid; bitStream.Read(playerGuid);
+
+				if(m_players.find(playerGuid) != m_players.end())
+				{
+					Controller *controller = m_players[playerGuid]->getController();
+					uint inputState; bitStream.Read(inputState);
+					controller->m_inputState = inputState;
 				}
 			}
 			break;

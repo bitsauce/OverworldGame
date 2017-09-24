@@ -13,6 +13,7 @@ public:
 
 private:
 	Overworld *m_game;
+	bool m_local;
 
 	void updateInputState(InputEvent *e, int type);
 	void updateUseItemState(InputEvent *e);

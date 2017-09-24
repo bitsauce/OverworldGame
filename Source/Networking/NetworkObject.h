@@ -8,19 +8,19 @@ class Connection;
 
 class NetworkObject : public RakNet::NetworkIDObject
 {
+	friend class Server;
+	friend class Client;
 public:
-	NetworkObject(Connection *conn);
-	~NetworkObject();
-	
-	// TODO: pack -> onPack, unpack -> onUnpack
-	virtual void pack(RakNet::BitStream *bitStream, const Connection *conn) {}
-	virtual void unpack(RakNet::BitStream *bitStream, const Connection *conn) {}
+	virtual void packData(RakNet::BitStream *bitStream, const Connection *conn) {}
+	virtual bool unpackData(RakNet::BitStream *bitStream, const Connection *conn) { return true; }
 
-	//bool isLocal() const;
-	bool m_local;
+	RakNet::RakNetGUID getOriginGUID() const
+	{
+		return m_originGUID;
+	}
+
 private:
-	Connection *m_connection;
-	//RakNet::RakNetGUID m_origin;
+	RakNet::RakNetGUID m_originGUID;
 };
 
 #endif // NETWORK_OBJECT_H

@@ -17,14 +17,6 @@
 
 Overworld *Overworld::s_this = 0;
 
-// TODO:
-// [x] Fix it so that the game doesn't load chunks around 0, 0 at the start
-// [x] Loading screen
-// [ ] Work on separating the client and server
-//     [ ] ChunkManager
-// [ ] Fix it so that the "in-game" game state can be drawn to a render target
-// [ ] Bring the GameOverlay elements back
-
 Overworld::Overworld() :
 	Game("Overworld", SAUCE_EXPORT_LOG | SAUCE_RUN_IN_BACKGROUND | SAUCE_WINDOW_RESIZABLE),
 	m_takeScreenshot(false),

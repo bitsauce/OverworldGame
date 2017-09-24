@@ -72,4 +72,6 @@ private:
 	bool m_lmbState;
 	uint m_moveCount;
 	Vector2F m_lightDragOffset;
+
+	Resource<Texture2D> m_inputIconsTexture;
 };

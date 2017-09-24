@@ -44,7 +44,8 @@ InGameDebug::InGameDebug(GameState *gameState) :
 	m_newPointlight(0),
 	m_selectedLight(0),
 	m_lmbState(false),
-	m_moveCount(0)
+	m_moveCount(0),
+	m_inputIconsTexture("Sprites/Debug/InputIcons")
 {
 	// Make default block not the empty block
 	m_block++;
@@ -293,11 +294,21 @@ void InGameDebug::onDraw(DrawEvent *e)
 
 			if(m_game->getClient()->getWorld()->getLocalPlayer())
 			{
-				Player *player = m_game->getClient()->getWorld()->getLocalPlayer();
-				Controller *controller = player->getController();
-				addVariable("Velocity", player->getVelocity().toString());
-				addVariable("Move dir", util::intToStr(controller->getInputState(Controller::INPUT_MOVE_RIGHT) - controller->getInputState(Controller::INPUT_MOVE_LEFT)));
-				addVariable("Running", util::intToStr(controller->getInputState(Controller::INPUT_RUN)));
+				for(auto pawn : m_game->getClient()->getWorld()->getPawns())
+				{
+					Controller *controller = pawn->getController();
+					addVariable("Velocity", pawn->getVelocity().toString());
+					for(int i = 0; i < Controller::INPUT_COUNT; i++)
+					{
+						Vector2F position = pawn->getDrawPosition(e->getAlpha()) - (m_world->getCamera()->getCenter(e->getAlpha()) - context->getSize() * 0.5f) - Vector2F(10, 12);
+						Sprite inputIcon(m_inputIconsTexture, RectF(position.x, position.y + i * 12, 12, 12), Vector2F(6, 6), 0, TextureRegion(float(i) / Controller::INPUT_COUNT, 0, float(i + 1) / Controller::INPUT_COUNT, 1));
+						if(!controller->getInputState(i))
+						{
+							inputIcon.setColor(Color(127, 127, 127, 127));
+						}
+						spriteBatch->drawSprite(inputIcon);
+					}
+				}
 			}
 		}
 		break;

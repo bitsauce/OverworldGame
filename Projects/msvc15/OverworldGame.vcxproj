@@ -128,7 +128,6 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <ClCompile Include="..\..\Source\Entities\Player.cpp" />
     <ClCompile Include="..\..\Source\Entities\Stick.cpp" />
     <ClCompile Include="..\..\Source\Game\Commander.cpp" />
-    <ClCompile Include="..\..\Source\Game\Debug.cpp" />
     <ClCompile Include="..\..\Source\Game\Game.cpp" />
     <ClCompile Include="..\..\Source\Game\RayCast.cpp" />
     <ClCompile Include="..\..\Source\Game\States\DialogBoxState.cpp" />
@@ -217,7 +216,6 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <ClInclude Include="..\..\Source\Entities\Player.h" />
     <ClInclude Include="..\..\Source\Entities\Stick.h" />
     <ClInclude Include="..\..\Source\Game\Commander.h" />
-    <ClInclude Include="..\..\Source\Game\Debug.h" />
     <ClInclude Include="..\..\Source\Game\Game.h" />
     <ClInclude Include="..\..\Source\Game\States\DialogBoxState.h" />
     <ClInclude Include="..\..\Source\Game\States\GameState.h" />

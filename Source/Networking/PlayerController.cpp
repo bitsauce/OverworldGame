@@ -4,7 +4,8 @@
 #include "Game/Game.h"
 
 PlayerController::PlayerController(Overworld *game, const bool local) :
-	m_game(game)
+	m_game(game),
+	m_local(local)
 {
 	// If player is local, do extra stuff
 	if(local)
@@ -37,10 +38,10 @@ PlayerController::~PlayerController()
 
 void PlayerController::updateUseItemState(InputEvent *e)
 {
-	m_inputState[INPUT_USE_ITEM] = e->getType() != KeyEvent::UP && !m_game->getGameOverlay()->isHovered();
+	m_inputState ^= (-(e->getType() != KeyEvent::UP && !m_game->getGameOverlay()->isHovered()) ^ m_inputState) & (1 << INPUT_USE_ITEM);
 }
 
 void PlayerController::updateInputState(InputEvent *e, int type)
 {
-	m_inputState[type] = e->getType() != KeyEvent::UP;
+	m_inputState ^= (-(e->getType() != KeyEvent::UP) ^ m_inputState) & (1 << type);
 }

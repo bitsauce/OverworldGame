@@ -230,7 +230,7 @@ void Pawn::onTick(TickEvent *e)
 	ItemData *item = ItemData::get(currentItemID);
 	if(item)
 	{
-		if(m_controller->getInputState(Controller::INPUT_USE_ITEM))
+		/*if(m_controller->getInputState(Controller::INPUT_USE_ITEM))
 		{
 			if(!m_lmbPressed)
 			{
@@ -243,7 +243,7 @@ void Pawn::onTick(TickEvent *e)
 			//m_humanoid.setPostAnimation(Humanoid::ANIM_NULL);
 			m_lmbPressed = false;
 		}
-		item->update(this, e->getDelta());
+		item->update(this, e->getDelta());*/
 	}
 
 	// Update animations // NOTE: Seems wierd to call onTick here...
@@ -265,7 +265,7 @@ void Pawn::onDraw(DrawEvent *e)
 	}
 }
 
-void Pawn::pack(RakNet::BitStream *bitStream, const Connection *conn)
+void Pawn::packData(RakNet::BitStream *bitStream, const Connection *conn)
 {
 	bitStream->Write(getPosition().x);
 	bitStream->Write(getPosition().y);
@@ -274,45 +274,40 @@ void Pawn::pack(RakNet::BitStream *bitStream, const Connection *conn)
 	bitStream->Write(getCurrentItem()->getItem());
 }
 
-void Pawn::unpack(RakNet::BitStream *bitStream, const Connection *conn)
+Timer t;
+
+bool Pawn::unpackData(RakNet::BitStream *bitStream, const Connection *conn)
 {
-	if(conn->isServer())
+	double time = t.getElapsedTime();
+	t.stop();
+
+	// Get position and velocity
+	Vector2F position, velocity;
+	bitStream->Read(position.x);
+	bitStream->Read(position.y);
+	bitStream->Read(velocity.x);
+	bitStream->Read(velocity.y);
+	bitStream->Read(m_equipedItemID);
+
+	// TODO: Verify using some time detla between this and previous packet
+	float radius = getVelocity().length() * time * 100.0 + 20.0 /*gravity*/;
+	float moved = (getPosition() - position).length();
+	if(conn->isServer() && radius < moved)
 	{
-		// Get position and velocity
-		Vector2F position, velocity;
-		bitStream->Read(position.x);
-		bitStream->Read(position.y);
-		bitStream->Read(velocity.x);
-		bitStream->Read(velocity.y);
-		bitStream->Read(m_equipedItemID);
-
-		// TODO: Verify using some time detla between this and previous packet
-		/*if(getVelocity().length() * delta_time < (getPosition() - Vector2F(x, y)).length())
-		{
-			// Invalid position, lets not accept the values we we're sent
-			// Send back a packet containing the server-side object state
-			// to all clients
-
-		}
-		else
-		{*/
-			// Lets move the player to their new (verified) position
-			//moveTo(position); // TODO: These should be here, however they break position interpolation for the local client
-			//setVelocity(velocity);
-		//}
+		// Invalid position, lets not accept the values we we're sent
+		// Send back a packet containing the server-side object state
+		// to all clients
+		return false;
 	}
 	else
 	{
-		// Recieved player update packet from server, apply it
-		Vector2F position, velocity;
-		bitStream->Read(position.x);
-		bitStream->Read(position.y);
-		bitStream->Read(velocity.x);
-		bitStream->Read(velocity.y);
-		bitStream->Read(m_equipedItemID);
-		moveTo(position);
+		// Lets move the player to their new (verified) position
+		moveTo(position); // TODO: These should be here, however they break position interpolation for the local client
 		setVelocity(velocity);
+
 	}
+	t.start();
+	return true;
 }
 
 void Pawn::createSaveData(FileWriter &saveData)

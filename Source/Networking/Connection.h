@@ -41,7 +41,6 @@ protected:
 	RakNet::RakPeerInterface *m_rakPeer;
 	RakNet::NetworkIDManager m_networkIDManager;
 	list<NetworkObject*> m_networkObjects;
-	list<Entity*> m_networkEntities;
 	
 	World *m_world;
 
