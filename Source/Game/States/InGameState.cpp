@@ -8,14 +8,13 @@ InGameState::InGameState(Overworld *game, World *world) :
 	m_world(world)
 {
 	// Create game overlay
-	Canvas *canvas = new Canvas(game->getWindow());
-	m_gameOverlay = new GameOverlay(game, canvas, game->getWindow()->getGraphicsContext());
+	m_gameOverlay = new GameOverlay(game, game->getWindow());
 	m_gameOverlay->setPlayer(world->getLocalPlayer());
 
-	addChildLast(m_gameOverlay);
 	addChildLast(m_world);
 	if(game->getServer()->getWorld()) addChildLast(game->getServer());
 	if(game->getClient()->getWorld()) addChildLast(game->getClient());
+	addChildLast(m_gameOverlay);
 
 	// Create debugger object
 	m_debug = new InGameDebug(this);

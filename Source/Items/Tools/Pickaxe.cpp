@@ -8,9 +8,8 @@
 #include "Entities/ItemDrop.h"
 #include "Game/Game.h"
 
-Pickaxe::Pickaxe(Overworld *game, const ItemDataDesc *desc) :
+Pickaxe::Pickaxe(const ItemDataDesc *desc) :
 	ItemData(desc),
-	m_game(game),
 	m_cracksSprite(Resource<Texture2D>("Sprites/Items/Tools/Pickaxes/Mining_Cracks")),
 	m_sprite(Resource<Texture2D>("Sprites/Items/Tools/Pickaxes/IronPickaxe")),
 	m_cracksAnimation(1, 4),
@@ -35,15 +34,15 @@ void Pickaxe::unequip(Pawn *player)
 	player->getHumanoid().clearAttachment(Humanoid::RIGHT_HAND);
 }
 
-void Pickaxe::update(Pawn *pawn, const float delta)
+void Pickaxe::update(World *world, Pawn *pawn, const float delta)
 {
 	// Get block input position
-	Vector2I position = m_game->getClient()->getWorld()->getCamera()->getInputPosition();
+	Vector2I position = world->getCamera()->getInputPosition();
 	position.x = (int) floor(position.x / BLOCK_PXF);
 	position.y = (int) floor(position.y / BLOCK_PXF);
 
 	if(pawn->getController()->getInputState(Controller::INPUT_USE_ITEM) && // Do we have user input and...
-		m_game->getClient()->getWorld()->getTerrain()->isBlockAt(position.x, position.y, WORLD_LAYER_MIDDLE)) // ... is there a block at this position?
+	   world->getTerrain()->isBlockAt(position.x, position.y, WORLD_LAYER_MIDDLE)) // ... is there a block at this position?
 	{
 		// Reset timer if block position have changed
 		if(position != m_prevBlockPosition)
@@ -58,7 +57,7 @@ void Pickaxe::update(Pawn *pawn, const float delta)
 		m_mineCounter -= delta;
 		if(m_mineCounter <= 0.0f)
 		{
-			m_game->getClient()->getWorld()->getTerrain()->removeBlockAt(position.x, position.y, WORLD_LAYER_MIDDLE);
+			world->getTerrain()->removeBlockAt(position.x, position.y, WORLD_LAYER_MIDDLE);
 		}
 		else
 		{
@@ -69,12 +68,12 @@ void Pickaxe::update(Pawn *pawn, const float delta)
 		}
 
 		// Set mining animation
-		m_game->getClient()->getWorld()->getLocalPlayer()->getHumanoid().setPostAnimation(Humanoid::ANIM_MINE);
+		pawn->getHumanoid().setPostAnimation(Humanoid::ANIM_MINE);
 	}
 	else
 	{
 		m_mineCounter = m_mineTime; // Reset the counter
-		m_game->getClient()->getWorld()->getLocalPlayer()->getHumanoid().setPostAnimation(Humanoid::ANIM_NULL); // Reset animations
+		pawn->getHumanoid().setPostAnimation(Humanoid::ANIM_NULL); // Reset animations
 		m_drawCracks = false; // Don't draw cracks
 	}
 }

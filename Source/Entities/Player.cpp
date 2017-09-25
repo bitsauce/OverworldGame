@@ -16,7 +16,9 @@ Player::~Player()
 
 void Player::onDraw(DrawEvent *e)
 {
+	Pawn::onDraw(e);
+
+	// Draw player name
 	SpriteBatch *spriteBatch = (SpriteBatch*)e->getUserData();
 	m_font->draw(spriteBatch, getDrawPosition(e->getAlpha()) - Vector2F(16, 48), m_name);
-	Pawn::onDraw(e);
 }

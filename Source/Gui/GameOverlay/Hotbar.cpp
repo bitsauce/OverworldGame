@@ -49,7 +49,6 @@ void Hotbar::onTick(TickEvent *e)
 		m_mouseWheel = 0;
 	}
 
-	setSize(Vector2F(490.f, 56.f) / m_gameOverlay->getDrawSize());
 	UiObject::onTick(e);
 }
 
@@ -91,6 +90,12 @@ void Hotbar::onDraw(DrawEvent *e)
 		}
 	}
 }
+
+void Hotbar::onResize(ResizeEvent *e)
+{
+	setSize(Vector2F(490.f, 56.f) / m_gameOverlay->getDrawSize());
+}
+
 
 void Hotbar::setSelectedSlot(InputEvent *e, const uint slot)
 {

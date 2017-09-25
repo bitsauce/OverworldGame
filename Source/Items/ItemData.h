@@ -6,6 +6,7 @@
 #include "Game/Storage.h"
 
 class Pawn;
+class World;
 
 struct ItemDataDesc
 {
@@ -28,7 +29,7 @@ public:
 	virtual void equip(Pawn *pawn) { }
 	virtual void unequip(Pawn *pawn) { }
 	virtual void use(Pawn *pawn, const float delta) { }
-	virtual void update(Pawn *pawn, const float delta) { }
+	virtual void update(World *world, Pawn *pawn, const float delta) { }
 	virtual void draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha) { }
 
 	static ItemData *get(const ItemID id) { return s_data[id]; }

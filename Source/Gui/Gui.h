@@ -10,5 +10,3 @@
 #include "UiObjects/GradientBackground.h"
 #include "UiObjects/Slider.h"
 #include "UiObjects/Label.h"
-
-class Canvas;

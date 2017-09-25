@@ -1,5 +1,4 @@
-#ifndef NETWORK_OBJECT_H
-#define NETWORK_OBJECT_H
+#pragma once
 
 #include "NetworkIDObject.h"
 #include "BitStream.h"
@@ -8,10 +7,10 @@ class Connection;
 
 class NetworkObject : public RakNet::NetworkIDObject
 {
-	friend class Server;
-	friend class Client;
 public:
-	virtual void packData(RakNet::BitStream *bitStream, const Connection *conn) {}
+	NetworkObject(Connection *conn);
+
+	virtual void packData(RakNet::BitStream *bitStream, const Connection *conn) { }
 	virtual bool unpackData(RakNet::BitStream *bitStream, const Connection *conn) { return true; }
 
 	RakNet::RakNetGUID getOriginGUID() const
@@ -19,8 +18,17 @@ public:
 		return m_originGUID;
 	}
 
+	void setOriginGUID(RakNet::RakNetGUID originGUID);
+
+	bool isClientObject() const
+	{
+		return m_isClientObject;
+	}
+
+protected:
+	Connection *m_connection;
+
 private:
 	RakNet::RakNetGUID m_originGUID;
+	bool m_isClientObject;
 };
-
-#endif // NETWORK_OBJECT_H

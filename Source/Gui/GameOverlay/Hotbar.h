@@ -14,6 +14,7 @@ public:
 
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
+	void onResize(ResizeEvent * e);
 
 	void setSelectedSlot(InputEvent* e, const uint slot);
 	

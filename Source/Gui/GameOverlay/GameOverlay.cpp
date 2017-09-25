@@ -6,17 +6,14 @@
 #include "Entities/Player.h"
 #include "Entities/ItemDrop.h"
 
-GameOverlay::GameOverlay(Overworld *game, UiObject *parent, GraphicsContext *context) :
-	UiObject(parent),
+GameOverlay::GameOverlay(Overworld *game, Window *window) :
+	Canvas(window),
 	m_game(game),
 	m_player(nullptr),
 	m_craftingEnabled(false),
 	m_font(Resource<Font>("Fonts/Inventory")),
 	m_active(true)
 {
-	setPosition(Vector2F(0.0f, 0.0f));
-	setSize(Vector2F(1.0f, 1.0f));
-
 	m_hotbar = new Hotbar(this);
 	/*m_healthManaStatus = new HealthManaStatus(scene, this);
 	m_omnicon = new Omnicon(scene, this);
@@ -37,7 +34,7 @@ GameOverlay::~GameOverlay()
 
 void GameOverlay::onTick(TickEvent *e)
 {
-	UiObject::onTick(e);
+	Canvas::onTick(e);
 	if(!m_player) return;
 	/*Storage::Slot *heldItem = m_player->getHeldItem();
 	if(!heldItem->isEmpty() && !isHovered() && m_game->getInputManager()->getKeyState(MOUSE_BUTTON_RIGHT))
@@ -57,11 +54,9 @@ void GameOverlay::onDraw(DrawEvent *e)
 	spriteBatch->end();
 	spriteBatch->begin(e->getGraphicsContext(), SpriteBatch::State());
 
-	UiObject::onDraw(e);
+	Canvas::onDraw(e);
 
-	if(!m_player) return;
-
-	m_player->getHeldItem()->drawItem(m_game->getInputManager()->getPosition() + Vector2F(5.0f, 0.0f), spriteBatch, m_font);
+	if(m_player) m_player->getHeldItem()->drawItem(m_game->getInputManager()->getPosition() + Vector2F(5.0f, 0.0f), spriteBatch, m_font);
 }
 
 void GameOverlay::toggleCrafting()

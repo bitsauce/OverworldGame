@@ -14,10 +14,10 @@
 class Overworld;
 class Player;
 
-class GameOverlay : public UiObject
+class GameOverlay : public Canvas
 {
 public:
-	GameOverlay(Overworld *game, UiObject *parent, GraphicsContext *graphicsContext);
+	GameOverlay(Overworld *game, Window *window);
 	~GameOverlay();
 
 	void onTick(TickEvent *e);

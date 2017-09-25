@@ -66,10 +66,10 @@ void Client::onTick(TickEvent *e)
 		sendPacket(&bitStream);
 	}
 
-	// Send corrections for client-side objects to server
+	// Send corrections of client-side objects to server
 	for(NetworkObject *object : m_networkObjects)
 	{
-		if(object->m_originGUID == getGUID())
+		if(object->isClientObject())
 		{
 			RakNet::BitStream bitStream;
 			bitStream.Write((RakNet::MessageID) ID_NETWORK_OBJECT_UPDATE);
@@ -110,23 +110,16 @@ void Client::onTick(TickEvent *e)
 				RakNet::NetworkID playerNetworkID; bitStream.Read(playerNetworkID);
 				bool isLocalPlayer = playerGUID == getGUID();
 
-				Vector2F position, velocity;
-				bitStream.Read(position.x);
-				bitStream.Read(position.y);
-				bitStream.Read(velocity.x);
-				bitStream.Read(velocity.y);
-
 				// Create player
 				Json::Value attributes;
 				attributes["name"] = playerName;
-				attributes["local"] = isLocalPlayer;
 
 				Player *player = new Player(m_world, attributes);
 				player->SetNetworkIDManager(&m_networkIDManager);
 				player->SetNetworkID(playerNetworkID);
-				//player->unpackData(&bitStream, this);
-				player->setPosition(position); // Make sure lastPosition == position
-				player->setVelocity(velocity);
+				player->setOriginGUID(playerGUID);
+				player->unpackData(&bitStream, this);
+				player->setPosition(player->getPosition()); // Make sure lastPosition == position
 
 				// Create player controller
 				PlayerController *playerController = new PlayerController(m_game, isLocalPlayer);
@@ -134,11 +127,18 @@ void Client::onTick(TickEvent *e)
 
 				// Add to client-side network objects
 				m_networkObjects.push_back(player);
-				player->m_originGUID = playerGUID;
 
 				if(isLocalPlayer)
 				{
-					//m_game->getGameOverlay()->setPlayer(player);
+					uint storageSize; bitStream.Read(storageSize);
+					for(int i = 0; i < storageSize; i++)
+					{
+						ItemID item; bitStream.Read(item);
+						int amount;  bitStream.Read(amount);
+						player->getStorage()->addItem(item, amount);
+					}
+
+
 					m_world->getCamera()->setTargetEntity(player);
 					m_world->m_localPlayer = player;
 
@@ -242,6 +242,7 @@ void Client::onTick(TickEvent *e)
 			}
 			break;
 
+			// Apply server correction
 			case ID_NETWORK_OBJECT_UPDATE:
 			{
 				RakNet::BitStream bitStream(packet->data, packet->length, false);

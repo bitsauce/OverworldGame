@@ -5,6 +5,7 @@
 #include "Game/Game.h"
 
 Entity::Entity(World *world, const string &entityName, const Json::Value &attributes) :
+	NetworkObject(world->getConnection()),
 	m_world(world),
 	m_data(EntityData::GetByName(entityName)),
 	m_acceleration(0.0f, 0.0f),

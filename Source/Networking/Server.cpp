@@ -67,7 +67,7 @@ void Server::onTick(TickEvent *e)
 		bitStream.Write((RakNet::MessageID) ID_NETWORK_OBJECT_UPDATE);
 		bitStream.Write(object->GetNetworkID());
 		object->packData(&bitStream, this);
-		assert(m_rakPeer->Send(&bitStream, LOW_PRIORITY, RELIABLE_ORDERED, 0, object->m_originGUID, true) != 0);
+		assert(m_rakPeer->Send(&bitStream, LOW_PRIORITY, RELIABLE_ORDERED, 0, object->getOriginGUID(), true) != 0);
 	}
 
 	for(RakNet::Packet *packet = m_rakPeer->Receive(); packet; m_rakPeer->DeallocatePacket(packet), packet = m_rakPeer->Receive())
@@ -93,9 +93,10 @@ void Server::onTick(TickEvent *e)
 				// Create player
 				Json::Value attributes;
 				attributes["name"] = playerName;
-				attributes["local"] = false;
+
 				Player *player = new Player(m_world, attributes);
 				player->SetNetworkIDManager(&m_networkIDManager);
+				player->setOriginGUID(packet->guid);
 
 				// Create player controller
 				PlayerController *playerController = new PlayerController(m_game, false);
@@ -103,7 +104,6 @@ void Server::onTick(TickEvent *e)
 
 				// Add to list of network objects
 				m_networkObjects.push_back(player);
-				player->m_originGUID = packet->guid;
 
 				string playerFilePath = m_world->getWorldPath() + "/Players/" + playerName + ".obj";
 				if(util::fileExists(playerFilePath))
@@ -142,7 +142,7 @@ void Server::onTick(TickEvent *e)
 					bitStream.Write(packet->guid);
 					bitStream.Write(player->GetNetworkID());
 					player->packData(&bitStream, this);
-					assert(m_rakPeer->Send(&bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
+					assert(m_rakPeer->Send(&bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, true) != 0);
 
 					// Send players which are already on the server to the newly joined client
 					for(auto player : m_players)
@@ -153,6 +153,23 @@ void Server::onTick(TickEvent *e)
 						bitStream.Write(player.first);
 						bitStream.Write(player.second->GetNetworkID());
 						player.second->packData(&bitStream, this);
+						assert(m_rakPeer->Send(&bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, false) != 0);
+					}
+
+					{
+						// Brodcast the packet to all clients with the network id of the object added
+						RakNet::BitStream bitStream(packet->data, packet->length, true);
+						bitStream.Write(packet->guid);
+						bitStream.Write(player->GetNetworkID());
+						player->packData(&bitStream, this);
+						Storage *storage = player->getStorage();
+						bitStream.Write(storage->getSize());
+						for(int i = 0; i < storage->getSize(); i++)
+						{
+							Storage::Slot *slot = storage->getSlotAt(i);
+							bitStream.Write(slot->getItem());
+							bitStream.Write(slot->getAmount());
+						}
 						assert(m_rakPeer->Send(&bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, false) != 0);
 					}
 
@@ -253,18 +270,28 @@ void Server::onTick(TickEvent *e)
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
+				// Find network object by network id
 				RakNet::NetworkID id; bitStream.Read(id);
 				NetworkObject *object = m_networkIDManager.GET_OBJECT_FROM_ID<NetworkObject*>(id);
+
+				// If the object exists on the server
 				if(object)
 				{
-					if(!object->unpackData(&bitStream, this))
+					// Unpack data
+					if(object->unpackData(&bitStream, this))
 					{
-						// The server did not accept the client packet, send server-object state back to client
+						// Server accepted the packet, send server-object state to all clients except the origin
+						RakNet::BitStream bitStream(packet->data, packet->length, false);
+						assert(m_rakPeer->Send(&bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, true) != 0);
+					}
+					else
+					{
+						// The server did not accept the client packet, send server-object state to all clients
 						RakNet::BitStream bitStream;
 						bitStream.Write((RakNet::MessageID) ID_NETWORK_OBJECT_UPDATE);
 						bitStream.Write(object->GetNetworkID());
 						object->packData(&bitStream, this);
-						assert(m_rakPeer->Send(&bitStream, LOW_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, false) != 0);
+						assert(m_rakPeer->Send(&bitStream, LOW_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
 					}
 				}
 			}

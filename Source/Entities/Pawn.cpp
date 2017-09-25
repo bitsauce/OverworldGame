@@ -39,7 +39,6 @@ Pawn::Pawn(World *world, const string &entityName, const Json::Value &attributes
 	m_pointlight->setRadius(5.0f);
 	m_pointlight->setColor(Color::White);*/
 
-
 	m_spotlight = new Spotlight(m_world);
 	m_spotlight->setMobility(LightSource::DYNAMIC);
 	m_spotlight->setRadius(5.0f);
@@ -216,7 +215,7 @@ void Pawn::onTick(TickEvent *e)
 	}
 
 	// Item swaped?
-	ItemID currentItemID = m_equipedItemID;
+	ItemID currentItemID = isClientObject() ? getCurrentItem()->getItem() : m_equipedItemID;
 	if(m_prevItemID != currentItemID)
 	{
 		ItemData *item = ItemData::get(m_prevItemID);
@@ -230,7 +229,7 @@ void Pawn::onTick(TickEvent *e)
 	ItemData *item = ItemData::get(currentItemID);
 	if(item)
 	{
-		/*if(m_controller->getInputState(Controller::INPUT_USE_ITEM))
+		if(m_controller->getInputState(Controller::INPUT_USE_ITEM))
 		{
 			if(!m_lmbPressed)
 			{
@@ -243,7 +242,7 @@ void Pawn::onTick(TickEvent *e)
 			//m_humanoid.setPostAnimation(Humanoid::ANIM_NULL);
 			m_lmbPressed = false;
 		}
-		item->update(this, e->getDelta());*/
+		item->update(m_world, this, e->getDelta());
 	}
 
 	// Update animations // NOTE: Seems wierd to call onTick here...
@@ -256,7 +255,8 @@ void Pawn::onDraw(DrawEvent *e)
 	m_spotlight->setPosition(math::lerp(getLastPosition() + getSize() * 0.5f, getPosition() + getSize() * 0.5f, e->getAlpha()) / BLOCK_PXF);
 	m_spotlight->setDirection((Vector2F(m_world->getCamera()->getInputPosition()) - getCenter()).angle());
 
-	SpriteBatch *spriteBatch = (SpriteBatch*) e->getUserData();
+
+	SpriteBatch *spriteBatch = (SpriteBatch*)e->getUserData();
 	m_humanoid.draw(this, e->getGraphicsContext(), spriteBatch, e->getAlpha());
 	ItemData *item = ItemData::get(getCurrentItem()->getItem());
 	if(item)
@@ -302,7 +302,8 @@ bool Pawn::unpackData(RakNet::BitStream *bitStream, const Connection *conn)
 	else
 	{
 		// Lets move the player to their new (verified) position
-		moveTo(position); // TODO: These should be here, however they break position interpolation for the local client
+		setPosition(getLastPosition()); // Doing this ensures that players are interpolated correctly from their last position to their new position
+		moveTo(position); // TODO: Not really a pretty solution
 		setVelocity(velocity);
 
 	}

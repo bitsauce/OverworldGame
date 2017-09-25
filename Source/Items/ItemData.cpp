@@ -121,7 +121,7 @@ void ItemData::init(Overworld *game)
 		}
 		else if(itemDataDesc->type == "pickaxe")
 		{
-			itemData = new Pickaxe(game, itemDataDesc);
+			itemData = new Pickaxe(itemDataDesc);
 		}
 		else if(itemDataDesc->type == "torch")
 		{
