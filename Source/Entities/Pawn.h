@@ -15,6 +15,7 @@ class Overworld;
 class GameOverlay;
 class Pointlight;
 class Spotlight;
+class Item;
 
 class Bag
 {
@@ -93,7 +94,8 @@ protected:
 	int m_selectedSlot;
 
 	// Equiped item
-	ItemID m_prevItemID, m_equipedItemID;
+	ItemID m_prevEquipedItemID, m_equipedItemID;
+	Item *m_equipedItem;
 
 	// Pawn health
 	int m_maxHealth;

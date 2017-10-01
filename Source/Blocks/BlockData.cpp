@@ -1,19 +1,14 @@
 #include "BlockData.h"
 #include "World/World.h"
 
-map<BlockID, BlockData*> BlockData::s_idToData;
+vector<BlockData*> BlockData::s_blockDataVector;
 map<string, BlockData*> BlockData::s_nameToData;
 TextureAtlas *BlockData::s_textureAtlas = nullptr;
 shared_ptr<Texture2D> BlockData::s_dataTexture = nullptr;
 
 BlockData *BlockData::get(const BlockID id)
 {
-	map<BlockID, BlockData*>::iterator itr;
-	if((itr = s_idToData.find(id)) != s_idToData.end())
-	{
-		return itr->second;
-	}
-	return 0;
+	return s_blockDataVector[id];
 }
 
 BlockData *BlockData::get(const string &name)
@@ -107,13 +102,15 @@ void BlockData::init()
 	Pixmap blockDataPixmap(blockDataDesc.size(), 2);
 	uchar pixelData[4];
 
+	s_blockDataVector.resize(blockDataDesc.size());
+
 	for(int i = 0; i < blockDataDesc.size(); i++)
 	{
 		BlockDataDesc *blockData = &blockDataDesc[i];
 
 		// Create block data object
 		Pixmap pixmap(blockData->imagePath, true);
-		s_nameToData[blockData->name] = s_idToData[blockData->id] = new BlockData(blockData->id, blockData->name, pixmap, blockData->itemName, blockData->opacity, blockData->solid);
+		s_blockDataVector[blockData->id] = s_nameToData[blockData->name] = new BlockData(blockData->id, blockData->name, pixmap, blockData->itemName, blockData->opacity, blockData->solid);
 		s_textureAtlas->add(util::intToStr(blockData->id), pixmap);
 
 		// Store meta data
@@ -159,5 +156,5 @@ BlockData::BlockData(const BlockID id, const string &name, const Pixmap &pixmap,
 
 ItemData *BlockData::getItem() const
 {
-	return ItemData::getByName(m_itemName);
+	return ItemData::GetByName(m_itemName);
 }

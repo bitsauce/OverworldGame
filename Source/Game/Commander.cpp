@@ -138,7 +138,7 @@ void Commander::spawn(Chat *chat, vector<string> args)
 
 void Commander::give(Chat *chat, vector<string> args)
 {
-	ItemData *data = ItemData::getByName(args[0]);
+	ItemData *data = ItemData::GetByName(args[0]);
 	if(data == 0)
 	{
 		chat->insertMessage("No item named '" + args[0] + "'");

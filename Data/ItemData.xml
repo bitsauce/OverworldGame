@@ -1,6 +1,6 @@
 <items>
 	<i>
-		<id>1</id>
+		<id>0</id>
 		<name>grass_block_item</name>
 		<inventoryName>Grass Block</inventoryName>
 		<description>A block of grass</description>
@@ -13,7 +13,7 @@
 		</userData>
 	</i>
 	<i>
-		<id>2</id>
+		<id>1</id>
 		<name>dirt_block_item</name>
 		<inventoryName>Dirt Block</inventoryName>
 		<description>A block of dirt</description>
@@ -26,7 +26,7 @@
 		</userData>
 	</i>
 	<i>
-		<id>3</id>
+		<id>2</id>
 		<name>dirt_back_block_item</name>
 		<inventoryName>Dirt Backdrop</inventoryName>
 		<description>A block of dirt</description>
@@ -39,7 +39,7 @@
 		</userData>
 	</i>
 	<i>
-		<id>4</id>
+		<id>3</id>
 		<name>stone_block_item</name>
 		<inventoryName>Stone Block</inventoryName>
 		<description>A block of stone</description>
@@ -52,7 +52,7 @@
 		</userData>
 	</i>
 	<i>
-		<id>5</id>
+		<id>4</id>
 		<name>oak_block_item</name>
 		<inventoryName>Oak Block</inventoryName>
 		<description>A block of oak</description>
@@ -65,7 +65,7 @@
 		</userData>
 	</i>
 	<i>
-		<id>6</id>
+		<id>5</id>
 		<name>oak_leaves_block_item</name>
 		<inventoryName>Oak Leaves</inventoryName>
 		<description>A block of oak leaves</description>
@@ -79,7 +79,7 @@
 	</i>
 	
 	<i>
-		<id>7</id>
+		<id>6</id>
 		<name>iron_pickaxe_item</name>
 		<inventoryName>Iron Pickaxe</inventoryName>
 		<description>An iron pickaxe. Used for mining ores</description>
@@ -88,7 +88,7 @@
 		<maxStack>1</maxStack>
 	</i>
 	<i>
-		<id>8</id>
+		<id>7</id>
 		<name>iron_axe_item</name>
 		<inventoryName>Iron Axe</inventoryName>
 		<description>An iron axe. Used for chopping down trees</description>
@@ -97,7 +97,7 @@
 		<maxStack>1</maxStack>
 	</i>
 	<i>
-		<id>9</id>
+		<id>8</id>
 		<name>torch_item</name>
 		<inventoryName>Torch</inventoryName>
 		<description>Useful light source during night or when exploring dark areas</description>
@@ -109,7 +109,7 @@
     </userData>
 	</i>
 	<i>
-		<id>10</id>
+		<id>9</id>
 		<name>crafting_bench_item</name>
 		<inventoryName>Crafting Bench</inventoryName>
 		<description>For crafting the items of your dreams</description>
@@ -118,7 +118,7 @@
 		<maxStack>1</maxStack>
 	</i>
 	<i>
-		<id>11</id>
+		<id>10</id>
 		<name>red_currant_bush_item</name>
 		<inventoryName>Red Currant Bush</inventoryName>
 		<description>Pland and maintain to grow red currants</description>
@@ -127,7 +127,7 @@
 		<maxStack>1</maxStack>
 	</i>
 	<i>
-		<id>12</id>
+		<id>11</id>
 		<name>bow_item</name>
 		<inventoryName>Bow</inventoryName>
 		<description>Ranged weapon. Charge up to fire arrows further. Require arrows to use</description>
@@ -136,7 +136,7 @@
 		<maxStack>1</maxStack>
 	</i>
 	<i>
-		<id>13</id>
+		<id>12</id>
 		<name>arrow_item</name>
 		<inventoryName>Arrow</inventoryName>
 		<description>Common projectile for a bow</description>

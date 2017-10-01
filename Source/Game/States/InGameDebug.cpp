@@ -33,7 +33,7 @@
 InGameDebug::InGameDebug(GameState *gameState) :
 	m_game(Overworld::Get()),
 	m_world(dynamic_cast<InGameState*>(gameState)->getWorld()),
-	m_block(BlockData::s_idToData.cbegin()),
+	m_block(BlockData::s_blockDataVector.cbegin()),
 	m_enabled(false),
 	m_debugChunkLoader(false),
 	m_debugMode(DEBUG_MODE_DEFAULT),
@@ -196,7 +196,7 @@ void InGameDebug::onTick(TickEvent *e)
 					(int)floor(m_world->getCamera()->getInputPosition().x / BLOCK_PXF),
 					(int)floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF),
 					layer,
-					m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) ? m_block->second : BlockData::get(0),
+					m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) ? *m_block : BlockData::get(0),
 					true);
 			}
 		}
@@ -310,6 +310,24 @@ void InGameDebug::onDraw(DrawEvent *e)
 					}
 				}
 			}
+
+			if(m_game->getServer()->getWorld())
+			{
+				for(auto pawn : m_game->getServer()->getWorld()->getPawns())
+				{
+					Controller *controller = pawn->getController();
+					for(int i = 0; i < Controller::INPUT_COUNT; i++)
+					{
+						Vector2F position = pawn->getDrawPosition(e->getAlpha()) - (m_world->getCamera()->getCenter(e->getAlpha()) - context->getSize() * 0.5f) + Vector2F(58, -12);
+						Sprite inputIcon(m_inputIconsTexture, RectF(position.x, position.y + i * 12, 12, 12), Vector2F(6, 6), 0, TextureRegion(float(i) / Controller::INPUT_COUNT, 0, float(i + 1) / Controller::INPUT_COUNT, 1));
+						if(!controller->getInputState(i))
+						{
+							inputIcon.setColor(Color(127, 127, 127, 127));
+						}
+						spriteBatch->drawSprite(inputIcon);
+					}
+				}
+			}
 		}
 		break;
 	}
@@ -329,8 +347,8 @@ void InGameDebug::onDraw(DrawEvent *e)
 	{
 		case DEBUG_MODE_BLOCK_PAINTER:
 		{
-			m_blockPainterTexture->updatePixmap(m_block->second->getPixmap());
-			spriteBatch->drawText(Vector2F(5.0f, context->getHeight() - 48.0f), "Current block:   (" + util::intToStr(m_block->second->getID()) + ")\n" + "Current layer: " + (m_game->getInputManager()->getKeyState(SAUCE_KEY_LCTRL) ? "BACK" : (m_game->getInputManager()->getKeyState(SAUCE_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font.get());
+			m_blockPainterTexture->updatePixmap((*m_block)->getPixmap());
+			spriteBatch->drawText(Vector2F(5.0f, context->getHeight() - 48.0f), "Current block:   (" + util::intToStr((*m_block)->getID()) + ")\n" + "Current layer: " + (m_game->getInputManager()->getKeyState(SAUCE_KEY_LCTRL) ? "BACK" : (m_game->getInputManager()->getKeyState(SAUCE_KEY_LSHIFT) ? "FRONT" : "SCENE")), m_font.get());
 			Sprite blockSprite(m_blockPainterTexture, RectF(m_font->getStringWidth("Current block:"), context->getHeight() - 60.0f, 32.0f, 32.0f), Vector2F(0.0f, 0.0f), 0.0f, TextureRegion(0.0f, 1.0f / 3.0f, 1.0f, 1.0f));
 			spriteBatch->drawSprite(blockSprite);
 		}
@@ -580,9 +598,9 @@ void InGameDebug::nextBlock(InputEvent *e)
 	if(m_enabled && e->getType() == KeyEvent::DOWN)
 	{
 		m_block++;
-		if(m_block == BlockData::s_idToData.cend())
+		if(m_block == BlockData::s_blockDataVector.cend())
 		{
-			m_block = BlockData::s_idToData.cbegin();
+			m_block = BlockData::s_blockDataVector.cbegin();
 		}
 	}
 }
@@ -591,9 +609,9 @@ void InGameDebug::prevBlock(InputEvent *e)
 {
 	if(m_enabled && e->getType() == KeyEvent::DOWN)
 	{
-		if(m_block == BlockData::s_idToData.cbegin())
+		if(m_block == BlockData::s_blockDataVector.cbegin())
 		{
-			m_block = BlockData::s_idToData.cend();
+			m_block = BlockData::s_blockDataVector.cend();
 		}
 		m_block--;
 	}

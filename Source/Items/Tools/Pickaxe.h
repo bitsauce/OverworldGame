@@ -11,7 +11,7 @@ public:
 	Pickaxe(const ItemDataDesc *desc);
 	void equip(Pawn *player);
 	void unequip(Pawn *player);
-	void update(World *world, Pawn *player, const float delta);
+	void update(Pawn *player, World *world, const float delta);
 	void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha);
 
 private:

@@ -4,17 +4,16 @@
 #include "Config.h"
 #include "Items/ItemData.h"
 
-class Bow : public ItemData
+class Bow : public Item
 {
 public:
-	Bow(Overworld *game, const ItemDataDesc *desc);
-	void equip(Pawn *player);
-	void unequip(Pawn *player);
-	void update(Pawn *player, const float delta);
-	void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha);
+	Bow(World *world, Pawn *pawn);
+	void equip();
+	void unequip();
+	void update(const float delta);
+	void draw(SpriteBatch *spriteBatch, const float alpha);
 
 private:
-	Overworld * m_game;
 	Sprite m_sprite;
 	SpriteAnimation m_chargeAnim;
 	Resource<Texture2D> m_attachTexture;

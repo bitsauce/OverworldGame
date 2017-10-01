@@ -34,7 +34,7 @@ void Pickaxe::unequip(Pawn *player)
 	player->getHumanoid().clearAttachment(Humanoid::RIGHT_HAND);
 }
 
-void Pickaxe::update(World *world, Pawn *pawn, const float delta)
+void Pickaxe::update(Pawn *pawn, World *world, const float delta)
 {
 	// Get block input position
 	Vector2I position = world->getCamera()->getInputPosition();

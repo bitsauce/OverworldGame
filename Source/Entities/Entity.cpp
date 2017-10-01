@@ -28,8 +28,8 @@ Entity::Entity(World *world, const string &entityName, const Json::Value &attrib
 	if(attributes.isMember("position"))
 	{
 		const Json::Value &position = attributes["position"];
-		if(position.isMember("x")) m_position.x = position["x"].asFloat();
-		if(position.isMember("y")) m_position.y = position["y"].asFloat();
+		if(position.isMember("x")) m_lastPosition.x = m_position.x = position["x"].asFloat();
+		if(position.isMember("y")) m_lastPosition.y = m_position.y = position["y"].asFloat();
 	}
 
 	m_lastChunkPosition = math::floor(m_position / CHUNK_PXF);

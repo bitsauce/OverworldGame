@@ -60,9 +60,13 @@ void Client::onTick(TickEvent *e)
 	// Send input state
 	if(m_joinFinalized)
 	{
+		m_world->m_localPlayer->getController()->m_inputPosition = m_world->getCamera()->getInputPosition();
+
 		RakNet::BitStream bitStream;
 		bitStream.Write((RakNet::MessageID) ID_SEND_INPUT_STATE);
 		bitStream.Write(m_world->m_localPlayer->getController()->m_inputState);
+		bitStream.Write(m_world->m_localPlayer->getController()->m_inputPosition.x);
+		bitStream.Write(m_world->m_localPlayer->getController()->m_inputPosition.y);
 		sendPacket(&bitStream);
 	}
 
@@ -270,6 +274,8 @@ void Client::onTick(TickEvent *e)
 					Controller *controller = m_players[playerGuid]->getController();
 					uint inputState; bitStream.Read(inputState);
 					controller->m_inputState = inputState;
+					bitStream.Read(controller->m_inputPosition.x);
+					bitStream.Read(controller->m_inputPosition.y);
 				}
 			}
 			break;

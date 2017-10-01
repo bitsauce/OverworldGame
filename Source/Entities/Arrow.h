@@ -7,14 +7,14 @@
 class Arrow : public Entity
 {
 public:
-	Arrow(const Json::Value &attributes);
+	Arrow(World *world, const Json::Value &attributes);
 	void onDraw(DrawEvent *e);
 	bool plotTest(int x, int y);
 	void onTick(TickEvent *e);
 
 	static Arrow *Factory(const Json::Value &attributes)
 	{
-		return new Arrow(attributes);
+		return new Arrow(0, attributes);
 	}
 
 private:

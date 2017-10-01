@@ -60,7 +60,7 @@ private:
 	World *m_world;
 
 	// Paint block
-	map<BlockID, BlockData*>::const_iterator m_block;
+	vector<BlockData*>::const_iterator m_block;
 
 	// Random
 	Random m_random;

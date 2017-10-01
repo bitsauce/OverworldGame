@@ -44,7 +44,7 @@ private:
 	const bool m_solid;
 
 	// Static data
-	static map<BlockID, BlockData*> s_idToData;
+	static vector<BlockData*> s_blockDataVector;
 	static map<string, BlockData*> s_nameToData;
 	static TextureAtlas *s_textureAtlas;
 	static shared_ptr<Texture2D> s_dataTexture;

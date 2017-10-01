@@ -8,27 +8,28 @@
 #include "Weapons/Bow.h"
 #include "Weapons/Ammo.h"
 
-map<ItemID, ItemData*> ItemData::s_data;
+vector<ItemData*> ItemData::s_itemDataVector;
+map<string, ItemData*> ItemData::s_nameToData;
+
+Bow *makeBow(World*w, Pawn*p) { return new Bow(w, p); }
+
+function<Item*(World*, Pawn*)> getItemFactory(const string &itemName)
+{
+	if(itemName == "bow_item")
+	{
+		return makeBow;
+	}
+	return 0;
+}
 
 ItemData::ItemData(const ItemDataDesc *itemDataDesc) :
 	m_id(itemDataDesc->id),
 	m_name(itemDataDesc->name),
 	m_desc(itemDataDesc->desc),
 	m_maxStack(itemDataDesc->maxStack),
-	m_iconTexture(Resource<Texture2D>(itemDataDesc->icon))
+	m_iconTexture(Resource<Texture2D>(itemDataDesc->icon)),
+	m_factory(itemDataDesc->factory)
 {
-}
-
-ItemData *ItemData::getByName(const string &name)
-{
-	for(map<ItemID, ItemData*>::iterator itr = s_data.begin(); itr != s_data.end(); ++itr)
-	{
-		if(itr->second && itr->second->m_name == name)
-		{
-			return itr->second;
-		}
-	}
-	return 0;
 }
 
 void ItemData::init(Overworld *game)
@@ -78,7 +79,7 @@ void ItemData::init(Overworld *game)
 					}
 				}
 
-				ItemDataDesc itemDesc = { util::strToInt(id->GetText()), name->GetText(), invName->GetText(), desc->GetText(), type->GetText(), icon->GetText(), (uint)util::strToInt(maxStack->GetText()), userDataMap };
+				ItemDataDesc itemDesc = { util::strToInt(id->GetText()), name->GetText(), invName->GetText(), desc->GetText(), type->GetText(), icon->GetText(), (uint)util::strToInt(maxStack->GetText()), getItemFactory(name->GetText()), userDataMap };
 				itemDataDescs.push_back(itemDesc);
 			}
 			else
@@ -106,64 +107,11 @@ void ItemData::init(Overworld *game)
 		THROW("ItemData.xml is missing!");
 	}
 
+	s_itemDataVector.resize(itemDataDescs.size());
+
 	for(int i = 0; i < itemDataDescs.size(); i++)
 	{
-		ItemDataDesc *itemDataDesc = &itemDataDescs[i];
-
-		ItemData *itemData = 0;
-		if(itemDataDesc->type == "block_item")
-		{
-			itemData = new BlockItem(game, itemDataDesc);
-		}
-		else if(itemDataDesc->type == "axe")
-		{
-			itemData = new Axe(game, itemDataDesc);
-		}
-		else if(itemDataDesc->type == "pickaxe")
-		{
-			itemData = new Pickaxe(itemDataDesc);
-		}
-		else if(itemDataDesc->type == "torch")
-		{
-			itemData = new TorchItem(game, itemDataDesc);
-		}
-		else if(itemDataDesc->type == "block_entity_item")
-		{
-			itemData = new BlockEntityItem(game, itemDataDesc);
-		}
-		else if(itemDataDesc->type == "ammo")
-		{
-			itemData = new Ammo(itemDataDesc);
-		}
-		else if(itemDataDesc->type == "bow")
-		{
-			itemData = new Bow(game, itemDataDesc);
-		}
-		else
-		{
-			LOG("Unknown item type '%s'", itemDataDesc->type.c_str());
-		}
-		s_data[itemDataDesc->id] = itemData;
+		ItemDataDesc *desc = &itemDataDescs[i];
+		s_itemDataVector[desc->id] = s_nameToData[desc->name] = new ItemData(desc);
 	}
-
-#ifdef POTET
-	s_data[ITEM_NONE] = new ItemData();
-
-	(s_data[ITEM_BLOCK_GRASS] = new BlockItem(game, WORLD_LAYER_MIDDLE, BLOCK_GRASS))->set(ITEM_BLOCK_GRASS, "Grass", "A block of grass", "Sprites/ItemIcons/BlockGrass", 255);
-	(s_data[ITEM_BLOCK_DIRT] = new BlockItem(game, WORLD_LAYER_MIDDLE, BLOCK_DIRT))->set(ITEM_BLOCK_DIRT, "Dirt", "A block of dirt", "Sprites/ItemIcons/BlockDirt", 255);
-	(s_data[ITEM_BLOCK_DIRT_BACK] = new BlockItem(game, WORLD_LAYER_BACK, BLOCK_DIRT_BACK))->set(ITEM_BLOCK_DIRT_BACK, "Dirt backdrop", "", "Sprites/ItemIcons/BlockDirtBack", 255);
-	(s_data[ITEM_BLOCK_STONE] = new BlockItem(game, WORLD_LAYER_MIDDLE, BLOCK_STONE))->set(ITEM_BLOCK_STONE, "Stone", "A block of stone", "Sprites/ItemIcons/BlockStone", 255);
-	(s_data[ITEM_BLOCK_OAK_WOOD] = new BlockItem(game, WORLD_LAYER_BACK, BLOCK_OAK_WOOD))->set(ITEM_BLOCK_OAK_WOOD, "Oak wood", "A block of oak", "Sprites/ItemIcons/BlockOakWood", 255);
-	(s_data[ITEM_BLOCK_OAK_LEAVES] = new BlockItem(game, WORLD_LAYER_FRONT, BLOCK_OAK_LEAVES))->set(ITEM_BLOCK_OAK_LEAVES, "Oak leaves", "A pile of oak leaves", "Sprites/ItemIcons/BlockOakLeaves", 255);
-
-	(s_data[ITEM_PICKAXE_IRON] = new Pickaxe(game))->set(ITEM_PICKAXE_IRON, "Iron Pickaxe", "An iron pickaxe. Used for mining ores.", "Sprites/ItemIcons/Pickaxe_Iron", 1);
-	(s_data[ITEM_AXE_IRON] = new Axe(game))->set(ITEM_AXE_IRON, "Iron Axe", "An iron axe. Used for chopping down trees.", "Sprites/ItemIcons/Axe_Iron", 1);
-
-	(s_data[ITEM_TORCH] = new BlockEntityItem(game, BLOCK_ENTITY_TORCH))->set(ITEM_TORCH, "Torch", "Useful light source during night or when exploring dark areas.", "Sprites/ItemIcons/Torch", 255);
-	(s_data[ITEM_CRAFTING_BENCH] = new BlockEntityItem(game, /*ENTITY_CRAFTING_BENCH*/BLOCK_ENTITY_TORCH))->set(ITEM_CRAFTING_BENCH, "Crafting Bench", "For crafting the items of your dreams", "Sprites/ItemIcons/CraftingBench", 1);
-	(s_data[ITEM_RED_CURRANT_BUSH] = new BlockEntityItem(game, /*ENTITY_RED_CURRANT_BUSH*/BLOCK_ENTITY_TORCH))->set(ITEM_RED_CURRANT_BUSH, "Red Currant Bush", "Grows red currants", "Sprites/ItemIcons/Torch", 255);
-	
-	(s_data[ITEM_BOW_WOODEN] = new Bow(game))->set(ITEM_BOW_WOODEN, "Bow", "Ranged weapon. Charge up to fire arrows further. Require arrows to use.", "Sprites/ItemIcons/Bow", 1);
-	(s_data[ITEM_ARROW] = new Ammo(game))->set(ITEM_ARROW, "Arrow", "Common projectile for a bow.", "Sprites/ItemIcons/Arrow", 255);
-#endif
 }

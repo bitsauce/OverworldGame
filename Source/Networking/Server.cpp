@@ -128,12 +128,12 @@ void Server::onTick(TickEvent *e)
 					}
 
 					// Give default load out
-					player->getStorage()->addItem(ItemData::getByName("iron_pickaxe_item")->getID());
-					player->getStorage()->addItem(ItemData::getByName("iron_axe_item")->getID());
-					player->getStorage()->addItem(ItemData::getByName("bow_item")->getID());
-					//player->getStorage()->addItem(ItemData::getByName("crafting_bench_item")->getID());
-					player->getStorage()->addItem(ItemData::getByName("torch_item")->getID(), 255);
-					player->getStorage()->addItem(ItemData::getByName("arrow_item")->getID(), 255);
+					//player->getStorage()->addItem(ItemData::GetByName("iron_pickaxe_item")->getID());
+					//player->getStorage()->addItem(ItemData::GetByName("iron_axe_item")->getID());
+					player->getStorage()->addItem(ItemData::GetByName("bow_item")->getID());
+					//player->getStorage()->addItem(ItemData::GetByName("crafting_bench_item")->getID());
+					//player->getStorage()->addItem(ItemData::GetByName("torch_item")->getID(), 255);
+					player->getStorage()->addItem(ItemData::GetByName("arrow_item")->getID(), 255);
 				}
 
 				{
@@ -302,13 +302,18 @@ void Server::onTick(TickEvent *e)
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 				uint inputState; bitStream.Read(inputState);
-				m_players[packet->guid]->getController()->m_inputState = inputState;
+				Controller *controller = m_players[packet->guid]->getController();
+				controller->m_inputState = inputState;
+				bitStream.Read(controller->m_inputPosition.x);
+				bitStream.Read(controller->m_inputPosition.y);
 
 				{
 					RakNet::BitStream outStream;
 					outStream.Write((RakNet::MessageID)ID_SEND_INPUT_STATE);
 					outStream.Write(packet->guid);
 					outStream.Write(inputState);
+					outStream.Write(controller->m_inputPosition.x);
+					outStream.Write(controller->m_inputPosition.y);
 					assert(m_rakPeer->Send(&outStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, true) != 0);
 				}
 			}

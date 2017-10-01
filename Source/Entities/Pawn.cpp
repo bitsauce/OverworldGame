@@ -25,8 +25,9 @@ Pawn::Pawn(World *world, const string &entityName, const Json::Value &attributes
 	m_lmbPressed(false),
 	m_storage(10),
 	m_bag(new Bag(20, 5)),
-	m_prevItemID(ITEM_NONE),
+	m_prevEquipedItemID(ITEM_NONE),
 	m_equipedItemID(ITEM_NONE),
+	m_equipedItem(0),
 	m_selectedSlot(0),
 	m_jumpForce(20.0f),
 	m_jumpEase(1.5f),
@@ -216,24 +217,21 @@ void Pawn::onTick(TickEvent *e)
 
 	// Item swaped?
 	ItemID currentItemID = isClientObject() ? getCurrentItem()->getItem() : m_equipedItemID;
-	if(m_prevItemID != currentItemID)
+	if(m_prevEquipedItemID != currentItemID)
 	{
-		ItemData *item = ItemData::get(m_prevItemID);
-		if(item) item->unequip(this);
-		item = ItemData::get(currentItemID);
-		if(item) item->equip(this);
-		m_prevItemID = currentItemID;
+		if(m_equipedItem) { m_equipedItem->unequip(); delete m_equipedItem; }
+		m_equipedItem = ItemData::Create(currentItemID, m_world, this); if(m_equipedItem) m_equipedItem->equip();
+		m_prevEquipedItemID = currentItemID;
 	}
 
 	// Use current item
-	ItemData *item = ItemData::get(currentItemID);
-	if(item)
+	if(m_connection->isClient() && m_equipedItem)
 	{
 		if(m_controller->getInputState(Controller::INPUT_USE_ITEM))
 		{
 			if(!m_lmbPressed)
 			{
-				item->use(this, e->getDelta());
+				m_equipedItem->use(e->getDelta());
 			}
 			m_lmbPressed = true;
 		}
@@ -242,7 +240,7 @@ void Pawn::onTick(TickEvent *e)
 			//m_humanoid.setPostAnimation(Humanoid::ANIM_NULL);
 			m_lmbPressed = false;
 		}
-		item->update(m_world, this, e->getDelta());
+		m_equipedItem->update(e->getDelta());
 	}
 
 	// Update animations // NOTE: Seems wierd to call onTick here...
@@ -255,13 +253,12 @@ void Pawn::onDraw(DrawEvent *e)
 	m_spotlight->setPosition(math::lerp(getLastPosition() + getSize() * 0.5f, getPosition() + getSize() * 0.5f, e->getAlpha()) / BLOCK_PXF);
 	m_spotlight->setDirection((Vector2F(m_world->getCamera()->getInputPosition()) - getCenter()).angle());
 
-
 	SpriteBatch *spriteBatch = (SpriteBatch*)e->getUserData();
 	m_humanoid.draw(this, e->getGraphicsContext(), spriteBatch, e->getAlpha());
-	ItemData *item = ItemData::get(getCurrentItem()->getItem());
-	if(item)
+
+	if(m_equipedItem)
 	{
-		item->draw(this, spriteBatch, e->getAlpha());
+		m_equipedItem->draw(spriteBatch, e->getAlpha());
 	}
 }
 

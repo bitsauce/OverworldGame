@@ -21,6 +21,19 @@ Chunk::Chunk(ChunkManager *chunkManager) :
 	m_blockEntities = new BlockEntity*[CHUNK_BLOCKS * CHUNK_BLOCKS * WORLD_LAYER_COUNT];
 	m_blockTexture = shared_ptr<Texture2D>(new Texture2D(CHUNK_BLOCKS, CHUNK_BLOCKS));
 
+	// Set all blocks
+	for(int z = 0; z < WORLD_LAYER_COUNT; ++z)
+	{
+		for(int y = 0; y < CHUNK_BLOCKS; ++y)
+		{
+			for(int x = 0; x < CHUNK_BLOCKS; ++x)
+			{
+				m_blocks[BLOCK_INDEX(x, y, z)] = 0;
+				m_blockEntities[BLOCK_INDEX(x, y, z)] = 0;
+			}
+		}
+	}
+
 	uchar data[4] = { 0 };
 	Random rand;
 	Pixmap pixmap(CHUNK_BLOCKS, CHUNK_BLOCKS);

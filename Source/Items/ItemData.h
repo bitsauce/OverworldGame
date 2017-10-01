@@ -7,6 +7,7 @@
 
 class Pawn;
 class World;
+class Item;
 
 struct ItemDataDesc
 {
@@ -17,7 +18,30 @@ struct ItemDataDesc
 	const string type;
 	const string icon;
 	const uint maxStack;
+	const function<Item*(World*, Pawn*)> factory;
 	const map<string, string> userData;
+};
+
+class Item
+{
+public:
+	Item(World *world, Pawn *pawn) :
+		m_world(world),
+		m_pawn(pawn)
+	{
+	}
+
+	virtual ~Item() { }
+
+	virtual void equip() { }
+	virtual void unequip() { }
+	virtual void use(const float delta) { }
+	virtual void update(const float delta) { }
+	virtual void draw(SpriteBatch *spriteBatch, const float alpha) { }
+
+protected:
+	World *const m_world;
+	Pawn *const m_pawn;
 };
 
 class ItemData
@@ -25,15 +49,32 @@ class ItemData
 	friend class Overworld;
 public:
 	ItemData(const ItemDataDesc *);
-	
-	virtual void equip(Pawn *pawn) { }
-	virtual void unequip(Pawn *pawn) { }
-	virtual void use(Pawn *pawn, const float delta) { }
-	virtual void update(World *world, Pawn *pawn, const float delta) { }
-	virtual void draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha) { }
 
-	static ItemData *get(const ItemID id) { return s_data[id]; }
-	static ItemData *getByName(const string &name);
+	static ItemData *Get(const ItemID id)
+	{
+		return s_itemDataVector[id];
+	}
+
+	static ItemData *GetByName(const string &name)
+	{
+		map<string, ItemData*>::iterator itr = s_nameToData.find(name);
+		if(itr == s_nameToData.end())
+		{
+			THROW("Could not find entity with name=%s", name.c_str());
+		}
+		return itr->second;
+	}
+
+	static Item *Create(const ItemID id, World *world, Pawn *pawn)
+	{
+		if(Get(id)->m_factory)
+			return Get(id)->m_factory(world, pawn); else return 0;
+	}
+
+	static Item *CreateByName(const string &name, World *world, Pawn *pawn)
+	{
+		return GetByName(name)->m_factory(world, pawn);
+	}
 
 	ItemID getID() const { return m_id; }
 	Resource<Texture2D> getIconTexture() const { return m_iconTexture; }
@@ -48,9 +89,12 @@ private:
 	uint m_maxStack;
 	Resource<Texture2D> m_iconTexture;
 	//map<string, string> m_userData;
+	function<Item*(World*, Pawn*)> m_factory;
+	
 
 	static void init(Overworld *game);
-	static map<ItemID, ItemData*> s_data;
+	static vector<ItemData*> s_itemDataVector;
+	static map<string, ItemData*> s_nameToData;
 };
 
 #endif // ITEM_DATA_H

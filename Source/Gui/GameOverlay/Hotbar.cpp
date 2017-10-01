@@ -84,7 +84,7 @@ void Hotbar::onDraw(DrawEvent *e)
 		// Check if mouse is hovering over this item
 		if(!slot->isEmpty() && RectF(sprite.getPosition(), sprite.getSize()).contains(m_mousePosition))
 		{
-			ItemData *itemData = ItemData::get(slot->getItem());
+			ItemData *itemData = ItemData::Get(slot->getItem());
 			m_itemDescFont->drawBox(spriteBatch, sprite.getPosition() - Vector2F(0.0f, m_itemDescFont->getHeight() * 2), 200, itemData->getDesc());
 			m_itemDescFont->draw(spriteBatch, sprite.getPosition() - Vector2F(0.0f, m_itemDescFont->getHeight()*3), itemData->getName());
 		}
