@@ -1,6 +1,13 @@
 # OverworldGame
 Overworld is a 2D tile based sandbox game. Runs on the [SuperSauce Engine](https://github.com/bitsauce/Sauce-Engine).
 
+Current features include:
+* Infinite world generation using the GPU
+* Breakable terrain
+* Items
+* In-game UI with chat
+* Client-server networking (using RakNet)
+
 # Screenshots
 #### Latest changes:
 
