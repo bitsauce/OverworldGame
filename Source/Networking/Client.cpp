@@ -14,6 +14,7 @@
 #include "Game/Game.h"
 #include "World/World.h"
 
+#include "Entities/EntityData.h"
 #include "Entities/Player.h"
 #include "PlayerController.h"
 
@@ -71,14 +72,15 @@ void Client::onTick(TickEvent *e)
 	}
 
 	// Send corrections of client-side objects to server
-	for(NetworkObject *object : m_networkObjects)
+	for(Entity *object : m_networkEntities)
 	{
 		if(object->isClientObject())
 		{
 			RakNet::BitStream bitStream;
 			bitStream.Write((RakNet::MessageID) ID_NETWORK_OBJECT_UPDATE);
 			bitStream.Write(object->GetNetworkID());
-			object->packData(&bitStream, this);
+			bitStream.Write(object->getData()->getID());
+			object->packData(&bitStream);
 			sendPacket(&bitStream);
 		}
 	}
@@ -118,9 +120,7 @@ void Client::onTick(TickEvent *e)
 				Json::Value attributes;
 				attributes["name"] = playerName;
 
-				Player *player = new Player(m_world, attributes);
-				player->SetNetworkIDManager(&m_networkIDManager);
-				player->SetNetworkID(playerNetworkID);
+				Player *player = createEntity<Player>(attributes, playerNetworkID);
 				player->setOriginGUID(playerGUID);
 				player->unpackData(&bitStream, this);
 				player->setPosition(player->getPosition()); // Make sure lastPosition == position
@@ -128,9 +128,6 @@ void Client::onTick(TickEvent *e)
 				// Create player controller
 				PlayerController *playerController = new PlayerController(m_game, isLocalPlayer);
 				player->setController(playerController);
-
-				// Add to client-side network objects
-				m_networkObjects.push_back(player);
 
 				if(isLocalPlayer)
 				{
@@ -210,29 +207,28 @@ void Client::onTick(TickEvent *e)
 			}
 			break;
 
-			case ID_CREATE_ENTITY:
+			/*case ID_CREATE_ENTITY:
 			{
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
-				EntityID entityID; bitStream.Read(entityID);
+				// Get name and attributes
+				string name; bitStream.Read(name);
+				string attributesStr; bitStream.Read(attributesStr);
 				RakNet::NetworkID networkID; bitStream.Read(networkID);
-				RakNet::RakNetGUID guid; bitStream.Read(guid);
+				RakNet::RakNetGUID originGUID; bitStream.Read(originGUID);
 
-				switch(entityID)
-				{
-					case 1:
-					{
-						// Create player
-						Player *player = new Player(m_world, Json::Value());
-						player->SetNetworkIDManager(&m_networkIDManager);
-						player->SetNetworkID(networkID);
-						player->setController(new PlayerController(m_game, false));
-					}
-					break;
-				}
+				// Parse attributes
+				Json::Reader reader; Json::Value attributes;
+				reader.parse(attributesStr, attributes);
+
+				// Create and setup entity
+				Entity *entity = EntityData::CreateByName(m_world, name);
+				entity->SetNetworkIDManager(&m_networkIDManager);
+				entity->SetNetworkID(networkID);
+				entity->setOriginGUID(originGUID);
 			}
-			break;
+			break;*/
 
 			case ID_SET_BLOCK:
 			{
@@ -252,11 +248,33 @@ void Client::onTick(TickEvent *e)
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
-				RakNet::NetworkID id; bitStream.Read(id);
-				NetworkObject *object = m_networkIDManager.GET_OBJECT_FROM_ID<NetworkObject*>(id);
+				RakNet::NetworkID networkID; bitStream.Read(networkID);
+				Entity *object = m_networkIDManager.GET_OBJECT_FROM_ID<Entity*>(networkID);
 				if(object)
 				{
-					object->unpackData(&bitStream, this);
+					bitStream.IgnoreBytes(sizeof(EntityID));
+					object->unpackData(&bitStream, true);
+				}
+				else
+				{
+					// Object doesn't exist on the client, create it
+					EntityID entityID; bitStream.Read(entityID);
+					if(entityID != 1) // TODO: Try to fix. Shouldn't receive update packets from players before we're ready maybe?
+					{
+						Entity *entity = createEntityByID(entityID, networkID);
+
+						RakNet::RakNetGUID guid; bitStream.Read(guid);
+						entity->setOriginGUID(guid);
+
+						entity->unpackData(&bitStream, true);
+
+						LOG("Creating server object");
+
+						// Send packet to all clients except the origin
+						RakNet::BitStream outStream(packet->data, packet->length, true);
+						outStream.Write(packet->guid);
+						assert(m_rakPeer->Send(&outStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, true) != 0);
+					}
 				}
 			}
 			break;
@@ -291,3 +309,33 @@ void Client::sendPacket(RakNet::BitStream *bitStream)
 {
 	assert(m_rakPeer->Send(bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
 }
+
+/*Entity *Client::createEntity(const string &name)
+{
+	// NOTE TO SELF: This function might be useful if I want entities
+	// which are not networked. Add every entity that is create with
+	// this function to a list, and those will be the networked entities
+	// while it's still possible to create entities outside this function.
+
+	// Create entity locally, and setup
+	Entity *entity = EntityData::CreateByName(m_world, name);
+	entity->SetNetworkIDManager(&m_networkIDManager);
+	entity->setOriginGUID(getGUID());
+
+	// --- Packet format ---
+	// data[0]: ID_CREATE_ENTITY
+	// data[1]: Entity ID
+	// data[2]: Entity Network ID
+	// data[3+n]: Data for server-side entity initialization
+	RakNet::BitStream bitStream;
+	bitStream.Write((RakNet::MessageID) ID_CREATE_ENTITY);
+	bitStream.Write(entity->getData()->getID());
+	bitStream.Write(entity->GetNetworkID());
+	entity->packData(&bitStream, this);
+
+	// Send packet
+	sendPacket(&bitStream);
+
+	// Return entity
+	return entity;
+}*/

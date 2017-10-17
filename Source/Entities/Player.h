@@ -6,15 +6,8 @@
 
 class Player : public Pawn
 {
+	DECLARE_ENTITY(Player)
 public:
-	Player(World *world, const Json::Value &attributes);
-	~Player();
-
-	static Entity *Factory(const Json::Value &attributes)
-	{
-		return new Player(0, attributes);
-	}
-
 	string getName() const
 	{
 		return m_name;

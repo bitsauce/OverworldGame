@@ -78,7 +78,7 @@ void Bow::update(const float delta)
 			attributes["speed"] = 45.0f * min(m_chargeTime, 1.0f);
 			attributes["position"]["x"] = aimCenter.x;
 			attributes["position"]["y"] = aimCenter.y;
-			new Arrow(m_world, attributes);
+			m_world->getConnection()->createEntity<Arrow>(attributes);
 		}
 		m_chargeTime = 0.0f;
 		m_charging = false;

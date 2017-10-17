@@ -5,8 +5,8 @@
 #include "Items/ItemData.h"
 #include "Entities/EntityData.h"
 
-ItemDrop::ItemDrop(const Json::Value &attributes) :
-	Entity(0, "ItemDrop", attributes),
+/*ItemDrop::ItemDrop(World *world, const Json::Value &attributes) :
+	Entity(world, attributes),
 	m_noPickupTime(1.0f), // No pickup for 1 s
 	m_dragDistance(16.0f * BLOCK_PXF),
 	m_pickupDistance(16.0f),
@@ -63,4 +63,4 @@ void ItemDrop::onDraw(DrawEvent *e)
 		Vector2F(24.0f)),
 		Vector2F(), 0.0f, TextureRegion())
 		);
-}
+}*/

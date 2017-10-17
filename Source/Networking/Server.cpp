@@ -61,12 +61,13 @@ void Server::onTick(TickEvent *e)
 	m_world->onTick(e);
 
 	// Send corrections for server-side objects to clients
-	for(NetworkObject *object : m_networkObjects)
+	for(Entity *object : m_networkEntities)
 	{
 		RakNet::BitStream bitStream;
 		bitStream.Write((RakNet::MessageID) ID_NETWORK_OBJECT_UPDATE);
 		bitStream.Write(object->GetNetworkID());
-		object->packData(&bitStream, this);
+		bitStream.Write(object->getData()->getID());
+		object->packData(&bitStream);
 		assert(m_rakPeer->Send(&bitStream, LOW_PRIORITY, RELIABLE_ORDERED, 0, object->getOriginGUID(), true) != 0);
 	}
 
@@ -94,16 +95,12 @@ void Server::onTick(TickEvent *e)
 				Json::Value attributes;
 				attributes["name"] = playerName;
 
-				Player *player = new Player(m_world, attributes);
-				player->SetNetworkIDManager(&m_networkIDManager);
+				Player *player = createEntity<Player>(attributes);
 				player->setOriginGUID(packet->guid);
 
 				// Create player controller
 				PlayerController *playerController = new PlayerController(m_game, false);
 				player->setController(playerController);
-
-				// Add to list of network objects
-				m_networkObjects.push_back(player);
 
 				string playerFilePath = m_world->getWorldPath() + "/Players/" + playerName + ".obj";
 				if(util::fileExists(playerFilePath))
@@ -141,7 +138,7 @@ void Server::onTick(TickEvent *e)
 					RakNet::BitStream bitStream(packet->data, packet->length, true);
 					bitStream.Write(packet->guid);
 					bitStream.Write(player->GetNetworkID());
-					player->packData(&bitStream, this);
+					player->packData(&bitStream);
 					assert(m_rakPeer->Send(&bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, true) != 0);
 
 					// Send players which are already on the server to the newly joined client
@@ -152,7 +149,7 @@ void Server::onTick(TickEvent *e)
 						bitStream.Write(player.second->getName().c_str());
 						bitStream.Write(player.first);
 						bitStream.Write(player.second->GetNetworkID());
-						player.second->packData(&bitStream, this);
+						player.second->packData(&bitStream);
 						assert(m_rakPeer->Send(&bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, false) != 0);
 					}
 
@@ -161,7 +158,7 @@ void Server::onTick(TickEvent *e)
 						RakNet::BitStream bitStream(packet->data, packet->length, true);
 						bitStream.Write(packet->guid);
 						bitStream.Write(player->GetNetworkID());
-						player->packData(&bitStream, this);
+						player->packData(&bitStream);
 						Storage *storage = player->getStorage();
 						bitStream.Write(storage->getSize());
 						for(int i = 0; i < storage->getSize(); i++)
@@ -216,7 +213,7 @@ void Server::onTick(TickEvent *e)
 
 				savePlayer(m_players[packet->guid]);
 
-				delete m_players[packet->guid];
+				//delete m_players[packet->guid];
 				m_players.erase(packet->guid);
 			}
 			break;
@@ -233,37 +230,6 @@ void Server::onTick(TickEvent *e)
 			}
 			break;
 
-			case ID_CREATE_ENTITY:
-			{
-				RakNet::BitStream bitStream(packet->data, packet->length, false);
-				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
-
-				// Get entity
-				EntityID entity;
-				bitStream.Read(entity);
-
-				NetworkObject *netObj;
-
-				switch(entity)
-				{
-					/*case ENTITY_ZOMBIE:
-					{
-						Zombie *zombie = new Zombie(m_world);
-						zombie->setPosition(m_players.begin()->second->getPosition());
-						netObj = zombie;
-					}*/
-				}
-
-				{
-					// Brodcast the packet to all clients with the network id of the object added
-					RakNet::BitStream bitStream(packet->data, packet->length, true);
-					bitStream.Write(netObj->GetNetworkID());
-					bitStream.Write(packet->guid);
-					sendPacket(&bitStream);
-				}
-			}
-			break;
-
 			// Client want to correct the server
 			case ID_NETWORK_OBJECT_UPDATE:
 			{
@@ -271,14 +237,15 @@ void Server::onTick(TickEvent *e)
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 
 				// Find network object by network id
-				RakNet::NetworkID id; bitStream.Read(id);
-				NetworkObject *object = m_networkIDManager.GET_OBJECT_FROM_ID<NetworkObject*>(id);
+				RakNet::NetworkID networkID; bitStream.Read(networkID);
+				Entity *object = m_networkIDManager.GET_OBJECT_FROM_ID<Entity*>(networkID);
 
-				// If the object exists on the server
+				// Check if the object exists on the server
 				if(object)
 				{
 					// Unpack data
-					if(object->unpackData(&bitStream, this))
+					bitStream.IgnoreBytes(sizeof(EntityID));
+					if(object->unpackData(&bitStream, false))
 					{
 						// Server accepted the packet, send server-object state to all clients except the origin
 						RakNet::BitStream bitStream(packet->data, packet->length, false);
@@ -290,9 +257,24 @@ void Server::onTick(TickEvent *e)
 						RakNet::BitStream bitStream;
 						bitStream.Write((RakNet::MessageID) ID_NETWORK_OBJECT_UPDATE);
 						bitStream.Write(object->GetNetworkID());
-						object->packData(&bitStream, this);
+						object->packData(&bitStream);
 						assert(m_rakPeer->Send(&bitStream, LOW_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
 					}
+				}
+				else
+				{
+					// Object doesn't exist on the server, create it
+					EntityID entityID; bitStream.Read(entityID);
+					object = createEntityByID(entityID, networkID);
+					object->setOriginGUID(packet->guid);
+					object->unpackData(&bitStream, true);
+
+					LOG("Creating server object");
+
+					// Send packet to all clients except the origin
+					RakNet::BitStream outStream(packet->data, packet->length, true);
+					outStream.Write(packet->guid);
+					assert(m_rakPeer->Send(&outStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, true) != 0);
 				}
 			}
 			break;

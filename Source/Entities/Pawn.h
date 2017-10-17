@@ -41,7 +41,7 @@ private:
 class Pawn : public Entity
 {
 public:
-	Pawn(World *world, const string &entityName, const Json::Value &attributes);
+	Pawn(World *world, const Json::Value &attributes);
 	virtual ~Pawn();
 
 	void setController(Controller *controller);
@@ -62,8 +62,8 @@ public:
 	virtual void onTick(TickEvent *e);
 	virtual void onDraw(DrawEvent *e);
 
-	void packData(RakNet::BitStream *bitStream, const Connection *conn);
-	bool unpackData(RakNet::BitStream *bitStream, const Connection *conn);
+	void packData(RakNet::BitStream *bitStream);
+	bool unpackData(RakNet::BitStream *bitStream, const bool force);
 
 	void createSaveData(FileWriter &saveData);
 	void loadSaveData(FileReader &saveData);

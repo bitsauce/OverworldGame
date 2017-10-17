@@ -1,0 +1,10 @@
+{
+  "Player": {
+    "id": 1,
+    "layer": "middle"
+  },
+  "Arrow": {
+    "id": 2,
+    "layer": "back"
+  }
+}

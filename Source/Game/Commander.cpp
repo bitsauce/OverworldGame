@@ -130,7 +130,7 @@ void Commander::spawn(Chat *chat, vector<string> args)
 	}
 
 	// Create entity by name
-	Entity *entity = EntityData::CreateByName(args[0], attributes);
+//	Entity *entity = m_game->getClient()->createEntityByName(args[0], attributes);
 
 	// Insert chat message
 	chat->insertMessage(args[0] + " spawned");

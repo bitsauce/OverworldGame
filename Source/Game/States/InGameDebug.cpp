@@ -32,7 +32,7 @@
 
 InGameDebug::InGameDebug(GameState *gameState) :
 	m_game(Overworld::Get()),
-	m_world(dynamic_cast<InGameState*>(gameState)->getWorld()),
+	m_world(0),
 	m_block(BlockData::s_blockDataVector.cbegin()),
 	m_enabled(false),
 	m_debugChunkLoader(false),
@@ -47,6 +47,9 @@ InGameDebug::InGameDebug(GameState *gameState) :
 	m_moveCount(0),
 	m_inputIconsTexture("Sprites/Debug/InputIcons")
 {
+	// Set camera
+	m_camera = m_game->getClient()->getWorld()->getCamera();
+
 	// Make default block not the empty block
 	m_block++;
 
@@ -66,7 +69,15 @@ void InGameDebug::debugFunction(InputEvent *_e)
 	switch(e->getKeycode())
 	{
 		// Toggle debug
-		case SAUCE_KEY_F1: toggle(); break;
+		case SAUCE_KEY_F1:
+		{
+			if(!m_enabled)
+			{
+				m_world = !m_game->getInputManager()->getKeyState(SAUCE_KEY_LSHIFT) ? m_game->getClient()->getWorld() : m_game->getServer()->getWorld();
+			}
+			m_enabled = !m_enabled;
+		}
+		break;
 
 			// Toggle lighting
 		case SAUCE_KEY_F2:
@@ -137,22 +148,21 @@ void InGameDebug::debugFunction(InputEvent *_e)
 		// Attach/detach camera
 		case SAUCE_KEY_F10:
 		{
-			Camera *camera = m_world->getCamera();
-			if(camera->getTargetEntity())
+			if(m_camera->getTargetEntity())
 			{
 				// Detach camera
-				camera->setTargetEntity(nullptr);
+				m_camera->setTargetEntity(nullptr);
 			}
 			else
 			{
 				// If we hold SHIFT, we move the player to the camera position
 				if((e->getModifiers() & KeyEvent::SHIFT) != 0)
 				{
-					m_world->getLocalPlayer()->setPosition(camera->getCenter(0.0f));
+					m_world->getLocalPlayer()->setPosition(m_camera->getCenter(0.0f));
 				}
 
 				// Attach camera to local player
-				camera->setTargetEntity(m_world->getLocalPlayer());
+				m_camera->setTargetEntity(m_world->getLocalPlayer());
 			}
 		}
 		break;
@@ -193,8 +203,8 @@ void InGameDebug::onTick(TickEvent *e)
 			if(m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) || m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_RIGHT))
 			{
 				m_world->getTerrain()->setBlockAt(
-					(int)floor(m_world->getCamera()->getInputPosition().x / BLOCK_PXF),
-					(int)floor(m_world->getCamera()->getInputPosition().y / BLOCK_PXF),
+					(int)floor(m_camera->getInputPosition().x / BLOCK_PXF),
+					(int)floor(m_camera->getInputPosition().y / BLOCK_PXF),
 					layer,
 					m_game->getInputManager()->getKeyState(SAUCE_MOUSE_BUTTON_LEFT) ? *m_block : BlockData::get(0),
 					true);
@@ -223,6 +233,12 @@ void InGameDebug::onDraw(DrawEvent *e)
 	spriteBatch->end();
 	spriteBatch->begin(context);
 
+	// Server world?
+	if(m_world->getConnection()->isServer())
+	{
+		addVariable("[SERVER]", "");
+	}
+
 	// Set FPS output
 	addVariable("FPS", util::intToStr((int)m_game->getFPS()));
 
@@ -230,8 +246,8 @@ void InGameDebug::onDraw(DrawEvent *e)
 	{
 		case DEBUG_MODE_DEFAULT:
 		{
-			Vector2I center = m_world->getCamera()->getCenter(e->getAlpha());
-			Vector2F inputPosition = m_world->getCamera()->getInputPosition();
+			Vector2I center = m_camera->getCenter(e->getAlpha());
+			Vector2F inputPosition = m_camera->getInputPosition();
 
 			addVariable("Chunks", util::intToStr(m_world->getTerrain()->getChunkManager()->m_chunks.size()) + " / " + util::intToStr(m_world->getTerrain()->getChunkManager()->m_optimalChunkCount));
 
@@ -243,7 +259,7 @@ void InGameDebug::onDraw(DrawEvent *e)
 			}
 
 			addVariable("Camera", util::floatToStr(center.x) + ", " + util::floatToStr(center.y));
-			addVariable("Zoom", util::intToStr(int(m_world->getCamera()->getZoomLevel() * 100)) + "%");
+			addVariable("Zoom", util::intToStr(int(m_camera->getZoomLevel() * 100)) + "%");
 			{
 				const BlockData *blocks[WORLD_LAYER_COUNT];
 				const int blockX = (int)floor(inputPosition.x / BLOCK_PXF);
@@ -300,7 +316,7 @@ void InGameDebug::onDraw(DrawEvent *e)
 					addVariable("Velocity", pawn->getVelocity().toString());
 					for(int i = 0; i < Controller::INPUT_COUNT; i++)
 					{
-						Vector2F position = pawn->getDrawPosition(e->getAlpha()) - (m_world->getCamera()->getCenter(e->getAlpha()) - context->getSize() * 0.5f) - Vector2F(10, 12);
+						Vector2F position = pawn->getDrawPosition(e->getAlpha()) - (m_camera->getCenter(e->getAlpha()) - context->getSize() * 0.5f) - Vector2F(10, 12);
 						Sprite inputIcon(m_inputIconsTexture, RectF(position.x, position.y + i * 12, 12, 12), Vector2F(6, 6), 0, TextureRegion(float(i) / Controller::INPUT_COUNT, 0, float(i + 1) / Controller::INPUT_COUNT, 1));
 						if(!controller->getInputState(i))
 						{
@@ -318,7 +334,7 @@ void InGameDebug::onDraw(DrawEvent *e)
 					Controller *controller = pawn->getController();
 					for(int i = 0; i < Controller::INPUT_COUNT; i++)
 					{
-						Vector2F position = pawn->getDrawPosition(e->getAlpha()) - (m_world->getCamera()->getCenter(e->getAlpha()) - context->getSize() * 0.5f) + Vector2F(58, -12);
+						Vector2F position = pawn->getDrawPosition(e->getAlpha()) - (m_camera->getCenter(e->getAlpha()) - context->getSize() * 0.5f) + Vector2F(58, -12);
 						Sprite inputIcon(m_inputIconsTexture, RectF(position.x, position.y + i * 12, 12, 12), Vector2F(6, 6), 0, TextureRegion(float(i) / Controller::INPUT_COUNT, 0, float(i + 1) / Controller::INPUT_COUNT, 1));
 						if(!controller->getInputState(i))
 						{
@@ -356,10 +372,10 @@ void InGameDebug::onDraw(DrawEvent *e)
 	}
 
 	// Draw block grid
-	context->setTransformationMatrix(m_world->getCamera()->getTransformationMatrix(e->getAlpha()));
+	context->pushMatrix(m_camera->getTransformationMatrix(e->getAlpha()));
 	context->setTexture(nullptr);
-	Vector2F position = m_world->getCamera()->getPosition();
-	Vector2F size = m_world->getCamera()->getSize();
+	Vector2F position = m_camera->getPosition();
+	Vector2F size = m_camera->getSize();
 	if(m_game->getInputManager()->getKeyState(SAUCE_KEY_K))
 	{
 		int x0 = (int)floor(position.x / BLOCK_PXF);
@@ -369,12 +385,12 @@ void InGameDebug::onDraw(DrawEvent *e)
 
 		for(int y = y0; y <= y1; ++y)
 		{
-			context->drawRectangle(x0 * BLOCK_PXF, y * BLOCK_PXF, (x1 - x0 + 1) * BLOCK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(80, 80, 80, 80));
+			context->drawRectangle(x0 * BLOCK_PXF, y * BLOCK_PXF, (x1 - x0 + 1) * BLOCK_PXF, 1.0f / m_camera->getZoomLevel(), Color(80, 80, 80, 80));
 		}
 
 		for(int x = x0; x <= x1; ++x)
 		{
-			context->drawRectangle(x * BLOCK_PXF, y0 * BLOCK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (y1 - y0 + 1) * BLOCK_PXF, Color(80, 80, 80, 80));
+			context->drawRectangle(x * BLOCK_PXF, y0 * BLOCK_PXF, 1.0f / m_camera->getZoomLevel(), (y1 - y0 + 1) * BLOCK_PXF, Color(80, 80, 80, 80));
 		}
 	}
 
@@ -386,31 +402,31 @@ void InGameDebug::onDraw(DrawEvent *e)
 
 	for(int y = y0; y <= y1; ++y)
 	{
-		context->drawRectangle(x0 * CHUNK_PXF, y * CHUNK_PXF, (x1 - x0 + 1) * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(0, 0, 0, 80));
+		context->drawRectangle(x0 * CHUNK_PXF, y * CHUNK_PXF, (x1 - x0 + 1) * CHUNK_PXF, 1.0f / m_camera->getZoomLevel(), Color(0, 0, 0, 80));
 	}
 
 	for(int x = x0; x <= x1; ++x)
 	{
-		context->drawRectangle(x * CHUNK_PXF, y0 * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (y1 - y0 + 1) * CHUNK_PXF, Color(0, 0, 0, 80));
+		context->drawRectangle(x * CHUNK_PXF, y0 * CHUNK_PXF, 1.0f / m_camera->getZoomLevel(), (y1 - y0 + 1) * CHUNK_PXF, Color(0, 0, 0, 80));
 	}
 
 	// Draw debug chunks
 	if(m_debugChunkLoader)
 	{
 		// Draw current view
-		Vector2F position = m_world->getCamera()->getCenter(e->getAlpha()) - context->getSize() * 0.5f;
+		Vector2F position = m_camera->getCenter(e->getAlpha()) - context->getSize() * 0.5f;
 		Vector2F size = context->getSize();
-		context->drawRectangle(position.x, position.y, 1.0f / m_world->getCamera()->getZoomLevel(), size.y, Color(127, 127, 255, 255));
-		context->drawRectangle((position.x + size.x), position.y, 1.0f / m_world->getCamera()->getZoomLevel(), size.y, Color(127, 127, 255, 255));
-		context->drawRectangle(position.x, position.y, size.x, 1.0f / m_world->getCamera()->getZoomLevel(), Color(127, 127, 255, 255));
-		context->drawRectangle(position.x, (position.y + size.y), size.x, 1.0f / m_world->getCamera()->getZoomLevel(), Color(127, 127, 255, 255));
+		context->drawRectangle(position.x, position.y, 1.0f / m_camera->getZoomLevel(), size.y, Color(127, 127, 255, 255));
+		context->drawRectangle((position.x + size.x), position.y, 1.0f / m_camera->getZoomLevel(), size.y, Color(127, 127, 255, 255));
+		context->drawRectangle(position.x, position.y, size.x, 1.0f / m_camera->getZoomLevel(), Color(127, 127, 255, 255));
+		context->drawRectangle(position.x, (position.y + size.y), size.x, 1.0f / m_camera->getZoomLevel(), Color(127, 127, 255, 255));
 
 		// Draw load area
 		ChunkManager::ChunkArea loadArea = m_world->getTerrain()->getChunkManager()->getLoadingArea();
-		context->drawRectangle(loadArea.x0 * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PXF, Color(255, 255, 255, 255));
-		context->drawRectangle((loadArea.x1 + 1) * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PXF, Color(255, 255, 255, 255));
-		context->drawRectangle(loadArea.x0 * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(255, 255, 255, 255));
-		context->drawRectangle(loadArea.x0 * CHUNK_PXF, (loadArea.y1 + 1) * CHUNK_PXF, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PXF, 1.0f / m_world->getCamera()->getZoomLevel(), Color(255, 255, 255, 255));
+		context->drawRectangle(loadArea.x0 * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, 1.0f / m_camera->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PXF, Color(255, 255, 255, 255));
+		context->drawRectangle((loadArea.x1 + 1) * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, 1.0f / m_camera->getZoomLevel(), (loadArea.y1 - loadArea.y0 + 1) * CHUNK_PXF, Color(255, 255, 255, 255));
+		context->drawRectangle(loadArea.x0 * CHUNK_PXF, loadArea.y0 * CHUNK_PXF, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PXF, 1.0f / m_camera->getZoomLevel(), Color(255, 255, 255, 255));
+		context->drawRectangle(loadArea.x0 * CHUNK_PXF, (loadArea.y1 + 1) * CHUNK_PXF, (loadArea.x1 - loadArea.x0 + 1) * CHUNK_PXF, 1.0f / m_camera->getZoomLevel(), Color(255, 255, 255, 255));
 
 		// Draw chunk status
 		for(int y = y0; y <= y1; ++y)
@@ -441,7 +457,7 @@ void InGameDebug::onDraw(DrawEvent *e)
 	if(m_debugMode == DEBUG_MODE_LIGHT_PAINTER)
 	{
 		// Show light sources
-		for(list<DebugPointlight*>::iterator itr = DebugPointlight::s_pointlights.begin(); itr != DebugPointlight::s_pointlights.end(); ++itr)
+		/*for(list<DebugPointlight*>::iterator itr = DebugPointlight::s_pointlights.begin(); itr != DebugPointlight::s_pointlights.end(); ++itr)
 		{
 			LightSource *light = (*itr)->getPointlight();
 			context->setShader(m_drawCircleShader);
@@ -449,7 +465,7 @@ void InGameDebug::onDraw(DrawEvent *e)
 			m_drawCircleShader->setUniform1ui("u_DrawOutline", m_selectedLight && light == m_selectedLight->getPointlight());
 			context->drawRectangle((light->getPosition() - Vector2F(light->getRadius())) * BLOCK_PXF, Vector2F(light->getRadius() * 2.0f) * BLOCK_PXF);
 		}
-		context->setShader(0);
+		context->setShader(0);*/
 	}
 
 	if(m_debugMode == DEBUG_MODE_LIGHT)
@@ -473,6 +489,8 @@ void InGameDebug::onDraw(DrawEvent *e)
 			context->drawCircle(light->getPosition() * BLOCK_PXF, 5.0f, 12, light->getColor());
 		}
 	}
+
+	context->popMatrix();
 }
 
 void InGameDebug::onMouseEvent(MouseEvent *e)
@@ -494,27 +512,27 @@ void InGameDebug::onMouseEvent(MouseEvent *e)
 					if(e->getButton() == SAUCE_MOUSE_BUTTON_LEFT)
 					{
 						// Select a light source
-						for(list<DebugPointlight*>::iterator itr = DebugPointlight::s_pointlights.begin(); itr != DebugPointlight::s_pointlights.end(); ++itr)
+						/*for(list<DebugPointlight*>::iterator itr = DebugPointlight::s_pointlights.begin(); itr != DebugPointlight::s_pointlights.end(); ++itr)
 						{
 							DebugPointlight *lightEntity = *itr;
 							LightSource *light = lightEntity->getPointlight();
-							if(RectF(light->getPosition() - Vector2F(light->getRadius()), Vector2F(light->getRadius() * 2.0f)).contains(Vector2F(m_game->getClient()->getWorld()->getCamera()->getInputPosition() / BLOCK_PXF)))
+							if(RectF(light->getPosition() - Vector2F(light->getRadius()), Vector2F(light->getRadius() * 2.0f)).contains(Vector2F(m_camera->getInputPosition() / BLOCK_PXF)))
 							{
 								m_selectedLight = lightEntity;
 								//m_colorPicker->setSelectedColor(m_selectedLight->getPointlight()->getColor());
 								m_moveCount = 0;
-								m_lightDragOffset = m_selectedLight->getPosition() - m_game->getClient()->getWorld()->getCamera()->getInputPosition();
+								m_lightDragOffset = m_selectedLight->getPosition() - m_camera->getInputPosition();
 								break;
 							}
 							m_selectedLight = 0;
 						}
-						m_lmbState = true;
+						m_lmbState = true;*/
 					}
 					else if(e->getButton() == SAUCE_MOUSE_BUTTON_RIGHT)
 					{
 						// Create new point light
 						/*m_newPointlight = new DebugPointlight(m_world);
-						m_newPointlight->setPosition(Vector2F(m_world->getCamera()->getInputPosition()));
+						m_newPointlight->setPosition(Vector2F(m_camera->getInputPosition()));
 						m_newPointlight->getPointlight()->setColor(m_colorPicker->getSelectedColor());
 						m_selectedLight = m_newPointlight;*/
 					}
@@ -523,20 +541,20 @@ void InGameDebug::onMouseEvent(MouseEvent *e)
 
 				case MouseEvent::MOVE:
 				{
-					if(m_newPointlight)
+					/*if(m_newPointlight)
 					{
 						// Set new light radius
 						Pointlight *pointlight = m_newPointlight->getPointlight();
-						pointlight->setRadius((pointlight->getPosition() - Vector2F(m_game->getClient()->getWorld()->getCamera()->getInputPosition()) / BLOCK_PXF).length());
+						pointlight->setRadius((pointlight->getPosition() - Vector2F(m_camera->getInputPosition()) / BLOCK_PXF).length());
 					}
 					else if(m_lmbState && m_selectedLight)
 					{
 						// Drag-move selected light
 						if(m_moveCount++ > 2)
 						{
-							m_selectedLight->setPosition(Vector2F(m_game->getClient()->getWorld()->getCamera()->getInputPosition()) + m_lightDragOffset);
+							m_selectedLight->setPosition(Vector2F(m_camera->getInputPosition()) + m_lightDragOffset);
 						}
-					}
+					}*/
 				}
 				break;
 
@@ -558,8 +576,8 @@ void InGameDebug::onMouseEvent(MouseEvent *e)
 					// Change selected light radius
 					if(m_selectedLight)
 					{
-						float newRadius = m_selectedLight->getPointlight()->getRadius() + (e->getWheelY() > 0 ? 1.0f : -1.0f);
-						m_selectedLight->getPointlight()->setRadius(max(newRadius, 0.0f));
+						//float newRadius = m_selectedLight->getPointlight()->getRadius() + (e->getWheelY() > 0 ? 1.0f : -1.0f);
+//						m_selectedLight->getPointlight()->setRadius(max(newRadius, 0.0f));
 					}
 				}
 				break;
@@ -586,11 +604,6 @@ void InGameDebug::onKeyEvent(KeyEvent *e)
 		}
 		break;
 	}
-}
-
-void InGameDebug::toggle()
-{
-	m_enabled = !m_enabled;
 }
 
 void InGameDebug::nextBlock(InputEvent *e)

@@ -12,6 +12,7 @@ class LightSource;
 class BlockData;
 class ColorPicker;
 class GameState;
+class Camera;
 
 class InGameDebug : public SceneObject
 {
@@ -22,8 +23,6 @@ public:
 	void onDraw(DrawEvent *e);
 	void onMouseEvent(MouseEvent *e);
 	void onKeyEvent(KeyEvent *e);
-
-	void toggle();
 
 	void nextBlock(InputEvent *e);
 	void prevBlock(InputEvent *e);
@@ -58,6 +57,7 @@ private:
 	// Game pointer
 	Overworld *m_game;
 	World *m_world;
+	Camera *m_camera;
 
 	// Paint block
 	vector<BlockData*>::const_iterator m_block;

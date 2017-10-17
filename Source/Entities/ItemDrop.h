@@ -1,21 +1,20 @@
-#ifndef ITEM_DROP_H
-#define ITEM_DROP_H
+#pragma once
 
 #include "Config.h"
 #include "Game/Game.h"
 #include "Entity.h"
 
-class ItemDrop : public Entity
+/*class ItemDrop : public Entity
 {
 public:
-	ItemDrop(const Json::Value &attributes);
+	ItemDrop(World *world, const Json::Value &attributes);
 
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
 
-	static Entity *Factory(const Json::Value &attributes)
+	static Entity *Factory(World *world, const Json::Value &attributes)
 	{
-		return new ItemDrop(attributes);
+		return new ItemDrop(world, attributes);
 	}
 
 private:
@@ -26,6 +25,4 @@ private:
 	float m_pickupDistance;
 	float m_hoverTime;
 	float m_prevHoverTime;
-};
-
-#endif // ITEM_DROP_H
+};*/

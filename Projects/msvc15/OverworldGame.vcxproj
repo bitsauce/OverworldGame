@@ -290,6 +290,7 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     <Xml Include="..\..\Data\Resources.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Data\EntityData.json" />
     <None Include="..\..\Data\Shaders\BlockEntitiesDraw.frag" />
     <None Include="..\..\Data\Shaders\BlockEntitiesDraw.vert" />
     <None Include="..\..\Data\Shaders\BlurH.frag" />

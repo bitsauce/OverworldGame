@@ -1,16 +1,26 @@
-#ifndef ENTITY_H
-#define ENTITY_H
+#pragma once
 
 #include "Config.h"
 #include "Networking/NetworkObject.h"
 
 class World;
 class EntityData;
+class Connection;
+class Chunk;
 
-class Entity : public SceneObject, public NetworkObject
+#define DECLARE_ENTITY(EntityName) \
+friend class EntityData; \
+friend class World; \
+private: \
+	EntityName(World *world, const Json::Value &attributes); \
+	~EntityName(); \
+	static Entity *Factory(World *world, const Json::Value &attributes) { return new EntityName(world, attributes); } \
+	const EntityData *getData() const { return EntityData::GetByName(#EntityName); }
+
+class Entity : public SceneObject, public RakNet::NetworkIDObject
 {
 public:
-	Entity(World *world, const string &entityName, const Json::Value &attributes);
+	Entity(World *world, const Json::Value &attributes);
 	virtual ~Entity();
 
 	virtual void onTick(TickEvent *e);
@@ -18,7 +28,7 @@ public:
 	virtual void onSaveData(FileWriter &f) {}
 	virtual void onLoadData(FileReader &f) {}
 
-	const EntityData *getData() const { return m_data; }
+	virtual const EntityData *getData() const = 0;
 
 	/* Position functions */
 	void setPosition(const Vector2F &pos);
@@ -188,11 +198,26 @@ public:
 		return getPosition() + getSize() * 0.5f;
 	}
 
+	virtual void packData(RakNet::BitStream *bitStream) { }
+	virtual bool unpackData(RakNet::BitStream *bitStream, const bool force) { return true; }
+
+	RakNet::RakNetGUID getOriginGUID() const
+	{
+		return m_originGUID;
+	}
+
+	void setOriginGUID(RakNet::RakNetGUID originGUID);
+
+	bool isClientObject() const
+	{
+		return m_isClientObject;
+	}
+
 	bool m_allowRotation;
 
 protected:
-	const EntityData * const m_data;
 	World * const m_world;
+	Connection *const m_connection;
 
 private:
 	Vector2F m_acceleration;
@@ -200,10 +225,11 @@ private:
 	Vector2F m_position;
 	Vector2F m_lastPosition;
 	Vector2F m_size;
-	Vector2I m_lastChunkPosition;
+	Chunk *m_currentChunk;
 	float m_rotation;
 	float m_gravityScale;
 	uint m_contact, m_lastContact;
-};
 
-#endif // ENTITY_H
+	RakNet::RakNetGUID m_originGUID;
+	bool m_isClientObject;
+};

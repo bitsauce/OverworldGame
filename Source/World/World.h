@@ -4,6 +4,7 @@
 #include "Config.h"
 
 #include "Entities/Entity.h"
+#include "Entities/EntityData.h"
 
 #include "Controllers/Terrain.h"
 #include "Controllers/Lighting.h"
@@ -45,35 +46,34 @@ public:
 	
 	//IniFile *getWorldFile() const { return m_worldFile; }
 
-	// Controller entities
-
-	Background *getBackground() const
-	{
-		return m_background;
-	}
-
-	TimeOfDay *getTimeOfDay() const
-	{
-		return m_timeOfDay;
-	}
-
-	Camera *getCamera() const
-	{
-		return m_camera;
-	}
-
-	Lighting *getLighting() const
-	{
-		return m_lighting;
-	}
-
-	Terrain *getTerrain() const
-	{
-		return m_terrain;
-	}
+	// Get controller objects
+	Background *getBackground() const { return m_background; }
+	TimeOfDay *getTimeOfDay() const { return m_timeOfDay; }
+	Camera *getCamera() const { return m_camera; }
+	Lighting *getLighting() const { return m_lighting; }
+	Terrain *getTerrain() const { return m_terrain; }
 
 	// Entities
-	void addEntity(Entity *entity);
+	template<typename T> T *createEntity(const Json::Value &attributes)
+	{
+		T *entity = new T(this, attributes);
+		addEntity(entity);
+		return entity;
+	}
+
+	Entity *createEntityByID(const EntityID id)
+	{
+		EntityData *entityData = EntityData::Get(id);
+		if(!entityData)
+		{
+			THROW("No entity with id=%i", id);
+		}
+
+		Entity *entity = entityData->m_factory(this, Json::Value());
+		addEntity(entity);
+		return entity;
+	}
+
 	void removeEntity(Entity *entity);
 	EntityLayer *getEntitiyLayer(const WorldLayer layer) const;
 	list<Entity*> getEntities() const;
@@ -101,6 +101,8 @@ public:
 	}
 
 private:
+	void addEntity(Entity *);
+
 	Connection *m_connection;
 
 	uint m_seed;

@@ -13,8 +13,8 @@
 #include "Game/States/GameState.h"
 #include "Gui/Gui.h"
 
-Pawn::Pawn(World *world, const string &entityName, const Json::Value &attributes) :
-	Entity(world, entityName, attributes),
+Pawn::Pawn(World *world, const Json::Value &attributes) :
+	Entity(world, attributes),
 	m_camera(m_world->getCamera()),
 	m_terrain(m_world->getTerrain()),
 	m_controller(0),
@@ -262,7 +262,7 @@ void Pawn::onDraw(DrawEvent *e)
 	}
 }
 
-void Pawn::packData(RakNet::BitStream *bitStream, const Connection *conn)
+void Pawn::packData(RakNet::BitStream *bitStream)
 {
 	bitStream->Write(getPosition().x);
 	bitStream->Write(getPosition().y);
@@ -273,7 +273,7 @@ void Pawn::packData(RakNet::BitStream *bitStream, const Connection *conn)
 
 Timer t;
 
-bool Pawn::unpackData(RakNet::BitStream *bitStream, const Connection *conn)
+bool Pawn::unpackData(RakNet::BitStream *bitStream, const bool force)
 {
 	double time = t.getElapsedTime();
 	t.stop();
@@ -289,7 +289,7 @@ bool Pawn::unpackData(RakNet::BitStream *bitStream, const Connection *conn)
 	// TODO: Verify using some time detla between this and previous packet
 	float radius = getVelocity().length() * time * 100.0 + 20.0 /*gravity*/;
 	float moved = (getPosition() - position).length();
-	if(conn->isServer() && radius < moved)
+	if(!force && radius < moved)
 	{
 		// Invalid position, lets not accept the values we we're sent
 		// Send back a packet containing the server-side object state

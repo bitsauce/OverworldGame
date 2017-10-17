@@ -1,8 +1,8 @@
 #include "Stick.h"
 #include "Game/RayCast.h"
 
-Stick::Stick(const Json::Value &attributes) :
-	Entity(0, "Stick", attributes),
+/*Stick::Stick(World *world) :
+	Entity(world, "Stick"),
 	m_sprite(Resource<Texture2D>("Sprites/Items/Stick")),
 	m_hitState(false),
 	m_deleteTime(0.0f),
@@ -31,4 +31,4 @@ void Stick::onDraw(DrawEvent *e)
 void Stick::onTick(TickEvent *e)
 {
 	Entity::onTick(e);
-}
+}*/

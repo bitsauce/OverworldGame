@@ -20,12 +20,12 @@ struct EntityDataDesc
 	const EntityFactory factory;
 };
 
-const EntityFactory getFactory(const string &entityName)
+const EntityFactory EntityData::getFactory(const string &entityName)
 {
 	if(entityName == "Player") return Player::Factory;
 	if(entityName == "Arrow") return Arrow::Factory;
-	if(entityName == "ItemDrop") return ItemDrop::Factory;
-	if(entityName == "Stick") return Stick::Factory;
+	//if(entityName == "ItemDrop") return ItemDrop::Factory;
+	//if(entityName == "Stick") return Stick::Factory;
 	return 0;
 }
 
@@ -41,66 +41,43 @@ void EntityData::init(Game *)
 {
 	LOG("Loading entity data...");
 
-	// Load entity data from file
-	vector<EntityDataDesc> entityDataDesc;
-
-	if(util::fileExists("EntityData.xml"))
+	// Load block entity data from file
+	if(!util::fileExists("EntityData.json"))
 	{
-		tinyxml2::XMLDocument doc;
-		doc.LoadFile("EntityData.xml");
-
-		// Get root node
-		tinyxml2::XMLNode *entityNode = doc.FirstChildElement();
-		if(!entityNode)
-		{
-			LOG("EntityData.xml has no root node!");
-			return;
-		}
-
-		// For each block node
-		entityNode = entityNode->FirstChildElement();
-		while(entityNode)
-		{
-			// For each block entry
-			tinyxml2::XMLElement *id = entityNode->FirstChildElement("id");
-			tinyxml2::XMLElement *name = entityNode->FirstChildElement("name");
-			tinyxml2::XMLElement *layer = entityNode->FirstChildElement("layer");
-
-			if(id && name && layer)
-			{
-				EntityDataDesc desc = { (EntityID)util::strToInt(id->GetText()), name->GetText(), getLayerFromString(layer->GetText()), getFactory(name->GetText()) };
-				entityDataDesc.push_back(desc);
-			}
-			else
-			{
-				if(name)
-				{
-					LOG("Loading entity '%s' failed", name->GetText());
-				}
-				else if(id)
-				{
-					LOG("Loading entity (id='%s') failed", id->GetText());
-				}
-				else
-				{
-					LOG("Loading entity (nr='%i') failed", entityDataDesc.size());
-				}
-			}
-
-			// Next resource
-			entityNode = entityNode->NextSibling();
-		}
-	}
-	else
-	{
-		THROW("EntityData.xml is missing!");
+		THROW("EntityData.json is missing!");
 	}
 
-	// Create all entity data
-	for(EntityDataDesc &entityData : entityDataDesc)
+	// Read block entity JSON data
+	Json::Value entitiesJSON;
 	{
-		EntityData *data = new EntityData(entityData.id, entityData.name, entityData.layer, entityData.factory);
-		s_nameToData[entityData.name] = data;
-		s_idToData[entityData.id] = data;
+		Json::Reader reader;
+		ifstream blockEntityDataFile("EntityData.json");
+		if(blockEntityDataFile.is_open())
+		{
+			if(!reader.parse(blockEntityDataFile, entitiesJSON))
+			{
+				THROW("Error parsing EntityData.json!");
+			}
+		}
+		else
+		{
+			THROW("Error opening EntityData.json!");
+		}
+	}
+
+	// Load block entity data
+	for(Json::Value::const_iterator itr = entitiesJSON.begin(); itr != entitiesJSON.end(); itr++)
+	{
+		const Json::Value &blockEntityJSON = *itr;
+		const string name = itr.key().asString();
+		const BlockID id = blockEntityJSON.get("id", -1).asInt();
+		const string layer = blockEntityJSON.get("layer", -1).asString();
+		const EntityFactory factory = getFactory(name);
+		assert(s_idToData.find(id) == s_idToData.end());
+		assert(s_nameToData.find(name) == s_nameToData.end());
+
+		EntityData *data = new EntityData(id, name, getLayerFromString(layer), factory);
+		s_nameToData[name] = data;
+		s_idToData[id] = data;
 	}
 }

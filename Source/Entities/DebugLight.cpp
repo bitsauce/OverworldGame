@@ -3,10 +3,10 @@
 #include "Game/Game.h"
 #include "World/Controllers/Lighting.h"
 
-list<DebugPointlight*> DebugPointlight::s_pointlights;
+/*list<DebugPointlight*> DebugPointlight::s_pointlights;
 
-DebugPointlight::DebugPointlight(const Json::Value &attributes) :
-	Entity(0, "Debug/Pointlight", attributes),
+DebugPointlight::DebugPointlight(World *world) :
+	Entity(world, "Debug/Pointlight"),
 	m_pointlight(new Pointlight(m_world))
 {
 	m_pointlight->setMobility(LightSource::DYNAMIC);
@@ -61,3 +61,4 @@ Pointlight *DebugPointlight::getPointlight() const
 {
 	return m_pointlight;
 }
+*/

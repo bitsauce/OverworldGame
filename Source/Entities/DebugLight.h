@@ -6,11 +6,11 @@
 class Overworld;
 class Pointlight;
 
-class DebugPointlight : public Entity
+/*class DebugPointlight : public Entity
 {
 	friend class InGameDebug;
 public:
-	DebugPointlight(const Json::Value &attributes);
+	DebugPointlight(World *world);
 	~DebugPointlight();
 
 	void onTick(TickEvent *e);
@@ -20,13 +20,13 @@ public:
 
 	Pointlight *getPointlight() const;
 
-	static Entity *Factory(const Json::Value &attributes)
+	static Entity *Factory(World *world)
 	{
-		return new DebugPointlight(attributes);
+		return new DebugPointlight(world);
 	}
 
 private:
 	Pointlight *m_pointlight;
 
 	static list<DebugPointlight*> s_pointlights;
-};
+};*/

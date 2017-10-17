@@ -4,16 +4,16 @@
 #include "Game/Game.h"
 #include "Pawn.h"
 
-class Stick : public Entity
+/*class Stick : public Entity
 {
 public:
-	Stick(const Json::Value &attributes);
+	Stick(World *world, const Json::Value &attributes);
 	void onDraw(DrawEvent *e);
 	void onTick(TickEvent *e);
 
-	static Stick *Factory(const Json::Value &attributes)
+	static Stick *Factory(World *world, const Json::Value &attributes)
 	{
-		return new Stick(attributes);
+		return new Stick(world, attributes);
 	}
 
 private:
@@ -22,4 +22,4 @@ private:
 	uint m_hitState;
 	float m_deleteTime;
 	float m_moveToAlpha;
-};
+};*/

@@ -24,7 +24,7 @@ void BlockEntityData::init()
 	// Load block entity data from file
 	if (!util::fileExists("BlockEntityData.json"))
 	{
-		THROW("EntityData.xml is missing!");
+		THROW("BlockEntityData.json is missing!");
 	}
 
 	// Read block entity JSON data

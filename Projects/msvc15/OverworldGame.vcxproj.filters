@@ -742,5 +742,8 @@
     <None Include="..\..\Data\Shaders\GroundHeight.frag">
       <Filter>Data\Shaders\Generation</Filter>
     </None>
+    <None Include="..\..\Data\EntityData.json">
+      <Filter>Data</Filter>
+    </None>
   </ItemGroup>
 </Project>

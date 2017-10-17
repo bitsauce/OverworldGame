@@ -4,10 +4,10 @@
 #include "Entities/EntityData.h"
 
 Player::Player(World *world, const Json::Value &attributes) :
-	Pawn(world, "Player", attributes),
-	m_font(Resource<Font>("Fonts/Debug"))
+	Pawn(world, attributes),
+	m_font(Resource<Font>("Fonts/Debug")),
+	m_name(attributes.get("name", "<UNKNOWN>").asString())
 {
-	m_name = attributes.get("name", "<UNKNOWN>").asString();
 }
 
 Player::~Player()

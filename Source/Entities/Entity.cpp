@@ -4,10 +4,9 @@
 #include "World/World.h"
 #include "Game/Game.h"
 
-Entity::Entity(World *world, const string &entityName, const Json::Value &attributes) :
-	NetworkObject(world->getConnection()),
+Entity::Entity(World *world, const Json::Value &attributes) :
+	m_connection(world->getConnection()),
 	m_world(world),
-	m_data(EntityData::GetByName(entityName)),
 	m_acceleration(0.0f, 0.0f),
 	m_velocity(0.0f, 0.0f),
 	m_position(0.0f, 0.0f),
@@ -16,14 +15,8 @@ Entity::Entity(World *world, const string &entityName, const Json::Value &attrib
 	m_rotation(45.0f),
 	m_gravityScale(1.0f),
 	m_allowRotation(false),
-	m_contact(0),
-	m_lastChunkPosition(0, 0)
+	m_contact(0)
 {
-	if(!m_data)
-	{
-		THROW("Could not create entity '%s' (no entity data)", entityName.c_str());
-	}
-
 	// JSON format: { "position": { "x": float, "y": float} }
 	if(attributes.isMember("position"))
 	{
@@ -32,9 +25,8 @@ Entity::Entity(World *world, const string &entityName, const Json::Value &attrib
 		if(position.isMember("y")) m_lastPosition.y = m_position.y = position["y"].asFloat();
 	}
 
-	m_lastChunkPosition = math::floor(m_position / CHUNK_PXF);
-	m_world->addEntity(this);
-	m_world->getTerrain()->getChunkManager()->getChunkAt(m_lastChunkPosition.x, m_lastChunkPosition.y, true)->m_entities.push_back(this);
+	Vector2I chunkPosition = math::floor(m_position / Vector2F(CHUNK_PXF));
+	m_currentChunk = m_world->getTerrain()->getChunkManager()->getChunkAt(chunkPosition.x, chunkPosition.y, true);
 }
 
 Entity::~Entity()
@@ -45,7 +37,7 @@ Entity::~Entity()
 		camera->setTargetEntity(nullptr);
 	}
 	m_world->removeEntity(this);
-	m_world->getTerrain()->getChunkManager()->getChunkAt(m_lastChunkPosition.x, m_lastChunkPosition.y, true)->m_entities.remove(this);
+	m_currentChunk->m_entities.remove(this);
 }
 
 void Entity::onTick(TickEvent *e)
@@ -168,11 +160,12 @@ void Entity::onTick(TickEvent *e)
 	}
 
 	Vector2I chunkPosition = math::floor(m_position / Vector2F(CHUNK_PXF));
-	if(chunkPosition != m_lastChunkPosition)
+	Chunk *chunk = m_world->getTerrain()->getChunkManager()->getChunkAt(chunkPosition.x, chunkPosition.y, true);
+	if(chunk!= m_currentChunk)
 	{
-		m_world->getTerrain()->getChunkManager()->getChunkAt(m_lastChunkPosition.x, m_lastChunkPosition.y, true)->m_entities.remove(this);
-		m_world->getTerrain()->getChunkManager()->getChunkAt(chunkPosition.x, chunkPosition.y, true)->m_entities.push_back(this);
-		m_lastChunkPosition = chunkPosition;
+		m_currentChunk->m_entities.remove(this);
+		chunk->m_entities.push_back(this);
+		m_currentChunk = chunk;
 	}
 }
 
@@ -181,10 +174,17 @@ void Entity::setPosition(const Vector2F & pos)
 	m_lastPosition = m_position = pos;
 
 	Vector2I chunkPosition = math::floor(m_position / Vector2F(CHUNK_PXF));
-	if(chunkPosition != m_lastChunkPosition)
+	Chunk *chunk = m_world->getTerrain()->getChunkManager()->getChunkAt(chunkPosition.x, chunkPosition.y, true);
+	if(chunk != m_currentChunk)
 	{
-		m_world->getTerrain()->getChunkManager()->getChunkAt(m_lastChunkPosition.x, m_lastChunkPosition.y, true)->m_entities.remove(this);
-		m_world->getTerrain()->getChunkManager()->getChunkAt(chunkPosition.x, chunkPosition.y, true)->m_entities.push_back(this);
-		m_lastChunkPosition = chunkPosition;
+		m_currentChunk->m_entities.remove(this);
+		chunk->m_entities.push_back(this);
+		m_currentChunk = chunk;
 	}
+}
+
+void Entity::setOriginGUID(RakNet::RakNetGUID originGUID)
+{
+	m_originGUID = originGUID;
+	m_isClientObject = m_connection->getGUID() == m_originGUID;
 }

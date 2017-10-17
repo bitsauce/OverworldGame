@@ -4,12 +4,14 @@
 #include "Constants.h"
 
 class Entity;
+class World;
 
-typedef function<Entity*(const Json::Value&)> EntityFactory;
+typedef function<Entity*(World*, const Json::Value &attributes)> EntityFactory;
 
 class EntityData
 {
 	friend class Overworld;
+	friend class World;
 public:
 	EntityData(const EntityID id, const string &name, const WorldLayer layer, const EntityFactory factory) :
 		m_id(id),
@@ -40,16 +42,6 @@ public:
 		return itr->second;
 	}
 
-	static Entity *Create(const EntityID id, const Json::Value &attributes)
-	{
-		return Get(id)->m_factory(attributes);
-	}
-
-	static Entity *CreateByName(const string &name, const Json::Value &attributes)
-	{
-		return GetByName(name)->m_factory(attributes);
-	}
-
 	EntityID getID() const
 	{
 		return m_id;
@@ -66,6 +58,8 @@ public:
 	}
 
 private:
+	static const EntityFactory getFactory(const string &entityName);
+
 	const EntityID m_id;
 	const string m_name;
 	const WorldLayer m_layer;

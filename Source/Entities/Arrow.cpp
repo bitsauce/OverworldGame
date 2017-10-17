@@ -3,7 +3,7 @@
 #include "Entities/EntityData.h"
 
 Arrow::Arrow(World *world, const Json::Value &attributes) :
-	Entity(world, "Arrow", attributes),
+	Entity(world, attributes),
 	m_sprite(Resource<Texture2D>("Sprites/Items/Weapons/Arrow")),
 	m_hitState(false),
 	m_deleteTime(0.0f),
@@ -19,6 +19,11 @@ Arrow::Arrow(World *world, const Json::Value &attributes) :
 	Vector2F dir(1.0f, 0.0f); dir.rotate(attributes.get("angle", 0.0f).asFloat());
 	setVelocity(dir * attributes.get("speed", 45.0f).asFloat());
 	setGravityScale(0.75f);
+}
+
+Arrow::~Arrow()
+{
+
 }
 
 void Arrow::onDraw(DrawEvent *e)
@@ -87,8 +92,10 @@ void Arrow::onTick(TickEvent *e)
 
 		// Ray cast
 		Vector2F aabb[4];
+		m_sprite.setPosition(getPosition());
 		m_sprite.getAABB(aabb);
 		Vector2F dt = getPosition() - getLastPosition();
+
 		Vector2F pos = (aabb[1] + aabb[2]) / 2.0f;
 		RayCast rayCast(bind(&Arrow::plotTest, this, placeholders::_1, placeholders::_2));
 		if(rayCast.trace(pos, pos + dt))
@@ -106,9 +113,53 @@ void Arrow::onTick(TickEvent *e)
 		m_deleteTime += e->getDelta();
 		if(m_deleteTime > 10.0f)
 		{
-			delete this;
+//			delete this;
 			return;
 		}
 		return;
 	}
+}
+
+void Arrow::packData(RakNet::BitStream *bitStream)
+{
+	bitStream->Write(getPosition().x);
+	bitStream->Write(getPosition().y);
+	bitStream->Write(getVelocity().x);
+	bitStream->Write(getVelocity().y);
+}
+
+extern Timer t;
+
+bool Arrow::unpackData(RakNet::BitStream *bitStream, const bool force)
+{
+	double time = t.getElapsedTime();
+	t.stop();
+
+	// Get position and velocity
+	Vector2F position, velocity;
+	bitStream->Read(position.x);
+	bitStream->Read(position.y);
+	bitStream->Read(velocity.x);
+	bitStream->Read(velocity.y);
+
+	// TODO: Verify using some time detla between this and previous packet
+	float radius = getVelocity().length() * time * 100.0 + 20.0 /*gravity*/;
+	float moved = (getPosition() - position).length();
+	if(!force && radius < moved)
+	{
+		// Invalid position, lets not accept the values we we're sent
+		// Send back a packet containing the server-side object state
+		// to all clients
+		return false;
+	}
+	else
+	{
+		// Lets move the player to their new (verified) position
+		setPosition(getLastPosition()); // Doing this ensures that players are interpolated correctly from their last position to their new position
+		moveTo(position); // TODO: Not really a pretty solution
+		setVelocity(velocity);
+
+	}
+	t.start();
+	return true;
 }

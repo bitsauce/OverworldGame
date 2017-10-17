@@ -6,16 +6,14 @@
 
 class Arrow : public Entity
 {
+	DECLARE_ENTITY(Arrow)
 public:
-	Arrow(World *world, const Json::Value &attributes);
 	void onDraw(DrawEvent *e);
 	bool plotTest(int x, int y);
 	void onTick(TickEvent *e);
 
-	static Arrow *Factory(const Json::Value &attributes)
-	{
-		return new Arrow(0, attributes);
-	}
+	void packData(RakNet::BitStream *bitStream);
+	bool unpackData(RakNet::BitStream *bitStream, const bool force);
 
 private:
 	Sprite m_sprite;
