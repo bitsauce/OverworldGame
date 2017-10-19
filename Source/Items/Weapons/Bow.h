@@ -1,5 +1,4 @@
-#ifndef BOW_H
-#define BOW_H
+#pragma once
 
 #include "Config.h"
 #include "Items/ItemData.h"
@@ -13,6 +12,8 @@ public:
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
+	static Item *Factory(World *world, Pawn *pawn) { return new Bow(world, pawn); }
+
 private:
 	Sprite m_sprite;
 	SpriteAnimation m_chargeAnim;
@@ -20,5 +21,3 @@ private:
 	bool m_charging;
 	float m_chargeTime;
 };
-
-#endif // BOW_H

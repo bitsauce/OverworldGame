@@ -27,6 +27,7 @@ Entity::Entity(World *world, const Json::Value &attributes) :
 
 	Vector2I chunkPosition = math::floor(m_position / Vector2F(CHUNK_PXF));
 	m_currentChunk = m_world->getTerrain()->getChunkManager()->getChunkAt(chunkPosition.x, chunkPosition.y, true);
+	m_currentChunk->m_entities.push_back(this);
 }
 
 Entity::~Entity()
@@ -36,7 +37,7 @@ Entity::~Entity()
 	{
 		camera->setTargetEntity(nullptr);
 	}
-	m_world->removeEntity(this);
+	//m_world->removeEntity(this);
 	m_currentChunk->m_entities.remove(this);
 }
 

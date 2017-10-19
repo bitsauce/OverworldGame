@@ -80,10 +80,11 @@ bool Terrain::removeBlockAt(const int x, const int y, const WorldLayer layer, co
 	{
 		if(createItem)
 		{
-			/*Json::Value props;
-			props["item"]["id"] = block->getItem()->getID();
-			ItemDrop *itemDrop = new ItemDrop(m_world, block->getItem()->getID());
-			itemDrop->setPosition(x * BLOCK_PXF, y * BLOCK_PXF);*/
+			Json::Value attributes;
+			attributes["item"]["id"] = block->getItem()->getID();
+			attributes["position"]["x"] = x * BLOCK_PXF;
+			attributes["position"]["y"] = y * BLOCK_PXF;
+			m_world->getConnection()->createEntity<ItemDrop>(attributes);
 		}
 		return true;
 	}

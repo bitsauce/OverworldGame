@@ -50,6 +50,16 @@ public:
 		return entity;
 	}
 
+	void removeEntity(Entity *entity)
+	{
+		// TODO: Send entity removal packet to other clients
+		// NOTE TO SELF: Maybe a problem with the current "create on
+		// update of non-existent object" is that objects can be reconstructed after they're deleted.
+		m_networkEntities.remove(entity);
+		m_world->removeEntity(entity);
+		delete entity;
+	}
+
 	World *getWorld() const { return m_world; }
 
 	virtual void sendPacket(RakNet::BitStream *bitStream) { LOG("SEND PACKET?????"); }

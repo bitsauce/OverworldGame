@@ -8,8 +8,8 @@
 #include "Entities/ItemDrop.h"
 #include "Game/Game.h"
 
-Pickaxe::Pickaxe(const ItemDataDesc *desc) :
-	ItemData(desc),
+Pickaxe::Pickaxe(World *world, Pawn *pawn) :
+	Item(world, pawn),
 	m_cracksSprite(Resource<Texture2D>("Sprites/Items/Tools/Pickaxes/Mining_Cracks")),
 	m_sprite(Resource<Texture2D>("Sprites/Items/Tools/Pickaxes/IronPickaxe")),
 	m_cracksAnimation(1, 4),
@@ -22,27 +22,27 @@ Pickaxe::Pickaxe(const ItemDataDesc *desc) :
 	m_sprite.setRegion(TextureRegion(0.0f, 0.0f, 1.0f, 1.0f), true);
 }
 
-void Pickaxe::equip(Pawn *player)
+void Pickaxe::equip()
 {
-	RegionAttachment *attachment = player->getHumanoid().setAttachment(Humanoid::RIGHT_HAND, "Right_Hand_Equip", "Pickaxe_Iron");
+	RegionAttachment *attachment = m_pawn->getHumanoid().setAttachment(Humanoid::RIGHT_HAND, "Right_Hand_Equip", "Pickaxe_Iron");
 	attachment->setPosition(0.8f, 12.7f);
 	attachment->setRotation(405.0f);
 }
 
-void Pickaxe::unequip(Pawn *player)
+void Pickaxe::unequip()
 {
-	player->getHumanoid().clearAttachment(Humanoid::RIGHT_HAND);
+	m_pawn->getHumanoid().clearAttachment(Humanoid::RIGHT_HAND);
 }
 
-void Pickaxe::update(Pawn *pawn, World *world, const float delta)
+void Pickaxe::update(const float delta)
 {
 	// Get block input position
-	Vector2I position = world->getCamera()->getInputPosition();
+	Vector2I position = m_world->getCamera()->getInputPosition();
 	position.x = (int) floor(position.x / BLOCK_PXF);
 	position.y = (int) floor(position.y / BLOCK_PXF);
 
-	if(pawn->getController()->getInputState(Controller::INPUT_USE_ITEM) && // Do we have user input and...
-	   world->getTerrain()->isBlockAt(position.x, position.y, WORLD_LAYER_MIDDLE)) // ... is there a block at this position?
+	if(m_pawn->getController()->getInputState(Controller::INPUT_USE_ITEM) && // Do we have user input and...
+	   m_world->getTerrain()->isBlockAt(position.x, position.y, WORLD_LAYER_MIDDLE)) // ... is there a block at this position?
 	{
 		// Reset timer if block position have changed
 		if(position != m_prevBlockPosition)
@@ -57,7 +57,7 @@ void Pickaxe::update(Pawn *pawn, World *world, const float delta)
 		m_mineCounter -= delta;
 		if(m_mineCounter <= 0.0f)
 		{
-			world->getTerrain()->removeBlockAt(position.x, position.y, WORLD_LAYER_MIDDLE);
+			m_world->getTerrain()->removeBlockAt(position.x, position.y, WORLD_LAYER_MIDDLE);
 		}
 		else
 		{
@@ -68,17 +68,17 @@ void Pickaxe::update(Pawn *pawn, World *world, const float delta)
 		}
 
 		// Set mining animation
-		pawn->getHumanoid().setPostAnimation(Humanoid::ANIM_MINE);
+		m_pawn->getHumanoid().setPostAnimation(Humanoid::ANIM_MINE);
 	}
 	else
 	{
 		m_mineCounter = m_mineTime; // Reset the counter
-		pawn->getHumanoid().setPostAnimation(Humanoid::ANIM_NULL); // Reset animations
+		m_pawn->getHumanoid().setPostAnimation(Humanoid::ANIM_NULL); // Reset animations
 		m_drawCracks = false; // Don't draw cracks
 	}
 }
 
-void Pickaxe::draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha)
+void Pickaxe::draw(SpriteBatch *spriteBatch, const float alpha)
 {
 	// Is there a block at this position?
 	if(m_drawCracks)

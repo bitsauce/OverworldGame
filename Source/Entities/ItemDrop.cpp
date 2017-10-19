@@ -5,7 +5,7 @@
 #include "Items/ItemData.h"
 #include "Entities/EntityData.h"
 
-/*ItemDrop::ItemDrop(World *world, const Json::Value &attributes) :
+ItemDrop::ItemDrop(World *world, const Json::Value &attributes) :
 	Entity(world, attributes),
 	m_noPickupTime(1.0f), // No pickup for 1 s
 	m_dragDistance(16.0f * BLOCK_PXF),
@@ -24,6 +24,10 @@
 	setSize(Vector2F(16.0f));
 }
 
+ItemDrop::~ItemDrop()
+{
+}
+
 void ItemDrop::onTick(TickEvent *e)
 {
 	if(m_noPickupTime <= 0.0f)
@@ -37,7 +41,7 @@ void ItemDrop::onTick(TickEvent *e)
 				m_amount -= m_amount - pawn->getStorage()->addItem(m_itemID, m_amount);
 				if(m_amount <= 0)
 				{
-					delete this;
+					m_connection->removeEntity(this);
 					return;
 				}
 			}
@@ -63,4 +67,4 @@ void ItemDrop::onDraw(DrawEvent *e)
 		Vector2F(24.0f)),
 		Vector2F(), 0.0f, TextureRegion())
 		);
-}*/
+}

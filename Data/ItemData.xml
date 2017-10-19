@@ -80,7 +80,7 @@
 	
 	<i>
 		<id>6</id>
-		<name>iron_pickaxe_item</name>
+		<name>IronPickaxe</name>
 		<inventoryName>Iron Pickaxe</inventoryName>
 		<description>An iron pickaxe. Used for mining ores</description>
 		<type>pickaxe</type>
@@ -128,7 +128,7 @@
 	</i>
 	<i>
 		<id>11</id>
-		<name>bow_item</name>
+		<name>Bow</name>
 		<inventoryName>Bow</inventoryName>
 		<description>Ranged weapon. Charge up to fire arrows further. Require arrows to use</description>
 		<type>bow</type>
@@ -137,7 +137,7 @@
 	</i>
 	<i>
 		<id>12</id>
-		<name>arrow_item</name>
+		<name>Arrow</name>
 		<inventoryName>Arrow</inventoryName>
 		<description>Common projectile for a bow</description>
 		<type>ammo</type>

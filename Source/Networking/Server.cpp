@@ -125,12 +125,12 @@ void Server::onTick(TickEvent *e)
 					}
 
 					// Give default load out
-					//player->getStorage()->addItem(ItemData::GetByName("iron_pickaxe_item")->getID());
+					player->getStorage()->addItem(ItemData::GetByName("IronPickaxe")->getID());
 					//player->getStorage()->addItem(ItemData::GetByName("iron_axe_item")->getID());
-					player->getStorage()->addItem(ItemData::GetByName("bow_item")->getID());
+					player->getStorage()->addItem(ItemData::GetByName("Bow")->getID());
 					//player->getStorage()->addItem(ItemData::GetByName("crafting_bench_item")->getID());
 					//player->getStorage()->addItem(ItemData::GetByName("torch_item")->getID(), 255);
-					player->getStorage()->addItem(ItemData::GetByName("arrow_item")->getID(), 255);
+					player->getStorage()->addItem(ItemData::GetByName("Arrow")->getID(), 255);
 				}
 
 				{

@@ -24,7 +24,7 @@ const EntityFactory EntityData::getFactory(const string &entityName)
 {
 	if(entityName == "Player") return Player::Factory;
 	if(entityName == "Arrow") return Arrow::Factory;
-	//if(entityName == "ItemDrop") return ItemDrop::Factory;
+	if(entityName == "ItemDrop") return ItemDrop::Factory;
 	//if(entityName == "Stick") return Stick::Factory;
 	return 0;
 }

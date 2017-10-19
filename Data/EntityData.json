@@ -6,5 +6,9 @@
   "Arrow": {
     "id": 2,
     "layer": "back"
+  },
+  "ItemDrop": {
+    "id": 3,
+    "layer": "middle"
   }
 }

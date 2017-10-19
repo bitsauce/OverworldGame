@@ -37,7 +37,7 @@ public:
 		map<string, EntityData*>::iterator itr = s_nameToData.find(name);
 		if(itr == s_nameToData.end())
 		{
-			THROW("Could not find entity with name=%s", name.c_str());
+			THROW("Could not find entity \"%s\"", name.c_str());
 		}
 		return itr->second;
 	}

@@ -3,24 +3,22 @@
 #include "Config.h"
 #include "Items/ItemData.h"
 
-class World;
-
-class Pickaxe : public ItemData
+class Pickaxe : public Item
 {
 public:
-	Pickaxe(const ItemDataDesc *desc);
-	void equip(Pawn *player);
-	void unequip(Pawn *player);
-	void update(Pawn *player, World *world, const float delta);
-	void draw(Pawn *player, SpriteBatch *spriteBatch, const float alpha);
+	Pickaxe(World *world, Pawn *pawn);
+	void equip();
+	void unequip();
+	void update(const float delta);
+	void draw(SpriteBatch *spriteBatch, const float alpha);
+
+	static Item *Factory(World *world, Pawn *pawn) { return new Pickaxe(world, pawn); }
 
 private:
 	Sprite m_sprite;
-
 	Sprite m_cracksSprite;
 	SpriteAnimation m_cracksAnimation;
 	bool m_drawCracks;
-
 	Vector2I m_prevBlockPosition;
 	float m_mineCounter;
 	float m_mineTime;

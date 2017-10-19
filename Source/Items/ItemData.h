@@ -60,7 +60,7 @@ public:
 		map<string, ItemData*>::iterator itr = s_nameToData.find(name);
 		if(itr == s_nameToData.end())
 		{
-			THROW("Could not find entity with name=%s", name.c_str());
+			THROW("Could not find item \"%s\"", name.c_str());
 		}
 		return itr->second;
 	}

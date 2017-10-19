@@ -11,14 +11,10 @@
 vector<ItemData*> ItemData::s_itemDataVector;
 map<string, ItemData*> ItemData::s_nameToData;
 
-Bow *makeBow(World*w, Pawn*p) { return new Bow(w, p); }
-
 function<Item*(World*, Pawn*)> getItemFactory(const string &itemName)
 {
-	if(itemName == "bow_item")
-	{
-		return makeBow;
-	}
+	if(itemName == "Bow") return Bow::Factory;
+	if(itemName == "IronPickaxe") return Pickaxe::Factory;
 	return 0;
 }
 
