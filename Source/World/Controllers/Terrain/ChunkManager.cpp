@@ -273,7 +273,7 @@ Chunk *ChunkManager::getChunkAt(const int chunkX, const int chunkY, const bool l
 				bitStream.Write((RakNet::MessageID)ID_REQUEST_CHUNK);
 				bitStream.Write(chunkX);
 				bitStream.Write(chunkY);
-				conn->sendPacket(&bitStream);
+				dynamic_cast<Client*>(conn)->sendPacket(&bitStream);
 
 				// Create temporary chunk to fill with block data from the server
 				Chunk *chunk = popChunkFromPool();

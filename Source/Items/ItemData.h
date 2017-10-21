@@ -52,6 +52,10 @@ public:
 
 	static ItemData *Get(const ItemID id)
 	{
+		if(id < 0 && id >= s_itemDataVector.size())
+		{
+			THROW("Could not find item with id=%i", id);
+		}
 		return s_itemDataVector[id];
 	}
 

@@ -11,6 +11,9 @@ public:
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
 
+	void packData(RakNet::BitStream *bitStream);
+	bool unpackData(RakNet::BitStream *bitStream, const bool force);
+
 private:
 	ItemID m_itemID;
 	int m_amount;

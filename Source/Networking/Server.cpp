@@ -218,15 +218,41 @@ void Server::onTick(TickEvent *e)
 			}
 			break;
 
+			case ID_CREATE_ENTITY:
+			{
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
+				RakNet::NetworkID networkID; bitStream.Read(networkID);
+				EntityID entityID; bitStream.Read(entityID);
+				RakNet::RakNetGUID guid; bitStream.Read(guid);
+
+				LOG("Creating server object");
+				Entity *entity = createEntityByID(entityID, networkID);
+				entity->setOriginGUID(guid);
+				entity->unpackData(&bitStream, true);
+
+				// Send packet to all clients except the origin
+				RakNet::BitStream outStream(packet->data, packet->length, false);
+				assert(m_rakPeer->Send(&outStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, true) != 0);
+			}
+			break;
+
 			case ID_SET_BLOCK:
 			{
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 				int x; bitStream.Read(x);
 				int y; bitStream.Read(y);
-				BlockID blockID; bitStream.Read(blockID);
 				WorldLayer layer; bitStream.Read(layer);
-				m_world->getTerrain()->setBlockAt(x, y, layer, BlockData::get(blockID), true);
+				BlockID blockID; bitStream.Read(blockID);
+
+				m_world->getTerrain()->getChunkManager()->getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF), true)->setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer, blockID);
+
+				// Broadcast to other clients
+				{
+					RakNet::BitStream outStream(packet->data, packet->length, false);
+					assert(m_rakPeer->Send(&outStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, true) != 0);
+				}
 			}
 			break;
 
@@ -260,21 +286,6 @@ void Server::onTick(TickEvent *e)
 						object->packData(&bitStream);
 						assert(m_rakPeer->Send(&bitStream, LOW_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
 					}
-				}
-				else
-				{
-					// Object doesn't exist on the server, create it
-					EntityID entityID; bitStream.Read(entityID);
-					object = createEntityByID(entityID, networkID);
-					object->setOriginGUID(packet->guid);
-					object->unpackData(&bitStream, true);
-
-					LOG("Creating server object");
-
-					// Send packet to all clients except the origin
-					RakNet::BitStream outStream(packet->data, packet->length, true);
-					outStream.Write(packet->guid);
-					assert(m_rakPeer->Send(&outStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, true) != 0);
 				}
 			}
 			break;

@@ -11,6 +11,7 @@ class Chunk;
 #define DECLARE_ENTITY(EntityName) \
 friend class EntityData; \
 friend class World; \
+friend class Connection; \
 private: \
 	EntityName(World *world, const Json::Value &attributes); \
 	~EntityName(); \

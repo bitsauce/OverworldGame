@@ -13,12 +13,8 @@ ItemDrop::ItemDrop(World *world, const Json::Value &attributes) :
 	m_hoverTime(0.0f),
 	m_prevHoverTime(0.0f)
 {
-	if(attributes.isMember("item"))
-	{
-		const Json::Value &item = attributes["item"];
-		m_itemID = item.get("id", ITEM_NONE).asInt();
-		m_amount = item.get("amount", 1).asInt();
-	}
+	m_itemID = attributes["item"].get("id", ITEM_NONE).asInt();
+	m_amount = attributes["item"].get("amount", 1).asInt();
 
 	setGravityScale(0.1f);
 	setSize(Vector2F(16.0f));
@@ -67,4 +63,48 @@ void ItemDrop::onDraw(DrawEvent *e)
 		Vector2F(24.0f)),
 		Vector2F(), 0.0f, TextureRegion())
 		);
+}
+
+void ItemDrop::packData(RakNet::BitStream *bitStream)
+{
+	bitStream->Write(getPosition().x);
+	bitStream->Write(getPosition().y);
+	bitStream->Write(getVelocity().x);
+	bitStream->Write(getVelocity().y);
+}
+
+extern Timer t;
+
+bool ItemDrop::unpackData(RakNet::BitStream *bitStream, const bool force)
+{
+	double time = t.getElapsedTime();
+	t.stop();
+
+	// Get position and velocity
+	Vector2F position, velocity;
+	bitStream->Read(position.x);
+	bitStream->Read(position.y);
+	bitStream->Read(velocity.x);
+	bitStream->Read(velocity.y);
+
+	// TODO: Verify using some time detla between this and previous packet
+	float radius = getVelocity().length() * time * 100.0 + 20.0 /*gravity*/;
+	float moved = (getPosition() - position).length();
+	if(!force && radius < moved)
+	{
+		// Invalid position, lets not accept the values we we're sent
+		// Send back a packet containing the server-side object state
+		// to all clients
+		return false;
+	}
+	else
+	{
+		// Lets move the player to their new (verified) position
+		setPosition(getLastPosition()); // Doing this ensures that players are interpolated correctly from their last position to their new position
+		moveTo(position); // TODO: Not really a pretty solution
+		setVelocity(velocity);
+
+	}
+	t.start();
+	return true;
 }

@@ -26,27 +26,6 @@ Terrain::~Terrain()
 // BLOCKS
 bool Terrain::setBlockAt(const int x, const int y, const WorldLayer layer, const BlockData *blockData, const bool replace)
 {
-	/*if(Connection::getInstance()->isServer())
-	{
-		RakNet::BitStream bitStream;
-		bitStream.Write((RakNet::MessageID)ID_SET_BLOCK);
-		bitStream.Write(x);
-		bitStream.Write(y);
-		bitStream.Write(block);
-		bitStream.Write(layer);
-		((Server*)Connection::getInstance())->sendPacket(&bitStream);
-	}
-	else if(Client::getInstance())
-	{
-		RakNet::BitStream bitStream;
-		bitStream.Write((RakNet::MessageID)ID_SET_BLOCK);
-		bitStream.Write(x);
-		bitStream.Write(y);
-		bitStream.Write(block);
-		bitStream.Write(layer);
-		((Client*)Connection::getInstance())->sendPacket(&bitStream);
-	}*/
-
 	Chunk *chunk = m_chunkManager->getChunkAt((int) floor(x / CHUNK_BLOCKSF), (int) floor(y / CHUNK_BLOCKSF), true);
 
 	if(!replace)
@@ -59,6 +38,8 @@ bool Terrain::setBlockAt(const int x, const int y, const WorldLayer layer, const
 			return false;
 		}
 	}
+
+	m_world->getConnection()->updateBlock(x, y, layer, blockData->getID());
 
 	return chunk->setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer, blockData->getID());
 }

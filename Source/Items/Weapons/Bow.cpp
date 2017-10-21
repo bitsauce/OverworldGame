@@ -71,7 +71,7 @@ void Bow::update(const float delta)
 	}
 	else if(m_charging)
 	{
-		if(m_pawn->getStorage()->removeItem(ItemData::GetByName("arrow_item")->getID()) == 0)
+		if(m_pawn->getStorage()->removeItem(ItemData::GetByName("Arrow")->getID()) == 0)
 		{
 			Json::Value attributes;
 			attributes["angle"] = dir.angle();

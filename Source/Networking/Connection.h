@@ -37,7 +37,20 @@ public:
 		T *entity = m_world->createEntity<T>(attributes);
 		m_networkEntities.push_back(entity);
 		entity->SetNetworkIDManager(&m_networkIDManager);
-		if(networkID != RakNet::UNASSIGNED_NETWORK_ID) entity->SetNetworkID(networkID);
+		if(networkID == RakNet::UNASSIGNED_NETWORK_ID)
+		{
+			RakNet::BitStream bitStream;
+			bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
+			bitStream.Write(entity->GetNetworkID());
+			bitStream.Write(entity->getData()->getID());
+			bitStream.Write(m_rakPeer->GetMyGUID());
+			entity->packData(&bitStream);
+			assert(m_rakPeer->Send(&bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
+		}
+		else
+		{
+			entity->SetNetworkID(networkID);
+		}
 		return entity;
 	}
 
@@ -46,7 +59,20 @@ public:
 		Entity *entity = m_world->createEntityByID(id);
 		m_networkEntities.push_back(entity);
 		entity->SetNetworkIDManager(&m_networkIDManager);
-		if(networkID != RakNet::UNASSIGNED_NETWORK_ID) entity->SetNetworkID(networkID);
+		if(networkID == RakNet::UNASSIGNED_NETWORK_ID)
+		{
+			RakNet::BitStream bitStream;
+			bitStream.Write((RakNet::MessageID)ID_CREATE_ENTITY);
+			bitStream.Write(entity->GetNetworkID());
+			bitStream.Write(entity->getData()->getID());
+			bitStream.Write(m_rakPeer->GetMyGUID());
+			entity->packData(&bitStream);
+			assert(m_rakPeer->Send(&bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
+		}
+		else
+		{
+			entity->SetNetworkID(networkID);
+		}
 		return entity;
 	}
 
@@ -60,9 +86,18 @@ public:
 		delete entity;
 	}
 
-	World *getWorld() const { return m_world; }
+	void updateBlock(const int x, const int y, const WorldLayer layer, const BlockID blockID)
+	{
+		RakNet::BitStream bitStream;
+		bitStream.Write((RakNet::MessageID)ID_SET_BLOCK);
+		bitStream.Write(x);
+		bitStream.Write(y);
+		bitStream.Write(layer);
+		bitStream.Write(blockID);
+		assert(m_rakPeer->Send(&bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
+	}
 
-	virtual void sendPacket(RakNet::BitStream *bitStream) { LOG("SEND PACKET?????"); }
+	World *getWorld() const { return m_world; }
 
 protected:
 	bool m_isServer;

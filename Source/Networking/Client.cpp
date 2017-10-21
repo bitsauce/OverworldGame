@@ -207,28 +207,24 @@ void Client::onTick(TickEvent *e)
 			}
 			break;
 
-			/*case ID_CREATE_ENTITY:
+			case ID_CREATE_ENTITY:
 			{
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
-
-				// Get name and attributes
-				string name; bitStream.Read(name);
-				string attributesStr; bitStream.Read(attributesStr);
 				RakNet::NetworkID networkID; bitStream.Read(networkID);
-				RakNet::RakNetGUID originGUID; bitStream.Read(originGUID);
+				EntityID entityID; bitStream.Read(entityID);
+				RakNet::RakNetGUID guid; bitStream.Read(guid);
 
-				// Parse attributes
-				Json::Reader reader; Json::Value attributes;
-				reader.parse(attributesStr, attributes);
+				if(entityID != 1) // TODO: Try to fix. Shouldn't receive update packets from players before we're ready maybe?
+				{
+					Entity *entity = createEntityByID(entityID, networkID);
+					entity->setOriginGUID(guid);
+					entity->unpackData(&bitStream, true);
 
-				// Create and setup entity
-				Entity *entity = EntityData::CreateByName(m_world, name);
-				entity->SetNetworkIDManager(&m_networkIDManager);
-				entity->SetNetworkID(networkID);
-				entity->setOriginGUID(originGUID);
+					LOG("Creating client object");
+				}
 			}
-			break;*/
+			break;
 
 			case ID_SET_BLOCK:
 			{
@@ -236,9 +232,9 @@ void Client::onTick(TickEvent *e)
 				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
 				int x; bitStream.Read(x);
 				int y; bitStream.Read(y);
-				BlockID blockID; bitStream.Read(blockID);
 				WorldLayer layer; bitStream.Read(layer);
-				m_world->getTerrain()->setBlockAt(x, y, layer, BlockData::get(blockID), true);
+				BlockID blockID; bitStream.Read(blockID);
+				m_world->getTerrain()->getChunkManager()->getChunkAt((int)floor(x / CHUNK_BLOCKSF), (int)floor(y / CHUNK_BLOCKSF), true)->setBlockAt(math::mod(x, CHUNK_BLOCKS), math::mod(y, CHUNK_BLOCKS), layer, blockID);
 			}
 			break;
 
