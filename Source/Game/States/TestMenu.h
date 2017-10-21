@@ -17,4 +17,5 @@ public:
 private:
 	Overworld *m_game;
 	LineEdit *m_ipLineEdit;
+	LineEdit *m_nameLineEdit;
 };

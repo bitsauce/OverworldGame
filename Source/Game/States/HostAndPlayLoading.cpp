@@ -23,7 +23,7 @@ public:
 	float m_progress;
 };
 
-HostAndPlayLoading::HostAndPlayLoading(Overworld *game) :
+HostAndPlayLoading::HostAndPlayLoading(Overworld *game, const string &name) :
 	GameState(GAME_STATE_TEST_MENU, false)
 {
 	Window *window = game->getWindow();
@@ -47,7 +47,7 @@ HostAndPlayLoading::HostAndPlayLoading(Overworld *game) :
 	server->host("Debug", DEFAULT_PORT);
 
 	Client *client = game->getClient();
-	client->join("Bitsauce", "127.0.0.1", DEFAULT_PORT);
+	client->join(name.empty() ? "Bitsauce" : name, "127.0.0.1", DEFAULT_PORT);
 }
 
 void HostAndPlayLoading::onTick(TickEvent *e)

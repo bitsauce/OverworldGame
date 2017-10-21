@@ -23,7 +23,7 @@ public:
 	float m_progress;
 };
 
-JoinLoading::JoinLoading(Overworld *game, const string &ip) :
+JoinLoading::JoinLoading(Overworld *game, const string &name, const string &ip) :
 	GameState(GAME_STATE_TEST_MENU, false)
 {
 	Window *window = game->getWindow();
@@ -44,7 +44,7 @@ JoinLoading::JoinLoading(Overworld *game, const string &ip) :
 	m_loadingBar->setAnchor(0.5f, 0.5f);
 
 	Client *client = game->getClient();
-	client->join("Bitsauce", ip.empty() ? "127.0.0.1" : ip, DEFAULT_PORT);
+	client->join(name.empty() ? "Bitsauce" : name, ip.empty() ? "127.0.0.1" : ip, DEFAULT_PORT);
 }
 
 void JoinLoading::onTick(TickEvent *e)

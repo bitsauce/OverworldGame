@@ -9,7 +9,7 @@ class Commander;
 class Chat : public UiObject
 {
 public:
-	Chat(Overworld *game, GraphicsContext *context, GameOverlay *gameOverlay);
+	Chat(Overworld *game, GameOverlay *gameOverlay);
 
 	void onTick(TickEvent *e);
 	void onDraw(DrawEvent *e);
@@ -25,14 +25,12 @@ private:
 
 	Resource<Font> m_font;
 
-	LineEdit m_chatInput;
+	LineEdit *m_chatInput;
 	
 	bool m_active;
 	float m_fadeTime;
 
-	int m_chatLinePos;
-
-	vector<string> m_messages;
+	list<string> m_messages;
 
 	// Message history
 	vector<string> m_inputHistory;

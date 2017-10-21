@@ -10,7 +10,7 @@ class Connection;
 class HostAndPlayLoading : public GameState
 {
 public:
-	HostAndPlayLoading(Overworld *game);
+	HostAndPlayLoading(Overworld *game, const string &name);
 	void onTick(TickEvent *e);
 
 private:

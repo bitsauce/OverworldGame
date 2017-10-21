@@ -71,7 +71,7 @@ void Commander::execute(string command)
 	}
 
 	// Empty command. Print help
-	if(cmdSplitString[0].empty())
+	if(cmdSplitString.empty())
 	{
 		chat->insertMessage("Type /help for more info.");
 		return;

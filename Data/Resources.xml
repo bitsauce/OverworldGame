@@ -219,16 +219,23 @@
     <premultiplyAlpha>true</premultiplyAlpha>
   </texture>
 
+  <!--Chat-->
+  <texture>
+    <name>Gui/GameOverlay/Chat_Input</name>
+    <path>Sprites/Gui/GameOverlay/Chat_Input.png</path>
+    <premultiplyAlpha>false</premultiplyAlpha>
+  </texture>
+
   <!--LineEdit-->
   <texture>
     <name>Gui/Input_Active</name>
     <path>Sprites/Gui/Input_Active.png</path>
-    <premultiplyAlpha>true</premultiplyAlpha>
+    <premultiplyAlpha>false</premultiplyAlpha>
   </texture>
   <texture>
     <name>Gui/Input_Inactive</name>
     <path>Sprites/Gui/Input_Inactive.png</path>
-    <premultiplyAlpha>true</premultiplyAlpha>
+    <premultiplyAlpha>false</premultiplyAlpha>
   </texture>
 	
 	<!-- Shaders -->

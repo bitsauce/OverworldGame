@@ -97,6 +97,15 @@ public:
 		assert(m_rakPeer->Send(&bitStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
 	}
 
+	void sendChatMessage(const string &message)
+	{
+		RakNet::BitStream bitStream;
+		bitStream.Write((RakNet::MessageID)ID_CHAT_MESSAGE);
+		bitStream.Write(message.size());
+		bitStream.Write(message.c_str());
+		assert(m_rakPeer->Send(&bitStream, LOW_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
+	}
+
 	World *getWorld() const { return m_world; }
 
 protected:

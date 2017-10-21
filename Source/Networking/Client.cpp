@@ -294,6 +294,17 @@ void Client::onTick(TickEvent *e)
 			}
 			break;
 
+			case ID_CHAT_MESSAGE:
+			{
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				bitStream.IgnoreBytes(sizeof(RakNet::MessageID));
+				uint size; bitStream.Read(size);
+				string message; message.resize(size);
+				bitStream.Read(&message[0]);
+				m_game->getGameOverlay()->getChat()->insertMessage(message);
+			}
+			break;
+
 			default:
 				LOG("Received unknown packet type %s", RakNet::PacketLogger::BaseIDTOString(packet->data[0]));
 				break;

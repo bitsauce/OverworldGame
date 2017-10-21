@@ -312,6 +312,13 @@ void Server::onTick(TickEvent *e)
 			}
 			break;
 
+			case ID_CHAT_MESSAGE:
+			{
+				RakNet::BitStream bitStream(packet->data, packet->length, false);
+				assert(m_rakPeer->Send(&bitStream, LOW_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, true) != 0);
+			}
+			break;
+
 			default:
 				LOG("Received packet type %s", RakNet::PacketLogger::BaseIDTOString(packet->data[0]));
 				break;

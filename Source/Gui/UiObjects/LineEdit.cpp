@@ -1,12 +1,16 @@
 #include "LineEdit.h"
 
-LineEdit::LineEdit(UiObject *parent, const uint width, const uint height) :
+LineEdit::LineEdit(UiObject *parent, const uint width, const uint height,
+				   Resource<Font> font,
+				   Resource<Texture2D> activeTexture,
+				   Resource<Texture2D> inactiveTexture,
+				   const uint borderSize) :
 	UiObject(parent),
 	m_cursorTime(0.0f),
 	m_offsetX(0.0f),
-	m_font(Resource<Font>("Fonts/MenuFont")),
-	m_textureActive(Resource<Texture2D>("Gui/Input_Active")),
-	m_textureInactive(Resource<Texture2D>("Gui/Input_Inactive")),
+	m_font(font),
+	m_textureActive(activeTexture),
+	m_textureInactive(inactiveTexture),
 	m_renderTarget(0),
 	m_dirtyGraphics(true),
 	m_dirtyTextGraphics(true),
@@ -15,7 +19,8 @@ LineEdit::LineEdit(UiObject *parent, const uint width, const uint height) :
 	m_wordEnd(0),
 	m_defaultText(""),
 	m_color(0, 0, 0, 255),
-	m_renderTargetText(0)
+	m_renderTargetText(0),
+	m_borderSize(borderSize)
 {
 	setText("");
 	m_renderTarget = new RenderTarget2D(width, height);
@@ -85,7 +90,7 @@ void LineEdit::onDraw(DrawEvent *e)
 		// Update line edit visualization
 		graphicsContext->pushState();
 		graphicsContext->setRenderTarget(m_renderTarget);
-		graphicsContext->setBlendState(BlendState(BlendState::BLEND_SRC_ALPHA, BlendState::BLEND_ZERO, BlendState::BLEND_ONE, BlendState::BLEND_ZERO));
+		graphicsContext->setBlendState(BlendState(BlendState::BLEND_ONE, BlendState::BLEND_ZERO, BlendState::BLEND_ONE, BlendState::BLEND_ZERO));
 
 		// Set texture
 		if(isFocused())
@@ -132,7 +137,6 @@ void LineEdit::onDraw(DrawEvent *e)
 		// OPTIMIZATION: Only update the text which changed
 		graphicsContext->setBlendState(BlendState(BlendState::BLEND_ZERO, BlendState::BLEND_ZERO));
 		graphicsContext->drawRectangle(0, 0, m_renderTargetText->getWidth(), m_renderTargetText->getHeight());
-		graphicsContext->setBlendState(BlendState(BlendState::BLEND_SRC_ALPHA, BlendState::BLEND_ONE_MINUS_SRC_ALPHA, BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA));
 
 		// Get the string to render and set text color
 		string text;
@@ -156,7 +160,7 @@ void LineEdit::onDraw(DrawEvent *e)
 
 		// Draw and clip the text using scissoring rectangle
 		const float w = m_renderTargetText->getWidth(), h = m_renderTargetText->getHeight();
-		graphicsContext->enableScissor(8, 0, w - 16, h);
+		graphicsContext->enableScissor(m_borderSize, 0, w - m_borderSize * 2, h);
 		m_spriteBatch.begin(graphicsContext, SpriteBatch::State(SpriteBatch::DEFERRED, BlendState(BlendState::BLEND_SRC_ALPHA, BlendState::BLEND_ONE_MINUS_SRC_ALPHA, BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA)));
 		m_font->draw(&m_spriteBatch, textOffset.x + dx, textOffset.y, visibleText);
 		m_spriteBatch.end();
@@ -170,14 +174,11 @@ void LineEdit::onDraw(DrawEvent *e)
 	}
 
 	// Draw line edit visualization
-	//graphicsContext->setBlendState(BlendState(BlendState::BLEND_ONE, BlendState::BLEND_ONE_MINUS_SRC_ALPHA));
 	graphicsContext->setTexture(m_renderTarget->getTexture());
 	graphicsContext->drawRectangle(rect);
-	graphicsContext->setTexture(0);
 	graphicsContext->setTexture(m_renderTargetText->getTexture());
 	graphicsContext->drawRectangle(rect);
 	graphicsContext->setTexture(0);
-	//graphicsContext->setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
 
 	// Draw text cursor
 	if(isFocused() && m_cursorTime >= 0.5f)

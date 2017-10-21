@@ -10,7 +10,7 @@ class Connection;
 class JoinLoading : public GameState
 {
 public:
-	JoinLoading(Overworld *game, const string &ip);
+	JoinLoading(Overworld *game, const string &name, const string &ip);
 	void onTick(TickEvent *e);
 
 private:

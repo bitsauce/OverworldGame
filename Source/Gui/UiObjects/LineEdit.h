@@ -1,5 +1,4 @@
-#ifndef LINE_EDIT_H
-#define LINE_EDIT_H
+#pragma once
 
 #include "UiObject.h"
 
@@ -15,7 +14,11 @@ class LineEdit : public UiObject
 {
 	friend class Cursor;
 public:
-	LineEdit(UiObject *parent, const uint width, const uint height);
+	LineEdit(UiObject *parent, const uint width, const uint height,
+			 Resource<Font> font = Resource<Font>("Fonts/MenuFont"),
+			 Resource<Texture2D> activeTexture = Resource<Texture2D>("Gui/Input_Active"),
+			 Resource<Texture2D> inactiveTexture = Resource<Texture2D>("Gui/Input_Inactive"),
+			 const uint borderSize = 8);
 	~LineEdit();
 
 	/**
@@ -164,6 +167,7 @@ protected:
 	RenderTarget2D *m_renderTargetText;
 	Resource<Font> m_font;
 	Color m_color;
+	const uint m_borderSize;
 
 	// Data
 	SimpleTimer m_textTimer;
@@ -176,5 +180,3 @@ protected:
 	bool m_dirtyGraphics, m_dirtyTextGraphics;
 	function<void()> m_acceptFunc;
 };
-
-#endif // LINE_EDIT_H
