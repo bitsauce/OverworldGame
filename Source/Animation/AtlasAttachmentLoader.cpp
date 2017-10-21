@@ -14,8 +14,12 @@ RegionAttachment *AtlasAttachmentLoader::newAttachment(const string &name, const
 	spRegionAttachment *regionAttachment = SUB_CAST(spRegionAttachment, attachment);
 	spAtlasRegion *atlasRegion = spAtlas_findRegion(m_atlas, path.c_str());
 
-	regionAttachment->width = atlasRegion->width;
-	regionAttachment->height = atlasRegion->height;
+	if(atlasRegion)
+	{
+		regionAttachment->width = atlasRegion->width;
+		regionAttachment->height = atlasRegion->height;
+		return new RegionAttachment(regionAttachment);
+	}
 
-	return new RegionAttachment(regionAttachment);
+	return 0;
 }

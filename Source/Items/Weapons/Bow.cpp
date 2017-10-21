@@ -8,7 +8,7 @@
 #include "Animation/Bone.h"
 #include "Animation/RegionAttachment.h"
 
-Bow::Bow(World *world, Pawn *pawn) :
+Bow::Bow(World *world, Pawn *pawn, const Json::Value &attributes) :
 	Item(world, pawn),
 	m_attachTexture(Resource<Texture2D>("Sprites/Items/Weapons/WoodenBow")),
 	m_sprite(Resource<Texture2D>("Sprites/Items/Weapons/WoodenBowAnim")),

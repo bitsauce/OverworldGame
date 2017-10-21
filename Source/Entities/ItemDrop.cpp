@@ -71,6 +71,8 @@ void ItemDrop::packData(RakNet::BitStream *bitStream)
 	bitStream->Write(getPosition().y);
 	bitStream->Write(getVelocity().x);
 	bitStream->Write(getVelocity().y);
+	bitStream->Write(m_itemID);
+	bitStream->Write(m_amount);
 }
 
 extern Timer t;
@@ -86,6 +88,8 @@ bool ItemDrop::unpackData(RakNet::BitStream *bitStream, const bool force)
 	bitStream->Read(position.y);
 	bitStream->Read(velocity.x);
 	bitStream->Read(velocity.y);
+	bitStream->Read(m_itemID);
+	bitStream->Read(m_amount);
 
 	// TODO: Verify using some time detla between this and previous packet
 	float radius = getVelocity().length() * time * 100.0 + 20.0 /*gravity*/;

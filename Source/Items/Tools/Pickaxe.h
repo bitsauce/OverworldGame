@@ -6,13 +6,14 @@
 class Pickaxe : public Item
 {
 public:
-	Pickaxe(World *world, Pawn *pawn);
+	Pickaxe(World *world, Pawn *pawn, const Json::Value &attributes);
+
 	void equip();
 	void unequip();
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
-	static Item *Factory(World *world, Pawn *pawn) { return new Pickaxe(world, pawn); }
+	static Item *Factory(World *world, Pawn *pawn, const Json::Value &attributes) { return new Pickaxe(world, pawn, attributes); }
 
 private:
 	Sprite m_sprite;

@@ -8,18 +8,20 @@ class Camera;
 class Terrain;
 class BlockData;
 
-class BlockItem : public ItemData
+class BlockItem : public Item
 {
 public:
-	BlockItem(Overworld *game, const ItemDataDesc *desc);
+	BlockItem(World *world, Pawn *pawn, const Json::Value &attributes);
 
-	void equip(Pawn *player);
-	void unequip(Pawn *player);
-	void use(Pawn *pawn, const float delta);
-	void draw(Pawn *pawn, SpriteBatch *spriteBatch, const float alpha);
+	void equip();
+	void unequip();
+	void update(const float delta);
+	void draw(SpriteBatch *spriteBatch, const float alpha);
+
+
+	static Item *Factory(World *world, Pawn *pawn, const Json::Value &attributes) { return new BlockItem(world, pawn, attributes); }
 
 private:
-	Overworld *const m_game;
 	WorldLayer m_layer;
 	BlockData *m_blockData;
 };

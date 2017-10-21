@@ -8,7 +8,7 @@
 #include "Entities/ItemDrop.h"
 #include "Game/Game.h"
 
-Pickaxe::Pickaxe(World *world, Pawn *pawn) :
+Pickaxe::Pickaxe(World *world, Pawn *pawn, const Json::Value &attributes) :
 	Item(world, pawn),
 	m_cracksSprite(Resource<Texture2D>("Sprites/Items/Tools/Pickaxes/Mining_Cracks")),
 	m_sprite(Resource<Texture2D>("Sprites/Items/Tools/Pickaxes/IronPickaxe")),

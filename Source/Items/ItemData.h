@@ -9,17 +9,18 @@ class Pawn;
 class World;
 class Item;
 
+typedef function<Item*(World*, Pawn*, const Json::Value&)> ItemFactory;
+
 struct ItemDataDesc
 {
 	const ItemID id;
 	const string name;
 	const string invName;
 	const string desc;
-	const string type;
 	const string icon;
 	const uint maxStack;
-	const function<Item*(World*, Pawn*)> factory;
-	const map<string, string> userData;
+	const ItemFactory factory;
+	const Json::Value &attributes;
 };
 
 class Item
@@ -71,13 +72,22 @@ public:
 
 	static Item *Create(const ItemID id, World *world, Pawn *pawn)
 	{
-		if(Get(id)->m_factory)
-			return Get(id)->m_factory(world, pawn); else return 0;
+		ItemData *data = Get(id);
+		if(data->m_factory)
+		{
+			return data->m_factory(world, pawn, data->m_attributes);
+		}
+		return 0;
 	}
 
 	static Item *CreateByName(const string &name, World *world, Pawn *pawn)
 	{
-		return GetByName(name)->m_factory(world, pawn);
+		ItemData *data = GetByName(name);
+		if(data->m_factory)
+		{
+			return data->m_factory(world, pawn, data->m_attributes);
+		}
+		return 0;
 	}
 
 	ItemID getID() const { return m_id; }
@@ -87,13 +97,13 @@ public:
 	string getDesc() const { return m_desc; }
 
 private:
-	ItemID m_id;
-	string m_name;
-	string m_desc;
-	uint m_maxStack;
-	Resource<Texture2D> m_iconTexture;
-	//map<string, string> m_userData;
-	function<Item*(World*, Pawn*)> m_factory;
+	const ItemID m_id;
+	const string m_name;
+	const string m_desc;
+	const uint m_maxStack;
+	const Resource<Texture2D> m_iconTexture;
+	const Json::Value m_attributes;
+	const ItemFactory m_factory;
 	
 
 	static void init(Overworld *game);

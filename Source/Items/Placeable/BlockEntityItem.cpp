@@ -8,10 +8,10 @@ BlockEntityItem::BlockEntityItem(Overworld *game, const ItemDataDesc *desc) :
 	ItemData(desc),
 	m_game(game)
 {
-	if(desc->userData.find("blockEntity") != desc->userData.end())
+	/*if(desc->userData.find("blockEntity") != desc->userData.end())
 	{
 		m_blockEntityData = BlockEntityData::GetByName(desc->userData.at("blockEntity"));
-	}
+	}*/
 }
 
 void BlockEntityItem::equip(Pawn *pawn)

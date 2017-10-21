@@ -41,20 +41,20 @@ void EntityData::init(Game *)
 {
 	LOG("Loading entity data...");
 
-	// Load block entity data from file
+	// Load entity data from file
 	if(!util::fileExists("EntityData.json"))
 	{
 		THROW("EntityData.json is missing!");
 	}
 
-	// Read block entity JSON data
+	// Read entity JSON data
 	Json::Value entitiesJSON;
 	{
 		Json::Reader reader;
-		ifstream blockEntityDataFile("EntityData.json");
-		if(blockEntityDataFile.is_open())
+		ifstream dataFile("EntityData.json");
+		if(dataFile.is_open())
 		{
-			if(!reader.parse(blockEntityDataFile, entitiesJSON))
+			if(!reader.parse(dataFile, entitiesJSON))
 			{
 				THROW("Error parsing EntityData.json!");
 			}
@@ -65,13 +65,13 @@ void EntityData::init(Game *)
 		}
 	}
 
-	// Load block entity data
+	// Load entity data
 	for(Json::Value::const_iterator itr = entitiesJSON.begin(); itr != entitiesJSON.end(); itr++)
 	{
-		const Json::Value &blockEntityJSON = *itr;
+		const Json::Value &entityJSON = *itr;
 		const string name = itr.key().asString();
-		const BlockID id = blockEntityJSON.get("id", -1).asInt();
-		const string layer = blockEntityJSON.get("layer", -1).asString();
+		const BlockID id = entityJSON.get("id", -1).asInt();
+		const string layer = entityJSON.get("layer", -1).asString();
 		const EntityFactory factory = getFactory(name);
 		assert(s_idToData.find(id) == s_idToData.end());
 		assert(s_nameToData.find(name) == s_nameToData.end());

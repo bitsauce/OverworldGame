@@ -635,12 +635,6 @@
     <Xml Include="..\..\Data\BlockData.xml">
       <Filter>Data</Filter>
     </Xml>
-    <Xml Include="..\..\Data\ItemData.xml">
-      <Filter>Data</Filter>
-    </Xml>
-    <Xml Include="..\..\Data\EntityData.xml">
-      <Filter>Data</Filter>
-    </Xml>
     <Xml Include="..\..\Data\BlockEntityData.json">
       <Filter>Data</Filter>
     </Xml>
@@ -743,6 +737,9 @@
       <Filter>Data\Shaders\Generation</Filter>
     </None>
     <None Include="..\..\Data\EntityData.json">
+      <Filter>Data</Filter>
+    </None>
+    <None Include="..\..\Data\ItemData.json">
       <Filter>Data</Filter>
     </None>
   </ItemGroup>

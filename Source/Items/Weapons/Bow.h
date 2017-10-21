@@ -6,13 +6,13 @@
 class Bow : public Item
 {
 public:
-	Bow(World *world, Pawn *pawn);
+	Bow(World *world, Pawn *pawn, const Json::Value &attributes);
 	void equip();
 	void unequip();
 	void update(const float delta);
 	void draw(SpriteBatch *spriteBatch, const float alpha);
 
-	static Item *Factory(World *world, Pawn *pawn) { return new Bow(world, pawn); }
+	static Item *Factory(World *world, Pawn *pawn, const Json::Value &attributes) { return new Bow(world, pawn, attributes); }
 
 private:
 	Sprite m_sprite;

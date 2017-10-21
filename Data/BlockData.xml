@@ -4,7 +4,7 @@
 		<id>0</id>
 		<name>Empty_Block</name>
 		<image>Sprites/Blocks/Empty.png</image>
-		<item>null_item</item>
+		<item>NullItem</item>
 		<opacity>0.0</opacity>
 		<frames>1</frames>
 		<solid>0</solid>
@@ -14,7 +14,7 @@
 		<id>1</id>
 		<name>Grass_Block</name>
 		<image>Sprites/Blocks/Grass.png</image>
-		<item>grass_block_item</item>
+		<item>GrassBlock</item>
 		<opacity>1.0</opacity>
 		<frames>1</frames>
 	</b>
@@ -22,7 +22,7 @@
 		<id>2</id>
 		<name>Dirt_Block</name>
 		<image>Sprites/Blocks/Dirt.png</image>
-		<item>dirt_block_item</item>
+		<item>DirtBlock</item>
 		<opacity>1.0</opacity>
 		<frames>1</frames>
 	</b>

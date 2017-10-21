@@ -1,0 +1,58 @@
+{
+  "NullItem": {
+    "id": 0,
+    "name": "NULL",
+    "description": "",
+    "class": "",
+    "icon": "",
+    "maxStack": 0
+  },
+  "GrassBlock": {
+    "id": 1,
+    "name": "Grass Block",
+    "description": "A block of grass",
+    "class": "BlockItem",
+    "icon": "Sprites/ItemIcons/BlockGrass",
+    "maxStack": 255,
+    "attributes": {
+      "block": "Grass_Block",
+      "layer": "middle"
+    }
+  },
+  "DirtBlock": {
+    "id": 2,
+    "name": "Dirt Block",
+    "description": "A block of dirt",
+    "class": "BlockItem",
+    "icon": "Sprites/ItemIcons/BlockDirt",
+    "maxStack": 255,
+    "attributes": {
+      "block": "Dirt_Block",
+      "layer": "middle"
+    }
+  },
+  "IronPickaxe": {
+    "id": 3,
+    "name": "Iron Pickaxe",
+    "description": "An iron pickaxe. Used for mining ores",
+    "class": "Pickaxe",
+    "icon": "Sprites/ItemIcons/Pickaxe_Iron",
+    "maxStack": 1
+  },
+  "Bow": {
+    "id": 4,
+    "name": "Bow",
+    "description": "Ranged weapon. Charge up to fire arrows further. Requires arrows to use",
+    "class": "Bow",
+    "icon": "Sprites/ItemIcons/Bow",
+    "maxStack": 1
+  },
+  "Arrow": {
+    "id": 5,
+    "name": "Arrow",
+    "description": "Common projectile for a bow",
+    "class": "Ammo",
+    "icon": "Sprites/ItemIcons/Arrow",
+    "maxStack": 255
+  }
+}

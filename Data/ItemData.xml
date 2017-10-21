@@ -4,7 +4,7 @@
 		<name>grass_block_item</name>
 		<inventoryName>Grass Block</inventoryName>
 		<description>A block of grass</description>
-		<type>block_item</type>
+		<type>BlockItem</type>
 		<icon>Sprites/ItemIcons/BlockGrass</icon>
 		<maxStack>255</maxStack>
 		<userData>
@@ -17,7 +17,7 @@
 		<name>dirt_block_item</name>
 		<inventoryName>Dirt Block</inventoryName>
 		<description>A block of dirt</description>
-		<type>block_item</type>
+		<type>BlockItem</type>
 		<icon>Sprites/ItemIcons/BlockDirt</icon>
 		<maxStack>255</maxStack>
 		<userData>
