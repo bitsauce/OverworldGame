@@ -63,7 +63,7 @@ public:
 	virtual void onDraw(DrawEvent *e);
 
 	void packData(RakNet::BitStream *bitStream);
-	bool unpackData(RakNet::BitStream *bitStream, const bool force);
+	void unpackData(RakNet::BitStream *bitStream);
 
 	void createSaveData(FileWriter &saveData);
 	void loadSaveData(FileReader &saveData);

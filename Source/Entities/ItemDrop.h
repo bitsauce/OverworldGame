@@ -12,7 +12,7 @@ public:
 	void onDraw(DrawEvent *e);
 
 	void packData(RakNet::BitStream *bitStream);
-	bool unpackData(RakNet::BitStream *bitStream, const bool force);
+	void unpackData(RakNet::BitStream *bitStream);
 
 private:
 	ItemID m_itemID;

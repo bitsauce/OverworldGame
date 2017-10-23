@@ -199,8 +199,9 @@ public:
 		return getPosition() + getSize() * 0.5f;
 	}
 
-	virtual void packData(RakNet::BitStream *bitStream) { }
-	virtual bool unpackData(RakNet::BitStream *bitStream, const bool force) { return true; }
+	virtual void packData(RakNet::BitStream *bitStream);
+	virtual void unpackData(RakNet::BitStream *bitStream);
+	virtual bool unpackAndValidate(RakNet::BitStream *bitStream);
 
 	RakNet::RakNetGUID getOriginGUID() const
 	{
@@ -231,6 +232,9 @@ private:
 	float m_gravityScale;
 	uint m_contact, m_lastContact;
 
+	uint m_packetDelta;
+
 	RakNet::RakNetGUID m_originGUID;
 	bool m_isClientObject;
+	bool m_initialized;
 };

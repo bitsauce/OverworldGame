@@ -15,7 +15,9 @@ Entity::Entity(World *world, const Json::Value &attributes) :
 	m_rotation(45.0f),
 	m_gravityScale(1.0f),
 	m_allowRotation(false),
-	m_contact(0)
+	m_contact(0),
+	m_packetDelta(0),
+	m_initialized(!attributes.empty())
 {
 	// JSON format: { "position": { "x": float, "y": float} }
 	if(attributes.isMember("position"))
@@ -168,6 +170,8 @@ void Entity::onTick(TickEvent *e)
 		chunk->m_entities.push_back(this);
 		m_currentChunk = chunk;
 	}
+
+	m_packetDelta++;
 }
 
 void Entity::setPosition(const Vector2F & pos)
@@ -188,4 +192,47 @@ void Entity::setOriginGUID(RakNet::RakNetGUID originGUID)
 {
 	m_originGUID = originGUID;
 	m_isClientObject = m_connection->getGUID() == m_originGUID;
+}
+
+void Entity::packData(RakNet::BitStream *bitStream)
+{
+	// Write position and velocity
+	bitStream->Write(m_position.x);
+	bitStream->Write(m_position.y);
+	bitStream->Write(m_velocity.x);
+	bitStream->Write(m_velocity.y);
+}
+
+void Entity::unpackData(RakNet::BitStream *bitStream)
+{
+	// Read position and velocity
+	bitStream->Read(m_position.x);
+	bitStream->Read(m_position.y);
+	bitStream->Read(m_velocity.x);
+	bitStream->Read(m_velocity.y);
+	if(!m_initialized)
+	{
+		m_lastPosition = m_position;
+		m_initialized = true;
+	}
+	m_packetDelta = 0;
+}
+
+bool Entity::unpackAndValidate(RakNet::BitStream *bitStream)
+{
+	const int ticksDelta = m_packetDelta + 1;
+	Vector2F position = m_position, velocity = m_velocity;
+	unpackData(bitStream);
+
+	// Verify using some time delta between this and previous packet
+	float radius = (velocity.length() + 50 /*maxImpulse*/) * ticksDelta;
+	float moved = (m_position - position).length();
+	if(radius < moved)
+	{
+		// Invalid movement. Restore object state
+		m_position = position;
+		m_velocity = velocity;
+		return false;
+	}
+	return true;
 }

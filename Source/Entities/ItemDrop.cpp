@@ -67,48 +67,14 @@ void ItemDrop::onDraw(DrawEvent *e)
 
 void ItemDrop::packData(RakNet::BitStream *bitStream)
 {
-	bitStream->Write(getPosition().x);
-	bitStream->Write(getPosition().y);
-	bitStream->Write(getVelocity().x);
-	bitStream->Write(getVelocity().y);
+	Entity::packData(bitStream);
 	bitStream->Write(m_itemID);
 	bitStream->Write(m_amount);
 }
 
-extern Timer t;
-
-bool ItemDrop::unpackData(RakNet::BitStream *bitStream, const bool force)
+void ItemDrop::unpackData(RakNet::BitStream *bitStream)
 {
-	double time = t.getElapsedTime();
-	t.stop();
-
-	// Get position and velocity
-	Vector2F position, velocity;
-	bitStream->Read(position.x);
-	bitStream->Read(position.y);
-	bitStream->Read(velocity.x);
-	bitStream->Read(velocity.y);
+	Entity::unpackData(bitStream);
 	bitStream->Read(m_itemID);
 	bitStream->Read(m_amount);
-
-	// TODO: Verify using some time detla between this and previous packet
-	float radius = getVelocity().length() * time * 100.0 + 20.0 /*gravity*/;
-	float moved = (getPosition() - position).length();
-	if(!force && radius < moved)
-	{
-		// Invalid position, lets not accept the values we we're sent
-		// Send back a packet containing the server-side object state
-		// to all clients
-		return false;
-	}
-	else
-	{
-		// Lets move the player to their new (verified) position
-		setPosition(getLastPosition()); // Doing this ensures that players are interpolated correctly from their last position to their new position
-		moveTo(position); // TODO: Not really a pretty solution
-		setVelocity(velocity);
-
-	}
-	t.start();
-	return true;
 }

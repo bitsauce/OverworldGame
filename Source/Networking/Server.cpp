@@ -60,17 +60,6 @@ void Server::onTick(TickEvent *e)
 {
 	m_world->onTick(e);
 
-	// Send corrections for server-side objects to clients
-	for(Entity *object : m_networkEntities)
-	{
-		RakNet::BitStream bitStream;
-		bitStream.Write((RakNet::MessageID) ID_NETWORK_OBJECT_UPDATE);
-		bitStream.Write(object->GetNetworkID());
-		bitStream.Write(object->getData()->getID());
-		object->packData(&bitStream);
-		assert(m_rakPeer->Send(&bitStream, LOW_PRIORITY, RELIABLE_ORDERED, 0, object->getOriginGUID(), true) != 0);
-	}
-
 	for(RakNet::Packet *packet = m_rakPeer->Receive(); packet; m_rakPeer->DeallocatePacket(packet), packet = m_rakPeer->Receive())
 	{
 		switch(packet->data[0])
@@ -229,7 +218,7 @@ void Server::onTick(TickEvent *e)
 				LOG("Creating server object");
 				Entity *entity = createEntityByID(entityID, networkID);
 				entity->setOriginGUID(guid);
-				entity->unpackData(&bitStream, true);
+				entity->unpackData(&bitStream);
 
 				// Send packet to all clients except the origin
 				RakNet::BitStream outStream(packet->data, packet->length, false);
@@ -256,7 +245,7 @@ void Server::onTick(TickEvent *e)
 			}
 			break;
 
-			// Client want to correct the server
+			// Client wants to correct the server
 			case ID_NETWORK_OBJECT_UPDATE:
 			{
 				RakNet::BitStream bitStream(packet->data, packet->length, false);
@@ -270,8 +259,7 @@ void Server::onTick(TickEvent *e)
 				if(object)
 				{
 					// Unpack data
-					bitStream.IgnoreBytes(sizeof(EntityID));
-					if(object->unpackData(&bitStream, false))
+					if(object->unpackAndValidate(&bitStream))
 					{
 						// Server accepted the packet, send server-object state to all clients except the origin
 						RakNet::BitStream bitStream(packet->data, packet->length, false);
@@ -324,6 +312,19 @@ void Server::onTick(TickEvent *e)
 				break;
 		}
 	}
+
+	/*if(m_tickCount < m_packetRate)
+	{
+		// Send corrections for server-side objects to clients
+		for(Entity *object : m_networkEntities)
+		{
+			RakNet::BitStream bitStream;
+			bitStream.Write((RakNet::MessageID) ID_NETWORK_OBJECT_UPDATE);
+			bitStream.Write(object->GetNetworkID());
+			object->packData(&bitStream);
+			assert(m_rakPeer->Send(&bitStream, LOW_PRIORITY, RELIABLE_ORDERED, 0, object->getOriginGUID(), true) != 0);
+		}
+	}*/
 }
 
 void Server::save()

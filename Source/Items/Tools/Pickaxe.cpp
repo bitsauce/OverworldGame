@@ -37,7 +37,7 @@ void Pickaxe::unequip()
 void Pickaxe::update(const float delta)
 {
 	// Get block input position
-	Vector2I position = m_world->getCamera()->getInputPosition();
+	Vector2I position = m_pawn->getController()->getInputPosition();
 	position.x = (int) floor(position.x / BLOCK_PXF);
 	position.y = (int) floor(position.y / BLOCK_PXF);
 

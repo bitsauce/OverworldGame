@@ -1,5 +1,4 @@
-#ifndef CONNECTION_H
-#define CONNECTION_H
+#pragma once
 
 #include "Config.h"
 #include "NetworkIDManager.h"
@@ -11,6 +10,8 @@
 #include "NetworkIDObject.h"
 #include "NetworkIDManager.h"
 #include "PacketLogger.h"
+#include "RakNetStatistics.h"
+#include "GetTime.h"
 #include "Entities/EntityData.h"
 #include "World/World.h"
 
@@ -22,7 +23,8 @@ class Connection : public SceneObject
 public:
 	Connection(const bool isServer) :
 		m_isServer(isServer),
-		m_world(0)
+		m_world(0),
+		m_tickRate(1)
 	{
 		m_rakPeer = RakNet::RakPeerInterface::GetInstance(); 
 	}
@@ -31,6 +33,7 @@ public:
 	bool isClient() const { return !m_isServer; }
 	RakNet::RakNetGUID getGUID() const { return m_rakPeer->GetMyGUID(); }
 	RakNet::RakPeerInterface *getRakPeer() const { return m_rakPeer; }
+	int getTickRate() const { return m_tickRate; }
 
 	template<typename T> T *createEntity(const Json::Value &attributes, RakNet::NetworkID networkID = RakNet::UNASSIGNED_NETWORK_ID)
 	{
@@ -113,7 +116,7 @@ protected:
 	RakNet::RakPeerInterface *m_rakPeer;
 	RakNet::NetworkIDManager m_networkIDManager;
 	World *m_world;
+	uint m_tickRate;
+	uint m_tickCounter;
 	list<Entity*> m_networkEntities;
 };
-
-#endif // CONNECTION_H

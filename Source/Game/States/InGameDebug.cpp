@@ -238,6 +238,10 @@ void InGameDebug::onDraw(DrawEvent *e)
 	{
 		addVariable("[SERVER]", "");
 	}
+	else
+	{
+		addVariable("Ping", util::intToStr(dynamic_cast<Client*>(m_world->getConnection())->getPing()) + " ms (Tick rate: "+ util::intToStr(m_world->getConnection()->getTickRate())+")");
+	}
 
 	// Set FPS output
 	addVariable("FPS", util::intToStr((int)m_game->getFPS()));

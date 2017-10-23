@@ -12,9 +12,6 @@ public:
 	bool plotTest(int x, int y);
 	void onTick(TickEvent *e);
 
-	void packData(RakNet::BitStream *bitStream);
-	bool unpackData(RakNet::BitStream *bitStream, const bool force);
-
 private:
 	Sprite m_sprite;
 	Vector2F m_prevVelocity;

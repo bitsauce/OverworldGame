@@ -25,7 +25,9 @@ Client::Client(Overworld *game) :
 	Connection(false),
 	m_game(game),
 	m_joinFinalized(false),
-	m_joinProgress(0.0f)
+	m_joinProgress(0.0f),
+	m_serverGuid(RakNet::UNASSIGNED_RAKNET_GUID),
+	m_serverAddress(RakNet::UNASSIGNED_SYSTEM_ADDRESS)
 {
 }
 
@@ -71,20 +73,6 @@ void Client::onTick(TickEvent *e)
 		sendPacket(&bitStream);
 	}
 
-	// Send corrections of client-side objects to server
-	for(Entity *object : m_networkEntities)
-	{
-		if(object->isClientObject())
-		{
-			RakNet::BitStream bitStream;
-			bitStream.Write((RakNet::MessageID) ID_NETWORK_OBJECT_UPDATE);
-			bitStream.Write(object->GetNetworkID());
-			bitStream.Write(object->getData()->getID());
-			object->packData(&bitStream);
-			sendPacket(&bitStream);
-		}
-	}
-
 	// Process incomming packets
 	for(RakNet::Packet *packet = m_rakPeer->Receive(); packet; m_rakPeer->DeallocatePacket(packet), packet = m_rakPeer->Receive())
 	{
@@ -100,6 +88,9 @@ void Client::onTick(TickEvent *e)
 				bitStream.Write((RakNet::MessageID) ID_PLAYER_JOIN);
 				bitStream.Write(m_playerName.c_str());
 				sendPacket(&bitStream);
+
+				m_serverGuid = packet->guid;
+				m_serverAddress = packet->systemAddress;
 
 				m_joinProgress++;
 			}
@@ -122,7 +113,7 @@ void Client::onTick(TickEvent *e)
 
 				Player *player = createEntity<Player>(attributes, playerNetworkID);
 				player->setOriginGUID(playerGUID);
-				player->unpackData(&bitStream, this);
+				player->unpackData(&bitStream);
 				player->setPosition(player->getPosition()); // Make sure lastPosition == position
 
 				// Create player controller
@@ -219,7 +210,7 @@ void Client::onTick(TickEvent *e)
 				{
 					Entity *entity = createEntityByID(entityID, networkID);
 					entity->setOriginGUID(guid);
-					entity->unpackData(&bitStream, true);
+					entity->unpackData(&bitStream);
 
 					LOG("Creating client object");
 				}
@@ -248,29 +239,7 @@ void Client::onTick(TickEvent *e)
 				Entity *object = m_networkIDManager.GET_OBJECT_FROM_ID<Entity*>(networkID);
 				if(object)
 				{
-					bitStream.IgnoreBytes(sizeof(EntityID));
-					object->unpackData(&bitStream, true);
-				}
-				else
-				{
-					// Object doesn't exist on the client, create it
-					EntityID entityID; bitStream.Read(entityID);
-					if(entityID != 1) // TODO: Try to fix. Shouldn't receive update packets from players before we're ready maybe?
-					{
-						Entity *entity = createEntityByID(entityID, networkID);
-
-						RakNet::RakNetGUID guid; bitStream.Read(guid);
-						entity->setOriginGUID(guid);
-
-						entity->unpackData(&bitStream, true);
-
-						LOG("Creating server object");
-
-						// Send packet to all clients except the origin
-						RakNet::BitStream outStream(packet->data, packet->length, true);
-						outStream.Write(packet->guid);
-						assert(m_rakPeer->Send(&outStream, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, true) != 0);
-					}
+					object->unpackData(&bitStream);
 				}
 			}
 			break;
@@ -310,39 +279,65 @@ void Client::onTick(TickEvent *e)
 				break;
 		}
 	}
+
+	if(++m_tickCounter >= m_tickRate)
+	{
+		// Send corrections of client-side objects to server
+		for(Entity *object : m_networkEntities)
+		{
+			if(object->isClientObject())
+			{
+				RakNet::BitStream bitStream;
+				bitStream.Write((RakNet::MessageID) ID_NETWORK_OBJECT_UPDATE);
+				bitStream.Write(object->GetNetworkID());
+				object->packData(&bitStream);
+				sendPacket(&bitStream);
+			}
+		}
+		m_tickCounter = 0;
+	}
+
+	if(pushingPastCapacity())
+	{
+		m_tickRate++;
+		m_increasePacketRateCounter = 0;
+		m_ticksBeforeIncreasePacketRate = max(m_ticksBeforeIncreasePacketRate + 1, 100);
+		LOG("Using too much bandwidth, reducing packet rate");
+	}
+
+	if(m_increasePacketRateCounter++ == m_ticksBeforeIncreasePacketRate)
+	{
+		if(m_tickRate > 1) m_tickRate--;
+		LOG("Trying to increase packet rate");
+	}
+}
+
+// Returns true if RakNet's output queue is increasing over time
+bool Client::pushingPastCapacity()
+{
+	RakNet::Time currentTime = RakNet::GetTime();
+	static double bufferedBytesLastTick = 0.0;
+	static RakNet::Time whenStartedPushingPastCapacity = currentTime;
+	RakNet::RakNetStatistics rns;
+	m_rakPeer->GetStatistics(m_serverAddress, &rns);
+	double bufferedBytesThisTick = rns.bytesInSendBuffer[IMMEDIATE_PRIORITY] + rns.bytesInSendBuffer[HIGH_PRIORITY] + rns.bytesInSendBuffer[MEDIUM_PRIORITY] + rns.bytesInSendBuffer[LOW_PRIORITY];
+	if(bufferedBytesThisTick > bufferedBytesLastTick)
+	{
+		if(currentTime - whenStartedPushingPastCapacity > 500)
+		{
+			bufferedBytesLastTick = bufferedBytesThisTick;
+			return true;
+		}
+	}
+	else
+	{
+		whenStartedPushingPastCapacity = currentTime;
+	}
+	bufferedBytesLastTick = bufferedBytesThisTick;
+	return false;
 }
 
 void Client::sendPacket(RakNet::BitStream *bitStream)
 {
 	assert(m_rakPeer->Send(bitStream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true) != 0);
 }
-
-/*Entity *Client::createEntity(const string &name)
-{
-	// NOTE TO SELF: This function might be useful if I want entities
-	// which are not networked. Add every entity that is create with
-	// this function to a list, and those will be the networked entities
-	// while it's still possible to create entities outside this function.
-
-	// Create entity locally, and setup
-	Entity *entity = EntityData::CreateByName(m_world, name);
-	entity->SetNetworkIDManager(&m_networkIDManager);
-	entity->setOriginGUID(getGUID());
-
-	// --- Packet format ---
-	// data[0]: ID_CREATE_ENTITY
-	// data[1]: Entity ID
-	// data[2]: Entity Network ID
-	// data[3+n]: Data for server-side entity initialization
-	RakNet::BitStream bitStream;
-	bitStream.Write((RakNet::MessageID) ID_CREATE_ENTITY);
-	bitStream.Write(entity->getData()->getID());
-	bitStream.Write(entity->GetNetworkID());
-	entity->packData(&bitStream, this);
-
-	// Send packet
-	sendPacket(&bitStream);
-
-	// Return entity
-	return entity;
-}*/
