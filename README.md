@@ -26,5 +26,8 @@ Current features include:
 **_2015-10-01: Parallax backgrounds_**
 ![Background](https://i.imgur.com/DaMxNkY.png)
 
-**_2014-07-19: New tile system**
+**_2014-07-19: New tile system_**
 ![New tile system](https://i.imgur.com/jGod0Q7.png?1)
+
+**_2014-06-12: Hello World_**
+[Hello World](https://i.imgur.com/pcsmH7H.png?1)
