@@ -22,3 +22,9 @@ Current features include:
 
 **_2016-07-19: Can change player appearance_**
 ![Appearance changing](https://i.imgur.com/Xecojpd.gif)
+
+**_2015-10-01: Parallax backgrounds_**
+![Background](https://i.imgur.com/DaMxNkY.png)
+
+**_2014-07-19: New tile system**
+![New tile system](https://i.imgur.com/jGod0Q7.png?1)
