@@ -11,11 +11,14 @@ Current features include:
 # Screenshots
 #### Latest changes:
 
+**_2017-10-30: In-game Chat!**
+![In-game chat](https://i.imgur.com/1Xe6Xmw.png)
+
 **_2016-08-28: Dynamic lighting_**
-![Dynamic lighting](http://i.imgur.com/0deItIz.gif)
+![Dynamic lighting](https://i.imgur.com/0deItIz.gif)
 
 **_2016-08-28: Static lighting_**
-![Static lighting](http://i.imgur.com/JsgtE0I.png)
+![Static lighting](https://i.imgur.com/JsgtE0I.png)
 
 **_2016-07-19: Can change player appearance_**
-![Appearance changing](http://i.imgur.com/Xecojpd.gif)
+![Appearance changing](https://i.imgur.com/Xecojpd.gif)
