@@ -15,7 +15,9 @@ Current features include:
 ![In-game chat](https://i.imgur.com/1Xe6Xmw.png)
 
 **_2016-08-28: Dynamic lighting_**
-![Dynamic lighting](https://i.imgur.com/0deItIz.gif)
+<p align="center">
+  <img src="https://i.imgur.com/0deItIz.gif">
+</p>
 
 **_2016-08-28: Static lighting_**
 ![Static lighting](https://i.imgur.com/JsgtE0I.png)
