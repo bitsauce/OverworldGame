@@ -14,7 +14,7 @@
 	</font>
 	<font>
 		<name>Fonts/Chat</name>
-		<path>Fonts/DebugFont.fnt</path>
+		<path>Fonts/Chat_Font.fnt</path>
 	</font>
   <font>
     <name>Fonts/MenuFont</name>

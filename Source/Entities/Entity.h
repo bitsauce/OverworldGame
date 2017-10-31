@@ -194,9 +194,9 @@ public:
 		return RectF(getPosition(), getSize());
 	}
 
-	Vector2F getCenter() const
+	Vector2F getCenter(const float alpha = 0.0f) const
 	{
-		return getPosition() + getSize() * 0.5f;
+		return getDrawPosition(alpha) + getSize() * 0.5f;
 	}
 
 	virtual void packData(RakNet::BitStream *bitStream);

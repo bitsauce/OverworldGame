@@ -20,6 +20,8 @@ public:
 	void prevMessage(InputEvent *e);
 	void insertMessage(const string &message);
 
+
+
 private:
 	Overworld *m_game;
 

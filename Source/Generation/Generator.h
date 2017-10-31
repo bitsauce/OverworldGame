@@ -8,14 +8,15 @@
 class ChunkGenerator
 {
 public:
-	ChunkGenerator(const uint seed);
+	ChunkGenerator();
 
 	uint getSeed() const { return m_seed; }
+	void setSeed(const uint seed);
 
 	void getBlocks(const int chunkX, const int chunkY, BlockID *blocks);
 	int getGroundHeight(const int x);
 
-	//void setBlockAt(const int x, const int y, const WorldLayer z, const BlockID block);
+	//void setBlockAt(const int x, const int y, const WorldLayer z, const BlockID block);	
 
 private:
 	void generateGroundHeight(const int chunkX);
@@ -29,7 +30,7 @@ private:
 		BLOCK_COUNT
 	};
 
-	const uint m_seed;
+	uint m_seed;
 	const BlockData *m_blockData[BLOCK_COUNT];
 	list<Formation*> m_formations;
 

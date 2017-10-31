@@ -17,7 +17,8 @@ World::World(Connection *conn) :
 	m_worldPath(""),
 	m_worldFile(nullptr),
 	m_localPlayer(nullptr),
-	m_connection(conn)
+	m_connection(conn),
+	m_seed(0)
 {
 	Overworld *game = Overworld::Get();
 
@@ -66,7 +67,7 @@ void World::create(const string &name)
 	m_worldFile->setValue("world", "seed", util::intToStr(m_seed));
 	m_worldFile->save();
 
-	//m_generator->setSeed(seed);
+	m_terrain->getChunkManager()->getGenerator()->setSeed(m_seed);
 }
 
 void World::save()
@@ -86,6 +87,7 @@ bool World::load(const string &name)
 		m_worldFile = new IniFile(worldFile);
 
 		m_seed = util::strToInt(m_worldFile->getValue("world", "seed"));
+		m_terrain->getChunkManager()->getGenerator()->setSeed(m_seed);
 	}
 	else
 	{

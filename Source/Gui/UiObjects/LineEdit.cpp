@@ -177,7 +177,9 @@ void LineEdit::onDraw(DrawEvent *e)
 	graphicsContext->setTexture(m_renderTarget->getTexture());
 	graphicsContext->drawRectangle(rect);
 	graphicsContext->setTexture(m_renderTargetText->getTexture());
+	graphicsContext->setBlendState(BlendState(BlendState::PRESET_PREMULTIPLIED_ALPHA));
 	graphicsContext->drawRectangle(rect);
+	graphicsContext->setBlendState(BlendState(BlendState::PRESET_ALPHA_BLEND));
 	graphicsContext->setTexture(0);
 
 	// Draw text cursor

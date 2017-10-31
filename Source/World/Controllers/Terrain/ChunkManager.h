@@ -71,6 +71,8 @@ public:
 
 	uint m_generatedChunks = 0;
 
+	ChunkGenerator *getGenerator() const { return m_generator; }
+
 private:
 	Chunk *loadChunkAt(const int chunkX, const int chunkY);
 	Chunk *popChunkFromPool();

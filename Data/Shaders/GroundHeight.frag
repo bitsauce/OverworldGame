@@ -13,7 +13,7 @@ int hash(int x)
     x += (x << 10U);
     x ^= (x >>  6U);
     x += (x <<  3U);
-    x ^= (x >> 11U);
+    x ^= int(u_Seed);//(x >> 11U);
     x += (x << 15U);
     return x;
 }
@@ -34,7 +34,7 @@ float fractalNoise1D(int octaves, float x)
 	float amplitude = 0.5 / (1.0 - pow(2.0, -float(octaves)));
 	for(int i = 0; i < octaves; i++)
 	{
-		x += float(u_Seed);
+		//x += float(u_Seed);
 		float j = floor(x);
 		float f = smoothstep(0.0, 1.0, fract(x));
 		value += amplitude * mix(rand(j), rand(j + 1.0), f);
@@ -50,7 +50,7 @@ float fractalNoise2D(int octaves, vec2 pos)
 	float amplitude = 0.5 / (1.0 - pow(2.0, -float(octaves)));
 	for(int i = 0; i < octaves; i++)
 	{
-		pos += vec2(float(u_Seed));
+		//pos += vec2(float(u_Seed));
 		vec2 j = floor(pos);
 		vec2 f = smoothstep(0.0, 1.0, fract(pos));
 		value += amplitude * mix(

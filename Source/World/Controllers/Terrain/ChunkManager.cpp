@@ -36,7 +36,7 @@ ChunkManager::ChunkManager(World *world, Window *window) :
 	m_applyZoom(true),
 	m_window(window),
 	m_camera(world->getCamera()),
-	m_generator(new ChunkGenerator(world->getSeed())),
+	m_generator(new ChunkGenerator()),
 	m_world(world),
 	m_chunkPositionIndex(0),
 	m_loadAreaRadius(5),
