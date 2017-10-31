@@ -30,4 +30,4 @@ Current features include:
 ![New tile system](https://i.imgur.com/jGod0Q7.png?1)
 
 **_2014-06-12: Hello World_**
-[Hello World](https://i.imgur.com/pcsmH7H.png?1)
+![Hello World](https://i.imgur.com/pcsmH7H.png?1)
