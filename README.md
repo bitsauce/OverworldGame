@@ -11,7 +11,7 @@ Current features include:
 # Screenshots
 #### Latest changes:
 
-**_2017-10-30: In-game Chat!**
+**2017-10-30: In-game Chat!**
 ![In-game chat](https://i.imgur.com/1Xe6Xmw.png)
 
 **_2016-08-28: Dynamic lighting_**
