@@ -13,7 +13,9 @@ Current features include:
 #### Latest changes:
 
 **_2017-10-31: Networking implemented!_**
-<video src="https://www.dropbox.com/s/sd4jl14pg7hjy9m/Networking_1.mp4" width="320" height="200" controls preload></video>
+<video src="https://www.dropbox.com/s/sd4jl14pg7hjy9m/Networking_1.mp4" width="832" height="468" controls preload></video>
+<video src="https://www.dropbox.com/s/2qekkset9aezf9t/Networking_2.mp4?dl=0" width="832" height="468" controls preload></video>
+<video src="https://www.dropbox.com/s/pkjnunicijlgtot/Networking_3.mp4?dl=0" width="832" height="468" controls preload></video>
 
 **_2017-10-30: In-game chat!_**
 ![In-game chat](https://i.imgur.com/PIUiQyo.png)
