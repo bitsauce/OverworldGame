@@ -13,7 +13,7 @@ Current features include:
 #### Latest changes:
 
 **_2017-10-30: In-game chat!_**
-![In-game chat](https://i.imgur.com/1Xe6Xmw.png)
+![In-game chat](https://i.imgur.com/PIUiQyo.png)
 
 **_2016-08-28: Dynamic lighting_**
 <p align="center">
