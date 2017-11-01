@@ -12,6 +12,8 @@ Current features include:
 # Screenshots
 #### Latest changes:
 
+<video src="https://i.imgur.com/lOB6nUK.mp4" width="320" height="200" controls preload></video>
+
 **_2017-10-30: In-game chat!_**
 ![In-game chat](https://i.imgur.com/PIUiQyo.png)
 
