@@ -12,6 +12,7 @@ Current features include:
 # Screenshots
 #### Latest changes:
 
+**_2017-10-31: Networking implemented!_**
 <video src="https://i.imgur.com/lOB6nUK.mp4" width="320" height="200" controls preload></video>
 
 **_2017-10-30: In-game chat!_**
