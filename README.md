@@ -13,12 +13,12 @@ Current features include:
 #### Latest changes:
 
 **_2017-10-31: Networking implemented!_**
-<video src="https://dl.dropbox.com/s/2uyln9a6hx44rgc/Networking_Showcase_1.mp4?dl=0" width="832" height="468" controls preload>
+<video src="https://dl.dropbox.com/s/2uyln9a6hx44rgc/Networking_Showcase_1.mp4?dl=0" width="832" height="468" controls preload loop>
   
   To view the videos, go to the [github.io page](http://bitsauce.github.io/OverworldGame/)
 </video>
-<video src="https://dl.dropbox.com/s/zt9khqb9j33ok0v/Networking_Showcase_2.mp4?dl=0" width="832" height="468" controls preload></video>
-<video src="https://dl.dropbox.com/s/vdxcijupqfb7fpd/Networking_Showcase_3.mp4?dl=0" width="832" height="468" controls preload></video>
+<video src="https://dl.dropbox.com/s/zt9khqb9j33ok0v/Networking_Showcase_2.mp4?dl=0" width="832" height="468" controls preload loop></video>
+<video src="https://dl.dropbox.com/s/vdxcijupqfb7fpd/Networking_Showcase_3.mp4?dl=0" width="832" height="468" controls preload loop></video>
 
 **_2017-10-30: In-game chat!_**
 ![In-game chat](https://i.imgur.com/PIUiQyo.png)
