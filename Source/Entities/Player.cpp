@@ -20,5 +20,5 @@ void Player::onDraw(DrawEvent *e)
 
 	// Draw player name
 	SpriteBatch *spriteBatch = (SpriteBatch*)e->getUserData();
-	m_font->draw(spriteBatch, getDrawPosition(e->getAlpha()) - Vector2F(16, 48), m_name);
+	m_font->draw(spriteBatch, getCenter(e->getAlpha()) - Vector2F(0, 64), m_name, FONT_ALIGN_CENTER);
 }

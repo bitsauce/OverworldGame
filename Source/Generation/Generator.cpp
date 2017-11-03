@@ -7,21 +7,16 @@
 
 const float CLIFFING_DELTA = 70.0f;
 
-ChunkGenerator::ChunkGenerator(const uint seed) :
-	m_seed(seed),
-	m_graphicsContext(Game::Get()->getWindow()->getGraphicsContext())
+ChunkGenerator::ChunkGenerator() :
+	m_graphicsContext(Game::Get()->getWindow()->getGraphicsContext()),
+	m_seed(0)
 {
-	//m_random.setSeed(seed);
-
 	m_generationShader = Resource<Shader>("Shaders/Generation");
 	m_generationShader->setUniform1i("u_ShowNoise", false);
 	m_generationShader->setUniform2f("u_Resolution", CHUNK_BLOCKS, CHUNK_BLOCKS);
-	m_generationShader->setUniform1ui("u_Seed", seed % 1000); // NOTE TO SELF: This is not the right way - here we can only get 1000 different worlds.
-															  // u_Seed should change the hash function in the shader instead
 	m_generationShader->setUniform1f("u_CliffingDelta", CLIFFING_DELTA);
 
 	m_groundHeightShader = Resource<Shader>("Shaders/Generation/GroundHeight");
-	m_groundHeightShader->setUniform1ui("u_Seed", seed % 1000);
 	m_groundHeightShader->setUniform1f("u_ResolutionX", CHUNK_BLOCKS);
 	m_groundHeightShader->setUniform1f("u_CliffingDelta", CLIFFING_DELTA);
 
@@ -35,6 +30,13 @@ ChunkGenerator::ChunkGenerator(const uint seed) :
 
 	// Add formations to list
 	m_formations.push_back(new OakForest(this));
+}
+
+void ChunkGenerator::setSeed(const uint seed)
+{
+	m_seed = seed;
+	m_generationShader->setUniform1ui("u_Seed", seed);
+	m_groundHeightShader->setUniform1ui("u_Seed", seed);
 }
 
 void ChunkGenerator::getBlocks(const int chunkX, const int chunkY, BlockID *blocks)
