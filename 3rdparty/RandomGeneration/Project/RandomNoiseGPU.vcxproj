@@ -14,7 +14,7 @@
     <ProjectGuid>{7F4BAC8A-5B6C-4120-B1B4-8772C5022352}</ProjectGuid>
     <RootNamespace>deferredlighting</RootNamespace>
     <ProjectName>RandomGeneration</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -53,17 +53,17 @@
       <WarningLevel>Level1</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\Include;$(ProjectDir)..\..\..\..\Sauce-Engine\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\SDL\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\SDL_image;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\SDL_mixer;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\freetype\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\openal\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\gl3w\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\tinyxml2</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\SDL\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\SDL_image;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\SDL_mixer;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\freetype\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\openal\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\gl3w\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\tinyxml2</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>CGF_DEBUG;CGF_IMPORT;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\SauceEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)..\..\..\SuperSauce-Engine\build\$(Platform)\$(Configuration)\SauceEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"</Command>
+      <Command>copy "$(SolutionDir)..\..\..\SuperSauce-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -73,7 +73,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\Source;$(ProjectDir)..\..\..\..\Sauce-Engine\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\SDL\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\SDL_image;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\SDL_mixer;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\freetype\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\openal\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\gl3w\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\tinyxml2</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\Source;$(ProjectDir)..\..\..\..\SuperSauce-Engine\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\SDL\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\SDL_image;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\SDL_mixer;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\freetype\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\openal\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\gl3w\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\tinyxml2</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <PreprocessorDefinitions>CGF_IMPORT;</PreprocessorDefinitions>
     </ClCompile>
@@ -81,10 +81,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>$(SolutionDir)..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\SauceEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)..\..\..\SuperSauce-Engine\build\$(Platform)\$(Configuration)\SauceEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"</Command>
+      <Command>copy "$(SolutionDir)..\..\..\SuperSauce-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

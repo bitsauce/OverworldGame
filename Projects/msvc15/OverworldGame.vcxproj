@@ -14,7 +14,7 @@
     <ProjectGuid>{B781FFBE-67AB-4B3D-92D7-9C9D89A36CC0}</ProjectGuid>
     <RootNamespace>overworld_game</RootNamespace>
     <ProjectName>OverworldGame</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -53,17 +53,18 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>..\..\Source\;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\Sauce-Engine\include;..\..\..\Sauce-Engine\3rdparty\SDL\include;..\..\..\Sauce-Engine\3rdparty\SDL_image;..\..\..\Sauce-Engine\3rdparty\SDL_mixer</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\Source\;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\SuperSauce-Engine\include;..\..\..\SuperSauce-Engine\3rdparty\SDL\include;..\..\..\SuperSauce-Engine\3rdparty\SDL_image;..\..\..\SuperSauce-Engine\3rdparty\SDL_mixer</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SAUCE_DEBUG;SAUCE_IMPORT;_ITERATOR_DEBUG_LEVEL=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\..\3rdparty\spine\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>..\..\3rdparty\RakNet\Lib\RakNet_VS2008_DLL_Debug_Win32.lib;..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\SauceEngine.lib;ws2_32.lib;spined.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\3rdparty\RakNet\Lib\RakNet_VS2008_DLL_Debug_Win32.lib;..\..\..\SuperSauce-Engine\build\$(Platform)\$(Configuration)\SauceEngine.lib;ws2_32.lib;spined.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"
+      <Command>copy "$(SolutionDir)..\..\..\SuperSauce-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"
+copy "$(SolutionDir)..\..\3rdparty\RakNet\Lib\RakNet_DLL_$(Configuration)_Win32.dll" "$(TargetDir)"
 rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
     </PostBuildEvent>
     <Manifest>
@@ -78,7 +79,7 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>
       </SDLCheck>
-      <AdditionalIncludeDirectories>..\..\Source\;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\Sauce-Engine\include;..\..\..\Sauce-Engine\3rdparty\SDL\include;..\..\..\Sauce-Engine\3rdparty\SDL_image;..\..\..\Sauce-Engine\3rdparty\SDL_mixer</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\Source\;..\..\3rdparty\RakNet\Source;..\..\3rdparty\spine\include;..\..\..\SuperSauce-Engine\include;..\..\..\SuperSauce-Engine\3rdparty\SDL\include;..\..\..\SuperSauce-Engine\3rdparty\SDL_image;..\..\..\SuperSauce-Engine\3rdparty\SDL_mixer</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <PreprocessorDefinitions>SAUCE_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -86,11 +87,12 @@ rmdir %appdata%\SuperSauceEngine\Overworld /s /q</Command>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>..\..\3rdparty\RakNet\Lib\RakNet_VS2008_DLL_Release_Win32.lib;..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\SauceEngine.lib;ws2_32.lib;spine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\3rdparty\RakNet\Lib\RakNet_VS2008_DLL_Release_Win32.lib;..\..\..\SuperSauce-Engine\build\$(Platform)\$(Configuration)\SauceEngine.lib;ws2_32.lib;spine.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\3rdparty\spine\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"</Command>
+      <Command>copy "$(SolutionDir)..\..\..\SuperSauce-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"
+copy "$(SolutionDir)..\..\3rdparty\RakNet\Lib\RakNet_DLL_$(Configuration)_Win32.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>

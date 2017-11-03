@@ -14,7 +14,7 @@
     <ProjectGuid>{7A44F0BC-017A-4954-AC15-4B357471983C}</ProjectGuid>
     <RootNamespace>deferredlighting</RootNamespace>
     <ProjectName>WaterPhysics</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -53,17 +53,17 @@
       <WarningLevel>Level1</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\Include;$(ProjectDir)..\..\..\..\Sauce-Engine\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\SDL\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\SDL_image;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\SDL_mixer;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\freetype\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\openal\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\gl3w\include;$(ProjectDir)..\..\..\..\Sauce-Engine\3rdparty\tinyxml2</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\SDL\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\SDL_image;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\SDL_mixer;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\freetype\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\openal\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\gl3w\include;$(ProjectDir)..\..\..\..\SuperSauce-Engine\3rdparty\tinyxml2</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SAUCE_DEBUG;SAUCE_IMPORT;</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\SauceEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)..\..\..\SuperSauce-Engine\build\$(Platform)\$(Configuration)\SauceEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)..\..\..\Sauce-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"</Command>
+      <Command>copy "$(SolutionDir)..\..\..\SuperSauce-Engine\build\$(Platform)\$(Configuration)\*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
