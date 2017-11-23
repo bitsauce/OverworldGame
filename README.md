@@ -1,5 +1,5 @@
 # OverworldGame
-Overworld is a 2D tile based sandbox game which has been in development since November 2011. It runs on the [SuperSauce Engine](https://github.com/bitsauce/SuperSauce-Engine).
+Overworld is a 2D tile based sandbox game which has been in development since November 2011. Runs on the [SuperSauce Engine](https://github.com/bitsauce/SuperSauce-Engine).
 
 Current features include:
 * Infinite world generation on the GPU
